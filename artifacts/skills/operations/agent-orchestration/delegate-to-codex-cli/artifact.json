@@ -1,0 +1,64 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/operations/agent-orchestration/delegate-to-codex-cli",
+  "slug": "delegate-to-codex-cli",
+  "name": "Delegate To Codex Cli",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Delegate a bounded task to Codex CLI in an isolated, reviewable workspace.",
+  "description": "Delegate an independent coding or review task to Codex CLI with a narrow brief, isolated worktree, bounded permissions, and parent-agent verification. Use only when the CLI is available and parallel delegation adds value.",
+  "domain": "operations",
+  "category": "agent-orchestration",
+  "problems": [
+    "agent-delegation"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "implementation",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not grant broader filesystem, network, or credential access than the parent task.",
+    "It does not let the delegate commit, push, deploy, or contact people unless explicitly authorized.",
+    "It does not accept a delegate claim as proof without parent-side review."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "operate"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

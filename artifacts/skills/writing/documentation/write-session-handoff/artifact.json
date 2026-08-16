@@ -1,0 +1,70 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/writing/documentation/write-session-handoff",
+  "slug": "write-session-handoff",
+  "name": "Write Session Handoff",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Capture verified working state so another agent can resume without reconstruction.",
+  "description": "Write a concise session handoff containing objective, verified state, decisions, changed files, validation, dead ends, and next action. Use before context loss, agent transfer, or an intentional pause.",
+  "domain": "writing",
+  "category": "documentation",
+  "problems": [
+    "session-handoff"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "handoff"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not invent completed work, passing checks, or decisions.",
+    "It does not include credentials, private payloads, or unnecessary personal data.",
+    "It does not silently turn suggestions into instructions or authorization."
+  ],
+  "execution": {
+    "mode": "hybrid",
+    "entrypoints": [
+      {
+        "path": "scripts/collect-git-state.mjs",
+        "runtime": "node",
+        "purpose": "Collect revision, branch, upstream, working-tree, diff-statistic, and recent-commit evidence from Git without mutation.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "author"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

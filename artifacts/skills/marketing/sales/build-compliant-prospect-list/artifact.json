@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/sales/build-compliant-prospect-list",
+  "slug": "build-compliant-prospect-list",
+  "name": "Build Compliant Prospect List",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Build a bounded B2B prospect list from lawful sources, explicit fit rules, and traceable evidence.",
+  "description": "Build or review a B2B prospect list using a defined ideal-customer situation, lawful public business sources, explicit qualification, provenance, minimization, and suppression. Use before approved outbound work when target accounts require evidence rather than bulk contact collection.",
+  "domain": "marketing",
+  "category": "sales",
+  "problems": [
+    "prospecting"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "planning",
+    "review"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not harvest private contact details, bypass logins, infer protected traits, or buy unverifiable lists.",
+    "It does not contact prospects, enrich identities, or upload data to another service without authority.",
+    "It does not present a fit score as consent, intent, or permission to send outreach."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "author"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

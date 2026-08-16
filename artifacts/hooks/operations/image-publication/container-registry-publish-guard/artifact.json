@@ -1,0 +1,70 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/operations/image-publication/container-registry-publish-guard",
+  "slug": "container-registry-publish-guard",
+  "name": "Container registry publish guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block direct publication of container images, Helm charts, and OCI artifacts.",
+  "description": "A deterministic Claude Code PreToolUse gate that recognizes Docker, Podman, ORAS, buildx, and Helm publication commands while allowing local build, load, inspect, scan, and packaging operations.",
+  "domain": "operations",
+  "category": "image-publication",
+  "problems": [
+    "container-image-publication"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "javascript",
+    "shell"
+  ],
+  "lifecycle": [
+    "release"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not push, sign, copy, delete, or promote registry artifacts.",
+    "It does not inspect registry credentials, ownership, or retention policy.",
+    "It does not accept a tag, registry name, or prompt as publication approval."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/container-registry-publish-guard.mjs",
+        "runtime": "node",
+        "purpose": "Recognize OCI and chart publication commands and refuse registry writes.",
+        "sideEffects": "none"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

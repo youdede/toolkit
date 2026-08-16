@@ -1,0 +1,30 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": ["project"],
+  "files": [
+    {
+      "from": "targets/claude-code/generated-file-guard.mjs",
+      "to": "hooks/youdede/generated-file-guard.mjs",
+      "executable": true
+    }
+  ],
+  "settingsPatch": {
+    "hooks": {
+      "PreToolUse": [
+        {
+          "matcher": "Write|Edit",
+          "description": "[youdede:generated-file-guard] Protect confirmed generated outputs",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "node \"{claudeRoot}/hooks/youdede/generated-file-guard.mjs\"",
+              "timeout": 10
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

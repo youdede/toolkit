@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/development/debugging/debug-systematically",
+  "slug": "debug-systematically",
+  "name": "Debug systematically",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Trace failures to an evidenced root cause before making a bounded repair.",
+  "description": "A four-stage debugging procedure for reproduction, backward tracing, discriminating hypotheses, and regression proof across single or multi-component systems.",
+  "domain": "development",
+  "category": "debugging",
+  "problems": [
+    "root-cause-analysis"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "implementation",
+    "maintenance",
+    "incident"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not modify production code before an evidenced hypothesis exists.",
+    "It does not expose secrets or customer payloads while adding diagnostics.",
+    "It does not claim resolution without fresh regression verification."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "diagnose"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/operations/ci-cd/debug-ci-failure",
+  "slug": "debug-ci-failure",
+  "name": "Debug CI Failure",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Trace a failing CI job to the earliest actionable divergence and a minimal discriminating check.",
+  "description": "Diagnose a failing CI job by correlating an exact run, logs, workflow revision, environment, and repository evidence before proposing a bounded remedy. Use when a check fails remotely, flakes, or differs from a local result.",
+  "domain": "operations",
+  "category": "ci-cd",
+  "capabilities": [
+    "diagnose"
+  ],
+  "problems": [
+    "anomaly-root-cause",
+    "root-cause-analysis"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review",
+    "incident"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not rerun, cancel, edit, disable, or approve CI workflows without separate authorization.",
+    "It does not expose secrets from logs or reproduce a failure by weakening permissions and safety controls.",
+    "It does not claim root cause from the last error line, a successful retry, or an untested correlation."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [
+      "skill/operations/ci-cd/review-ci-workflow-change",
+      "subagent/operations/ci-cd/ci-failure-analyst"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  }
+}

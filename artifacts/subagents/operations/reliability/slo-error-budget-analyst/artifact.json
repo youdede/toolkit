@@ -1,0 +1,62 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/operations/reliability/slo-error-budget-analyst",
+  "slug": "slo-error-budget-analyst",
+  "name": "SLO Error Budget Analyst",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Analyze supplied SLI and error-budget evidence for eligibility, window, exclusion, and burn-rate errors.",
+  "description": "A narrow, read-only specialist whose outcome is to verify that a reported SLO or burn value follows the exact indicator contract and measurement window. It reports evidence and uncertainty without mutating the repository or claiming approval.",
+  "domain": "operations",
+  "category": "reliability",
+  "problems": [
+    "sli-budget-math"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review",
+    "operations"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not claim service availability without complete supplied evidence.",
+    "It does not query monitoring systems or change SLOs and alerts.",
+    "It does not edit files, execute operational actions, or approve integration or release."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "diagnose"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

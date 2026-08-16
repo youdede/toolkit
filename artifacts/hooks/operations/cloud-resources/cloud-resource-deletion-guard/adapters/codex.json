@@ -1,0 +1,43 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "codex",
+  "scopes": [
+    "project"
+  ],
+  "files": [
+    {
+      "from": "targets/claude-code/cloud-resource-deletion-guard.mjs",
+      "to": "hooks/youdede/cloud-resource-deletion-guard.mjs",
+      "executable": true
+    }
+  ],
+  "settingsPatch": {
+    "path": "hooks.json",
+    "hooks": {
+      "PreToolUse": [
+        {
+          "matcher": "Bash",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "node \"{codexRoot}/hooks/youdede/cloud-resource-deletion-guard.mjs\"",
+              "timeout": 10,
+              "statusMessage": "[youdede:cloud-resource-deletion-guard] Evaluating cloud resource deletion guard."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "bindings": [
+    {
+      "event": "PreToolUse",
+      "matcher": "Bash"
+    }
+  ],
+  "stability": "stable",
+  "limitations": [
+    "This native tranche covers shell-command interception only; project hook definitions require Codex trust review before execution."
+  ]
+}

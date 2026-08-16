@@ -1,0 +1,67 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/operations/git/prepare-branch-integration",
+  "slug": "prepare-branch-integration",
+  "name": "Prepare Branch Integration",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Prepare a development branch for integration with clean evidence, explicit options, and recoverable actions.",
+  "description": "Prepare a development branch for merge, pull request, handoff, or deliberate retention by verifying repository policy, changes, tests, history, migration risk, and integration options. Use after implementation is complete but before mutating remote or shared branch state.",
+  "domain": "operations",
+  "category": "git",
+  "problems": [
+    "branch-integration"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review",
+    "release",
+    "handoff"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not discard work, force-push, merge, delete branches, or publish without clear authorization.",
+    "It does not hide failing checks, untracked files, migrations, or scope drift.",
+    "It does not claim a branch is integrated from local state alone."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "plan"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/operations/git/resolve-merge-conflicts-by-intent"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

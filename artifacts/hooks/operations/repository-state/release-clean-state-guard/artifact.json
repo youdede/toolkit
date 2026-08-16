@@ -1,0 +1,85 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/operations/repository-state/release-clean-state-guard",
+  "slug": "release-clean-state-guard",
+  "name": "Release clean state guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Require a clean attached Git worktree before a recognized package or release publication command.",
+  "description": "A deterministic Claude Code PreToolUse gate for Bash that recognizes bounded release commands and blocks publication when tracked or untracked changes exist, HEAD is detached, merge state exists, or repository inspection fails.",
+  "domain": "operations",
+  "category": "repository-state",
+  "problems": [
+    "release-state-cleanliness"
+  ],
+  "frameworks": [
+    "agnostic",
+    "nodejs"
+  ],
+  "languages": [
+    "agnostic",
+    "shell"
+  ],
+  "lifecycle": [
+    "release",
+    "operations"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not publish, tag, push, build, test, authenticate, clean, stash, commit, or repair the repository.",
+    "It does not infer that a clean worktree is correct, releasable, reviewed, or synchronized with a remote.",
+    "It does not recognize arbitrary aliases, shell functions, dynamic subcommands, or every release service.",
+    "It does not allow a repository file, environment variable, or command flag to bypass a dirty state."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/release-clean-state-guard.mjs",
+        "runtime": "node",
+        "purpose": "Inspect Git repository state before recognized release publication commands and reject ambiguous release inputs.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [
+      "hook/operations/git/worktree-removal-evidence-guard",
+      "hook/operations/package-publication/package-publish-guard",
+      "hook/operations/versioning/release-version-consistency-guard",
+      "skill/operations/release/verify-mobile-release-readiness",
+      "skill/operations/release/verify-production-release",
+      "subagent/development/testing/mobile-reliability-accessibility-reviewer",
+      "subagent/operations/release/release-evidence-verifier",
+      "subagent/operations/release/release-risk-reviewer"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/mobile-release-readiness",
+      "pack/release-readiness"
+    ]
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

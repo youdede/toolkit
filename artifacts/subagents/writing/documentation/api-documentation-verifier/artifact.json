@@ -1,0 +1,61 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/writing/documentation/api-documentation-verifier",
+  "slug": "api-documentation-verifier",
+  "name": "API Documentation Verifier",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Verify bounded API documentation and examples against the exact implementation or specification version.",
+  "description": "A narrow, read-only specialist whose outcome is to identify a documentation claim or example that disagrees with the named API implementation or specification version. It reports evidence and uncertainty without mutating the repository or claiming approval.",
+  "domain": "writing",
+  "category": "documentation",
+  "problems": [
+    "implementation-accuracy"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not execute endpoints, generate credentials, or modify documentation.",
+    "It does not perform general API compatibility or application-security review.",
+    "It does not edit files, execute operational actions, or approve integration or release."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "verify"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

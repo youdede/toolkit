@@ -1,0 +1,71 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/operations/scheduled-execution/scheduled-task-mutation-guard",
+  "slug": "scheduled-task-mutation-guard",
+  "name": "Scheduled task mutation guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block direct creation, mutation, execution, and removal of operating-system scheduled tasks.",
+  "description": "A deterministic Claude Code PreToolUse gate that distinguishes scheduler inspection from mutating cron, at, launchd, and Windows Task Scheduler commands.",
+  "domain": "operations",
+  "category": "scheduled-execution",
+  "problems": [
+    "scheduled-task-mutation"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "javascript",
+    "shell"
+  ],
+  "lifecycle": [
+    "setup",
+    "operations"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not create, execute, alter, or delete scheduled tasks.",
+    "It does not inspect scheduler databases or existing task definitions.",
+    "It does not infer authorization from a task name, comment, or prompt."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/scheduled-task-mutation-guard.mjs",
+        "runtime": "node",
+        "purpose": "Classify scheduler commands and refuse operations that alter scheduled execution.",
+        "sideEffects": "none"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

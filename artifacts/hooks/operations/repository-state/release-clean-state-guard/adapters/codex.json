@@ -1,0 +1,43 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "codex",
+  "scopes": [
+    "project"
+  ],
+  "files": [
+    {
+      "from": "targets/claude-code/release-clean-state-guard.mjs",
+      "to": "hooks/youdede/release-clean-state-guard.mjs",
+      "executable": true
+    }
+  ],
+  "settingsPatch": {
+    "path": "hooks.json",
+    "hooks": {
+      "PreToolUse": [
+        {
+          "matcher": "Bash",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "node \"{codexRoot}/hooks/youdede/release-clean-state-guard.mjs\"",
+              "timeout": 20,
+              "statusMessage": "[youdede:release-clean-state-guard] Evaluating release clean state guard."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "bindings": [
+    {
+      "event": "PreToolUse",
+      "matcher": "Bash"
+    }
+  ],
+  "stability": "stable",
+  "limitations": [
+    "This native tranche covers shell-command interception only; project hook definitions require Codex trust review before execution."
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": ["project"],
+  "files": [{"from": "targets/claude-code/submodule-target-guard.mjs", "to": "hooks/youdede/submodule-target-guard.mjs", "executable": true}],
+  "settingsPatch": {"hooks": {"PreToolUse": [{
+    "matcher": "Write|Edit|MultiEdit|Bash",
+    "description": "[youdede:submodule-target-guard] Constrain Git submodule source targets",
+    "hooks": [{"type": "command", "command": "node \"{claudeRoot}/hooks/youdede/submodule-target-guard.mjs\"", "timeout": 10}]
+  }]}}
+}

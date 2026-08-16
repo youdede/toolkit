@@ -1,0 +1,68 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/development/testing/plan-load-test",
+  "slug": "plan-load-test",
+  "name": "Plan Load Test",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Design a capacity experiment with a representative workload, safety envelope, observability, and stop rules.",
+  "description": "Plan a bounded load, stress, soak, or spike test from a representative workload model, service objectives, production safeguards, observability, and explicit abort criteria. Use before testing capacity or claiming performance at scale.",
+  "domain": "development",
+  "category": "testing",
+  "capabilities": [
+    "plan"
+  ],
+  "problems": [
+    "performance-diagnosis",
+    "saturation-thresholds"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "operations"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not run load against production, third-party systems, or shared environments without explicit scoped authorization.",
+    "It does not create unbounded traffic, uncontrolled cost, destructive test data, or a denial-of-service condition.",
+    "It does not claim capacity from averages, a single run, a nonrepresentative workload, or client-side metrics alone."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [
+      "skill/development/code-quality/optimize-with-performance-profile",
+      "subagent/operations/capacity/capacity-risk-analyst"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/analytics/design-marketing-measurement",
+  "slug": "design-marketing-measurement",
+  "name": "Design Marketing Measurement",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Translate marketing decisions into a governed event, property, quality, and reporting plan.",
+  "description": "Design or audit marketing measurement with decision questions, event semantics, identity boundaries, consent constraints, QA, and ownership. Use when teams need trustworthy conversion tracking or a tracking plan rather than an indiscriminate list of events.",
+  "domain": "marketing",
+  "category": "analytics",
+  "problems": [
+    "marketing-measurement"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "implementation",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not collect personal or sensitive data merely because a tool supports it.",
+    "It does not invent event semantics from dashboard labels or silently redefine historical metrics.",
+    "It does not claim implementation works without observed payloads and downstream reconciliation."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "plan"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

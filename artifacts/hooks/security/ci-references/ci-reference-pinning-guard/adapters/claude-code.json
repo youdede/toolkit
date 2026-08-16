@@ -1,0 +1,16 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": ["project"],
+  "files": [{
+    "from": "targets/claude-code/ci-reference-pinning-guard.mjs",
+    "to": "hooks/youdede/ci-reference-pinning-guard.mjs",
+    "executable": true
+  }],
+  "settingsPatch": {"hooks": {"PreToolUse": [{
+    "matcher": "Write|Edit|MultiEdit",
+    "description": "[youdede:ci-reference-pinning-guard] Require immutable CI execution references",
+    "hooks": [{"type": "command", "command": "node \"{claudeRoot}/hooks/youdede/ci-reference-pinning-guard.mjs\"", "timeout": 10}]
+  }]}}
+}

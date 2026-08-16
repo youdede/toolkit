@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/positioning/document-product-positioning",
+  "slug": "document-product-positioning",
+  "name": "Document Product Positioning",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Create a reusable positioning record with evidence, decisions, boundaries, and unresolved questions.",
+  "description": "Create or update a project-local product positioning record covering audience, situation, alternatives, differentiated value, proof, language, constraints, and open questions. Use before substantial marketing work when foundational context is missing or inconsistent.",
+  "domain": "marketing",
+  "category": "positioning",
+  "problems": [
+    "product-positioning"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "planning",
+    "handoff"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not invent an ICP, differentiation, product capability, proof, or customer language.",
+    "It does not overwrite an approved positioning record or expose confidential research without permission.",
+    "It does not turn uncertain assumptions into universal brand claims."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "author"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

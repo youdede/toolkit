@@ -1,0 +1,61 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/development/algorithms/numerical-correctness-analyst",
+  "slug": "numerical-correctness-analyst",
+  "name": "Numerical Correctness Analyst",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Analyze bounded numeric code for overflow, precision, rounding, and unit errors with witness inputs.",
+  "description": "A narrow, read-only specialist whose outcome is to derive a concrete input within the supported domain that exceeds the allowed numerical error or changes units. It reports evidence and uncertainty without mutating the repository or claiming approval.",
+  "domain": "development",
+  "category": "algorithms",
+  "problems": [
+    "numeric-boundaries"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not report floating-point use alone as a defect.",
+    "It does not invent units, domains, or tolerances.",
+    "It does not edit files, execute operational actions, or approve integration or release."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "diagnose"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

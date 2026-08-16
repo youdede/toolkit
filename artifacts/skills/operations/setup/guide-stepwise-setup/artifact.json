@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/operations/setup/guide-stepwise-setup",
+  "slug": "guide-stepwise-setup",
+  "name": "Guide Stepwise Setup",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Guide unfamiliar setup one verified action at a time while retaining the full checklist.",
+  "description": "Walk a user through an unfamiliar environment or integration setup using one atomic action per turn, explicit expected evidence, and a maintained checklist. Use when the user must perform interactive or privileged steps.",
+  "domain": "operations",
+  "category": "setup",
+  "problems": [
+    "setup-guidance"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "setup"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not dump a long unprioritized setup guide on the user.",
+    "It does not ask the user to expose secret values in chat or logs.",
+    "It does not advance past a failed or ambiguous verification step."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "plan"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/operations/setup/author-guided-setup-wizard"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

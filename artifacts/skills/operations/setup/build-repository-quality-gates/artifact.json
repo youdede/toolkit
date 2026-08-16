@@ -1,0 +1,69 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/operations/setup/build-repository-quality-gates",
+  "slug": "build-repository-quality-gates",
+  "name": "Build Repository Quality Gates",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Build proportionate local and CI quality gates from the repository’s actual risks and commands.",
+  "description": "Build or repair repository quality gates by discovering existing tools, classifying checks by latency and risk, and proving clean and failing paths. Use when commits or pull requests need reliable automated feedback without framework lock-in.",
+  "domain": "operations",
+  "category": "setup",
+  "capabilities": [
+    "author"
+  ],
+  "problems": [
+    "repository-quality-gates",
+    "commit-safety"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "setup",
+    "pre-commit",
+    "maintenance"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not install a hardcoded JavaScript hook stack into repositories that use another mechanism.",
+    "It does not place slow, network-dependent, privileged, or flaky work in a blocking commit hook.",
+    "It does not auto-commit, conceal bypasses, or overwrite existing hook and formatter configuration."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [
+      "skill/development/testing/verify-completion-evidence",
+      "skill/operations/ci-cd/review-ci-workflow-change"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  }
+}

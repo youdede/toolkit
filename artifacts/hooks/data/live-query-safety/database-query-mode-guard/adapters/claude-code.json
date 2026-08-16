@@ -1,0 +1,32 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": [
+    "project"
+  ],
+  "files": [
+    {
+      "from": "targets/claude-code/database-query-mode-guard.mjs",
+      "to": "hooks/youdede/database-query-mode-guard.mjs",
+      "executable": true
+    }
+  ],
+  "settingsPatch": {
+    "hooks": {
+      "PreToolUse": [
+        {
+          "matcher": "^(?:Bash|PowerShell|mcp__(?:[a-zA-Z0-9]+_)*(?:postgres|postgresql|mysql|mariadb|sqlite|database|db|neon|supabase)(?:_[a-zA-Z0-9]+)*__(?:query|execute_query|run_query|sql|execute_sql|run_sql))$",
+          "description": "[youdede:database-query-mode-guard] Block mutating SQL sent directly to database command and connector tools",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "node \"{claudeRoot}/hooks/youdede/database-query-mode-guard.mjs\"",
+              "timeout": 10
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

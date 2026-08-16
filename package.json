@@ -1,0 +1,73 @@
+{
+  "name": "@youdede/toolkit",
+  "version": "0.1.0",
+  "description": "Open, individually installable skills, hooks, and subagents for coding agents.",
+  "type": "module",
+  "license": "MIT",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/udede/toolkit.git"
+  },
+  "homepage": "https://github.com/udede/toolkit#readme",
+  "bugs": {
+    "url": "https://github.com/udede/toolkit/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "youdede-toolkit": "bin/youdede-toolkit.mjs"
+  },
+  "files": [
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "LICENSE",
+    "NOTICE",
+    "artifacts",
+    "bin",
+    "catalog",
+    "docs",
+    "packs",
+    "quality",
+    "schema",
+    "scripts/build-release-benchmark.mjs",
+    "scripts/runtime",
+    "scripts/validate-evaluations.mjs",
+    "scripts/validate-release-readiness.mjs",
+    "scripts/lib"
+  ],
+  "scripts": {
+    "setup:repo": "node scripts/setup-repository.mjs",
+    "catalog": "node scripts/generate-catalog.mjs",
+    "check:catalog": "node scripts/generate-catalog.mjs --check",
+    "integrity": "node scripts/generate-integrity.mjs",
+    "check:integrity": "node scripts/generate-integrity.mjs --check",
+    "check:legal": "node scripts/verify-legal.mjs",
+    "check:evaluations": "node scripts/validate-evaluations.mjs",
+    "check:quality": "node scripts/validate-release-readiness.mjs --structural-only",
+    "check:readiness": "node scripts/validate-release-readiness.mjs",
+    "benchmark:release:build": "node scripts/build-release-benchmark.mjs",
+    "check:package": "node scripts/verify-package.mjs",
+    "prepublishOnly": "npm run check && npm run check:readiness",
+    "validate": "node scripts/validate.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "check": "npm run validate && npm run check:evaluations && npm run check:quality && npm run check:catalog && npm run check:integrity && npm run check:legal && npm run check:package && npm test"
+  },
+  "keywords": [
+    "agent-skills",
+    "claude-code",
+    "codex",
+    "cursor",
+    "gemini-cli",
+    "github-copilot",
+    "hooks",
+    "opencode",
+    "subagents",
+    "developer-tools"
+  ]
+}

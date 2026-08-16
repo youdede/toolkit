@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://youdede.dev/schemas/toolkit-taxonomy-v1.json",
+  "title": "youdede toolkit taxonomy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "kinds", "domains", "capabilities", "problems", "frameworks", "languages", "lifecycle", "risk", "targets", "scopes"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "kinds": { "$ref": "#/$defs/slugs" },
+    "domains": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+      "additionalProperties": { "$ref": "#/$defs/slugs" }
+    },
+    "capabilities": { "$ref": "#/$defs/slugs" },
+    "problems": { "$ref": "#/$defs/slugs" },
+    "frameworks": { "$ref": "#/$defs/slugs" },
+    "languages": { "$ref": "#/$defs/slugs" },
+    "lifecycle": { "$ref": "#/$defs/slugs" },
+    "risk": { "$ref": "#/$defs/slugs" },
+    "targets": { "$ref": "#/$defs/slugs" },
+    "scopes": { "$ref": "#/$defs/slugs" }
+  },
+  "$defs": {
+    "slugs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" }
+    }
+  }
+}

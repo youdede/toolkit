@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/partnerships/qualify-co-marketing-partner",
+  "slug": "qualify-co-marketing-partner",
+  "name": "Qualify Co-Marketing Partner",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Evaluate a joint-marketing partner and define a balanced, measurable campaign agreement.",
+  "description": "Qualify potential co-marketing partners by audience fit, trust, operational readiness, contribution balance, conflicts, and measurement. Use before proposing a joint campaign, integration launch, webinar, research project, or cross-promotion.",
+  "domain": "marketing",
+  "category": "partnerships",
+  "problems": [
+    "partner-marketing"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "planning",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not scrape private contacts, misrepresent an existing relationship, or imply endorsement before agreement.",
+    "It does not trade audience data or add contacts to marketing systems without appropriate consent.",
+    "It does not recommend a partner solely because of follower count or brand prestige."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

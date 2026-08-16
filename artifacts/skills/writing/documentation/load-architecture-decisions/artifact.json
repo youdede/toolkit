@@ -1,0 +1,67 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/writing/documentation/load-architecture-decisions",
+  "slug": "load-architecture-decisions",
+  "name": "Load Architecture Decisions",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Load every applicable architecture decision and report conflicts or missing context.",
+  "description": "Discover and read all architecture decision records applicable to the current scope, following repository guidance and nested locations. Use before architecture changes or when the user explicitly requests complete ADR context.",
+  "domain": "writing",
+  "category": "documentation",
+  "problems": [
+    "architecture-context"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "design",
+    "review"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not sample a subset while claiming to have read every ADR.",
+    "It does not treat superseded or proposed records as active policy.",
+    "It does not edit decision status or architecture as part of context loading."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "collect"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/development/architecture/define-domain-language"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

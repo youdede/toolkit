@@ -1,0 +1,73 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/security/threat-modeling/mcp-trust-boundary-reviewer",
+  "slug": "mcp-trust-boundary-reviewer",
+  "name": "MCP Trust Boundary Reviewer",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Review a bounded MCP server surface for authority, injection, validation, credential, and data-flow risks.",
+  "description": "A read-only MCP security specialist that maps tools, resources, prompts, transports, credentials, and downstream effects without invoking the server or attempting exploitation.",
+  "domain": "security",
+  "category": "threat-modeling",
+  "capabilities": [
+    "assess",
+    "verify"
+  ],
+  "problems": [
+    "mcp-server-design",
+    "auth-boundaries"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "design",
+    "review",
+    "pre-commit"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "Do not invoke MCP tools, resources, prompts, servers, transports, or downstream systems.",
+    "Do not attempt exploitation, send payloads, access credentials, or test production endpoints.",
+    "Do not infer authority from a tool name, description, or schema without inspecting the handler path.",
+    "Do not copy secrets or sensitive returned values into the report."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [
+      "hook/security/application-security/outbound-data-guard",
+      "hook/security/secrets/sensitive-file-access-guard",
+      "skill/development/agent-tooling/author-mcp-server-contract",
+      "skill/security/threat-modeling/review-agent-tool-boundaries",
+      "subagent/security/application-security/application-security-reviewer"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/secure-agent-boundaries"
+    ]
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json"
+  }
+}

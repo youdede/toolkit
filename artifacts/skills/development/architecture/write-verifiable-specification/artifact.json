@@ -1,0 +1,69 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/development/architecture/write-verifiable-specification",
+  "slug": "write-verifiable-specification",
+  "name": "Write Verifiable Specification",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Write an implementation-ready specification with decisions, invariants, boundaries, and acceptance evidence.",
+  "description": "Write or review a feature or system specification from repository evidence, user outcomes, constraints, interfaces, failure states, decisions, and acceptance checks. Use before implementation when ambiguity spans multiple components or stakeholders.",
+  "domain": "development",
+  "category": "architecture",
+  "problems": [
+    "specification-design"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "planning",
+    "design"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not fabricate requirements, stakeholder agreement, dates, or system guarantees.",
+    "It does not replace design decisions with vague adjectives such as scalable or robust.",
+    "It does not start implementation or present unresolved scope as approved."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "author"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/development/architecture/build-disposable-prototype",
+      "skill/development/architecture/define-domain-language",
+      "skill/operations/reviewability/triage-engineering-request"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/operations/system-services/system-service-mutation-guard",
+  "slug": "system-service-mutation-guard",
+  "name": "System service mutation guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block direct operating-system service lifecycle and configuration mutations.",
+  "description": "A deterministic Claude Code PreToolUse gate that refuses mutating systemd, launchd, SysV, and Windows service-manager operations while permitting status and inspection commands.",
+  "domain": "operations",
+  "category": "system-services",
+  "problems": [
+    "system-service-mutation"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "javascript",
+    "shell"
+  ],
+  "lifecycle": [
+    "setup",
+    "operations"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not start, stop, enable, disable, or reconfigure services.",
+    "It does not infer whether a named service is safe or disposable.",
+    "It does not accept prompt text or environment variables as service authority."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/system-service-mutation-guard.mjs",
+        "runtime": "node",
+        "purpose": "Classify system service manager operations and refuse state mutations.",
+        "sideEffects": "none"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

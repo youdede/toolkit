@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/performance/produce-testable-ad-creative",
+  "slug": "produce-testable-ad-creative",
+  "name": "Produce Testable Ad Creative",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Create platform-fit ad variants whose hypotheses and claims can be reviewed and measured.",
+  "description": "Produce ad concepts and copy variants tied to distinct audience insights, formats, claims, and measurement hypotheses. Use when paid campaigns need new creative, disciplined iteration from performance evidence, or a reviewable creative testing matrix.",
+  "domain": "marketing",
+  "category": "performance",
+  "problems": [
+    "ad-creative"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "implementation",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not fabricate testimonials, performance numbers, scarcity, endorsements, or product capabilities.",
+    "It does not evade advertising policies or disguise regulated, discriminatory, or deceptive targeting.",
+    "It does not generate large batches whose differences cannot produce interpretable learning."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "author"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

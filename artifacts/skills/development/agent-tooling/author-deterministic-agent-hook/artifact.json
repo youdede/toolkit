@@ -1,0 +1,69 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/development/agent-tooling/author-deterministic-agent-hook",
+  "slug": "author-deterministic-agent-hook",
+  "name": "Author Deterministic Agent Hook",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Author a narrow deterministic agent hook whose native event and failure semantics are tested.",
+  "description": "Design, implement, and validate a deterministic coding-agent hook from a precise invariant or observation requirement. Use when a repeated must-block or must-observe boundary should be enforced through a runtime-native hook rather than prompt compliance.",
+  "domain": "development",
+  "category": "agent-tooling",
+  "problems": [
+    "agent-policy-integrity",
+    "primitive-protocol-use",
+    "repository-quality-gates"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "design",
+    "implementation",
+    "review"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not claim portability when target events, payloads, blocking exits, or timeout behavior differ materially.",
+    "It does not execute submitted commands, trust project-authored exemptions, or use eval to inspect input.",
+    "It does not install or enable a hook outside a disposable fixture before allow, block, malformed, boundary, load, and removal behavior are tested."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "author",
+    "enforce",
+    "verify"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

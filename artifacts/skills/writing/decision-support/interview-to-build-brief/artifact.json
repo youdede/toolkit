@@ -1,0 +1,67 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/writing/decision-support/interview-to-build-brief",
+  "slug": "interview-to-build-brief",
+  "name": "Interview To Build Brief",
+  "version": "1.1.0",
+  "kind": "skill",
+  "summary": "Interview for evidence-backed product intent before turning decisions into a build brief.",
+  "description": "Ask adaptive questions to establish the user problem, evidence, falsifiable hypothesis, non-goals, authority, and acceptance criteria without smuggling engineering choices into product intent. Use when a build request is materially underspecified and guessing would change the result.",
+  "domain": "writing",
+  "category": "decision-support",
+  "problems": [
+    "requirements-discovery"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "planning"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not ask for information already available in project files or prior answers.",
+    "It does not use an endless fixed questionnaire or block reversible progress unnecessarily.",
+    "It does not convert an assumption into a user-approved requirement."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "plan"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/operations/reviewability/triage-engineering-request",
+      "skill/writing/decision-support/design-stakeholder-questionnaire"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

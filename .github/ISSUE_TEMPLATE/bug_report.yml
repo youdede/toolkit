@@ -1,0 +1,62 @@
+name: Bug report
+description: Report a reproducible defect in the toolkit, installer, or an artifact.
+title: "fix: "
+labels: ["type: bug", "status: triage"]
+body:
+  - type: markdown
+    attributes:
+      value: Do not report vulnerabilities here. Use the private process in SECURITY.md.
+  - type: input
+    id: version
+    attributes:
+      label: Toolkit version or commit
+      placeholder: "0.1.0 or commit SHA"
+    validations:
+      required: true
+  - type: dropdown
+    id: target
+    attributes:
+      label: Target runtime
+      options:
+        - Claude Code
+        - Codex
+        - Cursor
+        - Gemini CLI
+        - GitHub Copilot
+        - OpenCode
+        - Repository tooling
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Include exact commands, bounded fixtures, and prerequisites without secrets or private data.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior and evidence
+      description: Paste the smallest useful output and redact sensitive content.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Suspected scope and impact
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Submission checks
+      options:
+        - label: I searched existing issues and this is not a duplicate.
+          required: true
+        - label: This report contains no credentials, customer data, or undisclosed vulnerability details.
+          required: true

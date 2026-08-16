@@ -1,0 +1,40 @@
+# Runtime targets
+
+Support is declared per artifact. A missing adapter is an intentional refusal, not an installation bug.
+
+## Coverage
+
+| Target | Skills | Hooks | Subagents | Project root | User root |
+| --- | ---: | ---: | ---: | --- | --- |
+| Claude Code | 146 | 56 | 62 | `.claude` | `~/.claude` |
+| Codex | 146 | 22 | 0 | skills: `.agents`; hooks/agents: `.codex` | skills: `~/.agents`; hooks/agents: `~/.codex` |
+| Gemini CLI | 146 | 22 | 62 | `.gemini` | `~/.gemini` |
+| GitHub Copilot | 146 | 0 | 62 | `.github` | `$COPILOT_HOME` or `~/.copilot` |
+| Cursor | 146 | 22 | 0 | `.cursor` | `~/.cursor` |
+| OpenCode | 146 | 22 | 50 | `.opencode` | `~/.config/opencode` |
+
+Every skill uses the runtime's native `skills/<slug>/SKILL.md` location and carries its scripts or references through the same installation. Only Codex receives `agents/openai.yaml`.
+
+## Specialist profiles
+
+Gemini profiles convert the Claude tool allowlist to `read_file`, `grep_search`, and `glob`, preserve `maxTurns` as `max_turns`, and are marked preview because Gemini documents subagents as preview. GitHub Copilot profiles use `.agent.md`, map the read-only tools to `read` and `search`, and carry the turn budget as an explicit instruction because the profile format does not enforce it.
+
+OpenCode receives 50 profiles with a deny-all permission baseline plus explicit `read`, `grep`, and `glob` grants. Twelve profiles that request a model reasoning-effort setting are withheld because OpenCode cannot preserve that setting while inheriting an arbitrary model. Cursor profiles are withheld because `readonly` cannot reproduce the existing per-tool allowlist and would silently expose the parent's broader read, network, browser, or MCP surface.
+
+Codex custom agents are deliberately withheld. The native TOML format supports a read-only sandbox, but an agent that omits `mcp_servers` inherits the parent MCP configuration and the format does not provide the closed `Read`/`Grep`/`Glob` allowlist required by this catalog's specialist contract. Publishing a profile would therefore broaden authority compared with the canonical artifact. The installer already resolves Codex agent roots through `.codex`, so support can be added without a layout migration if the native boundary becomes equivalent.
+
+## Deterministic gates
+
+The first cross-runtime gate tranche contains 22 shell-only `PreToolUse` guards. Codex registers them in `.codex/hooks.json` as synchronous `PreToolUse` command hooks matched to `Bash`; an exit code of 2 blocks the call, and each handler has a bounded timeout. Gemini registers them as `BeforeTool` with millisecond timeouts and an input bridge. Cursor registers native `preToolUse` handlers with `Shell`, `failClosed: true`, and second-based timeouts. OpenCode installs one local `.js` plugin per selected guard, filters `tool.execute.before` to shell calls, normalizes the working directory, and invokes the bounded policy core with Node.js.
+
+Write/edit, MCP, prompt, transcript, compaction, configuration, worktree, failure-context, and task-completion hooks remain Claude-only until target-native fixtures prove that their preventive boundary and failure policy survive translation. GitHub Copilot hooks are withheld because documented hook timeouts always fail open, which conflicts with the fail-closed promise of the enforcement catalog.
+
+Installing an OpenCode guard executes local plugin code when OpenCode starts and requires a reload after changes. Codex exact command hooks require the workspace to be trusted; Gemini and Cursor project hooks are likewise subject to their runtime trust controls. Node.js 20 or later must remain available for JavaScript helpers and cross-runtime deterministic gates.
+
+## Official format references
+
+- [Codex skills](https://developers.openai.com/codex/skills), [hooks](https://developers.openai.com/codex/hooks), and [custom agents](https://developers.openai.com/codex/subagents)
+- [Gemini CLI skills](https://geminicli.com/docs/cli/skills/), [subagents](https://geminicli.com/docs/core/subagents/), and [hooks](https://geminicli.com/docs/hooks/reference/)
+- [GitHub Copilot skills](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-skills) and [custom agents](https://docs.github.com/en/copilot/reference/custom-agents-configuration)
+- [Cursor skills](https://cursor.com/docs/skills), [subagents](https://cursor.com/docs/subagents), and [hooks](https://cursor.com/docs/hooks)
+- [OpenCode skills](https://opencode.ai/docs/skills), [agents](https://opencode.ai/docs/agents), [permissions](https://opencode.ai/docs/permissions), and [plugins](https://opencode.ai/docs/plugins)

@@ -1,0 +1,34 @@
+{
+  "$schema": "../../schema/pack.schema.json",
+  "schemaVersion": 1,
+  "id": "pack/data-change-safety",
+  "slug": "data-change-safety",
+  "name": "Data change safety",
+  "summary": "Review schema and migration changes with deterministic safety checks and independent risk analysis.",
+  "outcomes": [
+    "compatible-data-change",
+    "migration-safety"
+  ],
+  "members": [
+    {
+      "artifactId": "skill/data/migrations/review-database-migration-plan",
+      "role": "procedure",
+      "required": true
+    },
+    {
+      "artifactId": "skill/data/schemas/review-schema-evolution",
+      "role": "verifier",
+      "required": true
+    },
+    {
+      "artifactId": "subagent/data/migrations/migration-risk-reviewer",
+      "role": "specialist",
+      "required": true
+    },
+    {
+      "artifactId": "hook/data/migrations/migration-safety-guard",
+      "role": "enforcement",
+      "required": true
+    }
+  ]
+}

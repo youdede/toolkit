@@ -1,0 +1,67 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/operations/observability/build-macos-metrics-collector",
+  "slug": "build-macos-metrics-collector",
+  "name": "Build Macos Metrics Collector",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Build a low-overhead local macOS metrics collector with private-by-default storage.",
+  "description": "Design and validate a native macOS metrics collector using supported system interfaces, bounded sampling, SQLite, and launchd. Use for local device observability where privacy and low overhead are required.",
+  "domain": "operations",
+  "category": "observability",
+  "problems": [
+    "local-monitoring"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "swift",
+    "sql",
+    "shell"
+  ],
+  "lifecycle": [
+    "design",
+    "implementation",
+    "operations"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not collect screen content, keystrokes, credentials, or unrelated application data.",
+    "It does not require private APIs for core operation.",
+    "It does not transmit telemetry or make backups public by default."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "author"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

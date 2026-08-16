@@ -1,0 +1,64 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/development/testing/test-interface-in-browser",
+  "slug": "test-interface-in-browser",
+  "name": "Test Interface In Browser",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Exercise a bounded browser journey with state, network, console, accessibility, and visual evidence.",
+  "description": "Test a web interface in a real browser across functional states, viewport behavior, console and network failures, accessibility, and persistence. Use when static review or unit tests cannot prove an important user journey.",
+  "domain": "development",
+  "category": "testing",
+  "problems": [
+    "browser-testing"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "implementation",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not bypass authentication, bot protection, access controls, or consent.",
+    "It does not claim cross-browser or assistive-technology coverage that was not run.",
+    "It does not alter production data or conceal console, network, or cleanup failures."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "verify"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

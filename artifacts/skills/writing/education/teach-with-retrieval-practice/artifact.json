@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/writing/education/teach-with-retrieval-practice",
+  "slug": "teach-with-retrieval-practice",
+  "name": "Teach With Retrieval Practice",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Teach toward a real mission using short lessons, retrieval, feedback, and records.",
+  "description": "Design a stateful learning sequence grounded in the learner’s mission, prior knowledge, trusted sources, retrieval practice, feedback, and spaced application. Use when the user wants to learn a skill over multiple sessions.",
+  "domain": "writing",
+  "category": "education",
+  "problems": [
+    "teaching"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "learning"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not equate passive reading or answer recognition with durable learning.",
+    "It does not infer broad ability from one response or use manipulative grading.",
+    "It does not persist personal learning records without explicit consent."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "operate"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/writing/education/build-progressive-learning-exercises"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

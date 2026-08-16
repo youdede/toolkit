@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": ["project"],
+  "files": [{"from": "targets/claude-code/symlink-publication-guard.mjs", "to": "hooks/youdede/symlink-publication-guard.mjs", "executable": true}],
+  "settingsPatch": {"hooks": {"PreToolUse": [{
+    "matcher": "Bash",
+    "description": "[youdede:symlink-publication-guard] Keep published symlink targets contained",
+    "hooks": [{"type": "command", "command": "node \"{claudeRoot}/hooks/youdede/symlink-publication-guard.mjs\"", "timeout": 20}]
+  }]}}
+}

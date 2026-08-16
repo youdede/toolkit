@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": ["project"],
+  "files": [{"from": "targets/claude-code/release-clean-state-guard.mjs", "to": "hooks/youdede/release-clean-state-guard.mjs", "executable": true}],
+  "settingsPatch": {"hooks": {"PreToolUse": [{
+    "matcher": "Bash",
+    "description": "[youdede:release-clean-state-guard] Require a clean Git release state",
+    "hooks": [{"type": "command", "command": "node \"{claudeRoot}/hooks/youdede/release-clean-state-guard.mjs\"", "timeout": 20}]
+  }]}}
+}

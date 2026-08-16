@@ -1,0 +1,71 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/operations/release/release-risk-reviewer",
+  "slug": "release-risk-reviewer",
+  "name": "Release Risk Reviewer",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Review a bounded release candidate for evidence-backed rollout, rollback, and verification risk.",
+  "description": "Review a supplied release candidate, exact revision, required checks, deployment plan, migrations, and rollback evidence for material release risk. Use before a release decision when a parent needs a read-only risk review, not deployment execution or approval.",
+  "domain": "operations",
+  "category": "release",
+  "problems": [
+    "release-verification"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review",
+    "release"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not deploy, push, tag, trigger release jobs, or modify release configuration.",
+    "It does not claim checks passed, production health, or rollback readiness without exact supplied evidence.",
+    "It does not approve a release, bypass required controls, or grant production authority."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [
+      "hook/operations/package-publication/package-publish-guard",
+      "hook/operations/repository-state/release-clean-state-guard",
+      "hook/operations/versioning/release-version-consistency-guard",
+      "skill/operations/release/verify-mobile-release-readiness",
+      "skill/operations/release/verify-production-release",
+      "subagent/operations/release/release-evidence-verifier"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/release-readiness"
+    ]
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/security/telemetry/sensitive-logging-reviewer",
+  "slug": "sensitive-logging-reviewer",
+  "name": "Sensitive Logging Reviewer",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Review a bounded telemetry path for classified data reaching logs, traces, errors, or analytics.",
+  "description": "A narrow, read-only specialist whose outcome is to trace one classified datum from its source through transformation to an observable telemetry sink and audience. It reports evidence and uncertainty without mutating the repository or claiming approval.",
+  "domain": "security",
+  "category": "telemetry",
+  "problems": [
+    "data-exposure-review"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not read, reproduce, or request real secret values.",
+    "It does not search external telemetry systems or change retention.",
+    "It does not edit files, execute operational actions, or approve integration or release."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/data/governance/design-private-data-lifecycle"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/positioning/build-competitor-evidence-profile",
+  "slug": "build-competitor-evidence-profile",
+  "name": "Build Competitor Evidence Profile",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Build a dated competitor profile that separates observed facts, claims, inference, and unknowns.",
+  "description": "Build structured competitor evidence profiles from lawful public sources, supplied materials, and reproducible observations. Use when positioning, product, sales, or strategy work needs comparable current facts rather than an untraceable competitive narrative.",
+  "domain": "marketing",
+  "category": "positioning",
+  "problems": [
+    "competitive-intelligence"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "review",
+    "maintenance"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not scrape behind authentication, bypass technical controls, or solicit confidential competitor information.",
+    "It does not invent market share, customer counts, roadmap, pricing, or product capability.",
+    "It does not turn inference or anonymous commentary into an established fact."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "author"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

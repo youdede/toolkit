@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/growth/evaluate-free-tool-growth",
+  "slug": "evaluate-free-tool-growth",
+  "name": "Evaluate Free Tool Growth",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Evaluate whether a free utility can create genuine user value and a measurable acquisition loop.",
+  "description": "Evaluate and scope a free calculator, checker, generator, template, or interactive utility as a growth product. Use when a team is considering engineering a free tool for discovery, lead qualification, education, or product adoption.",
+  "domain": "marketing",
+  "category": "growth",
+  "problems": [
+    "free-tool-growth"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "planning",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not gate the core result behind surprise lead capture.",
+    "It does not present estimates as professional, legal, medical, or financial determinations.",
+    "It does not recommend a thin clone or mass-generated utility with no distinct user value."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

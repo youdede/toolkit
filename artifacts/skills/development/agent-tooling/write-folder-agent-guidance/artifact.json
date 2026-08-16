@@ -1,0 +1,64 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/development/agent-tooling/write-folder-agent-guidance",
+  "slug": "write-folder-agent-guidance",
+  "name": "Write Folder Agent Guidance",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Write scoped agent guidance files that inherit cleanly and avoid contradiction.",
+  "description": "Create or update folder-scoped agent instruction files after inspecting runtime precedence and repository boundaries. Use when a subtree needs commands or constraints that differ from the repository root.",
+  "domain": "development",
+  "category": "agent-tooling",
+  "problems": [
+    "folder-context"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "design",
+    "implementation"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not duplicate the root guidance into every folder.",
+    "It does not invent commands, paths, owners, or runtime precedence.",
+    "It does not weaken inherited safety or quality policy without explicit review."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "author"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

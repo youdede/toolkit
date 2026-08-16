@@ -1,0 +1,61 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/development/serialization/serialization-contract-reviewer",
+  "slug": "serialization-contract-reviewer",
+  "name": "Serialization Contract Reviewer",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Review encoder and decoder changes for round-trip loss and cross-version wire incompatibility.",
+  "description": "A narrow, read-only specialist whose outcome is to find a value or version pairing that loses information or changes meaning across serialization boundaries. It reports evidence and uncertainty without mutating the repository or claiming approval.",
+  "domain": "development",
+  "category": "serialization",
+  "problems": [
+    "round-trip-compatibility"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not claim wire compatibility from schema shape alone.",
+    "It does not execute fuzzers or regenerate serialization code.",
+    "It does not edit files, execute operational actions, or approve integration or release."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/operations/git/resolve-merge-conflicts-by-intent",
+  "slug": "resolve-merge-conflicts-by-intent",
+  "name": "Resolve Merge Conflicts By Intent",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Resolve Git conflicts by reconstructing both changes, preserving intent, and verifying the merged behavior.",
+  "description": "Resolve an in-progress merge, rebase, or cherry-pick by tracing each side to its intent, selecting an explicit combined behavior, and verifying the resulting history. Use when conflict markers require semantic rather than mechanical resolution.",
+  "domain": "operations",
+  "category": "git",
+  "capabilities": [
+    "diagnose"
+  ],
+  "problems": [
+    "merge-conflict-resolution",
+    "branch-integration"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "implementation",
+    "review"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not automatically abort, continue, commit, push, or force-update history.",
+    "It does not choose an entire side merely because it compiles or has the newer timestamp.",
+    "It does not rewrite unrelated files or hide verification failures inside conflict cleanup."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [
+      "skill/development/testing/verify-completion-evidence",
+      "skill/operations/git/prepare-branch-integration"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  }
+}

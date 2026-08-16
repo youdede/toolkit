@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "gemini-cli",
+  "scopes": [
+    "project",
+    "user"
+  ],
+  "files": [
+    {
+      "from": "targets/gemini-cli/dependency-risk-reviewer.md",
+      "to": "agents/{slug}.md"
+    }
+  ],
+  "stability": "preview",
+  "limitations": [
+    "Gemini CLI currently documents subagents as a preview capability."
+  ]
+}

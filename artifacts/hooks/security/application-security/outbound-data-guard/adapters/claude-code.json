@@ -1,0 +1,30 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": ["project"],
+  "files": [
+    {
+      "from": "targets/claude-code/outbound-data-guard.mjs",
+      "to": "hooks/youdede/outbound-data-guard.mjs",
+      "executable": true
+    }
+  ],
+  "settingsPatch": {
+    "hooks": {
+      "PreToolUse": [
+        {
+          "matcher": "Bash|PowerShell",
+          "description": "[youdede:outbound-data-guard] Reject explicit local-data uploads and transfers",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "node \"{claudeRoot}/hooks/youdede/outbound-data-guard.mjs\"",
+              "timeout": 10
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

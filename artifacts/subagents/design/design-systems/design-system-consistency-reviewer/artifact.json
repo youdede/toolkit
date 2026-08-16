@@ -1,0 +1,63 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/design/design-systems/design-system-consistency-reviewer",
+  "slug": "design-system-consistency-reviewer",
+  "name": "Design System Consistency Reviewer",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Review a bounded interface delta for component, token, variant, and exception consistency.",
+  "description": "A narrow, read-only specialist whose outcome is to identify a changed UI element that bypasses an applicable system primitive or violates its documented variant contract. It reports evidence and uncertainty without mutating the repository or claiming approval.",
+  "domain": "design",
+  "category": "design-systems",
+  "problems": [
+    "token-component-conformance"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "html",
+    "css",
+    "javascript"
+  ],
+  "lifecycle": [
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not rank aesthetic preference or demand pixel uniformity.",
+    "It does not perform accessibility or web-performance review.",
+    "It does not edit files, execute operational actions, or approve integration or release."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

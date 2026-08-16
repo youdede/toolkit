@@ -1,0 +1,67 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/operations/agent-orchestration/audit-agent-workflow-opportunities",
+  "slug": "audit-agent-workflow-opportunities",
+  "name": "Audit Agent Workflow Opportunities",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Discover durable agent-workflow improvements from one failed run or a bounded history window.",
+  "description": "Analyze one agent run or a consented bounded window of local agent history to find repeated corrections, manual sequences, and preventable failures worth encoding. Use when deciding what should become guidance, a skill, hook, subagent, tool, or automation.",
+  "domain": "operations",
+  "category": "agent-orchestration",
+  "problems": [
+    "priority-discovery",
+    "workflow-delegation",
+    "agent-evaluation"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "maintenance"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not ingest an unbounded transcript corpus or retain raw sensitive history.",
+    "It does not turn a one-off mistake into permanent policy without recurrence or impact evidence.",
+    "It does not recommend an AI component when a simpler deterministic check or documentation fix is sufficient."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess",
+    "plan"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

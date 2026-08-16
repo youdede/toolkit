@@ -1,0 +1,70 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/security/code-execution/dynamic-code-execution-guard",
+  "slug": "dynamic-code-execution-guard",
+  "name": "Dynamic code execution guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block new direct dynamic code execution primitives in supported source files.",
+  "description": "A deterministic Claude Code PreToolUse gate that masks comments and literals before detecting direct eval-style execution in JavaScript, TypeScript, Python, PHP, and Ruby source edits.",
+  "domain": "security",
+  "category": "code-execution",
+  "problems": [
+    "dynamic-code-execution"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "javascript",
+    "typescript",
+    "python",
+    "php",
+    "ruby"
+  ],
+  "lifecycle": [
+    "implementation",
+    "review"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not execute or rewrite submitted source code.",
+    "It does not claim to detect indirect or reflective execution through custom wrappers.",
+    "It does not treat an inline suppression or comment as approval."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/dynamic-code-execution-guard.mjs",
+        "runtime": "node",
+        "purpose": "Recognize direct dynamic execution primitives in bounded proposed source content.",
+        "sideEffects": "none"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

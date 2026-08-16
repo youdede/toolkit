@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/strategy/map-conversion-site-architecture",
+  "slug": "map-conversion-site-architecture",
+  "name": "Map Conversion Site Architecture",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Map a website around user decisions, content ownership, navigation, and crawlable relationships.",
+  "description": "Plan or audit a marketing website’s page inventory, hierarchy, navigation, URL system, internal links, and ownership around user decisions and search discovery. Use before a redesign, migration, or expansion when page relationships need an explicit model.",
+  "domain": "marketing",
+  "category": "strategy",
+  "problems": [
+    "information-architecture"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "planning",
+    "design"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not delete, merge, redirect, or rename production URLs without approved migration evidence.",
+    "It does not create pages solely to occupy keywords or mirror the company org chart.",
+    "It does not claim a hierarchy is usable or crawlable without appropriate validation."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "plan"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

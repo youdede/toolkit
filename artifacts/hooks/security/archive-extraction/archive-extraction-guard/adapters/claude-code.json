@@ -1,0 +1,8 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": ["project"],
+  "files": [{"from": "targets/claude-code/archive-extraction-guard.mjs", "to": "hooks/youdede/archive-extraction-guard.mjs", "executable": true}],
+  "settingsPatch": {"hooks": {"PreToolUse": [{"matcher": "Bash", "description": "[youdede:archive-extraction-guard] Refuse unverified archive extraction", "hooks": [{"type": "command", "command": "node \"{claudeRoot}/hooks/youdede/archive-extraction-guard.mjs\"", "timeout": 10}]}]}}
+}

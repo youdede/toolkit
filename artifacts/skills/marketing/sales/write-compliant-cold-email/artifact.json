@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/sales/write-compliant-cold-email",
+  "slug": "write-compliant-cold-email",
+  "name": "Write Compliant Cold Email",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Write concise B2B outreach grounded in relevance, verifiable claims, and respectful follow-up.",
+  "description": "Write or review a bounded B2B cold-email sequence using lawful targeting, evidence-based relevance, peer-level language, one clear ask, and opt-out handling. Use when an approved prospecting program needs message copy after audience and compliance decisions are complete.",
+  "domain": "marketing",
+  "category": "sales",
+  "problems": [
+    "outbound-email"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "implementation",
+    "review"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not harvest private addresses, infer sensitive traits, impersonate a peer, or fabricate research.",
+    "It does not bypass opt-outs, spam controls, platform rules, or legal review.",
+    "It does not send messages, configure domains, or claim compliance from copy alone."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "author"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

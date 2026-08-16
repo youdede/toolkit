@@ -1,0 +1,66 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/development/architecture/write-implementation-plan",
+  "slug": "write-implementation-plan",
+  "name": "Write Implementation Plan",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Write a repository-grounded implementation plan with bounded steps, proof, dependencies, and decisions.",
+  "description": "Write or review an implementation plan from an approved specification and current repository evidence, including exact change surfaces, ordering, tests, migrations, checkpoints, and open decisions. Use before multi-file or risky implementation work.",
+  "domain": "development",
+  "category": "architecture",
+  "problems": [
+    "implementation-planning"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "handoff"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not invent files, APIs, tests, commands, or repository conventions without inspection.",
+    "It does not hide design decisions inside implementation steps.",
+    "It does not execute the plan or imply authority beyond the approved task."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "author"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/development/architecture/design-deep-module-interface"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

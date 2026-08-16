@@ -1,0 +1,12 @@
+# prompt-secret-guard
+
+Install with `npx @youdede/toolkit add prompt-secret-guard`. The hook runs on `UserPromptSubmit`, before model processing, and returns a JSON block decision with `suppressOriginalPrompt` when a bounded high-confidence credential pattern matches. It fails closed for malformed or oversized input and never repeats the prompt in diagnostics.
+
+The protected boundary is submitted prompt text only. It allows ordinary prose, redacted examples, and prompts without a recognized live credential format. It has no runtime configuration or project-writable bypass.
+
+## Refusals and limits
+
+- It does not reveal, persist, transmit, rotate, or revoke a detected credential.
+- It does not inspect attachments, referenced files, previous turns, or assistant output.
+- It does not claim complete secret coverage or replace repository and provider scanners.
+- It does not accept an inline suppression, allowlist, or environment-variable bypass.

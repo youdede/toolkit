@@ -1,0 +1,68 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/operations/git/protected-branch-guard",
+  "slug": "protected-branch-guard",
+  "name": "Protected branch guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block native edits and direct Git mutations that target a protected branch.",
+  "description": "A deterministic Claude Code PreToolUse hook that discovers the current and repository-default Git branches with bounded subprocesses, blocks native file changes on protected branches, and parses static shell envelopes for narrow history mutation, deletion, and direct-push cases.",
+  "domain": "operations",
+  "category": "git",
+  "problems": [
+    "protected-branch-change"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "javascript",
+    "shell"
+  ],
+  "lifecycle": [
+    "implementation",
+    "pre-commit",
+    "release"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not create a branch, commit, checkpoint, merge, rebase, delete, or push on the user's behalf.",
+    "It does not accept a project-writable allowlist, environment switch, command comment, or embedded approval as a bypass.",
+    "It does not claim to protect server-side branch rules or arbitrary repository mutations performed by non-native tools."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/protected-branch-guard.mjs",
+        "runtime": "node",
+        "purpose": "Discover protected Git branch context and reject narrow native or static command mutations before execution.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

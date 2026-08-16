@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/operations/observability/write-incident-runbook",
+  "slug": "write-incident-runbook",
+  "name": "Write Incident Runbook",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Write an executable incident runbook with detection, authority, diagnosis, containment, and recovery.",
+  "description": "Write or review an incident runbook for a specific service or failure mode using real signals, safe diagnostic commands, authority boundaries, containment, recovery, communication, and verification. Use before an incident or after a response exposes missing guidance.",
+  "domain": "operations",
+  "category": "observability",
+  "problems": [
+    "incident-readiness"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "operations",
+    "incident"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not embed secrets, personal credentials, or irreversible commands as routine steps.",
+    "It does not grant incident authority or suppress required escalation and communication.",
+    "It does not claim a runbook is tested from document review alone."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "author"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

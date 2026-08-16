@@ -1,0 +1,79 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/security/application-security/outbound-data-guard",
+  "slug": "outbound-data-guard",
+  "name": "Outbound data guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block explicit local-file uploads and dynamic payloads sent by common network commands.",
+  "description": "A framework-agnostic deterministic policy core with a Claude Code PreToolUse adapter. It applies bounded shell parsing to high-confidence upload flags, local-to-remote transfers, piped network streams, and uninspectable dynamic payloads without logging their values.",
+  "domain": "security",
+  "category": "application-security",
+  "problems": [
+    "outbound-data-control"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "javascript",
+    "shell"
+  ],
+  "lifecycle": [
+    "implementation",
+    "operations"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not inspect, print, upload, redact, or retain the contents of any local file or payload.",
+    "It does not claim to prevent every network path, covert channel, child process, or application protocol.",
+    "It does not accept project-controlled configuration or provide a hidden bypass for blocked transfers."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/outbound-data-guard.mjs",
+        "runtime": "node",
+        "purpose": "Evaluate shell transfer intent and block explicit outbound local-data boundaries before execution.",
+        "sideEffects": "none"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [
+      "hook/security/secrets/sensitive-file-access-guard",
+      "skill/development/agent-tooling/author-mcp-server-contract",
+      "skill/security/threat-modeling/review-agent-tool-boundaries",
+      "subagent/security/application-security/application-security-reviewer",
+      "subagent/security/threat-modeling/mcp-trust-boundary-reviewer"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/secure-agent-boundaries"
+    ]
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

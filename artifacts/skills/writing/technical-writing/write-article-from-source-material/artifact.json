@@ -1,0 +1,70 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/writing/technical-writing/write-article-from-source-material",
+  "slug": "write-article-from-source-material",
+  "name": "Write Article From Source Material",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Develop an article from bounded source material while preserving claims, reader grounding, and author control.",
+  "description": "Develop an article from notes, interviews, evidence, or fragments by separating exploration from structure, tracking reader prerequisites, and validating every factual claim. Use when source material exists but the argument and sequence need deliberate shaping.",
+  "domain": "writing",
+  "category": "technical-writing",
+  "capabilities": [
+    "author"
+  ],
+  "problems": [
+    "source-material-development",
+    "copy-editing"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "design",
+    "implementation",
+    "review"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not fabricate examples, quotations, citations, consensus, or factual bridges absent from the source material.",
+    "It does not overwrite user edits, silently alter voice, or mine unrelated private workspace content.",
+    "It does not publish, post, or optimize for a platform without separate authorization."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [
+      "skill/marketing/content/edit-marketing-copy",
+      "skill/research/web-research/conduct-source-backed-research"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  }
+}

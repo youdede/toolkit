@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": [
+    "project"
+  ],
+  "files": [
+    {
+      "from": "targets/claude-code/test-integrity-guard.mjs",
+      "to": "hooks/youdede/test-integrity-guard.mjs",
+      "executable": true
+    },
+    {
+      "from": "targets/claude-code/test-integrity-paths.mjs",
+      "to": "hooks/youdede/test-integrity-paths.mjs"
+    }
+  ],
+  "settingsPatch": {
+    "hooks": {
+      "PreToolUse": [
+        {
+          "matcher": "Bash|Write|Edit|MultiEdit",
+          "description": "[youdede:test-integrity-guard] Protect test execution and discoverability",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "node \"{claudeRoot}/hooks/youdede/test-integrity-guard.mjs\"",
+              "timeout": 10
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

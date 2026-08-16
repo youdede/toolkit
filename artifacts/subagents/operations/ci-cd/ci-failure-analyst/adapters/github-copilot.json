@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "github-copilot",
+  "scopes": [
+    "project",
+    "user"
+  ],
+  "files": [
+    {
+      "from": "targets/github-copilot/ci-failure-analyst.agent.md",
+      "to": "agents/{slug}.agent.md"
+    }
+  ],
+  "stability": "preview",
+  "limitations": [
+    "GitHub Copilot does not enforce the source profile turn limit or reasoning-effort preference as frontmatter fields."
+  ]
+}

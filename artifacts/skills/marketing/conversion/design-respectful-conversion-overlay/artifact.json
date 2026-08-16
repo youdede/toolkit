@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/conversion/design-respectful-conversion-overlay",
+  "slug": "design-respectful-conversion-overlay",
+  "name": "Design Respectful Conversion Overlay",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Design a contextual overlay that is accessible, dismissible, frequency-bounded, and measurable.",
+  "description": "Design or review a popup, modal, banner, slide-in, or sticky conversion prompt with contextual value, accessible behavior, clear dismissal, frequency limits, and consent-aware measurement. Use when an interruptive surface is being considered or underperforming.",
+  "domain": "marketing",
+  "category": "conversion",
+  "problems": [
+    "overlay-conversion"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "design",
+    "implementation",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not use fake close controls, repeated reappearance, forced countdowns, or misleading system-style alerts.",
+    "It does not capture contact or sensitive data without appropriate notice and permission.",
+    "It does not trade accessibility or core task completion for opt-in rate."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "plan"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

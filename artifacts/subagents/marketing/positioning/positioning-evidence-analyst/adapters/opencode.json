@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "opencode",
+  "scopes": [
+    "project",
+    "user"
+  ],
+  "files": [
+    {
+      "from": "targets/opencode/positioning-evidence-analyst.md",
+      "to": "agents/{slug}.md"
+    }
+  ],
+  "stability": "stable",
+  "limitations": []
+}

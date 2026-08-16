@@ -1,0 +1,68 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/writing/decision-support/design-stakeholder-questionnaire",
+  "slug": "design-stakeholder-questionnaire",
+  "name": "Design Stakeholder Questionnaire",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Design a concise asynchronous questionnaire around decisions only a specific stakeholder can answer.",
+  "description": "Design a stakeholder questionnaire that closes a defined knowledge gap with prioritized, single-purpose questions and usable answer fields. Use when the user must obtain facts or decisions from someone with unique context.",
+  "domain": "writing",
+  "category": "decision-support",
+  "capabilities": [
+    "plan"
+  ],
+  "problems": [
+    "stakeholder-questionnaire",
+    "decision-sensitive-gaps"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "planning"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not invent the stakeholder's answer or pressure the requester to answer on their behalf.",
+    "It does not collect credentials, unnecessary sensitive data, or information without a declared use.",
+    "It does not bury the highest-impact questions behind optional background and low-value detail."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [
+      "skill/writing/decision-support/interview-to-build-brief",
+      "skill/writing/documentation/document-project-vision"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  }
+}

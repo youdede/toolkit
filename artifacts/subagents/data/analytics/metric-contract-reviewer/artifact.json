@@ -1,0 +1,62 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/data/analytics/metric-contract-reviewer",
+  "slug": "metric-contract-reviewer",
+  "name": "Metric Contract Reviewer",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Review a metric implementation for grain, cohort, window, timezone, deduplication, and denominator drift.",
+  "description": "A narrow, read-only specialist whose outcome is to identify a changed metric contract field that alters the population, time basis, or unit consumed by a named decision. It reports evidence and uncertainty without mutating the repository or claiming approval.",
+  "domain": "data",
+  "category": "analytics",
+  "problems": [
+    "metric-semantics"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "sql",
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not calculate metric values without supplied data.",
+    "It does not perform general data-quality diagnosis or dashboard redesign.",
+    "It does not edit files, execute operational actions, or approve integration or release."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/data/databases/query-production-readonly",
+  "slug": "query-production-readonly",
+  "name": "Query Production Readonly",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Answer a bounded question from production data without mutating or exporting it.",
+  "description": "Run a minimal, bounded, read-only production database query and report aggregate evidence safely. Use when a specific operational question cannot be answered from lower-risk telemetry or replicas.",
+  "domain": "data",
+  "category": "databases",
+  "problems": [
+    "production-data-analysis"
+  ],
+  "frameworks": [
+    "postgresql"
+  ],
+  "languages": [
+    "sql"
+  ],
+  "lifecycle": [
+    "operations",
+    "incident"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not execute writes, DDL, procedures with side effects, or lock-heavy analysis.",
+    "It does not print connection strings, credentials, or unnecessary row-level personal data.",
+    "It does not retry an expensive or timed-out production query in a loop."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "collect"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

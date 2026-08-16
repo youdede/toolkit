@@ -1,0 +1,76 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/security/dependencies/dependency-change-guard",
+  "slug": "dependency-change-guard",
+  "name": "Dependency change guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Keep dependency changes reproducible and block explicit package-manager safety bypasses.",
+  "description": "A deterministic Claude Code PreToolUse gate for Bash, Write, and Edit that prevents direct lockfile editing, rejects narrow package-manager safety bypass flags, and verifies at commit time that changed dependency manifests have a staged associated lockfile when one exists.",
+  "domain": "security",
+  "category": "dependencies",
+  "problems": [
+    "dependency-change-control",
+    "dependency-risk"
+  ],
+  "frameworks": [
+    "agnostic",
+    "nodejs"
+  ],
+  "languages": [
+    "go",
+    "javascript",
+    "php",
+    "python",
+    "ruby",
+    "rust",
+    "shell",
+    "typescript"
+  ],
+  "lifecycle": [
+    "implementation",
+    "pre-commit",
+    "maintenance"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not install, remove, upgrade, resolve, audit, or choose a dependency for the user.",
+    "It does not claim that a matching manifest and lockfile diff proves dependency safety or build correctness.",
+    "It does not expose a project-writable policy, silently rewrite a lockfile, or approve a bypassing command."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/dependency-change-guard.mjs",
+        "runtime": "node",
+        "purpose": "Inspect bounded Git state and deterministically enforce reproducible dependency-change boundaries.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

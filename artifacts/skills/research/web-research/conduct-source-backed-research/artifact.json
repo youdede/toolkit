@@ -1,0 +1,66 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/research/web-research/conduct-source-backed-research",
+  "slug": "conduct-source-backed-research",
+  "name": "Conduct Source Backed Research",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Research a decision with primary sources, claim-level citations, and a gap pass.",
+  "description": "Conduct deep source-backed research using available browsing or research tools, then synthesize a cited report that separates facts, inference, and uncertainty. Use for consequential questions that need current external evidence.",
+  "domain": "research",
+  "category": "web-research",
+  "problems": [
+    "source-backed-research"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "review"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not fabricate citations, quote search snippets as evidence, or force consensus.",
+    "It does not rely on a single vendor, API, or model when alternatives are available.",
+    "It does not present inference, forecasts, or forum anecdotes as confirmed fact."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "research"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/writing/technical-writing/write-article-from-source-material"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

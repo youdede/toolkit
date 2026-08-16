@@ -1,0 +1,775 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-17T01:38:36.852Z",
+  "count": 7,
+  "packs": [
+    {
+      "$schema": "../../schema/pack.schema.json",
+      "schemaVersion": 1,
+      "id": "pack/accessibility-assurance",
+      "slug": "accessibility-assurance",
+      "name": "Accessibility assurance",
+      "summary": "Plan, enforce, and independently verify accessible interface behavior from source evidence.",
+      "outcomes": [
+        "accessible-interface",
+        "regression-prevention"
+      ],
+      "members": [
+        {
+          "artifactId": "skill/design/accessibility/plan-accessibility-conformance-evidence",
+          "role": "procedure",
+          "required": true
+        },
+        {
+          "artifactId": "skill/design/accessibility/test-screen-reader-journey",
+          "role": "verifier",
+          "required": true
+        },
+        {
+          "artifactId": "subagent/design/accessibility/accessibility-journey-tester",
+          "role": "specialist",
+          "required": true
+        },
+        {
+          "artifactId": "subagent/design/accessibility/accessibility-conformance-reviewer",
+          "role": "specialist",
+          "required": true
+        },
+        {
+          "artifactId": "hook/design/semantic-markup/accessibility-attribute-regression-guard",
+          "role": "enforcement",
+          "required": true
+        },
+        {
+          "artifactId": "hook/design/keyboard-focus/focus-style-regression-guard",
+          "role": "enforcement",
+          "required": true
+        }
+      ],
+      "targets": [
+        "claude-code"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "scopes": [
+            "project"
+          ],
+          "optionalUnsupported": [],
+          "optionalUnsupportedByScope": {
+            "project": []
+          }
+        }
+      },
+      "promotion": {
+        "eligible": true,
+        "criteria": {
+          "crossKindRequiredWorkflow": true,
+          "requiredProcedure": true,
+          "independentRequiredAssurance": true,
+          "roleCompatible": true,
+          "compositionConnected": true,
+          "conflictFree": true,
+          "prerequisiteClosed": true,
+          "compatibleInstallCoordinate": true
+        },
+        "requiredKinds": [
+          "hook",
+          "skill",
+          "subagent"
+        ],
+        "roleCounts": {
+          "procedure": 1,
+          "collector": 0,
+          "specialist": 2,
+          "verifier": 1,
+          "enforcement": 2,
+          "observer": 0
+        }
+      },
+      "hookFanout": [
+        {
+          "boundary": "claude-code:PreToolUse:Write|Edit|MultiEdit",
+          "count": 2
+        }
+      ],
+      "install": [
+        {
+          "target": "claude-code",
+          "scope": "project",
+          "command": "npx @youdede/toolkit add-pack accessibility-assurance --target claude-code --scope project"
+        }
+      ]
+    },
+    {
+      "$schema": "../../schema/pack.schema.json",
+      "schemaVersion": 1,
+      "id": "pack/data-change-safety",
+      "slug": "data-change-safety",
+      "name": "Data change safety",
+      "summary": "Review schema and migration changes with deterministic safety checks and independent risk analysis.",
+      "outcomes": [
+        "compatible-data-change",
+        "migration-safety"
+      ],
+      "members": [
+        {
+          "artifactId": "skill/data/migrations/review-database-migration-plan",
+          "role": "procedure",
+          "required": true
+        },
+        {
+          "artifactId": "skill/data/schemas/review-schema-evolution",
+          "role": "verifier",
+          "required": true
+        },
+        {
+          "artifactId": "subagent/data/migrations/migration-risk-reviewer",
+          "role": "specialist",
+          "required": true
+        },
+        {
+          "artifactId": "hook/data/migrations/migration-safety-guard",
+          "role": "enforcement",
+          "required": true
+        }
+      ],
+      "targets": [
+        "claude-code"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "scopes": [
+            "project"
+          ],
+          "optionalUnsupported": [],
+          "optionalUnsupportedByScope": {
+            "project": []
+          }
+        }
+      },
+      "promotion": {
+        "eligible": true,
+        "criteria": {
+          "crossKindRequiredWorkflow": true,
+          "requiredProcedure": true,
+          "independentRequiredAssurance": true,
+          "roleCompatible": true,
+          "compositionConnected": true,
+          "conflictFree": true,
+          "prerequisiteClosed": true,
+          "compatibleInstallCoordinate": true
+        },
+        "requiredKinds": [
+          "hook",
+          "skill",
+          "subagent"
+        ],
+        "roleCounts": {
+          "procedure": 1,
+          "collector": 0,
+          "specialist": 1,
+          "verifier": 1,
+          "enforcement": 1,
+          "observer": 0
+        }
+      },
+      "hookFanout": [
+        {
+          "boundary": "claude-code:PreToolUse:Bash|Write|Edit",
+          "count": 1
+        }
+      ],
+      "install": [
+        {
+          "target": "claude-code",
+          "scope": "project",
+          "command": "npx @youdede/toolkit add-pack data-change-safety --target claude-code --scope project"
+        }
+      ]
+    },
+    {
+      "$schema": "../../schema/pack.schema.json",
+      "schemaVersion": 1,
+      "id": "pack/infrastructure-change-readiness",
+      "slug": "infrastructure-change-readiness",
+      "name": "Infrastructure change readiness",
+      "summary": "Plan a staged infrastructure change and independently review lifecycle, blast-radius, and recovery evidence.",
+      "outcomes": [
+        "recovery-evidence",
+        "staged-infrastructure-change"
+      ],
+      "members": [
+        {
+          "artifactId": "skill/operations/infrastructure/plan-infrastructure-change",
+          "role": "procedure",
+          "required": true
+        },
+        {
+          "artifactId": "subagent/operations/infrastructure/infrastructure-change-reviewer",
+          "role": "specialist",
+          "required": true
+        },
+        {
+          "artifactId": "subagent/operations/resilience/disaster-recovery-readiness-auditor",
+          "role": "verifier",
+          "required": true
+        }
+      ],
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "scopes": [
+            "project",
+            "user"
+          ],
+          "optionalUnsupported": [],
+          "optionalUnsupportedByScope": {
+            "project": [],
+            "user": []
+          }
+        },
+        "gemini-cli": {
+          "scopes": [
+            "project",
+            "user"
+          ],
+          "optionalUnsupported": [],
+          "optionalUnsupportedByScope": {
+            "project": [],
+            "user": []
+          }
+        },
+        "github-copilot": {
+          "scopes": [
+            "project",
+            "user"
+          ],
+          "optionalUnsupported": [],
+          "optionalUnsupportedByScope": {
+            "project": [],
+            "user": []
+          }
+        },
+        "opencode": {
+          "scopes": [
+            "project",
+            "user"
+          ],
+          "optionalUnsupported": [],
+          "optionalUnsupportedByScope": {
+            "project": [],
+            "user": []
+          }
+        }
+      },
+      "promotion": {
+        "eligible": true,
+        "criteria": {
+          "crossKindRequiredWorkflow": true,
+          "requiredProcedure": true,
+          "independentRequiredAssurance": true,
+          "roleCompatible": true,
+          "compositionConnected": true,
+          "conflictFree": true,
+          "prerequisiteClosed": true,
+          "compatibleInstallCoordinate": true
+        },
+        "requiredKinds": [
+          "skill",
+          "subagent"
+        ],
+        "roleCounts": {
+          "procedure": 1,
+          "collector": 0,
+          "specialist": 1,
+          "verifier": 1,
+          "enforcement": 0,
+          "observer": 0
+        }
+      },
+      "hookFanout": [],
+      "install": [
+        {
+          "target": "claude-code",
+          "scope": "project",
+          "command": "npx @youdede/toolkit add-pack infrastructure-change-readiness --target claude-code --scope project"
+        },
+        {
+          "target": "gemini-cli",
+          "scope": "project",
+          "command": "npx @youdede/toolkit add-pack infrastructure-change-readiness --target gemini-cli --scope project"
+        },
+        {
+          "target": "github-copilot",
+          "scope": "project",
+          "command": "npx @youdede/toolkit add-pack infrastructure-change-readiness --target github-copilot --scope project"
+        },
+        {
+          "target": "opencode",
+          "scope": "project",
+          "command": "npx @youdede/toolkit add-pack infrastructure-change-readiness --target opencode --scope project"
+        }
+      ]
+    },
+    {
+      "$schema": "../../schema/pack.schema.json",
+      "schemaVersion": 1,
+      "id": "pack/mobile-release-readiness",
+      "slug": "mobile-release-readiness",
+      "name": "Mobile release readiness",
+      "summary": "Review mobile release evidence, accessibility, reliability, repository state, and version consistency.",
+      "outcomes": [
+        "mobile-release-evidence",
+        "safe-publication"
+      ],
+      "members": [
+        {
+          "artifactId": "skill/operations/release/verify-mobile-release-readiness",
+          "role": "procedure",
+          "required": true
+        },
+        {
+          "artifactId": "subagent/development/testing/mobile-reliability-accessibility-reviewer",
+          "role": "specialist",
+          "required": true
+        },
+        {
+          "artifactId": "hook/operations/repository-state/release-clean-state-guard",
+          "role": "enforcement",
+          "required": true
+        },
+        {
+          "artifactId": "hook/operations/versioning/release-version-consistency-guard",
+          "role": "enforcement",
+          "required": true
+        }
+      ],
+      "targets": [
+        "claude-code",
+        "gemini-cli"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "scopes": [
+            "project"
+          ],
+          "optionalUnsupported": [],
+          "optionalUnsupportedByScope": {
+            "project": []
+          }
+        },
+        "gemini-cli": {
+          "scopes": [
+            "project"
+          ],
+          "optionalUnsupported": [],
+          "optionalUnsupportedByScope": {
+            "project": []
+          }
+        }
+      },
+      "promotion": {
+        "eligible": true,
+        "criteria": {
+          "crossKindRequiredWorkflow": true,
+          "requiredProcedure": true,
+          "independentRequiredAssurance": true,
+          "roleCompatible": true,
+          "compositionConnected": true,
+          "conflictFree": true,
+          "prerequisiteClosed": true,
+          "compatibleInstallCoordinate": true
+        },
+        "requiredKinds": [
+          "hook",
+          "skill",
+          "subagent"
+        ],
+        "roleCounts": {
+          "procedure": 1,
+          "collector": 0,
+          "specialist": 1,
+          "verifier": 0,
+          "enforcement": 2,
+          "observer": 0
+        }
+      },
+      "hookFanout": [
+        {
+          "boundary": "claude-code:PreToolUse:Bash",
+          "count": 2
+        },
+        {
+          "boundary": "gemini-cli:BeforeTool:run_shell_command",
+          "count": 2
+        }
+      ],
+      "install": [
+        {
+          "target": "claude-code",
+          "scope": "project",
+          "command": "npx @youdede/toolkit add-pack mobile-release-readiness --target claude-code --scope project"
+        },
+        {
+          "target": "gemini-cli",
+          "scope": "project",
+          "command": "npx @youdede/toolkit add-pack mobile-release-readiness --target gemini-cli --scope project"
+        }
+      ]
+    },
+    {
+      "$schema": "../../schema/pack.schema.json",
+      "schemaVersion": 1,
+      "id": "pack/release-readiness",
+      "slug": "release-readiness",
+      "name": "Release readiness",
+      "summary": "Build an evidence-backed release decision and stop publication from unsafe repository state.",
+      "outcomes": [
+        "release-evidence",
+        "safe-publication"
+      ],
+      "members": [
+        {
+          "artifactId": "skill/operations/release/verify-production-release",
+          "role": "procedure",
+          "required": true
+        },
+        {
+          "artifactId": "subagent/operations/release/release-risk-reviewer",
+          "role": "specialist",
+          "required": true
+        },
+        {
+          "artifactId": "subagent/operations/release/release-evidence-verifier",
+          "role": "verifier",
+          "required": true
+        },
+        {
+          "artifactId": "hook/operations/repository-state/release-clean-state-guard",
+          "role": "enforcement",
+          "required": true
+        },
+        {
+          "artifactId": "hook/operations/versioning/release-version-consistency-guard",
+          "role": "enforcement",
+          "required": true
+        },
+        {
+          "artifactId": "hook/operations/package-publication/package-publish-guard",
+          "role": "enforcement",
+          "required": true
+        }
+      ],
+      "targets": [
+        "claude-code",
+        "gemini-cli"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "scopes": [
+            "project"
+          ],
+          "optionalUnsupported": [],
+          "optionalUnsupportedByScope": {
+            "project": []
+          }
+        },
+        "gemini-cli": {
+          "scopes": [
+            "project"
+          ],
+          "optionalUnsupported": [],
+          "optionalUnsupportedByScope": {
+            "project": []
+          }
+        }
+      },
+      "promotion": {
+        "eligible": true,
+        "criteria": {
+          "crossKindRequiredWorkflow": true,
+          "requiredProcedure": true,
+          "independentRequiredAssurance": true,
+          "roleCompatible": true,
+          "compositionConnected": true,
+          "conflictFree": true,
+          "prerequisiteClosed": true,
+          "compatibleInstallCoordinate": true
+        },
+        "requiredKinds": [
+          "hook",
+          "skill",
+          "subagent"
+        ],
+        "roleCounts": {
+          "procedure": 1,
+          "collector": 0,
+          "specialist": 1,
+          "verifier": 1,
+          "enforcement": 3,
+          "observer": 0
+        }
+      },
+      "hookFanout": [
+        {
+          "boundary": "claude-code:PreToolUse:Bash",
+          "count": 3
+        },
+        {
+          "boundary": "gemini-cli:BeforeTool:run_shell_command",
+          "count": 3
+        }
+      ],
+      "install": [
+        {
+          "target": "claude-code",
+          "scope": "project",
+          "command": "npx @youdede/toolkit add-pack release-readiness --target claude-code --scope project"
+        },
+        {
+          "target": "gemini-cli",
+          "scope": "project",
+          "command": "npx @youdede/toolkit add-pack release-readiness --target gemini-cli --scope project"
+        }
+      ]
+    },
+    {
+      "$schema": "../../schema/pack.schema.json",
+      "schemaVersion": 1,
+      "id": "pack/reviewable-change",
+      "slug": "reviewable-change",
+      "name": "Reviewable change",
+      "summary": "Prepare bounded code changes, obtain independent review, and prevent oversized unreviewable commits.",
+      "outcomes": [
+        "independent-review",
+        "reviewable-delivery"
+      ],
+      "members": [
+        {
+          "artifactId": "skill/operations/reviewability/prepare-reviewable-pull-request",
+          "role": "procedure",
+          "required": true
+        },
+        {
+          "artifactId": "skill/development/code-quality/evaluate-code-review-feedback",
+          "role": "procedure",
+          "required": true
+        },
+        {
+          "artifactId": "skill/development/code-quality/request-independent-code-review",
+          "role": "verifier",
+          "required": true
+        },
+        {
+          "artifactId": "subagent/development/code-quality/refactor-equivalence-reviewer",
+          "role": "specialist",
+          "required": true
+        },
+        {
+          "artifactId": "hook/operations/reviewability/large-diff-review-guard",
+          "role": "enforcement",
+          "required": true
+        }
+      ],
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "opencode"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "scopes": [
+            "project"
+          ],
+          "optionalUnsupported": [],
+          "optionalUnsupportedByScope": {
+            "project": []
+          }
+        },
+        "gemini-cli": {
+          "scopes": [
+            "project"
+          ],
+          "optionalUnsupported": [],
+          "optionalUnsupportedByScope": {
+            "project": []
+          }
+        },
+        "opencode": {
+          "scopes": [
+            "project",
+            "user"
+          ],
+          "optionalUnsupported": [],
+          "optionalUnsupportedByScope": {
+            "project": [],
+            "user": []
+          }
+        }
+      },
+      "promotion": {
+        "eligible": true,
+        "criteria": {
+          "crossKindRequiredWorkflow": true,
+          "requiredProcedure": true,
+          "independentRequiredAssurance": true,
+          "roleCompatible": true,
+          "compositionConnected": true,
+          "conflictFree": true,
+          "prerequisiteClosed": true,
+          "compatibleInstallCoordinate": true
+        },
+        "requiredKinds": [
+          "hook",
+          "skill",
+          "subagent"
+        ],
+        "roleCounts": {
+          "procedure": 2,
+          "collector": 0,
+          "specialist": 1,
+          "verifier": 1,
+          "enforcement": 1,
+          "observer": 0
+        }
+      },
+      "hookFanout": [
+        {
+          "boundary": "claude-code:PreToolUse:Bash",
+          "count": 1
+        },
+        {
+          "boundary": "gemini-cli:BeforeTool:run_shell_command",
+          "count": 1
+        },
+        {
+          "boundary": "opencode:tool.execute.before:bash|shell",
+          "count": 1
+        }
+      ],
+      "install": [
+        {
+          "target": "claude-code",
+          "scope": "project",
+          "command": "npx @youdede/toolkit add-pack reviewable-change --target claude-code --scope project"
+        },
+        {
+          "target": "gemini-cli",
+          "scope": "project",
+          "command": "npx @youdede/toolkit add-pack reviewable-change --target gemini-cli --scope project"
+        },
+        {
+          "target": "opencode",
+          "scope": "project",
+          "command": "npx @youdede/toolkit add-pack reviewable-change --target opencode --scope project"
+        }
+      ]
+    },
+    {
+      "$schema": "../../schema/pack.schema.json",
+      "schemaVersion": 1,
+      "id": "pack/secure-agent-boundaries",
+      "slug": "secure-agent-boundaries",
+      "name": "Secure agent boundaries",
+      "summary": "Design agent integrations, review their trust boundary, and block obvious data-exposure paths.",
+      "outcomes": [
+        "agent-tool-security",
+        "data-exposure-control"
+      ],
+      "members": [
+        {
+          "artifactId": "skill/security/threat-modeling/review-agent-tool-boundaries",
+          "role": "verifier",
+          "required": true
+        },
+        {
+          "artifactId": "skill/development/agent-tooling/author-mcp-server-contract",
+          "role": "procedure",
+          "required": true
+        },
+        {
+          "artifactId": "subagent/security/application-security/application-security-reviewer",
+          "role": "specialist",
+          "required": true
+        },
+        {
+          "artifactId": "subagent/security/threat-modeling/mcp-trust-boundary-reviewer",
+          "role": "specialist",
+          "required": true
+        },
+        {
+          "artifactId": "hook/security/application-security/outbound-data-guard",
+          "role": "enforcement",
+          "required": true
+        },
+        {
+          "artifactId": "hook/security/secrets/sensitive-file-access-guard",
+          "role": "enforcement",
+          "required": true
+        }
+      ],
+      "targets": [
+        "claude-code"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "scopes": [
+            "project"
+          ],
+          "optionalUnsupported": [],
+          "optionalUnsupportedByScope": {
+            "project": []
+          }
+        }
+      },
+      "promotion": {
+        "eligible": true,
+        "criteria": {
+          "crossKindRequiredWorkflow": true,
+          "requiredProcedure": true,
+          "independentRequiredAssurance": true,
+          "roleCompatible": true,
+          "compositionConnected": true,
+          "conflictFree": true,
+          "prerequisiteClosed": true,
+          "compatibleInstallCoordinate": true
+        },
+        "requiredKinds": [
+          "hook",
+          "skill",
+          "subagent"
+        ],
+        "roleCounts": {
+          "procedure": 1,
+          "collector": 0,
+          "specialist": 2,
+          "verifier": 1,
+          "enforcement": 2,
+          "observer": 0
+        }
+      },
+      "hookFanout": [
+        {
+          "boundary": "claude-code:PreToolUse:Bash|PowerShell",
+          "count": 1
+        },
+        {
+          "boundary": "claude-code:PreToolUse:Read|Write|Edit|MultiEdit|NotebookEdit|Grep|Bash|PowerShell",
+          "count": 1
+        }
+      ],
+      "install": [
+        {
+          "target": "claude-code",
+          "scope": "project",
+          "command": "npx @youdede/toolkit add-pack secure-agent-boundaries --target claude-code --scope project"
+        }
+      ]
+    }
+  ]
+}

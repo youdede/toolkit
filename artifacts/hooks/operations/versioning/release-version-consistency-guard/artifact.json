@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/operations/versioning/release-version-consistency-guard",
+  "slug": "release-version-consistency-guard",
+  "name": "Release version consistency guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Require package and lockfile versions to agree before a recognized publication command.",
+  "description": "A deterministic Claude Code PreToolUse gate for Bash that recognizes Node package publication commands and compares bounded root package metadata with its lockfile, rejecting missing, malformed, placeholder, private, or inconsistent release versions.",
+  "domain": "operations",
+  "category": "versioning",
+  "problems": [
+    "release-version-consistency"
+  ],
+  "frameworks": [
+    "nodejs"
+  ],
+  "languages": [
+    "javascript",
+    "typescript",
+    "shell"
+  ],
+  "lifecycle": [
+    "release",
+    "review"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not choose, increment, tag, rewrite, publish, install, or validate compatibility of a version.",
+    "It does not contact a registry or prove that a version is available, unique, or semantically correct.",
+    "It does not treat a matching lockfile as evidence that package contents or provenance are safe.",
+    "It does not accept command options, prompt text, or project-authored files as a bypass."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/release-version-consistency-guard.mjs",
+        "runtime": "node",
+        "purpose": "Inspect bounded package metadata before publication and reject inconsistent or non-releaseable version state.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [
+      "hook/operations/package-publication/package-publish-guard",
+      "hook/operations/repository-state/release-clean-state-guard",
+      "skill/operations/release/verify-mobile-release-readiness",
+      "skill/operations/release/verify-production-release",
+      "subagent/development/testing/mobile-reliability-accessibility-reviewer",
+      "subagent/operations/release/release-evidence-verifier",
+      "subagent/operations/release/release-risk-reviewer"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/mobile-release-readiness",
+      "pack/release-readiness"
+    ]
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

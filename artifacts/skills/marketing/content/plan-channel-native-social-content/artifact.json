@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/content/plan-channel-native-social-content",
+  "slug": "plan-channel-native-social-content",
+  "name": "Plan Channel Native Social Content",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Plan platform-native social content from audience value, proof, voice, and sustainable operations.",
+  "description": "Plan, write, repurpose, or review organic social content for a defined audience and platform using original evidence, native formats, voice constraints, moderation, and measurement. Use when a team needs a sustainable social program rather than generic cross-posting.",
+  "domain": "marketing",
+  "category": "content",
+  "problems": [
+    "social-content"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "implementation",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not publish, schedule, reply, or contact users without explicit authorization.",
+    "It does not plagiarize creators, fabricate engagement, hide sponsorship, or exploit private conversations.",
+    "It does not promise virality, follower growth, or revenue from posting frequency."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "plan"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

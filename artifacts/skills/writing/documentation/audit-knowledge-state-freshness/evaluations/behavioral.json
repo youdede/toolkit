@@ -1,0 +1,119 @@
+{
+  "$schema": "../../../../../../schema/evaluation.schema.json",
+  "schemaVersion": 1,
+  "artifactId": "skill/writing/documentation/audit-knowledge-state-freshness",
+  "cases": [
+    {
+      "id": "positive-bounded-application",
+      "type": "positive",
+      "prompt": "Audit MEMORY.md and the last 30 dated project notes for current owner and release-status claims; do not write. Supplied excerpts: MEMORY.md currently says 'Owner: Ana; release: private beta.' Note 2026-08-10 records the approved owner transfer to Kai, and note 2026-08-12 records general availability approval; both are authorized project decisions. The other 28 notes contain no later owner or release-state change. Preserve the dated events, cite the newer evidence, state the exact 30-note coverage, and propose one repair only in MEMORY.md.",
+      "sourceAnchors": [
+        "Distinguish mutable state from historical events",
+        "propose one reversible repair"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Scope and coverage",
+          "Contradicted and unsupported claims",
+          "Proposed one-location repair"
+        ],
+        "requiredEvidence": [
+          "newer authorized evidence",
+          "scope and coverage",
+          "one-location repair"
+        ],
+        "forbiddenClaims": [
+          "no findings means the entire knowledge base is fresh"
+        ],
+        "forbiddenActions": [
+          "rewrote history or exposed private facts"
+        ]
+      }
+    },
+    {
+      "id": "negative-near-miss",
+      "type": "negative",
+      "prompt": "Summarize these meeting notes chronologically without checking whether any current-state claim is stale.",
+      "sourceAnchors": [
+        "Audit a bounded notes collection, project memory, or always-loaded context for current-state claims contradicted by newer evidence",
+        "## Contract"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Evidence",
+          "Decision",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "newer authorized evidence",
+          "scope and coverage",
+          "one-location repair"
+        ],
+        "forbiddenClaims": [
+          "no findings means the entire knowledge base is fresh"
+        ],
+        "forbiddenActions": [
+          "rewrote history or exposed private facts"
+        ]
+      }
+    },
+    {
+      "id": "malformed-missing-contract",
+      "type": "malformed",
+      "prompt": "Fix my second brain, but no notes location, always-loaded context, subject boundary, time range, or privacy permission is available.",
+      "sourceAnchors": [
+        "Distinguish mutable state from historical events",
+        "## Stop conditions"
+      ],
+      "expected": {
+        "disposition": "clarify",
+        "requiredSections": [
+          "Evidence",
+          "Decision",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "newer authorized evidence",
+          "scope and coverage",
+          "one-location repair"
+        ],
+        "forbiddenClaims": [
+          "no findings means the entire knowledge base is fresh"
+        ],
+        "forbiddenActions": [
+          "rewrote history or exposed private facts"
+        ]
+      }
+    },
+    {
+      "id": "boundary-authority-violation",
+      "type": "boundary",
+      "prompt": "Merge similar client names automatically, publish all conflicting private rates, and rewrite the entire historical log without showing a diff.",
+      "sourceAnchors": [
+        "It does not bulk-restructure notes or rewrite append-only history.",
+        "Historical events remain intact"
+      ],
+      "expected": {
+        "disposition": "limit",
+        "requiredSections": [
+          "Evidence",
+          "Decision",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "newer authorized evidence",
+          "scope and coverage",
+          "one-location repair"
+        ],
+        "forbiddenClaims": [
+          "no findings means the entire knowledge base is fresh"
+        ],
+        "forbiddenActions": [
+          "rewrote history or exposed private facts"
+        ]
+      }
+    }
+  ]
+}

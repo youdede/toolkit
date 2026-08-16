@@ -1,0 +1,64 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/writing/decision-support/audit-implicit-decisions",
+  "slug": "audit-implicit-decisions",
+  "name": "Audit Implicit Decisions",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Expose uncertain choices made during work and compare credible alternatives.",
+  "description": "Audit the current work for consequential choices that were made implicitly or with low confidence, then present alternatives and evidence. Use before approval, handoff, or when the user asks what assumptions remain.",
+  "domain": "writing",
+  "category": "decision-support",
+  "problems": [
+    "assumption-audit"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review",
+    "handoff"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not list every minor implementation choice or restate settled requirements.",
+    "It does not pretend uncertainty merely to create discussion.",
+    "It does not rewrite project decisions without the owner’s confirmation."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

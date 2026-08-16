@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://youdede.dev/schemas/toolkit-pack-v1.json",
+  "title": "youdede toolkit composition pack",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "id",
+    "slug",
+    "name",
+    "summary",
+    "outcomes",
+    "members"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "id": { "type": "string", "pattern": "^pack/[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 64 },
+    "name": { "type": "string", "minLength": 3, "maxLength": 80 },
+    "summary": { "type": "string", "minLength": 20, "maxLength": 180 },
+    "outcomes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" }
+    },
+    "members": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["artifactId", "role", "required"],
+        "properties": {
+          "artifactId": {
+            "type": "string",
+            "pattern": "^(skill|hook|subagent)/[a-z0-9-]+/[a-z0-9-]+/[a-z0-9-]+$"
+          },
+          "role": {
+            "enum": ["procedure", "collector", "specialist", "verifier", "enforcement", "observer"]
+          },
+          "required": { "type": "boolean" }
+        }
+      }
+    }
+  }
+}

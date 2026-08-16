@@ -1,0 +1,61 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/development/cli/cli-contract-reviewer",
+  "slug": "cli-contract-reviewer",
+  "name": "CLI Contract Reviewer",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Review a CLI delta for automation-breaking grammar, stream, exit-code, and output changes.",
+  "description": "A narrow, read-only specialist whose outcome is to show whether a supported invocation or parser observes an unannounced command-line contract change. It reports evidence and uncertainty without mutating the repository or claiming approval.",
+  "domain": "development",
+  "category": "cli",
+  "problems": [
+    "automation-compatibility"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not rank subjective terminal aesthetics.",
+    "It does not execute commands or rewrite shell scripts.",
+    "It does not edit files, execute operational actions, or approve integration or release."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

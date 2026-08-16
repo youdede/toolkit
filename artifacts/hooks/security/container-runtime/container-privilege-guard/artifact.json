@@ -1,0 +1,68 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/security/container-runtime/container-privilege-guard",
+  "slug": "container-privilege-guard",
+  "name": "Container privilege guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block explicit container privilege expansion in commands and recognized deployment configuration.",
+  "description": "A deterministic Claude Code PreToolUse gate that detects privileged mode, host namespaces, dangerous capabilities, engine socket mounts, and device passthrough in container commands and recognized configuration paths.",
+  "domain": "security",
+  "category": "container-runtime",
+  "problems": [
+    "container-privilege"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "javascript",
+    "shell"
+  ],
+  "lifecycle": [
+    "setup",
+    "implementation",
+    "operations"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not run containers or inspect a live container engine.",
+    "It does not claim to validate every Kubernetes security control.",
+    "It does not accept a manifest annotation or environment variable as approval."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/container-privilege-guard.mjs",
+        "runtime": "node",
+        "purpose": "Detect explicit high-impact host privileges in container commands and proposed configuration.",
+        "sideEffects": "none"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

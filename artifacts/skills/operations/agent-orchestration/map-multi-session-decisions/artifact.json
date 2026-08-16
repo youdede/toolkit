@@ -1,0 +1,69 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/operations/agent-orchestration/map-multi-session-decisions",
+  "slug": "map-multi-session-decisions",
+  "name": "Map Multi Session Decisions",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Map a large uncertain effort as bounded decisions, dependencies, frontier work, and explicit fog.",
+  "description": "Map an effort too uncertain for one session into a destination, resolved decisions, bounded decision nodes, dependency frontier, unknown territory, and handoff rules. Use before execution when premature task breakdown would encode guesses.",
+  "domain": "operations",
+  "category": "agent-orchestration",
+  "capabilities": [
+    "plan"
+  ],
+  "problems": [
+    "multi-session-planning",
+    "decision-making"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "planning",
+    "handoff"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not pre-slice unknown territory into invented tasks merely to make the map look complete.",
+    "It does not let concurrent sessions claim the same decision or duplicate its authoritative answer.",
+    "It does not treat a planning map as authority to execute external, destructive, or privileged actions."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [
+      "skill/operations/agent-orchestration/write-verifiable-goal-loop",
+      "skill/writing/decision-support/resolve-next-decision"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  }
+}

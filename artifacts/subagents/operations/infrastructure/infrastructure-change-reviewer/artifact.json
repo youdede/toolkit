@@ -1,0 +1,66 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/operations/infrastructure/infrastructure-change-reviewer",
+  "slug": "infrastructure-change-reviewer",
+  "name": "Infrastructure Change Reviewer",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Review a bounded infrastructure-as-code delta for replacement, deletion, dependency, and blast-radius risk.",
+  "description": "A narrow, read-only specialist whose outcome is to identify a planned resource action whose lifecycle or dependency effect threatens named state or availability. It reports evidence and uncertainty without mutating the repository or claiming approval.",
+  "domain": "operations",
+  "category": "infrastructure",
+  "problems": [
+    "iac-lifecycle-risk"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review",
+    "pre-commit"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not run plan or apply, alter state, or change infrastructure.",
+    "It does not substitute a neighboring workspace or stale plan.",
+    "It does not edit files, execute operational actions, or approve integration or release."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/operations/infrastructure/plan-infrastructure-change"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/infrastructure-change-readiness"
+    ]
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

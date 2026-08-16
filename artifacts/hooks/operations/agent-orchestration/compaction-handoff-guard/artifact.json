@@ -1,0 +1,70 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/operations/agent-orchestration/compaction-handoff-guard",
+  "slug": "compaction-handoff-guard",
+  "name": "Compaction Handoff Guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Record bounded, content-free receipts before and after conversation compaction.",
+  "description": "A deterministic fail-open PreCompact and PostCompact observer that records only byte counts and SHA-256 digests in a bounded toolkit-owned local state file.",
+  "domain": "operations",
+  "category": "agent-orchestration",
+  "capabilities": [
+    "collect"
+  ],
+  "problems": [
+    "session-handoff",
+    "state-completeness"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "handoff",
+    "operations"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not store transcript text, compacted summaries, custom instructions, or session identifiers.",
+    "It does not block automatic or manual compaction when a receipt cannot be written.",
+    "It does not claim that matching digests prove semantic completeness of the compacted summary.",
+    "It does not write outside the bounded toolkit-owned project state file."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/compaction-handoff-guard.mjs",
+        "runtime": "node",
+        "purpose": "Persist bounded content-free receipts around context compaction for local audit continuity.",
+        "sideEffects": "writes-files"
+      }
+    ]
+  },
+  "relationships": {
+    "composesWith": [
+      "hook/operations/agent-orchestration/completion-evidence-guard"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "observing",
+    "failurePolicy": "fail-open",
+    "latencyClass": "bounded",
+    "dataRetention": "local-bounded"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  }
+}

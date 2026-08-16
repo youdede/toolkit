@@ -1,0 +1,72 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/operations/configuration/instruction-config-integrity-guard",
+  "slug": "instruction-config-integrity-guard",
+  "name": "Instruction Config Integrity Guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Guard project configuration against explicit enforcement bypasses and observe instruction path drift.",
+  "description": "A deterministic ConfigChange gate for explicit hook and permission bypasses plus a fail-open InstructionsLoaded observer for project instruction files outside the active project boundary.",
+  "domain": "operations",
+  "category": "configuration",
+  "capabilities": [
+    "enforce",
+    "verify"
+  ],
+  "problems": [
+    "agent-policy-integrity",
+    "policy-conformance"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "setup",
+    "operations",
+    "maintenance"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not block managed policy changes or claim authority over enterprise policy settings.",
+    "It does not rewrite settings, instruction files, permissions, or hook configuration.",
+    "It does not inspect arbitrary project files or interpret natural-language instructions.",
+    "It does not claim that accepted configuration is secure beyond its explicit bounded rules."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/instruction-config-integrity-guard.mjs",
+        "runtime": "node",
+        "purpose": "Reject explicit project configuration bypasses and observe unverifiable project instruction paths.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "relationships": {
+    "composesWith": [
+      "hook/development/code-quality/policy-file-guard"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "bounded",
+    "dataRetention": "none"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  }
+}

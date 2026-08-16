@@ -1,0 +1,75 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/design/accessibility/plan-accessibility-conformance-evidence",
+  "slug": "plan-accessibility-conformance-evidence",
+  "name": "Plan Accessibility Conformance Evidence",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Plan accessibility evidence across user journeys, automation, keyboard, assistive technology, and human review.",
+  "description": "Plan or audit accessibility conformance evidence for a bounded product surface using requirements, critical journeys, semantic and visual checks, keyboard use, assistive technology, zoom, motion, forms, errors, and documented coverage gaps. Use before making an accessibility claim or release decision.",
+  "domain": "design",
+  "category": "accessibility",
+  "capabilities": [
+    "plan",
+    "verify"
+  ],
+  "problems": [
+    "accessibility-review",
+    "screen-reader-testing"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "review",
+    "release"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not claim legal compliance, certification, or full conformance from automated scans or a single assistive-technology run.",
+    "It does not mark missing devices, browsers, states, content, authentication, or human testing as passed.",
+    "It does not weaken target requirements, suppress user-blocking failures, or simulate lived experience as a substitute for affected-user research."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [
+      "hook/design/keyboard-focus/focus-style-regression-guard",
+      "hook/design/semantic-markup/accessibility-attribute-regression-guard",
+      "skill/design/accessibility/test-screen-reader-journey",
+      "subagent/design/accessibility/accessibility-conformance-reviewer",
+      "subagent/design/accessibility/accessibility-journey-tester"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/accessibility-assurance"
+    ]
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "gemini-cli",
+  "scopes": [
+    "project"
+  ],
+  "files": [
+    {
+      "from": "targets/claude-code/foreground-process-guard.mjs",
+      "to": "hooks/youdede/foreground-process-guard.core.mjs",
+      "executable": true
+    },
+    {
+      "root": "package",
+      "from": "scripts/runtime/hook-command-bridge.mjs",
+      "to": "hooks/youdede/foreground-process-guard.mjs",
+      "executable": true
+    }
+  ],
+  "settingsPatch": {
+    "path": "settings.json",
+    "hooks": {
+      "BeforeTool": [
+        {
+          "matcher": "run_shell_command",
+          "sequential": true,
+          "hooks": [
+            {
+              "name": "youdede-foreground-process-guard",
+              "type": "command",
+              "command": "node \"{geminiRoot}/hooks/youdede/foreground-process-guard.mjs\" --target gemini-cli --failure-policy fail-closed",
+              "timeout": 10000,
+              "description": "[youdede:foreground-process-guard] Block recognizable indefinite development processes launched in the foreground."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "bindings": [
+    {
+      "event": "BeforeTool",
+      "matcher": "run_shell_command"
+    }
+  ],
+  "stability": "preview",
+  "limitations": [
+    "This first native tranche covers shell-command interception only; write, MCP, prompt, and lifecycle boundaries remain withheld pending fixtures."
+  ]
+}

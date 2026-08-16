@@ -1,0 +1,66 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/development/binary-integrity/binary-mutation-guard",
+  "slug": "binary-mutation-guard",
+  "name": "Binary Mutation Guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block text-editor mutations against existing binary or binary-signature files.",
+  "description": "Reads only a bounded prefix without following symlinks, recognizes NUL and common binary signatures, and prevents text Write or Edit tools from corrupting those files.",
+  "domain": "development",
+  "category": "binary-integrity",
+  "problems": [
+    "binary-edit-control"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "implementation",
+    "pre-commit"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not block normal binary-producing build commands.",
+    "It does not classify UTF-16 text or JSON notebooks as binary solely by extension.",
+    "It does not repair, convert, or inspect full binary contents."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/binary-mutation-guard.mjs",
+        "runtime": "node",
+        "purpose": "Block text-editor mutations against existing binary or binary-signature files.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

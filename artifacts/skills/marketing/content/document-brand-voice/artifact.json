@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/content/document-brand-voice",
+  "slug": "document-brand-voice",
+  "name": "Document Brand Voice",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Document a usable brand voice from real examples, audience context, boundaries, and review tests.",
+  "description": "Create or update a reusable brand-voice guide from approved examples, audience evidence, strategic context, linguistic patterns, and explicit boundaries. Use when multiple writers or agents need consistent choices without flattening all content into one generic tone.",
+  "domain": "marketing",
+  "category": "content",
+  "problems": [
+    "brand-voice"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "planning",
+    "handoff"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not invent a voice from adjectives, trends, or one isolated sample.",
+    "It does not preserve discriminatory, inaccessible, deceptive, or unsupported language as brand identity.",
+    "It does not publish the guide or expose confidential examples without authorization."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "author"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

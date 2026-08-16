@@ -1,0 +1,63 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/research/consumer-research/research-online-purchase",
+  "slug": "research-online-purchase",
+  "name": "Research Online Purchase",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Compare fair price, reputable sellers, and purchase fit without placing an order.",
+  "description": "Research an online purchase using current prices, seller evidence, total delivered cost, product fit, and scam signals. Use when comparing listings or deciding whether, where, or when to buy.",
+  "domain": "research",
+  "category": "consumer-research",
+  "problems": [
+    "purchase-research"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not purchase, reserve, bid, create accounts, or enter payment or address data.",
+    "It does not quote a price that was not directly observed in a current source.",
+    "It does not recommend an unknown seller solely because it is cheapest."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "research"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

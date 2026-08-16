@@ -1,0 +1,62 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/operations/configuration/configuration-drift-analyst",
+  "slug": "configuration-drift-analyst",
+  "name": "Configuration Drift Analyst",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Compare desired state with timestamped environment snapshots and classify meaningful configuration drift.",
+  "description": "A narrow, read-only specialist whose outcome is to identify an unapproved desired-versus-observed difference between equivalent resources at a known time. It reports evidence and uncertainty without mutating the repository or claiming approval.",
+  "domain": "operations",
+  "category": "configuration",
+  "problems": [
+    "environment-parity"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review",
+    "operations"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not reconcile, mutate, or restart environments.",
+    "It does not compare non-equivalent or untimestamped snapshots as facts.",
+    "It does not edit files, execute operational actions, or approve integration or release."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "diagnose"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

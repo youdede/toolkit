@@ -1,0 +1,72 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/operations/agent-orchestration/completion-evidence-guard",
+  "slug": "completion-evidence-guard",
+  "name": "Completion Evidence Guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Require a structured pass receipt before an explicitly marked task or verifier can finish.",
+  "description": "A deterministic TaskCompleted and specialist SubagentStop gate that activates only for transcripts marked evidence-required and checks a bounded final receipt tied to the task identifier.",
+  "domain": "operations",
+  "category": "agent-orchestration",
+  "capabilities": [
+    "enforce",
+    "verify"
+  ],
+  "problems": [
+    "completion-verification",
+    "recovery-evidence"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review",
+    "handoff"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not activate unless the bounded task or transcript contains the exact evidence-required marker.",
+    "It does not execute tests, trust prose as proof, or validate the truth of a reported command result.",
+    "It does not accept a pass receipt for a different task identifier.",
+    "It does not edit task state, transcripts, or subagent output."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/completion-evidence-guard.mjs",
+        "runtime": "node",
+        "purpose": "Require a task-bound structured pass receipt for explicitly evidence-gated completions.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "relationships": {
+    "composesWith": [
+      "hook/operations/agent-orchestration/compaction-handoff-guard",
+      "hook/operations/observability/failure-evidence-guard"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "bounded",
+    "dataRetention": "none"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  }
+}

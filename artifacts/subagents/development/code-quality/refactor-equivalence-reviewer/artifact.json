@@ -1,0 +1,69 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/development/code-quality/refactor-equivalence-reviewer",
+  "slug": "refactor-equivalence-reviewer",
+  "name": "Refactor Equivalence Reviewer",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Compare a bounded before-and-after refactor for unintended observable behavior changes.",
+  "description": "A narrow, read-only specialist whose outcome is to identify an input class for which the refactor changes a promised observable result or side effect. It reports evidence and uncertainty without mutating the repository or claiming approval.",
+  "domain": "development",
+  "category": "code-quality",
+  "problems": [
+    "behavior-preservation"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review",
+    "pre-commit"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not report style, naming, or structure differences as behavior defects.",
+    "It does not redesign the implementation or demand test coverage percentages.",
+    "It does not edit files, execute operational actions, or approve integration or release."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [
+      "hook/operations/reviewability/large-diff-review-guard",
+      "skill/development/code-quality/evaluate-code-review-feedback",
+      "skill/development/code-quality/request-independent-code-review",
+      "skill/operations/reviewability/prepare-reviewable-pull-request"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/reviewable-change"
+    ]
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

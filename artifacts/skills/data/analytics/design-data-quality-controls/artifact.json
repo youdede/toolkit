@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/data/analytics/design-data-quality-controls",
+  "slug": "design-data-quality-controls",
+  "name": "Design Data Quality Controls",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Design data-quality contracts, checks, ownership, and incident behavior around real decisions.",
+  "description": "Design or audit data-quality controls for datasets, pipelines, metrics, or interfaces using semantic contracts, risk, checks, lineage, ownership, observability, and incident response. Use when downstream decisions require trustworthy structured data.",
+  "domain": "data",
+  "category": "analytics",
+  "problems": [
+    "data-quality"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "implementation",
+    "operations"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not equate passing schema checks with trustworthy analytical meaning.",
+    "It does not delete, rewrite, quarantine, or backfill production data without authority.",
+    "It does not hide overrides, false positives, or unresolved reconciliation gaps."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "plan"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

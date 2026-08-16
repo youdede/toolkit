@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/content/plan-evidence-led-content",
+  "slug": "plan-evidence-led-content",
+  "name": "Plan Evidence Led Content",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Build a content portfolio around audience decisions, distribution, evidence, and operating capacity.",
+  "description": "Plan a content strategy that connects audience questions and business decisions to differentiated evidence, formats, distribution, ownership, and measurement. Use when a team needs a durable content portfolio rather than an unprioritized topic list.",
+  "domain": "marketing",
+  "category": "content",
+  "problems": [
+    "content-strategy"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "planning",
+    "maintenance"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not manufacture a high-volume calendar from keyword tools alone.",
+    "It does not copy competitor topics without a distinct audience need or evidence advantage.",
+    "It does not promise rankings, virality, pipeline, or attribution from publication volume."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "plan"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

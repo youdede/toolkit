@@ -1,0 +1,30 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": ["project"],
+  "files": [
+    {
+      "from": "targets/claude-code/failure-evidence-guard.mjs",
+      "to": "hooks/youdede/failure-evidence-guard.mjs",
+      "executable": true
+    }
+  ],
+  "settingsPatch": {
+    "hooks": {
+      "PostToolUseFailure": [
+        {
+          "matcher": "^[A-Za-z0-9_.:-]{1,128}$",
+          "description": "[youdede:failure-evidence-guard] Normalize failed tool evidence without raw content",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "node \"{claudeRoot}/hooks/youdede/failure-evidence-guard.mjs\"",
+              "timeout": 5
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

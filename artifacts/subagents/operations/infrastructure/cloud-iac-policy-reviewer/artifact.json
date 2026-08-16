@@ -1,0 +1,66 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/operations/infrastructure/cloud-iac-policy-reviewer",
+  "slug": "cloud-iac-policy-reviewer",
+  "name": "Cloud IaC Policy Reviewer",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Review a bounded infrastructure plan for lifecycle, identity, network, data, policy, and rollback risk.",
+  "description": "A read-only cloud and infrastructure-as-code specialist that reconciles configuration, plans, policy results, state identity, and rollout constraints without operating infrastructure.",
+  "domain": "operations",
+  "category": "infrastructure",
+  "capabilities": [
+    "assess",
+    "verify"
+  ],
+  "problems": [
+    "cloud-resource-deletion",
+    "iac-lifecycle-risk",
+    "auth-boundaries"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review",
+    "pre-commit",
+    "release"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "Do not initialize providers, refresh state, plan, apply, destroy, import, move state, or call cloud APIs.",
+    "Do not edit infrastructure, policies, exceptions, variables, state, lockfiles, or deployment configuration.",
+    "Do not substitute a plan or state summary from another source revision, workspace, account, project, region, or time window.",
+    "Do not treat an unknown plan value or absent policy result as safe."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json"
+  }
+}

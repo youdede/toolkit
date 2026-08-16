@@ -1,0 +1,265 @@
+{
+  "$schema": "../schema/script-test-declarations.schema.json",
+  "schemaVersion": 1,
+  "suites": [
+    {
+      "id": "hook-contract-boundaries",
+      "artifactIds": [
+        "hook/data/compatibility/schema-compatibility-guard",
+        "hook/data/live-query-safety/database-query-mode-guard",
+        "hook/design/keyboard-focus/focus-style-regression-guard",
+        "hook/design/semantic-markup/accessibility-attribute-regression-guard",
+        "hook/development/assertion-integrity/test-assertion-removal-guard",
+        "hook/development/binary-integrity/binary-mutation-guard",
+        "hook/development/contract-compatibility/api-contract-compatibility-guard",
+        "hook/development/diagnostic-suppression/lint-suppression-guard",
+        "hook/development/error-handling/exception-swallowing-guard",
+        "hook/operations/delegation-budget/subagent-fanout-guard",
+        "hook/operations/process-lifecycle/foreground-process-guard",
+        "hook/security/deserialization/unsafe-deserialization-guard"
+      ],
+      "testFiles": ["tests/hook-expansion-contracts.test.mjs"],
+      "coverage": {
+        "allow": "reported false positives remain allowed without weakening the boundary",
+        "deny-or-observe": "contract and orchestration guards own distinct deterministic boundaries",
+        "malformed": "hook processes fail closed on empty, malformed, and oversized envelopes",
+        "oversized": "x'.repeat(1024 * 1024 + 1)",
+        "boundary": "specific bypass forms are rejected",
+        "false-positive": "reported false positives remain allowed without weakening the boundary",
+        "process-exit": "reported bypasses are exercised through the installed hook processes"
+      }
+    },
+    {
+      "id": "hook-guard-expansion",
+      "artifactIds": [
+        "hook/data/migrations/migration-safety-guard",
+        "hook/development/code-quality/generated-file-guard",
+        "hook/development/debugging/debug-artifact-guard",
+        "hook/security/dependencies/dependency-change-guard"
+      ],
+      "testFiles": ["tests/guard-expansion.test.mjs"],
+      "coverage": {
+        "allow": "ignores project-authored",
+        "deny-or-observe": "blocks direct lockfile edits and narrow unsafe flags",
+        "malformed": "all new hook wrappers fail closed on malformed and oversized input",
+        "oversized": "GENERATED_MAX_STDIN + 1",
+        "boundary": "never follows an existing symlink",
+        "false-positive": "scanner is narrow and does not duplicate secret scanning",
+        "process-exit": "all new hook wrappers expose stable block exit behavior"
+      }
+    },
+    {
+      "id": "hook-verification-boundaries",
+      "artifactIds": [
+        "hook/development/testing/test-integrity-guard",
+        "hook/security/supply-chain/ci-trust-boundary-guard"
+      ],
+      "testFiles": ["tests/hook-verification-boundaries.test.mjs"],
+      "coverage": {
+        "allow": "allows existing suppressions",
+        "deny-or-observe": "blocks only net-new findings",
+        "malformed": "both hook wrappers fail closed on malformed and oversized input",
+        "oversized": "CI_MAX_STDIN_BYTES + 1",
+        "boundary": "fails closed for symlinks, traversal, and oversized relevant content",
+        "false-positive": "ignores comments, inert block examples, and safe read-only permissions",
+        "process-exit": "expose stable process exits"
+      }
+    },
+    {
+      "id": "hook-lifecycle",
+      "artifactIds": [
+        "hook/operations/agent-orchestration/compaction-handoff-guard",
+        "hook/operations/agent-orchestration/completion-evidence-guard",
+        "hook/operations/configuration/instruction-config-integrity-guard",
+        "hook/operations/git/worktree-removal-evidence-guard",
+        "hook/operations/observability/failure-evidence-guard",
+        "hook/security/secrets/prompt-secret-guard"
+      ],
+      "testFiles": ["tests/lifecycle-hooks.test.mjs"],
+      "coverage": {
+        "allow": "ordinary work",
+        "deny-or-observe": "ruleId",
+        "malformed": "malformed and oversized input",
+        "oversized": "MAX_STDIN_BYTES + 1",
+        "boundary": "is opt-in and task-bound",
+        "false-positive": "instruction path drift is observed but never presented as blockable",
+        "process-exit": "result.status"
+      }
+    },
+    {
+      "id": "hook-system-expansion",
+      "artifactIds": [
+        "hook/operations/cloud-resources/cloud-resource-deletion-guard",
+        "hook/operations/image-publication/container-registry-publish-guard",
+        "hook/operations/infrastructure-execution/infrastructure-apply-guard",
+        "hook/operations/package-publication/package-publish-guard",
+        "hook/operations/scheduled-execution/scheduled-task-mutation-guard",
+        "hook/operations/system-services/system-service-mutation-guard",
+        "hook/security/archive-extraction/archive-extraction-guard",
+        "hook/security/code-execution/dynamic-code-execution-guard",
+        "hook/security/container-runtime/container-privilege-guard",
+        "hook/security/host-filesystem/system-path-mutation-guard",
+        "hook/security/identity-administration/user-account-mutation-guard",
+        "hook/security/network-control/firewall-policy-mutation-guard",
+        "hook/security/transport-security/transport-security-regression-guard"
+      ],
+      "testFiles": ["tests/hook-expansion-system.test.mjs"],
+      "coverage": {
+        "allow": "allow boundary",
+        "deny-or-observe": "block boundary",
+        "malformed": "malformed boundary",
+        "oversized": "oversized policy boundary",
+        "boundary": "global options and dry runs preserve command intent boundaries",
+        "false-positive": "false-positive boundary",
+        "process-exit": "blockedProcess.status"
+      }
+    },
+    {
+      "id": "hook-repository-boundaries",
+      "artifactIds": [
+        "hook/operations/git/protected-branch-guard",
+        "hook/security/application-security/workspace-boundary-guard"
+      ],
+      "testFiles": ["tests/hook-repository-boundaries.test.mjs"],
+      "coverage": {
+        "allow": "allows contained native targets",
+        "deny-or-observe": "blocks lexical traversal and absolute escape",
+        "malformed": "valid, blocked, malformed, and oversized input",
+        "oversized": "input: 'x'.repeat(limit + 1)",
+        "boundary": "checks the canonical nearest existing ancestor",
+        "false-positive": "accepts a canonical absolute target beneath a symlinked project root",
+        "process-exit": "use stable process exits"
+      }
+    },
+    {
+      "id": "hook-supply-chain",
+      "artifactIds": [
+        "hook/operations/path-portability/path-portability-guard",
+        "hook/operations/repository-state/release-clean-state-guard",
+        "hook/operations/reviewability/large-diff-review-guard",
+        "hook/operations/signed-history/commit-signature-intent-guard",
+        "hook/operations/versioning/release-version-consistency-guard",
+        "hook/security/ci-references/ci-reference-pinning-guard",
+        "hook/security/dependency-origins/dependency-source-guard",
+        "hook/security/executable-content/executable-permission-guard",
+        "hook/security/git-submodules/submodule-target-guard",
+        "hook/security/lifecycle-scripts/install-lifecycle-script-guard",
+        "hook/security/lockfile-origins/lockfile-origin-guard",
+        "hook/security/repository-links/symlink-publication-guard"
+      ],
+      "testFiles": ["tests/hook-expansion-supply-chain.test.mjs"],
+      "coverage": {
+        "allow": "preserve paired false positives",
+        "deny-or-observe": "block their exact boundary",
+        "malformed": "bounds stdin and rejects malformed envelopes",
+        "oversized": "MAX_STDIN_BYTES + 1",
+        "boundary": "stable across allow, block, malformed, oversized, and boundary contexts",
+        "false-positive": "preserve paired false positives",
+        "process-exit": "file and command wrappers expose paired process allow and block exits"
+      }
+    },
+    {
+      "id": "hook-data-boundaries",
+      "artifactIds": [
+        "hook/security/application-security/outbound-data-guard",
+        "hook/security/secrets/sensitive-file-access-guard"
+      ],
+      "testFiles": ["tests/hook-data-boundaries.test.mjs"],
+      "coverage": {
+        "allow": "permits downloads, static requests, reverse transfers, and local pipes",
+        "deny-or-observe": "blocks file, stream, and local-to-remote transfer boundaries",
+        "malformed": "treats malformed, oversized, and excessive boundaries deterministically",
+        "oversized": "MAX_SENSITIVE_COMMAND + 1",
+        "boundary": "resolves filesystem aliases without opening file content",
+        "false-positive": "allows irrelevant and documented false-positive controls",
+        "process-exit": "both hook processes use blocking exit codes and content-safe diagnostics"
+      }
+    },
+    {
+      "id": "hook-core",
+      "artifactIds": [
+        "hook/development/code-quality/policy-file-guard",
+        "hook/security/application-security/shell-command-guard",
+        "hook/security/secrets/commit-guard"
+      ],
+      "testFiles": ["tests/hooks.test.mjs"],
+      "coverage": {
+        "allow": "preserves safe controls",
+        "deny-or-observe": "blocks catastrophic commands",
+        "malformed": "process fails closed without echoing command content",
+        "oversized": "input: 'x'.repeat(limit + 1)",
+        "boundary": "commit intent detection stays narrow",
+        "false-positive": "ignores unrelated Bash calls",
+        "process-exit": "process fails closed"
+      }
+    },
+    {
+      "id": "helper-core",
+      "artifactIds": [
+        "skill/development/agent-tooling/author-effective-agent-skill",
+        "skill/research/transcripts/extract-youtube-captions",
+        "skill/writing/documentation/write-session-handoff"
+      ],
+      "testFiles": ["tests/deterministic-helpers.test.mjs"],
+      "coverage": {
+        "positive": "reports reproducible Git state without writing",
+        "negative": "checks structure, names, placeholders, and links",
+        "malformed": "assert.throws(() => normalizeJson3({})",
+        "boundary": "missing"
+      }
+    },
+    {
+      "id": "helper-expansion",
+      "artifactIds": [
+        "skill/data/migrations/review-database-migration-plan",
+        "skill/operations/ci-cd/review-ci-workflow-change",
+        "skill/writing/release-notes/write-release-notes-from-evidence"
+      ],
+      "testFiles": ["tests/expansion-skills.test.mjs"],
+      "coverage": {
+        "positive": "reports literal lines without YAML execution or semantic parsing",
+        "negative": "findings, []",
+        "malformed": "from: 'missing'",
+        "boundary": "rejects oversized input"
+      }
+    },
+    {
+      "id": "helper-schema-evolution",
+      "artifactIds": ["skill/data/schemas/review-schema-evolution"],
+      "testFiles": ["tests/schema-evolution-skill.test.mjs"],
+      "coverage": {
+        "positive": "reports stable structural signals without a compatibility verdict",
+        "negative": "emits no signals for semantically reordered object keys and type arrays",
+        "malformed": "refuses malformed JSON",
+        "boundary": "accepts the file-size boundary and rejects oversized or symbolic-link input"
+      }
+    },
+    {
+      "id": "helper-scripts-expansion",
+      "artifactIds": [
+        "skill/development/architecture/enforce-typescript-module-boundaries",
+        "skill/operations/reviewability/decompose-dependent-work-slices",
+        "skill/operations/setup/author-guided-setup-wizard",
+        "skill/writing/education/build-progressive-learning-exercises"
+      ],
+      "testFiles": ["tests/helper-scripts-expansion.test.mjs"],
+      "coverage": {
+        "positive": "assert.equal(valid.status, 0",
+        "negative": "assert.equal(invalid.status, 1",
+        "malformed": "reject missing and malformed inputs",
+        "boundary": "usage boundary"
+      }
+    },
+    {
+      "id": "helper-supply-chain",
+      "artifactIds": ["skill/security/supply-chain/review-supply-chain-change"],
+      "testFiles": ["tests/supply-chain-expansion.test.mjs"],
+      "coverage": {
+        "positive": "reports only bounded observable npm manifest signals",
+        "negative": "without parsing or executing YAML",
+        "malformed": "rejects malformed, duplicate, unsupported, and oversized evidence",
+        "boundary": "reads only explicit in-root non-symlink files"
+      }
+    }
+  ]
+}

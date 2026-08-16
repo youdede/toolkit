@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://youdede.dev/schemas/toolkit-adapter-v1.json",
+  "title": "youdede toolkit target adapter",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "target", "scopes", "files"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "target": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "scopes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "enum": ["project", "user"] }
+    },
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["from", "to"],
+        "properties": {
+          "from": { "type": "string", "minLength": 1 },
+          "to": { "type": "string", "minLength": 1 },
+          "root": { "enum": ["artifact", "package"] },
+          "optional": { "type": "boolean" },
+          "executable": { "type": "boolean" }
+        }
+      }
+    },
+    "settingsPatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hooks"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+        },
+        "hooks": { "type": "object", "minProperties": 1 }
+      }
+    },
+    "stability": { "enum": ["stable", "preview"] },
+    "limitations": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 20 }
+    },
+    "bindings": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["event", "matcher"],
+        "properties": {
+          "event": { "type": "string", "minLength": 2 },
+          "matcher": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

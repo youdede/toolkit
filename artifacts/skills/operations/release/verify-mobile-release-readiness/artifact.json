@@ -1,0 +1,73 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/operations/release/verify-mobile-release-readiness",
+  "slug": "verify-mobile-release-readiness",
+  "name": "Verify Mobile Release Readiness",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Verify a mobile release candidate across identity, signing evidence, journeys, compatibility, rollout, and recovery.",
+  "description": "Verify iOS or Android release readiness using an exact build identity, source revision, test devices, critical journeys, permissions, privacy declarations, signing evidence, store configuration, staged rollout, and recovery plan. Use before submission or phased release.",
+  "domain": "operations",
+  "category": "release",
+  "capabilities": [
+    "verify"
+  ],
+  "problems": [
+    "release-verification",
+    "regression-prevention"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review",
+    "release"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not access signing keys, upload builds, submit store reviews, change rollout state, or publish without explicit authority.",
+    "It does not claim device, upgrade, accessibility, permission, or store verification from static source inspection alone.",
+    "It does not hide crash, data-loss, migration, privacy, backend-compatibility, or rollback limitations to meet a release date."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [
+      "hook/operations/repository-state/release-clean-state-guard",
+      "hook/operations/versioning/release-version-consistency-guard",
+      "skill/operations/release/verify-production-release",
+      "subagent/development/testing/mobile-reliability-accessibility-reviewer",
+      "subagent/operations/release/release-risk-reviewer"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/mobile-release-readiness"
+    ]
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  }
+}

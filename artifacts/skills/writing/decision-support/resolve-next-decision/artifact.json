@@ -1,0 +1,66 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/writing/decision-support/resolve-next-decision",
+  "slug": "resolve-next-decision",
+  "name": "Resolve Next Decision",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Resolve the highest-impact open decision one evidence-backed choice at a time.",
+  "description": "Select the most consequential unresolved decision, present a compact set of viable options and a recommendation, then record the answer before continuing. Use when a plan has several open choices.",
+  "domain": "writing",
+  "category": "decision-support",
+  "problems": [
+    "decision-clarity"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "design"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not ask several decisions in one interaction.",
+    "It does not include options that violate known constraints merely to fill a list.",
+    "It does not record its recommendation as the user’s decision."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "diagnose"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/operations/agent-orchestration/map-multi-session-decisions"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

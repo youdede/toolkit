@@ -1,0 +1,67 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/development/testing/design-llm-evaluation",
+  "slug": "design-llm-evaluation",
+  "name": "Design LLM Evaluation",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Design an LLM evaluation around real tasks, controlled judges, failure taxonomy, and decision thresholds.",
+  "description": "Design or audit an evaluation for an LLM feature, agent, retrieval flow, or prompt using representative tasks, reference evidence, deterministic checks, calibrated judges, uncertainty, and release decisions. Use before comparing models or claiming quality improvement.",
+  "domain": "development",
+  "category": "testing",
+  "problems": [
+    "llm-evaluation"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "implementation",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not fabricate ground truth, use private data without authorization, or tune on the held-out set.",
+    "It does not declare one model universally better from a narrow benchmark.",
+    "It does not hide safety regressions, judge disagreement, cost, latency, or failed cases."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "plan"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/development/testing/evaluate-retrieval-system"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

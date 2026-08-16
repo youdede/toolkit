@@ -1,0 +1,66 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/development/agent-tooling/evaluate-agent-guidance-value",
+  "slug": "evaluate-agent-guidance-value",
+  "name": "Evaluate Agent Guidance Value",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Measure whether always-loaded agent guidance changes outcomes before pruning or promoting it.",
+  "description": "Design and run a controlled ablation of repository agent guidance using isolated matched trials, rule-level scoring, and explicit uncertainty. Use when deciding whether AGENTS.md, CLAUDE.md, or equivalent always-loaded instructions should be kept, shortened, moved, or removed.",
+  "domain": "development",
+  "category": "agent-tooling",
+  "problems": [
+    "agent-evaluation",
+    "agent-policy-integrity"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review",
+    "maintenance"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not delete or rewrite guidance from a single clean run.",
+    "It does not disable hooks, permissions, or other enforcement while testing prompt guidance.",
+    "It does not run costly, destructive, external, or production-facing probe tasks without explicit approval."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess",
+    "verify"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

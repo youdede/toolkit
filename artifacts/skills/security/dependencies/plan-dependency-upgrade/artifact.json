@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/security/dependencies/plan-dependency-upgrade",
+  "slug": "plan-dependency-upgrade",
+  "name": "Plan Dependency Upgrade",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Plan a dependency upgrade from release evidence, compatibility surface, migration steps, and rollback.",
+  "description": "Plan or review an application dependency upgrade using installed versions, release and migration documentation, affected usage, transitive changes, compatibility tests, rollout, and rollback. Use when an upgrade is material, breaking, security-driven, or framework-wide.",
+  "domain": "security",
+  "category": "dependencies",
+  "problems": [
+    "dependency-upgrade"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "implementation",
+    "maintenance"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not upgrade unrelated packages to achieve a clean latest state.",
+    "It does not edit lockfiles manually or suppress peer and security warnings without evidence.",
+    "It does not claim compatibility from compilation or unit tests alone when runtime boundaries changed."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "plan"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/writing/documentation/audit-knowledge-state-freshness",
+  "slug": "audit-knowledge-state-freshness",
+  "name": "Audit Knowledge State Freshness",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Audit current-state claims in notes or agent memory against newer evidence without rewriting history.",
+  "description": "Audit a bounded notes collection, project memory, or always-loaded context for current-state claims contradicted by newer evidence. Use when an agent gives stale answers or a knowledge base may mix mutable state with append-only events.",
+  "domain": "writing",
+  "category": "documentation",
+  "problems": [
+    "state-completeness",
+    "cross-source-reconciliation",
+    "project-documentation"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review",
+    "maintenance"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not bulk-restructure notes or rewrite append-only history.",
+    "It does not infer a current value when evidence order or subject identity is ambiguous.",
+    "It does not expose, transmit, or unnecessarily repeat private facts found during the audit."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess",
+    "verify"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

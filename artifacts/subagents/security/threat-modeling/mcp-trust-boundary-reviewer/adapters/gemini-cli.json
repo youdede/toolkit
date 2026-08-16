@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "gemini-cli",
+  "scopes": [
+    "project",
+    "user"
+  ],
+  "files": [
+    {
+      "from": "targets/gemini-cli/mcp-trust-boundary-reviewer.md",
+      "to": "agents/{slug}.md"
+    }
+  ],
+  "stability": "preview",
+  "limitations": [
+    "Gemini CLI subagents are preview and do not expose the source profile reasoning-effort control."
+  ]
+}

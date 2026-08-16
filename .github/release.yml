@@ -1,0 +1,24 @@
+changelog:
+  exclude:
+    labels:
+      - release: skip
+  categories:
+    - title: Breaking changes
+      labels:
+        - release: breaking
+    - title: Features
+      labels:
+        - type: feature
+    - title: Fixes
+      labels:
+        - type: bug
+    - title: Security
+      labels:
+        - type: security
+    - title: Documentation and maintenance
+      labels:
+        - type: documentation
+        - type: maintenance
+    - title: Other changes
+      labels:
+        - "*"

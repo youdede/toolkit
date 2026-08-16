@@ -1,0 +1,68 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/development/agent-tooling/write-project-agent-guidance",
+  "slug": "write-project-agent-guidance",
+  "name": "Write Project Agent Guidance",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Write lean root agent guidance from verified project commands, boundaries, and canonical context.",
+  "description": "Create or repair root-level AGENTS.md, CLAUDE.md, or equivalent project guidance from verified repository evidence and current runtime precedence. Use when onboarding an agent runtime or replacing generic generated instructions with durable project-specific rules.",
+  "domain": "development",
+  "category": "agent-tooling",
+  "problems": [
+    "agent-policy-integrity",
+    "folder-context",
+    "project-documentation"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "setup",
+    "design",
+    "maintenance"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not invent commands, architecture, tracker conventions, or ownership from filenames alone.",
+    "It does not duplicate canonical documentation or encode transient work status as permanent guidance.",
+    "It does not overwrite existing agent guidance or choose a new runtime filename without review."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "author",
+    "verify"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

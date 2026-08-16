@@ -1,0 +1,70 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/development/code-quality/request-independent-code-review",
+  "slug": "request-independent-code-review",
+  "name": "Request Independent Code Review",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Obtain a neutral second review and reconcile it against the actual change.",
+  "description": "Request an independent code review from another capable agent with a neutral brief and then verify every finding against the diff. Use for risky changes, disputed reviews, or before high-impact integration.",
+  "domain": "development",
+  "category": "code-quality",
+  "problems": [
+    "independent-review"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not treat reviewer confidence, tone, or model identity as evidence.",
+    "It does not forward secrets, customer data, or unrelated repository content.",
+    "It does not turn style preferences into blocking defects without a project rule."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "verify"
+  ],
+  "relationships": {
+    "composesWith": [
+      "hook/operations/reviewability/large-diff-review-guard",
+      "skill/development/code-quality/evaluate-code-review-feedback",
+      "skill/operations/reviewability/prepare-reviewable-pull-request",
+      "subagent/development/code-quality/refactor-equivalence-reviewer"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/reviewable-change"
+    ]
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

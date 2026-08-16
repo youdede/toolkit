@@ -1,0 +1,76 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/writing/education/build-progressive-learning-exercises",
+  "slug": "build-progressive-learning-exercises",
+  "name": "Build Progressive Learning Exercises",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Build sequenced learning exercises with explicit objectives, prerequisites, variants, and validation.",
+  "description": "Build a progression of learning exercises from objectives and prerequisite skills, with learner prompts, reference solutions, feedback, accessibility, and structural validation. Use when authoring workshops, courses, or practice repositories.",
+  "domain": "writing",
+  "category": "education",
+  "capabilities": [
+    "author"
+  ],
+  "problems": [
+    "learning-exercise-design",
+    "goal-design"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "design",
+    "implementation",
+    "learning"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not create empty directories or title-only placeholders and call them complete exercises.",
+    "It does not reveal solutions in starter material or make formatting cues disclose quiz answers.",
+    "It does not auto-commit, renumber unrelated content, or rely on one proprietary course linter."
+  ],
+  "execution": {
+    "mode": "hybrid",
+    "entrypoints": [
+      {
+        "path": "scripts/validate-exercise-plan.mjs",
+        "runtime": "node",
+        "purpose": "Validate section and exercise identifiers, prerequisite references, sequence order, variants, and required learning objectives.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "relationships": {
+    "composesWith": [
+      "skill/writing/education/assess-learning-gaps",
+      "skill/writing/education/teach-with-retrieval-practice"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  }
+}

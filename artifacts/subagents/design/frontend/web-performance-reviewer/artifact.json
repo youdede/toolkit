@@ -1,0 +1,61 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/design/frontend/web-performance-reviewer",
+  "slug": "web-performance-reviewer",
+  "name": "Web Performance Reviewer",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Review a bounded web change for evidenced loading, rendering, responsiveness, and regression risks.",
+  "description": "Review a bounded web change for performance regressions across loading, rendering, network, assets, interaction, and framework boundaries. Use after implementation when the parent needs evidence-led findings without mutation.",
+  "domain": "design",
+  "category": "frontend",
+  "problems": [
+    "performance-diagnosis"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not edit code, configuration, assets, budgets, or monitoring systems.",
+    "It does not claim runtime or field performance from static code inspection.",
+    "It does not approve release or demand optimization without measured user impact."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/security/application-security/review-auth-boundary",
+  "slug": "review-auth-boundary",
+  "name": "Review Auth Boundary",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Review authentication and authorization boundaries through concrete identities, resources, and denied paths.",
+  "description": "Review an authentication or authorization change by mapping identities, credentials, sessions, resources, policies, trust boundaries, and denied behavior. Use before merging access-control work or when a privilege, tenant, or session failure is suspected.",
+  "domain": "security",
+  "category": "application-security",
+  "problems": [
+    "auth-boundaries"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "design",
+    "implementation",
+    "review"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not weaken policy, generate real credentials, bypass controls, or test unauthorized production accounts.",
+    "It does not treat hidden UI, route middleware, or token presence as sufficient authorization.",
+    "It does not provide security approval beyond the exact evidence reviewed."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

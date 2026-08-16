@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/seo/audit-technical-seo",
+  "slug": "audit-technical-seo",
+  "name": "Audit Technical SEO",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Audit discoverability from crawl and index signals through templates, performance, and content evidence.",
+  "description": "Audit a website for technical and on-page search issues across crawl access, canonicalization, rendering, index signals, templates, internal links, content, structured data, and performance. Use when visibility declines or before a substantial SEO change.",
+  "domain": "marketing",
+  "category": "seo",
+  "problems": [
+    "seo-audit"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "review",
+    "maintenance"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not guarantee ranking, recovery, crawl frequency, indexation, or traffic.",
+    "It does not recommend cloaking, doorway pages, link schemes, hidden content, or access evasion.",
+    "It does not deploy redirects, robots, canonical, sitemap, or template changes without authorization."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

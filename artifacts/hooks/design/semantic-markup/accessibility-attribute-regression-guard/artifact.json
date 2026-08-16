@@ -1,0 +1,74 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/design/semantic-markup/accessibility-attribute-regression-guard",
+  "slug": "accessibility-attribute-regression-guard",
+  "name": "Accessibility Attribute Regression Guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block net removal of explicit accessibility relationships from markup changes.",
+  "description": "Counts bounded explicit labels, alternatives, roles, and ARIA relationships in markup revisions and blocks only a net loss while interactive markup remains.",
+  "domain": "design",
+  "category": "semantic-markup",
+  "problems": [
+    "accessibility-semantic-regression"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "implementation",
+    "pre-commit"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not claim WCAG conformance or replace assistive-technology testing.",
+    "It does not judge visual design or keyboard behavior.",
+    "It does not infer semantics hidden inside runtime component implementations."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/accessibility-attribute-regression-guard.mjs",
+        "runtime": "node",
+        "purpose": "Block net removal of explicit accessibility relationships from markup changes.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [
+      "hook/design/keyboard-focus/focus-style-regression-guard",
+      "skill/design/accessibility/plan-accessibility-conformance-evidence",
+      "skill/design/accessibility/test-screen-reader-journey",
+      "subagent/design/accessibility/accessibility-conformance-reviewer",
+      "subagent/design/accessibility/accessibility-journey-tester"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/accessibility-assurance"
+    ]
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

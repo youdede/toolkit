@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/seo/audit-ai-search-visibility",
+  "slug": "audit-ai-search-visibility",
+  "name": "Audit AI Search Visibility",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Assess whether verifiable site content can be discovered, understood, and cited by answer systems.",
+  "description": "Audit a public site for AI-answer discoverability using crawl access, entity clarity, source quality, extractable answers, citation evidence, and measurement limits. Use when a brand wants to understand or improve visibility in AI-generated search without relying on speculative ranking tricks.",
+  "domain": "marketing",
+  "category": "seo",
+  "problems": [
+    "ai-search-visibility"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "review",
+    "maintenance"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not guarantee citation, placement, traffic, or model behavior.",
+    "It does not recommend fabricated consensus, synthetic mentions, doorway pages, or content written only for machines.",
+    "It does not claim that an unverified file or markup convention is a universal ranking requirement."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

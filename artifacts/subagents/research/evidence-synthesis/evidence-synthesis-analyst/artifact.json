@@ -1,0 +1,62 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/research/evidence-synthesis/evidence-synthesis-analyst",
+  "slug": "evidence-synthesis-analyst",
+  "name": "Evidence Synthesis Analyst",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Synthesize a bounded source packet while preserving population, method, context, and contradiction differences.",
+  "description": "A narrow, read-only specialist whose outcome is to produce propositions showing where supplied evidence converges, conflicts, or cannot be combined for the target question. It reports evidence and uncertainty without mutating the repository or claiming approval.",
+  "domain": "research",
+  "category": "evidence-synthesis",
+  "problems": [
+    "cross-source-reconciliation"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not perform new research beyond the supplied packet.",
+    "It does not use majority vote or source count as a confidence rule.",
+    "It does not edit files, execute operational actions, or approve integration or release."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "diagnose"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

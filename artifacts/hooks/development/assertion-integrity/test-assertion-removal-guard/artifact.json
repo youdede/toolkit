@@ -1,0 +1,66 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/development/assertion-integrity/test-assertion-removal-guard",
+  "slug": "test-assertion-removal-guard",
+  "name": "Test Assertion Removal Guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block removal of the last recognizable assertion from an existing test file.",
+  "description": "Compares bounded test-file revisions and stops a change when recognizable tests remain but all assertion or failure primitives disappear from a previously asserting file.",
+  "domain": "development",
+  "category": "assertion-integrity",
+  "problems": [
+    "test-assertion-integrity"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "implementation",
+    "pre-commit"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not judge assertion quality or test coverage.",
+    "It does not block assertion-preserving refactors recognized by its bounded vocabulary.",
+    "It does not govern skipped or deleted test cases."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/test-assertion-removal-guard.mjs",
+        "runtime": "node",
+        "purpose": "Block removal of the last recognizable assertion from an existing test file.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

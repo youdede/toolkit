@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/seo/design-safe-programmatic-seo",
+  "slug": "design-safe-programmatic-seo",
+  "name": "Design Safe Programmatic SEO",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Design data-backed templated pages with unique utility, quality gates, and controlled indexing.",
+  "description": "Design or audit a programmatic SEO system using reliable data, a real repeated user job, differentiated page value, template quality, indexing controls, and lifecycle ownership. Use before generating many search landing pages.",
+  "domain": "marketing",
+  "category": "seo",
+  "problems": [
+    "seo-at-scale"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "planning",
+    "implementation"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not create doorway pages, spun text, fake locations, fabricated data, or mass near-duplicates.",
+    "It does not bypass robots, access restrictions, content licenses, or platform terms.",
+    "It does not promise rankings or indexation from page volume."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "plan"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "$schema": "../../schema/pack.schema.json",
+  "schemaVersion": 1,
+  "id": "pack/reviewable-change",
+  "slug": "reviewable-change",
+  "name": "Reviewable change",
+  "summary": "Prepare bounded code changes, obtain independent review, and prevent oversized unreviewable commits.",
+  "outcomes": [
+    "independent-review",
+    "reviewable-delivery"
+  ],
+  "members": [
+    {
+      "artifactId": "skill/operations/reviewability/prepare-reviewable-pull-request",
+      "role": "procedure",
+      "required": true
+    },
+    {
+      "artifactId": "skill/development/code-quality/evaluate-code-review-feedback",
+      "role": "procedure",
+      "required": true
+    },
+    {
+      "artifactId": "skill/development/code-quality/request-independent-code-review",
+      "role": "verifier",
+      "required": true
+    },
+    {
+      "artifactId": "subagent/development/code-quality/refactor-equivalence-reviewer",
+      "role": "specialist",
+      "required": true
+    },
+    {
+      "artifactId": "hook/operations/reviewability/large-diff-review-guard",
+      "role": "enforcement",
+      "required": true
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/partnerships/qualify-influencer-partnership",
+  "slug": "qualify-influencer-partnership",
+  "name": "Qualify Influencer Partnership",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Qualify creator partnerships using audience evidence, brand safety, rights, disclosure, and economics.",
+  "description": "Qualify and structure an influencer or creator partnership using audience fit, content quality, authenticity, brand safety, disclosure, usage rights, measurement, and commercial terms. Use before outreach, contracting, gifting, or renewing a creator campaign.",
+  "domain": "marketing",
+  "category": "partnerships",
+  "problems": [
+    "influencer-marketing"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "planning",
+    "review"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not buy undisclosed endorsements, fake engagement, reviews, or deceptive testimonials.",
+    "It does not scrape private audience data or target protected or sensitive traits.",
+    "It does not contact, contract, pay, publish, or grant usage rights without explicit authority."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

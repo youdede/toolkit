@@ -1,0 +1,43 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": ["project"],
+  "files": [
+    {
+      "from": "targets/claude-code/instruction-config-integrity-guard.mjs",
+      "to": "hooks/youdede/instruction-config-integrity-guard.mjs",
+      "executable": true
+    }
+  ],
+  "settingsPatch": {
+    "hooks": {
+      "ConfigChange": [
+        {
+          "matcher": "project_settings|local_settings",
+          "description": "[youdede:instruction-config-integrity-guard] Reject explicit project enforcement bypasses",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "node \"{claudeRoot}/hooks/youdede/instruction-config-integrity-guard.mjs\"",
+              "timeout": 10
+            }
+          ]
+        }
+      ],
+      "InstructionsLoaded": [
+        {
+          "matcher": "session_start|nested_traversal|path_glob_match|include|compact",
+          "description": "[youdede:instruction-config-integrity-guard] Observe project instruction path integrity",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "node \"{claudeRoot}/hooks/youdede/instruction-config-integrity-guard.mjs\"",
+              "timeout": 10
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

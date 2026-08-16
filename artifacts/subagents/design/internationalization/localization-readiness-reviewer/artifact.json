@@ -1,0 +1,61 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/design/internationalization/localization-readiness-reviewer",
+  "slug": "localization-readiness-reviewer",
+  "name": "Localization Readiness Reviewer",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Review locale-sensitive code for message, plural, format, timezone, fallback, and bidirectional defects.",
+  "description": "A narrow, read-only specialist whose outcome is to identify a supported locale or value class whose rendered meaning violates the supplied localization contract. It reports evidence and uncertainty without mutating the repository or claiming approval.",
+  "domain": "design",
+  "category": "internationalization",
+  "problems": [
+    "locale-behavior"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not certify translation quality in a language not evidenced.",
+    "It does not perform accessibility or responsive-layout review.",
+    "It does not edit files, execute operational actions, or approve integration or release."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

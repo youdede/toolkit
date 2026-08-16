@@ -1,0 +1,62 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/security/abuse-prevention/abuse-resistance-analyst",
+  "slug": "abuse-resistance-analyst",
+  "name": "Abuse Resistance Analyst",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Analyze one operation for attacker-controlled cost amplification, fanout, and quota bypass.",
+  "description": "A narrow, read-only specialist whose outcome is to show a reachable low-cost input that creates disproportionate compute, storage, queue, or third-party work beyond a stated limit. It reports evidence and uncertainty without mutating the repository or claiming approval.",
+  "domain": "security",
+  "category": "abuse-prevention",
+  "problems": [
+    "resource-amplification"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "design",
+    "review"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not run denial-of-service tests or generate abusive traffic.",
+    "It does not invent throughput, pricing, or quota values.",
+    "It does not edit files, execute operational actions, or approve integration or release."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "diagnose"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

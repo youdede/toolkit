@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": ["project"],
+  "files": [{"from": "targets/claude-code/path-portability-guard.mjs", "to": "hooks/youdede/path-portability-guard.mjs", "executable": true}],
+  "settingsPatch": {"hooks": {"PreToolUse": [{
+    "matcher": "Write|Edit|MultiEdit",
+    "description": "[youdede:path-portability-guard] Protect cross-platform repository paths",
+    "hooks": [{"type": "command", "command": "node \"{claudeRoot}/hooks/youdede/path-portability-guard.mjs\"", "timeout": 10}]
+  }]}}
+}

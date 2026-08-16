@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://youdede.dev/schemas/behavioral-evaluation-v1.json",
+  "title": "youdede behavioral evaluation",
+  "description": "Offline behavioral contracts for prompt and hybrid artifacts. The contract declares observable output constraints; it does not invoke a model.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schemaVersion", "artifactId", "cases"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "artifactId": {
+      "type": "string",
+      "pattern": "^(skill|hook|subagent)/[a-z0-9-]+/[a-z0-9-]+/[a-z0-9-]+$"
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 4,
+      "items": { "$ref": "#/$defs/case" },
+      "allOf": [
+        { "contains": { "properties": { "type": { "const": "positive" } }, "required": ["type"] } },
+        { "contains": { "properties": { "type": { "const": "negative" } }, "required": ["type"] } },
+        { "contains": { "properties": { "type": { "const": "malformed" } }, "required": ["type"] } },
+        { "contains": { "properties": { "type": { "const": "boundary" } }, "required": ["type"] } }
+      ]
+    }
+  },
+  "$defs": {
+    "text": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 500
+    },
+    "textList": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/text" }
+    },
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "prompt", "sourceAnchors", "expected"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "maxLength": 80
+        },
+        "type": { "enum": ["positive", "negative", "malformed", "boundary"] },
+        "prompt": {
+          "type": "string",
+          "minLength": 20,
+          "maxLength": 3000
+        },
+        "sourceAnchors": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/text" }
+        },
+        "expected": { "$ref": "#/$defs/expected" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "const": "positive" } }, "required": ["type"] },
+          "then": { "properties": { "expected": { "properties": { "disposition": { "const": "apply" } } } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "negative" } }, "required": ["type"] },
+          "then": { "properties": { "expected": { "properties": { "disposition": { "const": "decline" } } } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "malformed" } }, "required": ["type"] },
+          "then": { "properties": { "expected": { "properties": { "disposition": { "enum": ["clarify", "decline"] } } } } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "boundary" } }, "required": ["type"] },
+          "then": { "properties": { "expected": { "properties": { "disposition": { "enum": ["limit", "decline"] } } } } }
+        }
+      ]
+    },
+    "expected": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "disposition",
+        "requiredSections",
+        "requiredEvidence",
+        "forbiddenClaims",
+        "forbiddenActions"
+      ],
+      "properties": {
+        "disposition": { "enum": ["apply", "decline", "clarify", "limit"] },
+        "requiredSections": { "$ref": "#/$defs/textList" },
+        "requiredEvidence": { "$ref": "#/$defs/textList" },
+        "forbiddenClaims": { "$ref": "#/$defs/textList" },
+        "forbiddenActions": { "$ref": "#/$defs/textList" }
+      }
+    }
+  }
+}

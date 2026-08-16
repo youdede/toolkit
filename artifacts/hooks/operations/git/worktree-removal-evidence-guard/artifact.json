@@ -1,0 +1,71 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/operations/git/worktree-removal-evidence-guard",
+  "slug": "worktree-removal-evidence-guard",
+  "name": "Worktree Removal Evidence Guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Observe dirty Git state immediately before Claude Code removes an isolated worktree.",
+  "description": "A deterministic fail-open WorktreeRemove observer that runs a bounded read-only Git status and reports only the number of changed entries, never paths or content.",
+  "domain": "operations",
+  "category": "git",
+  "capabilities": [
+    "collect",
+    "verify"
+  ],
+  "problems": [
+    "cleanup-safety",
+    "worktree-isolation"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "handoff",
+    "maintenance"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not create, retain, delete, clean, commit, stash, or modify a worktree.",
+    "It does not claim to prevent removal because WorktreeRemove has no decision control.",
+    "It does not print changed paths, diff content, branch names, or repository remotes.",
+    "It does not follow a symbolic-link worktree path or run project-provided commands."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/worktree-removal-evidence-guard.mjs",
+        "runtime": "node",
+        "purpose": "Count dirty worktree entries before removal without exposing file paths or changing repository state.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "relationships": {
+    "composesWith": [
+      "hook/operations/repository-state/release-clean-state-guard"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "observing",
+    "failurePolicy": "fail-open",
+    "latencyClass": "bounded",
+    "dataRetention": "none"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  }
+}

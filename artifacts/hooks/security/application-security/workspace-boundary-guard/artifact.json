@@ -1,0 +1,66 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/security/application-security/workspace-boundary-guard",
+  "slug": "workspace-boundary-guard",
+  "name": "Workspace boundary guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block native file edits whose resolved target escapes the active project workspace.",
+  "description": "A bounded Claude Code PreToolUse hook for Write, Edit, MultiEdit, and NotebookEdit that checks lexical containment and the canonical location of the nearest existing ancestor before allowing a file mutation.",
+  "domain": "security",
+  "category": "application-security",
+  "problems": [
+    "workspace-boundary"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "javascript"
+  ],
+  "lifecycle": [
+    "implementation",
+    "operations"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not expand the workspace boundary from a repository file, tool payload, or agent-authored exception.",
+    "It does not follow a symlink chain whose canonical existing ancestor escapes the workspace.",
+    "It does not claim to replace operating-system sandboxing or prevent a filesystem race after evaluation."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/workspace-boundary-guard.mjs",
+        "runtime": "node",
+        "purpose": "Verify lexical and canonical containment for native file mutation targets without modifying the filesystem.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

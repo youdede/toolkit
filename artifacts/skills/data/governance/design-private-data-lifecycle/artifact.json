@@ -1,0 +1,70 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/data/governance/design-private-data-lifecycle",
+  "slug": "design-private-data-lifecycle",
+  "name": "Design Private Data Lifecycle",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Define a private-data lifecycle with classification, purpose, access, retention, deletion, and verification evidence.",
+  "description": "Design or review a privacy-aware data lifecycle across collection, classification, processing, access, sharing, retention, deletion, backup, and incident handling. Use when a product or pipeline handles personal, confidential, regulated, or customer-controlled data.",
+  "domain": "data",
+  "category": "governance",
+  "capabilities": [
+    "plan"
+  ],
+  "problems": [
+    "data-exposure-review",
+    "outbound-data-control"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "design",
+    "review",
+    "maintenance"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not expose real personal data, secrets, customer exports, or production records in the plan.",
+    "It does not claim legal compliance, anonymization, deletion, or consent from design intent alone.",
+    "It does not recommend indefinite retention, silent secondary use, cross-tenant access, or a policy exception without accountable approval."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [
+      "subagent/data/governance/data-lineage-mapper",
+      "subagent/security/telemetry/sensitive-logging-reviewer"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  }
+}

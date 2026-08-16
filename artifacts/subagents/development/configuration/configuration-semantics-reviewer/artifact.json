@@ -1,0 +1,61 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/development/configuration/configuration-semantics-reviewer",
+  "slug": "configuration-semantics-reviewer",
+  "name": "Configuration Semantics Reviewer",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Review configuration loading for precedence, default, coercion, and fallback semantic changes.",
+  "description": "A narrow, read-only specialist whose outcome is to reconstruct the selected value and expose a changed meaning for an explicit configuration state. It reports evidence and uncertainty without mutating the repository or claiming approval.",
+  "domain": "development",
+  "category": "configuration",
+  "problems": [
+    "precedence-defaults"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not compare deployed environments without timestamped snapshots.",
+    "It does not read or reveal configuration secret values.",
+    "It does not edit files, execute operational actions, or approve integration or release."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

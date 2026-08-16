@@ -1,0 +1,43 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": ["project"],
+  "files": [
+    {
+      "from": "targets/claude-code/compaction-handoff-guard.mjs",
+      "to": "hooks/youdede/compaction-handoff-guard.mjs",
+      "executable": true
+    }
+  ],
+  "settingsPatch": {
+    "hooks": {
+      "PreCompact": [
+        {
+          "matcher": "manual|auto",
+          "description": "[youdede:compaction-handoff-guard] Record a bounded pre-compaction receipt",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "node \"{claudeRoot}/hooks/youdede/compaction-handoff-guard.mjs\"",
+              "timeout": 10
+            }
+          ]
+        }
+      ],
+      "PostCompact": [
+        {
+          "matcher": "manual|auto",
+          "description": "[youdede:compaction-handoff-guard] Record a bounded post-compaction receipt",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "node \"{claudeRoot}/hooks/youdede/compaction-handoff-guard.mjs\"",
+              "timeout": 10
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

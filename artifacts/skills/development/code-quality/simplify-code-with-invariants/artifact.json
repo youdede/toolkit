@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/development/code-quality/simplify-code-with-invariants",
+  "slug": "simplify-code-with-invariants",
+  "name": "Simplify Code With Invariants",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Simplify a bounded code path while preserving observable behavior and repository conventions.",
+  "description": "Simplify a bounded implementation by identifying its invariants, consumers, accidental complexity, and available repository patterns, then proving behavior is preserved. Use when code is difficult to reason about but a rewrite would be unnecessarily risky.",
+  "domain": "development",
+  "category": "code-quality",
+  "problems": [
+    "code-simplification"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "implementation",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not delete behavior because it appears unused without repository evidence.",
+    "It does not replace local complexity with a speculative framework or generic abstraction.",
+    "It does not claim simpler code from fewer lines alone."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "diagnose"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

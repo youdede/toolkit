@@ -1,0 +1,73 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/development/agent-tooling/author-mcp-server-contract",
+  "slug": "author-mcp-server-contract",
+  "name": "Author MCP Server Contract",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Design an MCP server with narrow tools, safe schemas, authority boundaries, and protocol evidence.",
+  "description": "Design or review an MCP server’s resources, prompts, tools, schemas, transport, authentication, pagination, errors, and authority boundaries before implementation. Use when exposing a real system to coding agents through the Model Context Protocol.",
+  "domain": "development",
+  "category": "agent-tooling",
+  "problems": [
+    "mcp-server-design"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "design",
+    "implementation",
+    "review"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not expose a generic execute endpoint or mirror an entire vendor API without a user contract.",
+    "It does not place secrets in prompts, tool results, source, or client-visible errors.",
+    "It does not deploy the server or grant external-system permissions without explicit authority."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "author"
+  ],
+  "relationships": {
+    "composesWith": [
+      "hook/security/application-security/outbound-data-guard",
+      "hook/security/secrets/sensitive-file-access-guard",
+      "skill/security/threat-modeling/review-agent-tool-boundaries",
+      "subagent/security/application-security/application-security-reviewer",
+      "subagent/security/threat-modeling/mcp-trust-boundary-reviewer"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/secure-agent-boundaries"
+    ]
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

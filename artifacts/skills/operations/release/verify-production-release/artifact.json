@@ -1,0 +1,72 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/operations/release/verify-production-release",
+  "slug": "verify-production-release",
+  "name": "Verify Production Release",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Release an exact revision through CI and prove deployment health before completion.",
+  "description": "Prepare and verify a production release using an exact revision, required checks, deployment evidence, health probes, and rollback awareness. Use only when production release authority is explicit.",
+  "domain": "operations",
+  "category": "release",
+  "problems": [
+    "release-verification"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "release"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not force-push, bypass checks, or weaken branch protection.",
+    "It does not deploy a dirty, unreviewed, or ambiguous revision.",
+    "It does not declare production healthy from CI success alone."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "verify"
+  ],
+  "relationships": {
+    "composesWith": [
+      "hook/operations/package-publication/package-publish-guard",
+      "hook/operations/repository-state/release-clean-state-guard",
+      "hook/operations/versioning/release-version-consistency-guard",
+      "skill/operations/release/verify-mobile-release-readiness",
+      "subagent/operations/release/release-evidence-verifier",
+      "subagent/operations/release/release-risk-reviewer"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/release-readiness"
+    ]
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

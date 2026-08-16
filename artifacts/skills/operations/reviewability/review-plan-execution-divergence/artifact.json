@@ -1,0 +1,68 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/operations/reviewability/review-plan-execution-divergence",
+  "slug": "review-plan-execution-divergence",
+  "name": "Review Plan Execution Divergence",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Reconcile an approved plan with actual changes and turn recurring divergence into process improvements.",
+  "description": "Review a completed implementation against its approved plan using the diff, commands, checks, and decision evidence rather than self-report alone. Use after delivery when plan divergence should inform planning, execution, or validation improvements.",
+  "domain": "operations",
+  "category": "reviewability",
+  "problems": [
+    "implementation-accuracy",
+    "plan-execution",
+    "incident-learning"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review",
+    "maintenance",
+    "learning"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not grade plan adherence as a proxy for implementation quality.",
+    "It does not accept an execution narrative without reconciling repository evidence.",
+    "It does not convert a one-off divergence into permanent guidance or automation."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess",
+    "verify"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

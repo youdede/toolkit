@@ -1,0 +1,76 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/development/architecture/enforce-typescript-module-boundaries",
+  "slug": "enforce-typescript-module-boundaries",
+  "name": "Enforce TypeScript Module Boundaries",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Detect and enforce TypeScript package entry-point boundaries without assuming one repository layout.",
+  "description": "Inspect and enforce TypeScript module boundaries so consumers import through declared entry points while internals remain local. Use when deep imports, package cycles, or test access make contracts and refactors unreliable.",
+  "domain": "development",
+  "category": "architecture",
+  "capabilities": [
+    "enforce"
+  ],
+  "problems": [
+    "module-boundary-enforcement",
+    "architecture-context"
+  ],
+  "frameworks": [
+    "nodejs"
+  ],
+  "languages": [
+    "typescript"
+  ],
+  "lifecycle": [
+    "design",
+    "setup",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not install or overwrite a dependency-analysis tool before inspecting existing configuration.",
+    "It does not treat unresolved aliases or generated imports as proven violations.",
+    "It does not create a giant barrel, break environment-specific exports, or claim architecture quality from path depth alone."
+  ],
+  "execution": {
+    "mode": "hybrid",
+    "entrypoints": [
+      {
+        "path": "scripts/inspect-module-boundaries.mjs",
+        "runtime": "node",
+        "purpose": "Scan static TypeScript import forms for cross-package deep imports under a caller-supplied package root.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "relationships": {
+    "composesWith": [
+      "skill/development/architecture/design-deep-module-interface",
+      "skill/development/testing/deliver-test-first"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/development/diagnostic-suppression/lint-suppression-guard",
+  "slug": "lint-suppression-guard",
+  "name": "Lint Suppression Guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block net-new broad diagnostic suppressions while allowing scoped rule exceptions.",
+  "description": "Compares bounded source revisions and rejects new file-wide or code-less ESLint, TypeScript, Python, Go, and IDE suppressions while allowing narrow identifiers.",
+  "domain": "development",
+  "category": "diagnostic-suppression",
+  "problems": [
+    "diagnostic-suppression-control"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "implementation",
+    "pre-commit"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not decide whether a named diagnostic is correct.",
+    "It does not block removal or narrowing of an existing suppression.",
+    "It does not govern test skips or focused tests."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/lint-suppression-guard.mjs",
+        "runtime": "node",
+        "purpose": "Block net-new broad diagnostic suppressions while allowing scoped rule exceptions.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/conversion/review-conversion-friction",
+  "slug": "review-conversion-friction",
+  "name": "Review Conversion Friction",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Review a conversion journey for evidence-backed clarity, trust, effort, and measurement gaps.",
+  "description": "Review a marketing page or lead form for conversion friction across intent match, value clarity, evidence, interaction cost, trust, accessibility, and measurement. Use when a journey underperforms or needs prioritized hypotheses before redesign.",
+  "domain": "marketing",
+  "category": "conversion",
+  "problems": [
+    "conversion-review"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not claim browser, analytics, or user verification from a screenshot alone.",
+    "It does not recommend deceptive scarcity, obscured consent, hidden fees, or inaccessible controls.",
+    "It does not redesign the page or launch experiments unless separately authorized."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

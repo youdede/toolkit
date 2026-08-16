@@ -1,0 +1,71 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/operations/infrastructure/plan-infrastructure-change",
+  "slug": "plan-infrastructure-change",
+  "name": "Plan Infrastructure Change",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Plan an infrastructure change from current state through staged transition, verification, and recovery.",
+  "description": "Plan or review a Terraform, OpenTofu, Kubernetes, cloud, network, or platform change using current state, dependency and blast-radius evidence, staged transitions, policy checks, and recovery proof. Use before applying infrastructure-as-code or changing shared infrastructure.",
+  "domain": "operations",
+  "category": "infrastructure",
+  "capabilities": [
+    "plan"
+  ],
+  "problems": [
+    "iac-lifecycle-risk",
+    "transition-safety"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "review",
+    "operations"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not run apply, destroy, import, state edit, kubectl write, or cloud mutation without explicit scoped authority.",
+    "It does not approve an IaC plan containing unexplained replacement, privilege expansion, public exposure, or data loss risk.",
+    "It does not claim reversibility from source configuration alone or conceal drift, cost, quota, and provider-version uncertainty."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [
+      "subagent/operations/infrastructure/infrastructure-change-reviewer",
+      "subagent/operations/resilience/disaster-recovery-readiness-auditor"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/infrastructure-change-readiness"
+    ]
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  }
+}

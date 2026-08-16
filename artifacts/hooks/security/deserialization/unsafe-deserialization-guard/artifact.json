@@ -1,0 +1,66 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/security/deserialization/unsafe-deserialization-guard",
+  "slug": "unsafe-deserialization-guard",
+  "name": "Unsafe Deserialization Guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block newly introduced executable or unsafe deserialization primitives.",
+  "description": "Scans bounded proposed source content after masking comments and quoted text, then blocks net-new calls to known unsafe deserializers across common languages.",
+  "domain": "security",
+  "category": "deserialization",
+  "problems": [
+    "unsafe-deserialization-control"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "implementation",
+    "pre-commit"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not deserialize supplied data or execute parser code.",
+    "It does not replace a threat model for custom protocols.",
+    "It does not treat safe parser names inside documentation as executable calls."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/unsafe-deserialization-guard.mjs",
+        "runtime": "node",
+        "purpose": "Block newly introduced executable or unsafe deserialization primitives.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

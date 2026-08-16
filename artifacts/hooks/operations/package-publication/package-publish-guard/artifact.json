@@ -1,0 +1,83 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/operations/package-publication/package-publish-guard",
+  "slug": "package-publish-guard",
+  "name": "Package publish guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block real ecosystem package publication while allowing local packaging and dry runs.",
+  "description": "A deterministic Claude Code PreToolUse gate that recognizes publication commands for JavaScript, Python, Rust, Ruby, and NuGet ecosystems while allowing build, pack, check, and supported dry-run operations.",
+  "domain": "operations",
+  "category": "package-publication",
+  "problems": [
+    "package-publication"
+  ],
+  "frameworks": [
+    "agnostic",
+    "nodejs"
+  ],
+  "languages": [
+    "javascript",
+    "python",
+    "rust",
+    "ruby",
+    "csharp",
+    "shell"
+  ],
+  "lifecycle": [
+    "release"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not publish, sign, tag, build, or upload a package.",
+    "It does not inspect registry credentials, permissions, or package ownership.",
+    "It does not accept an OTP, confirmation flag, or prompt as publication approval."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/package-publish-guard.mjs",
+        "runtime": "node",
+        "purpose": "Recognize ecosystem publication subcommands and refuse external package release.",
+        "sideEffects": "none"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [
+      "hook/operations/repository-state/release-clean-state-guard",
+      "hook/operations/versioning/release-version-consistency-guard",
+      "skill/operations/release/verify-production-release",
+      "subagent/operations/release/release-evidence-verifier",
+      "subagent/operations/release/release-risk-reviewer"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/release-readiness"
+    ]
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

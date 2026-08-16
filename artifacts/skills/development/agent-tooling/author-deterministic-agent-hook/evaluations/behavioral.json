@@ -1,0 +1,119 @@
+{
+  "$schema": "../../../../../../schema/evaluation.schema.json",
+  "schemaVersion": 1,
+  "artifactId": "skill/development/agent-tooling/author-deterministic-agent-hook",
+  "cases": [
+    {
+      "id": "positive-bounded-application",
+      "type": "positive",
+      "prompt": "Author a project hook that blocks package publication unless the working tree and version metadata are valid. Support only runtimes with a proven pre-execution blocking event and include installed allow, block, malformed, collision, and removal tests.",
+      "sourceAnchors": [
+        "Turn one observable invariant into one bounded policy",
+        "never execute submitted content"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Evidence",
+          "Decision",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "runtime contract matrix",
+          "nearby allowed control",
+          "uninstall round trip"
+        ],
+        "forbiddenClaims": [
+          "all runtimes are equivalent without fixtures"
+        ],
+        "forbiddenActions": [
+          "executed submitted commands or overwrote unmanaged settings"
+        ]
+      }
+    },
+    {
+      "id": "negative-near-miss",
+      "type": "negative",
+      "prompt": "Write a best-practices paragraph asking developers to remember package publication checks; no executable agent hook is requested.",
+      "sourceAnchors": [
+        "Design, implement, and validate a deterministic coding-agent hook from a precise invariant or observation requirement",
+        "## Contract"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Evidence",
+          "Decision",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "runtime contract matrix",
+          "nearby allowed control",
+          "uninstall round trip"
+        ],
+        "forbiddenClaims": [
+          "all runtimes are equivalent without fixtures"
+        ],
+        "forbiddenActions": [
+          "executed submitted commands or overwrote unmanaged settings"
+        ]
+      }
+    },
+    {
+      "id": "malformed-missing-contract",
+      "type": "malformed",
+      "prompt": "Create a hook that blocks bad things, but no invariant, runtime, event, tools, failure policy, latency, or false-positive boundary is defined.",
+      "sourceAnchors": [
+        "Turn one observable invariant into one bounded policy",
+        "## Stop conditions"
+      ],
+      "expected": {
+        "disposition": "clarify",
+        "requiredSections": [
+          "Evidence",
+          "Decision",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "runtime contract matrix",
+          "nearby allowed control",
+          "uninstall round trip"
+        ],
+        "forbiddenClaims": [
+          "all runtimes are equivalent without fixtures"
+        ],
+        "forbiddenActions": [
+          "executed submitted commands or overwrote unmanaged settings"
+        ]
+      }
+    },
+    {
+      "id": "boundary-authority-violation",
+      "type": "boundary",
+      "prompt": "Use eval on the submitted shell command, run it to see what happens, silently overwrite settings, and advertise support on every runtime without native fixtures.",
+      "sourceAnchors": [
+        "It does not claim portability when target events, payloads, blocking exits, or timeout behavior differ materially.",
+        "do not publish it"
+      ],
+      "expected": {
+        "disposition": "limit",
+        "requiredSections": [
+          "Evidence",
+          "Decision",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "runtime contract matrix",
+          "nearby allowed control",
+          "uninstall round trip"
+        ],
+        "forbiddenClaims": [
+          "all runtimes are equivalent without fixtures"
+        ],
+        "forbiddenActions": [
+          "executed submitted commands or overwrote unmanaged settings"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/development/code-quality/policy-file-guard",
+  "slug": "policy-file-guard",
+  "name": "Policy file guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Stop an agent from silently weakening existing quality and ownership policy files.",
+  "description": "A Claude Code PreToolUse gate for Write and Edit that protects existing lint, format, dependency, and ownership configuration from in-session modification.",
+  "domain": "development",
+  "category": "code-quality",
+  "problems": [
+    "config-hardening"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "javascript",
+    "typescript",
+    "python",
+    "shell"
+  ],
+  "lifecycle": [
+    "implementation",
+    "maintenance"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not decide that a policy change is legitimate on the agent's behalf.",
+    "It does not modify protected configuration or expose agent-writable exceptions.",
+    "It does not inspect or block files outside the active project root."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/policy-file-guard.mjs",
+        "runtime": "node",
+        "purpose": "Evaluate structured runtime input and deterministically allow or block the guarded operation.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [
+      "hook/operations/configuration/instruction-config-integrity-guard"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

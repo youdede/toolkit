@@ -1,0 +1,71 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/development/code-quality/evaluate-code-review-feedback",
+  "slug": "evaluate-code-review-feedback",
+  "name": "Evaluate Code Review Feedback",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Evaluate review feedback against the code, contract, and evidence before applying a bounded correction.",
+  "description": "Evaluate code-review feedback by reconstructing the claimed failure, checking repository evidence, and deciding whether to accept, refine, reject, or escalate it. Use when review comments are ambiguous, disputed, broad, or potentially incorrect.",
+  "domain": "development",
+  "category": "code-quality",
+  "problems": [
+    "review-feedback"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review",
+    "implementation"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not apply feedback merely to appear agreeable or reject it defensively.",
+    "It does not broaden a comment into unrelated cleanup or architecture work.",
+    "It does not claim resolution without fresh evidence and a precise response."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [
+      "hook/operations/reviewability/large-diff-review-guard",
+      "skill/development/code-quality/request-independent-code-review",
+      "skill/operations/reviewability/prepare-reviewable-pull-request",
+      "subagent/development/code-quality/refactor-equivalence-reviewer"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/reviewable-change"
+    ]
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/development/testing/mobile-reliability-accessibility-reviewer",
+  "slug": "mobile-reliability-accessibility-reviewer",
+  "name": "Mobile Reliability Accessibility Reviewer",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Review a bounded mobile journey for lifecycle, offline, recovery, permission, and accessibility evidence gaps.",
+  "description": "A read-only mobile quality specialist that traces platform lifecycle and accessibility behavior from supplied code, device evidence, and crash or test artifacts.",
+  "domain": "development",
+  "category": "testing",
+  "capabilities": [
+    "assess",
+    "verify"
+  ],
+  "problems": [
+    "test-strategy",
+    "failure-recovery",
+    "accessibility-review"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic",
+    "swift"
+  ],
+  "lifecycle": [
+    "review",
+    "release"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "Do not launch simulators, emulators, devices, builds, network proxies, profilers, or app-store systems.",
+    "Do not edit mobile code, manifests, permissions, tests, signing, build settings, or release configuration.",
+    "Do not generalize a result across platforms, OS versions, device classes, locales, or assistive technologies without evidence.",
+    "Do not label an unobserved device-matrix cell as passed or failed."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [
+      "hook/operations/repository-state/release-clean-state-guard",
+      "hook/operations/versioning/release-version-consistency-guard",
+      "skill/operations/release/verify-mobile-release-readiness"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/mobile-release-readiness"
+    ]
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json"
+  }
+}

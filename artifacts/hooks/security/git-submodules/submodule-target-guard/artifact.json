@@ -1,0 +1,69 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/security/git-submodules/submodule-target-guard",
+  "slug": "submodule-target-guard",
+  "name": "Submodule target guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Reject newly introduced Git submodules with relative, mutable, local, or insecure targets.",
+  "description": "A deterministic Claude Code PreToolUse gate that reconstructs .gitmodules changes and inspects static submodule-add commands, blocking new relative URLs, local paths, insecure transports, branch tracking, or dynamic targets.",
+  "domain": "security",
+  "category": "git-submodules",
+  "problems": [
+    "submodule-target-control"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic",
+    "shell"
+  ],
+  "lifecycle": [
+    "implementation",
+    "pre-commit",
+    "maintenance"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not clone, fetch, initialize, update, remove, or approve a Git submodule.",
+    "It does not contact a remote or prove that a permitted remote repository is trustworthy.",
+    "It does not infer a safe target from shell variables, command substitution, aliases, or prompt text.",
+    "It does not expose a repository-owned bypass list for submodule destinations."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/submodule-target-guard.mjs",
+        "runtime": "node",
+        "purpose": "Validate bounded submodule configuration and commands before introducing mutable or unsafe repository targets.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

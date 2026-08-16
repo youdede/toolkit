@@ -1,0 +1,77 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/development/debugging/debug-artifact-guard",
+  "slug": "debug-artifact-guard",
+  "name": "Debug artifact guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block commits containing high-confidence debugger statements or focused tests.",
+  "description": "A deterministic Claude Code PreToolUse commit gate that reads bounded staged blobs and rejects unresolved merge markers, standalone debugger breakpoints, and focused JavaScript, TypeScript, or Ruby tests without duplicating secret scanning.",
+  "domain": "development",
+  "category": "debugging",
+  "problems": [
+    "debug-artifact-prevention",
+    "commit-safety"
+  ],
+  "frameworks": [
+    "agnostic",
+    "nodejs",
+    "rails"
+  ],
+  "languages": [
+    "javascript",
+    "php",
+    "python",
+    "ruby",
+    "typescript"
+  ],
+  "lifecycle": [
+    "pre-commit",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not scan for credentials, dependency risk, lint failures, ordinary logging, or incomplete TODO comments.",
+    "It does not remove a breakpoint, unfocus a test, resolve a conflict, or modify the Git index.",
+    "It does not accept an inline suppression comment, project file, environment variable, or agent-authored change as approval."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/debug-artifact-guard.mjs",
+        "runtime": "node",
+        "purpose": "Read bounded staged blobs and deterministically reject high-confidence debugging residue.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/security/application-security/shell-command-guard",
+  "slug": "shell-command-guard",
+  "name": "Shell command guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block high-confidence destructive shell commands before Claude Code executes them.",
+  "description": "A bounded Claude Code PreToolUse hook that rejects catastrophic filesystem, disk, Git remote, GitHub, credential-store, and internet-to-shell command patterns without executing or rewriting input.",
+  "domain": "security",
+  "category": "application-security",
+  "problems": [
+    "shell-safety"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "javascript",
+    "shell"
+  ],
+  "lifecycle": [
+    "implementation",
+    "operations"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not execute, rewrite, sanitize, or automatically approve a submitted command.",
+    "It does not claim to be a sandbox or a complete shell parser.",
+    "It does not provide a hidden bypass for blocked destructive actions."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/shell-command-guard.mjs",
+        "runtime": "node",
+        "purpose": "Evaluate structured runtime input and deterministically allow or block the guarded operation.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

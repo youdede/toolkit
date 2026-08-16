@@ -1,0 +1,70 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/development/architecture/design-deep-module-interface",
+  "slug": "design-deep-module-interface",
+  "name": "Design Deep Module Interface",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Design a small stable interface that concentrates behavior, change, and testing behind one seam.",
+  "description": "Design or improve a module interface by measuring caller knowledge, variation, failure semantics, locality, and test leverage. Use when a module is shallow, cross-file changes scatter, or the correct test seam is unclear.",
+  "domain": "development",
+  "category": "architecture",
+  "capabilities": [
+    "plan"
+  ],
+  "problems": [
+    "module-interface-design",
+    "architecture-context"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "design",
+    "planning",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not measure depth by implementation size or reward code volume.",
+    "It does not create speculative abstraction for a single implementation with no observed variation.",
+    "It does not hide security, data, latency, or failure obligations merely to make an interface look small."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [
+      "skill/development/architecture/enforce-typescript-module-boundaries",
+      "skill/development/architecture/write-implementation-plan",
+      "skill/development/testing/deliver-test-first"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  }
+}

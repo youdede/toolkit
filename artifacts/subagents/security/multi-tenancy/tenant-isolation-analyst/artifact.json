@@ -1,0 +1,61 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/security/multi-tenancy/tenant-isolation-analyst",
+  "slug": "tenant-isolation-analyst",
+  "name": "Tenant Isolation Analyst",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Trace a tenant identity through storage, cache, job, and query boundaries for isolation failures.",
+  "description": "A narrow, read-only specialist whose outcome is to demonstrate a path where one tenant identifier is dropped, substituted, or not enforced before data reaches another boundary. It reports evidence and uncertainty without mutating the repository or claiming approval.",
+  "domain": "security",
+  "category": "multi-tenancy",
+  "problems": [
+    "isolation-tracing"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not access tenant data or construct exploit payloads.",
+    "It does not perform general authentication or application-security review.",
+    "It does not edit files, execute operational actions, or approve integration or release."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "diagnose"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

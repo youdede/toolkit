@@ -1,0 +1,79 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/operations/reviewability/large-diff-review-guard",
+  "slug": "large-diff-review-guard",
+  "name": "Large diff review guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Require a smaller staged change when a commit exceeds bounded reviewability thresholds.",
+  "description": "A deterministic Claude Code PreToolUse gate for git commit that measures staged file count, text additions and deletions, and binary size, then blocks changes above explicit fixed reviewability limits.",
+  "domain": "operations",
+  "category": "reviewability",
+  "problems": [
+    "diff-reviewability"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic",
+    "shell"
+  ],
+  "lifecycle": [
+    "pre-commit",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not split, edit, stage, unstage, commit, summarize, review, or approve the change.",
+    "It does not claim that a small diff is correct or that a large diff is necessarily unsafe.",
+    "It does not inspect unstaged work or count generated impact outside the staged snapshot.",
+    "It does not accept repository configuration, commit flags, or prompt text as a bypass."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/large-diff-review-guard.mjs",
+        "runtime": "node",
+        "purpose": "Measure the staged Git change and reject commits that exceed deterministic reviewability budgets.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/development/code-quality/evaluate-code-review-feedback",
+      "skill/development/code-quality/request-independent-code-review",
+      "skill/operations/reviewability/prepare-reviewable-pull-request",
+      "subagent/development/code-quality/refactor-equivalence-reviewer"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/reviewable-change"
+    ]
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

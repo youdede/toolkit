@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/positioning/design-pricing-and-packaging",
+  "slug": "design-pricing-and-packaging",
+  "name": "Design Pricing And Packaging",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Design pricing and packaging from customer value, economics, segmentation, and operational evidence.",
+  "description": "Design or review price levels, value metrics, packages, trials, freemium, discounts, and migration using customer evidence, unit economics, segmentation, and operational constraints. Use when deciding what to charge or how plans should differ.",
+  "domain": "marketing",
+  "category": "positioning",
+  "problems": [
+    "pricing-packaging"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "planning",
+    "review"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not guarantee willingness to pay, revenue lift, or optimal price from a benchmark.",
+    "It does not design hidden fees, deceptive reference prices, surprise renewals, or inaccessible cancellation.",
+    "It does not change production prices, contracts, or entitlements without explicit authority."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "plan"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

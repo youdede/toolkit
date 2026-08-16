@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": ["project"],
+  "files": [{"from": "targets/claude-code/executable-permission-guard.mjs", "to": "hooks/youdede/executable-permission-guard.mjs", "executable": true}],
+  "settingsPatch": {"hooks": {"PreToolUse": [{
+    "matcher": "Bash",
+    "description": "[youdede:executable-permission-guard] Review staged executable permission additions",
+    "hooks": [{"type": "command", "command": "node \"{claudeRoot}/hooks/youdede/executable-permission-guard.mjs\"", "timeout": 20}]
+  }]}}
+}

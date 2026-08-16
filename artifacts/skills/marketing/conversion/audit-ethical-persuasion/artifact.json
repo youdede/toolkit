@@ -1,0 +1,64 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/conversion/audit-ethical-persuasion",
+  "slug": "audit-ethical-persuasion",
+  "name": "Audit Ethical Persuasion",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Audit persuasive design for informed choice, evidence, accessibility, and avoidable manipulation.",
+  "description": "Audit marketing copy and interaction design for persuasive mechanisms, user comprehension, claim support, autonomy, accessibility, and dark-pattern risk. Use before shipping a conversion experience or when trust and pressure tactics need independent review.",
+  "domain": "marketing",
+  "category": "conversion",
+  "problems": [
+    "ethical-persuasion"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "design",
+    "review"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not optimize coercion, shame, addiction, confusion, false scarcity, or obstructed cancellation.",
+    "It does not treat a disclosed dark pattern as ethical merely because text exists somewhere.",
+    "It does not provide legal approval or claim that conversion lift justifies user harm."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

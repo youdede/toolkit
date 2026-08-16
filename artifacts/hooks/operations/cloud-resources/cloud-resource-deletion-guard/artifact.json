@@ -1,0 +1,71 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/operations/cloud-resources/cloud-resource-deletion-guard",
+  "slug": "cloud-resource-deletion-guard",
+  "name": "Cloud resource deletion guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block high-confidence direct cloud CLI deletion, termination, and purge operations.",
+  "description": "A deterministic Claude Code PreToolUse gate that recognizes explicit destructive AWS, Google Cloud, and Azure CLI verbs while allowing their list, describe, show, and get operations.",
+  "domain": "operations",
+  "category": "cloud-resources",
+  "problems": [
+    "cloud-resource-deletion"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "javascript",
+    "shell"
+  ],
+  "lifecycle": [
+    "setup",
+    "operations"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not delete, restore, snapshot, or inspect cloud resources.",
+    "It does not infer whether an account or resource is production.",
+    "It does not accept confirmation flags or prompt text as authorization."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/cloud-resource-deletion-guard.mjs",
+        "runtime": "node",
+        "purpose": "Recognize direct cloud CLI deletion verbs without contacting provider APIs.",
+        "sideEffects": "none"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

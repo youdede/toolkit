@@ -1,0 +1,70 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/security/application-security/application-security-reviewer",
+  "slug": "application-security-reviewer",
+  "name": "Application Security Reviewer",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Fallback cross-boundary application-security review when no narrower security specialist fits.",
+  "description": "A read-only umbrella reviewer for bounded changes that connect multiple application-security boundaries. Single-outcome authorization, tenant isolation, threat modeling, cryptography, sensitive logging, and abuse resistance work routes to the dedicated specialist.",
+  "domain": "security",
+  "category": "application-security",
+  "problems": [
+    "application-security-review"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not modify code, exploit a live target, or retrieve real secrets.",
+    "It does not report generic checklist items without a reachable change path.",
+    "It does not absorb a single-boundary review covered by a narrower security specialist.",
+    "It does not provide certification, legal compliance, or release approval."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [
+      "hook/security/application-security/outbound-data-guard",
+      "hook/security/secrets/sensitive-file-access-guard",
+      "skill/development/agent-tooling/author-mcp-server-contract",
+      "skill/security/threat-modeling/review-agent-tool-boundaries",
+      "subagent/security/threat-modeling/mcp-trust-boundary-reviewer"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/secure-agent-boundaries"
+    ]
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

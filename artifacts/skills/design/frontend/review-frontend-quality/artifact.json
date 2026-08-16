@@ -1,0 +1,73 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/design/frontend/review-frontend-quality",
+  "slug": "review-frontend-quality",
+  "name": "Review frontend quality",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Audit web interfaces across behavior, accessibility, responsiveness, and performance.",
+  "description": "An evidence-first review procedure for production web interfaces, with framework routing for React, Next.js, Vue, Nuxt, Svelte, SvelteKit, and Angular.",
+  "domain": "design",
+  "category": "frontend",
+  "problems": [
+    "accessibility-review",
+    "frontend-quality"
+  ],
+  "frameworks": [
+    "react",
+    "nextjs",
+    "vue",
+    "nuxt",
+    "svelte",
+    "sveltekit",
+    "angular"
+  ],
+  "languages": [
+    "html",
+    "css",
+    "javascript",
+    "typescript"
+  ],
+  "lifecycle": [
+    "review"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not turn personal visual preference into a blocking review finding.",
+    "It does not claim runtime or accessibility verification from static inspection alone.",
+    "It does not modify the reviewed interface unless implementation is requested separately."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

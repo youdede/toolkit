@@ -1,0 +1,44 @@
+{
+  "$schema": "../../schema/pack.schema.json",
+  "schemaVersion": 1,
+  "id": "pack/release-readiness",
+  "slug": "release-readiness",
+  "name": "Release readiness",
+  "summary": "Build an evidence-backed release decision and stop publication from unsafe repository state.",
+  "outcomes": [
+    "release-evidence",
+    "safe-publication"
+  ],
+  "members": [
+    {
+      "artifactId": "skill/operations/release/verify-production-release",
+      "role": "procedure",
+      "required": true
+    },
+    {
+      "artifactId": "subagent/operations/release/release-risk-reviewer",
+      "role": "specialist",
+      "required": true
+    },
+    {
+      "artifactId": "subagent/operations/release/release-evidence-verifier",
+      "role": "verifier",
+      "required": true
+    },
+    {
+      "artifactId": "hook/operations/repository-state/release-clean-state-guard",
+      "role": "enforcement",
+      "required": true
+    },
+    {
+      "artifactId": "hook/operations/versioning/release-version-consistency-guard",
+      "role": "enforcement",
+      "required": true
+    },
+    {
+      "artifactId": "hook/operations/package-publication/package-publish-guard",
+      "role": "enforcement",
+      "required": true
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/development/architecture/define-domain-language",
+  "slug": "define-domain-language",
+  "name": "Define Domain Language",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Define a precise domain glossary and record only durable, consequential design decisions.",
+  "description": "Define or repair shared domain language by reconciling stakeholder terms, code behavior, concrete scenarios, and durable decisions. Use when overloaded vocabulary or undocumented trade-offs make design and implementation ambiguous.",
+  "domain": "development",
+  "category": "architecture",
+  "capabilities": [
+    "plan"
+  ],
+  "problems": [
+    "domain-language",
+    "decision-clarity"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "design",
+    "maintenance"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not put file paths, class names, or transient implementation detail into domain definitions.",
+    "It does not create a decision record for routine, reversible, or uncontested choices.",
+    "It does not erase disagreement or present inferred terminology as stakeholder-approved language."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [
+      "skill/development/architecture/write-verifiable-specification",
+      "skill/writing/documentation/load-architecture-decisions"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  }
+}

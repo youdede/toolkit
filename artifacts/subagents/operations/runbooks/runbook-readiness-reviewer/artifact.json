@@ -1,0 +1,62 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/operations/runbooks/runbook-readiness-reviewer",
+  "slug": "runbook-readiness-reviewer",
+  "name": "Runbook Readiness Reviewer",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Review one operational runbook for executable prerequisites, checks, failure branches, ownership, and recovery.",
+  "description": "A narrow, read-only specialist whose outcome is to find a runbook step that cannot be executed or safely evaluated from the stated starting conditions. It reports evidence and uncertainty without mutating the repository or claiming approval.",
+  "domain": "operations",
+  "category": "runbooks",
+  "problems": [
+    "operator-executability"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review",
+    "operations"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not execute runbook commands or contact responders.",
+    "It does not claim the runbook works without scoped exercise evidence.",
+    "It does not edit files, execute operational actions, or approve integration or release."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

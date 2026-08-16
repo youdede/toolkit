@@ -1,0 +1,75 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/operations/setup/author-guided-setup-wizard",
+  "slug": "author-guided-setup-wizard",
+  "name": "Author Guided Setup Wizard",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Author a resumable human-guided setup script with safe secret handling and verified checkpoints.",
+  "description": "Author a bounded shell wizard for manual setup steps that require human interaction, credentials, dashboards, or irreversible confirmation. Use when automation cannot complete the procedure but a repeatable guided path is valuable.",
+  "domain": "operations",
+  "category": "setup",
+  "capabilities": [
+    "author"
+  ],
+  "problems": [
+    "human-guided-setup",
+    "config-hardening"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "setup"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not ask users to paste secrets into chat, logs, arguments, or visible terminal input.",
+    "It does not automate billing, permission grants, deletion, cutover, or other irreversible choices without a human gate.",
+    "It does not claim provider UI steps are current unless they were verified against current official documentation."
+  ],
+  "execution": {
+    "mode": "hybrid",
+    "entrypoints": [
+      {
+        "path": "scripts/validate-setup-wizard.mjs",
+        "runtime": "node",
+        "purpose": "Statically validate Bash syntax, secret-handling hazards, confirmation gates, and the declared wizard stage count.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "relationships": {
+    "composesWith": [
+      "skill/operations/setup/guide-stepwise-setup",
+      "skill/security/threat-modeling/review-agent-tool-boundaries"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  }
+}

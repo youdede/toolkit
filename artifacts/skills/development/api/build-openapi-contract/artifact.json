@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/development/api/build-openapi-contract",
+  "slug": "build-openapi-contract",
+  "name": "Build OpenAPI Contract",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Build an OpenAPI contract from verified behavior, reusable schemas, failures, and executable checks.",
+  "description": "Build or repair an OpenAPI document by reconciling implementation, tests, product requirements, authentication, schemas, examples, and error behavior. Use when an HTTP API needs an accurate machine-readable contract or drift review.",
+  "domain": "development",
+  "category": "api",
+  "problems": [
+    "openapi-contract"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "design",
+    "implementation",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not invent endpoints, fields, examples, status codes, or security scopes.",
+    "It does not expose internal or sensitive schemas merely because implementation fields exist.",
+    "It does not publish, deploy, or guarantee backward compatibility without evidence."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "author"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/sales/define-revenue-lifecycle",
+  "slug": "define-revenue-lifecycle",
+  "name": "Define Revenue Lifecycle",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Define revenue stages, ownership, data contracts, handoffs, and reconciliation across teams.",
+  "description": "Define or audit the lead-to-revenue lifecycle across marketing, sales, success, billing, and analytics using explicit stage semantics, ownership, service levels, routing, data quality, and reconciliation. Use when handoffs or pipeline reporting are inconsistent.",
+  "domain": "marketing",
+  "category": "sales",
+  "problems": [
+    "revenue-lifecycle"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "planning",
+    "operations"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not silently redefine metrics, overwrite CRM records, or deploy routing automation.",
+    "It does not infer sensitive traits or enrich contacts without an approved purpose and source.",
+    "It does not force incompatible revenue and pipeline definitions to match."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "plan"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

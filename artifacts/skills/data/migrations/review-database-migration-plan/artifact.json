@@ -1,0 +1,78 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/data/migrations/review-database-migration-plan",
+  "slug": "review-database-migration-plan",
+  "name": "Review Database Migration Plan",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Review a database migration plan for explicit SQL hazards and an evidenced rollout, rollback, lock, and backfill plan.",
+  "description": "Review a proposed database schema or data migration before it is executed by separating deterministic high-confidence SQL hazards from contextual rollout, rollback, lock, and backfill judgment. Use when a migration plan or SQL change needs review.",
+  "domain": "data",
+  "category": "migrations",
+  "problems": [
+    "migration-safety"
+  ],
+  "frameworks": [
+    "postgresql"
+  ],
+  "languages": [
+    "sql"
+  ],
+  "lifecycle": [
+    "planning",
+    "review",
+    "pre-commit"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not execute SQL, apply a migration, or approve a production change.",
+    "It does not infer table size, lock duration, engine behavior, or rollback feasibility from SQL alone.",
+    "It does not turn an absent rollback, backup, or owner into an assumed safety control."
+  ],
+  "execution": {
+    "mode": "hybrid",
+    "entrypoints": [
+      {
+        "path": "scripts/classify-sql-risks.mjs",
+        "runtime": "node",
+        "purpose": "Classify only explicit, high-confidence SQL risk patterns from a bounded local file and emit JSON.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [
+      "hook/data/migrations/migration-safety-guard",
+      "skill/data/schemas/review-schema-evolution",
+      "subagent/data/migrations/migration-risk-reviewer"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/data-change-safety"
+    ]
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

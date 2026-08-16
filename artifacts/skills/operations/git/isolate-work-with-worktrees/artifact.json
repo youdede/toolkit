@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/operations/git/isolate-work-with-worktrees",
+  "slug": "isolate-work-with-worktrees",
+  "name": "Isolate Work With Worktrees",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Isolate concurrent Git work and integrate only reviewed, verified changes.",
+  "description": "Create and manage a dedicated Git worktree for an independent change, including environment isolation, verification, and deliberate integration. Use when parallel work would otherwise share files, state, or a branch.",
+  "domain": "operations",
+  "category": "git",
+  "problems": [
+    "worktree-isolation"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "setup",
+    "implementation",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not force-remove a worktree or discard uncommitted changes.",
+    "It does not reuse a branch already checked out elsewhere.",
+    "It does not merge or push merely because isolated tests passed."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "diagnose"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/design/interaction/interaction-state-reviewer",
+  "slug": "interaction-state-reviewer",
+  "name": "Interaction State Reviewer",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Review one user journey for complete, coherent, and recoverable interaction-state transitions.",
+  "description": "A narrow, read-only specialist whose outcome is to find a reachable event that leaves the user in a missing, contradictory, duplicate, or unrecoverable interface state. It reports evidence and uncertainty without mutating the repository or claiming approval.",
+  "domain": "design",
+  "category": "interaction",
+  "problems": [
+    "state-completeness"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "html",
+    "css",
+    "javascript"
+  ],
+  "lifecycle": [
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not perform accessibility, performance, or aesthetic review.",
+    "It does not invent backend outcomes or rendered states.",
+    "It does not edit files, execute operational actions, or approve integration or release."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

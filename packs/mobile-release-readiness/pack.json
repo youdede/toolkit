@@ -1,0 +1,34 @@
+{
+  "$schema": "../../schema/pack.schema.json",
+  "schemaVersion": 1,
+  "id": "pack/mobile-release-readiness",
+  "slug": "mobile-release-readiness",
+  "name": "Mobile release readiness",
+  "summary": "Review mobile release evidence, accessibility, reliability, repository state, and version consistency.",
+  "outcomes": [
+    "mobile-release-evidence",
+    "safe-publication"
+  ],
+  "members": [
+    {
+      "artifactId": "skill/operations/release/verify-mobile-release-readiness",
+      "role": "procedure",
+      "required": true
+    },
+    {
+      "artifactId": "subagent/development/testing/mobile-reliability-accessibility-reviewer",
+      "role": "specialist",
+      "required": true
+    },
+    {
+      "artifactId": "hook/operations/repository-state/release-clean-state-guard",
+      "role": "enforcement",
+      "required": true
+    },
+    {
+      "artifactId": "hook/operations/versioning/release-version-consistency-guard",
+      "role": "enforcement",
+      "required": true
+    }
+  ]
+}

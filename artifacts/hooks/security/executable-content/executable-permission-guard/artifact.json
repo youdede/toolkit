@@ -1,0 +1,73 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/security/executable-content/executable-permission-guard",
+  "slug": "executable-permission-guard",
+  "name": "Executable permission guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Reject suspicious staged executable-bit additions before they enter repository history.",
+  "description": "A deterministic Claude Code PreToolUse gate for git commit that examines bounded staged mode changes and blocks executable permission added to declarative or documentation files, or to text scripts without a recognized shebang.",
+  "domain": "security",
+  "category": "executable-content",
+  "problems": [
+    "executable-permission-control"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic",
+    "shell"
+  ],
+  "lifecycle": [
+    "pre-commit",
+    "review",
+    "release"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not chmod, rewrite, stage, unstage, execute, sign, or approve a file.",
+    "It does not claim that a recognized shebang makes a program safe or portable.",
+    "It does not inspect filesystem permissions that are not represented in the staged Git index.",
+    "It does not provide a repository-authored extension or path bypass."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/executable-permission-guard.mjs",
+        "runtime": "node",
+        "purpose": "Inspect staged Git modes and bounded blob prefixes before accepting newly executable repository files.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

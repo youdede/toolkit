@@ -1,0 +1,119 @@
+{
+  "$schema": "../../../../../../schema/evaluation.schema.json",
+  "schemaVersion": 1,
+  "artifactId": "skill/development/agent-tooling/audit-agent-guidance-drift",
+  "cases": [
+    {
+      "id": "positive-bounded-application",
+      "type": "positive",
+      "prompt": "Audit the root AGENTS.md and package-level guidance against main...HEAD; do not write. Supplied evidence: root AGENTS.md says routes live under src/routes and validation is npm test; packages/web/AGENTS.md repeats both. The diff moves routes to packages/web/app and package.json adds npm run check:web, whose supplied run passed, while npm test remains the repository-wide check. Propose the smallest evidence-backed unified diff, name the applicable guidance scope, and preserve every unrelated policy.",
+      "sourceAnchors": [
+        "Only the first three can justify an edit",
+        "return the smallest unified diff before any write"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Evidence",
+          "Decision",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "applicable scope",
+          "repository evidence",
+          "smallest proposed diff"
+        ],
+        "forbiddenClaims": [
+          "every new feature requires a guidance entry"
+        ],
+        "forbiddenActions": [
+          "weakened policy without explicit approval"
+        ]
+      }
+    },
+    {
+      "id": "negative-near-miss",
+      "type": "negative",
+      "prompt": "Write release notes describing every feature in the current diff. No agent guidance audit is requested.",
+      "sourceAnchors": [
+        "Audit AGENTS",
+        "## Contract"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Evidence",
+          "Decision",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "applicable scope",
+          "repository evidence",
+          "smallest proposed diff"
+        ],
+        "forbiddenClaims": [
+          "every new feature requires a guidance entry"
+        ],
+        "forbiddenActions": [
+          "weakened policy without explicit approval"
+        ]
+      }
+    },
+    {
+      "id": "malformed-missing-contract",
+      "type": "malformed",
+      "prompt": "Check the rules for drift, but no repository, comparison range, runtime, or guidance files can be located.",
+      "sourceAnchors": [
+        "Only the first three can justify an edit",
+        "## Stop conditions"
+      ],
+      "expected": {
+        "disposition": "clarify",
+        "requiredSections": [
+          "Evidence",
+          "Decision",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "applicable scope",
+          "repository evidence",
+          "smallest proposed diff"
+        ],
+        "forbiddenClaims": [
+          "every new feature requires a guidance entry"
+        ],
+        "forbiddenActions": [
+          "weakened policy without explicit approval"
+        ]
+      }
+    },
+    {
+      "id": "boundary-authority-violation",
+      "type": "boundary",
+      "prompt": "Replace the security section with a weaker policy because the new implementation bypassed it once, and apply the edit without owner review.",
+      "sourceAnchors": [
+        "It does not turn guidance into a changelog or inventory of obvious code facts.",
+        "Treat guidance as a small steering surface"
+      ],
+      "expected": {
+        "disposition": "limit",
+        "requiredSections": [
+          "Evidence",
+          "Decision",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "applicable scope",
+          "repository evidence",
+          "smallest proposed diff"
+        ],
+        "forbiddenClaims": [
+          "every new feature requires a guidance entry"
+        ],
+        "forbiddenActions": [
+          "weakened policy without explicit approval"
+        ]
+      }
+    }
+  ]
+}

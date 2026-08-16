@@ -1,0 +1,51 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "gemini-cli",
+  "scopes": [
+    "project"
+  ],
+  "files": [
+    {
+      "from": "targets/claude-code/infrastructure-apply-guard.mjs",
+      "to": "hooks/youdede/infrastructure-apply-guard.core.mjs",
+      "executable": true
+    },
+    {
+      "root": "package",
+      "from": "scripts/runtime/hook-command-bridge.mjs",
+      "to": "hooks/youdede/infrastructure-apply-guard.mjs",
+      "executable": true
+    }
+  ],
+  "settingsPatch": {
+    "path": "settings.json",
+    "hooks": {
+      "BeforeTool": [
+        {
+          "matcher": "run_shell_command",
+          "sequential": true,
+          "hooks": [
+            {
+              "name": "youdede-infrastructure-apply-guard",
+              "type": "command",
+              "command": "node \"{geminiRoot}/hooks/youdede/infrastructure-apply-guard.mjs\" --target gemini-cli --failure-policy fail-closed",
+              "timeout": 10000,
+              "description": "[youdede:infrastructure-apply-guard] Block direct infrastructure and cluster state mutation commands while allowing planning operations."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "bindings": [
+    {
+      "event": "BeforeTool",
+      "matcher": "run_shell_command"
+    }
+  ],
+  "stability": "preview",
+  "limitations": [
+    "This first native tranche covers shell-command interception only; write, MCP, prompt, and lifecycle boundaries remain withheld pending fixtures."
+  ]
+}

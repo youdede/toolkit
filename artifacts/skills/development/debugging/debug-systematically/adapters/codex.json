@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "codex",
+  "scopes": [
+    "project",
+    "user"
+  ],
+  "files": [
+    {
+      "from": "SKILL.md",
+      "to": "skills/{slug}/SKILL.md"
+    },
+    {
+      "from": "agents",
+      "to": "skills/{slug}/agents"
+    },
+    {
+      "from": "references",
+      "to": "skills/{slug}/references"
+    }
+  ]
+}

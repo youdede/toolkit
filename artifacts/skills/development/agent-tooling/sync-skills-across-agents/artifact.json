@@ -1,0 +1,64 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/development/agent-tooling/sync-skills-across-agents",
+  "slug": "sync-skills-across-agents",
+  "name": "Sync Skills Across Agents",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Synchronize a skill across configured agent roots without assuming personal paths.",
+  "description": "Discover configured skill roots for multiple agent runtimes and synchronize one validated skill with collision, symlink, and removal safeguards. Use when the same portable skill should be available to more than one agent.",
+  "domain": "development",
+  "category": "agent-tooling",
+  "problems": [
+    "skill-distribution"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "shell"
+  ],
+  "lifecycle": [
+    "setup",
+    "release"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not assume hardcoded personal directories or undocumented runtime behavior.",
+    "It does not overwrite divergent or unmanaged copies without approval.",
+    "It does not delete skills or consolidate directories as a side effect of synchronization."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "collect"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

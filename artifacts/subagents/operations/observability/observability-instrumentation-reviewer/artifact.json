@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/operations/observability/observability-instrumentation-reviewer",
+  "slug": "observability-instrumentation-reviewer",
+  "name": "Observability Instrumentation Reviewer",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Map a bounded failure journey to telemetry and identify evidence-backed detection and diagnosis gaps.",
+  "description": "A read-only observability specialist that reviews instrumentation, context propagation, sampling, cardinality, privacy, dashboards, and alerts without querying live systems.",
+  "domain": "operations",
+  "category": "observability",
+  "capabilities": [
+    "assess",
+    "verify"
+  ],
+  "problems": [
+    "observability-design",
+    "incident-readiness"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "design",
+    "review",
+    "operations"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "Do not query production telemetry, dashboards, vendors, collectors, or incident systems.",
+    "Do not edit instrumentation, alerts, dashboards, sampling, retention, or runbooks.",
+    "Do not claim a signal is emitted or an alert fires from configuration names alone.",
+    "Do not reproduce secret, personal, or high-cardinality values in findings."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json"
+  }
+}

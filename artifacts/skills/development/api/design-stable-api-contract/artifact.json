@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/development/api/design-stable-api-contract",
+  "slug": "design-stable-api-contract",
+  "name": "Design Stable API Contract",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Design an interface contract around consumers, invariants, compatibility, and failure semantics.",
+  "description": "Design or review an internal, public, HTTP, event, library, or command interface using consumer evidence, invariants, compatibility, error semantics, and evolution rules. Use before implementation or when an interface change could affect independent consumers.",
+  "domain": "development",
+  "category": "api",
+  "problems": [
+    "api-contract"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "design",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not invent consumer needs or expose implementation details without a contract reason.",
+    "It does not label a breaking change safe because current tests pass.",
+    "It does not generate credentials, weaken authorization, or deploy interface changes."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "plan"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

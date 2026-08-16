@@ -1,0 +1,63 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/writing/decision-support/make-practical-decision",
+  "slug": "make-practical-decision",
+  "name": "Make Practical Decision",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "End low-value analysis with a reversible recommendation and concrete next action.",
+  "description": "Convert an overextended analysis into a practical decision by separating critical blockers from acceptable uncertainty, preferring reversibility, and naming the next step. Use when the user explicitly wants to stop overthinking.",
+  "domain": "writing",
+  "category": "decision-support",
+  "problems": [
+    "decision-making"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not minimize serious safety, legal, financial, or data-loss concerns.",
+    "It does not add speculative blockers or reopen settled details.",
+    "It does not confuse a recommendation with permission to execute."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "plan"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

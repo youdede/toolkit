@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": ["project"],
+  "files": [{"from": "targets/claude-code/lockfile-origin-guard.mjs", "to": "hooks/youdede/lockfile-origin-guard.mjs", "executable": true}],
+  "settingsPatch": {"hooks": {"PreToolUse": [{
+    "matcher": "Bash",
+    "description": "[youdede:lockfile-origin-guard] Verify staged lockfile package origins",
+    "hooks": [{"type": "command", "command": "node \"{claudeRoot}/hooks/youdede/lockfile-origin-guard.mjs\"", "timeout": 20}]
+  }]}}
+}

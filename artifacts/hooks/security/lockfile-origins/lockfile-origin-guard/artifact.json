@@ -1,0 +1,75 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/security/lockfile-origins/lockfile-origin-guard",
+  "slug": "lockfile-origin-guard",
+  "name": "Lockfile origin guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Inspect staged lockfile origins before commit and reject insecure or unverifiable package sources.",
+  "description": "A deterministic Claude Code PreToolUse gate for git commit that reads bounded staged lockfiles and blocks insecure transport, credential-bearing origins, missing integrity metadata, or local and Git package resolutions.",
+  "domain": "security",
+  "category": "lockfile-origins",
+  "problems": [
+    "lockfile-origin-integrity"
+  ],
+  "frameworks": [
+    "nodejs",
+    "agnostic"
+  ],
+  "languages": [
+    "javascript",
+    "typescript",
+    "shell"
+  ],
+  "lifecycle": [
+    "pre-commit",
+    "review",
+    "maintenance"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not regenerate, normalize, sign, install, or verify the full dependency graph.",
+    "It does not send package origins, credentials, integrity values, or repository content anywhere.",
+    "It does not claim that an accepted lockfile is reproducible, authentic, or vulnerability-free.",
+    "It does not allow command flags or repository files to disable a detected origin violation."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/lockfile-origin-guard.mjs",
+        "runtime": "node",
+        "purpose": "Inspect bounded staged lockfile metadata before commit and reject high-confidence unsafe dependency origins.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

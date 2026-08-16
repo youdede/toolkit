@@ -1,0 +1,69 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/development/testing/deliver-test-first",
+  "slug": "deliver-test-first",
+  "name": "Deliver test first",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Deliver behavior changes through a verified red-green-refactor loop.",
+  "description": "A stack-discovery-first testing procedure that requires observable red evidence, minimal implementation, durable tests, and broader verification.",
+  "domain": "development",
+  "category": "testing",
+  "problems": [
+    "regression-prevention",
+    "test-strategy"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "implementation",
+    "maintenance"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not weaken assertions or configuration to manufacture a passing result.",
+    "It does not claim regression proof when the test never failed for the expected reason.",
+    "It does not assume a test framework or command without inspecting the repository."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "operate"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/development/architecture/design-deep-module-interface",
+      "skill/development/architecture/enforce-typescript-module-boundaries",
+      "skill/development/testing/design-property-and-fuzz-tests"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

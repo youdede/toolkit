@@ -1,0 +1,67 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/operations/cloud-resources/cloud-cost-finops-analyst",
+  "slug": "cloud-cost-finops-analyst",
+  "name": "Cloud Cost FinOps Analyst",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Reconcile a bounded cloud-cost question to usage, allocation, pricing, commitments, and uncertainty evidence.",
+  "description": "A read-only FinOps specialist that identifies evidenced cost drivers and estimates bounded options without querying billing systems, purchasing commitments, or changing resources.",
+  "domain": "operations",
+  "category": "cloud-resources",
+  "capabilities": [
+    "assess",
+    "diagnose",
+    "plan"
+  ],
+  "problems": [
+    "production-data-analysis",
+    "resource-amplification",
+    "sli-budget-math"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "review",
+    "operations"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "Do not query cloud billing systems, provider consoles, production telemetry, or financial accounts.",
+    "Do not purchase, exchange, modify, or recommend unconditional commitments without supplied demand and risk constraints.",
+    "Do not resize, stop, delete, migrate, or reconfigure cloud resources.",
+    "Do not hide unallocated cost, mix gross and net values, or present estimated savings as guaranteed."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json"
+  }
+}

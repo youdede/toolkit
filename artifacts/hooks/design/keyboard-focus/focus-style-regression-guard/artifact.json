@@ -1,0 +1,74 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/design/keyboard-focus/focus-style-regression-guard",
+  "slug": "focus-style-regression-guard",
+  "name": "Focus Style Regression Guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block newly invisible CSS focus states that have no visible replacement.",
+  "description": "Parses bounded CSS rule blocks and rejects net-new focus selectors that disable outlines without a visible outline, shadow, border, or text-decoration replacement.",
+  "domain": "design",
+  "category": "keyboard-focus",
+  "problems": [
+    "focus-visibility-regression"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "implementation",
+    "pre-commit"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not evaluate rendered contrast or pixel visibility.",
+    "It does not reject outline removal when the same focus rule supplies a visible replacement.",
+    "It does not claim keyboard accessibility conformance."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/focus-style-regression-guard.mjs",
+        "runtime": "node",
+        "purpose": "Block newly invisible CSS focus states that have no visible replacement.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [
+      "hook/design/semantic-markup/accessibility-attribute-regression-guard",
+      "skill/design/accessibility/plan-accessibility-conformance-evidence",
+      "skill/design/accessibility/test-screen-reader-journey",
+      "subagent/design/accessibility/accessibility-conformance-reviewer",
+      "subagent/design/accessibility/accessibility-journey-tester"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/accessibility-assurance"
+    ]
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/content/write-conversion-copy",
+  "slug": "write-conversion-copy",
+  "name": "Write Conversion Copy",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Write persuasive page copy from audience evidence, product truth, objections, and one primary action.",
+  "description": "Write website or landing-page copy from verified product facts, customer language, decision context, objections, and a defined action. Use when a new page or substantial rewrite needs persuasive structure without invented proof or manipulative claims.",
+  "domain": "marketing",
+  "category": "content",
+  "problems": [
+    "conversion-copy"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "implementation",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not fabricate customers, quotes, awards, results, guarantees, or urgency.",
+    "It does not use fear, shame, hidden costs, or ambiguous controls to force action.",
+    "It does not claim a conversion outcome without measurement evidence."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "author"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

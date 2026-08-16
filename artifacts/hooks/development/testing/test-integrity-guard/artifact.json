@@ -1,0 +1,78 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/development/testing/test-integrity-guard",
+  "slug": "test-integrity-guard",
+  "name": "Test integrity guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block newly introduced test suppressions and explicit shell removal of test sources.",
+  "description": "A deterministic Claude Code PreToolUse gate for Bash, Write, and Edit that compares bounded test-source changes for newly introduced skip, expected-failure, or ignore markers and rejects statically recognizable shell deletion or rename-away of test files without duplicating focused-test checks.",
+  "domain": "development",
+  "category": "testing",
+  "problems": [
+    "test-integrity"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "csharp",
+    "go",
+    "java",
+    "javascript",
+    "php",
+    "python",
+    "ruby",
+    "rust",
+    "shell",
+    "swift",
+    "typescript"
+  ],
+  "lifecycle": [
+    "implementation",
+    "pre-commit",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not run tests, measure coverage, repair a test, or decide whether a suppression is justified.",
+    "It does not inspect or block focused-test markers because that boundary belongs to debug-artifact-guard.",
+    "It does not infer a test deletion from arbitrary scripts, dynamic paths, interpreters, build tools, or unsupported shell constructs.",
+    "It does not expose a project-writable allowlist, inline bypass, environment override, or agent-controlled approval mechanism."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/test-integrity-guard.mjs",
+        "runtime": "node",
+        "purpose": "Compare bounded test changes and reject new suppressions or explicit static test-source removal.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/operations/agent-orchestration/write-verifiable-goal-loop",
+  "slug": "write-verifiable-goal-loop",
+  "name": "Write Verifiable Goal Loop",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Turn an open-ended objective into a bounded loop with evidence and stop rules.",
+  "description": "Write a goal-driven agent loop with explicit constraints, validation, checkpoints, progress measures, and termination conditions. Use for long-running autonomous work where a simple step list is insufficient.",
+  "domain": "operations",
+  "category": "agent-orchestration",
+  "problems": [
+    "goal-design"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "operations"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not use vague goals such as make it better without measurable completion.",
+    "It does not reward activity counts that can be gamed instead of outcomes.",
+    "It does not loop indefinitely or hide repeated failure."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "author"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/operations/agent-orchestration/map-multi-session-decisions"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

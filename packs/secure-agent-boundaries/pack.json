@@ -1,0 +1,44 @@
+{
+  "$schema": "../../schema/pack.schema.json",
+  "schemaVersion": 1,
+  "id": "pack/secure-agent-boundaries",
+  "slug": "secure-agent-boundaries",
+  "name": "Secure agent boundaries",
+  "summary": "Design agent integrations, review their trust boundary, and block obvious data-exposure paths.",
+  "outcomes": [
+    "agent-tool-security",
+    "data-exposure-control"
+  ],
+  "members": [
+    {
+      "artifactId": "skill/security/threat-modeling/review-agent-tool-boundaries",
+      "role": "verifier",
+      "required": true
+    },
+    {
+      "artifactId": "skill/development/agent-tooling/author-mcp-server-contract",
+      "role": "procedure",
+      "required": true
+    },
+    {
+      "artifactId": "subagent/security/application-security/application-security-reviewer",
+      "role": "specialist",
+      "required": true
+    },
+    {
+      "artifactId": "subagent/security/threat-modeling/mcp-trust-boundary-reviewer",
+      "role": "specialist",
+      "required": true
+    },
+    {
+      "artifactId": "hook/security/application-security/outbound-data-guard",
+      "role": "enforcement",
+      "required": true
+    },
+    {
+      "artifactId": "hook/security/secrets/sensitive-file-access-guard",
+      "role": "enforcement",
+      "required": true
+    }
+  ]
+}

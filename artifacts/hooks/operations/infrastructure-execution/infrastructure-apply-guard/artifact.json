@@ -1,0 +1,71 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/operations/infrastructure-execution/infrastructure-apply-guard",
+  "slug": "infrastructure-apply-guard",
+  "name": "Infrastructure apply guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block direct infrastructure and cluster state mutation commands while allowing planning operations.",
+  "description": "A deterministic Claude Code PreToolUse gate that distinguishes read-only plan and diff operations from mutating Terraform, OpenTofu, Pulumi, kubectl, and Helm subcommands.",
+  "domain": "operations",
+  "category": "infrastructure-execution",
+  "problems": [
+    "infrastructure-execution"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "javascript",
+    "shell"
+  ],
+  "lifecycle": [
+    "release",
+    "operations"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not apply, destroy, import, or roll back infrastructure.",
+    "It does not infer an environment from a prompt, variable, account, or workspace name.",
+    "It does not treat a dry-run-like custom flag as proof of safety."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/infrastructure-apply-guard.mjs",
+        "runtime": "node",
+        "purpose": "Classify infrastructure CLI subcommands and refuse those that mutate managed state.",
+        "sideEffects": "none"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

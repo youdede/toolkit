@@ -1,0 +1,71 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/writing/release-notes/write-release-notes-from-evidence",
+  "slug": "write-release-notes-from-evidence",
+  "name": "Write Release Notes From Evidence",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Write release notes from bounded Git evidence while separating verified changes, user impact, and unresolved claims.",
+  "description": "Write concise release notes from an explicit Git revision range and supplied validation evidence, using a read-only collector to ground change statements. Use when preparing release notes, a changelog entry, or a release announcement.",
+  "domain": "writing",
+  "category": "release-notes",
+  "problems": [
+    "release-verification"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "release",
+    "handoff"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not invent customer impact, performance, security, or compatibility claims from commit messages.",
+    "It does not publish, tag, push, or modify Git history.",
+    "It does not expose secret-bearing diffs or include unverified future work as shipped."
+  ],
+  "execution": {
+    "mode": "hybrid",
+    "entrypoints": [
+      {
+        "path": "scripts/collect-release-evidence.mjs",
+        "runtime": "node",
+        "purpose": "Collect a bounded Git revision range, commit list, and changed-file evidence without mutation.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "author"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

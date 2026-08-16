@@ -1,0 +1,63 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/writing/technical-writing/compress-response-with-context",
+  "slug": "compress-response-with-context",
+  "name": "Compress Response With Context",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Compress a prior response while preserving the minimum context needed to act.",
+  "description": "Rewrite the previous answer into a shorter plain-language version with an optional compact context recap, preserving decisions, caveats, evidence, and next action. Use when the user asks for shorter or simpler.",
+  "domain": "writing",
+  "category": "technical-writing",
+  "problems": [
+    "response-compression"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "handoff"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not repeat private or irrelevant early conversation merely for completeness.",
+    "It does not remove safety, uncertainty, authorization, or rollback information.",
+    "It does not perform new work when the request is only to rewrite the previous answer."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "operate"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

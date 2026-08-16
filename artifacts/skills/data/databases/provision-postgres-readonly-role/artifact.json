@@ -1,0 +1,64 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/data/databases/provision-postgres-readonly-role",
+  "slug": "provision-postgres-readonly-role",
+  "name": "Provision Postgres Readonly Role",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Design and verify a least-privilege PostgreSQL role for bounded read access.",
+  "description": "Prepare reviewed PostgreSQL SQL for a login role that defaults to read-only, has bounded execution, and excludes sensitive relations. Use when humans need to grant an analyst or agent production read access.",
+  "domain": "data",
+  "category": "databases",
+  "problems": [
+    "postgres-least-privilege"
+  ],
+  "frameworks": [
+    "postgresql"
+  ],
+  "languages": [
+    "sql"
+  ],
+  "lifecycle": [
+    "setup",
+    "operations"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not grant SUPERUSER, BYPASSRLS, write privileges, or role administration.",
+    "It does not embed or print a production password.",
+    "It does not apply production DDL without explicit authorization and a revocation plan."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "operate"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "$schema": "../../schema/pack.schema.json",
+  "schemaVersion": 1,
+  "id": "pack/accessibility-assurance",
+  "slug": "accessibility-assurance",
+  "name": "Accessibility assurance",
+  "summary": "Plan, enforce, and independently verify accessible interface behavior from source evidence.",
+  "outcomes": [
+    "accessible-interface",
+    "regression-prevention"
+  ],
+  "members": [
+    {
+      "artifactId": "skill/design/accessibility/plan-accessibility-conformance-evidence",
+      "role": "procedure",
+      "required": true
+    },
+    {
+      "artifactId": "skill/design/accessibility/test-screen-reader-journey",
+      "role": "verifier",
+      "required": true
+    },
+    {
+      "artifactId": "subagent/design/accessibility/accessibility-journey-tester",
+      "role": "specialist",
+      "required": true
+    },
+    {
+      "artifactId": "subagent/design/accessibility/accessibility-conformance-reviewer",
+      "role": "specialist",
+      "required": true
+    },
+    {
+      "artifactId": "hook/design/semantic-markup/accessibility-attribute-regression-guard",
+      "role": "enforcement",
+      "required": true
+    },
+    {
+      "artifactId": "hook/design/keyboard-focus/focus-style-regression-guard",
+      "role": "enforcement",
+      "required": true
+    }
+  ]
+}

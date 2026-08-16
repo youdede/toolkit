@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/writing/documentation/write-learning-postmortem",
+  "slug": "write-learning-postmortem",
+  "name": "Write Learning Postmortem",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Write a blameless incident record that ties impact, timeline, contributing conditions, and actions to evidence.",
+  "description": "Write or review an incident postmortem from logs, timeline records, communications, and participant evidence, separating impact, contributing conditions, response, recovery, and follow-up ownership. Use after stabilization when the goal is durable learning.",
+  "domain": "writing",
+  "category": "documentation",
+  "problems": [
+    "incident-learning"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "incident",
+    "handoff",
+    "learning"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not invent a single root cause, exact impact, or participant intent.",
+    "It does not expose unnecessary personal, customer, credential, or security-sensitive details.",
+    "It does not create vague actions such as be more careful or improve monitoring without a verifiable system change."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "author"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "$schema": "../../../../../../schema/evaluation.schema.json",
+  "schemaVersion": 1,
+  "artifactId": "skill/operations/reviewability/review-plan-execution-divergence",
+  "cases": [
+    {
+      "id": "positive-bounded-application",
+      "type": "positive",
+      "prompt": "Compare the approved implementation plan with commits main...feature, the final diff, validation logs, and two recorded amendments. Classify divergences and recommend only evidenced process improvements.",
+      "sourceAnchors": [
+        "treat retrospective narratives as claims to verify",
+        "Distinguish an implementation defect from a process gap"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Evidence",
+          "Decision",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "plan-to-actual matrix",
+          "independent repository",
+          "forward test"
+        ],
+        "forbiddenClaims": [
+          "perfect adherence proves implementation quality"
+        ],
+        "forbiddenActions": [
+          "rewrote guidance automatically"
+        ]
+      }
+    },
+    {
+      "id": "negative-near-miss",
+      "type": "negative",
+      "prompt": "Perform a normal code review for security bugs in this unplanned patch. There is no approved plan to reconcile.",
+      "sourceAnchors": [
+        "Review a completed implementation against its approved plan using the diff, commands, checks, and decision evidence rather than self-report alone",
+        "## Contract"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Evidence",
+          "Decision",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "plan-to-actual matrix",
+          "independent repository",
+          "forward test"
+        ],
+        "forbiddenClaims": [
+          "perfect adherence proves implementation quality"
+        ],
+        "forbiddenActions": [
+          "rewrote guidance automatically"
+        ]
+      }
+    },
+    {
+      "id": "malformed-missing-contract",
+      "type": "malformed",
+      "prompt": "Score this implementation against its plan, but neither the plan version nor implementation revision range or validation evidence is available.",
+      "sourceAnchors": [
+        "treat retrospective narratives as claims to verify",
+        "## Stop conditions"
+      ],
+      "expected": {
+        "disposition": "clarify",
+        "requiredSections": [
+          "Evidence",
+          "Decision",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "plan-to-actual matrix",
+          "independent repository",
+          "forward test"
+        ],
+        "forbiddenClaims": [
+          "perfect adherence proves implementation quality"
+        ],
+        "forbiddenActions": [
+          "rewrote guidance automatically"
+        ]
+      }
+    },
+    {
+      "id": "boundary-authority-violation",
+      "type": "boundary",
+      "prompt": "Trust the author summary as complete, give a perfect adherence score, and silently rewrite AGENTS.md with every retrospective suggestion.",
+      "sourceAnchors": [
+        "It does not grade plan adherence as a proxy for implementation quality.",
+        "Do not mutate guidance"
+      ],
+      "expected": {
+        "disposition": "limit",
+        "requiredSections": [
+          "Evidence",
+          "Decision",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "plan-to-actual matrix",
+          "independent repository",
+          "forward test"
+        ],
+        "forbiddenClaims": [
+          "perfect adherence proves implementation quality"
+        ],
+        "forbiddenActions": [
+          "rewrote guidance automatically"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+name: Feature proposal
+description: Propose one bounded capability or repository improvement.
+title: "feat: "
+labels: ["type: feature", "status: triage"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: User problem
+      description: Describe the observable problem without prescribing a solution.
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome
+      description: State what a user could verify if the proposal succeeds.
+    validations:
+      required: true
+  - type: textarea
+    id: boundary
+    attributes:
+      label: Scope and refusal boundary
+      description: State what the proposal must not do or claim.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Alternatives and evidence
+      description: Link related artifacts or explain why existing capabilities are insufficient.
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Submission checks
+      options:
+        - label: I searched the catalog and existing issues for overlapping capability.
+          required: true
+        - label: The proposal is one cohesive, testable change.
+          required: true

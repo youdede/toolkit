@@ -1,0 +1,70 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/operations/process-lifecycle/foreground-process-guard",
+  "slug": "foreground-process-guard",
+  "name": "Foreground Process Guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block recognizable indefinite development processes launched in the foreground.",
+  "description": "Classifies bounded static shell commands and stops common servers, watchers, and follow-mode tools unless a timeout, detached session, or explicit background boundary is present.",
+  "domain": "operations",
+  "category": "process-lifecycle",
+  "problems": [
+    "foreground-process-control"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "implementation",
+    "pre-commit"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not kill existing processes or manage process supervisors.",
+    "It does not block bounded one-shot build and test commands.",
+    "It does not execute dynamic shell content to discover its duration."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/foreground-process-guard.mjs",
+        "runtime": "node",
+        "purpose": "Block recognizable indefinite development processes launched in the foreground.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

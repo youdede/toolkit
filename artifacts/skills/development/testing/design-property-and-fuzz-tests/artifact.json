@@ -1,0 +1,69 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/development/testing/design-property-and-fuzz-tests",
+  "slug": "design-property-and-fuzz-tests",
+  "name": "Design Property and Fuzz Tests",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Translate stable invariants and threat boundaries into reproducible property-based and fuzz tests.",
+  "description": "Design property-based or fuzz testing from observable invariants, input models, shrinking, reproducible seeds, budgets, and failure triage. Use when example tests miss broad input spaces, parser boundaries, state transitions, or adversarial inputs.",
+  "domain": "development",
+  "category": "testing",
+  "capabilities": [
+    "plan"
+  ],
+  "problems": [
+    "test-strategy",
+    "test-gaps"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "implementation",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not execute unbounded fuzz campaigns or target production and shared services.",
+    "It does not treat random input volume, code coverage, or a run without crashes as proof of correctness or security.",
+    "It does not retain sensitive generated samples, secrets, or user data in seeds and corpora."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [
+      "skill/development/testing/deliver-test-first",
+      "subagent/development/testing/test-gap-reviewer"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/conversion/audit-app-store-listing",
+  "slug": "audit-app-store-listing",
+  "name": "Audit App Store Listing",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Review an app listing for discoverability, truthful persuasion, visual sequence, and testable gaps.",
+  "description": "Audit an Apple App Store or Google Play listing using observable metadata, visual assets, review themes, category context, localization, and conversion hypotheses. Use before changing a listing or planning an app-store experiment.",
+  "domain": "marketing",
+  "category": "conversion",
+  "problems": [
+    "app-store-optimization"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "review",
+    "maintenance"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not manipulate ratings, incentivize prohibited reviews, stuff keywords, or imitate competitor branding.",
+    "It does not promise rank or installs from metadata changes.",
+    "It does not publish listing changes or invent console metrics."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

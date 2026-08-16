@@ -1,0 +1,43 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "codex",
+  "scopes": [
+    "project"
+  ],
+  "files": [
+    {
+      "from": "targets/claude-code/archive-extraction-guard.mjs",
+      "to": "hooks/youdede/archive-extraction-guard.mjs",
+      "executable": true
+    }
+  ],
+  "settingsPatch": {
+    "path": "hooks.json",
+    "hooks": {
+      "PreToolUse": [
+        {
+          "matcher": "Bash",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "node \"{codexRoot}/hooks/youdede/archive-extraction-guard.mjs\"",
+              "timeout": 10,
+              "statusMessage": "[youdede:archive-extraction-guard] Evaluating archive extraction guard."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "bindings": [
+    {
+      "event": "PreToolUse",
+      "matcher": "Bash"
+    }
+  ],
+  "stability": "stable",
+  "limitations": [
+    "This native tranche covers shell-command interception only; project hook definitions require Codex trust review before execution."
+  ]
+}

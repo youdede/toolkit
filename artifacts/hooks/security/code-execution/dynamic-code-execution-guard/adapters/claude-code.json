@@ -1,0 +1,5 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json", "schemaVersion": 1, "target": "claude-code", "scopes": ["project"],
+  "files": [{"from": "targets/claude-code/dynamic-code-execution-guard.mjs", "to": "hooks/youdede/dynamic-code-execution-guard.mjs", "executable": true}],
+  "settingsPatch": {"hooks": {"PreToolUse": [{"matcher": "Write|Edit|MultiEdit", "description": "[youdede:dynamic-code-execution-guard] Reject direct dynamic code execution", "hooks": [{"type": "command", "command": "node \"{claudeRoot}/hooks/youdede/dynamic-code-execution-guard.mjs\"", "timeout": 10}]}]}}
+}

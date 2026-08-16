@@ -1,0 +1,71 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/operations/observability/failure-evidence-guard",
+  "slug": "failure-evidence-guard",
+  "name": "Failure Evidence Guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Normalize failed tool calls into bounded, non-sensitive evidence for the next model step.",
+  "description": "A deterministic fail-open PostToolUseFailure observer that classifies a tool failure and adds a small corrective receipt without copying raw error or command content.",
+  "domain": "operations",
+  "category": "observability",
+  "capabilities": [
+    "collect"
+  ],
+  "problems": [
+    "failure-recovery",
+    "recovery-evidence"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "implementation",
+    "operations",
+    "incident"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not retry, repair, rerun, or reinterpret the failed operation.",
+    "It does not copy raw commands, tool inputs, stack traces, or error text into added context.",
+    "It does not claim that a failure category establishes the root cause.",
+    "It does not block the session when evidence cannot be normalized."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/failure-evidence-guard.mjs",
+        "runtime": "node",
+        "purpose": "Classify a failed tool call and inject a bounded, content-safe failure receipt.",
+        "sideEffects": "none"
+      }
+    ]
+  },
+  "relationships": {
+    "composesWith": [
+      "hook/operations/agent-orchestration/completion-evidence-guard"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "observing",
+    "failurePolicy": "fail-open",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  }
+}

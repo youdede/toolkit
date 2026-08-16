@@ -1,0 +1,64 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/development/testing/performance-benchmark-analyst",
+  "slug": "performance-benchmark-analyst",
+  "name": "Performance Benchmark Analyst",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Judge whether supplied benchmark results prove a meaningful regression under comparable conditions.",
+  "description": "A read-only benchmark specialist that audits scenario identity, environment parity, samples, noise, statistics, and budgets before attributing a performance change.",
+  "domain": "development",
+  "category": "testing",
+  "capabilities": [
+    "assess",
+    "diagnose"
+  ],
+  "problems": [
+    "regression-prevention",
+    "performance-diagnosis"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review",
+    "release"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "Do not execute benchmarks, profilers, load generators, or production queries.",
+    "Do not compare summaries that use different units, workloads, success conditions, or environment identities as if they were equivalent.",
+    "Do not remove outliers or failed samples without a supplied rule and auditable reason.",
+    "Do not attribute a regression to code without matching causal evidence."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json"
+  }
+}

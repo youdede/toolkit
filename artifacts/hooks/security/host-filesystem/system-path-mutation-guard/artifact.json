@@ -1,0 +1,72 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/security/host-filesystem/system-path-mutation-guard",
+  "slug": "system-path-mutation-guard",
+  "name": "System path mutation guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block explicit file mutation commands targeting protected operating-system paths.",
+  "description": "A deterministic Claude Code PreToolUse gate that detects common copy, move, install, permission, metadata, directory, and stream-write commands whose static destination is an operating-system path.",
+  "domain": "security",
+  "category": "host-filesystem",
+  "problems": [
+    "system-path-mutation"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "javascript",
+    "shell"
+  ],
+  "lifecycle": [
+    "setup",
+    "implementation",
+    "operations"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not write, repair, restore, or change permissions on system files.",
+    "It does not resolve dynamic shell paths or follow filesystem links.",
+    "It does not replace operating-system sandboxing or privilege separation."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/system-path-mutation-guard.mjs",
+        "runtime": "node",
+        "purpose": "Recognize static command destinations under protected operating-system paths.",
+        "sideEffects": "none"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

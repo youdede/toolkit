@@ -1,0 +1,68 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/security/ci-references/ci-reference-pinning-guard",
+  "slug": "ci-reference-pinning-guard",
+  "name": "CI reference pinning guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Require immutable commit or digest references when CI workflows acquire external execution.",
+  "description": "A deterministic Claude Code PreToolUse gate that reconstructs bounded CI workflow edits and blocks newly introduced external action, reusable-workflow, or container references that are mutable, dynamic, or incompletely pinned.",
+  "domain": "security",
+  "category": "ci-references",
+  "problems": [
+    "ci-reference-pinning"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "implementation",
+    "review",
+    "release"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not execute, validate, repair, approve, or publish a CI workflow.",
+    "It does not resolve tags, branches, action metadata, container registries, or network identities.",
+    "It does not treat comments, prompt text, or a project-authored allowlist as authorization to bypass pinning.",
+    "It does not claim support for CI providers or reference syntaxes outside its documented scanners."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/ci-reference-pinning-guard.mjs",
+        "runtime": "node",
+        "purpose": "Reconstruct bounded CI workflow edits and reject net-new external references that are not pinned to immutable identities.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

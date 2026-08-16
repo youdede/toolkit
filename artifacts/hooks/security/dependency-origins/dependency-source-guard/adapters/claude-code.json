@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": ["project"],
+  "files": [{"from": "targets/claude-code/dependency-source-guard.mjs", "to": "hooks/youdede/dependency-source-guard.mjs", "executable": true}],
+  "settingsPatch": {"hooks": {"PreToolUse": [{
+    "matcher": "Write|Edit|MultiEdit",
+    "description": "[youdede:dependency-source-guard] Keep dependency sources registry-resolved",
+    "hooks": [{"type": "command", "command": "node \"{claudeRoot}/hooks/youdede/dependency-source-guard.mjs\"", "timeout": 10}]
+  }]}}
+}

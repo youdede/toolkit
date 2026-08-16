@@ -1,0 +1,66 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/development/contract-compatibility/api-contract-compatibility-guard",
+  "slug": "api-contract-compatibility-guard",
+  "name": "Api Contract Compatibility Guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block high-confidence removals from bounded OpenAPI contract edits.",
+  "description": "Compares OpenAPI JSON or indentation-stable YAML signatures and blocks removed routes, operations, response codes, and newly mandatory parameters without executing generators.",
+  "domain": "development",
+  "category": "contract-compatibility",
+  "problems": [
+    "api-contract-change-control"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "implementation",
+    "pre-commit"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not call an API or regenerate clients.",
+    "It does not infer undocumented consumer behavior.",
+    "It does not approve a breaking-version release."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/api-contract-compatibility-guard.mjs",
+        "runtime": "node",
+        "purpose": "Block high-confidence removals from bounded OpenAPI contract edits.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

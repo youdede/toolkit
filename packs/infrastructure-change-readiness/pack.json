@@ -1,0 +1,29 @@
+{
+  "$schema": "../../schema/pack.schema.json",
+  "schemaVersion": 1,
+  "id": "pack/infrastructure-change-readiness",
+  "slug": "infrastructure-change-readiness",
+  "name": "Infrastructure change readiness",
+  "summary": "Plan a staged infrastructure change and independently review lifecycle, blast-radius, and recovery evidence.",
+  "outcomes": [
+    "recovery-evidence",
+    "staged-infrastructure-change"
+  ],
+  "members": [
+    {
+      "artifactId": "skill/operations/infrastructure/plan-infrastructure-change",
+      "role": "procedure",
+      "required": true
+    },
+    {
+      "artifactId": "subagent/operations/infrastructure/infrastructure-change-reviewer",
+      "role": "specialist",
+      "required": true
+    },
+    {
+      "artifactId": "subagent/operations/resilience/disaster-recovery-readiness-auditor",
+      "role": "verifier",
+      "required": true
+    }
+  ]
+}

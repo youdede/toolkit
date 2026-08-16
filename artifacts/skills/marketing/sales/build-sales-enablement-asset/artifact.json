@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/sales/build-sales-enablement-asset",
+  "slug": "build-sales-enablement-asset",
+  "name": "Build Sales Enablement Asset",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Build a seller-ready asset from a specific buyer decision, evidence set, and usage context.",
+  "description": "Build or review a sales deck, one-pager, battle card, talk track, demo brief, objection guide, or ROI worksheet for a defined buyer and deal moment. Use when sellers need an evidence-backed asset they can apply consistently.",
+  "domain": "marketing",
+  "category": "sales",
+  "problems": [
+    "sales-enablement"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "implementation",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not invent customer results, logos, quotes, competitor weaknesses, pricing, or roadmap.",
+    "It does not create personalized financial conclusions from unsupported assumptions.",
+    "It does not publish, distribute, or represent an asset as approved without authorization."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "author"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

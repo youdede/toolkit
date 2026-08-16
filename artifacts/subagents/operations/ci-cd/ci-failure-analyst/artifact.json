@@ -1,0 +1,64 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/operations/ci-cd/ci-failure-analyst",
+  "slug": "ci-failure-analyst",
+  "name": "CI Failure Analyst",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Analyze one bounded CI failure for evidenced cause, discriminating checks, and safe next steps.",
+  "description": "Analyze supplied logs and repository context for a single failed CI job or workflow to distinguish an evidenced cause from hypotheses. Use after a CI failure when the parent needs read-only root-cause analysis without rerunning jobs or editing configuration.",
+  "domain": "operations",
+  "category": "ci-cd",
+  "problems": [
+    "root-cause-analysis"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "incident",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not rerun jobs, modify workflows, push commits, or change CI secrets and permissions.",
+    "It does not claim a root cause from a truncated log, retry, correlation, or recent diff alone.",
+    "It does not approve a pipeline, bypass a quality gate, or expand into an unrelated deployment review."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "diagnose"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/operations/ci-cd/debug-ci-failure"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

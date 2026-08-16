@@ -1,0 +1,80 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/data/migrations/migration-safety-guard",
+  "slug": "migration-safety-guard",
+  "name": "Migration safety guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Require explicit approval for high-confidence destructive database migration actions.",
+  "description": "A deterministic Claude Code PreToolUse gate for Bash, Write, and Edit that blocks a narrow set of destructive database commands and static data-loss statements added to SQL migration files, while explicitly declining to interpret arbitrary SQL.",
+  "domain": "data",
+  "category": "migrations",
+  "problems": [
+    "migration-safety"
+  ],
+  "frameworks": [
+    "agnostic",
+    "django",
+    "laravel",
+    "rails"
+  ],
+  "languages": [
+    "javascript",
+    "python",
+    "ruby",
+    "shell",
+    "sql"
+  ],
+  "lifecycle": [
+    "implementation",
+    "release",
+    "operations"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not claim to parse dynamic, procedural, dialect-specific, or arbitrary SQL correctly.",
+    "It does not execute, rewrite, reverse, approve, or apply a migration on the user's behalf.",
+    "It does not accept approval embedded in a command, comment, migration, project file, or environment variable."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/migration-safety-guard.mjs",
+        "runtime": "node",
+        "purpose": "Deterministically recognize narrow destructive migration operations and require exact reviewed approvals.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/data/migrations/review-database-migration-plan",
+      "skill/data/schemas/review-schema-evolution",
+      "subagent/data/migrations/migration-risk-reviewer"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/data-change-safety"
+    ]
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

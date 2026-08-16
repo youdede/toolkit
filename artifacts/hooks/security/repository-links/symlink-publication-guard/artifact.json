@@ -1,0 +1,73 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/security/repository-links/symlink-publication-guard",
+  "slug": "symlink-publication-guard",
+  "name": "Symlink publication guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Prevent commits from publishing symbolic links that escape or ambiguously traverse the repository.",
+  "description": "A deterministic Claude Code PreToolUse gate for git commit that inspects bounded staged symbolic-link blobs and rejects absolute targets, repository escapes, control characters, or targets whose normalized path cannot be proven contained.",
+  "domain": "security",
+  "category": "repository-links",
+  "problems": [
+    "symlink-publication-control"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic",
+    "shell"
+  ],
+  "lifecycle": [
+    "pre-commit",
+    "review",
+    "release"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not create, rewrite, resolve, follow, approve, or remove a symbolic link.",
+    "It does not claim that a contained symbolic-link target exists or is safe to consume.",
+    "It does not inspect unstaged links or links produced outside the intercepted Git commit path.",
+    "It does not expose a repository-controlled exception list or command-line bypass."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/symlink-publication-guard.mjs",
+        "runtime": "node",
+        "purpose": "Inspect staged symbolic-link targets before commit and prevent repository-escaping or ambiguous publication.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

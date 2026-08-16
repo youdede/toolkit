@@ -1,0 +1,66 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/operations/agent-orchestration/schedule-agent-runs",
+  "slug": "schedule-agent-runs",
+  "name": "Schedule Agent Runs",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Design and verify recurring agent work without hiding state, authority, or failure.",
+  "description": "Plan recurring or delayed agent work using the runtime scheduler, cron, or a supervised loop. Use when a task must run later or repeatedly and needs explicit state, permissions, output, and recovery behavior.",
+  "domain": "operations",
+  "category": "agent-orchestration",
+  "problems": [
+    "agent-scheduling"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "operations"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not invent authority for future writes or external messages.",
+    "It does not create an unbounded polling loop or conceal failed runs.",
+    "It does not claim a schedule works until registration and one execution are verified."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "plan"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/operations/agent-orchestration/design-delegable-workflow"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

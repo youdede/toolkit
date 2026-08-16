@@ -1,0 +1,67 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/writing/documentation/document-project-vision",
+  "slug": "document-project-vision",
+  "name": "Document Project Vision",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Turn a founder or maintainer interview into durable vision and decision records.",
+  "description": "Interview a project owner and write concise vision documentation plus ADRs for durable decisions. Use when essential intent lives in a person’s head and future contributors need trustworthy context.",
+  "domain": "writing",
+  "category": "documentation",
+  "problems": [
+    "project-documentation"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "planning",
+    "handoff"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not invent strategy, rationale, history, or owner approval.",
+    "It does not put every implementation detail into the vision document.",
+    "It does not silently overwrite existing ADRs or erase dissent and uncertainty."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "author"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/writing/decision-support/design-stakeholder-questionnaire"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

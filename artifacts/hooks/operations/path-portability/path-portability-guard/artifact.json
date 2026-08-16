@@ -1,0 +1,68 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/operations/path-portability/path-portability-guard",
+  "slug": "path-portability-guard",
+  "name": "Path portability guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block new repository paths that are invalid or collision-prone across common filesystems.",
+  "description": "A deterministic Claude Code PreToolUse gate for Write, Edit, and MultiEdit that rejects Windows-reserved names, forbidden characters, trailing dots or spaces, control bytes, and case-fold collisions with existing siblings.",
+  "domain": "operations",
+  "category": "path-portability",
+  "problems": [
+    "path-portability"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "implementation",
+    "review",
+    "maintenance"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not rename, move, delete, normalize, transliterate, or create a requested path.",
+    "It does not guarantee portability to every filesystem, archive format, or deployment target.",
+    "It does not follow project-defined ignore files or inline exceptions authored by the agent.",
+    "It does not inspect file content or infer whether a portability issue is intentional."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/path-portability-guard.mjs",
+        "runtime": "node",
+        "purpose": "Validate proposed repository paths for cross-platform filename safety and sibling case-fold collisions.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

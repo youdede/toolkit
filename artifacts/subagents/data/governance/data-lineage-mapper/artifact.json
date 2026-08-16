@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/data/governance/data-lineage-mapper",
+  "slug": "data-lineage-mapper",
+  "name": "Data Lineage Mapper",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Map bounded field-level lineage across sources, transforms, stores, and named consumers.",
+  "description": "A narrow, read-only specialist whose outcome is to produce an evidence-backed directed graph for named fields while marking every unresolved edge explicitly. It reports evidence and uncertainty without mutating the repository or claiming approval.",
+  "domain": "data",
+  "category": "governance",
+  "problems": [
+    "field-lineage"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "design",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not query data systems or retrieve field values.",
+    "It does not invent runtime connectors or ownership.",
+    "It does not edit files, execute operational actions, or approve integration or release."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "collect"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/data/governance/design-private-data-lifecycle",
+      "skill/data/quality/design-data-pipeline-change"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

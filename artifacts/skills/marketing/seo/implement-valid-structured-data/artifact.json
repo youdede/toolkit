@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/seo/implement-valid-structured-data",
+  "slug": "implement-valid-structured-data",
+  "name": "Implement Valid Structured Data",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Implement evidence-backed JSON-LD that matches visible content and current validator requirements.",
+  "description": "Implement or review structured data by selecting applicable types, mapping visible page facts, generating JSON-LD, and validating syntax and eligibility. Use when a site needs machine-readable entities or search-feature markup grounded in actual content.",
+  "domain": "marketing",
+  "category": "seo",
+  "problems": [
+    "structured-data"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "implementation",
+    "review",
+    "maintenance"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not add fake ratings, reviews, prices, availability, authorship, events, or organization facts.",
+    "It does not guarantee rich results, ranking, indexing, or knowledge-panel changes.",
+    "It does not suppress validator warnings or mark up content hidden from users merely to satisfy a schema."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "operate"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

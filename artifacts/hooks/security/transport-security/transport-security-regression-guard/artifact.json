@@ -1,0 +1,69 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/security/transport-security/transport-security-regression-guard",
+  "slug": "transport-security-regression-guard",
+  "name": "Transport security regression guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block high-confidence source and configuration changes that disable transport verification.",
+  "description": "A deterministic Claude Code PreToolUse gate for proposed file content that detects explicit TLS certificate-verification disablement and insecure non-local registry endpoints while ignoring comments.",
+  "domain": "security",
+  "category": "transport-security",
+  "problems": [
+    "transport-security-regression"
+  ],
+  "frameworks": [
+    "agnostic",
+    "nodejs"
+  ],
+  "languages": [
+    "javascript",
+    "python",
+    "go"
+  ],
+  "lifecycle": [
+    "implementation",
+    "review"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not infer the security of an entire network architecture.",
+    "It does not rewrite insecure endpoints or certificate settings.",
+    "It does not treat an inline suppression as authorization."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/transport-security-regression-guard.mjs",
+        "runtime": "node",
+        "purpose": "Inspect bounded proposed content for explicit transport-verification regressions.",
+        "sideEffects": "none"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

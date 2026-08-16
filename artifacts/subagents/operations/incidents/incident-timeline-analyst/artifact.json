@@ -1,0 +1,61 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/operations/incidents/incident-timeline-analyst",
+  "slug": "incident-timeline-analyst",
+  "name": "Incident Timeline Analyst",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Reconstruct a bounded incident chronology while separating observations, contradictions, and causal hypotheses.",
+  "description": "A narrow, read-only specialist whose outcome is to produce a normalized timeline that establishes what happened when without converting correlation into root cause. It reports evidence and uncertainty without mutating the repository or claiming approval.",
+  "domain": "operations",
+  "category": "incidents",
+  "problems": [
+    "chronology-causality"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "incident"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not assign blame or invent missing events.",
+    "It does not execute remediation, query production, or expose secrets from logs.",
+    "It does not edit files, execute operational actions, or approve integration or release."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "diagnose"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

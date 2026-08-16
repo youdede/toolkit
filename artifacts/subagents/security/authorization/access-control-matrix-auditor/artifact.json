@@ -1,0 +1,61 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/security/authorization/access-control-matrix-auditor",
+  "slug": "access-control-matrix-auditor",
+  "name": "Access Control Matrix Auditor",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Audit a bounded role-action-resource matrix against concrete authorization enforcement points.",
+  "description": "A narrow, read-only specialist whose outcome is to identify a specific policy cell whose implemented authorization decision is missing or more permissive than the supplied matrix. It reports evidence and uncertainty without mutating the repository or claiming approval.",
+  "domain": "security",
+  "category": "authorization",
+  "problems": [
+    "policy-conformance"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not test live credentials or bypass authentication.",
+    "It does not replace the supplied policy with preferred authorization design.",
+    "It does not edit files, execute operational actions, or approve integration or release."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

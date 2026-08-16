@@ -1,0 +1,63 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/design/responsive/responsive-layout-reviewer",
+  "slug": "responsive-layout-reviewer",
+  "name": "Responsive Layout Reviewer",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Review a bounded layout for viewport, content-length, zoom, and reflow resilience using supplied evidence.",
+  "description": "A narrow, read-only specialist whose outcome is to identify a viewport-and-content condition that clips, overlaps, hides, or reorders a required interface element. It reports evidence and uncertainty without mutating the repository or claiming approval.",
+  "domain": "design",
+  "category": "responsive",
+  "problems": [
+    "viewport-content-resilience"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "html",
+    "css",
+    "javascript"
+  ],
+  "lifecycle": [
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not claim a visual failure without code, computed, or rendered support.",
+    "It does not perform accessibility compliance or visual-style critique.",
+    "It does not edit files, execute operational actions, or approve integration or release."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

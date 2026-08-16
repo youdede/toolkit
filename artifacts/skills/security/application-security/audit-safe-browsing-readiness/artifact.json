@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/security/application-security/audit-safe-browsing-readiness",
+  "slug": "audit-safe-browsing-readiness",
+  "name": "Audit Safe Browsing Readiness",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Audit a public site for security, transparency, and reputation readiness.",
+  "description": "Assess whether a public website is ready for reputation and malware-review systems using observable security, ownership, content, and indexing signals. Use before submitting a site for review or diagnosing a warning.",
+  "domain": "security",
+  "category": "application-security",
+  "problems": [
+    "safe-browsing-readiness"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review",
+    "release",
+    "incident"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not guarantee allowlisting, ranking, indexing, or review timing.",
+    "It does not automate undocumented private APIs or evade platform controls.",
+    "It does not hide harmful behavior solely to pass a reputation check."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

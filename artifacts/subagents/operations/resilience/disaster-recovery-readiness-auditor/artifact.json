@@ -1,0 +1,66 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/operations/resilience/disaster-recovery-readiness-auditor",
+  "slug": "disaster-recovery-readiness-auditor",
+  "name": "Disaster Recovery Readiness Auditor",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Audit recovery objectives against backup, restore, failover, dependency, and exercise evidence.",
+  "description": "A narrow, read-only specialist whose outcome is to determine which recovery claim lacks an evidence chain from objective through tested restoration and dependency recovery. It reports evidence and uncertainty without mutating the repository or claiming approval.",
+  "domain": "operations",
+  "category": "resilience",
+  "problems": [
+    "recovery-evidence"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review",
+    "operations"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not execute restore, failover, failback, or destructive exercises.",
+    "It does not declare recoverability from backup existence alone.",
+    "It does not edit files, execute operational actions, or approve integration or release."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/operations/infrastructure/plan-infrastructure-change"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/infrastructure-change-readiness"
+    ]
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

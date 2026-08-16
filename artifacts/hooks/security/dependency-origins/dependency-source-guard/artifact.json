@@ -1,0 +1,70 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/security/dependency-origins/dependency-source-guard",
+  "slug": "dependency-source-guard",
+  "name": "Dependency source guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Reject newly introduced dependencies that bypass an authenticated package registry.",
+  "description": "A deterministic Claude Code PreToolUse gate that reconstructs supported dependency manifest edits and blocks net-new Git, URL, local-path, alias, or dynamically resolved package sources while allowing ordinary registry constraints.",
+  "domain": "security",
+  "category": "dependency-origins",
+  "problems": [
+    "dependency-origin-control"
+  ],
+  "frameworks": [
+    "nodejs",
+    "agnostic"
+  ],
+  "languages": [
+    "javascript",
+    "typescript"
+  ],
+  "lifecycle": [
+    "implementation",
+    "review",
+    "maintenance"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not install, resolve, upgrade, audit, or select dependency versions.",
+    "It does not contact a registry, Git server, archive host, or local package directory.",
+    "It does not claim that registry-resolved packages are safe, authentic, or compatible.",
+    "It does not expose an inline suppression or project-controlled source allowlist."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/dependency-source-guard.mjs",
+        "runtime": "node",
+        "purpose": "Inspect bounded dependency manifest changes and reject net-new package sources that bypass ordinary registry resolution.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

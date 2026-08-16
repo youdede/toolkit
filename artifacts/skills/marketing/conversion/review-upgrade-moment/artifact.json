@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/conversion/review-upgrade-moment",
+  "slug": "review-upgrade-moment",
+  "name": "Review Upgrade Moment",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Review an in-product upgrade request for timing, value evidence, terms, recovery, and autonomy.",
+  "description": "Review or design an in-product paywall, feature gate, trial ending, quota limit, or upgrade modal around experienced value and transparent commercial terms. Use when free or trial users encounter a request to pay.",
+  "domain": "marketing",
+  "category": "conversion",
+  "problems": [
+    "paywall-conversion"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "design",
+    "review"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not trap user data or work, obstruct dismissal, hide renewal, or create fake deadlines.",
+    "It does not preselect a costly option or misstate savings and reference prices.",
+    "It does not initiate billing, change entitlements, or claim compliance without authorized implementation and review."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

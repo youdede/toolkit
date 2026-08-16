@@ -1,0 +1,42 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": ["project"],
+  "files": [
+    {
+      "from": "targets/claude-code/completion-evidence-guard.mjs",
+      "to": "hooks/youdede/completion-evidence-guard.mjs",
+      "executable": true
+    }
+  ],
+  "settingsPatch": {
+    "hooks": {
+      "TaskCompleted": [
+        {
+          "description": "[youdede:completion-evidence-guard] Verify opt-in task completion evidence",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "node \"{claudeRoot}/hooks/youdede/completion-evidence-guard.mjs\"",
+              "timeout": 10
+            }
+          ]
+        }
+      ],
+      "SubagentStop": [
+        {
+          "matcher": "(?:^|[-:])(?:verifier|reviewer|tester)$",
+          "description": "[youdede:completion-evidence-guard] Verify opt-in specialist completion evidence",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "node \"{claudeRoot}/hooks/youdede/completion-evidence-guard.mjs\"",
+              "timeout": 10
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

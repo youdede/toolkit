@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/launch/plan-product-launch",
+  "slug": "plan-product-launch",
+  "name": "Plan Product Launch",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Plan a staged product launch with readiness gates, audience sequencing, ownership, and recovery.",
+  "description": "Plan a product or feature launch across readiness, positioning, enablement, channels, operations, measurement, and rollback. Use when a release needs coordinated market activation rather than a date-driven announcement checklist.",
+  "domain": "marketing",
+  "category": "launch",
+  "problems": [
+    "product-launch"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "release",
+    "operations"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not publish, deploy, notify customers, promise dates, or spend budget without authorization.",
+    "It does not hide known defects, availability limits, pricing terms, or operational risk.",
+    "It does not call announcement reach a successful launch without adoption and quality evidence."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "plan"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

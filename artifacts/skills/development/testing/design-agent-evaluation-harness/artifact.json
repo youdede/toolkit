@@ -1,0 +1,67 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/development/testing/design-agent-evaluation-harness",
+  "slug": "design-agent-evaluation-harness",
+  "name": "Design Agent Evaluation Harness",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Design a reproducible agent evaluation harness with isolated cases, traces, judges, and regression gates.",
+  "description": "Design or audit an evaluation harness for a coding or tool-using agent using isolated tasks, controlled environments, deterministic checks, calibrated judgment, traces, and regression thresholds. Use before changing agent prompts, tools, policies, or orchestration.",
+  "domain": "development",
+  "category": "testing",
+  "problems": [
+    "agent-evaluation"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "implementation",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not tune the agent on hidden cases or leak expected fixes into task prompts.",
+    "It does not treat one successful stochastic run as reliable behavior.",
+    "It does not permit uncontrolled external writes, spending, messaging, or destructive actions during evaluation."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "plan"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/development/testing/evaluate-retrieval-system"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/security/dependencies/dependency-risk-reviewer",
+  "slug": "dependency-risk-reviewer",
+  "name": "Dependency risk reviewer",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Review dependency deltas for supply-chain and compatibility risk without mutating the repo.",
+  "description": "A narrow read-only Claude Code specialist for manifest, lockfile, provenance, install-script, runtime, and integration risks after dependency changes.",
+  "domain": "security",
+  "category": "dependencies",
+  "problems": [
+    "dependency-risk"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review",
+    "pre-commit",
+    "maintenance"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not modify manifests, lockfiles, source code, or repository configuration.",
+    "It does not run dependency installers, lifecycle scripts, package managers, or network requests.",
+    "It does not assert vulnerability or maliciousness without attributable evidence."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

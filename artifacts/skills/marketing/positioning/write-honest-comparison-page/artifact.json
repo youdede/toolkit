@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/positioning/write-honest-comparison-page",
+  "slug": "write-honest-comparison-page",
+  "name": "Write Honest Comparison Page",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Write a useful comparison page from sourced differences, fit criteria, and acknowledged tradeoffs.",
+  "description": "Write or review competitor comparison and alternative pages using current evidence, decision criteria, real tradeoffs, and fit guidance. Use when buyers need help deciding between products without fabricated parity tables or disguised attack copy.",
+  "domain": "marketing",
+  "category": "positioning",
+  "problems": [
+    "comparison-positioning"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "implementation",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not invent deficiencies, customer quotes, prices, market position, or feature support.",
+    "It does not impersonate an independent review or hide the publisher’s commercial interest.",
+    "It does not use trademarks deceptively, reproduce protected assets without permission, or encourage harassment."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "author"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

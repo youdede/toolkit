@@ -1,0 +1,72 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/design/accessibility/test-screen-reader-journey",
+  "slug": "test-screen-reader-journey",
+  "name": "Test Screen Reader Journey",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Test a bounded user journey with a real screen reader and evidence tied to interaction outcomes.",
+  "description": "Test a web or application journey with a specified screen reader and browser combination, covering navigation, names, roles, state, focus, reading order, live feedback, and recovery. Use when semantic inspection alone cannot prove assistive-technology behavior.",
+  "domain": "design",
+  "category": "accessibility",
+  "problems": [
+    "screen-reader-testing"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "implementation",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not claim screen-reader verification from DOM inspection or automated rules alone.",
+    "It does not generalize one browser and screen-reader combination to all assistive technology.",
+    "It does not expose private spoken content or mutate production data without authority."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "verify"
+  ],
+  "relationships": {
+    "composesWith": [
+      "hook/design/keyboard-focus/focus-style-regression-guard",
+      "hook/design/semantic-markup/accessibility-attribute-regression-guard",
+      "skill/design/accessibility/plan-accessibility-conformance-evidence",
+      "subagent/design/accessibility/accessibility-conformance-reviewer",
+      "subagent/design/accessibility/accessibility-journey-tester"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/accessibility-assurance"
+    ]
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

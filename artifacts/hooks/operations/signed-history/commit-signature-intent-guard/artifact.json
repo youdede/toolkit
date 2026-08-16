@@ -1,0 +1,73 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/operations/signed-history/commit-signature-intent-guard",
+  "slug": "commit-signature-intent-guard",
+  "name": "Commit signature intent guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Require an explicit or configured cryptographic-signing intent for Git commits.",
+  "description": "A deterministic Claude Code PreToolUse gate for Bash that recognizes direct Git commit commands and blocks explicit signature bypass, dynamic command shapes, or commits without -S when commit.gpgSign is not enabled.",
+  "domain": "operations",
+  "category": "signed-history",
+  "problems": [
+    "commit-signature-requirement"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic",
+    "shell"
+  ],
+  "lifecycle": [
+    "pre-commit",
+    "review",
+    "release"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not create, import, select, trust, unlock, rotate, or verify a signing key.",
+    "It does not sign, commit, attest, push, or claim that a future signature will verify.",
+    "It does not infer intent from branch names, commit messages, environment variables, aliases, or prompt text.",
+    "It does not expose a project-controlled bypass or accept --no-gpg-sign."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/commit-signature-intent-guard.mjs",
+        "runtime": "node",
+        "purpose": "Verify statically observable Git commit signing intent before allowing the commit command to execute.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

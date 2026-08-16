@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/design/design-systems/audit-design-system-consistency",
+  "slug": "audit-design-system-consistency",
+  "name": "Audit Design System Consistency",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Audit whether rendered surfaces use a coherent design-system contract without mistaking a token inventory for user experience.",
+  "description": "Audit design-system consistency across specified UI surfaces by examining tokens, component variants, states, responsive behavior, and accessible semantics with explicit evidence and uncertainty. Use when a design system or component set needs review.",
+  "domain": "design",
+  "category": "design-systems",
+  "problems": [
+    "frontend-quality"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "design",
+    "review",
+    "maintenance"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not declare a design system consistent from token names or source code alone.",
+    "It does not invent intended visual hierarchy, brand rules, or inaccessible acceptance criteria.",
+    "It does not replace design review, accessibility testing, or product approval with an audit."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

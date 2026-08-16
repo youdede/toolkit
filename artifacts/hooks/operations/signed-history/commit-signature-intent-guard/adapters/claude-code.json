@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": ["project"],
+  "files": [{"from": "targets/claude-code/commit-signature-intent-guard.mjs", "to": "hooks/youdede/commit-signature-intent-guard.mjs", "executable": true}],
+  "settingsPatch": {"hooks": {"PreToolUse": [{
+    "matcher": "Bash",
+    "description": "[youdede:commit-signature-intent-guard] Require explicit Git commit signing intent",
+    "hooks": [{"type": "command", "command": "node \"{claudeRoot}/hooks/youdede/commit-signature-intent-guard.mjs\"", "timeout": 10}]
+  }]}}
+}

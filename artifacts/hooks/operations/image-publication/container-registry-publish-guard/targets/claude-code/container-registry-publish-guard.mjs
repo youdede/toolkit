@@ -1,0 +1,158 @@
+#!/usr/bin/env node
+
+import { realpathSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+
+export const MAX_STDIN_BYTES = 1024 * 1024;
+export const MAX_COMMAND_BYTES = 256 * 1024;
+const ALLOW = { exitCode: 0 };
+const BLOCK = (ruleId, reason) => ({ exitCode: 2, ruleId, message: `BLOCKED by container-registry-publish-guard [${ruleId}]: ${reason}` });
+
+function executableName(value) {
+  return String(value || '').replaceAll('\\', '/').split('/').at(-1).toLowerCase();
+}
+
+function lexShell(source) {
+  const commands = []; let tokens = []; let value = ''; let quote = ''; let escaped = false; let dynamic = false;
+  const word = () => { if (value || dynamic) tokens.push({ value, dynamic }); value = ''; dynamic = false; };
+  const command = () => { word(); if (tokens.length) commands.push(tokens); tokens = []; };
+  for (let index = 0; index < source.length; index += 1) {
+    const character = source[index];
+    if (escaped) { value += character; escaped = false; continue; }
+    if (character === '\\') { escaped = true; continue; }
+    if (quote) {
+      if (character === quote) quote = '';
+      else { value += character; if (quote === '"' && (character === '$' || character === String.fromCharCode(96))) dynamic = true; }
+      continue;
+    }
+    if (character === "'" || character === '"') { quote = character; continue; }
+    if (character === '$' || character === String.fromCharCode(96)) { dynamic = true; value += character; continue; }
+    if (/\s/.test(character)) { word(); if (character === '\n') command(); continue; }
+    if (';&|'.includes(character)) { command(); if (source[index + 1] === character) index += 1; continue; }
+    value += character;
+  }
+  if (quote || escaped) return { error: true, commands: [] };
+  command();
+  return { commands };
+}
+
+function skipOption(tokens, index, takesValue) {
+  const token = tokens[index]?.value || '';
+  if (!token.startsWith('-') || token === '--') return index;
+  if (!token.includes('=') && takesValue.has(token)) return index + 2;
+  return index + 1;
+}
+
+function unwrap(tokens, depth = 0) {
+  let cursor = 0;
+  while (/^[A-Za-z_][A-Za-z0-9_]*=/.test(tokens[cursor]?.value || '')) cursor += 1;
+  for (;;) {
+    const executable = executableName(tokens[cursor]?.value);
+    if (executable === 'env') {
+      cursor += 1;
+      while (tokens[cursor] && (tokens[cursor].value.startsWith('-') || /^[A-Za-z_][A-Za-z0-9_]*=/.test(tokens[cursor].value))) {
+        cursor = /^[A-Za-z_][A-Za-z0-9_]*=/.test(tokens[cursor].value)
+          ? cursor + 1
+          : skipOption(tokens, cursor, new Set(['-u', '--unset', '-C', '--chdir']));
+      }
+      continue;
+    }
+    if (['command', 'nohup', 'setsid'].includes(executable)) { cursor += 1; while (tokens[cursor]?.value.startsWith('-')) cursor += 1; continue; }
+    if (['sudo', 'doas'].includes(executable)) {
+      cursor += 1;
+      while (tokens[cursor]?.value.startsWith('-')) cursor = skipOption(tokens, cursor, new Set(['-u', '-g', '-h', '-p', '-C', '-T', '--user', '--group', '--host', '--prompt', '--chdir']));
+      continue;
+    }
+    if (executable === 'time' || executable === 'nice') {
+      cursor += 1;
+      while (tokens[cursor]?.value.startsWith('-')) cursor = skipOption(tokens, cursor, new Set(['-f', '-o', '--format', '--output', '-n', '--adjustment']));
+      continue;
+    }
+    if (executable === 'timeout') {
+      cursor += 1;
+      while (tokens[cursor]?.value.startsWith('-')) cursor = skipOption(tokens, cursor, new Set(['-k', '--kill-after', '-s', '--signal']));
+      if (tokens[cursor]) cursor += 1;
+      continue;
+    }
+    if (['sh', 'bash', 'zsh', 'dash', 'ksh'].includes(executable)) {
+      const option = tokens.findIndex((token, index) => index > cursor && (/^-[^-]*c/.test(token.value) || token.value === '--command'));
+      if (option < 0 || !tokens[option + 1] || tokens[option + 1].dynamic || depth >= 3) return [{ invalid: true }];
+      const nested = normalizeCommands(tokens[option + 1].value, depth + 1);
+      return nested.error ? [{ invalid: true }] : nested.entries;
+    }
+    break;
+  }
+  if (!tokens[cursor]) return [{ invalid: true }];
+  return [{
+    executable: executableName(tokens[cursor].value),
+    executableDynamic: tokens[cursor].dynamic,
+    args: tokens.slice(cursor + 1),
+    dynamic: tokens.slice(cursor + 1).some((token) => token.dynamic)
+  }];
+}
+
+function normalizeCommands(source, depth = 0) {
+  if (typeof source !== 'string' || Buffer.byteLength(source) > MAX_COMMAND_BYTES) return { error: true, entries: [] };
+  const parsed = lexShell(source);
+  if (parsed.error) return { error: true, entries: [] };
+  return { entries: parsed.commands.flatMap((tokens) => unwrap(tokens, depth)) };
+}
+
+function values(entry) {
+  return entry.args.map((token) => token.value);
+}
+
+function stripLeadingOptions(args, valueOptions = new Set()) {
+  let index = 0;
+  while (args[index]?.value.startsWith('-') && args[index].value !== '--') index = skipOption(args, index, valueOptions);
+  if (args[index]?.value === '--') index += 1;
+  return args.slice(index);
+}
+
+
+const ENGINE_GLOBAL_VALUES = new Set(['--context', '-c', '--host', '-H', '--config', '--log-level']);
+function policy(entry) {
+  const args = stripLeadingOptions(entry.args, ENGINE_GLOBAL_VALUES);
+  if (['docker', 'podman'].includes(entry.executable)) {
+    const names = args.map((token) => token.value.toLowerCase());
+    if (names[0] === 'push' || (names[0] === 'image' && names[1] === 'push')) return entry.dynamic ? 'registry-publish-command-uninspectable' : 'container-image-push';
+    if (entry.executable === 'docker' && names[0] === 'buildx' && names[1] === 'build' && names.some((value) => value === '--push' || value === '--push=true' || /^(?:--output|-o)=?type=registry/.test(value))) return 'container-build-push';
+  }
+  if (entry.executable === 'oras' && args[0]?.value === 'push') return 'oci-artifact-push';
+  if (entry.executable === 'helm' && args[0]?.value === 'push') return 'helm-chart-push';
+  return null;
+}
+
+export function evaluate(input) {
+  if (!input || typeof input !== 'object' || !input.tool_input || typeof input.tool_input !== 'object') return BLOCK('container-registry-publish-input-invalid', 'the hook input is malformed.');
+  if (input.tool_name !== 'Bash') return ALLOW;
+  const command = input.tool_input.command;
+  const normalized = normalizeCommands(command);
+  if (normalized.error || normalized.entries.some((entry) => entry.invalid)) return BLOCK('registry-publish-command-uninspectable', 'the registry publication command cannot be normalized safely.');
+  for (const entry of normalized.entries) {
+    const ruleId = policy(entry);
+    if (ruleId) return BLOCK(ruleId, 'the registry publication command cannot be normalized safely.');
+  }
+  return ALLOW;
+}
+
+async function readInput() {
+  const chunks = []; let size = 0;
+  for await (const chunk of process.stdin) {
+    size += chunk.length;
+    if (size > MAX_STDIN_BYTES) throw new Error('oversized');
+    chunks.push(chunk);
+  }
+  return JSON.parse(Buffer.concat(chunks).toString('utf8'));
+}
+
+if (process.argv[1] && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  try {
+    const result = evaluate(await readInput());
+    if (result.exitCode) process.stderr.write(`${result.message}\n`);
+    process.exitCode = result.exitCode;
+  } catch {
+    process.stderr.write('BLOCKED by container-registry-publish-guard [container-registry-publish-input-invalid]: hook input is invalid or oversized.\n');
+    process.exitCode = 2;
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/development/testing/assess-mutation-test-value",
+  "slug": "assess-mutation-test-value",
+  "name": "Assess Mutation Test Value",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Use bounded mutation testing to expose weak assertions while separating equivalent and irrelevant mutants.",
+  "description": "Plan or assess a bounded mutation-testing exercise by selecting consequential code, defining budgets, triaging survivors, and improving observable assertions. Use when coverage is high but test effectiveness remains uncertain.",
+  "domain": "development",
+  "category": "testing",
+  "capabilities": [
+    "assess",
+    "verify"
+  ],
+  "problems": [
+    "test-integrity",
+    "test-assertion-integrity"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not optimize for a universal mutation-score threshold or add assertions that mirror implementation details.",
+    "It does not commit generated mutations, silence survivors broadly, or classify difficult cases as equivalent without evidence.",
+    "It does not claim effective tests from line coverage, killed-mutant counts, or one tool run alone."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [
+      "subagent/development/testing/test-gap-reviewer"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  }
+}

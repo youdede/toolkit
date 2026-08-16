@@ -1,0 +1,66 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/operations/delegation-budget/subagent-fanout-guard",
+  "slug": "subagent-fanout-guard",
+  "name": "Subagent Fanout Guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Cap per-session subagent delegation using a bounded transcript count.",
+  "description": "Counts prior Task and Agent tool calls in the supplied Claude Code transcript and blocks delegation after a fixed conservative session budget without invoking a model.",
+  "domain": "operations",
+  "category": "delegation-budget",
+  "problems": [
+    "subagent-budget-control"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "implementation",
+    "pre-commit"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not decide which specialist should be delegated to.",
+    "It does not infer concurrency or nesting when the transcript does not encode it.",
+    "It does not edit transcripts or terminate already running agents."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/subagent-fanout-guard.mjs",
+        "runtime": "node",
+        "purpose": "Cap per-session subagent delegation using a bounded transcript count.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

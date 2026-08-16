@@ -1,0 +1,66 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/data/compatibility/schema-compatibility-guard",
+  "slug": "schema-compatibility-guard",
+  "name": "Schema Compatibility Guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block provably incompatible JSON Schema, Avro, and Protobuf contract edits.",
+  "description": "Compares bounded before-and-after schema structure and blocks removed fields, newly required fields, narrowed JSON types, and reused Protobuf field identities.",
+  "domain": "data",
+  "category": "compatibility",
+  "problems": [
+    "schema-compatibility-control"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "implementation",
+    "pre-commit"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not execute schema compilers or resolve remote schema references.",
+    "It does not classify SQL migrations or OpenAPI documents.",
+    "It does not certify compatibility for unsupported schema dialects."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/schema-compatibility-guard.mjs",
+        "runtime": "node",
+        "purpose": "Block provably incompatible JSON Schema, Avro, and Protobuf contract edits.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

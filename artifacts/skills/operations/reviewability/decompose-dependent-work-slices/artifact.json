@@ -1,0 +1,75 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/operations/reviewability/decompose-dependent-work-slices",
+  "slug": "decompose-dependent-work-slices",
+  "name": "Decompose Dependent Work Slices",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Decompose approved work into independently verifiable vertical slices with an acyclic dependency graph.",
+  "description": "Decompose a plan or specification into bounded vertical work items, explicit acceptance evidence, and verified blocking edges. Use when work must be delegated or sequenced without losing end-to-end value.",
+  "domain": "operations",
+  "category": "reviewability",
+  "capabilities": [
+    "plan"
+  ],
+  "problems": [
+    "dependent-work-decomposition",
+    "incremental-delivery"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "handoff"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not split work into database, backend, frontend, and test layers that are unusable alone.",
+    "It does not publish, label, assign, close, or modify tracker items without authorization.",
+    "It does not disguise a cyclic plan by omitting or weakening real blocking edges."
+  ],
+  "execution": {
+    "mode": "hybrid",
+    "entrypoints": [
+      {
+        "path": "scripts/validate-work-graph.mjs",
+        "runtime": "node",
+        "purpose": "Validate unique work-item identifiers, dependency references, acyclicity, topological order, and the ready frontier.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "relationships": {
+    "composesWith": [
+      "skill/development/code-quality/deliver-incremental-change",
+      "skill/operations/agent-orchestration/delegate-bounded-subtasks"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  }
+}

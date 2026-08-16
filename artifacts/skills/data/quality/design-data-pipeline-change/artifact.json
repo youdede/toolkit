@@ -1,0 +1,71 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/data/quality/design-data-pipeline-change",
+  "slug": "design-data-pipeline-change",
+  "name": "Design Data Pipeline Change",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Design a data-pipeline transition with explicit contracts, replay safety, backfill controls, and reconciliation.",
+  "description": "Design or review a batch, streaming, ETL, ELT, or dbt pipeline change across producer and consumer contracts, idempotency, backfills, dual running, reconciliation, cutover, and recovery. Use before changing a governed data flow or replaying historical data.",
+  "domain": "data",
+  "category": "quality",
+  "capabilities": [
+    "plan"
+  ],
+  "problems": [
+    "data-quality",
+    "field-lineage",
+    "compatible-migration"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "design",
+    "implementation",
+    "review"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not run production queries, jobs, migrations, backfills, or cutovers without explicit scoped authorization.",
+    "It does not infer semantic compatibility from matching column names or accept aggregate counts as complete reconciliation.",
+    "It does not hide dropped records, duplicate effects, late data, privacy impact, consumer breakage, or unresolved mismatches."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [
+      "skill/data/schemas/review-schema-evolution",
+      "subagent/data/governance/data-lineage-mapper",
+      "subagent/data/quality/data-quality-diagnostician"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  }
+}

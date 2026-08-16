@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/lifecycle/improve-product-activation",
+  "slug": "improve-product-activation",
+  "name": "Improve Product Activation",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Improve first-use activation by removing barriers to a verified user value event.",
+  "description": "Review and improve post-signup onboarding around a defined value event, user intent, prerequisites, state transitions, guidance, recovery, and measurement. Use when new users enter a product but fail to reach meaningful value.",
+  "domain": "marketing",
+  "category": "lifecycle",
+  "problems": [
+    "product-activation"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "design",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not add forced tours, fake progress, nagging, or celebratory friction without user value.",
+    "It does not hide required setup, data use, or irreversible actions.",
+    "It does not claim activation or retention impact without cohort evidence."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "operate"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

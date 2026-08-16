@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/operations/observability/design-observability-signals",
+  "slug": "design-observability-signals",
+  "name": "Design Observability Signals",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Design logs, metrics, traces, and alerts around decisions, failure modes, cost, and privacy.",
+  "description": "Design or audit observability for a service, job, client, or distributed flow using operational questions, failure modes, structured events, metrics, traces, alerts, retention, and privacy. Use before implementation or when operators cannot explain system behavior safely.",
+  "domain": "operations",
+  "category": "observability",
+  "problems": [
+    "observability-design"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "implementation",
+    "operations"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not log secrets, raw customer payloads, or unnecessary identifiers.",
+    "It does not alert on non-actionable noise or use dashboard presence as proof of observability.",
+    "It does not deploy instrumentation or change retention without authorization."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "plan"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

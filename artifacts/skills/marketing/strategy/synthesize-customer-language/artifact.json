@@ -1,0 +1,64 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/strategy/synthesize-customer-language",
+  "slug": "synthesize-customer-language",
+  "name": "Synthesize Customer Language",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Turn authorized customer evidence into traceable themes, tensions, language, and open questions.",
+  "description": "Synthesize interviews, surveys, reviews, support records, sales notes, or lawful public discussions into traceable customer language and decision insights. Use when positioning, product, content, or retention work needs evidence beyond internal assumptions.",
+  "domain": "marketing",
+  "category": "strategy",
+  "problems": [
+    "customer-insight"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "planning"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not invent personas, quotes, prevalence, or motivations.",
+    "It does not deanonymize participants or collect private community content without authorization.",
+    "It does not present a convenience sample or online discussion as representative market truth."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "research"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

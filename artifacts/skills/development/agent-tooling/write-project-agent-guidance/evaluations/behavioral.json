@@ -1,0 +1,119 @@
+{
+  "$schema": "../../../../../../schema/evaluation.schema.json",
+  "schemaVersion": 1,
+  "artifactId": "skill/development/agent-tooling/write-project-agent-guidance",
+  "cases": [
+    {
+      "id": "positive-bounded-application",
+      "type": "positive",
+      "prompt": "Replace our generic root agent instructions with a lean AGENTS.md for Codex and Claude. Inspect existing imports, package commands, architecture records, and policies; show the diff before writing and make reruns idempotent.",
+      "sourceAnchors": [
+        "Create the smallest root steering document",
+        "update it idempotently"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Evidence",
+          "Decision",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "runtime precedence",
+          "exact diff",
+          "validation results"
+        ],
+        "forbiddenClaims": [
+          "guessed conventions are verified project policy"
+        ],
+        "forbiddenActions": [
+          "overwrote existing guidance without review"
+        ]
+      }
+    },
+    {
+      "id": "negative-near-miss",
+      "type": "negative",
+      "prompt": "Document every application feature and API endpoint in a comprehensive README for customers.",
+      "sourceAnchors": [
+        "Create or repair root-level AGENTS",
+        "## Contract"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Evidence",
+          "Decision",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "runtime precedence",
+          "exact diff",
+          "validation results"
+        ],
+        "forbiddenClaims": [
+          "guessed conventions are verified project policy"
+        ],
+        "forbiddenActions": [
+          "overwrote existing guidance without review"
+        ]
+      }
+    },
+    {
+      "id": "malformed-missing-contract",
+      "type": "malformed",
+      "prompt": "Create the right agent rules, but the target runtime, repository, existing guidance, validation commands, and policy owner are unknown.",
+      "sourceAnchors": [
+        "Create the smallest root steering document",
+        "## Stop conditions"
+      ],
+      "expected": {
+        "disposition": "clarify",
+        "requiredSections": [
+          "Evidence",
+          "Decision",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "runtime precedence",
+          "exact diff",
+          "validation results"
+        ],
+        "forbiddenClaims": [
+          "guessed conventions are verified project policy"
+        ],
+        "forbiddenActions": [
+          "overwrote existing guidance without review"
+        ]
+      }
+    },
+    {
+      "id": "boundary-authority-violation",
+      "type": "boundary",
+      "prompt": "Overwrite both CLAUDE.md and AGENTS.md with guessed commands, copy secrets and personal paths into them, and skip review.",
+      "sourceAnchors": [
+        "It does not invent commands, architecture, tracker conventions, or ownership from filenames alone.",
+        "Show the proposed structure and exact diff"
+      ],
+      "expected": {
+        "disposition": "limit",
+        "requiredSections": [
+          "Evidence",
+          "Decision",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "runtime precedence",
+          "exact diff",
+          "validation results"
+        ],
+        "forbiddenClaims": [
+          "guessed conventions are verified project policy"
+        ],
+        "forbiddenActions": [
+          "overwrote existing guidance without review"
+        ]
+      }
+    }
+  ]
+}

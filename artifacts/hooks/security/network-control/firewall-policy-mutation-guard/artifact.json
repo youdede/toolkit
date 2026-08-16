@@ -1,0 +1,71 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/security/network-control/firewall-policy-mutation-guard",
+  "slug": "firewall-policy-mutation-guard",
+  "name": "Firewall policy mutation guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block direct host firewall rule, policy, chain, and activation mutations.",
+  "description": "A deterministic Claude Code PreToolUse gate for mutating iptables, nftables, UFW, firewalld, pfctl, and Windows Firewall commands while allowing inspection operations.",
+  "domain": "security",
+  "category": "network-control",
+  "problems": [
+    "firewall-policy-mutation"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "javascript",
+    "shell"
+  ],
+  "lifecycle": [
+    "setup",
+    "operations"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not add, remove, flush, enable, or disable firewall rules.",
+    "It does not determine whether a port, address, zone, or rule is trustworthy.",
+    "It does not replace host isolation or network policy enforcement."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/firewall-policy-mutation-guard.mjs",
+        "runtime": "node",
+        "purpose": "Recognize host firewall mutation verbs and refuse policy-changing commands.",
+        "sideEffects": "none"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

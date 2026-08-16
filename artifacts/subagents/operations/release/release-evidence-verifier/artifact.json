@@ -1,0 +1,71 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/operations/release/release-evidence-verifier",
+  "slug": "release-evidence-verifier",
+  "name": "Release Evidence Verifier",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Verify whether a bounded release claim is supported by fresh, correctly identified, criterion-linked evidence.",
+  "description": "A read-only release specialist that checks artifact identity, provenance, environment, freshness, completeness, and acceptance-criterion coverage without deploying or approving.",
+  "domain": "operations",
+  "category": "release",
+  "capabilities": [
+    "verify"
+  ],
+  "problems": [
+    "completion-verification",
+    "release-verification"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review",
+    "release"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "Do not run tests, builds, deployments, migrations, rollbacks, scanners, or production checks.",
+    "Do not accept evidence from a different candidate, environment, configuration, or expired time window.",
+    "Do not treat task completion, a green summary, or absence of reported failure as direct proof.",
+    "Do not edit release artifacts, criteria, evidence, manifests, or status systems."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [
+      "hook/operations/package-publication/package-publish-guard",
+      "hook/operations/repository-state/release-clean-state-guard",
+      "hook/operations/versioning/release-version-consistency-guard",
+      "skill/operations/release/verify-production-release",
+      "subagent/operations/release/release-risk-reviewer"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/release-readiness"
+    ]
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json"
+  }
+}

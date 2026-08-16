@@ -1,0 +1,61 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/writing/documentation/procedural-documentation-tester",
+  "slug": "procedural-documentation-tester",
+  "name": "Procedural Documentation Tester",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Statically walk a procedure for prerequisites, state, observable results, retries, and recovery branches.",
+  "description": "A narrow, read-only specialist whose outcome is to identify the first instruction that cannot be executed or verified from the documented starting state. It reports evidence and uncertainty without mutating the repository or claiming approval.",
+  "domain": "writing",
+  "category": "documentation",
+  "problems": [
+    "procedure-executability"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not execute commands or follow external write actions.",
+    "It does not claim the procedure works without scoped run evidence.",
+    "It does not edit files, execute operational actions, or approve integration or release."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "verify"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

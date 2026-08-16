@@ -1,0 +1,64 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/development/architecture/repository-architecture-mapper",
+  "slug": "repository-architecture-mapper",
+  "name": "Repository Architecture Mapper",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Produce an evidence-linked component and dependency map for a bounded repository surface.",
+  "description": "A read-only repository mapper that traces entrypoints, ownership, dependency direction, state, and external boundaries without redesigning or editing the system.",
+  "domain": "development",
+  "category": "architecture",
+  "capabilities": [
+    "assess",
+    "collect"
+  ],
+  "problems": [
+    "architecture-context"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "planning",
+    "review"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "Do not edit, move, generate, or reformat repository files.",
+    "Do not turn a bounded mapping request into a repository-wide audit.",
+    "Do not infer runtime calls from naming or directory proximity alone.",
+    "Do not present documentation claims as current structure without corroboration."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json"
+  }
+}

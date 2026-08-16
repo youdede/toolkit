@@ -1,0 +1,66 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/marketing/content/edit-marketing-copy",
+  "slug": "edit-marketing-copy",
+  "name": "Edit Marketing Copy",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Edit existing marketing copy in bounded passes while preserving truth, voice, and intent.",
+  "description": "Edit existing marketing copy for clarity, specificity, evidence, voice, structure, risk, and action while preserving approved meaning. Use when copy already exists and needs a reviewable improvement rather than a new strategy or unsupported rewrite.",
+  "domain": "marketing",
+  "category": "content",
+  "problems": [
+    "copy-editing"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "implementation",
+    "review"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not fabricate proof, customers, outcomes, urgency, scarcity, or guarantees.",
+    "It does not erase required disclosures or change commercial terms silently.",
+    "It does not overwrite a distinctive voice with generic conversion jargon."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "author"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/writing/technical-writing/write-article-from-source-material"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

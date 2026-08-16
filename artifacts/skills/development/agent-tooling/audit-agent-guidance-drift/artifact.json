@@ -1,0 +1,68 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/development/agent-tooling/audit-agent-guidance-drift",
+  "slug": "audit-agent-guidance-drift",
+  "name": "Audit Agent Guidance Drift",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Audit agent guidance against repository changes and propose only evidence-backed minimal corrections.",
+  "description": "Audit AGENTS.md, CLAUDE.md, and equivalent scoped guidance for stale paths, false commands, contradictory precedence, or newly durable invariants. Use before integration or after structural repository changes when agent instructions may have drifted.",
+  "domain": "development",
+  "category": "agent-tooling",
+  "problems": [
+    "agent-policy-integrity",
+    "folder-context",
+    "precedence-defaults"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review",
+    "pre-commit",
+    "maintenance"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not turn guidance into a changelog or inventory of obvious code facts.",
+    "It does not add a rule from one incidental implementation choice.",
+    "It does not edit guidance or weaken policy without explicit approval."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess",
+    "verify"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

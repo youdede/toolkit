@@ -1,0 +1,75 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/security/threat-modeling/review-agent-tool-boundaries",
+  "slug": "review-agent-tool-boundaries",
+  "name": "Review Agent Tool Boundaries",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Review agent and MCP tool authority against prompt injection, confused-deputy, exfiltration, and unsafe side effects.",
+  "description": "Review an agent, MCP server, plugin, or tool workflow for prompt-injection paths, identity propagation, least privilege, data exposure, confirmation, and failure safety. Use before granting an agent access to real systems or expanding tool permissions.",
+  "domain": "security",
+  "category": "threat-modeling",
+  "capabilities": [
+    "assess"
+  ],
+  "problems": [
+    "trust-boundary-modeling",
+    "application-security-review"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "design",
+    "review"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not rely on prompt wording alone to protect secrets, writes, tenants, or external systems.",
+    "It does not request broad credentials, disable confirmation, or test attacks against unauthorized targets.",
+    "It does not describe a tool surface as secure when critical authority paths or negative tests remain unresolved."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [
+      "hook/security/application-security/outbound-data-guard",
+      "hook/security/secrets/sensitive-file-access-guard",
+      "skill/development/agent-tooling/author-mcp-server-contract",
+      "skill/operations/setup/author-guided-setup-wizard",
+      "subagent/security/application-security/application-security-reviewer",
+      "subagent/security/threat-modeling/mcp-trust-boundary-reviewer",
+      "subagent/security/threat-modeling/threat-model-mapper"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/secure-agent-boundaries"
+    ]
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  }
+}

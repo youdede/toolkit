@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/security/telemetry/privacy-data-handling-auditor",
+  "slug": "privacy-data-handling-auditor",
+  "name": "Privacy Data Handling Auditor",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Trace a bounded personal-data flow and report concrete collection, exposure, retention, or deletion risks.",
+  "description": "A read-only privacy engineering auditor that maps declared data classes through code and configuration without issuing legal conclusions or changing controls.",
+  "domain": "security",
+  "category": "telemetry",
+  "capabilities": [
+    "assess",
+    "verify"
+  ],
+  "problems": [
+    "outbound-data-control",
+    "data-exposure-review"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "design",
+    "review",
+    "release"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "Do not issue legal advice, certify compliance, or infer jurisdiction-specific obligations not supplied by the parent.",
+    "Do not access production data, credentials, customer records, or external vendor consoles.",
+    "Do not edit schemas, retention jobs, logging, consent flows, or access controls.",
+    "Do not reproduce secret or personal values in findings; identify fields and evidence locations instead."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json"
+  }
+}

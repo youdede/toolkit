@@ -1,0 +1,71 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/security/archive-extraction/archive-extraction-guard",
+  "slug": "archive-extraction-guard",
+  "name": "Archive extraction guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block agent-driven archive extraction when entry containment cannot be proven before execution.",
+  "description": "A deterministic Claude Code PreToolUse gate that permits archive listing and integrity tests while refusing extraction commands whose entry paths, links, and expansion size cannot be verified without executing the tool.",
+  "domain": "security",
+  "category": "archive-extraction",
+  "problems": [
+    "archive-extraction-safety"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "javascript",
+    "shell"
+  ],
+  "lifecycle": [
+    "setup",
+    "implementation"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not extract, rewrite, repair, or delete an archive.",
+    "It does not claim that filename-only listing proves archive safety.",
+    "It does not accept an inline flag or environment variable as approval."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/archive-extraction-guard.mjs",
+        "runtime": "node",
+        "purpose": "Recognize archive listing versus extraction and deterministically refuse unverified expansion.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

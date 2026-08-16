@@ -1,0 +1,69 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/operations/agent-orchestration/design-delegable-workflow",
+  "slug": "design-delegable-workflow",
+  "name": "Design Delegable Workflow",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Design a repeatable workflow with explicit triggers, deterministic steps, authority, checkpoints, and evidence.",
+  "description": "Design a recurring workflow for human, deterministic automation, and optional agent work by modeling triggers, state, decisions, authority, checkpoints, failures, and observability. Use before automating a repeated operational loop.",
+  "domain": "operations",
+  "category": "agent-orchestration",
+  "capabilities": [
+    "plan"
+  ],
+  "problems": [
+    "workflow-delegation",
+    "automation-compatibility"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "design",
+    "planning"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not add an agent, schedule, or human checkpoint when the workflow does not require one.",
+    "It does not automate consent, payment, deletion, publication, or permission decisions without explicit authority gates.",
+    "It does not hide nondeterminism, retries, cost, or partial failure behind a generic automation step."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [
+      "skill/operations/agent-orchestration/delegate-bounded-subtasks",
+      "skill/operations/agent-orchestration/schedule-agent-runs"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  }
+}

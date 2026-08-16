@@ -1,0 +1,67 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/development/testing/verify-completion-evidence",
+  "slug": "verify-completion-evidence",
+  "name": "Verify Completion Evidence",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Verify completion claims with fresh commands, inspectable artifacts, and explicit remaining uncertainty.",
+  "description": "Verify that a coding or configuration task is complete by mapping requested outcomes to fresh evidence, repository checks, diff inspection, and unresolved risk. Use before reporting success, handoff, commit, or integration.",
+  "domain": "development",
+  "category": "testing",
+  "problems": [
+    "completion-verification"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review",
+    "handoff"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not use confidence, code appearance, or another agent’s summary as proof.",
+    "It does not omit failed or unrun checks to present a cleaner result.",
+    "It does not claim deployment, publication, cleanup, or external mutation from local evidence."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "verify"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/operations/git/resolve-merge-conflicts-by-intent",
+      "skill/operations/setup/build-repository-quality-gates"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

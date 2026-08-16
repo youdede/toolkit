@@ -1,0 +1,45 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "cursor",
+  "scopes": [
+    "project"
+  ],
+  "files": [
+    {
+      "from": "targets/claude-code/user-account-mutation-guard.mjs",
+      "to": "hooks/youdede/user-account-mutation-guard.core.mjs",
+      "executable": true
+    },
+    {
+      "root": "package",
+      "from": "scripts/runtime/hook-command-bridge.mjs",
+      "to": "hooks/youdede/user-account-mutation-guard.mjs",
+      "executable": true
+    }
+  ],
+  "settingsPatch": {
+    "path": "hooks.json",
+    "hooks": {
+      "preToolUse": [
+        {
+          "type": "command",
+          "command": "node \"{cursorRoot}/hooks/youdede/user-account-mutation-guard.mjs\" --target cursor --failure-policy fail-closed --marker \"[youdede:user-account-mutation-guard]\"",
+          "timeout": 10,
+          "failClosed": true,
+          "matcher": "Shell"
+        }
+      ]
+    }
+  },
+  "bindings": [
+    {
+      "event": "preToolUse",
+      "matcher": "Shell"
+    }
+  ],
+  "stability": "stable",
+  "limitations": [
+    "This first native tranche covers the documented Shell payload only and does not depend on the optional Claude compatibility loader."
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": ["project"],
+  "files": [{"from": "targets/claude-code/large-diff-review-guard.mjs", "to": "hooks/youdede/large-diff-review-guard.mjs", "executable": true}],
+  "settingsPatch": {"hooks": {"PreToolUse": [{
+    "matcher": "Bash",
+    "description": "[youdede:large-diff-review-guard] Bound staged commit review size",
+    "hooks": [{"type": "command", "command": "node \"{claudeRoot}/hooks/youdede/large-diff-review-guard.mjs\"", "timeout": 20}]
+  }]}}
+}

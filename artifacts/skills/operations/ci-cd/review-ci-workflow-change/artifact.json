@@ -1,0 +1,75 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/operations/ci-cd/review-ci-workflow-change",
+  "slug": "review-ci-workflow-change",
+  "name": "Review CI Workflow Change",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Review a CI workflow change for observable trigger, permission, command, artifact, and rollback evidence.",
+  "description": "Review a proposed CI workflow change without applying it, using a bounded line collector plus contextual review of triggers, permissions, secrets, failure behavior, and release impact. Use when a CI configuration change needs review.",
+  "domain": "operations",
+  "category": "ci-cd",
+  "problems": [
+    "release-verification"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "review",
+    "pre-commit"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not parse YAML as a complete semantic model or claim that omitted signals are absent.",
+    "It does not change workflow files, rotate secrets, trigger a run, or approve deployment permissions.",
+    "It does not expose secret values or treat a reference to a secret as authorization to use it."
+  ],
+  "execution": {
+    "mode": "hybrid",
+    "entrypoints": [
+      {
+        "path": "scripts/collect-workflow-signals.mjs",
+        "runtime": "node",
+        "purpose": "Collect bounded line-level workflow signals without parsing or executing YAML.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/operations/ci-cd/debug-ci-failure",
+      "skill/operations/setup/build-repository-quality-gates"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

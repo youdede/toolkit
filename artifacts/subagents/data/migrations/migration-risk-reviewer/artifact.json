@@ -1,0 +1,68 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/data/migrations/migration-risk-reviewer",
+  "slug": "migration-risk-reviewer",
+  "name": "Migration Risk Reviewer",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Review a bounded schema or data migration for compatibility, integrity, lock, and recovery risk.",
+  "description": "Review a supplied migration delta for old-and-new application compatibility, data integrity, locking, backfill, deployment ordering, and rollback evidence. Use before merging a schema or data migration; reports scoped risks without running it.",
+  "domain": "data",
+  "category": "migrations",
+  "problems": [
+    "compatible-migration"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "sql"
+  ],
+  "lifecycle": [
+    "review",
+    "pre-commit"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not execute migrations, backfills, queries, or database administration commands.",
+    "It does not infer engine-specific lock, transaction, or rollback behavior without supplied versioned evidence.",
+    "It does not approve a migration, authorize deployment, or claim data integrity from static inspection alone."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "assess"
+  ],
+  "relationships": {
+    "composesWith": [
+      "hook/data/migrations/migration-safety-guard",
+      "skill/data/migrations/review-database-migration-plan",
+      "skill/data/schemas/review-schema-evolution"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/data-change-safety"
+    ]
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

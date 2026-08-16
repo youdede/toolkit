@@ -1,0 +1,71 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/security/identity-administration/user-account-mutation-guard",
+  "slug": "user-account-mutation-guard",
+  "name": "User account mutation guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block direct local user, group, password, and privilege-assignment mutations.",
+  "description": "A deterministic Claude Code PreToolUse gate for explicit Unix, macOS, and Windows account-administration commands while allowing identity and membership inspection.",
+  "domain": "security",
+  "category": "identity-administration",
+  "problems": [
+    "local-account-mutation"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "javascript",
+    "shell"
+  ],
+  "lifecycle": [
+    "setup",
+    "operations"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not create, delete, rename, unlock, or modify local accounts.",
+    "It does not set, read, generate, or rotate account passwords.",
+    "It does not infer account authority from prompt text or command flags."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/user-account-mutation-guard.mjs",
+        "runtime": "node",
+        "purpose": "Recognize local account administration commands and refuse identity mutations.",
+        "sideEffects": "none"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}

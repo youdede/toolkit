@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/operations/agent-orchestration/execute-verifiable-plan",
+  "slug": "execute-verifiable-plan",
+  "name": "Execute Verifiable Plan",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Execute an approved plan in bounded batches with checkpoints, evidence, and controlled deviation.",
+  "description": "Execute an approved implementation plan by validating prerequisites, working in bounded batches, collecting evidence, and escalating material deviations. Use when a reviewed plan already exists and the task requires disciplined delivery rather than replanning from scratch.",
+  "domain": "operations",
+  "category": "agent-orchestration",
+  "problems": [
+    "plan-execution"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "implementation",
+    "handoff"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not treat an old plan as authority over current evidence.",
+    "It does not skip checks to preserve schedule or hide failed steps inside a batch.",
+    "It does not perform destructive or external actions not authorized by the plan and user."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "operate"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

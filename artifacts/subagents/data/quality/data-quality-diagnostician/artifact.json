@@ -1,0 +1,64 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/data/quality/data-quality-diagnostician",
+  "slug": "data-quality-diagnostician",
+  "name": "Data Quality Diagnostician",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Diagnose a bounded data anomaly with ranked causes and discriminating evidence checks.",
+  "description": "A narrow, read-only specialist whose outcome is to rank plausible lineage-stage causes for a measured quality symptom and name the smallest check that separates them. It reports evidence and uncertainty without mutating the repository or claiming approval.",
+  "domain": "data",
+  "category": "quality",
+  "problems": [
+    "anomaly-root-cause"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "incident",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not modify, clean, impute, or expose row-level data.",
+    "It does not generalize a sample result to the whole dataset.",
+    "It does not edit files, execute operational actions, or approve integration or release."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "diagnose"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/data/quality/design-data-pipeline-change"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "subagent/security/threat-modeling/threat-model-mapper",
+  "slug": "threat-model-mapper",
+  "name": "Threat Model Mapper",
+  "version": "1.0.0",
+  "kind": "subagent",
+  "summary": "Map assets, actors, trust boundaries, controls, and reachable abuse hypotheses for one journey.",
+  "description": "A narrow, read-only specialist whose outcome is to produce a bounded threat model that distinguishes observed controls from hypotheses requiring verification. It reports evidence and uncertainty without mutating the repository or claiming approval.",
+  "domain": "security",
+  "category": "threat-modeling",
+  "problems": [
+    "trust-boundary-modeling"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "design",
+    "review"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not call an unverified hypothesis a vulnerability.",
+    "It does not probe systems, retrieve secrets, or propose exploit steps.",
+    "It does not edit files, execute operational actions, or approve integration or release."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "collect"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/security/threat-modeling/review-agent-tool-boundaries"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

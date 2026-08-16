@@ -1,0 +1,20 @@
+node_modules/
+coverage/
+.DS_Store
+*.log
+.tmp/
+.env
+.env.*
+!.env.example
+*.pem
+*.p12
+*.pfx
+
+# Local authoring laboratory. It contains source snapshots, generation context,
+# similarity reports, and request-routing hooks; none of it is published.
+.youdede-workbench/
+
+# Local agent bootstraps that activate the ignored workbench for authoring work.
+AGENTS.md
+CLAUDE.md
+.claude/settings.local.json

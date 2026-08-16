@@ -1,0 +1,63 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/research/source-analysis/write-source-backed-research-brief",
+  "slug": "write-source-backed-research-brief",
+  "name": "Write Source Backed Research Brief",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Turn a vague research need into a self-contained, evidence-oriented brief.",
+  "description": "Write a compact research brief for a human or agent researcher with full context, a decision question, coverage questions, source hierarchy, output contract, and completion bar. Use before delegating substantial research.",
+  "domain": "research",
+  "category": "source-analysis",
+  "problems": [
+    "research-brief"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not combine unrelated research missions into one brief.",
+    "It does not demand certainty where available evidence cannot support it.",
+    "It does not prescribe a single paid provider or undocumented research API."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "author"
+  ],
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

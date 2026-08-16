@@ -1,0 +1,68 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/development/architecture/build-disposable-prototype",
+  "slug": "build-disposable-prototype",
+  "name": "Build Disposable Prototype",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Build a bounded throwaway prototype that answers one behavior or interface design question.",
+  "description": "Build a disposable logic or interface prototype around one explicit uncertainty, with observable state, representative scenarios, and a removal decision. Use when cheap interaction evidence is more useful than further abstract discussion.",
+  "domain": "development",
+  "category": "architecture",
+  "capabilities": [
+    "author"
+  ],
+  "problems": [
+    "disposable-prototyping",
+    "decision-making"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "discovery",
+    "design"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "youdede contributors"
+  ],
+  "refuses": [
+    "It does not add production credentials, durable migrations, analytics, or infrastructure for a disposable experiment.",
+    "It does not claim usability, feasibility, or correctness from the author's own walkthrough alone.",
+    "It does not leave prototype code on the main delivery path without an explicit promotion decision."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [
+      "skill/development/architecture/write-verifiable-specification",
+      "skill/writing/decision-support/surface-build-decisions"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  }
+}
