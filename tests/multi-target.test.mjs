@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import os from 'node:os';
 import path from 'node:path';
@@ -193,6 +193,7 @@ test('OpenCode plugin blocks dangerous shell calls before execution', (context) 
   const directory = temporary(context, 'youdede-opencode-hook-');
   installArtifact('shell-command-guard', { cwd: directory, target: 'opencode' });
   const plugin = path.join(directory, '.opencode', 'plugins', 'youdede-shell-command-guard.js');
+  writeFileSync(path.join(path.dirname(plugin), 'package.json'), '{"type":"module"}\n');
   const script = `
     import { pathToFileURL } from 'node:url';
     const module = await import(pathToFileURL(process.argv[1]).href);
@@ -206,7 +207,7 @@ test('OpenCode plugin blocks dangerous shell calls before execution', (context) 
       process.exitCode = 2;
     }
   `;
-  const run = (command) => spawnSync(process.execPath, ['--experimental-default-type=module', '-e', script, plugin, directory, command], { encoding: 'utf8' });
+  const run = (command) => spawnSync(process.execPath, ['--input-type=module', '-e', script, plugin, directory, command], { encoding: 'utf8' });
   const allowed = run('pwd');
   assert.equal(allowed.status, 0, allowed.stderr);
   assert.equal(allowed.stdout, 'allowed');
@@ -218,7 +219,7 @@ test('OpenCode plugin blocks dangerous shell calls before execution', (context) 
 });
 
 test('project roots match native component directories', () => {
-  const cwd = path.join(path.sep, 'tmp', 'example');
+  const cwd = path.resolve(os.tmpdir(), 'youdede-config-root-example');
   assert.equal(resolveConfigRoot('codex', 'project', cwd, 'skill'), path.join(cwd, '.agents'));
   assert.equal(resolveConfigRoot('codex', 'project', cwd, 'hook'), path.join(cwd, '.codex'));
   assert.equal(resolveConfigRoot('codex', 'project', cwd, 'subagent'), path.join(cwd, '.codex'));

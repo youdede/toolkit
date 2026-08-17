@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 export const MAX_STDIN_BYTES = 1024 * 1024;
 export const MAX_COMMAND_BYTES = 256 * 1024;
 export const MAX_GIT_OUTPUT_BYTES = 64 * 1024;
-export const GIT_TIMEOUT_MS = 2000;
+export const GIT_TIMEOUT_MS = 3000;
 const NATIVE_MUTATION_TOOLS = new Set(['Write', 'Edit', 'MultiEdit', 'NotebookEdit']);
 const SHELLS = new Set(['sh', 'bash', 'zsh', 'dash', 'ksh']);
 const SIMPLE_WRAPPERS = new Set(['exec', 'command', 'time', 'noglob', 'env', 'sudo', 'nohup', 'nice', 'timeout']);

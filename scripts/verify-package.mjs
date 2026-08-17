@@ -5,6 +5,7 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadArtifacts, loadPacks } from './lib/catalog.mjs';
+import { resolveNpmPackInvocation, spawnFailureDetail } from './verify-package-command.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -13,14 +14,15 @@ function fail(message, detail = '') {
   process.exit(1);
 }
 
-const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
-const packed = spawnSync(npmCommand, ['pack', '--dry-run', '--json', '--ignore-scripts'], {
+const invocation = resolveNpmPackInvocation();
+const packed = spawnSync(invocation.command, invocation.argumentsList, {
   cwd: ROOT,
   encoding: 'utf8',
-  maxBuffer: 16 * 1024 * 1024
+  maxBuffer: 16 * 1024 * 1024,
+  shell: invocation.shell
 });
 
-if (packed.status !== 0) fail('npm pack --dry-run did not complete', packed.stderr.trim());
+if (packed.status !== 0) fail('npm pack --dry-run did not complete', spawnFailureDetail(packed));
 
 let result;
 try {

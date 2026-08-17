@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { chmodSync, mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
@@ -257,8 +257,8 @@ test('staged Git hooks inspect real index state without executing the submitted 
 
   const executableRoot = repository(context, 'youdede-executable-permission-');
   writeFileSync(path.join(executableRoot, 'metadata.json'), '{}\n');
-  chmodSync(path.join(executableRoot, 'metadata.json'), 0o755);
   git(executableRoot, ['add', 'metadata.json']);
+  git(executableRoot, ['update-index', '--chmod=+x', 'metadata.json']);
   assert.equal(invoke('executable', { cwd: executableRoot, tool_input: { command: 'git commit -m mode' } }, { cwd: executableRoot }).status, 2);
   assert.equal(invoke('executable', { cwd: executableRoot, tool_input: { command: 'git status' } }, { cwd: executableRoot }).status, 0);
 

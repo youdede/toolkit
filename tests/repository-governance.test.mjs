@@ -10,6 +10,8 @@ import {
   evaluateBranchName,
   evaluateCommitMessage
 } from '../scripts/validate-change-policy.mjs';
+import { resolveNpmPackInvocation, spawnFailureDetail } from '../scripts/verify-package-command.mjs';
+import { discoverTestFiles } from '../scripts/run-tests.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const POLICY_CLI = path.join(ROOT, 'scripts', 'validate-change-policy.mjs');
@@ -95,4 +97,41 @@ test('repository workflows pin every third-party action to a commit', () => {
     assert.match(reference, /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+@[0-9a-f]{40}$/u, reference);
   }
   assert.match(workflow, /name:\s+quality-gate/u);
+});
+
+test('package verification invokes npm portably and reports spawn failures safely', () => {
+  assert.deepEqual(resolveNpmPackInvocation({
+    platform: 'win32',
+    nodeExecutable: 'C:\\node.exe',
+    npmExecPath: 'C:\\npm-cli.js'
+  }), {
+    command: 'C:\\node.exe',
+    argumentsList: ['C:\\npm-cli.js', 'pack', '--dry-run', '--json', '--ignore-scripts'],
+    shell: false
+  });
+  assert.deepEqual(resolveNpmPackInvocation({ platform: 'win32', npmExecPath: '' }), {
+    command: 'npm.cmd',
+    argumentsList: ['pack', '--dry-run', '--json', '--ignore-scripts'],
+    shell: true
+  });
+  assert.equal(spawnFailureDetail({ stderr: null }), '');
+  assert.equal(spawnFailureDetail({ error: { code: 'ENOENT', message: 'not found' } }), 'ENOENT: not found');
+});
+
+test('package test discovery does not depend on shell glob expansion', () => {
+  const manifest = JSON.parse(readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
+  assert.equal(manifest.scripts.test, 'node scripts/run-tests.mjs');
+
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'toolkit-test-discovery-'));
+  try {
+    const first = path.join(directory, 'a.test.mjs');
+    const second = path.join(directory, 'b.test.mjs');
+    writeFileSync(second, '');
+    writeFileSync(first, '');
+    writeFileSync(path.join(directory, 'not-a-test.mjs'), '');
+    symlinkSync(first, path.join(directory, 'linked.test.mjs'));
+    assert.deepEqual(discoverTestFiles(directory), [first, second]);
+  } finally {
+    rmSync(directory, { recursive: true, force: true });
+  }
 });

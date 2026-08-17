@@ -35,7 +35,7 @@ test('handoff collector reports reproducible Git state without writing', (contex
   writeFileSync(path.join(directory, 'tracked.txt'), 'two\n');
 
   const state = collectGitState(directory);
-  assert.equal(realpathSync(state.root), realpathSync(directory));
+  assert.equal(realpathSync.native(state.root), realpathSync.native(directory));
   assert.match(state.head, /^[a-f0-9]{40}$/);
   assert.match(state.status, /M tracked\.txt/);
   assert.match(state.unstagedStat, /tracked\.txt/);
