@@ -55,7 +55,7 @@
     "check:package": "node scripts/verify-package.mjs",
     "prepublishOnly": "npm run check && npm run check:readiness",
     "validate": "node scripts/validate.mjs",
-    "test": "node --test tests/*.test.mjs",
+    "test": "node scripts/run-tests.mjs",
     "check": "npm run validate && npm run check:evaluations && npm run check:quality && npm run check:catalog && npm run check:integrity && npm run check:legal && npm run check:package && npm test"
   },
   "keywords": [

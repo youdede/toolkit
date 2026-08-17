@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -165,7 +165,12 @@ test('the thirteen hook packages have executable adapters and documented refusal
     assert.ok(manifest.refuses.length >= 3);
     assert.equal(adapter.scopes.join(','), 'project');
     assert.equal(adapter.files[0].executable, true);
-    assert.ok((statSync(source).mode & 0o111) !== 0);
+    const indexEntry = spawnSync('git', ['ls-files', '--stage', '--', definition.source], {
+      cwd: ROOT,
+      encoding: 'utf8'
+    });
+    assert.equal(indexEntry.status, 0, indexEntry.stderr);
+    assert.match(indexEntry.stdout, /^100755 /);
     assert.ok((readme.match(/^[-*] /gm) || []).length >= 3);
     assert.match(readme, /Refusals and limits/);
   }

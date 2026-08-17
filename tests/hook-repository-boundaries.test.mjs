@@ -19,6 +19,7 @@ import {
 } from '../artifacts/hooks/security/application-security/workspace-boundary-guard/targets/claude-code/workspace-boundary-guard.mjs';
 import {
   MAX_COMMAND_BYTES,
+  GIT_TIMEOUT_MS,
   MAX_STDIN_BYTES as BRANCH_MAX_STDIN,
   collectContext as collectBranch,
   evaluate as evaluateBranch,
@@ -147,6 +148,7 @@ test('workspace boundary uses CLAUDE_PROJECT_DIR before input cwd and bounds pat
 });
 
 test('protected branch discovery covers protected, feature, unborn, detached, and non-repository states', (context) => {
+  assert.equal(GIT_TIMEOUT_MS, 3000);
   const main = temporary(context, 'youdede-branch-main-');
   initRepository(main, 'main');
   const native = { tool_name: 'Write', cwd: main, tool_input: { file_path: 'src/app.js', content: '' } };
