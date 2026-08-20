@@ -13,22 +13,12 @@ if (invalid.length) {
   process.exit(1);
 }
 
+// Catalogs carry no generation timestamp, so identical public inputs produce identical
+// output and `--check` compares bytes rather than trusting a value read back from the file.
 const outputPath = path.join(ROOT, 'catalog', 'artifacts.json');
-let generatedAt = new Date().toISOString();
-if (check) {
-  try {
-    generatedAt = JSON.parse(readFileSync(outputPath, 'utf8')).generatedAt || generatedAt;
-  } catch {}
-}
-const content = `${JSON.stringify(publicCatalog(artifacts, generatedAt), null, 2)}\n`;
+const content = `${JSON.stringify(publicCatalog(artifacts), null, 2)}\n`;
 const packOutputPath = path.join(ROOT, 'catalog', 'packs.json');
-let packGeneratedAt = generatedAt;
-if (check) {
-  try {
-    packGeneratedAt = JSON.parse(readFileSync(packOutputPath, 'utf8')).generatedAt || packGeneratedAt;
-  } catch {}
-}
-const packContent = `${JSON.stringify(publicPackCatalog(packs, artifacts, packGeneratedAt), null, 2)}\n`;
+const packContent = `${JSON.stringify(publicPackCatalog(packs, artifacts), null, 2)}\n`;
 
 if (check) {
   let current = '';

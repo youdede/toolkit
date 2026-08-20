@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 youdede contributors
+// Copyright (c) 2026 Youdede
 
 import { realpathSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';

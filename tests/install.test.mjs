@@ -389,6 +389,119 @@ test('hook uninstall refuses settings drift and force removes only its stable ma
   assert.equal(doctor({ cwd: directory }).installs, 0);
 });
 
+test('uninstall refuses an unmarked hook state record instead of deleting unmanaged entries', (context) => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-remove-hook-unmarked-'));
+  context.after(() => rmSync(directory, { recursive: true, force: true }));
+  installArtifact('commit-guard', { cwd: directory });
+  const settingsFile = path.join(directory, '.claude', 'settings.json');
+  const stateFile = path.join(directory, '.claude', '.youdede-toolkit', 'state.json');
+
+  const userEntry = {
+    matcher: 'Bash',
+    hooks: [{ type: 'command', command: 'echo user-owned' }]
+  };
+  const settings = JSON.parse(readFileSync(settingsFile, 'utf8'));
+  settings.hooks.PreToolUse.push(userEntry);
+  writeFileSync(settingsFile, `${JSON.stringify(settings, null, 2)}\n`);
+
+  // A hook record whose marker cannot be resolved must never drive a marker filter:
+  // filtering on null would match every entry the user wrote themselves.
+  const state = JSON.parse(readFileSync(stateFile, 'utf8'));
+  const key = Object.keys(state.installs)[0];
+  state.installs[key].hooks = state.installs[key].hooks.map(({ event }) => ({ event }));
+  writeFileSync(stateFile, `${JSON.stringify(state, null, 2)}\n`);
+
+  assert.throws(() => removeArtifact('commit-guard', { cwd: directory, force: true }), /no \[youdede:<slug>\] marker/);
+  assert.deepEqual(JSON.parse(readFileSync(settingsFile, 'utf8')).hooks.PreToolUse[1], userEntry);
+  assert.equal(doctor({ cwd: directory }).findings.some((finding) => finding.status === 'hook-state-unmarked'), true);
+});
+
+test('uninstall honours a legacy hook state record that carries only a marker', (context) => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-remove-hook-legacy-'));
+  context.after(() => rmSync(directory, { recursive: true, force: true }));
+  installArtifact('commit-guard', { cwd: directory });
+  const settingsFile = path.join(directory, '.claude', 'settings.json');
+  const stateFile = path.join(directory, '.claude', '.youdede-toolkit', 'state.json');
+
+  const userEntry = {
+    matcher: 'Bash',
+    hooks: [{ type: 'command', command: 'echo user-owned' }]
+  };
+  const settings = JSON.parse(readFileSync(settingsFile, 'utf8'));
+  settings.hooks.PreToolUse.push(userEntry);
+  writeFileSync(settingsFile, `${JSON.stringify(settings, null, 2)}\n`);
+
+  const state = JSON.parse(readFileSync(stateFile, 'utf8'));
+  const key = Object.keys(state.installs)[0];
+  state.installs[key].hooks = state.installs[key].hooks.map(({ event, marker }) => ({ event, marker }));
+  writeFileSync(stateFile, `${JSON.stringify(state, null, 2)}\n`);
+
+  removeArtifact('commit-guard', { cwd: directory, force: true });
+  assert.deepEqual(JSON.parse(readFileSync(settingsFile, 'utf8')).hooks.PreToolUse, [userEntry]);
+  assert.equal(existsSync(path.join(directory, '.claude', 'hooks', 'youdede', 'commit-guard.mjs')), false);
+});
+
+test('concurrent installs into one config root record every artifact', (context) => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-install-parallel-'));
+  context.after(() => rmSync(directory, { recursive: true, force: true }));
+  const cli = new URL('../bin/youdede-toolkit.mjs', import.meta.url).pathname;
+  const slugs = ['debug-systematically', 'write-session-handoff', 'resolve-next-decision', 'make-practical-decision'];
+
+  const running = slugs.map((slug) => spawnSync(process.execPath, [cli, 'add', slug, '--target', 'claude-code', '--scope', 'project'], {
+    cwd: directory,
+    encoding: 'utf8'
+  }));
+  for (const result of running) assert.equal(result.status, 0, result.stderr);
+
+  const state = JSON.parse(readFileSync(path.join(directory, '.claude', '.youdede-toolkit', 'state.json'), 'utf8'));
+  assert.equal(Object.keys(state.installs).length, slugs.length);
+  assert.equal(existsSync(path.join(directory, '.claude', '.youdede-toolkit', 'state.lock')), false);
+  assert.equal(doctor({ cwd: directory }).findings.length, 0);
+});
+
+test('a failed multi-file install rolls back every file it had already written', { skip: process.platform === 'win32' }, (context) => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-install-rollback-'));
+  context.after(() => rmSync(directory, { recursive: true, force: true }));
+  const skillRoot = path.join(directory, '.claude', 'skills', 'debug-systematically');
+  const references = path.join(skillRoot, 'references');
+
+  // debug-systematically ships SKILL.md plus reference files. Making only the nested directory
+  // unwritable lets the first payload file land and the next one fail, which is the exact
+  // partial-write the rollback block exists for.
+  mkdirSync(references, { recursive: true });
+  chmodSync(references, 0o500);
+
+  assert.throws(() => installArtifact('debug-systematically', { cwd: directory }), /EACCES|EPERM/);
+  chmodSync(references, 0o700);
+
+  assert.equal(existsSync(path.join(skillRoot, 'SKILL.md')), false, 'partially written payload must be removed');
+  assert.equal(existsSync(path.join(directory, '.claude', '.youdede-toolkit', 'state.json')), false, 'no install may be recorded');
+  assert.equal(doctor({ cwd: directory }).installs, 0);
+});
+
+test('installing carries the licence notice with the copied files and uninstalling withdraws it', (context) => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-install-notice-'));
+  context.after(() => rmSync(directory, { recursive: true, force: true }));
+  const notice = path.join(directory, '.claude', '.youdede-toolkit', 'NOTICE.md');
+
+  installArtifact('debug-systematically', { cwd: directory });
+  installArtifact('commit-guard', { cwd: directory });
+  let text = readFileSync(notice, 'utf8');
+  assert.match(text, /skill\/development\/debugging\/debug-systematically/);
+  assert.match(text, /hook\/security\/secrets\/commit-guard/);
+  assert.match(text, /MIT License/);
+  assert.match(text, /Copyright \(c\) 2026 Youdede/);
+
+  removeArtifact('commit-guard', { cwd: directory });
+  text = readFileSync(notice, 'utf8');
+  assert.doesNotMatch(text, /commit-guard/);
+  assert.match(text, /debug-systematically/);
+
+  // The notice exists to accompany installed files; with none left it must not linger.
+  removeArtifact('debug-systematically', { cwd: directory });
+  assert.equal(existsSync(notice), false);
+});
+
 test('doctor reports missing and duplicate managed hook settings', (context) => {
   const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-doctor-hook-settings-'));
   context.after(() => rmSync(directory, { recursive: true, force: true }));

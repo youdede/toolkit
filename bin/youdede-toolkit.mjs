@@ -28,6 +28,35 @@ function parse(argv) {
   return { positional, options };
 }
 
+const INSTALL_FLAGS = ['target', 'scope', 'cwd', 'force', 'dry-run', 'json'];
+const COMMAND_FLAGS = {
+  help: [],
+  list: ['kind', 'domain', 'category', 'capability', 'problem', 'framework', 'language', 'lifecycle', 'risk', 'target', 'execution'],
+  info: ['target', 'scope', 'cwd'],
+  packs: [],
+  'pack-info': ['target', 'scope', 'cwd'],
+  add: INSTALL_FLAGS,
+  'add-pack': INSTALL_FLAGS,
+  remove: ['target', 'scope', 'cwd', 'force'],
+  'remove-pack': ['target', 'scope', 'cwd', 'force'],
+  doctor: ['target', 'scope', 'cwd'],
+  'verify-integrity': ['json'],
+  validate: []
+};
+
+// An unrecognised flag is a typo, and the flags that decide where bytes land must never fall
+// back to a default silently: `--scop user` used to install to project scope and exit 0.
+function assertKnownFlags(command, options) {
+  const allowed = COMMAND_FLAGS[command];
+  if (!allowed) throw new Error(`unknown command '${command}'`);
+  const unknown = Object.keys(options).filter((name) => name !== 'help' && !allowed.includes(name));
+  if (unknown.length) {
+    const list = unknown.map((name) => `--${name}`).join(', ');
+    const supported = allowed.length ? allowed.map((name) => `--${name}`).join(', ') : 'none';
+    throw new Error(`${command} does not accept ${list}; supported flags: ${supported}`);
+  }
+}
+
 function help() {
   const targets = SUPPORTED_TARGETS.join('|');
   process.stdout.write(`youdede-toolkit\n\n`);
@@ -63,6 +92,7 @@ async function main() {
   const { positional, options } = parse(process.argv.slice(2));
   const command = positional[0];
   if (!command || options.help || command === 'help') return help();
+  assertKnownFlags(command, options);
 
   if (command === 'list') {
     let records = loadArtifacts(ROOT);
@@ -127,11 +157,18 @@ async function main() {
     const { manifest } = resolvePack(requireQuery(positional));
     process.stdout.write(`${manifest.name}\n${manifest.id}\n\n${manifest.summary}\n\nOutcomes: ${manifest.outcomes.join(', ')}\nMembers:\n`);
     for (const member of manifest.members) process.stdout.write(`- ${member.artifactId} (${member.role}${member.required ? ', required' : ', optional'})\n`);
-    const plan = planPackInstall(manifest.id, { target: options.target, scope: options.scope, cwd: options.cwd });
+    // Fan-out is catalog data. Deriving it from an install plan made a read-only query depend on
+    // the working directory and fail on unrelated workspace state, and made `pack-info` stat and
+    // hash files under the user's config root as a side effect.
+    const target = options.target || 'claude-code';
     const fanout = new Map();
-    for (const item of plan.members.filter((entry) => !entry.skipped && entry.plan.artifact.kind === 'hook')) {
-      const record = resolveArtifact(item.member.artifactId);
-      for (const binding of hookBindings(record.adapters[plan.target]?.data)) {
+    for (const member of manifest.members) {
+      let record = null;
+      try { record = resolveArtifact(member.artifactId); } catch { continue; }
+      if (record.manifest.kind !== 'hook') continue;
+      const adapter = record.adapters[target]?.data;
+      if (!adapter) continue;
+      for (const binding of hookBindings(adapter)) {
         const boundary = `${binding.event}:${binding.matcher}`;
         fanout.set(boundary, (fanout.get(boundary) || 0) + 1);
       }
