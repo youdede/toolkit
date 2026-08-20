@@ -4,6 +4,10 @@ import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+function cleanGitEnvironment(environment = process.env) {
+  return Object.fromEntries(Object.entries(environment).filter(([name]) => !/^GIT_/i.test(name)));
+}
+
 export const MAX_STDIN_BYTES = 1024 * 1024;
 export const MAX_INDEX_BYTES = 2 * 1024 * 1024;
 export const MAX_INDEX_ENTRIES = 20000;
@@ -27,7 +31,7 @@ function isCommit(command, depth = 0) {
 }
 
 function runGit(cwd, args, limit = MAX_INDEX_BYTES) {
-  const result = spawnSync('git', args, { cwd, encoding: 'buffer', timeout: 5000, maxBuffer: limit });
+  const result = spawnSync('git', args, { cwd, encoding: 'buffer', timeout: 5000, maxBuffer: limit, env: cleanGitEnvironment() });
   if (result.status !== 0 || result.error || result.stdout.length > limit) throw new Error('git inspection failed');
   return result.stdout;
 }
@@ -44,7 +48,7 @@ function indexModes(buffer) {
 }
 
 function headModes(cwd) {
-  const present = spawnSync('git', ['rev-parse', '--verify', 'HEAD'], { cwd, encoding: 'utf8', timeout: 3000, maxBuffer: 4096 });
+  const present = spawnSync('git', ['rev-parse', '--verify', 'HEAD'], { cwd, encoding: 'utf8', timeout: 3000, maxBuffer: 4096, env: cleanGitEnvironment() });
   if (present.status !== 0) return new Map();
   const raw = runGit(cwd, ['ls-tree', '-r', '-z', 'HEAD']);
   const modes = new Map();

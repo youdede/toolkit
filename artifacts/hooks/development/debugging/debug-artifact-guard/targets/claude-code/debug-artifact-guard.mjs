@@ -5,6 +5,10 @@ import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+function cleanGitEnvironment(environment = process.env) {
+  return Object.fromEntries(Object.entries(environment).filter(([name]) => !/^GIT_/i.test(name)));
+}
+
 export const MAX_STDIN_BYTES = 1024 * 1024;
 export const MAX_STAGED_FILE_BYTES = 2 * 1024 * 1024;
 export const MAX_GIT_BUFFER_BYTES = 16 * 1024 * 1024;
@@ -184,7 +188,8 @@ function git(args, cwd, encoding = 'utf8') {
     encoding,
     stdio: ['ignore', 'pipe', 'pipe'],
     timeout: 10_000,
-    maxBuffer: MAX_GIT_BUFFER_BYTES
+    maxBuffer: MAX_GIT_BUFFER_BYTES,
+    env: cleanGitEnvironment()
   });
   if (result.error || result.status !== 0) {
     const detail = String(result.stderr || result.error?.message || 'unknown Git error').trim().slice(0, 300);

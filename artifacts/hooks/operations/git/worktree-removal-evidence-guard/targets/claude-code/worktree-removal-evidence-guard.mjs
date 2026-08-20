@@ -4,6 +4,10 @@ import { lstatSync, realpathSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
+function cleanGitEnvironment(environment = process.env) {
+  return Object.fromEntries(Object.entries(environment).filter(([name]) => !/^GIT_/i.test(name)));
+}
+
 export const MAX_STDIN_BYTES = 1024 * 1024;
 export const MAX_GIT_OUTPUT_BYTES = 1024 * 1024;
 
@@ -18,7 +22,8 @@ export function collectContext(input) {
       encoding: 'utf8',
       timeout: 5000,
       maxBuffer: MAX_GIT_OUTPUT_BYTES,
-      stdio: ['ignore', 'pipe', 'pipe']
+      stdio: ['ignore', 'pipe', 'pipe'],
+      env: cleanGitEnvironment()
     });
     if (result.error || result.status !== 0) return { inspectionError: 'git-status-unavailable' };
     const changes = result.stdout.split(/\r?\n/).filter(Boolean);

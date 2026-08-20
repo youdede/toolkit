@@ -4,6 +4,10 @@ import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+function cleanGitEnvironment(environment = process.env) {
+  return Object.fromEntries(Object.entries(environment).filter(([name]) => !/^GIT_/i.test(name)));
+}
+
 export const MAX_STDIN_BYTES = 1024 * 1024;
 export const MAX_FILES = 50;
 export const MAX_CHANGED_LINES = 1200;
@@ -27,7 +31,7 @@ function commitCommand(value, depth = 0) {
 }
 
 function git(cwd, args, maxBuffer = 2 * 1024 * 1024) {
-  const result = spawnSync('git', args, { cwd, encoding: 'utf8', timeout: 5000, maxBuffer });
+  const result = spawnSync('git', args, { cwd, encoding: 'utf8', timeout: 5000, maxBuffer, env: cleanGitEnvironment() });
   if (result.status !== 0 || result.error) throw new Error('git inspection failed');
   return result.stdout;
 }
@@ -42,9 +46,9 @@ function measure(cwd) {
     totals.files += 1;
     if (totals.files > 10000) throw new Error('file count inspection bound exceeded');
     if (match[1] === '-' || match[2] === '-') {
-      const staged = spawnSync('git', ['cat-file', '-s', `:${match[3]}`], { cwd, encoding: 'utf8', timeout: 5000, maxBuffer: 4096 });
+      const staged = spawnSync('git', ['cat-file', '-s', `:${match[3]}`], { cwd, encoding: 'utf8', timeout: 5000, maxBuffer: 4096, env: cleanGitEnvironment() });
       if (staged.status !== 0) {
-        const previous = spawnSync('git', ['cat-file', '-e', `HEAD:${match[3]}`], { cwd, encoding: 'utf8', timeout: 5000, maxBuffer: 4096 });
+        const previous = spawnSync('git', ['cat-file', '-e', `HEAD:${match[3]}`], { cwd, encoding: 'utf8', timeout: 5000, maxBuffer: 4096, env: cleanGitEnvironment() });
         if (previous.status === 0) continue;
         throw new Error('binary size unavailable');
       }

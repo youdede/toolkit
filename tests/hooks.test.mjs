@@ -202,3 +202,34 @@ test('shell command guard process fails closed without echoing command content',
   assert.equal(allowed.status, 0);
   assert.equal(allowed.stderr, '');
 });
+
+test('a guard inspects its own working directory even when GIT_DIR points elsewhere', (context) => {
+  // A guard runs wherever the agent runs it. Inside a git hook, or in any shell that exports
+  // GIT_DIR, git resolves the repository from that variable and ignores cwd. A guard that passes
+  // its environment straight through therefore inspects a repository nobody asked about, and
+  // reports its findings as if they came from the project in front of it.
+  const target = mkdtempSync(path.join(os.tmpdir(), 'youdede-guard-target-'));
+  const decoy = mkdtempSync(path.join(os.tmpdir(), 'youdede-guard-decoy-'));
+  context.after(() => rmSync(target, { recursive: true, force: true }));
+  context.after(() => rmSync(decoy, { recursive: true, force: true }));
+
+  for (const repository of [target, decoy]) git(repository, ['init', '-q']);
+
+  // Only the target stages a secret. The decoy stages a clean file.
+  const fixtureToken = ['ghp', 'abcdefghijklmnopqrstuvwxyz1234567890AB'].join('_');
+  writeFileSync(path.join(target, 'app.js'), `export const token = "${fixtureToken}";\n`);
+  git(target, ['add', 'app.js']);
+  writeFileSync(path.join(decoy, 'app.js'), 'export const value = 1;\n');
+  git(decoy, ['add', 'app.js']);
+
+  const previous = process.env.GIT_DIR;
+  process.env.GIT_DIR = path.join(decoy, '.git');
+  context.after(() => {
+    if (previous === undefined) delete process.env.GIT_DIR;
+    else process.env.GIT_DIR = previous;
+  });
+
+  const verdict = evaluateCommit({ cwd: target, tool_input: { command: 'git commit -m "unsafe"' } });
+  assert.equal(verdict.exitCode, 2, 'the guard must read the staged secret in its own working directory');
+  assert.match(verdict.message, /potential GitHub token/);
+});

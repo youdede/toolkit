@@ -21,6 +21,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 
 ### Fixed
 
+- Twelve guards and helper scripts passed their environment straight to `git`, so an inherited `GIT_DIR` made them inspect a repository other than the one they were pointed at, and report the result as if it came from the project in front of them. They now strip every `GIT_*` variable, matching the convention `protected-branch-guard` already used.
 - `remove --force` resolved the hook marker from the entry being removed rather than from recorded state, so a forced removal could delete a marker it never installed.
 - Concurrent installs shared no lock, and a refused install created a configuration root as a side effect.
 - Subagent validation assumed a single target shape and rejected targets that identify an agent by filename.

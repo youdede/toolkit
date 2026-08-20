@@ -4,6 +4,10 @@ import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+function cleanGitEnvironment(environment = process.env) {
+  return Object.fromEntries(Object.entries(environment).filter(([name]) => !/^GIT_/i.test(name)));
+}
+
 export const MAX_STDIN_BYTES = 1024 * 1024;
 export const MAX_COMMAND_BYTES = 256 * 1024;
 
@@ -55,7 +59,8 @@ export function collectContext(input, cwd = process.cwd()) {
   try {
     const repository = path.resolve(process.env.CLAUDE_PROJECT_DIR || input?.cwd || cwd);
     const configured = spawnSync('git', ['config', '--bool', '--get', 'commit.gpgSign'], {
-      cwd: repository, encoding: 'utf8', timeout: 3000, maxBuffer: 4096
+      cwd: repository, encoding: 'utf8', timeout: 3000, maxBuffer: 4096,
+      env: cleanGitEnvironment()
     });
     if (configured.error || ![0, 1].includes(configured.status)) throw new Error('git config inspection failed');
     return { ...intent, configured: configured.status === 0 && configured.stdout.trim() === 'true' };

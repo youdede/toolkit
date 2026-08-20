@@ -4,6 +4,10 @@ import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+function cleanGitEnvironment(environment = process.env) {
+  return Object.fromEntries(Object.entries(environment).filter(([name]) => !/^GIT_/i.test(name)));
+}
+
 export const MAX_STDIN_BYTES = 1024 * 1024;
 export const MAX_LOCKFILE_BYTES = 2 * 1024 * 1024;
 export const MAX_LOCKFILES = 24;
@@ -104,7 +108,7 @@ export function scanPackageLock(content) {
 }
 
 function git(cwd, args, maxBuffer = MAX_LOCKFILE_BYTES + 1024) {
-  const result = spawnSync('git', args, { cwd, encoding: 'utf8', timeout: 5000, maxBuffer });
+  const result = spawnSync('git', args, { cwd, encoding: 'utf8', timeout: 5000, maxBuffer, env: cleanGitEnvironment() });
   if (result.status !== 0 || result.error) throw new Error('git inspection failed');
   return result.stdout;
 }
