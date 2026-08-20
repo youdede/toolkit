@@ -4,7 +4,7 @@
   "id": "skill/operations/agent-orchestration/execute-verifiable-plan",
   "slug": "execute-verifiable-plan",
   "name": "Execute Verifiable Plan",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Execute an approved plan in bounded batches with checkpoints, evidence, and controlled deviation.",
   "description": "Execute an approved implementation plan by validating prerequisites, working in bounded batches, collecting evidence, and escalating material deviations. Use when a reviewed plan already exists and the task requires disciplined delivery rather than replanning from scratch.",
@@ -27,7 +27,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not treat an old plan as authority over current evidence.",

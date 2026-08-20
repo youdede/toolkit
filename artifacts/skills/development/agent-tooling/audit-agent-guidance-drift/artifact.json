@@ -4,7 +4,7 @@
   "id": "skill/development/agent-tooling/audit-agent-guidance-drift",
   "slug": "audit-agent-guidance-drift",
   "name": "Audit Agent Guidance Drift",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Audit agent guidance against repository changes and propose only evidence-backed minimal corrections.",
   "description": "Audit AGENTS.md, CLAUDE.md, and equivalent scoped guidance for stale paths, false commands, contradictory precedence, or newly durable invariants. Use before integration or after structural repository changes when agent instructions may have drifted.",
@@ -29,7 +29,7 @@
   "risk": "low",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not turn guidance into a changelog or inventory of obvious code facts.",

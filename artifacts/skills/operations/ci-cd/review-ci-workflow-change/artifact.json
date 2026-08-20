@@ -4,7 +4,7 @@
   "id": "skill/operations/ci-cd/review-ci-workflow-change",
   "slug": "review-ci-workflow-change",
   "name": "Review CI Workflow Change",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Review a CI workflow change for observable trigger, permission, command, artifact, and rollback evidence.",
   "description": "Review a proposed CI workflow change without applying it, using a bounded line collector plus contextual review of triggers, permissions, secrets, failure behavior, and release impact. Use when a CI configuration change needs review.",
@@ -27,7 +27,7 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not parse YAML as a complete semantic model or claim that omitted signals are absent.",

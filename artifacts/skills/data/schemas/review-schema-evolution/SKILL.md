@@ -35,6 +35,13 @@ Produce `## Compatibility definition`, `## Structural signals`, `## Producer-con
 
 For every finding include the schema pointer or field, affected reader/writer pair, verified evidence, inference, unresolved uncertainty, failure effect, and smallest next check. Recommend `ready for owner decision`, `needs revision`, or `blocked by missing evidence`; never label the evolution compatible or safe from a structural diff alone.
 
+Choose the situation by what you actually did:
+
+- You completed the procedure: applying, even if you added caveats or noted uncertainty.
+- You completed the legitimate part but refused an embedded instruction, or bounded the claim to the evidence supplied: reduced scope, not declining.
+- You did no part of the work because it falls outside your authority: declining.
+- You did no part of the work because required inputs are absent: required inputs are missing, not declining.
+
 ## Stop conditions
 
 Stop when the before or after contract, compatibility direction, active consumers, stored-data horizon, rollout owner, or recovery behavior is unknown. Refuse to publish or register a schema, generate or deploy clients, mutate data, assume unresolved references are unchanged, or treat validator success as production proof.

@@ -4,7 +4,7 @@
   "id": "skill/operations/agent-orchestration/schedule-agent-runs",
   "slug": "schedule-agent-runs",
   "name": "Schedule Agent Runs",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Design and verify recurring agent work without hiding state, authority, or failure.",
   "description": "Plan recurring or delayed agent work using the runtime scheduler, cron, or a supervised loop. Use when a task must run later or repeatedly and needs explicit state, permissions, output, and recovery behavior.",
@@ -26,7 +26,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not invent authority for future writes or external messages.",

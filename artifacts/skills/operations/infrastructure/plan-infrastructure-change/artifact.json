@@ -4,7 +4,7 @@
   "id": "skill/operations/infrastructure/plan-infrastructure-change",
   "slug": "plan-infrastructure-change",
   "name": "Plan Infrastructure Change",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Plan an infrastructure change from current state through staged transition, verification, and recovery.",
   "description": "Plan or review a Terraform, OpenTofu, Kubernetes, cloud, network, or platform change using current state, dependency and blast-radius evidence, staged transitions, policy checks, and recovery proof. Use before applying infrastructure-as-code or changing shared infrastructure.",
@@ -31,7 +31,7 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not run apply, destroy, import, state edit, kubectl write, or cloud mutation without explicit scoped authority.",

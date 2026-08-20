@@ -4,7 +4,7 @@
   "id": "subagent/operations/ci-cd/ci-failure-analyst",
   "slug": "ci-failure-analyst",
   "name": "CI Failure Analyst",
-  "version": "1.0.0",
+  "version": "1.4.0",
   "kind": "subagent",
   "summary": "Analyze one bounded CI failure for evidenced cause, discriminating checks, and safe next steps.",
   "description": "Analyze supplied logs and repository context for a single failed CI job or workflow to distinguish an evidenced cause from hypotheses. Use after a CI failure when the parent needs read-only root-cause analysis without rerunning jobs or editing configuration.",
@@ -26,7 +26,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not rerun jobs, modify workflows, push commits, or change CI secrets and permissions.",

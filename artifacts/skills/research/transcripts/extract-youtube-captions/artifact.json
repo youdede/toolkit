@@ -4,7 +4,7 @@
   "id": "skill/research/transcripts/extract-youtube-captions",
   "slug": "extract-youtube-captions",
   "name": "Extract Youtube Captions",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Extract available YouTube captions into clean text without downloading media.",
   "description": "Fetch manual or automatic captions from a YouTube URL with yt-dlp, normalize them into a safe text file, and preserve language and provenance. Use when the user requests captions or a transcript, not audio transcription.",
@@ -26,7 +26,7 @@
   "risk": "low",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not bypass access controls, geographic restrictions, or authentication challenges.",

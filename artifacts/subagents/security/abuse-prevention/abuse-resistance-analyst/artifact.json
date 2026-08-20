@@ -4,7 +4,7 @@
   "id": "subagent/security/abuse-prevention/abuse-resistance-analyst",
   "slug": "abuse-resistance-analyst",
   "name": "Abuse Resistance Analyst",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "subagent",
   "summary": "Analyze one operation for attacker-controlled cost amplification, fanout, and quota bypass.",
   "description": "A narrow, read-only specialist whose outcome is to show a reachable low-cost input that creates disproportionate compute, storage, queue, or third-party work beyond a stated limit. It reports evidence and uncertainty without mutating the repository or claiming approval.",
@@ -26,7 +26,7 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not run denial-of-service tests or generate abusive traffic.",

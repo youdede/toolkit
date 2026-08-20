@@ -4,7 +4,7 @@
   "id": "skill/data/quality/design-data-pipeline-change",
   "slug": "design-data-pipeline-change",
   "name": "Design Data Pipeline Change",
-  "version": "1.0.0",
+  "version": "1.4.0",
   "kind": "skill",
   "summary": "Design a data-pipeline transition with explicit contracts, replay safety, backfill controls, and reconciliation.",
   "description": "Design or review a batch, streaming, ETL, ELT, or dbt pipeline change across producer and consumer contracts, idempotency, backfills, dual running, reconciliation, cutover, and recovery. Use before changing a governed data flow or replaying historical data.",
@@ -32,7 +32,7 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not run production queries, jobs, migrations, backfills, or cutovers without explicit scoped authorization.",

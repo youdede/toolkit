@@ -4,7 +4,7 @@
   "id": "subagent/development/testing/flaky-test-diagnostician",
   "slug": "flaky-test-diagnostician",
   "name": "Flaky Test Diagnostician",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "subagent",
   "summary": "Diagnose repeated-test instability from supplied run evidence without rerunning, quarantining, or editing tests.",
   "description": "A narrow read-only specialist that separates deterministic defects from order, timing, resource, randomness, and environment-sensitive test failures using repeated-run evidence.",
@@ -31,7 +31,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "Do not run or rerun tests, change seeds, alter worker counts, or operate CI.",

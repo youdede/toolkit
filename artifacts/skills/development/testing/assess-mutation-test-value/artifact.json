@@ -4,7 +4,7 @@
   "id": "skill/development/testing/assess-mutation-test-value",
   "slug": "assess-mutation-test-value",
   "name": "Assess Mutation Test Value",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Use bounded mutation testing to expose weak assertions while separating equivalent and irrelevant mutants.",
   "description": "Plan or assess a bounded mutation-testing exercise by selecting consequential code, defining budgets, triaging survivors, and improving observable assertions. Use when coverage is high but test effectiveness remains uncertain.",
@@ -31,7 +31,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not optimize for a universal mutation-score threshold or add assertions that mirror implementation details.",

@@ -4,7 +4,7 @@
   "id": "skill/operations/agent-orchestration/audit-agent-workflow-opportunities",
   "slug": "audit-agent-workflow-opportunities",
   "name": "Audit Agent Workflow Opportunities",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Discover durable agent-workflow improvements from one failed run or a bounded history window.",
   "description": "Analyze one agent run or a consented bounded window of local agent history to find repeated corrections, manual sequences, and preventable failures worth encoding. Use when deciding what should become guidance, a skill, hook, subagent, tool, or automation.",
@@ -28,7 +28,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not ingest an unbounded transcript corpus or retain raw sensitive history.",

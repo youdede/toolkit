@@ -4,7 +4,7 @@
   "id": "skill/data/migrations/review-database-migration-plan",
   "slug": "review-database-migration-plan",
   "name": "Review Database Migration Plan",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Review a database migration plan for explicit SQL hazards and an evidenced rollout, rollback, lock, and backfill plan.",
   "description": "Review a proposed database schema or data migration before it is executed by separating deterministic high-confidence SQL hazards from contextual rollout, rollback, lock, and backfill judgment. Use when a migration plan or SQL change needs review.",
@@ -27,7 +27,7 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not execute SQL, apply a migration, or approve a production change.",

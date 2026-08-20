@@ -4,7 +4,7 @@
   "id": "skill/security/supply-chain/review-supply-chain-change",
   "slug": "review-supply-chain-change",
   "name": "Review Supply Chain Change",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Review changed package and build inputs from bounded, offline repository evidence.",
   "description": "Review a proposed software supply-chain change without executing package managers or querying external services, using a bounded collector for manifests, lockfiles, lifecycle scripts, and CI action references. Use before merge when dependency-source or build-input changes need evidence-led security review.",
@@ -27,7 +27,7 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not install, update, resolve, execute, quarantine, or remove dependencies or workflow actions.",

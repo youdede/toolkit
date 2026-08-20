@@ -4,7 +4,7 @@
   "id": "skill/development/code-quality/simplify-code-with-invariants",
   "slug": "simplify-code-with-invariants",
   "name": "Simplify Code With Invariants",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Simplify a bounded code path while preserving observable behavior and repository conventions.",
   "description": "Simplify a bounded implementation by identifying its invariants, consumers, accidental complexity, and available repository patterns, then proving behavior is preserved. Use when code is difficult to reason about but a rewrite would be unnecessarily risky.",
@@ -27,7 +27,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not delete behavior because it appears unused without repository evidence.",

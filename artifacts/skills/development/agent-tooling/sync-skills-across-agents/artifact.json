@@ -4,7 +4,7 @@
   "id": "skill/development/agent-tooling/sync-skills-across-agents",
   "slug": "sync-skills-across-agents",
   "name": "Sync Skills Across Agents",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Synchronize a skill across configured agent roots without assuming personal paths.",
   "description": "Discover configured skill roots for multiple agent runtimes and synchronize one validated skill with collision, symlink, and removal safeguards. Use when the same portable skill should be available to more than one agent.",
@@ -26,7 +26,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not assume hardcoded personal directories or undocumented runtime behavior.",

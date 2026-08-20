@@ -4,7 +4,7 @@
   "id": "skill/data/databases/query-production-readonly",
   "slug": "query-production-readonly",
   "name": "Query Production Readonly",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Answer a bounded question from production data without mutating or exporting it.",
   "description": "Run a minimal, bounded, read-only production database query and report aggregate evidence safely. Use when a specific operational question cannot be answered from lower-risk telemetry or replicas.",
@@ -26,7 +26,7 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not execute writes, DDL, procedures with side effects, or lock-heavy analysis.",

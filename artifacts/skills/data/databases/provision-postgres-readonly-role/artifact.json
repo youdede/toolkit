@@ -4,7 +4,7 @@
   "id": "skill/data/databases/provision-postgres-readonly-role",
   "slug": "provision-postgres-readonly-role",
   "name": "Provision Postgres Readonly Role",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Design and verify a least-privilege PostgreSQL role for bounded read access.",
   "description": "Prepare reviewed PostgreSQL SQL for a login role that defaults to read-only, has bounded execution, and excludes sensitive relations. Use when humans need to grant an analyst or agent production read access.",
@@ -26,7 +26,7 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not grant SUPERUSER, BYPASSRLS, write privileges, or role administration.",

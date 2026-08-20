@@ -4,7 +4,7 @@
   "id": "skill/operations/release/verify-mobile-release-readiness",
   "slug": "verify-mobile-release-readiness",
   "name": "Verify Mobile Release Readiness",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Verify a mobile release candidate across identity, signing evidence, journeys, compatibility, rollout, and recovery.",
   "description": "Verify iOS or Android release readiness using an exact build identity, source revision, test devices, critical journeys, permissions, privacy declarations, signing evidence, store configuration, staged rollout, and recovery plan. Use before submission or phased release.",
@@ -30,7 +30,7 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not access signing keys, upload builds, submit store reviews, change rollout state, or publish without explicit authority.",

@@ -4,7 +4,7 @@
   "id": "skill/development/code-quality/deliver-incremental-change",
   "slug": "deliver-incremental-change",
   "name": "Deliver Incremental Change",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Deliver a change in independently verifiable slices that preserve a working system.",
   "description": "Break and deliver a bounded implementation in vertical, behaviorally verifiable slices with explicit invariants, checkpoints, and integration evidence. Use when a change is too large for one safe edit but can progress without speculative scaffolding.",
@@ -27,7 +27,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not build unused layers or abstractions for hypothetical future slices.",

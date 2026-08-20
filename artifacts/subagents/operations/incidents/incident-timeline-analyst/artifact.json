@@ -4,7 +4,7 @@
   "id": "subagent/operations/incidents/incident-timeline-analyst",
   "slug": "incident-timeline-analyst",
   "name": "Incident Timeline Analyst",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "subagent",
   "summary": "Reconstruct a bounded incident chronology while separating observations, contradictions, and causal hypotheses.",
   "description": "A narrow, read-only specialist whose outcome is to produce a normalized timeline that establishes what happened when without converting correlation into root cause. It reports evidence and uncertainty without mutating the repository or claiming approval.",
@@ -25,7 +25,7 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not assign blame or invent missing events.",

@@ -4,7 +4,7 @@
   "id": "skill/writing/documentation/audit-knowledge-state-freshness",
   "slug": "audit-knowledge-state-freshness",
   "name": "Audit Knowledge State Freshness",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Audit current-state claims in notes or agent memory against newer evidence without rewriting history.",
   "description": "Audit a bounded notes collection, project memory, or always-loaded context for current-state claims contradicted by newer evidence. Use when an agent gives stale answers or a knowledge base may mix mutable state with append-only events.",
@@ -28,7 +28,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not bulk-restructure notes or rewrite append-only history.",

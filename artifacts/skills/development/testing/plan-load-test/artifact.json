@@ -4,7 +4,7 @@
   "id": "skill/development/testing/plan-load-test",
   "slug": "plan-load-test",
   "name": "Plan Load Test",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Design a capacity experiment with a representative workload, safety envelope, observability, and stop rules.",
   "description": "Plan a bounded load, stress, soak, or spike test from a representative workload model, service objectives, production safeguards, observability, and explicit abort criteria. Use before testing capacity or claiming performance at scale.",
@@ -30,7 +30,7 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not run load against production, third-party systems, or shared environments without explicit scoped authorization.",

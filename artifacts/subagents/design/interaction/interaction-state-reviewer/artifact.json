@@ -4,7 +4,7 @@
   "id": "subagent/design/interaction/interaction-state-reviewer",
   "slug": "interaction-state-reviewer",
   "name": "Interaction State Reviewer",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "subagent",
   "summary": "Review one user journey for complete, coherent, and recoverable interaction-state transitions.",
   "description": "A narrow, read-only specialist whose outcome is to find a reachable event that leaves the user in a missing, contradictory, duplicate, or unrecoverable interface state. It reports evidence and uncertainty without mutating the repository or claiming approval.",
@@ -27,7 +27,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not perform accessibility, performance, or aesthetic review.",

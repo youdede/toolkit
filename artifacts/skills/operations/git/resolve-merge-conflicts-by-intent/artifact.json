@@ -4,7 +4,7 @@
   "id": "skill/operations/git/resolve-merge-conflicts-by-intent",
   "slug": "resolve-merge-conflicts-by-intent",
   "name": "Resolve Merge Conflicts By Intent",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Resolve Git conflicts by reconstructing both changes, preserving intent, and verifying the merged behavior.",
   "description": "Resolve an in-progress merge, rebase, or cherry-pick by tracing each side to its intent, selecting an explicit combined behavior, and verifying the resulting history. Use when conflict markers require semantic rather than mechanical resolution.",
@@ -30,7 +30,7 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not automatically abort, continue, commit, push, or force-update history.",

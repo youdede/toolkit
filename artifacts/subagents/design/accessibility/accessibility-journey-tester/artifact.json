@@ -4,7 +4,7 @@
   "id": "subagent/design/accessibility/accessibility-journey-tester",
   "slug": "accessibility-journey-tester",
   "name": "Accessibility Journey Tester",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "subagent",
   "summary": "Verify a bounded user journey from supplied browser, keyboard, assistive-technology, and static evidence.",
   "description": "A read-only accessibility tester that reconciles supplied runtime observations with semantics and code while clearly separating tested behavior from unassessed criteria.",
@@ -34,7 +34,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "Do not claim to run a browser, accessibility scanner, keyboard session, screen reader, or device when only files and supplied evidence were inspected.",

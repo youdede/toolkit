@@ -4,7 +4,7 @@
   "id": "subagent/operations/capacity/capacity-risk-analyst",
   "slug": "capacity-risk-analyst",
   "name": "Capacity Risk Analyst",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "subagent",
   "summary": "Analyze measured demand, service rate, queues, and limits to expose a bounded saturation threshold.",
   "description": "A narrow, read-only specialist whose outcome is to derive the load or time threshold at which a named resource violates required headroom or queue stability. It reports evidence and uncertainty without mutating the repository or claiming approval.",
@@ -26,7 +26,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not invent traffic, service rates, growth, or pricing.",

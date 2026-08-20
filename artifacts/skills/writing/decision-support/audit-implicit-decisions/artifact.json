@@ -4,7 +4,7 @@
   "id": "skill/writing/decision-support/audit-implicit-decisions",
   "slug": "audit-implicit-decisions",
   "name": "Audit Implicit Decisions",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Expose uncertain choices made during work and compare credible alternatives.",
   "description": "Audit the current work for consequential choices that were made implicitly or with low confidence, then present alternatives and evidence. Use before approval, handoff, or when the user asks what assumptions remain.",
@@ -26,12 +26,12 @@
   "risk": "low",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not list every minor implementation choice or restate settled requirements.",
     "It does not pretend uncertainty merely to create discussion.",
-    "It does not rewrite project decisions without the owner’s confirmation."
+    "It does not rewrite project decisions without the owner\u2019s confirmation."
   ],
   "execution": {
     "mode": "prompt",

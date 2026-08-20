@@ -4,7 +4,7 @@
   "id": "subagent/data/migrations/migration-risk-reviewer",
   "slug": "migration-risk-reviewer",
   "name": "Migration Risk Reviewer",
-  "version": "1.0.0",
+  "version": "1.4.0",
   "kind": "subagent",
   "summary": "Review a bounded schema or data migration for compatibility, integrity, lock, and recovery risk.",
   "description": "Review a supplied migration delta for old-and-new application compatibility, data integrity, locking, backfill, deployment ordering, and rollback evidence. Use before merging a schema or data migration; reports scoped risks without running it.",
@@ -26,7 +26,7 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not execute migrations, backfills, queries, or database administration commands.",

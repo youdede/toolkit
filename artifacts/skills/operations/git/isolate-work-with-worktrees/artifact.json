@@ -4,7 +4,7 @@
   "id": "skill/operations/git/isolate-work-with-worktrees",
   "slug": "isolate-work-with-worktrees",
   "name": "Isolate Work With Worktrees",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Isolate concurrent Git work and integrate only reviewed, verified changes.",
   "description": "Create and manage a dedicated Git worktree for an independent change, including environment isolation, verification, and deliberate integration. Use when parallel work would otherwise share files, state, or a branch.",
@@ -27,7 +27,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not force-remove a worktree or discard uncommitted changes.",

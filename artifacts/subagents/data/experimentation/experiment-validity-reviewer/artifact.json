@@ -4,7 +4,7 @@
   "id": "subagent/data/experimentation/experiment-validity-reviewer",
   "slug": "experiment-validity-reviewer",
   "name": "Experiment Validity Reviewer",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "subagent",
   "summary": "Review a bounded experiment for randomization, exposure, contamination, stopping, and analysis validity.",
   "description": "A narrow, read-only specialist whose outcome is to identify a design or analysis mechanism that can bias the claimed treatment comparison. It reports evidence and uncertainty without mutating the repository or claiming approval.",
@@ -26,7 +26,7 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not declare a winner or causal effect without valid supplied results.",

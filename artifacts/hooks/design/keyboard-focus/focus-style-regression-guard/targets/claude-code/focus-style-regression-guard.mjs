@@ -32,6 +32,9 @@ function invisible(state) {
   const visible = [...state].some(([property, value]) => /^(?:box-shadow|border(?:-color|-width|-style)?|text-decoration|background(?:-color)?|filter)$/.test(property) && !/^(?:none|transparent|0(?:\D|$)|initial|inherit|unset)$/.test(value));
   return !visible;
 }
+// The element a focus state applies to, ignoring which focus pseudo-class expresses it.
+export function focusSubject(selector) { return normalizedSelector(selector.replace(/:focus(?:-visible|-within)?\b/gi, '')); }
+
 export function evaluate(input, context = {}) {
   if (!input || typeof input !== 'object' || !input.tool_name) return block('focus-style-regression-input-invalid', 'the hook envelope is incomplete');
   if (!/^(?:Write|Edit|MultiEdit)$/.test(input.tool_name)) return allow();
@@ -39,7 +42,20 @@ export function evaluate(input, context = {}) {
   const file = context.file || input.tool_input.file_path || input.tool_input.file; if (!cssFile(file)) return allow();
   if (!context.complete) return block('focus-style-unverified', 'the stylesheet edit could not be reconstructed');
   const before = focusStates(context.before || ''); const after = focusStates(context.proposed || '');
-  for (const [selector, state] of after) if (invisible(state) && !invisible(before.get(selector) || new Map())) return block('focus-indicator-removed', 'a focus selector disables its indicator without a visible replacement');
+
+  // Suppressing the always-on ring and restoring it for keyboard users is the recommended
+  // pattern, not a regression, so the two rules are judged together by subject. A
+  // `:focus-visible` rule has no such fallback: if it goes invisible the keyboard indicator is
+  // gone, and it is still blocked.
+  const coveredSubjects = new Set();
+  for (const [selector, state] of after) if (!invisible(state)) coveredSubjects.add(focusSubject(selector));
+
+  for (const [selector, state] of after) {
+    if (!invisible(state)) continue;
+    if (invisible(before.get(selector) || new Map())) continue;
+    if (!/:focus-visible\b/i.test(selector) && coveredSubjects.has(focusSubject(selector))) continue;
+    return block('focus-indicator-removed', 'a focus selector disables its indicator without a visible replacement');
+  }
   return allow();
 }
 

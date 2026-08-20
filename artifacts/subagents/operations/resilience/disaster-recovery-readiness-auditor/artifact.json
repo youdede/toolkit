@@ -4,7 +4,7 @@
   "id": "subagent/operations/resilience/disaster-recovery-readiness-auditor",
   "slug": "disaster-recovery-readiness-auditor",
   "name": "Disaster Recovery Readiness Auditor",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "subagent",
   "summary": "Audit recovery objectives against backup, restore, failover, dependency, and exercise evidence.",
   "description": "A narrow, read-only specialist whose outcome is to determine which recovery claim lacks an evidence chain from objective through tested restoration and dependency recovery. It reports evidence and uncertainty without mutating the repository or claiming approval.",
@@ -26,7 +26,7 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not execute restore, failover, failback, or destructive exercises.",

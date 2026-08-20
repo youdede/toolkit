@@ -4,7 +4,7 @@
   "id": "skill/data/schemas/review-schema-evolution",
   "slug": "review-schema-evolution",
   "name": "Review Schema Evolution",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "kind": "skill",
   "summary": "Review schema evolution across real readers, writers, stored records, rollout order, compatibility policy, and recovery.",
   "description": "Review a data-contract or serialization-schema change against named producers, consumers, stored records, compatibility semantics, rollout order, and rollback evidence. Use before changing JSON Schema, event, message, file, or service data contracts, especially when independently deployed consumers are involved.",
@@ -30,7 +30,7 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not declare compatibility, safety, or rollback success from structural comparison or validation alone.",

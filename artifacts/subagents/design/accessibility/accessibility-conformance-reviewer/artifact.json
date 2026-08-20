@@ -4,7 +4,7 @@
   "id": "subagent/design/accessibility/accessibility-conformance-reviewer",
   "slug": "accessibility-conformance-reviewer",
   "name": "Accessibility Conformance Reviewer",
-  "version": "1.0.0",
+  "version": "1.4.0",
   "kind": "subagent",
   "summary": "Review a bounded interface change for evidence-led accessibility conformance risks and user barriers.",
   "description": "Review a supplied interface change against named accessibility criteria, user journeys, semantics, and available test evidence. Use before integration when a parent needs bounded read-only accessibility findings rather than implementation or certification.",
@@ -28,7 +28,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not edit interface code, styles, tests, design tokens, or accessibility configuration.",

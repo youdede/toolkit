@@ -4,7 +4,7 @@
   "id": "skill/operations/reviewability/decompose-dependent-work-slices",
   "slug": "decompose-dependent-work-slices",
   "name": "Decompose Dependent Work Slices",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Decompose approved work into independently verifiable vertical slices with an acyclic dependency graph.",
   "description": "Decompose a plan or specification into bounded vertical work items, explicit acceptance evidence, and verified blocking edges. Use when work must be delegated or sequenced without losing end-to-end value.",
@@ -30,7 +30,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not split work into database, backend, frontend, and test layers that are unusable alone.",

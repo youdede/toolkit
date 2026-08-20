@@ -4,7 +4,7 @@
   "id": "subagent/operations/infrastructure/cloud-iac-policy-reviewer",
   "slug": "cloud-iac-policy-reviewer",
   "name": "Cloud IaC Policy Reviewer",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "subagent",
   "summary": "Review a bounded infrastructure plan for lifecycle, identity, network, data, policy, and rollback risk.",
   "description": "A read-only cloud and infrastructure-as-code specialist that reconciles configuration, plans, policy results, state identity, and rollout constraints without operating infrastructure.",
@@ -33,7 +33,7 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "Do not initialize providers, refresh state, plan, apply, destroy, import, move state, or call cloud APIs.",

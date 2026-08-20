@@ -4,7 +4,7 @@
   "id": "skill/development/agent-tooling/author-deterministic-agent-hook",
   "slug": "author-deterministic-agent-hook",
   "name": "Author Deterministic Agent Hook",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Author a narrow deterministic agent hook whose native event and failure semantics are tested.",
   "description": "Design, implement, and validate a deterministic coding-agent hook from a precise invariant or observation requirement. Use when a repeated must-block or must-observe boundary should be enforced through a runtime-native hook rather than prompt compliance.",
@@ -29,7 +29,7 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not claim portability when target events, payloads, blocking exits, or timeout behavior differ materially.",

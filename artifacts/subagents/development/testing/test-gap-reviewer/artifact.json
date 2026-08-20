@@ -4,7 +4,7 @@
   "id": "subagent/development/testing/test-gap-reviewer",
   "slug": "test-gap-reviewer",
   "name": "Test gap reviewer",
-  "version": "1.0.0",
+  "version": "1.4.0",
   "kind": "subagent",
   "summary": "Find meaningful unproved behaviors in a bounded change without writing or running tests.",
   "description": "A read-only Claude Code specialist that maps intended behavior to tests and reports high-confidence regression, boundary, error, integration, and durability gaps.",
@@ -26,7 +26,7 @@
   "risk": "low",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not write tests, snapshots, fixtures, production code, or configuration.",

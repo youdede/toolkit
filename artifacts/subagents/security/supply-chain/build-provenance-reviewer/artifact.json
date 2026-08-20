@@ -4,7 +4,7 @@
   "id": "subagent/security/supply-chain/build-provenance-reviewer",
   "slug": "build-provenance-reviewer",
   "name": "Build Provenance Reviewer",
-  "version": "1.0.0",
+  "version": "1.4.0",
   "kind": "subagent",
   "summary": "Review a named build subject for evidence-backed provenance identity-chain gaps.",
   "description": "Review an exact build subject and supplied provenance, attestation, builder, verifier, and SBOM records for identity-chain mismatches or missing proof. Use when a parent needs a narrow read-only provenance review without artifact mutation, network retrieval, cryptographic verification, or release approval.",
@@ -26,7 +26,7 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not modify, fetch, rebuild, sign, attest, publish, quarantine, or delete artifacts or evidence.",

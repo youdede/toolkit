@@ -4,7 +4,7 @@
   "id": "skill/development/agent-tooling/write-folder-agent-guidance",
   "slug": "write-folder-agent-guidance",
   "name": "Write Folder Agent Guidance",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Write scoped agent guidance files that inherit cleanly and avoid contradiction.",
   "description": "Create or update folder-scoped agent instruction files after inspecting runtime precedence and repository boundaries. Use when a subtree needs commands or constraints that differ from the repository root.",
@@ -26,7 +26,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not duplicate the root guidance into every folder.",

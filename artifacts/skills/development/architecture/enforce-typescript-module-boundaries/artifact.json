@@ -4,7 +4,7 @@
   "id": "skill/development/architecture/enforce-typescript-module-boundaries",
   "slug": "enforce-typescript-module-boundaries",
   "name": "Enforce TypeScript Module Boundaries",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Detect and enforce TypeScript package entry-point boundaries without assuming one repository layout.",
   "description": "Inspect and enforce TypeScript module boundaries so consumers import through declared entry points while internals remain local. Use when deep imports, package cycles, or test access make contracts and refactors unreliable.",
@@ -31,7 +31,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not install or overwrite a dependency-analysis tool before inspecting existing configuration.",

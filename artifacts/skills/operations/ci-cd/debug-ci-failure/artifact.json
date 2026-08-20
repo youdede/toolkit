@@ -4,7 +4,7 @@
   "id": "skill/operations/ci-cd/debug-ci-failure",
   "slug": "debug-ci-failure",
   "name": "Debug CI Failure",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Trace a failing CI job to the earliest actionable divergence and a minimal discriminating check.",
   "description": "Diagnose a failing CI job by correlating an exact run, logs, workflow revision, environment, and repository evidence before proposing a bounded remedy. Use when a check fails remotely, flakes, or differs from a local result.",
@@ -30,7 +30,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not rerun, cancel, edit, disable, or approve CI workflows without separate authorization.",
