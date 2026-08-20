@@ -7,6 +7,7 @@ import { spawnSync } from 'node:child_process';
 import { doctor, installArtifact, planArtifactInstall, removeArtifact } from '../scripts/lib/install.mjs';
 import { loadArtifacts } from '../scripts/lib/catalog.mjs';
 import { cleanGitEnvironment } from './git-env.mjs';
+import { fileURLToPath } from 'node:url';
 
 function runGit(cwd, args) {
   const result = spawnSync('git', args, { cwd, encoding: 'utf8', env: cleanGitEnvironment() });
@@ -445,7 +446,7 @@ test('uninstall honours a legacy hook state record that carries only a marker', 
 test('concurrent installs into one config root record every artifact', (context) => {
   const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-install-parallel-'));
   context.after(() => rmSync(directory, { recursive: true, force: true }));
-  const cli = new URL('../bin/youdede-toolkit.mjs', import.meta.url).pathname;
+  const cli = fileURLToPath(new URL('../bin/youdede-toolkit.mjs', import.meta.url));
   const slugs = ['debug-systematically', 'write-session-handoff', 'resolve-next-decision', 'make-practical-decision'];
 
   const running = slugs.map((slug) => spawnSync(process.execPath, [cli, 'add', slug, '--target', 'claude-code', '--scope', 'project'], {
