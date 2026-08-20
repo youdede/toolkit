@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 youdede contributors
+// Copyright (c) 2026 Youdede
 
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -11,7 +11,7 @@ const notice = readFileSync(path.join(ROOT, 'NOTICE'), 'utf8');
 const citation = readFileSync(path.join(ROOT, 'CITATION.cff'), 'utf8');
 const errors = [];
 
-if (!license.startsWith('MIT License\n') || !license.includes('Copyright (c) 2026 youdede contributors')) {
+if (!license.startsWith('MIT License\n') || !license.includes('Copyright (c) 2026 Youdede')) {
   errors.push('LICENSE must retain the current MIT text and contributor notice');
 }
 if (!notice.includes('SPDX-License-Identifier: MIT') || !notice.includes('does not prove authorship')
@@ -33,4 +33,6 @@ if (errors.length > 0) {
   for (const error of errors) process.stderr.write(`${error}\n`);
   process.exit(1);
 }
-process.stdout.write(`Legal metadata covers ${artifactCount} original artifacts.\n`);
+// This checks declared licence metadata only. Originality is a contributor assertion recorded in
+// NOTICE; no script in this repository can verify it, so this line must not claim otherwise.
+process.stdout.write(`Legal metadata declares MIT for ${artifactCount} artifacts.\n`);
