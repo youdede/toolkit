@@ -3,4 +3,13 @@ set -eu
 
 repository_root=$(git rev-parse --show-toplevel)
 cd "$repository_root"
+
+# Git exports GIT_DIR and its companions into every hook. The test suite creates
+# temporary repositories and shells out to git inside them; an inherited GIT_DIR
+# overrides their working directory and redirects those calls at this repository,
+# so tests that pass on their own fail under push. Clear the environment before
+# running the checks, after the root has been resolved from it.
+unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_PREFIX GIT_COMMON_DIR \
+  GIT_OBJECT_DIRECTORY GIT_ALTERNATE_OBJECT_DIRECTORIES GIT_NAMESPACE
+
 exec npm run check

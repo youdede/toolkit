@@ -4,7 +4,7 @@
   "id": "hook/development/error-handling/exception-swallowing-guard",
   "slug": "exception-swallowing-guard",
   "name": "Exception Swallowing Guard",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "kind": "hook",
   "summary": "Block newly added empty exception handlers and ignored promise rejections.",
   "description": "Recognizes bounded high-confidence empty catch, except, rescue, and promise-rejection handlers and blocks only when the proposed revision adds swallowing behavior.",
@@ -26,11 +26,12 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not require a particular logging library.",
     "It does not reject handlers that rethrow, return a documented fallback, or record an error.",
+    "It does not reject an empty handler documented by a comment, or the `except ImportError`/`ModuleNotFoundError` optional-dependency fallback.",
     "It does not prove that every error path is handled."
   ],
   "execution": {

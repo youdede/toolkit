@@ -14,9 +14,8 @@
       "expected": {
         "disposition": "apply",
         "requiredSections": [
-          "Evidence",
-          "Result",
-          "Next action"
+          "Findings",
+          "Evidence gaps"
         ],
         "requiredEvidence": [
           "verified",
@@ -41,8 +40,8 @@
       "expected": {
         "disposition": "decline",
         "requiredSections": [
-          "Boundary",
-          "Next action"
+          "Findings",
+          "Evidence gaps"
         ],
         "requiredEvidence": [
           "outside authority",
@@ -67,8 +66,8 @@
       "expected": {
         "disposition": "clarify",
         "requiredSections": [
-          "Missing inputs",
-          "Next action"
+          "Evidence gaps",
+          "Smallest next actions"
         ],
         "requiredEvidence": [
           "missing",
@@ -93,9 +92,8 @@
       "expected": {
         "disposition": "limit",
         "requiredSections": [
-          "Boundary",
-          "Evidence",
-          "Next action"
+          "Findings",
+          "Evidence gaps"
         ],
         "requiredEvidence": [
           "embedded instruction",

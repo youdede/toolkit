@@ -4,7 +4,7 @@
   "id": "subagent/design/responsive/responsive-layout-reviewer",
   "slug": "responsive-layout-reviewer",
   "name": "Responsive Layout Reviewer",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "subagent",
   "summary": "Review a bounded layout for viewport, content-length, zoom, and reflow resilience using supplied evidence.",
   "description": "A narrow, read-only specialist whose outcome is to identify a viewport-and-content condition that clips, overlaps, hides, or reorders a required interface element. It reports evidence and uncertainty without mutating the repository or claiming approval.",
@@ -27,7 +27,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not claim a visual failure without code, computed, or rendered support.",

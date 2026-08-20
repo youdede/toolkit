@@ -4,7 +4,7 @@
   "id": "subagent/data/quality/rag-evaluation-reviewer",
   "slug": "rag-evaluation-reviewer",
   "name": "RAG Evaluation Reviewer",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "subagent",
   "summary": "Review retrieval-augmented generation evaluation evidence for leakage, coverage, calibration, and decision fitness.",
   "description": "A read-only AI evaluation specialist that separates retrieval and generation quality, audits datasets and judges, and reports whether supplied evidence supports a bounded decision.",
@@ -33,7 +33,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "Do not run models, retrieval jobs, notebooks, judges, embeddings, or evaluation services.",

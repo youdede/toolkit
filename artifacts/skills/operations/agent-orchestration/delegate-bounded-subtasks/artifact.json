@@ -4,7 +4,7 @@
   "id": "skill/operations/agent-orchestration/delegate-bounded-subtasks",
   "slug": "delegate-bounded-subtasks",
   "name": "Delegate Bounded Subtasks",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Split independent work into non-overlapping subagent briefs with owned outputs.",
   "description": "Delegate bounded independent subtasks to available subagents while preventing file overlap, missing context, and unverified integration. Use when parallelism materially reduces latency and each task has a clear output.",
@@ -27,7 +27,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not delegate an entire ambiguous project as one subtask.",

@@ -4,7 +4,7 @@
   "id": "subagent/operations/infrastructure/infrastructure-change-reviewer",
   "slug": "infrastructure-change-reviewer",
   "name": "Infrastructure Change Reviewer",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "subagent",
   "summary": "Review a bounded infrastructure-as-code delta for replacement, deletion, dependency, and blast-radius risk.",
   "description": "A narrow, read-only specialist whose outcome is to identify a planned resource action whose lifecycle or dependency effect threatens named state or availability. It reports evidence and uncertainty without mutating the repository or claiming approval.",
@@ -26,7 +26,7 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not run plan or apply, alter state, or change infrastructure.",

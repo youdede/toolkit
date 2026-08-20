@@ -4,7 +4,7 @@
   "id": "subagent/development/concurrency/concurrency-hazard-analyst",
   "slug": "concurrency-hazard-analyst",
   "name": "Concurrency Hazard Analyst",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "subagent",
   "summary": "Analyze a bounded concurrent path for a concrete race, deadlock, lost update, or ordering failure.",
   "description": "A narrow, read-only specialist whose outcome is to construct or reject a minimal interleaving that violates a stated concurrency invariant. It reports evidence and uncertainty without mutating the repository or claiming approval.",
@@ -25,7 +25,7 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not report a race or deadlock without a plausible schedule.",

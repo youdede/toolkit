@@ -4,7 +4,7 @@
   "id": "skill/security/dependencies/plan-dependency-upgrade",
   "slug": "plan-dependency-upgrade",
   "name": "Plan Dependency Upgrade",
-  "version": "1.0.0",
+  "version": "1.4.0",
   "kind": "skill",
   "summary": "Plan a dependency upgrade from release evidence, compatibility surface, migration steps, and rollback.",
   "description": "Plan or review an application dependency upgrade using installed versions, release and migration documentation, affected usage, transitive changes, compatibility tests, rollout, and rollback. Use when an upgrade is material, breaking, security-driven, or framework-wide.",
@@ -27,7 +27,7 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not upgrade unrelated packages to achieve a clean latest state.",

@@ -4,7 +4,7 @@
   "id": "subagent/operations/reliability/slo-error-budget-analyst",
   "slug": "slo-error-budget-analyst",
   "name": "SLO Error Budget Analyst",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "subagent",
   "summary": "Analyze supplied SLI and error-budget evidence for eligibility, window, exclusion, and burn-rate errors.",
   "description": "A narrow, read-only specialist whose outcome is to verify that a reported SLO or burn value follows the exact indicator contract and measurement window. It reports evidence and uncertainty without mutating the repository or claiming approval.",
@@ -26,7 +26,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not claim service availability without complete supplied evidence.",

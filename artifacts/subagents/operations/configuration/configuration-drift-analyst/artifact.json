@@ -4,7 +4,7 @@
   "id": "subagent/operations/configuration/configuration-drift-analyst",
   "slug": "configuration-drift-analyst",
   "name": "Configuration Drift Analyst",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "subagent",
   "summary": "Compare desired state with timestamped environment snapshots and classify meaningful configuration drift.",
   "description": "A narrow, read-only specialist whose outcome is to identify an unapproved desired-versus-observed difference between equivalent resources at a known time. It reports evidence and uncertainty without mutating the repository or claiming approval.",
@@ -26,7 +26,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not reconcile, mutate, or restart environments.",

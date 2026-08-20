@@ -4,11 +4,11 @@
 
 **Open tools for coding agents. Free, inspectable, and installable one at a time.**
 
-A procedure an agent can load, a deterministic gate that stops a dangerous commit, or a specialist with a deliberately narrow brief. Every artifact states what it does, what it refuses to do, which runtimes it supports, and where its ideas came from.
+A procedure an agent can load, a deterministic gate that stops a dangerous commit, or a specialist with a deliberately narrow brief. Every artifact states what it does, what it refuses to do, and which runtimes it supports.
 
 The same catalog now targets Claude Code, Codex, Gemini CLI, GitHub Copilot, Cursor, and OpenCode. Support is capability-specific rather than cosmetic: portable skills cover all six runtimes, specialist profiles are emitted only where their authority can be preserved, and deterministic gates are withheld whenever an event or failure contract is not equivalent.
 
-The current catalog contains 264 independently installable artifacts: 146 skills, 56 hooks, and 62 subagents, plus 7 cross-kind outcome packs. Source audits feed a classified backlog; overlapping, unsafe, tool-bound, or excessively broad items are consolidated, narrowed, validated further, or excluded rather than mirrored.
+The current catalog contains 264 independently installable artifacts: 146 skills, 56 hooks, and 62 subagents, plus 7 cross-kind outcome packs.
 
 ## Install one artifact or a composed pack
 
@@ -107,7 +107,7 @@ An artifact is publishable only when it:
 - declares granular taxonomy values and supported scopes;
 - documents explicit refusals and failure behavior;
 - matches its deterministic public integrity attestation;
-- is original work published under the toolkit's MIT license;
+- is published under the toolkit's MIT license, asserted by its contributors as original work;
 - contains a target adapter whose paths cannot escape the install root;
 - packages every declared deterministic entrypoint through every supported adapter;
 - has no duplicate identity or installation destination;

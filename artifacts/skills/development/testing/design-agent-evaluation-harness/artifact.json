@@ -4,7 +4,7 @@
   "id": "skill/development/testing/design-agent-evaluation-harness",
   "slug": "design-agent-evaluation-harness",
   "name": "Design Agent Evaluation Harness",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Design a reproducible agent evaluation harness with isolated cases, traces, judges, and regression gates.",
   "description": "Design or audit an evaluation harness for a coding or tool-using agent using isolated tasks, controlled environments, deterministic checks, calibrated judgment, traces, and regression thresholds. Use before changing agent prompts, tools, policies, or orchestration.",
@@ -27,7 +27,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not tune the agent on hidden cases or leak expected fixes into task prompts.",

@@ -4,7 +4,7 @@
   "id": "skill/development/testing/verify-completion-evidence",
   "slug": "verify-completion-evidence",
   "name": "Verify Completion Evidence",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Verify completion claims with fresh commands, inspectable artifacts, and explicit remaining uncertainty.",
   "description": "Verify that a coding or configuration task is complete by mapping requested outcomes to fresh evidence, repository checks, diff inspection, and unresolved risk. Use before reporting success, handoff, commit, or integration.",
@@ -26,10 +26,10 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
-    "It does not use confidence, code appearance, or another agent’s summary as proof.",
+    "It does not use confidence, code appearance, or another agent\u2019s summary as proof.",
     "It does not omit failed or unrun checks to present a cleaner result.",
     "It does not claim deployment, publication, cleanup, or external mutation from local evidence."
   ],

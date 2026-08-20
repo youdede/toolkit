@@ -4,7 +4,7 @@
   "id": "hook/design/keyboard-focus/focus-style-regression-guard",
   "slug": "focus-style-regression-guard",
   "name": "Focus Style Regression Guard",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "kind": "hook",
   "summary": "Block newly invisible CSS focus states that have no visible replacement.",
   "description": "Parses bounded CSS rule blocks and rejects net-new focus selectors that disable outlines without a visible outline, shadow, border, or text-decoration replacement.",
@@ -26,11 +26,11 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not evaluate rendered contrast or pixel visibility.",
-    "It does not reject outline removal when the same focus rule supplies a visible replacement.",
+    "It does not reject outline removal when the same focus rule, or a `:focus-visible` rule for the same subject element, supplies a visible replacement.",
     "It does not claim keyboard accessibility conformance."
   ],
   "execution": {

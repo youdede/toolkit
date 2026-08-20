@@ -4,7 +4,7 @@
   "id": "subagent/data/governance/data-lineage-mapper",
   "slug": "data-lineage-mapper",
   "name": "Data Lineage Mapper",
-  "version": "1.0.0",
+  "version": "1.4.0",
   "kind": "subagent",
   "summary": "Map bounded field-level lineage across sources, transforms, stores, and named consumers.",
   "description": "A narrow, read-only specialist whose outcome is to produce an evidence-backed directed graph for named fields while marking every unresolved edge explicitly. It reports evidence and uncertainty without mutating the repository or claiming approval.",
@@ -26,7 +26,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not query data systems or retrieve field values.",

@@ -4,7 +4,7 @@
   "id": "skill/writing/decision-support/resolve-next-decision",
   "slug": "resolve-next-decision",
   "name": "Resolve Next Decision",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Resolve the highest-impact open decision one evidence-backed choice at a time.",
   "description": "Select the most consequential unresolved decision, present a compact set of viable options and a recommendation, then record the answer before continuing. Use when a plan has several open choices.",
@@ -26,12 +26,12 @@
   "risk": "low",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not ask several decisions in one interaction.",
     "It does not include options that violate known constraints merely to fill a list.",
-    "It does not record its recommendation as the user’s decision."
+    "It does not record its recommendation as the user\u2019s decision."
   ],
   "execution": {
     "mode": "prompt",

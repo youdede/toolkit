@@ -4,7 +4,7 @@
   "id": "skill/writing/documentation/load-architecture-decisions",
   "slug": "load-architecture-decisions",
   "name": "Load Architecture Decisions",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Load every applicable architecture decision and report conflicts or missing context.",
   "description": "Discover and read all architecture decision records applicable to the current scope, following repository guidance and nested locations. Use before architecture changes or when the user explicitly requests complete ADR context.",
@@ -27,7 +27,7 @@
   "risk": "low",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not sample a subset while claiming to have read every ADR.",

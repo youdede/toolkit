@@ -7,12 +7,15 @@ import test from 'node:test';
 import {
   buildReleaseBenchmark,
   RELEASE_BENCHMARK_SEED,
-  selectStratifiedSample
+  selectStratifiedSample,
+  MINIMUM_DYNAMIC_SAMPLE,
+  MINIMUM_DYNAMIC_FRACTION
 } from '../scripts/build-release-benchmark.mjs';
 import {
   assessReleaseReadiness,
   assessStructuralEvidence,
-  validateSemanticEvidenceDocument
+  validateSemanticEvidenceDocument,
+  resolveBenchmarkSelection
 } from '../scripts/validate-release-readiness.mjs';
 import { ROOT, validateRepository } from '../scripts/lib/catalog.mjs';
 
@@ -69,6 +72,42 @@ test('release benchmark reviews every prompt statically and keeps sampled inputs
     assert.equal(Object.hasOwn(input, 'expected'), false);
     assert.equal(Object.hasOwn(input, 'caseType'), false);
     assert.equal(Object.hasOwn(input, 'caseId'), false);
+  }
+});
+
+test('the gate honours a recorded benchmark policy but refuses a weakened one', () => {
+  const full = { minimumSample: 128, minimumFraction: 1, minimumPerStratum: 1 };
+  assert.deepEqual(resolveBenchmarkSelection(full), { weakened: false, selection: full });
+
+  const dflt = { minimumSample: MINIMUM_DYNAMIC_SAMPLE, minimumFraction: MINIMUM_DYNAMIC_FRACTION, minimumPerStratum: 1 };
+  assert.deepEqual(resolveBenchmarkSelection(dflt), { weakened: false, selection: dflt });
+
+  // Each dimension below the release minimum is refused on its own.
+  assert.equal(resolveBenchmarkSelection({ ...dflt, minimumFraction: 0.05 }).weakened, true);
+  assert.equal(resolveBenchmarkSelection({ ...dflt, minimumSample: 10 }).weakened, true);
+  assert.equal(resolveBenchmarkSelection({ ...dflt, minimumPerStratum: 0 }).weakened, true);
+
+  // A missing or unusable policy falls back to the default, never to a weaker one.
+  assert.deepEqual(resolveBenchmarkSelection(null), { weakened: false, selection: {} });
+  assert.deepEqual(resolveBenchmarkSelection({ minimumFraction: 'most' }), { weakened: false, selection: {} });
+});
+
+test('complete coverage selects every candidate and says so, without weakening the sample', () => {
+  const sample = buildReleaseBenchmark(ROOT);
+  const full = buildReleaseBenchmark(ROOT, { minimumFraction: 1 });
+  assert.equal(full.index.dynamic.sampled, full.index.dynamic.candidates);
+  assert.equal(full.index.dynamic.coveragePercent, 100);
+  assert.equal(full.dynamicInputs.length, full.index.dynamic.candidates);
+  assert.ok(full.index.dynamic.sampled > sample.index.dynamic.sampled);
+  assert.match(full.index.interpretation, /cover every candidate case/);
+  assert.match(sample.index.interpretation, /sampled behavior only/);
+  // Complete coverage still may not be reported as portfolio semantic proof.
+  assert.match(full.index.interpretation, /not exhaustive portfolio semantic proof/);
+  // Selection stays deterministic at full coverage too.
+  assert.equal(buildReleaseBenchmark(ROOT, { minimumFraction: 1 }).index.benchmarkDigest, full.index.benchmarkDigest);
+  for (const input of full.dynamicInputs) {
+    assert.equal(Object.hasOwn(input, 'expected'), false);
+    assert.equal(Object.hasOwn(input, 'caseType'), false);
   }
 });
 

@@ -4,7 +4,7 @@
   "id": "skill/security/application-security/review-auth-boundary",
   "slug": "review-auth-boundary",
   "name": "Review Auth Boundary",
-  "version": "1.0.0",
+  "version": "1.4.0",
   "kind": "skill",
   "summary": "Review authentication and authorization boundaries through concrete identities, resources, and denied paths.",
   "description": "Review an authentication or authorization change by mapping identities, credentials, sessions, resources, policies, trust boundaries, and denied behavior. Use before merging access-control work or when a privilege, tenant, or session failure is suspected.",
@@ -27,7 +27,7 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not weaken policy, generate real credentials, bypass controls, or test unauthorized production accounts.",

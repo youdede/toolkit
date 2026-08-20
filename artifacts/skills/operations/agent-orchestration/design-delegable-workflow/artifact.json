@@ -4,7 +4,7 @@
   "id": "skill/operations/agent-orchestration/design-delegable-workflow",
   "slug": "design-delegable-workflow",
   "name": "Design Delegable Workflow",
-  "version": "1.0.0",
+  "version": "1.4.0",
   "kind": "skill",
   "summary": "Design a repeatable workflow with explicit triggers, deterministic steps, authority, checkpoints, and evidence.",
   "description": "Design a recurring workflow for human, deterministic automation, and optional agent work by modeling triggers, state, decisions, authority, checkpoints, failures, and observability. Use before automating a repeated operational loop.",
@@ -31,7 +31,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not add an agent, schedule, or human checkpoint when the workflow does not require one.",

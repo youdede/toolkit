@@ -4,7 +4,7 @@
   "id": "subagent/development/code-quality/refactor-equivalence-reviewer",
   "slug": "refactor-equivalence-reviewer",
   "name": "Refactor Equivalence Reviewer",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "subagent",
   "summary": "Compare a bounded before-and-after refactor for unintended observable behavior changes.",
   "description": "A narrow, read-only specialist whose outcome is to identify an input class for which the refactor changes a promised observable result or side effect. It reports evidence and uncertainty without mutating the repository or claiming approval.",
@@ -26,7 +26,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not report style, naming, or structure differences as behavior defects.",

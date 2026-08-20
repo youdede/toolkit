@@ -4,7 +4,7 @@
   "id": "skill/operations/agent-orchestration/delegate-to-codex-cli",
   "slug": "delegate-to-codex-cli",
   "name": "Delegate To Codex Cli",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Delegate a bounded task to Codex CLI in an isolated, reviewable workspace.",
   "description": "Delegate an independent coding or review task to Codex CLI with a narrow brief, isolated worktree, bounded permissions, and parent-agent verification. Use only when the CLI is available and parallel delegation adds value.",
@@ -26,7 +26,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not grant broader filesystem, network, or credential access than the parent task.",

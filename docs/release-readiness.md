@@ -43,7 +43,17 @@ The benchmark is model-agnostic:
 4. Write `.youdede-workbench/reports/semantic-release-evidence.json` using [`semantic-release-evidence.schema.json`](../schema/semantic-release-evidence.schema.json), recording the runner, independent judge, model identifiers, one static result per prompt artifact, and one dynamic judgment per sampled benchmark ID.
 5. Run `npm run check:readiness` and preserve its JSON output with the release review.
 
-The dynamic sample is stratified by kind, domain, risk, and case type. It selects at least one case from every populated cross-stratum, then fills strata round-robin until it reaches the larger of 128 cases or 20% of candidates. The fixed seed makes selection reproducible. The report must state `portfolioSemanticPass: false`: a passing sample supports only the sampled-behavior claim and is never converted into “100% of the portfolio is semantically proven.”
+The dynamic sample is stratified by kind, domain, risk, and case type. It selects at least one case from every populated cross-stratum, then fills strata round-robin until it reaches the larger of 128 cases or 20% of candidates. The fixed seed makes selection reproducible.
+
+To evaluate every candidate case instead of the sample, build with:
+
+```sh
+npm run benchmark:release:build -- --full
+```
+
+The benchmark records the effective selection policy, and the gate rebuilds using that recorded policy rather than assuming the default. A recorded policy that would select fewer cases than the release minimum is refused with `SEMANTIC_BENCHMARK_POLICY_WEAKENED`, so the flag can raise coverage but never lower it. Complete coverage removes sampling error; it does not remove run-to-run variation, and a single passing run of every case is still not proof that the portfolio is semantically correct.
+
+The report must state `portfolioSemanticPass: false` either way: neither a passing sample nor one passing run at complete coverage is converted into “100% of the portfolio is semantically proven.”
 
 Generic positive cases that cannot embed private project evidence identify themselves as contract simulations. They test applicable disposition, procedure, evidence labeling, output shape, and authority boundaries; they do not claim to measure the correctness of a domain-specific conclusion. Concrete specialist cases embed enough synthetic locations and observations to support the expected finding. A case that asks for an evidence-backed conclusion while withholding the evidence is a fixture defect, not a model failure.
 
@@ -61,9 +71,11 @@ The gate does not sign evidence or prove that a declared external evaluator actu
 
 ## Blocking publisher decisions
 
-Structural and semantic readiness do not resolve publisher identity. Before the first public release, the accountable publisher must:
+Structural and semantic readiness do not resolve publisher identity. The [publishing checklist](publishing-checklist.md) records what each of these steps needs and in which order; [`.github/workflows/release.yml`](../.github/workflows/release.yml) implements the parts that can be automated and refuses to publish until both gates pass.
 
-1. Confirm the exact legal person or entity that owns or administers the `youdede contributors` copyright notice. Do not substitute an invented company name.
+Before the first public release, the accountable publisher must:
+
+1. Confirm the exact legal person or entity that owns or administers the `Youdede` copyright notice. Do not substitute an invented company name.
 2. Complete the planned namespace migration from the temporary private `udede/toolkit` repository to the canonical public `youdede/toolkit` repository, then update and verify `repository`, `homepage`, `bugs`, CFF metadata, badges, CODEOWNERS, and trusted-publisher identity together.
 3. Publish from a protected CI environment using npm trusted publishing or another provenance-capable OIDC flow, and create a signed release tag for the exact commit.
 4. Publish the `catalog/integrity.json` root digest through the authenticated release page and verify it against the packed npm artifact.

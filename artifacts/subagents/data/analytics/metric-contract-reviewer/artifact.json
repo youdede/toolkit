@@ -4,7 +4,7 @@
   "id": "subagent/data/analytics/metric-contract-reviewer",
   "slug": "metric-contract-reviewer",
   "name": "Metric Contract Reviewer",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "subagent",
   "summary": "Review a metric implementation for grain, cohort, window, timezone, deduplication, and denominator drift.",
   "description": "A narrow, read-only specialist whose outcome is to identify a changed metric contract field that alters the population, time basis, or unit consumed by a named decision. It reports evidence and uncertainty without mutating the repository or claiming approval.",
@@ -26,7 +26,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not calculate metric values without supplied data.",

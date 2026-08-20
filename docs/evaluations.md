@@ -21,6 +21,16 @@ node scripts/validate-evaluations.mjs
 
 Use `--json` for stable machine-readable output. The runner discovers every skill and subagent from its manifest, so a newly added prompt-bearing artifact fails validation until it has a behavioral contract. Deterministic hooks and hybrid helpers are covered by declared executable event, boundary, malformed-input, false-positive, and process tests. The declarations and freshness-bound semantic release workflow are enforced by the [release-readiness gate](release-readiness.md).
 
+## Output contract consistency
+
+Each prompt payload states one output contract: the headings a reply must carry, in order. That line is only useful when it agrees with the rest of the payload, so a separate check compares them:
+
+```sh
+npm run check:contracts
+```
+
+It fails when a heading is demanded outside the contract but not named in it, when the payload's own numbered or prose list orders the headings differently, when an instruction points at a findings section the contract does not declare, when a heading is declared twice, or when a behavioral case requires a section the contract omits. A mention that states its own fallback for an undeclared heading is conditional and is not a contradiction. The check refuses to report success if it reads no payload at all.
+
 ## Checking saved outputs
 
 The framework does not generate responses. To check an output produced elsewhere, save a bounded response envelope and pass it to the runner:
@@ -43,6 +53,12 @@ The framework does not generate responses. To check an output produced elsewhere
 node scripts/validate-evaluations.mjs --responses ./responses.json
 ```
 
-The response checker is intentionally literal and deterministic: the declared disposition must match the case contract, required sections must be Markdown headings, required evidence must appear as text, and forbidden claims/actions must not appear. It limits a response file to 1 MB and never starts a subprocess, contacts a service, or executes artifact code.
+The response checker is deterministic: the same response text always produces the same verdict. It fails a response when a required section is missing as a Markdown heading, or when a forbidden claim or action appears. It limits a response file to 1 MB and never starts a subprocess, contacts a service, or executes artifact code.
+
+Two fields are deliberately not graded, and the reason matters when reading a result.
+
+`disposition` is not part of a response. It used to be self-reported by the responder and compared for equality, which is not decidable from the text: a response can honestly belong to two dispositions at once, for example refusing an instruction embedded in the evidence while also lacking the inputs to proceed. Required sections already differ per disposition, so section presence records which path was taken without asking the responder to label itself.
+
+`requiredEvidence` is reported as advice rather than enforced. Measured over a 176-case sample, requiring each phrase as a literal substring agreed with an independent judge on 44 percent of cases, because an idea such as "cannot proceed" has unbounded surface forms and a correct response states it in its own words. Section presence plus forbidden-phrase absence was re-measured on the same 176-case sample against a reader shown the contract and the response but never the checker's verdict, and agreed on 100 percent of the 352 judgments. The phrases stay in each contract as reviewer guidance, and the checker lists the ones it did not find verbatim so a reviewer can confirm the idea is present.
 
 This is a contract and regression gate, not a claim that natural-language compliance has been measured semantically. A response can use an equivalent phrase the literal checker does not recognize, and a prohibited action can be paraphrased. Use these cases as fixed inputs for a separate, reviewable model or human evaluation when semantic judgment is needed; keep the saved outputs and their provenance with that evaluation rather than treating this runner as a benchmark score.

@@ -1,6 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
+import { mkdirSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import { loadArtifacts, ROOT } from '../scripts/lib/catalog.mjs';
 
 function cli(args) {
@@ -11,6 +14,50 @@ function cli(args) {
   assert.equal(result.status, 0, result.stderr);
   return result.stdout;
 }
+
+function cliRaw(args, cwd = ROOT) {
+  return spawnSync(process.execPath, [`${ROOT}/bin/youdede-toolkit.mjs`, ...args], { cwd, encoding: 'utf8' });
+}
+
+test('unrecognised flags and commands fail loudly instead of falling back to a default', () => {
+  const typo = cliRaw(['add', 'debug-systematically', '--scop', 'user']);
+  assert.equal(typo.status, 1);
+  assert.match(typo.stderr, /add does not accept --scop/);
+  assert.match(typo.stderr, /--scope/);
+
+  const unknownCommand = cliRaw(['instal', 'debug-systematically']);
+  assert.equal(unknownCommand.status, 1);
+  assert.match(unknownCommand.stderr, /unknown command 'instal'/);
+
+  const wrongCommandFlag = cliRaw(['doctor', '--json']);
+  assert.equal(wrongCommandFlag.status, 1);
+  assert.match(wrongCommandFlag.stderr, /doctor does not accept --json/);
+});
+
+test('a failing command exits non-zero and reports the reason on stderr', () => {
+  const missing = cliRaw(['info', 'no-such-artifact-anywhere']);
+  assert.equal(missing.status, 1);
+  assert.match(missing.stderr, /was not found/);
+
+  const noQuery = cliRaw(['add']);
+  assert.equal(noQuery.status, 1);
+  assert.match(noQuery.stderr, /requires an artifact id or slug/);
+});
+
+test('pack-info is read-only and independent of the working directory state', (context) => {
+  const directory = mkdtempSync(path.join(tmpdir(), 'youdede-pack-info-'));
+  context.after(() => rmSync(directory, { recursive: true, force: true }));
+  mkdirSync(path.join(directory, '.claude'), { recursive: true });
+  writeFileSync(path.join(directory, '.claude', 'settings.json'), '{ this is not valid json\n');
+
+  const result = cliRaw(['pack-info', 'accessibility-assurance'], directory);
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /Hook fan-out: /);
+  assert.match(result.stdout, /focus-style-regression-guard/);
+
+  // An informational command must not create install state or read through the config root.
+  assert.deepEqual(readdirSync(path.join(directory, '.claude')), ['settings.json']);
+});
 
 test('list composes granular taxonomy filters', () => {
   const output = cli(['list', '--kind', 'skill', '--domain', 'operations', '--category', 'release', '--lifecycle', 'release', '--risk', 'high']);
@@ -48,7 +95,7 @@ test('info exposes the full compatibility facets and refusals', () => {
   assert.match(output, /Capabilities: research/);
   assert.match(output, /Behavior: advisory; failure policy: stop-and-report/);
   assert.match(output, /Target compatibility:/);
-  assert.match(output, /Authors of this toolkit artifact: youdede contributors/);
+  assert.match(output, /Authors of this toolkit artifact: Youdede/);
   assert.match(output, /Integrity: urn:youdede:artifact:sha256:[a-f0-9]{64}/);
   assert.match(output, /gemini-cli \(stable; scopes: project, user\)/);
   assert.match(output, /Refuses:/);

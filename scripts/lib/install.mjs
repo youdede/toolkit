@@ -23,6 +23,9 @@ import { defaultSettingsPath, resolveConfigRoot, resolveConfigRoots } from './ta
 
 const STATE_MODE = 0o600;
 const MAX_DISPLACED_FILE_BYTES = 1024 * 1024;
+const STATE_LOCK_TIMEOUT_MS = 30_000;
+const STATE_LOCK_STALE_MS = 120_000;
+const STATE_LOCK_POLL_MS = 25;
 const integrityCatalogs = new Map();
 
 function sha256(data) {
@@ -96,6 +99,86 @@ function loadState(configRoot) {
 
 function writeState(configRoot, state) {
   atomicWrite(statePath(configRoot), Buffer.from(`${JSON.stringify(state, null, 2)}\n`), STATE_MODE);
+}
+
+function lockPath(configRoot) {
+  return path.join(configRoot, '.youdede-toolkit', 'state.lock');
+}
+
+function noticePath(configRoot) {
+  return path.join(configRoot, '.youdede-toolkit', 'NOTICE.md');
+}
+
+// Installing an artifact copies MIT-licensed files into another project, and MIT requires the
+// copyright notice to travel with the copy. One generated notice per config root keeps that
+// obligation satisfied without stamping a header onto every installed payload.
+function renderNotice(state, root) {
+  const installs = Object.values(state.installs || {});
+  if (!installs.length) return null;
+  const seen = new Map();
+  for (const install of installs) {
+    if (!install.artifactId || seen.has(install.artifactId)) continue;
+    seen.set(install.artifactId, install);
+  }
+  const lines = [
+    '# Third-party notices',
+    '',
+    'The files below were installed by youdede-toolkit and remain under their own licence.',
+    'Do not delete this notice while those files are present.',
+    ''
+  ];
+  for (const install of [...seen.values()].sort((left, right) => left.artifactId.localeCompare(right.artifactId))) {
+    const licence = install.license || 'MIT';
+    const authors = Array.isArray(install.authors) && install.authors.length ? install.authors.join(', ') : 'Youdede';
+    lines.push(`- \`${install.artifactId}\`${install.version ? ` ${install.version}` : ''} (${licence}; ${authors})`);
+  }
+  let licenceText = '';
+  try { licenceText = readFileSync(path.join(root || ROOT, 'LICENSE'), 'utf8').trimEnd(); } catch {}
+  if (licenceText) lines.push('', '## MIT License', '', licenceText);
+  return Buffer.from(`${lines.join('\n')}\n`);
+}
+
+// ponytail: one coarse lock per config root, held across the whole read-modify-write of
+// state.json. Installs are user-initiated and take milliseconds, so contention is a parallel
+// script rather than a hot path. Move to per-key locking only if that stops being true.
+function withStateLock(configRoot, operation) {
+  const file = lockPath(configRoot);
+  mkdirSync(path.dirname(file), { recursive: true });
+  const deadline = Date.now() + STATE_LOCK_TIMEOUT_MS;
+  let descriptor = null;
+  for (;;) {
+    try {
+      descriptor = openSync(file, constants.O_CREAT | constants.O_EXCL | constants.O_WRONLY | constants.O_NOFOLLOW, STATE_MODE);
+      break;
+    } catch (error) {
+      if (error.code !== 'EEXIST') throw error;
+      let age = 0;
+      try { age = Date.now() - statSync(file).mtimeMs; } catch { continue; }
+      if (age > STATE_LOCK_STALE_MS) {
+        // The holder died without releasing. Reclaim rather than block a user forever.
+        try { rmSync(file, { force: true }); } catch {}
+        continue;
+      }
+      if (Date.now() > deadline) {
+        throw new Error(`another youdede-toolkit process holds ${file}; wait for it to finish or delete the lock`);
+      }
+      sleepBriefly();
+    }
+  }
+  try {
+    writeFileSync(descriptor, `${process.pid}\n`);
+    closeSync(descriptor);
+    descriptor = null;
+    return operation();
+  } finally {
+    if (descriptor !== null) closeSync(descriptor);
+    try { rmSync(file, { force: true }); } catch {}
+  }
+}
+
+function sleepBriefly() {
+  // Synchronous because the whole installer is synchronous; Atomics.wait blocks without spinning.
+  Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, STATE_LOCK_POLL_MS);
 }
 
 function publishedIntegrity(root) {
@@ -483,6 +566,22 @@ export function planArtifactInstall(query, options = {}) {
 }
 
 export function installArtifact(query, options = {}) {
+  // state.json is a read-modify-write across the whole plan-copy-record sequence, so the lock
+  // is taken before prepareInstall reads it. installPack delegates here per member, one at a
+  // time, so the lock is acquired and released per artifact and never nests.
+  const target = options.target || 'claude-code';
+  const scope = options.scope || 'project';
+  const record = resolveArtifact(query, options.root || ROOT);
+  // Reject unsupported target/scope combinations before taking the lock, so a refused install
+  // never creates the config root it was refused for.
+  const adapter = record.adapters[target]?.data;
+  if (!adapter) throw new Error(`${record.manifest.id} does not support ${target}`);
+  if (!adapter.scopes.includes(scope)) throw new Error(`${record.manifest.id} does not support ${scope} scope`);
+  const configRoot = resolveConfigRoot(target, scope, options.cwd || process.cwd(), record.manifest.kind);
+  return withStateLock(configRoot, () => installArtifactLocked(query, options));
+}
+
+function installArtifactLocked(query, options = {}) {
   const prepared = prepareInstall(query, options);
   const { record, target, scope, configRoot, key, state, ownedInstall, filePlan, stale, settings, displacedByPath, displacedFiles } = prepared;
   const owner = installOwner(options);
@@ -532,9 +631,21 @@ export function installArtifact(query, options = {}) {
       displacedHooks: settings.displacedHooks || [],
       settingsPath: settings.after ? path.relative(configRoot, settings.file) : null,
       settingsCreated: Boolean(ownedInstall?.settingsCreated || (settings.after && settings.before === null)),
+      license: record.manifest.license,
+      authors: record.manifest.authors,
       owners: [...new Set([...recordedOwners(ownedInstall), owner])].sort()
     };
     writeState(configRoot, state);
+
+    const notice = noticePath(configRoot);
+    if (!backups.has(notice)) {
+      backups.set(notice, existsSync(notice) ? { data: readFileSync(notice), mode: statSync(notice).mode } : null);
+    }
+    const rendered = renderNotice(state, record.root || ROOT);
+    if (rendered) {
+      atomicWrite(notice, rendered, 0o644);
+      touched.push(notice);
+    }
   } catch (error) {
     for (const destination of [...touched].reverse()) restoreFile(destination, backups.get(destination));
     if (settings.after) restoreFile(settings.file, settings.before === null ? null : { data: settings.before, mode: settings.beforeMode });
@@ -553,6 +664,30 @@ export function installArtifact(query, options = {}) {
 }
 
 export function removeArtifact(query, options = {}) {
+  // Resolve the owning root read-only, then redo the search under the lock so the state the
+  // removal acts on is the state it recorded its decisions from.
+  const target = options.target || 'claude-code';
+  const scope = options.scope || 'project';
+  const cwd = options.cwd || process.cwd();
+  let owningRoot = null;
+  for (const candidateRoot of resolveConfigRoots(target, scope, cwd)) {
+    if (!existsSync(statePath(candidateRoot))) continue;
+    const candidateState = loadState(candidateRoot);
+    if (Object.entries(candidateState.installs).some(([key, install]) => key.startsWith(`${target}:${scope}:`)
+      && (install.artifactId === query || install.slug === query))) {
+      owningRoot = candidateRoot;
+      break;
+    }
+  }
+  if (!owningRoot) {
+    let kind = null;
+    try { kind = resolveArtifact(query, options.root || ROOT).manifest.kind; } catch {}
+    owningRoot = resolveConfigRoot(target, scope, cwd, kind);
+  }
+  return withStateLock(owningRoot, () => removeArtifactLocked(query, options));
+}
+
+function removeArtifactLocked(query, options = {}) {
   const root = options.root || ROOT;
   const target = options.target || 'claude-code';
   const scope = options.scope || 'project';
@@ -628,8 +763,12 @@ export function removeArtifact(query, options = {}) {
   let deleteSettingsFile = false;
   if ((installed.hooks || []).length) {
     const settings = readJsonOr(settingsFile, {});
-    for (const { event, entry } of installed.hooks) {
-      const entryMarker = hookMarker(entry);
+    for (const hook of installed.hooks) {
+      const { event, entry } = hook;
+      const entryMarker = recordedHookMarker(hook);
+      if (!entryMarker) {
+        throw new Error(`installation state records a '${event}' hook with no [youdede:<slug>] marker; repair or delete ${statePath(configRoot)} before removing`);
+      }
       const configured = Array.isArray(settings.hooks?.[event]) ? settings.hooks[event] : [];
       const exact = configured.filter((candidate) => sameJson(candidate, entry));
       const marker = configured.filter((candidate) => hookMarker(candidate) === entryMarker);
@@ -688,6 +827,16 @@ export function removeArtifact(query, options = {}) {
     }
     delete state.installs[key];
     writeState(configRoot, state);
+
+    // Keep the generated notice in step with what is still installed, and drop it once the
+    // last artifact leaves so uninstall does not litter the project.
+    const notice = noticePath(configRoot);
+    if (!fileBackups.has(notice)) {
+      fileBackups.set(notice, existsSync(notice) ? { data: readFileSync(notice), mode: statSync(notice).mode } : null);
+    }
+    const rendered = renderNotice(state, ROOT);
+    if (rendered) atomicWrite(notice, rendered, 0o644);
+    else if (existsSync(notice)) rmSync(notice, { force: true });
   } catch (error) {
     for (const [absolute, backup] of fileBackups) restoreFile(absolute, backup);
     if (settingsFile) restoreFile(settingsFile, settingsBefore);
@@ -878,8 +1027,13 @@ function doctorRoot(target, scope, configRoot) {
         }
       }
       if (!settings) continue;
-      for (const { event, entry } of install.hooks || []) {
-        const entryMarker = hookMarker(entry);
+      for (const hook of install.hooks || []) {
+        const { event, entry } = hook;
+        const entryMarker = recordedHookMarker(hook);
+        if (!entryMarker) {
+          findings.push({ key, path: `${relativeSettings}#hooks.${event}`, status: 'hook-state-unmarked' });
+          continue;
+        }
         const configured = Array.isArray(settings.hooks?.[event]) ? settings.hooks[event] : [];
         const exact = configured.filter((candidate) => sameJson(candidate, entry));
         const marker = configured.filter((candidate) => hookMarker(candidate) === entryMarker);

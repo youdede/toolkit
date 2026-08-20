@@ -4,7 +4,7 @@
   "id": "subagent/security/threat-modeling/threat-model-mapper",
   "slug": "threat-model-mapper",
   "name": "Threat Model Mapper",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "subagent",
   "summary": "Map assets, actors, trust boundaries, controls, and reachable abuse hypotheses for one journey.",
   "description": "A narrow, read-only specialist whose outcome is to produce a bounded threat model that distinguishes observed controls from hypotheses requiring verification. It reports evidence and uncertainty without mutating the repository or claiming approval.",
@@ -26,7 +26,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not call an unverified hypothesis a vulnerability.",

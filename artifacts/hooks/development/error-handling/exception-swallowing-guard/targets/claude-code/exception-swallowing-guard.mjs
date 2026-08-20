@@ -44,17 +44,85 @@ export function collectContext(input, cwd = process.cwd()) {
 }
 
 
-export function swallowedHandlerInventory(text) {
-  const source = text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '').replace(/^\s*#.*$/gm, '');
+const HASH_COMMENT_FILE = /\.(?:py|rb|php)$/i;
+// The standard optional-dependency idiom: `except ImportError: pass` around an import is a
+// deliberate fallback, not a swallowed error.
+const OPTIONAL_IMPORT_ERRORS = /^\(?\s*(?:ImportError|ModuleNotFoundError)(?:\s*,\s*(?:ImportError|ModuleNotFoundError))*\s*,?\s*\)?$/;
+
+// Single left-to-right pass that blanks comment text and string contents, preserving length and
+// newlines so match offsets still address the original source. Handler shapes are then matched
+// against code only, so a string or comment that merely *describes* a swallowed handler cannot be
+// mistaken for one. Comment positions are retained: a comment inside an otherwise empty handler is
+// an explicit, reviewable statement of intent and exempts that handler.
+export function scanSource(text, file = '') {
+  const hashComments = HASH_COMMENT_FILE.test(file);
+  const slashComments = !/\.(?:py|rb)$/i.test(file);
+  const code = text.split('');
+  const comment = new Uint8Array(text.length);
+  const blank = (start, end, isComment) => {
+    for (let index = start; index < end && index < text.length; index += 1) {
+      if (text[index] !== '\n') code[index] = ' ';
+      if (isComment) comment[index] = 1;
+    }
+  };
+  let cursor = 0;
+  while (cursor < text.length) {
+    const three = text.slice(cursor, cursor + 3);
+    if (three === '"""' || three === "'''") {
+      const end = text.indexOf(three, cursor + 3);
+      const stop = end < 0 ? text.length : end + 3;
+      blank(cursor, stop, false); cursor = stop; continue;
+    }
+    const two = text.slice(cursor, cursor + 2);
+    if (slashComments && two === '/*') {
+      const end = text.indexOf('*/', cursor + 2);
+      const stop = end < 0 ? text.length : end + 2;
+      blank(cursor, stop, true); cursor = stop; continue;
+    }
+    if ((slashComments && two === '//') || (hashComments && text[cursor] === '#')) {
+      let end = text.indexOf('\n', cursor);
+      if (end < 0) end = text.length;
+      blank(cursor, end, true); cursor = end; continue;
+    }
+    if (text[cursor] === '"' || text[cursor] === "'" || text[cursor] === '`') {
+      const quote = text[cursor];
+      let end = cursor + 1;
+      while (end < text.length) {
+        if (text[end] === '\\') { end += 2; continue; }
+        if (text[end] === quote) { end += 1; break; }
+        if (text[end] === '\n' && quote !== '`') break;
+        end += 1;
+      }
+      blank(cursor, end, false); cursor = end; continue;
+    }
+    cursor += 1;
+  }
+  return { code: code.join(''), comment };
+}
+
+export function swallowedHandlerInventory(text, file = '') {
+  const { code, comment } = scanSource(text, file);
+  const documented = (start, end) => {
+    for (let index = start; index < end; index += 1) if (comment[index]) return true;
+    return false;
+  };
   const dialects = [
     ['empty-braced-catch', /catch(?:\s*\([^)]*\))?\s*\{\s*\}/g],
     ['ignored-promise-rejection', /\.catch\s*\(\s*(?:\([^)]*\)|[A-Za-z_]\w*)\s*=>\s*(?:\{\s*\}|undefined\b|null\b)\s*\)/g],
     ['ignored-promise-function', /\.catch\s*\(\s*(?:async\s+)?function(?:\s+[A-Za-z_]\w*)?\s*\([^)]*\)\s*\{\s*\}\s*\)/g],
-    ['python-pass-handler', /except(?:\s+[^:\n]+)?\s*:\s*(?:pass|\.\.\.)(?:\s*#.*)?\s*(?:$|\n)/gm],
-    ['ruby-empty-rescue', /rescue(?:\s+[^\n]+)?\s*\n\s*(?:#.*\n\s*)?end\b/g]
+    ['python-pass-handler', /except([^:\n]*)?:\s*(?:pass|\.\.\.)[^\S\n]*(?:$|\n)/gm],
+    ['ruby-empty-rescue', /rescue(?:[^\n]*)?\n\s*end\b/g]
   ];
   const inventory = [];
-  for (const [dialect, expression] of dialects) for (const match of source.matchAll(expression)) inventory.push({ dialect, offset: match.index });
+  for (const [dialect, expression] of dialects) {
+    for (const match of code.matchAll(expression)) {
+      const start = match.index;
+      const end = start + match[0].length;
+      if (documented(start, end)) continue;
+      if (dialect === 'python-pass-handler' && OPTIONAL_IMPORT_ERRORS.test((match[1] || '').trim())) continue;
+      inventory.push({ dialect, offset: start });
+    }
+  }
   return inventory;
 }
 export function evaluate(input, context = {}) {
@@ -63,9 +131,10 @@ export function evaluate(input, context = {}) {
   if (!input.tool_input || typeof input.tool_input !== 'object' || typeof (input.tool_input.file_path || input.tool_input.file) !== 'string') return block('exception-swallowing-input-invalid', 'the file edit input is malformed');
   if (!sourceFile(context.file || input.tool_input.file_path || input.tool_input.file || '')) return allow();
   if (!context.complete) return block('exception-handler-unverified', 'the exception-handler edit could not be reconstructed');
+  const target = context.file || input.tool_input.file_path || input.tool_input.file || '';
   const before = new Map(); const after = new Map();
-  for (const item of swallowedHandlerInventory(context.before || '')) before.set(item.dialect, (before.get(item.dialect) || 0) + 1);
-  for (const item of swallowedHandlerInventory(context.proposed || '')) after.set(item.dialect, (after.get(item.dialect) || 0) + 1);
+  for (const item of swallowedHandlerInventory(context.before || '', target)) before.set(item.dialect, (before.get(item.dialect) || 0) + 1);
+  for (const item of swallowedHandlerInventory(context.proposed || '', target)) after.set(item.dialect, (after.get(item.dialect) || 0) + 1);
   for (const [dialect, count] of after) if (count > (before.get(dialect) || 0)) return block('exception-swallowing-added', 'the change adds an empty exception or rejection handler');
   return allow();
 }

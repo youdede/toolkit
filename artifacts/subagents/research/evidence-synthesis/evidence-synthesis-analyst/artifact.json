@@ -4,7 +4,7 @@
   "id": "subagent/research/evidence-synthesis/evidence-synthesis-analyst",
   "slug": "evidence-synthesis-analyst",
   "name": "Evidence Synthesis Analyst",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "subagent",
   "summary": "Synthesize a bounded source packet while preserving population, method, context, and contradiction differences.",
   "description": "A narrow, read-only specialist whose outcome is to produce propositions showing where supplied evidence converges, conflicts, or cannot be combined for the target question. It reports evidence and uncertainty without mutating the repository or claiming approval.",
@@ -26,7 +26,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not perform new research beyond the supplied packet.",

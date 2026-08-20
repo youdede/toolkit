@@ -4,7 +4,7 @@
   "id": "subagent/operations/runbooks/runbook-readiness-reviewer",
   "slug": "runbook-readiness-reviewer",
   "name": "Runbook Readiness Reviewer",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "subagent",
   "summary": "Review one operational runbook for executable prerequisites, checks, failure branches, ownership, and recovery.",
   "description": "A narrow, read-only specialist whose outcome is to find a runbook step that cannot be executed or safely evaluated from the stated starting conditions. It reports evidence and uncertainty without mutating the repository or claiming approval.",
@@ -26,7 +26,7 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not execute runbook commands or contact responders.",

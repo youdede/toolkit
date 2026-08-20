@@ -280,9 +280,22 @@ function parseFrontmatter(file) {
   const end = raw.indexOf('\n---\n', 4);
   if (end < 0) return { raw, fields: null };
   const fields = {};
-  for (const line of raw.slice(4, end).split('\n')) {
-    const match = /^([A-Za-z][A-Za-z0-9-]*):\s*(.*)$/.exec(line);
-    if (match) fields[match[1]] = match[2].trim();
+  const lines = raw.slice(4, end).split('\n');
+  for (let index = 0; index < lines.length; index += 1) {
+    const match = /^([A-Za-z][A-Za-z0-9-]*):\s*(.*)$/.exec(lines[index]);
+    if (!match) continue;
+    let value = match[2].trim();
+    if (!value) {
+      // Collect an indented block value so a multi-line YAML list or mapping (Gemini's `tools:`,
+      // OpenCode's `permission:`) is not read as an empty declaration.
+      const block = [];
+      while (index + 1 < lines.length && /^\s+\S/.test(lines[index + 1])) {
+        block.push(lines[index + 1].trim());
+        index += 1;
+      }
+      value = block.join(', ');
+    }
+    fields[match[1]] = value;
   }
   return { raw, fields };
 }
@@ -599,15 +612,36 @@ export function validateArtifact(record, taxonomy, artifactsRoot = ARTIFACTS_ROO
 
   if (manifest.kind === 'subagent') {
     if (!SUBAGENT_ROLES.has(String(manifest.slug).split('-').at(-1))) errors.push('subagent slug must end with an approved role');
-    const mapping = Object.values(adapters)[0]?.data.files?.[0];
-    const agentFile = mapping ? path.resolve(directory, mapping.from) : null;
-    if (!agentFile || !existsSync(agentFile)) errors.push('subagent payload is missing');
-    else {
+    // Every target ships its own payload with its own frontmatter dialect, and each one is
+    // installed on its own. Validating only the first adapter left the rest free to lose their
+    // refusals, tool allowlist, or name match while the catalog still reported the artifact valid.
+    const entries = Object.entries(adapters)
+      .map(([target, adapter]) => [target, adapter.data.files?.[0]])
+      .filter(([, mapping]) => mapping);
+    if (!entries.length) errors.push('subagent payload is missing');
+    for (const [target, mapping] of entries) {
+      const agentFile = path.resolve(directory, mapping.from);
+      if (!existsSync(agentFile)) {
+        errors.push(`${target}: subagent payload is missing`);
+        continue;
+      }
       const { fields, raw } = parseFrontmatter(agentFile);
-      if (!fields || fields.name !== manifest.slug || !fields.description) errors.push('subagent frontmatter needs matching name and description');
-      if (!fields?.tools) errors.push('subagent must declare a bounded tools list');
-      if (!raw.includes('## Refusals')) errors.push('subagent must document Refusals');
-      if (refusalBulletCount(raw) < 3) errors.push('subagent must document at least three concrete refusals');
+      if (!fields) {
+        errors.push(`${target}: subagent payload needs frontmatter`);
+        continue;
+      }
+      if (!fields.description) errors.push(`${target}: subagent frontmatter needs a description`);
+      if (target === 'opencode') {
+        // OpenCode takes the agent name from the filename, so identity is checked there and
+        // bounded authority is expressed as a permission mapping rather than a tools list.
+        if (path.basename(mapping.from) !== `${manifest.slug}.md`) errors.push(`${target}: subagent payload filename must be ${manifest.slug}.md`);
+        if (!fields.permission) errors.push(`${target}: subagent must declare a bounded permission mapping`);
+      } else {
+        if (fields.name !== manifest.slug) errors.push(`${target}: subagent frontmatter name must match the slug`);
+        if (!fields.tools) errors.push(`${target}: subagent must declare a bounded tools list`);
+      }
+      if (!raw.includes('## Refusals')) errors.push(`${target}: subagent must document Refusals`);
+      if (refusalBulletCount(raw) < 3) errors.push(`${target}: subagent must document at least three concrete refusals`);
     }
   }
 
@@ -835,7 +869,7 @@ export function validatePack(record, knownIds, artifacts, root = ROOT) {
   return errors;
 }
 
-export function publicCatalog(artifacts, generatedAt) {
+export function publicCatalog(artifacts) {
   const items = artifacts
     .map(({ manifest, adapters }) => ({
       id: manifest.id,
@@ -874,7 +908,6 @@ export function publicCatalog(artifacts, generatedAt) {
 
   return {
     schemaVersion: 1,
-    generatedAt: generatedAt || new Date().toISOString(),
     counts: {
       total: items.length,
       skills: items.filter((item) => item.kind === 'skill').length,
@@ -886,7 +919,7 @@ export function publicCatalog(artifacts, generatedAt) {
   };
 }
 
-export function publicPackCatalog(packs, artifacts, generatedAt) {
+export function publicPackCatalog(packs, artifacts) {
   const byId = new Map(artifacts.map((record) => [record.manifest.id, record]));
   const items = packs.map(({ manifest }) => {
     const workflow = analyzePackWorkflow(manifest, artifacts);
@@ -926,5 +959,5 @@ export function publicPackCatalog(packs, artifacts, generatedAt) {
       })
     };
   }).sort((left, right) => left.id.localeCompare(right.id));
-  return { schemaVersion: 1, generatedAt: generatedAt || new Date().toISOString(), count: items.length, packs: items };
+  return { schemaVersion: 1, count: items.length, packs: items };
 }

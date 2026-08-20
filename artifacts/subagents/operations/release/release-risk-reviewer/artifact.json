@@ -4,7 +4,7 @@
   "id": "subagent/operations/release/release-risk-reviewer",
   "slug": "release-risk-reviewer",
   "name": "Release Risk Reviewer",
-  "version": "1.0.0",
+  "version": "1.4.0",
   "kind": "subagent",
   "summary": "Review a bounded release candidate for evidence-backed rollout, rollback, and verification risk.",
   "description": "Review a supplied release candidate, exact revision, required checks, deployment plan, migrations, and rollback evidence for material release risk. Use before a release decision when a parent needs a read-only risk review, not deployment execution or approval.",
@@ -26,7 +26,7 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not deploy, push, tag, trigger release jobs, or modify release configuration.",

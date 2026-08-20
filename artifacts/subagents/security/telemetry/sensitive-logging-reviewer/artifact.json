@@ -4,7 +4,7 @@
   "id": "subagent/security/telemetry/sensitive-logging-reviewer",
   "slug": "sensitive-logging-reviewer",
   "name": "Sensitive Logging Reviewer",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "subagent",
   "summary": "Review a bounded telemetry path for classified data reaching logs, traces, errors, or analytics.",
   "description": "A narrow, read-only specialist whose outcome is to trace one classified datum from its source through transformation to an observable telemetry sink and audience. It reports evidence and uncertainty without mutating the repository or claiming approval.",
@@ -25,7 +25,7 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not read, reproduce, or request real secret values.",

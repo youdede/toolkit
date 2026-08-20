@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 youdede contributors
+// Copyright (c) 2026 Youdede
 
 import { readFileSync, renameSync, writeFileSync } from 'node:fs';
 import path from 'node:path';

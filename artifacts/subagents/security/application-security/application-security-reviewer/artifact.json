@@ -4,7 +4,7 @@
   "id": "subagent/security/application-security/application-security-reviewer",
   "slug": "application-security-reviewer",
   "name": "Application Security Reviewer",
-  "version": "1.0.0",
+  "version": "1.4.0",
   "kind": "subagent",
   "summary": "Fallback cross-boundary application-security review when no narrower security specialist fits.",
   "description": "A read-only umbrella reviewer for bounded changes that connect multiple application-security boundaries. Single-outcome authorization, tenant isolation, threat modeling, cryptography, sensitive logging, and abuse resistance work routes to the dedicated specialist.",
@@ -25,7 +25,7 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not modify code, exploit a live target, or retrieve real secrets.",

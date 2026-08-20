@@ -139,3 +139,64 @@ test('database adapter is restricted to database connector names', () => {
   const adapter = JSON.parse(readFileSync(path.resolve('artifacts/hooks/data/live-query-safety/database-query-mode-guard/adapters/claude-code.json'), 'utf8'));
   const matcher = new RegExp(adapter.settingsPatch.hooks.PreToolUse[0].matcher); assert.equal(matcher.test('mcp__search__query'), false); assert.equal(matcher.test('mcp__neon__run_sql'), true); assert.equal(matcher.test('Bash'), true);
 });
+
+test('exception-swallowing-guard separates silent handlers from documented and idiomatic ones', (context) => {
+  const root = mkdtempSync(path.join(tmpdir(), 'youdede-exception-precision-'));
+  context.after(() => rmSync(root, { recursive: true, force: true }));
+
+  // want, label, file, before, proposed
+  const cases = [
+    ['allow', 'python optional-dependency import', 'opt.py', 'import sys\n', 'import sys\ntry:\n    import ujson\nexcept ImportError:\n    pass\n'],
+    ['allow', 'python optional-dependency tuple', 'opt2.py', 'import sys\n', 'import sys\ntry:\n    import ujson\nexcept (ImportError, ModuleNotFoundError):\n    pass\n'],
+    ['allow', 'block-comment documented catch', 'a.js', 'const a=1;\n', 'const a=1;\ntry { risky(); } catch (e) { /* intentional: best effort */ }\n'],
+    ['allow', 'line-comment documented catch', 'b.js', 'const a=1;\n', 'const a=1;\ntry { risky(); } catch (e) {\n  // intentional: telemetry is best effort\n}\n'],
+    ['allow', 'string literal describing a swallowed catch', 'c.js', 'const a=1;\n', 'const a=1;\nconst doc = "never write catch {} in this repo";\n'],
+    ['allow', 'docstring describing a swallowed handler', 'd.py', 'x=1\n', 'x=1\ndef f():\n    """Do not write except: pass here."""\n    return 1\n'],
+    ['allow', 'documented broad except', 'e.py', 'x=1\n', 'x=1\ntry:\n    risky()\nexcept Exception:  # deliberate: cleanup path\n    pass\n'],
+    ['allow', 'documented ruby rescue', 'f.rb', 'x=1\n', 'x=1\nbegin\n  risky\nrescue\n  # deliberate: optional\nend\n'],
+    ['block', 'silent javascript catch', 'g.js', 'const a=1;\n', 'const a=1;\ntry { risky(); } catch (e) {}\n'],
+    ['block', 'bare python except pass', 'h.py', 'x=1\n', 'x=1\ntry:\n    risky()\nexcept:\n    pass\n'],
+    ['block', 'silent broad python except', 'i.py', 'x=1\n', 'x=1\ntry:\n    risky()\nexcept Exception:\n    pass\n'],
+    ['block', 'ignored promise rejection', 'j.js', 'const a=1;\n', 'const a=1;\np.catch(() => {});\n'],
+    ['block', 'silent ruby rescue', 'k.rb', 'x=1\n', 'x=1\nbegin\n  risky\nrescue\nend\n'],
+    ['block', 'apostrophe in a comment must not mask a real catch', 'l.js', 'const a=1;\n', "const a=1;\n// don't hide the next line\ntry { risky(); } catch (e) {}\n"]
+  ];
+
+  for (const [want, label, file, before, proposed] of cases) {
+    const absolute = path.join(root, file);
+    writeFileSync(absolute, before);
+    const input = { tool_name: 'Write', cwd: root, tool_input: { file_path: absolute, content: proposed } };
+    const result = h4.evaluate(input, h4.collectContext(input, root));
+    assert.equal(result.exitCode, want === 'allow' ? 0 : 2, `${want}: ${label}`);
+    if (want === 'block') assert.equal(result.ruleId, 'exception-swallowing-added', label);
+  }
+});
+
+test('focus-style-regression-guard accepts the paired focus-visible pattern and still blocks real removals', (context) => {
+  const root = mkdtempSync(path.join(tmpdir(), 'youdede-focus-precision-'));
+  context.after(() => rmSync(root, { recursive: true, force: true }));
+
+  const cases = [
+    ['allow', 'recommended :focus / :focus-visible split', 'a.css', 'a { color: red; }\n',
+      'a { color: red; }\na:focus { outline: none; }\na:focus-visible { outline: 2px solid #005fcc; }\n'],
+    ['allow', 'split with a grouped selector', 'b.css', 'a { color: red; }\n',
+      'a { color: red; }\n.btn:focus, .link:focus { outline: none; }\n.btn:focus-visible, .link:focus-visible { outline: 3px solid blue; }\n'],
+    ['allow', 'suppressed outline replaced by a box-shadow ring', 'c.css', 'a { color: red; }\n',
+      'a { color: red; }\na:focus { outline: none; box-shadow: 0 0 0 3px #005fcc; }\n'],
+    ['block', 'outline removed with no replacement anywhere', 'd.css', 'a { color: red; }\n',
+      'a { color: red; }\na:focus { outline: none; }\n'],
+    ['block', 'focus-visible itself loses its indicator', 'e.css', 'a { color: red; }\n',
+      'a { color: red; }\na:focus { outline: 2px solid blue; }\na:focus-visible { outline: none; }\n'],
+    ['block', 'a different element supplies the only visible ring', 'f.css', 'a { color: red; }\n',
+      'a { color: red; }\n.menu:focus { outline: none; }\n.other:focus-visible { outline: 2px solid blue; }\n']
+  ];
+
+  for (const [want, label, file, before, proposed] of cases) {
+    const absolute = path.join(root, file);
+    writeFileSync(absolute, before);
+    const input = { tool_name: 'Write', cwd: root, tool_input: { file_path: absolute, content: proposed } };
+    const result = h8.evaluate(input, h8.collectContext(input, root));
+    assert.equal(result.exitCode, want === 'allow' ? 0 : 2, `${want}: ${label}`);
+    if (want === 'block') assert.equal(result.ruleId, 'focus-indicator-removed', label);
+  }
+});

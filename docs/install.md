@@ -33,6 +33,8 @@ Settings are written atomically while preserving an existing file mode. When an 
 
 Payload files are hashed while the plan is built and verified again immediately before they are copied. Existing symbolic links inside an installation destination are rejected so adapter paths cannot redirect writes outside the declared root.
 
+Installing writes `<target-root>/.youdede-toolkit/NOTICE.md`, listing every artifact currently installed in that root with its licence and contributors, together with the MIT licence text. It is regenerated on each install and removal and deleted when the last artifact is removed. Keep it while installed payloads are present: it is how the licence notice travels with the copied files.
+
 Bundled artifacts are also checked against `catalog/integrity.json` before planning. Run `verify-integrity` to validate one artifact or the complete catalog. These checksums detect drift relative to the included manifest; authenticate the manifest through the release's signed Git tag and npm provenance. See [integrity.md](integrity.md).
 
 ## Trust

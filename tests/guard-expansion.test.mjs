@@ -4,6 +4,7 @@ import { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from 'node
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { cleanGitEnvironment } from './git-env.mjs';
 
 import {
   MAX_STDIN_BYTES as GENERATED_MAX_STDIN,
@@ -43,7 +44,7 @@ function temporary(context, prefix) {
 }
 
 function git(cwd, args) {
-  const result = spawnSync('git', args, { cwd, encoding: 'utf8' });
+  const result = spawnSync('git', args, { cwd, encoding: 'utf8', env: cleanGitEnvironment() });
   assert.equal(result.status, 0, result.stderr);
   return result.stdout;
 }

@@ -4,7 +4,7 @@
   "id": "subagent/data/quality/data-quality-diagnostician",
   "slug": "data-quality-diagnostician",
   "name": "Data Quality Diagnostician",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "subagent",
   "summary": "Diagnose a bounded data anomaly with ranked causes and discriminating evidence checks.",
   "description": "A narrow, read-only specialist whose outcome is to rank plausible lineage-stage causes for a measured quality symptom and name the smallest check that separates them. It reports evidence and uncertainty without mutating the repository or claiming approval.",
@@ -26,7 +26,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not modify, clean, impute, or expose row-level data.",

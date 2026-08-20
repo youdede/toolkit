@@ -5,6 +5,7 @@ import {
   analyzeRelationshipGraph,
   loadPacks,
   publicCatalog,
+  publicPackCatalog,
   validateArtifact,
   validatePack,
   validateRelationshipIntegrity,
@@ -36,6 +37,58 @@ test('skill trigger and refusal contracts stay stricter than format validity', (
     assert.match(description, /\bUse (?:when|for|before|after)\b/i, manifest.id);
     assert.ok(raw.split(/\r?\n/).length < 500, `${manifest.id} must stay below 500 lines`);
   }
+});
+
+test('every subagent target payload is validated, not just the first adapter', () => {
+  const { artifacts, taxonomy } = validateRepository();
+  const subagents = artifacts.filter(({ manifest }) => manifest.kind === 'subagent');
+  assert.ok(subagents.length > 0);
+
+  // Each target ships and installs its own payload, so a defect in a non-primary one must be
+  // reported rather than hidden behind the first adapter.
+  let checkedTargets = 0;
+  for (const record of subagents) {
+    const targets = Object.keys(record.adapters);
+    assert.ok(targets.length >= 1, record.manifest.id);
+    checkedTargets += targets.length;
+    for (const target of targets) {
+      const broken = structuredClone(record);
+      broken.directory = record.directory;
+      broken.manifestPath = record.manifestPath;
+      broken.adapters = { [target]: record.adapters[target] };
+      // Point this target's payload at a file that does not exist and require the error to
+      // name the target it came from.
+      broken.adapters[target] = structuredClone(record.adapters[target]);
+      broken.adapters[target].data.files[0].from = 'targets/does-not-exist.md';
+      const errors = validateArtifact(broken, taxonomy);
+      assert.ok(errors.some((error) => error.startsWith(`${target}: `)), `${record.manifest.id} ${target}`);
+    }
+  }
+  assert.ok(checkedTargets > subagents.length, 'subagents must span more than one target');
+});
+
+test('the published artifact schema and the repository validator describe the same contract', () => {
+  const schema = JSON.parse(readFileSync(new URL('../schema/artifact.schema.json', import.meta.url), 'utf8'));
+  const { artifacts } = validateRepository();
+  assert.equal(schema.additionalProperties, false);
+
+  const declared = new Set(Object.keys(schema.properties));
+  const used = new Set();
+  for (const { manifest, manifestPath } of artifacts) {
+    for (const key of Object.keys(manifest)) {
+      used.add(key);
+      // `additionalProperties: false` is only meaningful if nothing in the repository violates
+      // it. Nothing evaluates JSON Schema at runtime, so this test is the enforcement.
+      assert.ok(declared.has(key), `${manifestPath} carries '${key}', absent from schema/artifact.schema.json`);
+    }
+    for (const key of schema.required) {
+      assert.ok(Object.hasOwn(manifest, key), `${manifestPath} is missing required '${key}'`);
+    }
+  }
+
+  // A property the schema declares but no artifact can use is drift in the other direction.
+  const unused = [...declared].filter((key) => key !== '$schema' && !used.has(key));
+  assert.deepEqual(unused, [], 'schema declares properties no artifact uses');
 });
 
 test('pack validation enforces its strict public schema surface', () => {
@@ -101,6 +154,26 @@ test('public catalog is sorted and exposes individual install commands', () => {
     else assert.ok(artifact.execution.entrypoints.length > 0);
     if (artifact.kind === 'skill') assert.ok(artifact.targets.includes('codex'));
   }
+});
+
+test('public catalogs are byte-reproducible and carry no generation timestamp', () => {
+  const { artifacts, packs } = validateRepository();
+  const first = JSON.stringify(publicCatalog(artifacts), null, 2);
+  const second = JSON.stringify(publicCatalog(artifacts), null, 2);
+  assert.equal(first, second);
+  assert.equal(Object.hasOwn(publicCatalog(artifacts), 'generatedAt'), false);
+
+  const firstPacks = JSON.stringify(publicPackCatalog(packs, artifacts), null, 2);
+  const secondPacks = JSON.stringify(publicPackCatalog(packs, artifacts), null, 2);
+  assert.equal(firstPacks, secondPacks);
+  assert.equal(Object.hasOwn(publicPackCatalog(packs, artifacts), 'generatedAt'), false);
+
+  // The committed files must equal a fresh build, so `--check` compares bytes rather
+  // than a value it read back out of the file it is checking.
+  const committed = readFileSync(new URL('../catalog/artifacts.json', import.meta.url), 'utf8');
+  assert.equal(committed, `${first}\n`);
+  const committedPacks = readFileSync(new URL('../catalog/packs.json', import.meta.url), 'utf8');
+  assert.equal(committedPacks, `${firstPacks}\n`);
 });
 
 test('relationship integrity rejects contradictory edges and directional cycles', () => {

@@ -4,7 +4,7 @@
   "id": "skill/operations/setup/author-guided-setup-wizard",
   "slug": "author-guided-setup-wizard",
   "name": "Author Guided Setup Wizard",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Author a resumable human-guided setup script with safe secret handling and verified checkpoints.",
   "description": "Author a bounded shell wizard for manual setup steps that require human interaction, credentials, dashboards, or irreversible confirmation. Use when automation cannot complete the procedure but a repeatable guided path is valuable.",
@@ -30,7 +30,7 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not ask users to paste secrets into chat, logs, arguments, or visible terminal input.",

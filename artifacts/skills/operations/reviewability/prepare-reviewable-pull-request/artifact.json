@@ -4,7 +4,7 @@
   "id": "skill/operations/reviewability/prepare-reviewable-pull-request",
   "slug": "prepare-reviewable-pull-request",
   "name": "Prepare Reviewable Pull Request",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Prepare a focused pull-request narrative whose claims trace to the diff, tests, risks, and review order.",
   "description": "Prepare a reviewable pull-request package from a verified branch diff, repository policy, test evidence, migration risk, and reviewer needs without publishing it. Use after implementation is complete and before opening or updating a pull request.",
@@ -31,7 +31,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not publish, push, commit, assign reviewers, or mutate remote state without explicit authorization.",

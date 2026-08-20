@@ -4,7 +4,7 @@
   "id": "subagent/operations/release/release-evidence-verifier",
   "slug": "release-evidence-verifier",
   "name": "Release Evidence Verifier",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "subagent",
   "summary": "Verify whether a bounded release claim is supported by fresh, correctly identified, criterion-linked evidence.",
   "description": "A read-only release specialist that checks artifact identity, provenance, environment, freshness, completeness, and acceptance-criterion coverage without deploying or approving.",
@@ -30,7 +30,7 @@
   "risk": "high",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "Do not run tests, builds, deployments, migrations, rollbacks, scanners, or production checks.",

@@ -1,0 +1,106 @@
+name: release
+
+# Publishes @youdede/toolkit from a protected environment using npm trusted publishing.
+# The job never sees a long-lived npm token: npm exchanges the GitHub OIDC identity for a
+# short-lived credential and records provenance for the exact commit.
+#
+# Before the first run the accountable publisher must complete the steps in
+# docs/release-readiness.md under "Blocking publisher decisions". This workflow deliberately
+# refuses to run until the release-readiness gate passes.
+
+on:
+  push:
+    tags: ['v*.*.*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing signed tag to publish, for example v0.1.0
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    name: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+          fetch-depth: 0
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Require a signed, annotated tag
+        env:
+          TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          git verify-tag "$TAG"
+          test "$(git cat-file -t "$TAG")" = tag
+
+      - name: Require the tag to match the package version
+        env:
+          TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          PACKAGE_VERSION="v$(node -p "require('./package.json').version")"
+          test "$TAG" = "$PACKAGE_VERSION"
+
+      - run: npm ci --ignore-scripts
+
+      - name: Structural and behavioural gate
+        run: npm run check
+
+      - name: Release-readiness gate
+        run: npm run check:readiness
+
+      - name: Record the integrity root digest for the release page
+        run: |
+          node ./bin/youdede-toolkit.mjs verify-integrity --json > integrity-attestation.json
+          node -p "'root digest ' + require('./catalog/integrity.json').rootDigest"
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: integrity-attestation
+          path: integrity-attestation.json
+          retention-days: 90
+
+  publish:
+    name: publish
+    needs: [verify]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # Create this environment in repository settings and add the accountable publisher as a
+    # required reviewer. That approval is the human gate before anything reaches npm.
+    environment: npm-publish
+    permissions:
+      contents: read
+      id-token: write # required for npm trusted publishing (OIDC)
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 20
+          cache: npm
+          registry-url: https://registry.npmjs.org
+
+      - run: npm ci --ignore-scripts
+
+      # npm >= 11.5.1 performs the OIDC exchange automatically when id-token: write is present
+      # and the package is configured for trusted publishing on npmjs.com.
+      - name: Publish with provenance
+        run: npm publish --access public --provenance
+
+      - name: Print the digest to publish on the authenticated release page
+        run: |
+          node -p "'root digest ' + require('./catalog/integrity.json').rootDigest"

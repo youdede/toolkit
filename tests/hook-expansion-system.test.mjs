@@ -5,6 +5,7 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import test from 'node:test';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { cleanGitEnvironment } from './git-env.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -167,7 +168,8 @@ test('the thirteen hook packages have executable adapters and documented refusal
     assert.equal(adapter.files[0].executable, true);
     const indexEntry = spawnSync('git', ['ls-files', '--stage', '--', definition.source], {
       cwd: ROOT,
-      encoding: 'utf8'
+      encoding: 'utf8',
+      env: cleanGitEnvironment()
     });
     assert.equal(indexEntry.status, 0, indexEntry.stderr);
     assert.match(indexEntry.stdout, /^100755 /);

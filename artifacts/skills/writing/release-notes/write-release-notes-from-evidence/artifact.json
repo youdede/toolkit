@@ -4,7 +4,7 @@
   "id": "skill/writing/release-notes/write-release-notes-from-evidence",
   "slug": "write-release-notes-from-evidence",
   "name": "Write Release Notes From Evidence",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Write release notes from bounded Git evidence while separating verified changes, user impact, and unresolved claims.",
   "description": "Write concise release notes from an explicit Git revision range and supplied validation evidence, using a read-only collector to ground change statements. Use when preparing release notes, a changelog entry, or a release announcement.",
@@ -26,7 +26,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not invent customer impact, performance, security, or compatibility claims from commit messages.",

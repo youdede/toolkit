@@ -4,7 +4,7 @@
   "id": "subagent/security/dependencies/dependency-risk-reviewer",
   "slug": "dependency-risk-reviewer",
   "name": "Dependency risk reviewer",
-  "version": "1.0.0",
+  "version": "1.4.0",
   "kind": "subagent",
   "summary": "Review dependency deltas for supply-chain and compatibility risk without mutating the repo.",
   "description": "A narrow read-only Claude Code specialist for manifest, lockfile, provenance, install-script, runtime, and integration risks after dependency changes.",
@@ -27,7 +27,7 @@
   "risk": "low",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not modify manifests, lockfiles, source code, or repository configuration.",

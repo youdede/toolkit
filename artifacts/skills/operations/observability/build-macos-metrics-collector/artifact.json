@@ -4,7 +4,7 @@
   "id": "skill/operations/observability/build-macos-metrics-collector",
   "slug": "build-macos-metrics-collector",
   "name": "Build Macos Metrics Collector",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Build a low-overhead local macOS metrics collector with private-by-default storage.",
   "description": "Design and validate a native macOS metrics collector using supported system interfaces, bounded sampling, SQLite, and launchd. Use for local device observability where privacy and low overhead are required.",
@@ -29,7 +29,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not collect screen content, keystrokes, credentials, or unrelated application data.",

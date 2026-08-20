@@ -7,6 +7,7 @@ import test from 'node:test';
 import { classifySqlRisks } from '../artifacts/skills/data/migrations/review-database-migration-plan/scripts/classify-sql-risks.mjs';
 import { collectWorkflowSignals } from '../artifacts/skills/operations/ci-cd/review-ci-workflow-change/scripts/collect-workflow-signals.mjs';
 import { collectReleaseEvidence } from '../artifacts/skills/writing/release-notes/write-release-notes-from-evidence/scripts/collect-release-evidence.mjs';
+import { cleanGitEnvironment } from './git-env.mjs';
 
 test('SQL risk helper emits only stable explicit risk IDs and rejects oversized input', () => {
   const result = classifySqlRisks('ALTER TABLE accounts DROP COLUMN legacy_id;\nTRUNCATE TABLE audit_log;');
@@ -42,7 +43,7 @@ test('workflow collector reports literal lines without YAML execution or semanti
 });
 
 function git(cwd, args) {
-  const result = spawnSync('git', args, { cwd, encoding: 'utf8' });
+  const result = spawnSync('git', args, { cwd, encoding: 'utf8', env: cleanGitEnvironment() });
   assert.equal(result.status, 0, result.stderr);
   return result.stdout.trim();
 }

@@ -4,7 +4,7 @@
   "id": "skill/development/agent-tooling/evaluate-agent-guidance-value",
   "slug": "evaluate-agent-guidance-value",
   "name": "Evaluate Agent Guidance Value",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "kind": "skill",
   "summary": "Measure whether always-loaded agent guidance changes outcomes before pruning or promoting it.",
   "description": "Design and run a controlled ablation of repository agent guidance using isolated matched trials, rule-level scoring, and explicit uncertainty. Use when deciding whether AGENTS.md, CLAUDE.md, or equivalent always-loaded instructions should be kept, shortened, moved, or removed.",
@@ -27,7 +27,7 @@
   "risk": "medium",
   "license": "MIT",
   "authors": [
-    "youdede contributors"
+    "Youdede"
   ],
   "refuses": [
     "It does not delete or rewrite guidance from a single clean run.",
