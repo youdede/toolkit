@@ -3,7 +3,8 @@
 import { existsSync, lstatSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildReleaseBenchmark } from './build-release-benchmark.mjs';
+import { buildReleaseBenchmark, MINIMUM_DYNAMIC_SAMPLE, MINIMUM_DYNAMIC_FRACTION, MINIMUM_PER_STRATUM }
+  from './build-release-benchmark.mjs';
 import { ROOT, validateRepository } from './lib/catalog.mjs';
 import { validateBehavioralEvaluations } from './validate-evaluations.mjs';
 
@@ -266,14 +267,45 @@ export function validateSemanticEvidenceDocument(document, benchmark, root, now 
   return reasons;
 }
 
+// The benchmark may be built at the default stratified coverage or at complete coverage. The
+// recorded policy decides which, so the gate rebuilds with it rather than assuming the default.
+// A policy that would select fewer cases than the release minimum is refused, not honoured: that
+// is the one direction in which trusting the recorded value could lower the bar.
+export function resolveBenchmarkSelection(recorded) {
+  if (!isPlainObject(recorded)) return { weakened: false, selection: {} };
+  const sample = recorded.minimumSample ?? MINIMUM_DYNAMIC_SAMPLE;
+  const fraction = recorded.minimumFraction ?? MINIMUM_DYNAMIC_FRACTION;
+  const perStratum = recorded.minimumPerStratum ?? MINIMUM_PER_STRATUM;
+  const usable = Number.isInteger(sample) && Number.isInteger(perStratum) && typeof fraction === 'number';
+  if (!usable) return { weakened: false, selection: {} };
+  if (sample < MINIMUM_DYNAMIC_SAMPLE || fraction < MINIMUM_DYNAMIC_FRACTION || perStratum < MINIMUM_PER_STRATUM) {
+    return { weakened: true, selection: {} };
+  }
+  return { weakened: false, selection: { minimumSample: sample, minimumFraction: fraction, minimumPerStratum: perStratum } };
+}
+
 export function assessSemanticEvidence(root = ROOT, { now = new Date() } = {}) {
   const benchmarkDirectory = path.join(root, '.youdede-workbench', 'release-benchmark');
   const indexFile = path.join(benchmarkDirectory, 'benchmark-index.json');
   const evidenceFile = path.join(root, '.youdede-workbench', 'reports', 'semantic-release-evidence.json');
   const reasons = [];
+  let recordedPolicy = null;
+  try {
+    recordedPolicy = readBoundedJson(indexFile).policy;
+  } catch {
+    recordedPolicy = null;
+  }
+  const resolved = resolveBenchmarkSelection(recordedPolicy);
+  if (resolved.weakened) {
+    reasons.push(reason('SEMANTIC_BENCHMARK_POLICY_WEAKENED', 'the recorded benchmark policy samples less than the release minimum', {
+      recorded: recordedPolicy,
+      minimum: { minimumSample: MINIMUM_DYNAMIC_SAMPLE, minimumFraction: MINIMUM_DYNAMIC_FRACTION, minimumPerStratum: MINIMUM_PER_STRATUM }
+    }));
+  }
+  const selection = resolved.selection;
   let expected;
   try {
-    expected = buildReleaseBenchmark(root);
+    expected = buildReleaseBenchmark(root, selection);
   } catch (error) {
     return { valid: false, evidenceFile, benchmarkFile: indexFile, coverage: null, reasons: [reason('SEMANTIC_BENCHMARK_BUILD_FAILED', error.message)] };
   }

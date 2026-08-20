@@ -38,6 +38,7 @@
     "scripts/build-release-benchmark.mjs",
     "scripts/runtime",
     "scripts/validate-evaluations.mjs",
+    "scripts/validate-output-contracts.mjs",
     "scripts/validate-release-readiness.mjs",
     "scripts/lib"
   ],
@@ -49,6 +50,7 @@
     "check:integrity": "node scripts/generate-integrity.mjs --check",
     "check:legal": "node scripts/verify-legal.mjs",
     "check:evaluations": "node scripts/validate-evaluations.mjs",
+    "check:contracts": "node scripts/validate-output-contracts.mjs",
     "check:quality": "node scripts/validate-release-readiness.mjs --structural-only",
     "check:readiness": "node scripts/validate-release-readiness.mjs",
     "benchmark:release:build": "node scripts/build-release-benchmark.mjs",
@@ -56,7 +58,7 @@
     "prepublishOnly": "npm run check && npm run check:readiness",
     "validate": "node scripts/validate.mjs",
     "test": "node scripts/run-tests.mjs",
-    "check": "npm run validate && npm run check:evaluations && npm run check:quality && npm run check:catalog && npm run check:integrity && npm run check:legal && npm run check:package && npm test"
+    "check": "npm run validate && npm run check:evaluations && npm run check:contracts && npm run check:quality && npm run check:catalog && npm run check:integrity && npm run check:legal && npm run check:package && npm test"
   },
   "keywords": [
     "agent-skills",

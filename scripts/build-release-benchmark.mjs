@@ -156,7 +156,9 @@ export function buildReleaseBenchmark(root = ROOT, options = {}) {
       byDimension,
       strata
     },
-    interpretation: 'Dynamic results estimate sampled behavior only and must not be reported as exhaustive portfolio semantic proof.'
+    interpretation: sampled.length === candidates.length
+      ? 'Dynamic inputs cover every candidate case. Complete coverage removes sampling error but not run-to-run variation, and is still not exhaustive portfolio semantic proof.'
+      : 'Dynamic results estimate sampled behavior only and must not be reported as exhaustive portfolio semantic proof.'
   };
   return { index, staticInputs, dynamicInputs, expectations, sampledWithIds };
 }
@@ -169,14 +171,19 @@ function parseArguments(argv) {
       const value = argv[++index];
       if (!value || value.startsWith('--')) throw new Error(`${option} requires a value`);
       options.output = path.resolve(value);
+    } else if (option === '--full') {
+      // Evaluate every candidate case instead of the stratified sample. Selection stays
+      // deterministic and the recorded policy tells the gate which coverage to expect.
+      options.minimumFraction = 1;
     } else throw new Error(`unknown argument '${option}'`);
   }
   return options;
 }
 
 function main() {
-  const options = parseArguments(process.argv.slice(2));
-  const benchmark = buildReleaseBenchmark(ROOT);
+  const { output, ...selection } = parseArguments(process.argv.slice(2));
+  const options = { output };
+  const benchmark = buildReleaseBenchmark(ROOT, selection);
   mkdirSync(options.output, { recursive: true });
   for (const [name, value] of [
     ['benchmark-index.json', benchmark.index],
@@ -184,7 +191,10 @@ function main() {
     ['dynamic-inputs.json', benchmark.dynamicInputs],
     ['secret-expectations.json', benchmark.expectations]
   ]) writeFileSync(path.join(options.output, name), `${JSON.stringify(value, null, 2)}\n`);
-  process.stdout.write(`Built ${benchmark.staticInputs.length} static inputs and a deterministic ${benchmark.dynamicInputs.length}/${benchmark.index.dynamic.candidates} dynamic sample.\n`);
+  const { sampled, candidates } = benchmark.index.dynamic;
+  process.stdout.write(sampled === candidates
+    ? `Built ${benchmark.staticInputs.length} static inputs and every one of the ${candidates} dynamic cases.\n`
+    : `Built ${benchmark.staticInputs.length} static inputs and a deterministic ${sampled}/${candidates} dynamic sample.\n`);
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
