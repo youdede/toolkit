@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import os from 'node:os';
 import path from 'node:path';
+import { cleanGitEnvironment } from './git-env.mjs';
 import {
   mkdirSync,
   mkdtempSync,
@@ -36,7 +37,7 @@ function temporary(context, prefix) {
 }
 
 function git(cwd, args, expected = 0) {
-  const result = spawnSync('git', args, { cwd, encoding: 'utf8' });
+  const result = spawnSync('git', args, { cwd, encoding: 'utf8', env: cleanGitEnvironment() });
   assert.equal(result.status, expected, result.stderr);
   return result.stdout.trim();
 }

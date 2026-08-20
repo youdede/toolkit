@@ -4,6 +4,7 @@ import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { cleanGitEnvironment } from './git-env.mjs';
 import {
   MAX_STDIN_BYTES as COMMIT_MAX_STDIN_BYTES,
   detectCommitIntent,
@@ -16,7 +17,7 @@ import {
 import { evaluate as evaluateShell } from '../artifacts/hooks/security/application-security/shell-command-guard/targets/claude-code/shell-command-guard.mjs';
 
 function git(cwd, args) {
-  const result = spawnSync('git', args, { cwd, encoding: 'utf8' });
+  const result = spawnSync('git', args, { cwd, encoding: 'utf8', env: cleanGitEnvironment() });
   assert.equal(result.status, 0, result.stderr);
 }
 

@@ -6,9 +6,10 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { doctor, installArtifact, planArtifactInstall, removeArtifact } from '../scripts/lib/install.mjs';
 import { loadArtifacts } from '../scripts/lib/catalog.mjs';
+import { cleanGitEnvironment } from './git-env.mjs';
 
 function runGit(cwd, args) {
-  const result = spawnSync('git', args, { cwd, encoding: 'utf8' });
+  const result = spawnSync('git', args, { cwd, encoding: 'utf8', env: cleanGitEnvironment() });
   assert.equal(result.status, 0, result.stderr);
   return result.stdout.trim();
 }

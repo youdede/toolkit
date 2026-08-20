@@ -11,6 +11,7 @@ import * as completionGuard from '../artifacts/hooks/operations/agent-orchestrat
 import * as configGuard from '../artifacts/hooks/operations/configuration/instruction-config-integrity-guard/targets/claude-code/instruction-config-integrity-guard.mjs';
 import * as compactionGuard from '../artifacts/hooks/operations/agent-orchestration/compaction-handoff-guard/targets/claude-code/compaction-handoff-guard.mjs';
 import * as worktreeGuard from '../artifacts/hooks/operations/git/worktree-removal-evidence-guard/targets/claude-code/worktree-removal-evidence-guard.mjs';
+import { cleanGitEnvironment } from './git-env.mjs';
 
 const scripts = {
   prompt: path.resolve('artifacts/hooks/security/secrets/prompt-secret-guard/targets/claude-code/prompt-secret-guard.mjs'),
@@ -26,7 +27,7 @@ function run(script, input) {
 }
 
 function git(cwd, args) {
-  const result = spawnSync('git', args, { cwd, encoding: 'utf8' });
+  const result = spawnSync('git', args, { cwd, encoding: 'utf8', env: cleanGitEnvironment() });
   assert.equal(result.status, 0, result.stderr);
 }
 

@@ -4,6 +4,7 @@ import { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from 'node
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
+import { cleanGitEnvironment } from './git-env.mjs';
 
 import {
   scanReferences,
@@ -80,7 +81,7 @@ function temporary(context, prefix) {
 }
 
 function git(cwd, args) {
-  const result = spawnSync('git', args, { cwd, encoding: 'utf8' });
+  const result = spawnSync('git', args, { cwd, encoding: 'utf8', env: cleanGitEnvironment() });
   assert.equal(result.status, 0, result.stderr);
   return result.stdout.trim();
 }

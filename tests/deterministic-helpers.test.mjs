@@ -7,9 +7,10 @@ import { spawnSync } from 'node:child_process';
 import { normalizeJson3 } from '../artifacts/skills/research/transcripts/extract-youtube-captions/scripts/normalize-json3.mjs';
 import { collectGitState } from '../artifacts/skills/writing/documentation/write-session-handoff/scripts/collect-git-state.mjs';
 import { validateSkill } from '../artifacts/skills/development/agent-tooling/author-effective-agent-skill/scripts/validate-skill.mjs';
+import { cleanGitEnvironment } from './git-env.mjs';
 
 function git(cwd, args) {
-  const result = spawnSync('git', args, { cwd, encoding: 'utf8' });
+  const result = spawnSync('git', args, { cwd, encoding: 'utf8', env: cleanGitEnvironment() });
   assert.equal(result.status, 0, result.stderr);
 }
 
