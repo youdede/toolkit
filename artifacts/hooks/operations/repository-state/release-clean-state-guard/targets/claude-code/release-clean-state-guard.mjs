@@ -5,6 +5,10 @@ import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+function cleanGitEnvironment(environment = process.env) {
+  return Object.fromEntries(Object.entries(environment).filter(([name]) => !/^GIT_/i.test(name)));
+}
+
 export const MAX_STDIN_BYTES = 1024 * 1024;
 export const MAX_STATUS_BYTES = 2 * 1024 * 1024;
 
@@ -53,7 +57,7 @@ export function releaseIntent(command) {
 }
 
 function git(cwd, args, allowedFailure = false) {
-  const outcome = spawnSync('git', args, { cwd, encoding: 'utf8', timeout: 5000, maxBuffer: MAX_STATUS_BYTES });
+  const outcome = spawnSync('git', args, { cwd, encoding: 'utf8', timeout: 5000, maxBuffer: MAX_STATUS_BYTES, env: cleanGitEnvironment() });
   if (outcome.error || (!allowedFailure && outcome.status !== 0)) throw new Error('git state unavailable');
   return outcome;
 }

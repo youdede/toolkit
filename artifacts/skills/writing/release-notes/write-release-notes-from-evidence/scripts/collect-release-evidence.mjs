@@ -4,11 +4,15 @@ import { realpathSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+function cleanGitEnvironment(environment = process.env) {
+  return Object.fromEntries(Object.entries(environment).filter(([name]) => !/^GIT_/i.test(name)));
+}
+
 const MAX_BUFFER = 1024 * 1024;
 const MAX_COMMITS = 50;
 const MAX_FILES = 200;
 function git(cwd, args) {
-  const result = spawnSync('git', args, { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 15_000, maxBuffer: MAX_BUFFER });
+  const result = spawnSync('git', args, { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 15_000, maxBuffer: MAX_BUFFER, env: cleanGitEnvironment() });
   if (result.error || result.status !== 0) throw new Error(String(result.stderr || result.error?.message || 'git failed').trim());
   return result.stdout.trimEnd();
 }

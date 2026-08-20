@@ -4,6 +4,10 @@ import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+function cleanGitEnvironment(environment = process.env) {
+  return Object.fromEntries(Object.entries(environment).filter(([name]) => !/^GIT_/i.test(name)));
+}
+
 export const MAX_STDIN_BYTES = 1024 * 1024;
 export const MAX_INDEX_BYTES = 1024 * 1024;
 export const MAX_LINK_BYTES = 4096;
@@ -39,7 +43,7 @@ export function inspectLinkTarget(repositoryPath, target) {
 }
 
 function gitRead(cwd, argumentsList, cap) {
-  const result = spawnSync('git', argumentsList, { cwd, encoding: 'buffer', timeout: 5000, maxBuffer: cap });
+  const result = spawnSync('git', argumentsList, { cwd, encoding: 'buffer', timeout: 5000, maxBuffer: cap, env: cleanGitEnvironment() });
   if (result.status !== 0 || result.error || result.stdout.length > cap) throw new Error('git inspection failed');
   return result.stdout;
 }

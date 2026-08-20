@@ -5,13 +5,18 @@ import { realpathSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+function cleanGitEnvironment(environment = process.env) {
+  return Object.fromEntries(Object.entries(environment).filter(([name]) => !/^GIT_/i.test(name)));
+}
+
 function git(cwd, args, required = true) {
   const result = spawnSync('git', args, {
     cwd,
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'pipe'],
     timeout: 15_000,
-    maxBuffer: 5 * 1024 * 1024
+    maxBuffer: 5 * 1024 * 1024,
+    env: cleanGitEnvironment()
   });
   if (result.error || result.status !== 0) {
     if (!required) return null;
