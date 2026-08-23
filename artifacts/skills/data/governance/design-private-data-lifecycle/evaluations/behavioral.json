@@ -6,7 +6,7 @@
     {
       "id": "positive-bounded-workflow",
       "type": "positive",
-      "prompt": "Design the lifecycle for support transcripts that may contain customer personal data and are copied to analytics.",
+      "prompt": "Design an engineering lifecycle control plan for these bounded data classes: (1) raw customer-support transcripts, classified confidential/personal data, containing customer name, email, account ID, free-text messages, and agent ID; and (2) derived analytics records containing account ID, redacted topic, sentiment score, and resolution category. Customer users and support agents are the data subjects. The owner-approved purposes are resolving support cases and measuring support quality; advertising, model training, and other secondary uses are prohibited. Accountable owner: Mira Chen, Director of Support Operations. Collection source: the authenticated support portal. The system of record is SupportDesk EU; a nightly processor copies redacted records to the internal Analytics Lake in AWS eu-west-1. Support agents may access assigned cases, support managers may access their tenant, and analytics-service identities may access only redacted records; cross-tenant access is prohibited. Policy PRV-12 requires EU storage, encryption with Security-owned keys, access auditing, and deletion after the approved clocks. Raw transcripts expire 90 days after case closure, analytics records 180 days after creation, and backups 35 days after primary deletion; Mira Chen is the retention authority. Primary deletion uses SupportDesk's case-deletion API and a daily Analytics Lake erasure job keyed by account ID. Processor deletion receipts and daily deletion-job manifests provide proof; restored backups must reapply retained deletion tombstones before serving data. Legal holds may pause deletion only when recorded by the Privacy Operations owner. Identify lineage or feasibility uncertainties as open decisions, and do not expose real records or claim legal compliance, anonymization, or guaranteed deletion.",
       "sourceAnchors": [
         "Follow every data state",
         "proof of deletion"
@@ -18,8 +18,8 @@
           "Lifecycle controls"
         ],
         "requiredEvidence": [
-          "retention clock",
-          "owner"
+          "Mira Chen is identified as the accountable owner and retention authority for both data classes",
+          "The plan traces the 90-day raw-transcript, 180-day analytics, and 35-day backup retention clocks through deletion APIs, erasure jobs, tombstones, and deletion evidence"
         ],
         "forbiddenClaims": [
           "guaranteed complete"

@@ -6,7 +6,7 @@
     {
       "id": "positive-bounded-application",
       "type": "positive",
-      "prompt": "Use this procedure for a bounded real task: Develop an article from notes, interviews, evidence, or fragments by separating exploration from structure, tracking reader prerequisites, and validating every factual claim. Use when source material exists but the argument and sequence need deliberate shaping.",
+      "prompt": "Develop a 700–900 word draft article from the fixed source record below, followed by the required validation accounting. The author has selected this central argument: “The eight-week pilot showed a promising reduction in measured household food-scrap waste, but its self-selected, uncontrolled design cannot establish that the program caused the change.” Intended readers are city residents with no composting background; the desired outcome is that they understand what was measured, what remains uncertain, and what a larger evaluation would need. Destination: the city sustainability blog. Voice: plain, measured, practical, and non-promotional. Preserve the author’s working title, `What We Learned From Eight Weeks of Curbside Composting`. This is draft authorization only; there is no authorization to publish or optimize it for another platform. Source set: S1, `City Waste Office Pilot Summary`, dated 2026-06-30, authored by the municipal waste-analysis team and licensed CC BY 4.0, reports 120 self-selected households, mean weekly food-scrap trash of 2.8 kg during the two-week baseline and 1.9 kg during week eight, no randomized control group, and complete scale records for 108 households; it permits attribution and paraphrase. S2, coordinator interview transcript dated 2026-07-02, owned by the city communications office, permits paraphrase but no direct quotation; it says the coordinator observed that labeled kitchen bins reduced sorting questions after week two, but no question counts were collected. S3, an anonymized participant email dated 2026-06-18, has written permission for anonymous paraphrase only; one participant reported less kitchen odor, which cannot be generalized. S4, the author-owned draft fragment, says `Trash fell 35%, proving curbside collection changed household habits.` The author authorizes copy-editing of S4. Correct the arithmetic from S1—`(2.8 - 1.9) / 2.8` is approximately 32%, not 35%—and do not describe the observational change as causal proof. Confidentiality constraint: do not identify the S3 participant or reproduce unpublished transcript wording. Cite claims using S1–S4, label interpretation, identify unused or unsupported material, and do not invent enrollment details, quotations, consensus, or factual bridges.",
       "sourceAnchors": [
         "Treat supplied material as bounded evidence, not automatic truth or permission to publish. Preserve the author's edits, voice constraints, citations, confidentiality, destination, and factual uncertainty. Separate discovery of material from commitment to an argument.",
         "## Validation"
@@ -18,8 +18,10 @@
           "Validation"
         ],
         "requiredEvidence": [
-          "source-material-development",
-          "copy-editing"
+          "Traceability of the 120-household, 108-complete-record, 2.8 kg, 1.9 kg, and approximately 32% claims to S1",
+          "Explicit separation of the observed change from any causal claim because the sample was self-selected and uncontrolled",
+          "Permission-aware handling of S2 and S3 as paraphrase-only sources with the participant kept anonymous",
+          "Correction of S4’s 35% causal sentence and identification of unsupported generalizations or unused material"
         ],
         "forbiddenClaims": [
           "completion without validation"

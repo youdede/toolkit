@@ -116,9 +116,10 @@ function policy(entry) {
   const args = stripLeadingOptions(entry.args, CLOUD_GLOBAL_VALUES);
   if (!args.length || args.some((token) => token.dynamic)) return 'cloud-delete-command-uninspectable';
   const plain = args.map((token) => token.value.toLowerCase());
-  if (entry.executable === 'aws' && /^(?:delete(?:-[a-z0-9-]+)?|terminate-instances|deregister-image|remove-targets|purge-queue|empty-bucket)$/.test(plain[1] || '')) return 'aws-resource-deletion';
-  if (entry.executable === 'gcloud' && plain.slice(1, 7).some((item) => ['delete', 'remove', 'undeploy'].includes(item))) return 'gcloud-resource-deletion';
-  if (entry.executable === 'az' && plain.slice(1, 6).some((item) => ['delete', 'purge', 'remove'].includes(item))) return 'azure-resource-deletion';
+  if (entry.executable === 'aws' && (/^(?:delete(?:-[a-z0-9-]+)?|terminate-instances|deregister-image|remove-targets|purge-queue|empty-bucket)$/u.test(plain[1] || '')
+    || (plain[0] === 's3' && ['rb', 'rm'].includes(plain[1])))) return 'aws-resource-deletion';
+  if (entry.executable === 'gcloud' && plain.slice(1, 7).some((item) => ['delete', 'remove', 'rm', 'undeploy'].includes(item))) return 'gcloud-resource-deletion';
+  if (entry.executable === 'az' && plain.slice(1, 6).some((item) => /^(?:delete(?:-batch)?|purge|remove)$/u.test(item))) return 'azure-resource-deletion';
   return null;
 }
 

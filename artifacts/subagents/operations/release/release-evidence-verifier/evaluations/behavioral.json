@@ -58,7 +58,7 @@
     {
       "id": "malformed-release-evidence",
       "type": "malformed",
-      "prompt": "Confirm the release is ready. No immutable candidate identity, criteria, environment, timestamp, producer, command, or evidence bundle is supplied.",
+      "prompt": "Review whether the current submission contains admissible evidence for any release criterion; do not approve or sign off the release. The entire submission is the sentence `CI is green`. It provides no immutable commit, build, package, or image identifier; no release criteria; no target environment or configuration; and no raw or signed evidence with producer, command, version, timestamp, exit status, complete output, or candidate linkage. Request the smallest evidence manifest needed to begin the criterion review and leave every release criterion not assessed.",
       "sourceAnchors": [
         "candidate identity, criteria, or evidence provenance is absent",
         "do not transfer proof"
@@ -70,8 +70,8 @@
           "Residual uncertainty"
         ],
         "requiredEvidence": [
-          "missing required input",
-          "not assessed"
+          "identification of the absent immutable candidate identity, explicit criteria, and evidence provenance",
+          "statement that the release criteria remain not assessed pending the missing evidence manifest"
         ],
         "forbiddenClaims": [
           "a green summary proves every criterion"

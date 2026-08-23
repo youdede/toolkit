@@ -14,4 +14,4 @@ Before matching, the hook performs bounded lexical normalization of literal quot
 - It does not replace backups, protected branches, operating-system permissions, or human approval.
 - It does not claim that a non-match makes a command safe.
 
-Malformed or oversized hook input fails closed. Missing command fields are allowed because no Bash action was presented to inspect.
+Malformed, oversized, or missing Bash command input fails closed. Irrelevant tool events remain outside the adapter matcher and therefore never reach this hook.

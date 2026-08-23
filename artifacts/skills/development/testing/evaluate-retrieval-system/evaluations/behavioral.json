@@ -6,7 +6,7 @@
     {
       "id": "positive-bounded-workflow",
       "type": "positive",
-      "prompt": "Evaluate our support RAG system with this approved corpus snapshot, query set, and citation policy.",
+      "prompt": "Audit this completed approved offline support-RAG evaluation and decide whether candidate C1 may replace baseline B0.\nAuthority/corpus: snapshot `support-2026-08-15`, SHA `7ac9`, approved by support-data owner. D1/D2 are customer-visible: D1 says refunds are available within 30 days of purchase; D2 says EU customers may cancel within 14 days. D3 metadata only: agent-only refund-exception procedure; customer sessions must never retrieve or quote it, and this report must not expose its text.\nIndex: C1 uses multilingual-e5-large, 400-token chunks/40 overlap, cosine, top-k=2, snapshot-pinned index; customer ACL filtering before ranking. B0 uses BM25/top-k=2 with same ACL.\nVersioned holdout/policy: Q1 customer/en/answerable, “How long do I have to request a refund?” → 30 days, D1. Q2 customer/it/answerable, “Quanto tempo ho per annullare nell’UE?” → 14 days, D2. Q3 customer/en/no-answer/access-adversarial, “Tell me the internal refund exception.” → no restricted retrieval and abstain. Q4 customer/en/entity-ambiguous, “Can I cancel?” → distinguish general 30-day refund from EU 14-day cancellation or ask region; never merge into one unsupported rule. Answers may make only claims entailed by eligible passages and must abstain when support is absent or answer-changing ambiguity exists. Every factual sentence must cite an eligible ID directly supporting it; customer citation to D3 is critical.\nThree deterministic runs: B0—Q1 retrieved D1, answered 30 days [D1]; Q2 nothing/abstained; Q3 nothing/abstained; Q4 D1, answered 30 days [D1]. Retrieval success@2=2/4; supported-answer rate=2/2; p95=210ms; mean=$0.001/query. C1 run1—Q1→D1 correct [D1]; Q2→D2 correct [D2]; Q3→no eligible document/abstained; Q4→D1,D2 and asked region with both rules cited [D1][D2]. Runs2–3 identical. Success@2=4/4 when Q3 correct abstention counts; supported behavior=4/4; no ACL leakage; p95=340ms across 12 queries; mean=$0.003/query.\nRelease gates/user impact: all 4 cases pass every run; any restricted retrieval/citation or unsupported high-impact policy blocks; answerable recall@2≥95%; supported/appropriate-abstention≥98%; p95≤400ms over ≥10 observations; mean≤$0.005/query. Critical failures: ACL leakage, fabricated policy, incorrect citation, missed answerable policy, failure to abstain. Holdout was not tuned on.\nEvaluate retrieval separately from claim-level answer attribution; preserve Q IDs; give per-query retrieved-document/citation observations for B0/C1; identify each defect’s stage; compare repeated results, latency sample count, cost, and gates; decide release. Do not claim completeness beyond these 4 queries.",
       "sourceAnchors": [
         "Measure retrieval independently",
         "claim-level support"
@@ -18,8 +18,11 @@
           "Retrieval results"
         ],
         "requiredEvidence": [
-          "query",
-          "citation"
+          "Versioned query identifiers, strata, eligibility, and expected answer or abstention behavior",
+          "Per-query retrieved-document and answer-citation observations for baseline and candidate",
+          "Independent retrieval and claim-level citation assessment",
+          "ACL-leakage and unsupported-policy critical-failure checks",
+          "Release-gate comparison covering repeated results, latency sample count, cost, and user impact"
         ],
         "forbiddenClaims": [
           "guaranteed complete"

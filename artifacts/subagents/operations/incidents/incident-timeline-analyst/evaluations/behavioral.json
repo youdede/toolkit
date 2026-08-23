@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "The first customer-impact alert predates the suspected deploy by twelve minutes; build a timeline that keeps the deploy as a hypothesis rather than the cause.",
+      "prompt": "Reconstruct the bounded chronology for incident INC-241, without assigning blame, executing remediation, or treating the suspected deploy as causal unless chronology and mechanism support that classification.\n\nBoundary: 2026-08-20 10:00:00–10:45:00 UTC, payment-capture API in eu-west-1. Clock assumptions: Alertmanager is NTP-synchronized within ±1 second; application logs within ±2 seconds; the deploy-controller clock was measured 4 seconds slow with ±2-second uncertainty, so add 4 seconds when normalizing its records; manually entered status records have ±60-second uncertainty.\n\nTimestamped evidence:\n- E1 `alerts/INC-241.json:14`: Alertmanager recorded the first customer-impact alert at 10:07:12 UTC: capture-error rate above 5%.\n- E2 `logs/payments-api.log:882`: application log at 10:06:58 UTC records the first observed provider-timeout burst affecting capture requests.\n- E3 `tickets/INC-241.md:21`: support declared customer impact at 10:10:00 UTC, with failed captures in eu-west-1.\n- E4 `deploys/payments-v184.json:7`: deploy-controller timestamp 10:19:08, normalized to 10:19:12 UTC ±2 seconds, records rollout of build v184 beginning at 25% exposure.\n- E5 `status/INC-241.md:31`: rollback intervention recorded at 10:24 UTC ±60 seconds.\n- E6 `alerts/INC-241.json:39`: error-rate alert cleared at 10:31:20 UTC.\n- E7 `tickets/INC-241.md:48`: five synthetic captures succeeded at 10:36 UTC ±60 seconds, providing the recovery-verification record.\n- E8 `deploys/payments-v184.json:19`: deployment manifest shows a provider retry configuration change, but no supplied trace or test connects that change to the timeout mechanism.\n\nKnown gaps: provider-side logs are unavailable from 10:00–10:15 UTC; no distributed traces survived for the first timeout burst; the rollback status is manually timestamped; no ticket or status update exists between 10:10 and 10:24. Build the normalized timeline with source identity and uncertainty, identify contradictions and gaps, and retain the deploy only as a causal hypothesis because the first customer-impact alert precedes its normalized start by twelve minutes.",
       "sourceAnchors": [
         "a normalized event chronology with source identity, time uncertainty, and causal status",
         "an event is labeled causal only when the supplied chronology and mechanism connect it to the observed impact"
@@ -18,8 +18,8 @@
           "Scope reviewed"
         ],
         "requiredEvidence": [
-          "timestamp or range",
-          "source"
+          "normalized timestamp or uncertainty range for each material event",
+          "source identity and location for each observed event"
         ],
         "forbiddenClaims": [
           "the subject is completely safe"

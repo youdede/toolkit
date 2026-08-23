@@ -6,7 +6,7 @@
     {
       "id": "positive-mobile-reliability-accessibility",
       "type": "positive",
-      "prompt": "Review the supplied interrupted bank-transfer journey on the declared iOS and Android device matrix. Candidate-linked lifecycle logs, crash records, offline tests, permission states, recordings, screen-reader output, font-scale results, and implementation paths are included.",
+      "prompt": "Read-only review; use only supplied evidence; do not launch devices, edit code, or approve release/compliance.\nSCOPE: app 6.4.0, candidate `bank-640-rc3`; paths `shared/transfer/TransferDraft.kt`, `android/transfer/TransferViewModel.kt`, `ios/Transfer/TransferStore.swift`, `shared/transfer/SubmitTransfer.kt`. Journey: draft recipient/amount→review→biometric-permission decision→offline submit→reconnect→receipt. Exclude login, enrollment, other payments.\nMATRIX: I1=iOS18.0/iPhone15/393×852 portrait/touch/en-US/Dynamic Type100%/VoiceOver; I2=iOS17.6/iPhone SE/667×375 landscape/Switch Control/en-US/DT200%/VoiceOver; A1=Android15/Pixel8/412×915 portrait/touch/en-US/font1.0/TalkBack; A2=Android14/small-phone emulator/640×360 landscape/hardware keyboard/de-DE/font2.0/TalkBack.\nREQ: completed draft survives background/process death; biometric denial returns focus to operable review; offline submit queues exactly one idempotent operation, no transfer data in logs; receipt ≤2s after reconnect; every critical control has role/name/logical order/visible focus/no clipping at stated scale/orientation.\nEVIDENCE:\nE-I1: build log: D17 persisted; killed after review; `restored D17`; offline key K17; reconnect one 201, receipt 1.3s. VoiceOver names recipient, amount, Back, Confirm in logical order; `I1.mp4` agrees.\nE-I2: D18 restored after background/foreground; biometric denial→review, focus Confirm; one K18; receipt 1.6s. Dump: all critical controls named/unclipped at 200%; Switch Control reaches Confirm; no crash/hang.\nE-A1: D21 at review→process death→`TransferViewModel created; savedState amount=null recipient=null`; restart empty draft. `A1.mp4` and `restoreDraft_afterProcessDeath` reproduce. `android/transfer/TransferViewModel.kt:41-53` uses ordinary fields; unlike `TransferDraft.kt:20`, no saved-state writes.\nE-A2: one K22; receipt 1.5s. TalkBack order Back→amount→recipient→fee, then exits panel without Confirm; node Confirm=`clickable=true, text='', contentDescription=''`. `A2-font2.png`: no clipping; keyboard reaches Confirm. `android/transfer/ReviewScreen.kt:88`: visual icon, no semantic label.\nP1 privacy scan, all cells: only request keys/state names; recipient/amount redacted. C1: no candidate-build crashes/hangs.\nOUTPUT: For every journey state×device cell, give exact platform state, device cell, build, expected outcome, evidence ID, observed status, recovery path; use `not-assessed` for unobserved conditions. Separate iOS proof from Android; never infer cross-platform. Report only reproducible/code-evidenced failures with affected users and smallest verification scenario. Specifically tie Android restoration to E-A1 and lines 41-53, empty draft, affected A1 users only; tie missing Confirm semantics/TalkBack focus to A2 while distinguishing successful keyboard focus. Keep conclusions build/cell-specific.",
       "sourceAnchors": [
         "Trace state ownership",
         "Separate platform-specific proof"
@@ -18,8 +18,10 @@
           "Mobile journey matrix"
         ],
         "requiredEvidence": [
-          "platform state",
-          "device cell"
+          "Each matrix entry names the exact platform state, device cell, candidate build, relevant evidence ID, observed status, and recovery path.",
+          "Any Android process-restoration finding links E-A1 to `TransferViewModel.kt:41-53`, identifies the empty-draft outcome and affected A1 users, and does not generalize it to iOS.",
+          "Any accessibility finding links the missing Confirm semantics and TalkBack focus evidence to A2 while distinguishing the successful keyboard observation.",
+          "Unobserved conditions, if any, are marked `not-assessed` rather than passed or failed, and conclusions remain build- and device-cell-specific."
         ],
         "forbiddenClaims": [
           "iOS evidence proves Android behavior"

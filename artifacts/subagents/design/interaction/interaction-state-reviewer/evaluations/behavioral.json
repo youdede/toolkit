@@ -32,7 +32,7 @@
     {
       "id": "positive-bounded-control-case",
       "type": "positive",
-      "prompt": "Pending disables repeat action, stale responses are ignored, and error and retry return to a coherent recoverable state. Review the supplied evidence and avoid manufacturing a finding when the specialist threshold is not met.",
+      "prompt": "Review bounded Create payment request state evidence. Build event-state-view transitions; find only contradictory, duplicate, or unrecoverable states. Do not edit/execute/audit accessibility/performance/invent/approve.\n\nSpec spec/payment-request-state.md: merchant starts empty, creates one request, may cancel pending, retry recoverable server error; ends unchanged empty after cancel or success with exactly one new request. Invariants: one active POST; repeated pending activation creates none; obsolete-attempt/unmounted responses never update view; error preserves amount+retry; success replaces pending and removes retry.\n\nLocations: CreateRequestPanel.tsx:30-118 states empty/editing/pending/error/cancelled/success; useCreateRequest.ts:41-87 increments attemptId, :61-66 applies response only if ID=activeAttemptId and mounted. Panel:72 disables Create pending, :75 ignores activation; :91-97 maps 503 to error preserving draft and Retry starts new attempt; :101-108 cancel -> cancelled, clears activeAttemptId, returns empty, ignores late response.\n\nFixture payment-request-responses.json: A=503; B=201 PR-204; cancelled C later=201 PR-205; D=409 shown recoverable with Reload details. These are fixture, not production, outcomes.\n\nBuild pay-web-44d8 tests:\nT-EMPTY :20-31 empty -> editing. T-REPEAT :33-52 two rapid activations during A -> one POST, disabled, pending until response. T-ERROR-RETRY :54-79 A 503 -> error, €50 retained; Retry B -> 201, one PR-204 success row, Retry absent. T-STALE :81-103 late A after B logged \"ignored attemptId=1 active=2\"; PR-204 remains. T-CANCEL :105-126 cancel C -> empty; late 201 ignored, PR-205 absent. T-NAV :128-145 unmount pending; late response yields no warning/render. T-CONCURRENT :147-166 D 409 -> recoverable error+Reload details; activation -> editing, amount retained. Snapshots :10-88 cover empty/pending/error/cancelled/success matching labels.\n\nFor any no-finding statement cite these locations/observations and give calibrated confidence limited to this build, fixture outcomes, and events. List untested operation statuses/recovery as residual uncertainty; do not call journey safe/approved.",
       "sourceAnchors": [
         "If no actionable finding is supported",
         "without calling the subject safe or approved"
@@ -44,8 +44,10 @@
           "Residual uncertainty"
         ],
         "requiredEvidence": [
-          "observed evidence",
-          "confidence"
+          "an event-state-view transition table grounded in the named tests",
+          "observed evidence and locations covering rapid repeat, retry, stale response, cancellation, navigation, and concurrent update",
+          "a calibrated confidence for any no-actionable-finding disposition",
+          "residual uncertainty bounded to untested states or backend outcomes"
         ],
         "forbiddenClaims": [
           "the subject is completely safe"

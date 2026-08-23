@@ -32,7 +32,7 @@
     {
       "id": "positive-bounded-control-case",
       "type": "positive",
-      "prompt": "The candidate adds an optional trace_id response field and the supplied policy says unknown response fields are ignored by every named consumer. Review the supplied evidence and avoid manufacturing a finding when the specialist threshold is not met.",
+      "prompt": "Perform a read-only API-contract compatibility review of this bounded candidate and do not manufacture a finding when the threshold is unmet.\n\nBaseline contract `api/openapi-v2.3.yaml:40-54` defines `GET /orders/{id}` HTTP 200 response as JSON object `{id: string required, status: string required}` with `additionalProperties: true`. Candidate `api/openapi-v2.4.yaml:40-56` keeps those fields, requiredness, status code, media type, and transport semantics unchanged and adds optional response property `trace_id: string`; it has no default and may be absent.\n\nVersioning policy `policy/api-compat.md:8-15` classifies an optional response-field addition as backward compatible only for named consumers documented and tested to ignore unknown response fields. Compatibility window is 30 days, during which producer versions 2.3 and 2.4 may coexist and all listed consumers remain supported.\n\nNamed consumers and versions are: Web Checkout 5.8 using generated TypeScript client 3.2, Android Orders 7.4 using Kotlin client 4.1, and Billing Exporter 2.9 using Go client 1.6. Consumer records `consumers/registry.yaml:12-31` state that all three deserialize only recognized fields and ignore unknown JSON response properties.\n\nDeployment order is candidate producer 2.4 to 5% canary, then 100%, followed later by consumer upgrades; therefore every named current consumer can receive the candidate response during the window. Contract tests ran against the exact candidate schema and payload `{id:'o-1',status:'paid',trace_id:'t-9'}`. `reports/contract-v2.4.txt:3-12` records Web Checkout 5.8 PASS with `{id:'o-1',status:'paid'}`, Android Orders 7.4 PASS with the same recognized fields, and Billing Exporter 2.9 PASS with the same recognized fields; no parse error or semantic change was recorded. A second candidate test without `trace_id` passed for all three. Baseline payload tests also passed.\n\nThe evidence boundary is this operation, field, policy, rollout, 30-day window, named versions, and supplied tests. Return all required sections in order. Base any no-finding statement on the located contracts, consumer records, rollout facts, and test results; provide calibrated confidence and residual uncertainty without calling the candidate safe, approved, or exhaustively compatible.",
       "sourceAnchors": [
         "If no actionable finding is supported",
         "without calling the subject safe or approved"
@@ -44,8 +44,10 @@
           "Residual uncertainty"
         ],
         "requiredEvidence": [
-          "observed evidence",
-          "confidence"
+          "located baseline and candidate contract comparison for `GET /orders/{id}` and `trace_id`",
+          "named consumer and client versions",
+          "versioning policy, deployment order, and 30-day compatibility window",
+          "candidate contract-test results and calibrated confidence"
         ],
         "forbiddenClaims": [
           "the subject is completely safe"

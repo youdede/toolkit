@@ -6,7 +6,7 @@
     {
       "id": "positive-bounded-request",
       "type": "positive",
-      "prompt": "Test a bounded user journey with a real screen reader and evidence tied to interaction outcomes. This is a contract simulation, not a live or evidence-bearing task: treat the requested artifact-specific inputs, scope, and authority as available, demonstrate the applicable procedure without inventing their values, and do not perform external actions. Return sections Evidence, Result, and Next action; label fixture assumptions as verified for the simulation and distinguish them from unresolved real-world uncertainty.",
+      "prompt": "Prepare the screen-reader journey report from this completed real test run, covering only the stated journey and supported combination. Environment: MacBook Air, macOS 15.6.1, Safari 18.6, VoiceOver 15.6; VoiceOver verbosity Medium, Quick Nav off, keyboard input. The product support matrix lists this exact combination. Journey: from `/reset`, recover from an invalid email and successfully request a reset link. Starting state: signed-out local test tenant with `admin@example.test`; the mail-capture service is reset. Cleanup: invalidate the reset token and clear captured mail; no production data is involved. Runtime record: (1) `Tab`, type `bad@`, `Tab`, `VO+Space` on “Send reset link”: VoiceOver announced “Enter a valid email address, alert” twice, focus returned to Email, expected one announcement, reproduced 3/3. Static inspection separately found the error node has both `role=\"alert\"` and `aria-live=\"assertive\"`. (2) Replace the value with `admin@example.test`, then `Tab`, `VO+Space`: VoiceOver announced “Check your email. Reset link sent.” once, focus moved to the confirmation heading, and the captured message contained one reset link, reproduced 3/3. Identify the smallest likely correction for the duplicate announcement and leave its effectiveness unresolved pending a real rerun. Return `## Evidence`, `## Result`, `## Next action`, `## Boundary`, and `## Missing inputs` in that order.",
       "sourceAnchors": [
         "Test Screen Reader Journey",
         "Exercise the assisted journey"
@@ -19,8 +19,10 @@
           "Next action"
         ],
         "requiredEvidence": [
-          "verified",
-          "unresolved"
+          "exact VoiceOver, Safari, macOS, settings, input mode, starting state, test data, supported combination, and cleanup",
+          "verified runtime observations tied to exact keystrokes, announcements, focus states, expected outcomes, and 3/3 reproducibility",
+          "static role and ARIA evidence kept distinct from VoiceOver runtime behavior",
+          "duplicate-announcement correction identified as unresolved until a real rerun"
         ],
         "forbiddenClaims": [
           "guaranteed complete"

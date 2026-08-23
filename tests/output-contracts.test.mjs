@@ -17,12 +17,22 @@ test('the committed catalog has no output-contract contradiction', () => {
   assert.deepEqual(collectContractProblems(), []);
 });
 
-test('a payload without an output contract is not checked', () => {
-  assert.deepEqual(payloadProblems({ manifest: { id: 'x' }, evaluation: null, file: 'a.md', text: '# Plain\n\nNo contract here.\n' }), []);
+test('a payload without an output contract fails closed', () => {
+  const problems = payloadProblems({ manifest: { id: 'x' }, evaluation: null, file: 'a.md', text: '# Plain\n\nNo contract here.\n' });
+  assert.equal(problems.length, 1);
+  assert.match(problems[0], /missing a ## Output contract section/);
 });
 
 test('an agreeing payload reports nothing', () => {
   assert.deepEqual(check('## Validation\n\nWrite `## Findings`, `## Evidence gaps`, and `## Recommendation`.'), []);
+});
+
+test('hand-authored inline and bulleted contract declarations are parsed', () => {
+  const inline = '# Example\n\n## Output contract\n\nProduce `## Findings`, `## Evidence gaps`, and `## Recommendation`.\n';
+  const bulleted = '# Example\n\n## Output contract\n\nProduce these sections:\n\n- `## Findings`: details.\n- `## Evidence gaps`: details.\n- `## Recommendation`: details.\n';
+  for (const text of [inline, bulleted]) {
+    assert.deepEqual(payloadProblems({ manifest: { id: 'skill/test/example' }, evaluation: null, file: 'SKILL.md', text }), []);
+  }
 });
 
 test('a heading demanded elsewhere must appear in the contract', () => {
@@ -51,6 +61,17 @@ test('a matching numbered list reports nothing', () => {
   );
 });
 
+test('a partial reversed numbered or bulleted list contradicts the contract', () => {
+  for (const body of [
+    '## Output\n\n1. `## Recommendation`\n2. `## Findings`',
+    '## Output\n\n- `## Evidence gaps`\n- `## Findings`'
+  ]) {
+    const problems = check(body);
+    assert.equal(problems.length, 1);
+    assert.match(problems[0], /output list orders headings as/);
+  }
+});
+
 test('a prose list must not reverse the contract order', () => {
   const problems = check('## Output schema\n\nThen provide `Recommendation`, `Evidence gaps`, and `Findings`.');
   assert.equal(problems.length, 1);
@@ -76,4 +97,14 @@ test('a repeated heading in the contract is reported', () => {
   const problems = payloadProblems({ manifest: { id: 'skill/test/example' }, evaluation: null, file: 'SKILL.md', text });
   assert.equal(problems.length, 1);
   assert.match(problems[0], /repeats ## Findings/);
+});
+
+test('explicit endpoint and exceptional-path contradictions are reported', () => {
+  const endpoint = check('End with Evidence gaps.');
+  assert.equal(endpoint.length, 1);
+  assert.match(endpoint[0], /makes ## Evidence gaps last/);
+
+  const exceptional = check('On failure, omit every section except `## Findings`.');
+  assert.equal(exceptional.length, 1);
+  assert.match(exceptional[0], /exceptional path omits contract headings/);
 });

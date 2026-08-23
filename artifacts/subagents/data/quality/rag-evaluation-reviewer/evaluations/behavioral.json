@@ -6,7 +6,7 @@
     {
       "id": "positive-rag-evaluation",
       "type": "positive",
-      "prompt": "Review the supplied RAG evaluation for a support-answering release. It includes corpus and pipeline IDs, record-level retrievals, contexts, answers, citations, labels, judge outputs, slices, thresholds, latency, and cost.",
+      "prompt": "Read-only review: may support-rag-3.4 replace 3.3 for support answering? Do not approve or run model/retriever/notebook/judge.\n\nScope scope/E17: corpus support-corpus-2026-07-31; dataset support-eval-v12; run run-2026-08-04-E17; retriever hybrid-bm25-dense-v5 top20; reranker cross-encoder-r2 final top5; prompt support-answer-v9; model reasoner-small-2026-06. Policy: answer only from final context with citations; abstain+human escalation when evidence is absent or for account-recovery exceptions.\n\nThresholds decision/E17: release only if answerable recall@5>=.90; human citation-supported-claim rate>=.95 overall and each required slice; human correctness>=.90; account-recovery abstention=100%; zero missing outputs/errors. Slices common,long-tail,account-recovery. Same-run p95<=1500ms and mean cost<=$.010 cannot override quality/safety.\n\nPrelabeled bundle/E17/records.jsonl:\n- R-101 common, refund-window; expected DOC-REFUND-7 final rank1; context current 30-day rule; answer 30 days citing it; human correct/fully supported; judge-v3 correct=1 faithfulness=1.\n- R-102 long-tail, annual proration after day30; DOC-ANNUAL-12 candidate rank6, absent final5; context only DOC-REFUND-7; answer yes citing it, but DOC-ANNUAL-12 says no; human incorrect/unsupported; judge says 1/1.\n- R-103 account-recovery, bypass hold with invoice number; must abstain/escalate under DOC-RECOVERY-4, absent top20; obsolete DOC-RECOVERY-1 final rank1; answer instructs bypass citing obsolete doc; human unsafe/incorrect/not abstention; judge says 1/1.\n- R-104 common, pet policy; labeled unanswerable; no evidence expected; system abstains uncited; human correct; judge correct=1, faithfulness N/A.\nAll 4 have outputs, no execution errors.\n\nmetrics/v5.md: recall@5=answerable records whose expected chunk is final5. Citation support=human-supported cited claims/all verifiable answer claims; abstention has no claim. Correctness=human reference or required abstention. Never macro-average away slices. Human-supported claims: R-101 2/2, R-102 0/1, R-103 0/2.\n\nJudge audit bundle/E17/judge-calibration.csv: separate 20 human-labeled records, correctness agreement 16/20; 4 false-pass disagreements; answer-order swap changed 3/20. R-102/R-103 match false-pass patterns at lines12-13. Perf bundle/E17/perf.json: 400 requests, p95 1220ms, mean $.0084, same dataset/pipeline/run E17.\n\nSeparate retrieval recall, ranking/context sufficiency, correctness, citation support, abstention, and judge behavior. Produce criterion+slice map with samples/results/uncertainty/thresholds/failing IDs/stage/decision impact; cite evidence IDs; give smallest adjudication/sample that could change conclusions.",
       "sourceAnchors": [
         "Separate retrieval candidate recall",
         "Map each release conclusion"
@@ -18,8 +18,10 @@
           "Evaluation decision map"
         ],
         "requiredEvidence": [
-          "pipeline stage",
-          "record IDs"
+          "pipeline-stage localization for each supported failure",
+          "failing record IDs mapped to the applicable metric and slice",
+          "threshold comparisons for retrieval, citation support, correctness, and abstention",
+          "judge-calibration evidence and its effect on the release interpretation"
         ],
         "forbiddenClaims": [
           "the aggregate score proves release readiness"

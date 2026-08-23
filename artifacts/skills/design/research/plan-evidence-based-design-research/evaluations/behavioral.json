@@ -6,7 +6,7 @@
     {
       "id": "positive-usability-study-plan",
       "type": "positive",
-      "prompt": "Plan a moderated usability study for five current account administrators choosing between two permission flows before the product owner decides which flow to pilot.",
+      "prompt": "Plan a moderated, remote usability study comparing permission-flow prototypes A and B. Decision: product owner Maya Chen must choose which flow to pilot by 15 September 2026. Intended claim: the study may identify observed usability breakdowns and determine whether either prototype satisfies the predefined pilot rule for these five sessions; it may not establish prevalence, representativeness, causality, or population preference. Current evidence: support ledger `SUP-27` contains 18 permission-related cases, but its convenience sample cannot establish frequency; analytics note `AN-14` shows abandonment at the permission step but not users’ motives. Product maturity: high-fidelity clickable prototypes before engineering implementation. Participants: five adults who currently administer an organization account and changed a member’s permissions within the last 90 days; exclude employees, vendors, and people lacking authority to manage permissions. Research Operations owner Dana Ruiz has authorized recruitment and the standard informed-consent process under protocol `UR-104`; planning only is requested—do not contact participants. Constraints: 45-minute remote sessions, one week of fieldwork, a €750 incentive budget, screen-reader and keyboard accommodations on request, and no collection of customer account contents. With consent, record screen and audio to encrypted research storage, restrict access to the named research team, retain recordings for 30 days and de-identified notes for 90 days, then delete them; stop recording and delete a participant’s data on withdrawal. Tasks must cover inviting a manager, removing export access, and recovering from an accidental change. Observable signals include task completion, critical permission errors, help requests, path deviations, time on task, and the participant’s explanation of the resulting access state. Counterbalance flow order and define a pilot decision rule that treats five sessions as evaluative evidence rather than a representative sample. Produce all required plan sections and assign each learning question `known`, `assumed`, or `unresolved`.",
       "sourceAnchors": [
         "decision this study must inform",
         "convenience sample representative"
@@ -18,8 +18,11 @@
           "Analysis and decision rule"
         ],
         "requiredEvidence": [
-          "participant eligibility",
-          "observable task signals"
+          "participant eligibility and exclusion criteria tied to recent account-administration experience",
+          "observable signals for completion, critical permission errors, help requests, deviations, timing, and access-state comprehension",
+          "explicit consent authority plus recording, access, retention, deletion, withdrawal, and accessibility safeguards",
+          "bounded intended claim, non-goals, current evidence identifiers, accountable owner, maturity, constraints, and decision deadline",
+          "predefined analysis and pilot decision rule that does not treat five sessions as representative"
         ],
         "forbiddenClaims": [
           "sample is representative"

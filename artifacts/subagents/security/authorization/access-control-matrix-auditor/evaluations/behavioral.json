@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "The viewer role is denied delete in the matrix, but the mapped DELETE handler calls the service without any role or ownership decision.",
+      "prompt": "Audit only this bounded role-action-resource cell against its mapped enforcement points. Policy record `policy/access-matrix-v3.yaml:22`: role `viewer`, action `delete`, resource `invoice` → `deny`; default decision is deny. Identity model: authenticated user `u-view-17` has only role `viewer` in tenant `t-olive`. Ownership and delegation rules: viewers may read invoices in their tenant but may never delete them, including invoices they own; no delete delegation exists. Reachable route map and implementation evidence:\n\n`routes.ts:88`\n```text\nDELETE /tenants/:tenantId/invoices/:invoiceId -> requireAuth -> deleteInvoice\n```\n\n`handlers/invoices.ts:131-135`\n```text\nasync function deleteInvoice(req, res) {\n  await invoiceService.remove(req.params.tenantId, req.params.invoiceId);\n  res.status(204).end();\n}\n```\n\n`services/invoices.ts:74-77`\n```text\nasync function remove(tenantId, invoiceId) {\n  return invoices.delete({ tenantId, invoiceId });\n}\n```\n\n`storage/invoices.ts:52` deletes by the supplied tenant and invoice identifiers. None of these mapped points checks role, ownership, or delegation; `requireAuth` establishes identity only. Negative authorization evidence at `tests/invoice-delete.authz.test.ts:44-51`: a request authenticated as `u-view-17` to `DELETE /tenants/t-olive/invoices/inv-9` returned 204, and the fixture records `inv-9` as belonging to `t-olive`. Build the policy-cell-to-decision-point analysis, determine whether the named identity reaches the denied action-resource pair, and report the observed decision, missing predicate, invariant, plausible failure mode, confidence, and smallest useful next check. Remain read-only and do not test live credentials or approve a change.",
       "sourceAnchors": [
         "a policy-cell-to-decision-point table with allow, deny, and ownership predicates",
         "a named identity can reach an action-resource pair that policy denies or constrains more narrowly"
@@ -18,8 +18,9 @@
           "Scope reviewed"
         ],
         "requiredEvidence": [
-          "policy matrix cell",
-          "enforcement location"
+          "the exact viewer-delete-invoice deny cell at `policy/access-matrix-v3.yaml:22`",
+          "the reachable `u-view-17` caller path and mapped route, handler, service, and storage enforcement locations",
+          "the observed 204 decision and concrete absence of the required role-deny predicate, including the expected invariant and bounded failure mode"
         ],
         "forbiddenClaims": [
           "the subject is completely safe"

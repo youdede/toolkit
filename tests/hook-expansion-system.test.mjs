@@ -195,11 +195,23 @@ test('global options and dry runs preserve command intent boundaries', async () 
   const container = await import(pathToFileURL(path.join(ROOT, CASES.find((entry) => entry.slug === 'container-privilege-guard').source)));
   const publish = await import(pathToFileURL(path.join(ROOT, CASES.find((entry) => entry.slug === 'package-publish-guard').source)));
   const registry = await import(pathToFileURL(path.join(ROOT, CASES.find((entry) => entry.slug === 'container-registry-publish-guard').source)));
+  const cloud = await import(pathToFileURL(path.join(ROOT, CASES.find((entry) => entry.slug === 'cloud-resource-deletion-guard').source)));
   assert.equal(container.evaluate({ tool_name: 'Bash', tool_input: { command: 'docker --config /tmp/config run --privileged alpine' } }).exitCode, 2);
   assert.equal(publish.evaluate({ tool_name: 'Bash', tool_input: { command: 'npm --workspace package-a publish' } }).exitCode, 2);
   assert.equal(registry.evaluate({ tool_name: 'Bash', tool_input: { command: 'docker --config /tmp/config push registry.invalid/a:1' } }).exitCode, 2);
   assert.equal(publish.evaluate({ tool_name: 'Bash', tool_input: { command: 'npm publish --dry-run' } }).exitCode, 0);
   assert.equal(publish.evaluate({ tool_name: 'Bash', tool_input: { command: 'poetry publish --dry-run' } }).exitCode, 0);
+  for (const command of [
+    'python3 -m twine upload dist/pkg.whl',
+    'python3.12 -m twine upload dist/pkg.whl',
+    'uv run twine upload dist/pkg.whl',
+    'uv publish dist/pkg.whl'
+  ]) assert.equal(publish.evaluate({ tool_name: 'Bash', tool_input: { command } }).exitCode, 2, command);
+  for (const command of [
+    'aws s3 rb s3://example-bucket --force',
+    'gcloud storage rm gs://example-bucket/object',
+    'az storage blob delete-batch --source container'
+  ]) assert.equal(cloud.evaluate({ tool_name: 'Bash', tool_input: { command } }).exitCode, 2, command);
 });
 
 test('scheduled execution distinguishes read-only queries from scheduler mutations', async () => {

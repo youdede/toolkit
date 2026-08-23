@@ -6,7 +6,7 @@
     {
       "id": "positive-bounded-workflow",
       "type": "positive",
-      "prompt": "Plan a bounded soak test for checkout at 200 requests per second using the supplied traffic trace and SLOs.",
+      "prompt": "Plan—but do not execute—a bounded soak test for checkout using these approved inputs.\n\nDecision and authorization:\n- Determine whether release `checkout-v4` can sustain the projected evening peak for four hours in the isolated staging environment `perf-checkout-03`.\n- The platform owner has authorized planning and a later separately approved run only against that environment. Operator and abort owner: on-call performance engineer Maya R.; she has sole stop authority.\n\nMeasured workload trace (2026-08-01 through 2026-08-07):\n- Open session 15%, price quote 35%, add item 20%, submit order 20%, poll order status 10%.\n- Target aggregate arrival rate is 200 requests/second, Poisson arrivals, 80 concurrent sessions, 1.2-second median think time, payloads p50 2 KiB/p95 16 KiB/max 64 KiB, 70% warm-cache and 30% forced-cold-cache requests, 60% EU/40% US synthetic users, and 50,000 synthetic products with 500,000 synthetic orders over the run.\n- Journey: open session → 1–3 quotes → 1–5 add-item calls → one submit → 1–4 status polls. Background inventory reconciliation runs every five minutes.\n\nObjectives and limits:\n- At 200 RPS: successful-request rate ≥99.5%; client-observed p95 ≤350 ms and p99 ≤700 ms over each five-minute window; order throughput ≥39 submits/second; zero duplicate or lost orders.\n- Staging capacity: 12 checkout pods, database ceiling 70% CPU and 800 active connections, queue ceiling 20,000 messages. Cost budget is $600.\n- Dependencies are staging PostgreSQL, Redis, payment-stub, inventory-stub, and the isolated queue. Their owners approved up to 220 aggregate RPS; no production or third-party endpoint is permitted.\n- Observability includes timestamped client latency/throughput/errors, pod CPU/memory/restarts, database CPU/connections/locks, Redis hit rate, queue depth/age, stub latency/errors, order-integrity counters, and spend.\n\nSafety controls:\n- Use synthetic tenant `soak-17`; delete its test records through the approved tenant cleanup job after validation.\n- Automatically abort on any duplicate/lost order; error rate >2% for two consecutive one-minute windows; p99 >1.5 seconds for two consecutive one-minute windows; database CPU >85% for three minutes; connections >760 for one minute; queue depth >18,000; any dependency error rate >1% for two minutes; cost >$550; or traffic >220 RPS.\n\nDesign warm-up, ramp, four-hour steady phase, recovery observation, repetitions, and a 100-RPS control run. State assumptions and confounders, compare repeated results using identical timestamped configurations, and include workload, safety, measurement, success, and abort details under all required headings. Planning must not generate traffic.",
       "sourceAnchors": [
         "derive request classes",
         "## Safety envelope"
@@ -18,8 +18,11 @@
           "Measurement plan"
         ],
         "requiredEvidence": [
-          "arrival rate",
-          "abort thresholds"
+          "Measured 200-RPS traffic mix, arrival pattern, session journey, payload distribution, cache state, and data volume",
+          "Authorized isolated target, dependency approvals, capacity ceilings, synthetic tenant, cost ceiling, and accountable abort owner",
+          "Concrete automatic abort thresholds for integrity, errors, latency, saturation, dependency health, spend, and rate",
+          "SLO measurements with percentile window, workload, and observation count requirements",
+          "Control run, repetition comparison, recovery observation, success thresholds, and confounders"
         ],
         "forbiddenClaims": [
           "guaranteed complete"

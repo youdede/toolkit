@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "The install procedure assumes an unstated working directory and its retry repeats a non-idempotent registration without a recovery step.",
+      "prompt": "Read-only reader simulation; identify first instruction not executable/verifiable from documented start. Do not run commands, edit/rewrite, approve, or broaden into incident authority.\nPERSONA: Mira, deployment operator; may register test nodes, no root. Ubuntu24.04, Glint Agent2.4.1, Bash5.2; cwd `/home/mira`. Release unpacked at `/opt/glint-agent-2.4.1`; `/opt/glint-agent-2.4.1/bin/glintctl` executable. Initially no registry node `edge-a`; agent stopped.\nPREREQS: network to `registry.test.example`; one free test-registration slot; `edge-a` authorized. Successful registration persistently consumes slot and creates record until explicit unregister.\nDOC “Install Glint Agent 2.4.1”:\n1 Run literal `./bin/glintctl register --node edge-a`; expect `Registered edge-a`; resulting state: registry contains edge-a.\n2 Run `./bin/glintctl start edge-a`; expect `edge-a: Ready` ≤30s.\n3 If not Ready by 30s, repeat step1 then step2.\n4 Success cleanup: delete downloaded archive; unpacked directory+registry entry remain.\n5 Recovery: “If a command fails, rerun the previous step.” No cwd, state check, unregister, duplicate handling, or interrupted-registration recovery documented.\nDRY RUN, same platform/version:\nD1 documented cwd `/home/mira`: literal step1→`bash: ./bin/glintctl: No such file or directory`; registry unchanged.\nD2 independent clean success control: author manually changed to `/opt/glint-agent-2.4.1` (undocumented); step1→`Registered edge-a`, exit0; step2→`edge-a: Ready` after 8s; archive deletion left unpacked directory+registry record as documented. Complete supplied success control, not proof documented path works.\nD3 second independent clean snapshot: same undocumented cd; registration succeeded (`Registered edge-a`, exit0); Ready withheld 30s; step3 repeated registration→`edge-a already registered`, exit12; registry retained exactly one edge-a. Doc has no exit12 action or way to determine whether registration completed after interruption.\nOUTPUT: Build step-precondition-action-observation-state ledger through supplied success control and one failure branch. First blocker must connect step1 literal relative command/expected observation to cwd `/home/mira` versus executable `/opt/glint-agent-2.4.1/bin/glintctl`, absent documented cd, and D1 unchanged state. Separately report later conditional non-idempotent retry: successful-registration state→step3 repeats registration→exit12 duplicate, with no state-check/unregister/duplicate/interruption recovery. Keep complete control path registration→Ready→documented cleanup distinct from blocked documented path; do not claim operational rehearsal. Reference inventory must list every unresolved token/cross-reference; give evidence-bounded calibrated confidence and smallest wording/ordering correction.",
       "sourceAnchors": [
         "a step-precondition-action-observation-state ledger through success and one failure branch",
         "a reader following only the supplied procedure cannot select, execute, verify, retry, or recover a required step safely"
@@ -19,8 +19,11 @@
           "Reference inventory"
         ],
         "requiredEvidence": [
-          "procedure step",
-          "required precondition"
+          "Step 1’s literal relative command `./bin/glintctl register --node edge-a` and its expected registration observation",
+          "The mismatch between the reader’s declared `/home/mira` starting directory and the executable’s `/opt/glint-agent-2.4.1/bin/glintctl` location, with no documented directory change",
+          "The same-version/platform dry-run result showing step 1 fails from the documented starting state without changing registry state",
+          "The successful-registration state transition, step 3’s repeated registration, exit-12 duplicate result, and absence of state-check, unregister, or duplicate-recovery instructions",
+          "The complete supplied control path through registration, Ready observation, and documented cleanup is kept distinct from the blocked documented starting path."
         ],
         "forbiddenClaims": [
           "the subject is completely safe"
@@ -33,7 +36,7 @@
     {
       "id": "positive-bounded-control-case",
       "type": "positive",
-      "prompt": "The procedure states environment, cwd, preconditions, bounded actions, observable results, idempotent retry, and cleanup. Review the supplied evidence and avoid manufacturing a finding when the specialist threshold is not met.",
+      "prompt": "Read-only reader simulation; do not execute or rewrite. If no specialist finding, report exact path, observed evidence, calibrated confidence; no operational-rehearsal/safety claim.\n\nPersona/start: Mira, support admin, Windows 11 23H2, Acme Desktop 4.2.0 GUI, local profile-admin permission; cwd C:\\Users\\Mira\\Downloads; staging-profile.json and invalid-profile.json present. App open; no staging-eu profile; no import active. Connected. staging file readable: id staging-eu, region eu-central, mode test. invalid file malformed line1 col18.\n\nProcedure Import and verify:\n1 Settings > Profiles > Import.\n2 Select C:\\Users\\Mira\\Downloads\\staging-profile.json, Open. Expect preview id/region/mode; state unchanged.\n3 Apply. Expect \"Profile staging-eu imported\" and exactly one Ready row.\n4 Retry 1-3 same file. Expect \"Profile staging-eu is already up to date\"; row neither duplicated nor changed.\n5 If preview open before Apply, Cancel. Preview closes/no state change; restart step1.\n6 On parse error, Back, correct/choose file, restart step1. invalid-profile.json expects \"Invalid JSON at line 1, column 18\"; no profile change.\n7 Cleanup: select staging-eu, Remove, Confirm. Expect \"Profile staging-eu removed\" and no row. If interrupted before Confirm, reopen Settings > Profiles and repeat; no pre-confirm removal.\n\nSame OS/version dry run: initial no row. First path previewed all 3 values; step3 banner+one Ready row. Repeat banner showed already up to date; one unchanged row. Cancel path unchanged. Invalid file showed exact line1/col18 error; Back left existing profile unchanged. Cleanup banner shown; final no row.\n\nSimulate first execution, repetition, interruption, invalid input, recovery, cleanup exactly. Build the required ledger and reference inventory. Treat the supplied dry run as observed evidence, not your own execution; inventory unresolved tokens/cross-references; report no finding only with bounded calibrated confidence.",
       "sourceAnchors": [
         "If no actionable finding is supported",
         "without claiming operational rehearsal"
@@ -46,8 +49,10 @@
           "Residual uncertainty"
         ],
         "requiredEvidence": [
-          "observed evidence",
-          "confidence"
+          "The declared Mira persona, Windows 11 23H2 and Acme Desktop 4.2.0 environment, permissions, working location, initial artifacts, and starting application state",
+          "Observed same-version/platform dry-run results for first import, idempotent retry, interruption, invalid-input recovery, and cleanup",
+          "The exact reader path and reference inventory showing whether every filename, UI label, expected observation, and restart point is resolvable",
+          "Calibrated confidence bounded to deterministic document simulation and the supplied dry-run record"
         ],
         "forbiddenClaims": [
           "the subject is completely safe"

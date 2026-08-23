@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "Users are randomized but sessions are analyzed as independent observations while the team repeatedly checks significance and stops on the first crossing.",
+      "prompt": "Review this bounded experiment for validity; do not edit, execute, approve, or declare a winner.\n\nExperiment record (`exp/design-v7.yaml`): hypothesis—showing a simplified checkout to eligible logged-in US users increases the probability of a completed purchase within 14 days of assignment. Estimand—difference in 14-day purchase probability among all assigned eligible users. Randomization unit and analysis unit intended by the estimand—user. Assignment—`hash(user_id, exp_v7) % 2`, 50/50 control or treatment, fixed for the experiment. Exposure—a user is exposed only when the assigned checkout renders; assignment is retained for ITT analysis. Primary outcome—at least one completed purchase per assigned user within 14 days. Guardrails—refund within 14 days and checkout-error incidence per assigned user. Sampling window—2026-07-01 through 2026-07-14 assignments, with outcomes observed through 2026-07-28. Pre-assignment exclusions—employees, known bots, and users lacking a US account. No post-assignment exclusions were planned. Crossovers remain in their assigned arm.\n\nObserved cohort record (`runs/exp-v7/cohort.csv`): control 1,000 assigned, 910 exposed, 1,820 exposed sessions, 9 crossovers, 8 missing outcome joins; treatment 1,000 assigned, 920 exposed, 3,680 exposed sessions, 12 crossovers, 10 missing outcome joins. The implementation analyzed each exposed session as an independent Bernoulli observation, rather than one outcome per assigned user, and excluded the 18 users with missing outcome joins.\n\nStopping record (`runs/exp-v7/peek-log.csv`): the team recomputed an ordinary fixed-horizon p-value daily without alpha adjustment—day 5: 0.12; day 6: 0.08; day 7: 0.061; day 8: 0.043—and stopped enrollment on day 8 because this was the first value below 0.05. The registered plan (`exp/analysis-plan-v7.md`) instead specified a fixed 14-day enrollment window, one final analysis, ITT by assigned user, and user-level standard errors.\n\nProduce the required assignment-to-exposure-to-analysis cohort flow and assess only supported randomization, exposure, clustering, exclusion, contamination, and stopping threats. Separate observed facts from inference, state the affected estimand and expected bias direction, and identify the smallest diagnostic for each supported finding.",
       "sourceAnchors": [
         "an assignment-to-exposure-to-analysis cohort flow with attrition and contamination points",
         "the supplied design permits systematic group differences or invalid uncertainty for the stated estimand"
@@ -18,8 +18,10 @@
           "Scope reviewed"
         ],
         "requiredEvidence": [
-          "validity threat",
-          "causal mechanism"
+          "the user-randomized but session-analyzed validity threat",
+          "the causal mechanism by which repeated within-user sessions invalidate independent-observation uncertainty",
+          "the optional-stopping mechanism and its expected anti-conservative bias direction",
+          "an assignment-to-exposure-to-analysis cohort flow using the supplied arm counts"
         ],
         "forbiddenClaims": [
           "the subject is completely safe"
@@ -32,7 +34,7 @@
     {
       "id": "positive-bounded-control-case",
       "type": "positive",
-      "prompt": "Assignment, exposure, analysis unit, exclusions, and stopping rule are predeclared and aligned with the stated estimand. Review the supplied evidence and avoid manufacturing a finding when the specialist threshold is not met.",
+      "prompt": "Read-only validity review of save-ui-2026-07-v3 using only E1-E6; do not execute/edit/approve/declare a winner.\n\nE1 spec-v3.md §§1-8: replacing two-step Save with one-click Save should increase eligible users saving >=1 item within 7 days; estimand=ITT risk difference among all eligible assigned users. Employee/test/bot/underage accounts excluded before assignment. Primary outcome=server binary save within 7 days; no event=0, not missing. Guardrails=crash-free sessions and p95 Save latency. Assignment window 2026-07-01 00:00 through 07-14 23:59 UTC; follow-up through 07-21; freeze 07-22; no post-assignment exclusions; calendar stopping predeclared, no interim looks, one analysis after freeze.\n\nE2 assignment-v3.txt: unit/analysis unit=stable user_id. First eligible catalog view assigns SHA256(experiment_id||user_id) mod 100: 0-49 control, 50-99 treatment; version pinned v3.\n\nE3 exposure-spec.md: assigned UI renders immediately on every eligible view; control=two-step, treatment=one-click; navigation before render stays in ITT; server audit found zero dual-interface users.\n\nE4 analysis-plan-v3.md: unadjusted user-level primary proportions, two-sided 95% CI, one primary comparison; guardrails separate with Holm; repeated visits collapse to one user.\n\nE5 cohort-flow-v3.csv: 20,000 assigned (10,004 control; 9,996 treatment); renders 9,875/9,868; all 20,000 in ITT with server-outcome coverage; 0 crossovers, post-assignment exclusions, or missing primary outcomes.\n\nE6 audit-v3.md: SRM p=0.94; save-event schema v12 unchanged from 2 weeks pre-assignment through freeze; assignment/exposure logs reconcile with E5; no interim query or allocation change. Feature is account-local and cannot expose another account's UI; social influence remains unmeasured.\n\nReview randomization, assignment/exposure, cohort flow, contamination, stopping, multiplicity, outcomes, and analysis. If no actionable finding is supported, name E1-E6, give calibrated confidence bounded to this evidence, and list residual uncertainty; do not invent a defect or call it safe/approved.",
       "sourceAnchors": [
         "If no actionable finding is supported",
         "without calling the subject safe or approved"
@@ -44,8 +46,10 @@
           "Residual uncertainty"
         ],
         "requiredEvidence": [
-          "observed evidence",
-          "confidence"
+          "The stated ITT estimand, user-level randomization and analysis units, eligibility rule, and pinned hash assignment",
+          "Assignment-to-exposure-to-analysis cohort counts, zero crossover, full primary-outcome coverage, and SRM result with their E2, E3, E5, and E6 locations",
+          "The fixed sampling window, seven-day follow-up, predeclared stopping rule, lack of interim looks, and frozen analysis plan",
+          "A calibrated confidence assessment grounded in E1–E6 and residual uncertainty about unmeasured interference, without implying safety, approval, or a causal winner"
         ],
         "forbiddenClaims": [
           "the subject is completely safe"

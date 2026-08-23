@@ -10,10 +10,11 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { loadArtifacts, ROOT } from './lib/catalog.mjs';
+import { extractOutputContract } from './lib/output-contract.mjs';
 
-const CONTRACT_LINE = /^Return every one of these headings[^\n]*/m;
 const BACKTICKED_HEADING = /`(##\s+[^`]+)`/g;
 const NUMBERED_HEADING = /^\s*\d+\.\s*`(##\s+[^`]+)`/gm;
+const BULLETED_HEADING = /^\s*[-*]\s*`(##\s+[^`]+)`/gm;
 const PROSE_LIST = /Then provide ((?:`[^`]+`(?:, | and |, and )?)+)\./;
 // A mention that offers a fallback for an undeclared heading is conditional, not a contradiction.
 const CONDITIONAL = /when this contract names that heading|when this contract names no uncertainty section|when it names none, in the first section it names/;
@@ -53,11 +54,18 @@ export function collectContractProblems(root = ROOT) {
 
 export function payloadProblems({ manifest, evaluation, file, text }) {
   const found = [];
-  const line = text.match(CONTRACT_LINE);
-  if (!line) return found;
-  const contract = [...line[0].matchAll(BACKTICKED_HEADING)].map((m) => clean(m[1]));
   const id = manifest?.id ?? file;
-  const rest = text.replace(line[0], '');
+  const parsed = extractOutputContract(text);
+  if (parsed.sections === 0) {
+    found.push(`${id} (${file}): missing a ## Output contract section`);
+    return found;
+  }
+  if (parsed.sections > 1) {
+    found.push(`${id} (${file}): declares ${parsed.sections} ## Output contract sections`);
+    return found;
+  }
+  const contract = parsed.headings;
+  const rest = text;
 
   if (contract.length === 0) {
     found.push(`${id} (${file}): the output contract names no heading`);
@@ -79,10 +87,15 @@ export function payloadProblems({ manifest, evaluation, file, text }) {
     }
   }
 
-  // 2. The payload's own numbered list must agree with the contract, membership and order.
-  const numbered = [...rest.matchAll(NUMBERED_HEADING)].map((m) => clean(m[1]));
-  if (numbered.length === contract.length && numbered.join('|') !== contract.join('|')) {
-    found.push(`${id} (${file}): the numbered output list orders headings as ${numbered.join(', ')} but the contract orders them ${contract.join(', ')}`);
+  // 2. Ordered heading lists must preserve the contract's relative order. A partial list can still
+  // contradict the contract, so it is checked rather than silently ignored.
+  for (const [label, pattern] of [['numbered', NUMBERED_HEADING], ['bulleted', BULLETED_HEADING]]) {
+    const listed = [...rest.matchAll(pattern)].map((m) => clean(m[1])).filter((heading) => contract.includes(heading));
+    const positions = listed.map((heading) => contract.indexOf(heading));
+    const ascending = positions.every((value, index) => index === 0 || positions[index - 1] < value);
+    if (listed.length >= 2 && !ascending) {
+      found.push(`${id} (${file}): the ${label} output list orders headings as ${listed.join(', ')} but the contract orders them ${contract.join(', ')}`);
+    }
   }
 
   // 3. A prose "Then provide `A`, `B`, and `C`" states a relative order too.
@@ -98,12 +111,37 @@ export function payloadProblems({ manifest, evaluation, file, text }) {
     }
   }
 
-  // 4. An instruction pointing at a findings section needs one, or an explicit fallback.
+  // 4. Explicit first/last instructions must name the first/last contract heading. These forms
+  // occur in hand-authored payloads without backticks, so compare normalized heading text too.
+  const normalizedContract = contract.map((heading) => bare(heading).toLocaleLowerCase('en-US'));
+  const endpointPatterns = [
+    ['first', /\b(?:start|begin)(?: the reply| the response)? with\s+(?:`##\s+([^`]+)`|([^.;\n]+))/giu, 0],
+    ['last', /\b(?:end|finish)(?: the reply| the response)? with\s+(?:`##\s+([^`]+)`|([^.;\n]+))/giu, contract.length - 1]
+  ];
+  for (const [label, pattern, expectedIndex] of endpointPatterns) {
+    for (const match of rest.matchAll(pattern)) {
+      const named = clean(match[1] || match[2]).replace(/^(?:the\s+)?/iu, '').toLocaleLowerCase('en-US');
+      const actualIndex = normalizedContract.indexOf(named);
+      if (actualIndex >= 0 && actualIndex !== expectedIndex) {
+        found.push(`${id} (${file}): an instruction makes ${contract[actualIndex]} ${label}, but the contract makes ${contract[expectedIndex]} ${label}`);
+      }
+    }
+  }
+
+  // 5. An unconditional exception that omits contract sections contradicts an every-path contract.
+  for (const match of rest.matchAll(/\b(?:on failure|when declining|when inputs are missing)[^\n.]{0,120}\b(?:omit|exclude) every section except\s+`(##\s+[^`]+)`/giu)) {
+    const kept = clean(match[1]);
+    if (contract.includes(kept) && contract.length > 1) {
+      found.push(`${id} (${file}): an exceptional path omits contract headings other than ${kept}`);
+    }
+  }
+
+  // 6. An instruction pointing at a findings section needs one, or an explicit fallback.
   if (/the findings section this contract names/.test(rest) && !contract.some((h) => /finding/i.test(h))) {
     found.push(`${id} (${file}): an instruction names a findings section that the contract does not declare`);
   }
 
-  // 5. Every section a behavioral case requires must be a heading the contract names.
+  // 7. Every section a behavioral case requires must be a heading the contract names.
   for (const item of evaluation?.cases ?? []) {
     for (const section of item.expected?.requiredSections ?? []) {
       if (!contract.includes(`## ${clean(section)}`)) {

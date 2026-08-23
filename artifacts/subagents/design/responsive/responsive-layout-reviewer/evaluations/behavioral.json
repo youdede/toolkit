@@ -32,7 +32,7 @@
     {
       "id": "positive-bounded-control-case",
       "type": "positive",
-      "prompt": "The same bounds show intrinsic sizing and wrapping with every required element inside its container and intended order. Review the supplied evidence and avoid manufacturing a finding when the specialist threshold is not met.",
+      "prompt": "Perform a read-only responsive-layout review of this bounded control case and do not manufacture a finding when the supplied threshold is unmet.\n\nChanged path: `src/components/CheckoutSummary.css:1-44` for `.summary`. Required elements, in intended DOM and reading order, are `h2#title`, `p#details`, and `button#pay`. Target effective layout viewports are 320–1440 CSS px in portrait or landscape. Supported content bounds are title 1–60 characters, details 1–240 characters, and button label 1–40 characters across `en-US`, `de-DE`, and `ar-EG`. Page zoom is 100–200%. Layout tokens are `space-16=16px`, `space-24=24px`, and `control-min=44px`.\n\nRelevant constraints at `CheckoutSummary.css:4-31`: `.summary{box-sizing:border-box;width:min(100%,720px);padding:16px;display:grid;gap:16px;overflow-wrap:anywhere}`; children use `min-width:0`; `#pay{width:100%;min-height:44px;white-space:normal}`; there are no fixed, absolute, sticky, negative-margin, overflow-hidden, or order declarations. In RTL, logical padding is used and DOM order is unchanged.\n\nRendered/computed evidence from `reports/checkout-layout.json:1-80`:\n- Effective viewport 320px, `en-US`, maximum content, 100% zoom: summary x=0..320; inner boundary x=16..304; title x=16..304/y=16..64, details x=16..304/y=80..176, pay x=16..304/y=192..252.\n- Effective viewport 320px, `de-DE`, maximum content, 200% zoom: inner boundary x=16..304; title y=16..112, details y=128..320, pay y=336..432; every rectangle has x=16..304 and the page scroll height expands to 448.\n- Effective viewport 320px, `ar-EG`, maximum content, 200% zoom: the same containment measurements, `direction=rtl`, and visual/DOM sequence title → details → pay.\n- Effective viewport 1440px, each locale, minimum and maximum content at 100% and 200% zoom: summary width=720 centered at x=360..1080; every required child remains within x=376..1064 and follows title → details → pay.\n\nRender assertions at `tests/layout/checkout.spec:22-51` report 24/24 supplied viewport-content-locale-zoom combinations with zero horizontal overflow, zero rectangle intersections, all three required elements visible, and DOM order equal to visual order. The evidence boundary does not cover widths below 320px, zoom above 200%, other locales, or unlisted components.\n\nReturn all required sections in order. Base any no-finding statement on the located computed and rendered evidence, provide calibrated confidence, and preserve the stated residual uncertainty without calling the subject safe or approved.",
       "sourceAnchors": [
         "If no actionable finding is supported",
         "without calling the subject safe or approved"
@@ -44,8 +44,10 @@
           "Residual uncertainty"
         ],
         "requiredEvidence": [
-          "observed evidence",
-          "confidence"
+          "target viewport, content, locale, and zoom bounds",
+          "located layout constraints and required-element order",
+          "computed containment and non-overlap measurements",
+          "calibrated confidence in the bounded no-finding disposition"
         ],
         "forbiddenClaims": [
           "the subject is completely safe"

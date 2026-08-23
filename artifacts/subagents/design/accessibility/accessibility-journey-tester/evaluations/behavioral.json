@@ -6,7 +6,7 @@
     {
       "id": "positive-accessibility-journey",
       "type": "positive",
-      "prompt": "Verify the supplied checkout-error journey across the declared keyboard, VoiceOver Safari, NVDA Firefox, 400% zoom, reduced-motion, high-contrast, and touch matrix. Build-linked recordings, transcripts, trees, focus logs, contrast results, reports, screenshots, and code are included.",
+      "prompt": "TASK: Read-only review; record every declared matrix cell `pass-evidenced|fail-evidenced|not-assessed`. Do not claim browser/screen-reader/scanner/device execution, edit, certify, or approve.\nSCOPE: build `checkout-web-91ac7e`; `/checkout`; `src/checkout/CheckoutForm.tsx`, `ErrorSummary.tsx`, `checkout.css`; `tests/a11y/checkout-error.spec.ts`. WCAG 2.2 AA 1.4.3,1.4.10,1.4.11,2.1.1,2.4.3,2.4.7,2.5.8,3.3.1,3.3.3,4.1.3.\nJOURNEY `J-CHK-ERR`: S1 leave postal empty→`Place order`; expect blocked submission+focus summary heading. S2 read summary/follow `Postal code`; expect focus invalid input, named/described error, SR announcement. S3 enter `00100`/reactivate; expect error clears, nonblocking `Checking address` status, no unexpected focus move. S4 backend accepts; expect confirmation heading reached/announced. Critical: S2 failure must not block correction/resubmission.\nMATRIX: complete 7 rows, not Cartesian; evidence on build, 2026-08-14.\nM1 Win11 Chrome127 1280x800 keyboard 100%, normal contrast/motion. `KBD-11`,`FOCUS-11` 09:00: S1 focus summary; S2→`#postal`, visible outline+associated error; S3 focus stays button as status appears; S4 focus confirmation; no trap/unreachable control observed.\nM2 macOS14 Safari17 VoiceOver 1440x900 100%. `VO-12`,`TREE-12` 09:20: S1 announces `There is 1 error`; S2 `Postal code, invalid, Enter a postal code`; S3 `Checking address, status`; S4 confirmation heading.\nM3 Win11 Firefox128 NVDA2024.2 1366x768 100%. `NVDA-13`,`TREE-13` 09:45: S1 summary; S2 focus `#postal`, tree has error description, transcript only `Postal code, edit, invalid`, omitting `Enter a postal code`; same omission twice; S3/S4 expected announcements.\nM4 Win11 Chrome127 keyboard 400%, 320 CSS-px viewport. `ZOOM-14`,`SHOT-14A/B`,`REFLOW-14` 10:10: S1-S4 operable; no 2D page scrolling; summary links/buttons visible; focus unobscured.\nM5 macOS14 Chrome127 keyboard, `prefers-reduced-motion:reduce`. `MOTION-15`+computed style 10:30: S1-S4 complete; summary animation duration `0s`; motion not needed to perceive change.\nM6 Win11 Edge127 keyboard forced-colors. `HC-16`+screenshots/computed colors 10:50: S1-S4 complete; outline=`Highlight`, visible; error icon/text distinguishable. Normal `CONTRAST-16`: body 9.2:1,error 5.8:1.\nM7 iOS18 Safari, VO off, touch,390x844 portrait. `TOUCH-17`+target boxes 11:15: S1-S4 complete; summary-link target 20x20 CSS px, 2 px from adjacent text; other targets >=44x44; recorded activation succeeds.\nAUTO/STATIC: `AUTO-18` `reports/checkout-91ac7e.json`: no violations; automation only. `ErrorSummary.tsx:34`→`#postal`; `CheckoutForm.tsx:91` aria-invalid; :92 aria-describedby=`postal-error`; :96 id=`postal-error`; :143 checking `role=status`. Static corroborates semantics, not runtime.\nOUTPUT required: `## Disposition`,`## Findings`,`## Journey evidence matrix`,`## Residual uncertainty`. Every finding: id,severity,claim,location",
       "sourceAnchors": [
         "Replay the supplied journey record",
         "Record every matrix cell"
@@ -18,8 +18,10 @@
           "Journey evidence matrix"
         ],
         "requiredEvidence": [
-          "journey step",
-          "matrix cell"
+          "journey-step and matrix-cell identifiers for every finding",
+          "an evidence ID and observed outcome for every matrix status",
+          "expected-versus-observed behavior tied to the applicable criterion",
+          "clear separation of runtime, static, and automated evidence classes"
         ],
         "forbiddenClaims": [
           "the automated scan certifies accessibility"

@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "Trace customer_email through a rename and hash transform into the warehouse and campaign export, preserving classification and marking one generated mapping unknown.",
+      "prompt": "Build a read-only field-level lineage graph for `customer_email` from the following bounded evidence. Mark the runtime-generated export mapping unknown; do not query systems, invent its resolved value, edit anything, or approve a release.\n\nNodes and boundaries:\n- `SRC.crm.customers.customer_email`: PostgreSQL table `crm.customers`, one row per customer, `customer_email STRING`, class `Restricted/Direct-Identifier`, owner `CRM Data / crm-data@example.test`, stored in the EU transactional boundary.\n- `STG.wh.stg_customers.email_normalized`: Snowflake table `wh.stg_customers`, one row per customer, class expected to remain `Restricted/Direct-Identifier`, owner `Analytics Platform / analytics@example.test`, EU warehouse boundary.\n- `WH.wh.customer_contact.email_hash`: Snowflake table `wh.customer_contact`, one row per customer, class `Restricted/Pseudonymous-Identifier`, owner `Analytics Platform / analytics@example.test`, EU warehouse boundary.\n- `SINK.campaign.daily_export.contact_key`: object field `contact_key` in `s3://campaign-eu/daily_export/date=*/`, one row per eligible customer, class required by policy to be `Restricted/Pseudonymous-Identifier`, owner `Growth Data / growth-data@example.test`, EU encrypted export boundary.\n\nLocated transform evidence:\n- `models/stg_customers.sql:8`: `lower(trim(customer_email)) AS email_normalized` from `crm.customers`.\n- `models/customer_contact.sql:14`: `sha2(email_normalized, 256) AS email_hash` from `wh.stg_customers`.\n- `jobs/campaign_export.sql:5`: `SELECT ${CONTACT_KEY_COLUMN} AS contact_key FROM wh.customer_contact WHERE marketing_opt_in = true`.\n- `jobs/campaign_export.yaml:11-16`: schedule `0 3 * * *`, sink `s3://campaign-eu/daily_export/date=${run_date}/`, KMS encryption enabled, owner `Growth Data`; the value of `CONTACT_KEY_COLUMN` is injected at runtime and is absent from the bounded evidence.\n- `orchestration/daily.yaml:20-31`: `stg_customers` runs at 01:00 UTC, `customer_contact` at 02:00 UTC, and `campaign_export` at 03:00 UTC after both predecessors succeed.\n- `governance/classification-policy.yaml:42`: normalization preserves a direct-identifier class; deterministic hashing changes it to pseudonymous identifier but does not make it public; downstream aliases must retain that classification.\n\nAssign stable node IDs, state transformation semantics, grain, classification, owner, location, and confidence for every supported edge. Treat the edge from `WH.wh.customer_contact` to `SINK.campaign.daily_export.contact_key` as unresolved because the runtime variable is unavailable, and name that exact missing runtime configuration as the smallest next artifact.",
       "sourceAnchors": [
         "a directed field-level lineage graph with transformation semantics and confidence per edge",
         "each asserted edge is supported by a supplied mapping, query, schema, or configuration location rather than a naming guess"
@@ -18,8 +18,10 @@
           "Scope reviewed"
         ],
         "requiredEvidence": [
-          "source and target nodes",
-          "transformation edge"
+          "stable source and target node identifiers for each asserted edge",
+          "located rename, normalization, and SHA-256 transformation edges",
+          "classification and row grain carried through supported edges",
+          "an explicitly unknown campaign-export edge tied to the unresolved runtime variable"
         ],
         "forbiddenClaims": [
           "the subject is completely safe"

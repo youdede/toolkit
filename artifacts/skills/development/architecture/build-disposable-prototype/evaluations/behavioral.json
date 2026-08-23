@@ -6,7 +6,7 @@
     {
       "id": "positive-bounded-application",
       "type": "positive",
-      "prompt": "Use this procedure for a bounded real task: Build a disposable logic or interface prototype around one explicit uncertainty, with observable state, representative scenarios, and a removal decision. Use when cheap interaction evidence is more useful than further abstract discussion.",
+      "prompt": "Assess and close out this disposable Node 20 ESM logic prototype. Its single falsifiable question is: “While a save request is in flight, does a four-state retry controller prevent duplicate submissions while still permitting one recovery attempt after a timeout?” The audience is the checkout product owner and QA lead; the decision is whether to transfer this state-machine rule into the durable checkout specification. Success requires all four agreed scenarios to match exactly, with no duplicate request in the boundary scenario. The time budget is 45 minutes; 28 minutes were used. The isolated file is `prototype/retry-probe.mjs`. Its observable state is `{phase, requestCount}` where phase is `idle`, `submitting`, `retryable`, or `succeeded`: `submit` from idle or retryable enters submitting and increments requestCount; `submit` while submitting is a no-op; `timeout` from submitting enters retryable without incrementing; `resolve` from submitting enters succeeded. It uses only in-memory synthetic events and Node’s built-in assertion module. Forbidden dependencies are production data, credentials, network calls, analytics, databases, repository migrations, and production routes. QA—not the author—ran `node prototype/retry-probe.mjs` in the isolated branch and recorded: ordinary `idle → submit → resolve` ended `{succeeded,1}`; boundary `idle → submit → submit` remained `{submitting,1}`; failure `idle → submit → timeout` ended `{retryable,1}`; recovery then `submit → resolve` ended `{succeeded,2}`. All assertions passed. The owner’s agreed rule is: if all four observations pass, transfer only the transition table and its rationale to `docs/specs/checkout-save.md`, then delete the prototype file and branch within 24 hours; promotion of prototype code is not authorized. Report the evidence separately from interpretation, state the supported decision, identify limitations, and record the exact disposal status. At response time the file and isolated branch still exist and deletion is pending owner confirmation.",
       "sourceAnchors": [
         "A prototype answers one named question; it is evidence, not production code. Define its audience, decision, success signal, time budget, disposal path, and forbidden dependencies before building.",
         "## Validation"
@@ -18,8 +18,9 @@
           "Validation"
         ],
         "requiredEvidence": [
-          "disposable-prototyping",
-          "decision-making"
+          "The falsifiable retry-controller question, audience, success threshold, time budget, synthetic-data boundary, forbidden dependencies, and four observable state-transition scenarios",
+          "The independent QA observations, including requestCount witnesses for duplicate prevention and recovery",
+          "A decision tied to the observed scenarios plus the exact pending disposal status and the rule that only the validated transition table may enter the durable specification"
         ],
         "forbiddenClaims": [
           "completion without validation"

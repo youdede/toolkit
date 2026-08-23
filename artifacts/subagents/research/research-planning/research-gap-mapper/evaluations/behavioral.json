@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "For a retention decision, map the missing cohort-level churn evidence, the branches it changes, and a stop threshold instead of asking for more research generally.",
+      "prompt": "Map the missing evidence for this retention decision without conducting research. Decision: whether to fund the Q4 onboarding-retention program. Branches: continue at full scope if 90-day churn is ≤8%; narrow to organic-signup customers if churn is >8% and ≤12%; postpone if churn is >12% and ≤15%; cancel if churn is >15%. If no valid result is available by 2026-09-01, postpone pending evidence regardless of the unknown band. Available evidence: aggregate Q2 90-day churn was 9% (90/1,000 accounts), but the export does not identify churn separately for the 600 paid-acquisition and 400 organic-signup accounts; billing records confirm the aggregate numerator and denominator, while the claim that paid acquisition drives most churn is untested. Constraints: decision due 2026-09-01, collection budget €2,000, no participant contact, and only existing billing and acquisition records may be used. Acceptable uncertainty: a cohort estimate with a 95% confidence interval no wider than ±2 percentage points, using records no older than Q2 2026; stop earlier if the evidence eliminates every branch but one. Feasible methods: record retrieval from the acquisition-attribution table followed by measurement against the billing cohort, or expert verification of the cohort join; both can finish within five business days. Produce the required gap-to-decision-impact map, mutually exclusive answer bands, affected branch for each band, cheapest valid collection step, sequencing, cost and latency, and stop condition. Defer questions that cannot change a named branch.",
       "sourceAnchors": [
         "a gap-to-decision-impact map with evidence method, cost class, and stop condition",
         "the unanswered question has at least two plausible answers that lead to different named decision branches"
@@ -19,8 +19,9 @@
           "Evidence portfolio"
         ],
         "requiredEvidence": [
-          "evidence gap",
-          "affected decision branch"
+          "the missing paid-acquisition versus organic cohort churn evidence and its current aggregate baseline",
+          "the explicit churn threshold and affected continue, narrow, postpone, or cancel branch for every answer band",
+          "a feasible record-retrieval or measurement method with sampling frame, precision and freshness target, cost, latency, dependency, and stop condition"
         ],
         "forbiddenClaims": [
           "the subject is completely safe"

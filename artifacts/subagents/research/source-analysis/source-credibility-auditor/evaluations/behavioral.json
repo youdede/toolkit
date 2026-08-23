@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "A decision claim cites a vendor blog that references no primary measurement; audit the directness, method gap, and applicability rather than accepting the citation.",
+      "prompt": "Audit this one claim-source relationship; do not synthesize other sources or perform web discovery. Atomic decision claim: “Enabling TurboCache 3.2 reduces checkout p95 latency by 40% for all EU retail deployments.” Supplied source: VendorCo blog post, “TurboCache 3.2 Makes Every Checkout Faster,” paragraph 4, stable captured locator `records/vendorco-blog-2026-06-10.html#p4`. Captured passage: “Customers using TurboCache 3.2 saw checkout latency fall by 40%, so every EU retailer can expect the same improvement.” Publisher: VendorCo. Author: Mira Lane, Product Marketing Manager; accountable institution: VendorCo Marketing. Publication date: 2026-06-10. Claimed observation/event period: February–April 2026. Relevant product version: TurboCache 3.2. Claimed population: all EU retail deployments. Method disclosure: the post gives no sample size, customer identities, sampling frame, p95 measurement procedure, baseline, uncertainty, or exclusion criteria. Citation chain: no dataset, experiment report, or other upstream primary measurement is cited or supplied. Disclosures: the publisher sells TurboCache; no additional sponsorship or conflict statement appears. Correction history: none shown in the captured page. Freshness threshold: evidence must concern version 3.2, include measurements from the preceding six months, and be published within six months of the decision. Grade directness, method fit, population/version applicability, missing origin evidence, and confidence based only on this supplied material.",
       "sourceAnchors": [
         "a claim-source matrix recording provenance, directness, applicability, conflicts, and confidence",
         "the source contains evidence that directly bears on the scoped claim for the relevant population, version, and date"
@@ -18,8 +18,9 @@
           "Claim-source audit"
         ],
         "requiredEvidence": [
-          "claim",
-          "source and source type"
+          "the exact atomic 40% latency claim and captured vendor-blog passage",
+          "the vendor blog source class, publisher and author accountability, dates, version, population, and commercial conflict",
+          "the absent primary measurement and specific method fields that limit directness or applicability, with an explained audit grade and confidence"
         ],
         "forbiddenClaims": [
           "the subject is completely safe"
@@ -32,7 +33,7 @@
     {
       "id": "positive-bounded-control-case",
       "type": "positive",
-      "prompt": "A versioned primary specification states the exact behavior for the named version and the scoped claim does not exceed it. Review the supplied evidence and avoid manufacturing a finding when the specialist threshold is not met.",
+      "prompt": "Audit this single claim-source relationship and do not manufacture a defect if the finding threshold is not met. Atomic claim: “For AcmeKV Server 4.2, a conditional PUT carrying an If-Match value that differs from the resource’s current ETag returns HTTP 412 and does not replace the resource.” Supplied source: AcmeKV Server 4.2 Primary Protocol Specification, §7.3.2 “Conditional PUT,” stable locator `spec/acmekv-4.2.html#conditional-put`. Captured text: “When If-Match does not equal the current entity tag, the server MUST return 412 Precondition Failed and MUST NOT apply the replacement.” Publisher and accountable author: Acme Systems Standards Group. Source class and method basis: versioned normative primary specification based on the protocol contract, not an empirical measurement. Publication date: 2026-07-01; version 4.2 effective/event date: 2026-07-15. Citation chain: no upstream citation—the supplied specification is the originating record. Population and version scope: AcmeKV Server 4.2 conditional PUT only; the claim makes no assertion about other versions or operations. Correction history: none listed. Sponsorship/conflict disclosure: produced by the product vendor; no additional conflict disclosed. Freshness threshold: the source must cover version 4.2 and have been published within 12 months of this audit. Review only this supplied record, grade its directness and method/version fit, name the exact evidence inspected, and give calibrated confidence without calling the claim approved or the product safe.",
       "sourceAnchors": [
         "If no actionable finding is supported",
         "say so without calling the source verified or the claim approved"
@@ -45,8 +46,9 @@
           "Residual uncertainty"
         ],
         "requiredEvidence": [
-          "observed evidence",
-          "confidence"
+          "the captured §7.3.2 normative statement and its exact locator as the observed evidence",
+          "the claim-to-source fit for AcmeKV 4.2, including provenance, directness, version and date applicability, and the vendor accountability disclosure",
+          "an audit grade with calibrated confidence and any bounded residual uncertainty, without inventing an actionable finding"
         ],
         "forbiddenClaims": [
           "the subject is completely safe"

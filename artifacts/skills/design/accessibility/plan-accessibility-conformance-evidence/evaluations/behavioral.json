@@ -6,7 +6,7 @@
     {
       "id": "positive-bounded-workflow",
       "type": "positive",
-      "prompt": "Plan accessibility evidence for checkout across keyboard, zoom, reduced motion, forms, and screen readers.",
+      "prompt": "Plan accessibility conformance evidence—not legal certification—for the bounded checkout surface in staging: `/cart`, `/checkout/contact`, `/checkout/delivery`, `/checkout/payment`, the order-review dialog, validation/error states, payment-declined recovery, and `/confirmation`. Owner-supplied target requirements are WCAG 2.2 Level A and AA. User populations include keyboard-only users and people using screen readers, zoom or reflow, voice input, reduced motion, forced colors, and alternative touch input. Decision owner: Sofia Bianchi, VP Product.\n\nCritical journeys are: (1) guest user reviews the cart, enters contact and delivery details, pays with a synthetic card, and reaches confirmation; (2) signed-in user edits an address in the review dialog and completes payment; (3) user recovers from missing-field validation; and (4) user recovers from a declined synthetic payment without losing entered data. Safe staging accounts and synthetic payment data are available. Supported matrix: Windows 11 with Chrome 128, keyboard, NVDA 2025.1, 200%/400% zoom, and forced colors; macOS 15 with Safari 18, keyboard, VoiceOver, zoom, and reduced motion; iOS 18 with Safari and VoiceOver; Android 15 with Chrome and TalkBack 15. Test 320 CSS-pixel reflow and text-spacing overrides where applicable. Design/content dependencies are Design System 6.2, checkout copy version 14, address autocomplete, and the PayFast sandbox iframe. Known exception ACC-214 covers the coupon widget's missing voice-input label and must be tested and reported as failed or not assessed, never passed. The PayFast iframe's iOS VoiceOver flow has not yet been assessed. Build a journey-first matrix and evidence protocol covering semantics, automated rules, contrast, keyboard order, focus visibility/restoration, zoom/reflow, text spacing, motion, forced colors, touch targets, screen-reader reading/interaction, voice input, forms, errors, and dynamic updates. Use only `verified`, `failed`, `not assessed`, `blocked`, or `not applicable` with rationale, and preserve an evidence artifact, tester, date, environment, expected/observed outcome, and reproducible steps for every claimed pass.",
       "sourceAnchors": [
         "Build a journey-first matrix",
         "Use statuses verified, failed, not assessed, blocked"
@@ -18,8 +18,8 @@
           "Evidence protocol"
         ],
         "requiredEvidence": [
-          "critical journeys",
-          "not assessed"
+          "The journey matrix covers guest checkout, signed-in address editing, validation recovery, and payment-decline recovery across their named routes and states",
+          "Unassessed PayFast iOS VoiceOver coverage and any matrix gaps are marked `not assessed` or `blocked` with rationale rather than counted as passes"
         ],
         "forbiddenClaims": [
           "guaranteed complete"

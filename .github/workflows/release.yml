@@ -30,6 +30,9 @@ jobs:
     name: verify
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    # Protect this environment with required reviewers. Its public verification key is pinned in
+    # repository settings, outside the tag being evaluated, so a commit cannot bless its own receipt.
+    environment: semantic-evidence
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -59,7 +62,18 @@ jobs:
       - name: Structural and behavioural gate
         run: npm run check
 
+      - name: Materialize the signed semantic receipt
+        run: |
+          test -s quality/release-evidence/semantic-release-evidence.json
+          test -s quality/release-evidence/semantic-release-evidence.sig
+          mkdir -p .youdede-workbench/reports
+          cp quality/release-evidence/semantic-release-evidence.json .youdede-workbench/reports/
+          cp quality/release-evidence/semantic-release-evidence.sig .youdede-workbench/reports/
+          npm run benchmark:release:build -- --full
+
       - name: Release-readiness gate
+        env:
+          YOUDEDE_SEMANTIC_EVIDENCE_PUBLIC_KEY: ${{ secrets.SEMANTIC_EVIDENCE_PUBLIC_KEY }}
         run: npm run check:readiness
 
       - name: Record the integrity root digest for the release page

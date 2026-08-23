@@ -6,7 +6,7 @@
     {
       "id": "positive-observability-instrumentation",
       "type": "positive",
-      "prompt": "Review telemetry for the bounded payment-capture timeout journey. Failure modes, SLO, instrumentation, schemas, sampling, representative redacted signals, dashboard queries, alerts, owners, and runbooks are supplied.",
+      "prompt": "Read-only bounded telemetry review; do not query live systems, modify telemetry, or approve readiness.\nSCOPE: `payments-api`, production+staging; `POST /captures` via `Acquirer-A`. FM-1: provider timeout >3s returns HTTP504 and may leave capture outcome unknown. Operator questions: are timeouts occurring; which provider/deploy; might capture require reconciliation; which runbook pivot?\nCONTRACT OBS-C1 (`ops/slo/payments.yaml:10-28`): 99.9% successful captures/30d; critical if timeout responses >2% for 5m; Payments On-call owns alert, acknowledge ≤5m, begin reconciliation ≤15m.\nTELEMETRY:\nOBS-E1 `src/capture/telemetry.ts:44-91`: timeout handler increments `capture_requests_total{outcome=\"timeout\",provider,deploy}`, emits redacted `capture.timeout` with trace_id/provider/deploy/elapsed_ms, ends `capture.provider`; span status is not ERROR.\nOBS-S1 `schemas/capture-event.json:1-42`: elapsed_ms integer milliseconds; labels limited to outcome, one of 3 providers, immutable deploy; customer/account/payment IDs prohibited.\nOBS-P1 `config/otel-collector.yaml:30-67`: OTLP preserves trace_id; metrics→Prometheus, events→Loki; tail sampling keeps 100% ERROR spans, 1% others, so FM-1 spans take 1%; retention Prometheus/Loki 30d, Tempo 7d.\nOBS-R1 `samples/staging-2026-08-20-1400Z.json:1-80`: identified staging window 14:00–14:10 UTC: 37 timeout counter increments +37 redacted events for deploy d91e, no retained timeout `capture.provider` span; correlation keys are redacted trace IDs.\nOBS-D1 `dashboards/payment-capture.json:110-175`: query=`sum(rate(capture_requests_total{outcome=\"timeout\"}[5m])) by (provider,deploy) / sum(rate(capture_requests_total[5m])) by (provider,deploy)`; links events by provider/deploy/time; no trace-presence panel.\nOBS-A1 `alerts/payment-timeout.yaml:5-31`: same ratio, >0.02 for 5m, owner payments-oncall, runbook RB-PAY-17, dedup provider+deploy. Configuration only: do not claim it fired.\nOBS-RB1 `runbooks/RB-PAY-17.md:20-63`: first pivot timeout-event query by provider/deploy; `outcome_unknown=true`→reconciliation; expects retained trace for provider-latency diagnosis.\nCONSTRAINT OBS-K1 `ops/telemetry-constraints.md:4-25`: ≤10,000 active metric series; ≤€2,000/month; no direct/hashed customer/payment IDs; stated retention; exclude development.\nOUTPUT: Map FM-1 through emission, propagation, collection, sampling, storage, query, dashboard/alert, ownership, runbook. Identify each detection/scoping/diagnosis/action stage, especially the evidenced blind stage, with evidence ID/location and the operator question it prevents answering. Mark inference and what would falsify it. Do not infer signal presence from names, expose sensitive/high-cardinality values, or claim production firing.",
       "sourceAnchors": [
         "Trace emitted signals",
         "Map every failure mode"
@@ -18,8 +18,8 @@
           "Failure-to-signal map"
         ],
         "requiredEvidence": [
-          "blind stage",
-          "operator question"
+          "blind stage tied to an evidence ID or file location",
+          "operator question that the evidenced telemetry can or cannot answer"
         ],
         "forbiddenClaims": [
           "the alert fired in production"

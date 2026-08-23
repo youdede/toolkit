@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "The record names a choice but contains no considered alternative, evidence, consequence, owner, or condition for revisiting it.",
+      "prompt": "Review the following historical decision record and contemporaneous evidence as a read-only decision-record audit. Identify any material missing or contradictory link; do not edit or approve the record.\n\nEvidence boundary: only ADR-042 and Procurement Note PN-17 below. Both were available by the information cutoff of 2025-02-10. No later evidence is supplied.\n\nADR-042 — “EU telemetry queue”\n- Status: Accepted on 2025-02-14; proposed on 2025-02-10.\n- Decision owner: not recorded.\n- Approval authority: Architecture Council, approval recorded 2025-02-14.\n- Scope: ingestion queue for EU API telemetry.\n- Information cutoff: 2025-02-10.\n- Context: projected ingestion was 18,000 events/second by Q3; telemetry had to remain in the EU; launch was required by 2025-06-30.\n- Constraints: two platform engineers were available; annual operating budget ceiling was €150,000.\n- Selected choice: operate a self-hosted Kafka cluster in the EU production account.\n- Recorded rationale: “This gives us control and avoids vendor lock-in.”\n- Considered alternatives: none recorded.\n- Supporting evidence or evidence locators: none recorded.\n- Consequences and accepted tradeoffs: none recorded.\n- Implementation or monitoring obligations, owners, and due conditions: none recorded.\n- Revisit condition: none recorded.\n- Predecessor: none.\n- Successor or superseding record: none recorded.\n\nPN-17, dated 2025-02-07:\n- A managed EU-resident queue was quoted at €9,500/month for 20,000 events/second with a 99.95% service commitment.\n- The platform estimate for self-hosting was two engineer-months to launch plus 0.6 FTE ongoing operations and approximately €4,000/month infrastructure cost.\n- PN-17 labels the managed service and self-hosted Kafka as the two feasible choices under the residency and launch constraints; it makes no recommendation.\n\nReconstruct the context-option-evidence-decision-consequence chain and the supersession state. Keep absent owner, consequence, obligation, revisit, and successor information explicitly unverified rather than inventing it, and keep hindsight separate from facts available at the cutoff.",
       "sourceAnchors": [
         "a context-option-evidence-decision-consequence chain with revisit and supersession conditions",
         "a material recorded conclusion lacks its claimed evidence, omits a consequential alternative, or contradicts the documented context"
@@ -19,8 +19,10 @@
           "Supersession map"
         ],
         "requiredEvidence": [
-          "decision claim",
-          "supporting evidence or gap"
+          "ADR-042’s accepted status, dates, information cutoff, context, constraints, and selected self-hosted Kafka choice",
+          "The record’s observable absence of considered alternatives, supporting evidence, accepted consequences, obligation ownership, and a revisit condition",
+          "PN-17’s contemporaneous managed-service alternative and quantified cost, capacity, staffing, residency, and launch tradeoffs",
+          "The recorded predecessor and successor fields needed to bound the supersession map"
         ],
         "forbiddenClaims": [
           "the subject is completely safe"
@@ -33,7 +35,7 @@
     {
       "id": "positive-bounded-control-case",
       "type": "positive",
-      "prompt": "A concise record still links context, two serious options, evidence, choice, consequences, owner, and supersession trigger. Review the supplied evidence and avoid manufacturing a finding when the specialist threshold is not met.",
+      "prompt": "Audit this complete historical decision record read-only and do not manufacture a finding if its chain is reconstructable.\n\nADR-017, “Queue for invoice generation.” Status: Accepted on 2025-02-14; effective 2025-03-01. Owner: Billing Platform lead. Approval authority: Architecture Council, recorded in `minutes/2025-02-14.md#adr-017`. Scope: invoice-generation jobs only. Information cutoff: 2025-02-10. Context and constraints (`ADR-017.md:12-25`): synchronous generation caused checkout requests to exceed the 800 ms latency budget during month-end; invoices must be generated within five minutes, delivery must tolerate worker restart, and the team could operate only existing PostgreSQL or managed QueueCo in 2025 Q1. Options (`ADR-017.md:27-54`): Option A, a PostgreSQL outbox plus workers, fit the existing stack and offered transactional enqueueing but required operating polling and cleanup; Option B, QueueCo, reduced worker plumbing but added a new vendor, non-transactional handoff from the billing database, and €48,000 annual cost. Contemporaneous evidence: `benchmarks/month-end-2025-02-03.csv` records synchronous p95 of 1.42 s over 50,000 requests; `experiments/outbox-2025-02-07.md` records outbox p95 enqueue latency of 34 ms, recovery of all 10,000 staged jobs after worker restart, and maximum completion time of 3m12s; `quotes/queueco-2025-02-05.pdf:2` records the €48,000 quote; `risk-review/2025-02-10.md:8-20` records the QueueCo handoff gap and accepts PostgreSQL polling load. Decision and rationale (`ADR-017.md:56-68`): select Option A because it meets the 800 ms and five-minute constraints, preserves atomic billing-write/enqueue behavior, and avoids a new vendor at the accepted cost of operating polling and cleanup. Consequences and obligations (`ADR-017.md:70-91`): Billing Platform lead owns worker dashboards before 2025-03-01; Database SRE owns monthly outbox cleanup and storage monitoring beginning 2025-03-15; alert if completion p99 exceeds five minutes or outbox storage exceeds 100 GB. Revisit if either threshold is breached for two consecutive weeks or QueueCo adds transactional handoff below €30,000 annually. Supersession (`ADR-017.md:93-98`): no predecessor or successor existed at the cutoff; any revisit must create a successor ADR linking back to ADR-017, and ADR-017 must then be marked Superseded without rewriting its rationale. Review the context-option-evidence-decision-consequence chain, obligation ownership, dates, and supersession conditions. If no actionable defect meets the threshold, base the bounded reconstructability conclusion on the supplied locators and give calibrated confidence without calling the decision approved or infallible.",
       "sourceAnchors": [
         "If no actionable finding is supported",
         "within its stated historical scope"
@@ -46,8 +48,10 @@
           "Residual uncertainty"
         ],
         "requiredEvidence": [
-          "observed evidence",
-          "confidence"
+          "the contemporaneous evidence locators supporting the latency, recovery, cost, and handoff premises",
+          "the trace from both serious options through the selected choice and accepted consequences",
+          "the named obligation owners, due conditions, monitoring thresholds, and revisit trigger",
+          "calibrated confidence for any bounded reconstructability conclusion"
         ],
         "forbiddenClaims": [
           "the subject is completely safe"

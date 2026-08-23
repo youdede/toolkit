@@ -112,6 +112,7 @@ function stripLeadingOptions(args, valueOptions = new Set()) {
 
 const PUBLISH_GLOBAL_VALUES = new Set(['--workspace', '-w', '--filter', '-C', '--dir']);
 function policy(entry) {
+  const rawArgs = entry.args;
   let args = stripLeadingOptions(entry.args, PUBLISH_GLOBAL_VALUES);
   if (entry.executable === 'npm' || entry.executable === 'pnpm') {
     if (args[0]?.value !== 'publish') return null;
@@ -122,7 +123,14 @@ function policy(entry) {
     if (args.some((token) => token.value === '--dry-run' || token.value === '--dry-run=true')) return null;
     return 'yarn-package-publish';
   }
-  if ((entry.executable === 'twine' && args[0]?.value === 'upload') || (entry.executable === 'python' && args[0]?.value === '-m' && args[1]?.value === 'twine' && args[2]?.value === 'upload')) return 'python-package-publish';
+  const pythonExecutable = /^(?:python(?:\d+(?:\.\d+)*)?|pypy\d*)$/u.test(entry.executable);
+  if ((entry.executable === 'twine' && args[0]?.value === 'upload')
+    || (pythonExecutable && rawArgs[0]?.value === '-m' && rawArgs[1]?.value === 'twine' && rawArgs[2]?.value === 'upload')
+    || (entry.executable === 'uv' && args[0]?.value === 'publish')
+    || (entry.executable === 'uv' && args[0]?.value === 'run' && args[1]?.value === 'twine' && args[2]?.value === 'upload')
+    || (entry.executable === 'hatch' && args[0]?.value === 'publish')
+    || (entry.executable === 'flit' && args[0]?.value === 'publish')
+    || (entry.executable === 'pdm' && args[0]?.value === 'publish')) return 'python-package-publish';
   if (entry.executable === 'poetry' && args[0]?.value === 'publish') return args.some((token) => token.value === '--dry-run') ? null : 'python-package-publish';
   if (entry.executable === 'cargo' && args[0]?.value === 'publish') return args.some((token) => token.value === '--dry-run') ? null : 'native-package-publish';
   if ((entry.executable === 'gem' && args[0]?.value === 'push') || (entry.executable === 'dotnet' && args[0]?.value === 'nuget' && args[1]?.value === 'push') || (entry.executable === 'nuget' && args[0]?.value === 'push')) return 'native-package-publish';

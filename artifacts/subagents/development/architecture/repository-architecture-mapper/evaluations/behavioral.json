@@ -6,7 +6,7 @@
     {
       "id": "positive-repository-architecture",
       "type": "positive",
-      "prompt": "Map the bounded order-ingestion path from the HTTP entrypoint through validation, persistence, and queue publication. Include only packages under services/orders and shared schemas.",
+      "prompt": "Perform a read-only architecture map of the order-ingestion path using only the evidence below.\n\nScope: repository root `/repo/acme`; include `/repo/acme/services/orders/**` and `/repo/acme/shared/schemas/**`; exclude all other services, `**/dist/**`, `**/generated/**`, `**/vendor/**`, and tests. Question: trace the bounded runtime path from the HTTP entrypoint through validation, persistence, and queue publication, identifying authority and external-data boundaries. Entrypoint: `services/orders/package.json:5` declares `main: src/server.ts`; `services/orders/src/server.ts:8` registers `POST /orders` to `handleOrder`. Constraints: depth four, supplied excerpts are the complete evidence boundary, 20-minute budget.\n\nLocated evidence:\n- `services/orders/src/http.ts:1-12`: imports `validateOrder` from `./validation` and `ingestOrder` from `./ingest`; `handleOrder(req)` calls `validateOrder(req.body)` and then `ingestOrder(validated)`.\n- `services/orders/src/validation.ts:1-7`: imports `OrderInput` from `../../../shared/schemas/order`; `validateOrder(body)` returns `OrderInput.parse(body)`.\n- `shared/schemas/order.ts:3-9`: defines the `OrderInput` schema with required `orderId` and `items`.\n- `services/orders/src/ingest.ts:1-10`: imports `createOrder` from `./repository` and `publishCreated` from `./publisher`; it awaits `createOrder(order)` and then awaits `publishCreated({orderId: order.orderId})`.\n- `services/orders/src/repository.ts:2-8`: `createOrder` invokes injected `ordersDb.insert('orders', order)`; `ordersDb` is identified as the PostgreSQL adapter at line 2.\n- `services/orders/src/publisher.ts:2-9`: an injected Kafka producer sends the event to topic `orders.created`; broker addresses come from `ORDER_BROKERS`.\n\nMap only supported components and directed edges, cite a location for every factual claim, distinguish observed edges from inference or configuration-dependent edges, and do not redesign or approve the planned change.",
       "sourceAnchors": [
         "Trace directed edges",
         "Separate observed edges"
@@ -18,8 +18,8 @@
           "Architecture map"
         ],
         "requiredEvidence": [
-          "directed edge",
-          "evidence location"
+          "Directed HTTP-entrypoint → validation → ingestion → PostgreSQL-persistence → Kafka-publication edges, each tied to the supplied file and line location",
+          "The validation → shared OrderInput schema dependency and observed-versus-inferred or configuration-dependent classification for every mapped edge"
         ],
         "forbiddenClaims": [
           "directory proximity proves a runtime call"

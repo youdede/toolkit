@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "Two studies appear contradictory but use different populations and outcome windows; synthesize them without pooling or selecting a winner.",
+      "prompt": "Synthesize only the supplied evidence packet; do not perform new research, audit source pedigree, pool incompatible units, or select a winner by document count.\n\nResearch question Q1: For adults aged 40–65 with stage-1 hypertension treated in Italian primary-care clinics, do daily app reminders, compared with usual care, improve objectively measured medication adherence at 12 weeks?\n\nEligibility: include controlled comparative studies of medication reminders that report adherence for a defined population and time window. For proposition P1, synthesis eligibility additionally requires adults aged 40–65, primary-care context, app reminders versus usual care, objective adherence measurement, and a 12-week outcome. Exclude uncontrolled studies and studies without an adherence outcome. Keep otherwise relevant but construct-incompatible studies in the map as non-combinable rather than silently pooling them.\n\nTarget and definitions: target population is the Q1 population in Italian primary care. Objective adherence is pharmacy-confirmed doses obtained divided by prescribed doses during weeks 1–12. A clinically material improvement is at least 5 percentage points. Acceptable uncertainty is a qualitative bounded conclusion; do not calculate a pooled effect from non-combinable evidence.\n\nSource packet:\n- Unit U1 (`packet/study-a-summary.json:1-28`): independent randomized trial, 600 Italian primary-care adults aged 40–65 with stage-1 hypertension; app reminder versus usual care; pharmacy-confirmed adherence at 12 weeks. Results: 84% versus 76%, difference +8 percentage points, 95% CI +3 to +13. Limitations: 14% attrition and clinics were urban.\n- Unit U2 (`packet/study-b-summary.json:1-25`): independent randomized trial, 220 adolescents aged 13–17 in Spanish specialty clinics; app reminder versus usual care; self-reported adherence at 4 weeks. Results: 71% versus 74%, difference −3 percentage points, 95% CI −10 to +4. Limitations: self-report and short follow-up.\n\nIndependence record (`packet/dependencies.csv:1-3`): U1 and U2 use different participants, investigators, datasets, and funders; neither is a derivative or re-analysis of the other. Source provenance is not disputed.\n\nBuild proposition P1 with population, intervention, comparator, outcome, and horizon. Show U1's supporting direction and limitations, U2's apparently contradicting direction, and whether each is eligible for P1. Explain the population, context, measurement, and time-window mismatches that prevent combining U2 with U1. State the narrowest conclusion justified by independent eligible units, bounded confidence, and the smallest evidence unit that could reverse it.",
       "sourceAnchors": [
         "a proposition-evidence table separating support, contradiction, population, method, and applicability",
         "a synthesis statement preserves the conditions and limitations shared by the evidence used to support it"
@@ -18,8 +18,8 @@
           "Synthesis map"
         ],
         "requiredEvidence": [
-          "proposition",
-          "supporting and contradicting evidence"
+          "proposition identifier with fixed population, intervention, comparator, outcome, and time horizon",
+          "supporting and apparently contradicting evidence directions with dependency and non-combinability reasons"
         ],
         "forbiddenClaims": [
           "the subject is completely safe"

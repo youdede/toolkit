@@ -1,6 +1,6 @@
 # Package publish guard for Claude Code
 
-This project-scoped `PreToolUse` hook blocks real package publication through npm, pnpm, Yarn, Twine, Poetry, Cargo, RubyGems, dotnet, and NuGet. Local build, pack, check, and supported dry-run forms remain allowed. The exported `evaluate(input)` function performs no network or credential access.
+This project-scoped `PreToolUse` hook blocks real package publication through npm, pnpm, Yarn, Twine (including versioned Python launchers), uv, Hatch, Flit, PDM, Poetry, Cargo, RubyGems, dotnet, and NuGet. Local build, pack, check, and supported dry-run forms remain allowed. The exported `evaluate(input)` function performs no network or credential access.
 
 ## Refusals and limits
 

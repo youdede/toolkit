@@ -1,6 +1,6 @@
 # Cloud resource deletion guard for Claude Code
 
-This project-scoped `PreToolUse` hook recognizes direct AWS, Google Cloud, and Azure CLI deletion, termination, removal, undeployment, and purge verbs. Read-only list, describe, get, and show operations pass. The exported `evaluate(input)` function is pure and never contacts provider APIs.
+This project-scoped `PreToolUse` hook recognizes direct AWS, Google Cloud, and Azure CLI deletion, termination, removal, `rm`, `rb`, `delete-batch`, undeployment, and purge verbs. Read-only list, describe, get, and show operations pass. The exported `evaluate(input)` function is pure and never contacts provider APIs.
 
 ## Refusals and limits
 

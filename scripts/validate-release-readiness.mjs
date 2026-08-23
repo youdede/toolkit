@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { verify as verifySignature } from 'node:crypto';
 import { existsSync, lstatSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -36,6 +37,14 @@ function uniqueStrings(value, minimum = 1) {
     && value.length >= minimum
     && value.every((item) => typeof item === 'string' && item.trim().length > 0)
     && new Set(value).size === value.length;
+}
+
+function boundedString(value, minimum, maximum = 10_000) {
+  return typeof value === 'string' && value.trim().length >= minimum && value.length <= maximum;
+}
+
+function finiteNumber(value, minimum = 0, maximum = 100) {
+  return typeof value === 'number' && Number.isFinite(value) && value >= minimum && value <= maximum;
 }
 
 function within(root, file) {
@@ -198,27 +207,31 @@ export function validateSemanticEvidenceDocument(document, benchmark, root, now 
   if (!exactKeys(document, keys)) return [reason('SEMANTIC_EVIDENCE_STRUCTURE_INVALID', `semantic evidence must contain only ${keys.join(', ')}`)];
   if (document.schemaVersion !== 1) reasons.push(reason('SEMANTIC_EVIDENCE_STRUCTURE_INVALID', 'semantic evidence schemaVersion must be 1'));
   const evidenceFile = path.join(root, '.youdede-workbench', 'reports', 'semantic-release-evidence.json');
-  if (path.resolve(path.dirname(evidenceFile), document.$schema || '') !== path.join(root, 'schema', 'semantic-release-evidence.schema.json')) {
+  if (!boundedString(document.$schema, 10, 500)
+    || path.resolve(path.dirname(evidenceFile), document.$schema) !== path.join(root, 'schema', 'semantic-release-evidence.schema.json')) {
     reasons.push(reason('SEMANTIC_EVIDENCE_STRUCTURE_INVALID', '$schema must resolve to schema/semantic-release-evidence.schema.json'));
   }
-  if (document.benchmarkDigest !== benchmark.index.benchmarkDigest) {
+  if (typeof document.benchmarkDigest !== 'string' || !/^[a-f0-9]{64}$/u.test(document.benchmarkDigest)) {
+    reasons.push(reason('SEMANTIC_EVIDENCE_STRUCTURE_INVALID', 'benchmarkDigest must be a lowercase SHA-256 digest'));
+  } else if (document.benchmarkDigest !== benchmark.index.benchmarkDigest) {
     reasons.push(reason('SEMANTIC_BENCHMARK_DIGEST_MISMATCH', 'semantic evidence does not cover the current deterministic benchmark inputs', {
       expected: benchmark.index.benchmarkDigest,
       actual: document.benchmarkDigest
     }));
   }
-  const generatedAt = Date.parse(document.generatedAt);
-  if (!Number.isFinite(generatedAt)) reasons.push(reason('SEMANTIC_EVIDENCE_STRUCTURE_INVALID', 'generatedAt must be a valid timestamp'));
+  const generatedAt = typeof document.generatedAt === 'string' ? Date.parse(document.generatedAt) : Number.NaN;
+  if (!Number.isFinite(generatedAt)) reasons.push(reason('SEMANTIC_EVIDENCE_STRUCTURE_INVALID', 'generatedAt must be a valid timestamp string'));
   else {
     const ageDays = (now.getTime() - generatedAt) / 86_400_000;
     if (ageDays < -1 / 24) reasons.push(reason('SEMANTIC_EVIDENCE_FROM_FUTURE', 'semantic evidence timestamp is more than one hour in the future', { generatedAt: document.generatedAt }));
     if (ageDays > MAX_SEMANTIC_EVIDENCE_AGE_DAYS) reasons.push(reason('SEMANTIC_EVIDENCE_STALE', `semantic evidence is older than ${MAX_SEMANTIC_EVIDENCE_AGE_DAYS} days`, { generatedAt: document.generatedAt, ageDays: Number(ageDays.toFixed(1)) }));
   }
   if (!exactKeys(document.protocol, ['runner', 'judge', 'independentJudge', 'modelIdentifiers'])
-    || typeof document.protocol.runner !== 'string'
-    || typeof document.protocol.judge !== 'string'
+    || !boundedString(document.protocol.runner, 3)
+    || !boundedString(document.protocol.judge, 3)
     || document.protocol.independentJudge !== true
-    || !uniqueStrings(document.protocol.modelIdentifiers)) {
+    || !uniqueStrings(document.protocol.modelIdentifiers)
+    || document.protocol.modelIdentifiers.some((identifier) => !boundedString(identifier, 2, 500))) {
     reasons.push(reason('SEMANTIC_PROTOCOL_INVALID', 'protocol must record runner, independent judge, and model identifiers'));
   }
 
@@ -229,8 +242,9 @@ export function validateSemanticEvidenceDocument(document, benchmark, root, now 
     reasons.push(reason('SEMANTIC_STATIC_COVERAGE_INCOMPLETE', 'static semantic results must cover every prompt-bearing artifact exactly once', { expected: expectedStatic.length, actual: new Set(actualStatic).size }));
   }
   const invalidStatic = staticResults.filter((item) => !exactKeys(item, ['artifactId', 'passed', 'score', 'confirmedDefects'])
+    || !boundedString(item.artifactId, 3, 500)
     || item.passed !== true
-    || typeof item.score !== 'number'
+    || !finiteNumber(item.score)
     || item.score < MINIMUM_STATIC_ARTIFACT_SCORE
     || !Number.isInteger(item.confirmedDefects)
     || item.confirmedDefects !== 0);
@@ -246,12 +260,16 @@ export function validateSemanticEvidenceDocument(document, benchmark, root, now 
   }
   const criteria = ['dispositionCorrect', 'requiredOutcomeMet', 'evidenceHonesty', 'safetyBoundaries'];
   const invalidDynamic = dynamicResults.filter((item) => !exactKeys(item, ['benchmarkId', 'passed', 'fixtureIssue', 'criteria'])
+    || typeof item.benchmarkId !== 'string'
+    || !/^dynamic-[0-9]{4}$/u.test(item.benchmarkId)
     || item.passed !== true
     || item.fixtureIssue !== false
     || !exactKeys(item.criteria, criteria)
     || criteria.some((key) => item.criteria[key] !== true));
   if (invalidDynamic.length > 0) reasons.push(reason('SEMANTIC_DYNAMIC_THRESHOLD_FAILED', 'one or more sampled dynamic cases failed, have incomplete criteria, or expose a fixture issue', { failures: invalidDynamic.map((item) => item?.benchmarkId || '<invalid>') }));
   if (!exactKeys(document.calibration, ['staticWithinOnePointPercent', 'judgeCriterionAgreementPercent'])
+    || !finiteNumber(document.calibration.staticWithinOnePointPercent)
+    || !finiteNumber(document.calibration.judgeCriterionAgreementPercent)
     || document.calibration.staticWithinOnePointPercent < MINIMUM_CALIBRATION_PERCENT
     || document.calibration.judgeCriterionAgreementPercent < MINIMUM_CALIBRATION_PERCENT) {
     reasons.push(reason('SEMANTIC_CALIBRATION_FAILED', `static and judge calibration must each be at least ${MINIMUM_CALIBRATION_PERCENT}%`));
@@ -261,7 +279,7 @@ export function validateSemanticEvidenceDocument(document, benchmark, root, now 
     || document.claims.portfolioSemanticPass !== false) {
     reasons.push(reason('UNSUPPORTED_READY_CLAIM', 'evidence may claim a passing sample but must not claim exhaustive portfolio semantic proof'));
   }
-  if (!uniqueStrings(document.limitations) || document.limitations.some((item) => item.length < 20)) {
+  if (!uniqueStrings(document.limitations) || document.limitations.some((item) => !boundedString(item, 20, 2000))) {
     reasons.push(reason('SEMANTIC_EVIDENCE_STRUCTURE_INVALID', 'limitations must be a non-empty unique list of substantive strings'));
   }
   return reasons;
@@ -284,10 +302,14 @@ export function resolveBenchmarkSelection(recorded) {
   return { weakened: false, selection: { minimumSample: sample, minimumFraction: fraction, minimumPerStratum: perStratum } };
 }
 
-export function assessSemanticEvidence(root = ROOT, { now = new Date() } = {}) {
+export function assessSemanticEvidence(root = ROOT, {
+  now = new Date(),
+  evidencePublicKey = process.env.YOUDEDE_SEMANTIC_EVIDENCE_PUBLIC_KEY || ''
+} = {}) {
   const benchmarkDirectory = path.join(root, '.youdede-workbench', 'release-benchmark');
   const indexFile = path.join(benchmarkDirectory, 'benchmark-index.json');
   const evidenceFile = path.join(root, '.youdede-workbench', 'reports', 'semantic-release-evidence.json');
+  const signatureFile = path.join(root, '.youdede-workbench', 'reports', 'semantic-release-evidence.sig');
   const reasons = [];
   let recordedPolicy = null;
   try {
@@ -312,6 +334,12 @@ export function assessSemanticEvidence(root = ROOT, { now = new Date() } = {}) {
   let index;
   try {
     index = readBoundedJson(indexFile);
+    if (JSON.stringify(index.policy) !== JSON.stringify(expected.index.policy)) {
+      reasons.push(reason('SEMANTIC_BENCHMARK_POLICY_INVALID', 'recorded benchmark policy is incomplete, malformed, or differs from the effective selection policy', {
+        expected: expected.index.policy,
+        actual: index.policy || null
+      }));
+    }
     if (index.benchmarkDigest !== expected.index.benchmarkDigest
       || index.seed !== expected.index.seed
       || index.static?.total !== expected.index.static.total
@@ -338,8 +366,24 @@ export function assessSemanticEvidence(root = ROOT, { now = new Date() } = {}) {
   }
   let evidence;
   try {
-    evidence = readBoundedJson(evidenceFile);
+    const evidenceBytes = readFileSync(evidenceFile);
+    if (evidenceBytes.length > MAX_JSON_BYTES) throw new Error(`file exceeds ${MAX_JSON_BYTES} bytes`);
+    evidence = JSON.parse(evidenceBytes.toString('utf8'));
     reasons.push(...validateSemanticEvidenceDocument(evidence, expected, root, now));
+    if (!boundedString(evidencePublicKey, 40, 20_000)) {
+      reasons.push(reason('SEMANTIC_EVIDENCE_UNAUTHENTICATED', 'semantic evidence requires an externally pinned Ed25519 public key'));
+    } else {
+      try {
+        const signatureStat = statSync(signatureFile);
+        if (!signatureStat.isFile() || signatureStat.size > 16_384) throw new Error('signature file is missing, not regular, or oversized');
+        const signatureText = readFileSync(signatureFile, 'utf8').trim();
+        if (!/^[A-Za-z0-9+/]+={0,2}$/u.test(signatureText)) throw new Error('signature is not canonical base64');
+        const signature = Buffer.from(signatureText, 'base64');
+        if (!verifySignature(null, evidenceBytes, evidencePublicKey, signature)) throw new Error('signature verification failed');
+      } catch (error) {
+        reasons.push(reason('SEMANTIC_EVIDENCE_SIGNATURE_INVALID', `semantic evidence is not signed by the trusted release evaluator: ${error.message}`));
+      }
+    }
   } catch (error) {
     reasons.push(reason('SEMANTIC_EVIDENCE_MISSING', `semantic release evidence is unavailable: ${error.message}`, { path: path.relative(root, evidenceFile) }));
   }
@@ -367,6 +411,7 @@ export function assessSemanticEvidence(root = ROOT, { now = new Date() } = {}) {
   return {
     valid: reasons.length === 0,
     evidenceFile,
+    signatureFile,
     benchmarkFile: indexFile,
     freshness: { maximumAgeDays: MAX_SEMANTIC_EVIDENCE_AGE_DAYS, generatedAt: evidence?.generatedAt || null },
     coverage: {
@@ -404,6 +449,7 @@ export function assessReleaseReadiness(root = ROOT, options = {}) {
     refresh: {
       buildCommand: 'node scripts/build-release-benchmark.mjs',
       evidencePath: '.youdede-workbench/reports/semantic-release-evidence.json',
+      signaturePath: '.youdede-workbench/reports/semantic-release-evidence.sig',
       documentation: 'docs/release-readiness.md'
     }
   };

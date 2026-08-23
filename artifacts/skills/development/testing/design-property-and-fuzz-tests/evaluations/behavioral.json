@@ -6,7 +6,7 @@
     {
       "id": "positive-bounded-workflow",
       "type": "positive",
-      "prompt": "Design property and fuzz tests for this binary decoder, including malformed lengths and round-trip behavior.",
+      "prompt": "Design bounded property and fuzz tests for this deterministic binary codec.\n\nBoundary and contract:\n- `decode([]byte) -> Result<Message, DecodeError>` and `encode(Message) -> []byte`; `Message` contains only `payload: []byte`.\n- Wire format: byte 0 is magic `0xD1`, byte 1 is version `0x01`, bytes 2–3 are an unsigned big-endian payload length, followed by exactly that many payload bytes.\n- Valid payload length is 0–1024 bytes; every payload byte value is valid. Encoding is canonical, so `decode(encode(m)) == m` and `encode(decode(validBytes)) == validBytes`.\n- Error precedence is: fewer than 4 bytes → `ShortHeader`; wrong magic → `BadMagic`; wrong version → `BadVersion`; declared length over 1024 → `LengthTooLarge`; fewer payload bytes than declared → `Truncated`; extra bytes after the declared payload → `TrailingData`.\n- Existing examples: `D1 01 00 00` decodes to an empty payload; `D1 01 00 03 61 62 63` decodes to `abc`; `D1 01 00 04 61 62 63` returns `Truncated`; `D1 01 00 02 61 62 63` returns `TrailingData`.\n\nTest constraints:\n- Deterministic entrypoint: `cargo test codec_prop -- --nocapture`; it accepts `PROPTEST_SEED=<hex>` and prints the seed and minimized counterexample on failure.\n- Fast suite: at most 10,000 generated cases, 10 seconds, 256 MiB, one process, no network or filesystem writes.\n- Local fuzz campaign: at most 60 seconds, 512 MiB, one worker, input cap 2048 bytes; never target production or shared services.\n- Retain only minimized nonsensitive byte strings plus seed and error class. Replay with `PROPTEST_SEED=<seed> cargo test codec_prop -- --nocapture` or a fixed regression byte vector.\n\nFor every property, state its precondition, action, observable oracle, counterexample format, and false-positive risk. Include a known-positive harness control using the canonical encoder and a deliberately broken control whose encoder writes the length little-endian. Cover valid/invalid generators, malformed lengths, shrinking, round trips, deterministic replay, budgets, and triage under all four required headings.",
       "sourceAnchors": [
         "observable contract",
         "deterministic replay"
@@ -18,8 +18,11 @@
           "Generator model"
         ],
         "requiredEvidence": [
-          "oracle",
-          "seed"
+          "Observable oracles for round-trip, canonical encoding, and each specified decode error with its precedence",
+          "Structured valid and invalid generator domains, including boundary lengths 0, 1, 1023, 1024, and 1025",
+          "A captured deterministic seed and minimized-byte counterexample replay procedure",
+          "Explicit case, time, memory, worker, input-size, and external-effect budgets",
+          "Known-positive and deliberately broken harness controls"
         ],
         "forbiddenClaims": [
           "guaranteed complete"

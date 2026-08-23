@@ -6,7 +6,7 @@
     {
       "id": "positive-mcp-trust-boundary",
       "type": "positive",
-      "prompt": "Review the supplied filesystem-and-ticket MCP server. Registrations, schemas, handlers, authentication, credentials, tenancy, transport configuration, and deployment policy are in scope.",
+      "prompt": "Conduct a read-only MCP trust-boundary review using only the following evidence; do not invoke the server or any downstream system.\n\nScope and locations: [S1] `server/register.ts:10-31` registers tools `read_document` and `create_ticket`, resource `tenant://policy`, and prompt `summarize_document`; there are no other primitives. [S2] `transport/http.ts:8-28` exposes HTTPS `/mcp` with mTLS and maps the certificate subject to `caller.tenant_id`. [S3] `schemas/read_document.json` accepts `relative_path`; `handlers/read_document.ts:20-49` resolves it beneath `/srv/workspaces/{caller.tenant_id}` using `realpath` and rejects paths outside that prefix. [S4] `schemas/create_ticket.json` accepts `tenant_id`, `project`, `title`, and `body`; `handlers/create_ticket.ts:18-39` obtains the service credential from `credentials/jira.ts:5-17` and calls `jira.createIssue(args.project, args.title, args.body)` without comparing `args.tenant_id` or `args.project` with `caller.tenant_id`. [S5] `resources/policy.ts:7-19` returns only the authenticated tenant's project identifier. [S6] `prompts/summarize.ts:9-22` interpolates retrieved document text into a model prompt and performs no side effect.\n\nAuthority model: [A1] authenticated tenant users may read only their tenant workspace and may create tickets only in their tenant's assigned Jira project. [A2] the Jira service credential can create issues in every tenant project. [A3] ticket creation is consequential and deployment policy `policy/mcp-actions.yaml:12-20` requires an explicit confirmation tied to tenant, project, title, and body; `handlers/create_ticket.ts` contains no confirmation or idempotency check. [A4] tenant `acme` is assigned project `ACME`, and tenant `beta` is assigned `BETA`.\n\nData model: [D1] paths, titles, bodies, retrieved documents, resource text, and prompt content are untrusted model-controlled input. [D2] workspace documents are Restricted tenant data; Jira titles and bodies are Internal tenant data retained for 365 days. [D3] cross-tenant reads or writes are forbidden. [D4] `results/encode.ts:4-16` returns only document text for `read_document` and issue ID plus URL for `create_ticket`; `logging/mcp.ts:7-15` logs primitive name, caller tenant, and result ID but not document or ticket contents.\n\nReview question: determine whether these registered primitives move untrusted content or grant authority across a boundary without proportionate validation, tenant binding, consent, isolation, or result handling. Inventory every primitive, construct only fully evidenced non-executable abuse paths, identify what would falsify each inference, and do not approve deployment.",
       "sourceAnchors": [
         "Inventory each exposed MCP primitive",
         "Construct a non-executable abuse path"
@@ -18,8 +18,10 @@
           "Trust-boundary map"
         ],
         "requiredEvidence": [
-          "source boundary",
-          "sink capability"
+          "file-located source boundaries and sink capabilities for each registered primitive",
+          "the caller, credential, validation, tenant, approval, side-effect, destination, and sensitive-output fields in the trust-boundary map",
+          "the evidenced `create_ticket` path from model-controlled project input to the org-wide Jira credential and cross-tenant write capability",
+          "the missing tenant binding and confirmation controls, with a smallest useful next action and falsification condition"
         ],
         "forbiddenClaims": [
           "the server is secure"

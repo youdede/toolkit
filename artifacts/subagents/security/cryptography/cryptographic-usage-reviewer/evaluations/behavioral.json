@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "The supplied AES-GCM code derives the nonce only from a per-process counter that resets while reusing the same persisted key.",
+      "prompt": "Review this bounded cryptographic use against the supplied protocol contract; do not design replacement cryptography or handle real keys. Required security purpose: preserve confidentiality and integrity of stored order-event messages, including across process restarts. Algorithm/mode and library: AES-256-GCM through Python `cryptography` 42.0.5, `AESGCM.encrypt`. Library-semantics record supplied for this review, `docs/cryptography-42.0.5-aesgcm.txt:12`: “A nonce must never be reused with a given key; AESGCM accepts a 12-byte nonce.” Usage evidence:\n\n`crypto/order_events.py:18-27`\n```python\nKEY = kms.load_key('orders-v7')\n_counter = 0\n\ndef seal(order_id: bytes, plaintext: bytes) -> bytes:\n    global _counter\n    nonce = _counter.to_bytes(12, 'big')\n    _counter += 1\n    return nonce + AESGCM(KEY).encrypt(nonce, plaintext, order_id)\n```\n\nKey lifecycle: KMS generated the 256-bit key version `orders-v7` once; every process instance loads that same persisted version at startup; it is shared for all order-event encryption in the deployment, rotates every 90 days, and is not changed merely because a worker restarts. Nonce rule: the only nonce input is the in-memory per-process counter, initialized to zero on every start; there is no random or instance-specific component and no persisted counter. Numerical witness from the supplied restart record `records/restarts-2026-08-20.txt`: worker start A encrypted message `order-101` with counter 0 and nonce `000000000000000000000000`; after restart, start B encrypted `order-205` under the same `orders-v7` key with counter 0 and the same nonce. Associated data is the order ID. Message format is `nonce || AES-GCM ciphertext || tag`; decryption reads the first 12 bytes as the nonce and verifies with the order ID. Protocol assumptions: multiple worker restarts may occur during one 90-day key period, and plaintexts and order IDs differ between messages. Build the property-to-parameter map and report only a concrete condition that invalidates the named property, with location, affected key/message scope, invariant, plausible failure mode, confidence, and smallest useful next check.",
       "sourceAnchors": [
         "a property-to-parameter map across key creation, message processing, storage, rotation, and verification",
         "the supplied usage permits a concrete condition that invalidates the required property under the stated protocol"
@@ -18,8 +18,9 @@
           "Scope reviewed"
         ],
         "requiredEvidence": [
-          "required property",
-          "usage location"
+          "the required confidentiality and integrity property across restarts",
+          "the AES-GCM usage at `crypto/order_events.py:18-27`, library version, and supplied unique-nonce semantic",
+          "the persisted `orders-v7` key lifecycle, resetting counter rule, and two-restart numerical witness showing nonce reuse under the same key"
         ],
         "forbiddenClaims": [
           "the subject is completely safe"

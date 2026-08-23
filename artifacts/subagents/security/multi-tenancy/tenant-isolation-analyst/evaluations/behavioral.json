@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "The job accepts tenant_id and object_id but reloads the object by object_id alone before exporting it to the requesting tenant.",
+      "prompt": "Perform a read-only tenant-isolation review of this export path.\n\nIsolation invariant: an authenticated tenant may export only objects whose `objects.tenant_id` equals the authoritative tenant in its signed session; every database, blob, cache, queue, and export lookup must retain that tenant label.\n\nEvidence:\n- `auth/session.ts:41`: a verified session claim `org_id` is copied to `ctx.tenant_id`; there is no tenant fallback.\n- `api/export.ts:18-25`: the caller supplies `object_id`; the handler enqueues `{tenant_id: ctx.tenant_id, object_id}` without first loading the object.\n- `db/schema.sql:72-79`: `objects(object_id UUID PRIMARY KEY, tenant_id UUID NOT NULL, blob_key TEXT NOT NULL)`; fixture rows show object `obj-B7` is owned by tenant B while the requesting session is tenant A.\n- `jobs/export.ts:33-38`: the worker receives both fields but executes `SELECT blob_key FROM objects WHERE object_id = $1` with only `object_id`, then reads the returned blob and sends it to the requester’s export destination.\n- Blob keys are `tenants/{tenant_id}/objects/{object_id}`, but the worker uses the database-returned `blob_key` without comparing its tenant prefix.\n- `cache/objects.ts:9` defines tenant-scoped keys `object:{tenant_id}:{object_id}`; `jobs/export.ts` bypasses this cache, and no other cache participates.\n- `exports/client.ts:51` uploads the selected bytes to the presigned destination for `ctx.tenant_id`; there are no other external calls.\n- `tests/export_foreign_object.fixture:6-14` records tenant A selecting caller-controlled `obj-B7` and the object-id-only query returning tenant B’s blob key.\n\nTrace the tenant label from the authenticated context through the queue, database selector, blob read, and export sink, and report only findings supported by these facts.",
       "sourceAnchors": [
         "a tenant-label propagation path from authenticated context to every named data sink",
         "attacker-controlled or stale resource identity can select data without the required tenant predicate or partition"
@@ -18,8 +18,10 @@
           "Scope reviewed"
         ],
         "requiredEvidence": [
-          "tenant source",
-          "propagation boundary"
+          "the authoritative tenant source at `auth/session.ts:41`",
+          "the propagation boundary from the queued `tenant_id` to the object-id-only query in `jobs/export.ts:33-38`",
+          "the caller-controlled foreign resource selector `obj-B7` and its tenant-B ownership",
+          "the missing tenant predicate or blob-prefix enforcement before the export sink"
         ],
         "forbiddenClaims": [
           "the subject is completely safe"

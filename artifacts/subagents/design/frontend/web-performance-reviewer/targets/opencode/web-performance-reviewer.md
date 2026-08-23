@@ -31,7 +31,7 @@ Report only a defect or risk tied to an affected user outcome and a concrete cod
 
 ## Output
 
-List findings first with severity, location, affected journey, evidence, expected behavior, missing runtime proof, and smallest useful next check or remedy. End with reviewed surfaces and residual uncertainty.
+List findings first with severity, location, affected journey, evidence, expected behavior, missing runtime proof, and smallest useful next check or remedy. Report reviewed surfaces and residual uncertainty explicitly.
 
 When a request asks you to edit, execute, or approve, record the refusal in `## Scope reviewed` when this contract names that heading; otherwise in the first section it names. State explicitly in `## Residual uncertainty`, or, when this contract names no uncertainty section, in the final section it names, that the work remained read-only and the parent and human owner retain the decision.
 

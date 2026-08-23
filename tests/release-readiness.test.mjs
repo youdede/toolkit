@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, rmSync, symlinkSync } from 'node:fs';
+import { generateKeyPairSync, sign } from 'node:crypto';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
@@ -111,6 +112,11 @@ test('complete coverage selects every candidate and says so, without weakening t
   }
 });
 
+test('the protected release workflow rebuilds the complete dynamic population', () => {
+  const workflow = readFileSync(path.join(ROOT, '.github', 'workflows', 'release.yml'), 'utf8');
+  assert.match(workflow, /npm run benchmark:release:build -- --full/u);
+});
+
 test('semantic evidence cannot turn sample success into a portfolio-ready claim', () => {
   const benchmark = buildReleaseBenchmark(ROOT);
   const document = {
@@ -139,6 +145,44 @@ test('semantic evidence cannot turn sample success into a portfolio-ready claim'
   assert.ok(reasons.some(({ code }) => code === 'UNSUPPORTED_READY_CLAIM'));
 });
 
+test('semantic evidence rejects schema-shaped values with the wrong runtime types', () => {
+  const benchmark = buildReleaseBenchmark(ROOT);
+  const base = {
+    $schema: '../../schema/semantic-release-evidence.schema.json',
+    schemaVersion: 1,
+    generatedAt: new Date().toISOString(),
+    benchmarkDigest: benchmark.index.benchmarkDigest,
+    protocol: {
+      runner: 'fixture runner',
+      judge: 'fixture independent judge',
+      independentJudge: true,
+      modelIdentifiers: ['fixture-model-v1']
+    },
+    staticResults: benchmark.staticInputs.map(({ artifactId }) => ({ artifactId, passed: true, score: 100, confirmedDefects: 0 })),
+    dynamicResults: benchmark.dynamicInputs.map(({ benchmarkId }) => ({
+      benchmarkId,
+      passed: true,
+      fixtureIssue: false,
+      criteria: { dispositionCorrect: true, requiredOutcomeMet: true, evidenceHonesty: true, safetyBoundaries: true }
+    })),
+    calibration: { staticWithinOnePointPercent: 100, judgeCriterionAgreementPercent: 100 },
+    claims: { samplePass: true, portfolioSemanticPass: false },
+    limitations: ['This synthetic fixture covers only the deterministic dynamic sample.']
+  };
+  for (const mutate of [
+    (document) => { document.protocol.runner = ''; },
+    (document) => { document.protocol.judge = ' '; },
+    (document) => { document.protocol.modelIdentifiers = ['x']; },
+    (document) => { document.calibration.staticWithinOnePointPercent = 'not measured'; },
+    (document) => { document.calibration.judgeCriterionAgreementPercent = Number.NaN; },
+    (document) => { document.staticResults[0].score = Number.POSITIVE_INFINITY; }
+  ]) {
+    const document = structuredClone(base);
+    mutate(document);
+    assert.ok(validateSemanticEvidenceDocument(document, benchmark, ROOT).length > 0);
+  }
+});
+
 test('missing semantic evidence blocks publishability without blocking structural proof', { skip: process.platform === 'win32' }, (context) => {
   const root = mkdtempSync(path.join(os.tmpdir(), 'youdede-release-readiness-'));
   context.after(() => rmSync(root, { recursive: true, force: true }));
@@ -157,4 +201,62 @@ test('missing semantic evidence blocks publishability without blocking structura
   });
   assert.equal(cli.status, 0, cli.stderr);
   assert.equal(JSON.parse(cli.stdout).structural.valid, true);
+});
+
+test('publishability requires an externally keyed signature over the exact evidence bytes', { skip: process.platform === 'win32' }, (context) => {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'youdede-signed-readiness-'));
+  context.after(() => rmSync(root, { recursive: true, force: true }));
+  for (const directory of ['artifacts', 'catalog', 'packs', 'quality', 'schema', 'scripts', 'tests']) {
+    symlinkSync(path.join(ROOT, directory), path.join(root, directory), 'dir');
+  }
+  const benchmark = buildReleaseBenchmark(root);
+  const benchmarkDirectory = path.join(root, '.youdede-workbench', 'release-benchmark');
+  const reportsDirectory = path.join(root, '.youdede-workbench', 'reports');
+  mkdirSync(benchmarkDirectory, { recursive: true });
+  mkdirSync(reportsDirectory, { recursive: true });
+  for (const [name, value] of [
+    ['benchmark-index.json', benchmark.index],
+    ['static-inputs.json', benchmark.staticInputs],
+    ['dynamic-inputs.json', benchmark.dynamicInputs],
+    ['secret-expectations.json', benchmark.expectations]
+  ]) writeFileSync(path.join(benchmarkDirectory, name), `${JSON.stringify(value, null, 2)}\n`);
+
+  const now = new Date('2026-08-21T12:00:00.000Z');
+  const evidence = {
+    $schema: '../../schema/semantic-release-evidence.schema.json',
+    schemaVersion: 1,
+    generatedAt: now.toISOString(),
+    benchmarkDigest: benchmark.index.benchmarkDigest,
+    protocol: {
+      runner: 'fixture runner with retained raw outputs',
+      judge: 'fixture independent judge with retained decisions',
+      independentJudge: true,
+      modelIdentifiers: ['fixture-model-v1']
+    },
+    staticResults: benchmark.staticInputs.map(({ artifactId }) => ({ artifactId, passed: true, score: 100, confirmedDefects: 0 })),
+    dynamicResults: benchmark.dynamicInputs.map(({ benchmarkId }) => ({
+      benchmarkId,
+      passed: true,
+      fixtureIssue: false,
+      criteria: { dispositionCorrect: true, requiredOutcomeMet: true, evidenceHonesty: true, safetyBoundaries: true }
+    })),
+    calibration: { staticWithinOnePointPercent: 100, judgeCriterionAgreementPercent: 100 },
+    claims: { samplePass: true, portfolioSemanticPass: false },
+    limitations: ['This is synthetic test evidence and is never used to authorize a real release.']
+  };
+  const evidenceBytes = Buffer.from(`${JSON.stringify(evidence, null, 2)}\n`);
+  const evidenceFile = path.join(reportsDirectory, 'semantic-release-evidence.json');
+  const signatureFile = path.join(reportsDirectory, 'semantic-release-evidence.sig');
+  writeFileSync(evidenceFile, evidenceBytes);
+  const { privateKey, publicKey } = generateKeyPairSync('ed25519');
+  writeFileSync(signatureFile, `${sign(null, evidenceBytes, privateKey).toString('base64')}\n`);
+  const publicPem = publicKey.export({ type: 'spki', format: 'pem' });
+
+  const accepted = assessReleaseReadiness(root, { now, evidencePublicKey: publicPem });
+  assert.equal(accepted.publishable, true, JSON.stringify(accepted.reasons, null, 2));
+
+  writeFileSync(signatureFile, `${Buffer.alloc(64).toString('base64')}\n`);
+  const tampered = assessReleaseReadiness(root, { now, evidencePublicKey: publicPem });
+  assert.equal(tampered.publishable, false);
+  assert.ok(tampered.reasons.some(({ code }) => code === 'SEMANTIC_EVIDENCE_SIGNATURE_INVALID'));
 });

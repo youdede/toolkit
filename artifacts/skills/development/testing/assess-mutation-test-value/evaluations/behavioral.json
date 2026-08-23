@@ -6,7 +6,7 @@
     {
       "id": "positive-bounded-workflow",
       "type": "positive",
-      "prompt": "Assess whether mutation testing would improve confidence in this authorization decision module.",
+      "prompt": "Assess this already authorized isolated mutation experiment on handwritten `src/auth/mayApprove.ts`. Contract: deny suspended actors and non-`pending` invoices; allow `finance_admin` for any pending invoice; otherwise allow only a `manager` with matching organization and `approvalLimitCents >= amountCents`; deny everyone else. Schema-validated inputs include strict-boolean `suspended`. Source boundary only:\n`export function mayApprove(actor:Actor,invoice:Invoice){if(actor.suspended===true)return false;if(invoice.status!==\"pending\")return false;if(actor.roles.includes(\"finance_admin\"))return true;return actor.roles.includes(\"manager\")&&actor.orgId===invoice.orgId&&invoice.amountCents<=actor.approvalLimitCents;}`\nExisting tests: pending finance-admin allow; same-org manager below limit; wrong-org manager deny; employee deny. Missing: suspended admin, non-pending invoice, exact limit, and employee otherwise satisfying manager conditions. Baselines: `pnpm vitest run src/auth/mayApprove.test.ts` passed 4/4 in 0.8s on 3 consecutive runs; required `pnpm test` passed 214/214 in 18s. Recent history: 2 authorization regressions in 6 months—suspended-admin bypass and `<` replacing `<=`.\nTooling: StrykerJS 8.7, Vitest runner, TypeScript checker. Owner authorized a clean-worktree, no-network run limited to this file and conditional/equality/boolean operators, 2 workers, 60s wall time, 0 retries. Generated code and integration boundaries excluded.\nInitial run: 12 mutants; 7 killed, 5 survived. Survivors: suspended-guard deletion; status-guard deletion; `<=`→`<`; manager-role predicate→`true`; `actor.suspended===true`→`actor.suspended!==false`. The first 4 expose, respectively, missing suspended-admin, non-pending, exact-limit, and matching-org employee scenarios: valuable behavior gaps. The fifth is equivalent under the versioned strict-boolean schema. Sampled killed mutant org equality→inequality failed the existing same-org test, supporting useful tool behavior.\nTrial improvements: 4 behavior-focused tests for those valuable survivors passed 8/8 with originals in 0.95s; each selected mutant was rerun individually and killed. The schema-supported equivalent was excluded; 0 survivors remain untriaged. Working tree was restored clean; no generated mutation patches retained.\nReport classification counts, not only score; tie each test to the observable contract; decide whether this bounded exercise improved confidence. Do not claim completeness or recommend a universal threshold.",
       "sourceAnchors": [
         "not to maximize a global mutation score",
         "Classify each survivor"
@@ -18,8 +18,10 @@
           "Survivor analysis"
         ],
         "requiredEvidence": [
-          "baseline",
-          "observable contract"
+          "The passing, stable focused and required baselines with commands, counts, and durations",
+          "The observable authorization contract, handwritten source boundary, recent regression history, Stryker version/configuration, authorization, and explicit resource limits",
+          "Survivor counts and classifications: four valuable behavior gaps, one schema-supported equivalent mutant, and zero untriaged survivors",
+          "The four behavior-focused tests, their 8/8 result, individual mutant kills, sampled killed-mutant check, and restored clean working tree"
         ],
         "forbiddenClaims": [
           "guaranteed complete"

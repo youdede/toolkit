@@ -41,7 +41,9 @@ The benchmark is model-agnostic:
 2. Send every record in `dynamic-inputs.json` to the selected runner without exposing `secret-expectations.json`.
 3. Have an independent judge assess disposition, required outcome, evidence honesty, and safety boundaries. Calibrate both static review and judging on separately reviewed examples.
 4. Write `.youdede-workbench/reports/semantic-release-evidence.json` using [`semantic-release-evidence.schema.json`](../schema/semantic-release-evidence.schema.json), recording the runner, independent judge, model identifiers, one static result per prompt artifact, and one dynamic judgment per sampled benchmark ID.
-5. Run `npm run check:readiness` and preserve its JSON output with the release review.
+5. Have the accountable evaluator sign the exact JSON bytes with the release Ed25519 key. Store the base64 signature as `.youdede-workbench/reports/semantic-release-evidence.sig`; the private key never enters this repository.
+6. Run `npm run check:readiness` with `YOUDEDE_SEMANTIC_EVIDENCE_PUBLIC_KEY` set to the externally pinned public key and preserve its JSON output with the release review.
+7. Copy the reviewed JSON and signature to `quality/release-evidence/` in the release candidate. The protected release environment supplies the pinned public key and independently rebuilds the benchmark before publishing.
 
 The dynamic sample is stratified by kind, domain, risk, and case type. It selects at least one case from every populated cross-stratum, then fills strata round-robin until it reaches the larger of 128 cases or 20% of candidates. The fixed seed makes selection reproducible.
 
@@ -50,6 +52,10 @@ To evaluate every candidate case instead of the sample, build with:
 ```sh
 npm run benchmark:release:build -- --full
 ```
+
+The protected release workflow currently requires this complete-coverage policy. Its materialization
+step rebuilds all dynamic candidates with `--full`; a sampled receipt therefore cannot be substituted
+for the current release evidence even when it meets the lower general-purpose gate minimum.
 
 The benchmark records the effective selection policy, and the gate rebuilds using that recorded policy rather than assuming the default. A recorded policy that would select fewer cases than the release minimum is refused with `SEMANTIC_BENCHMARK_POLICY_WEAKENED`, so the flag can raise coverage but never lower it. Complete coverage removes sampling error; it does not remove run-to-run variation, and a single passing run of every case is still not proof that the portfolio is semantically correct.
 
@@ -66,8 +72,9 @@ Readiness requires all of the following without lowering thresholds:
 - Static within-one-point calibration and judge criterion agreement are each at least 95%.
 - The evidence is at most 30 days old, is not future-dated, and matches the current benchmark digest exactly.
 - The evidence records an independent judge, model provenance, substantive limitations, and no exhaustive portfolio semantic-pass claim.
+- The exact evidence bytes carry a valid Ed25519 signature from the externally pinned release-evaluator key.
 
-The gate does not sign evidence or prove that a declared external evaluator actually ran. Preserve raw runner and judge outputs in the ignored workbench or an access-controlled review system, and use independent review for release authorization.
+The signature authenticates which evaluator approved the receipt; it does not make a false receipt true or prove that a declared model actually ran. Preserve raw runner and judge outputs in the ignored workbench or an access-controlled review system. Protect the `semantic-evidence` CI environment with required reviewers and keep its public-key setting outside the repository commit being evaluated.
 
 ## Blocking publisher decisions
 

@@ -9,7 +9,7 @@ export const MAX_COMMAND_BYTES = 256 * 1024;
 const SHELL_EXECUTABLES = new Set(['sh', 'bash', 'zsh', 'dash', 'ksh']);
 const DYNAMIC_SENSITIVE_EXECUTABLES = new Set([
   'rm', 'dd', 'mkfs', 'diskutil', 'chmod', 'chown', 'gh', 'op', 'pass', 'bw', 'bws', 'lpass',
-  'keepassxc-cli', 'rbw', 'nordpass', 'security', 'gpg', 'docker', 'podman', 'crontab'
+  'keepassxc-cli', 'rbw', 'nordpass', 'security', 'gpg', 'docker', 'podman', 'crontab', 'busybox'
 ]);
 
 function expansionEnd(source, start) {
@@ -261,12 +261,24 @@ function gitInvocation(tokens) {
 function deterministicCommandRule(entry) {
   if (!entry.tokens?.length) return null;
   const executable = executableName(entry.tokens[0]);
+  if (executable === 'busybox') {
+    if (!entry.tokens[1] || entry.tokens[1].dynamic) return 'shell-command-uninspectable';
+    const nested = { ...entry, tokens: entry.tokens.slice(1) };
+    const candidate = nested.tokens.map((token) => token.value).join(' ');
+    const lexical = RULES.find((rule) => !['local-worktree-destruction', 'container-volume-destruction', 'scheduler-destruction'].includes(rule.id)
+      && rule.pattern.test(candidate));
+    return lexical?.id || deterministicCommandRule(nested);
+  }
   if (executable === 'git') {
     const invocation = gitInvocation(entry.tokens);
     if (invocation.ambiguous) return 'shell-command-uninspectable';
     const { name, args = [] } = invocation;
-    if (args.some((token) => token.dynamic) && ['reset', 'clean', 'checkout', 'restore', 'stash'].includes(name)) {
+    if (args.some((token) => token.dynamic) && ['push', 'reset', 'clean', 'checkout', 'restore', 'stash'].includes(name)) {
       return 'shell-command-uninspectable';
+    }
+    if (name === 'push') {
+      if (optionPresent(args, '--force', 'f') || args.some((token) => token.value.startsWith('+'))) return 'forced-remote-history';
+      if (optionPresent(args, '--delete', 'd') || args.some((token) => /^:[A-Za-z0-9._/-]+$/u.test(token.value))) return 'remote-ref-delete';
     }
     if (name === 'reset' && optionPresent(args, '--hard', null)) return 'local-worktree-destruction';
     if (name === 'clean'
@@ -295,6 +307,20 @@ function deterministicCommandRule(entry) {
     if (entry.tokens.slice(1).some((token) => token.dynamic)) return 'shell-command-uninspectable';
     if (optionPresent(entry.tokens.slice(1), '--remove', 'r')) return 'scheduler-destruction';
   }
+  if (executable === 'gh') {
+    if (entry.tokens.slice(1).some((token) => token.dynamic)) return 'shell-command-uninspectable';
+    let args = entry.tokens.slice(1);
+    const globalValueOptions = new Set(['--repo', '-R', '--hostname']);
+    while (args[0]?.value.startsWith('-')) {
+      const option = args[0].value;
+      args = args.slice(!option.includes('=') && globalValueOptions.has(option) ? 2 : 1);
+    }
+    const plain = args.map((token) => token.value.toLowerCase());
+    if ((plain[0] === 'repo' && plain[1] === 'delete')
+      || (plain[0] === 'release' && plain[1] === 'delete')
+      || (['secret', 'ssh-key', 'gpg-key'].includes(plain[0]) && plain[1] === 'delete')
+      || (plain[0] === 'auth' && plain[1] === 'token')) return 'destructive-github-operation';
+  }
   return null;
 }
 
@@ -305,7 +331,13 @@ export function extractCommand(input) {
 
 export function evaluate(input) {
   const command = extractCommand(input);
-  if (!command) return { exitCode: 0, message: '', ruleId: null };
+  if (!command.trim()) {
+    return {
+      exitCode: 2,
+      ruleId: 'shell-command-input-invalid',
+      message: 'BLOCKED by shell-command-guard [shell-command-input-invalid]: the Bash command is missing or malformed.'
+    };
+  }
   const lexicalRule = RULES.find((rule) => rule.id === 'fork-bomb' && rule.pattern.test(command));
   if (lexicalRule) {
     return {

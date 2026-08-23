@@ -6,7 +6,7 @@
     {
       "id": "positive-bounded-workflow",
       "type": "positive",
-      "prompt": "Prepare a reviewable PR draft for this branch against main, using the supplied diff and test log.",
+      "prompt": "Task/authority: Prepare a reviewable PR package only; do not change code, commit, push, open a PR, assign reviewers, or mutate remote state.\nIdentity: base `main`=`1111111111111111111111111111111111111111`; head `feature/checkout-timeout`=`2222222222222222222222222222222222222222`; range `main...feature/checkout-timeout`; one commit `2222222 Configure checkout client timeout`. `git status --short` empty; no untracked files, generated outputs, migrations, dependency changes, or unrelated files; the following three-file diff is complete.\nAcceptance `CHK-318`: checkout HTTP calls default to 3000 ms; accept `CHECKOUT_TIMEOUT_MS` integers 1000..10000; invalid values retain 3000; preserve all other checkout behavior.\nPolicy: PR description must state motivation, behavior, non-goals, tests, rollout, residual risk. Required checks: `npm test`, `npm run lint`. Review security-sensitive configuration parsing before call-site changes.\nDiff:\n- `src/config.ts` index `10aa000..20bb000`: retain `checkoutBaseUrl = process.env.CHECKOUT_BASE_URL`; add `checkoutTimeoutMs(raw = process.env.CHECKOUT_TIMEOUT_MS)`: undefined→3000; `value=Number(raw)`; return value iff integer and 1000≤value≤10000, else 3000.\n- `src/checkout.ts` index `30cc000..40dd000`: import `checkoutTimeoutMs` from `./config`; change `http.post(\"/checkout\", body)` to `http.post(\"/checkout\", body, { timeout: checkoutTimeoutMs() })`.\n- New `test/checkout-timeout.test.ts`, mode 100644: parameter cases `[undefined,3000]`, `[\"1000\",1000]`, `[\"10000\",10000]`, `[\"999\",3000]`, `[\"10001\",3000]`, `[\"abc\",3000]`; async call `submitCheckout({cartId:\"c1\"})` expects `http.post(\"/checkout\", {cartId:\"c1\"}, {timeout:3000})`.\nFresh verification at head `2222222`, 2026-08-21: `npm test -- checkout-timeout` exit 0, 7 passed, report `artifacts/checkout-timeout.junit.xml`; `npm test` exit 0, 418 passed/0 failed/2 explicitly skipped integration tests, report `artifacts/junit.xml`; `npm run lint` exit 0, 0 errors/0 warnings.\nOwner rollout decision: initially deploy with variable unset; after observing checkout latency, set per environment. Roll back by unsetting it. No database/API compatibility change expected.\nOutput in order: `## Review map`, `## Verification evidence`, `## Residual risk`, `## Pull-request draft`. Trace every claim to diff, command result, or labeled owner decision. Map parser, checkout call site, and tests to `CHK-318`; parser is first hotspot. Include exact refs/range, clean/complete status, commands/exits/counts/artifacts, skipped integrations, runtime-environment-configuration risk, rollout/rollback, motivation, behavior, non-goals, and unresolved risk; do not claim approval/readiness merely from description completeness.",
       "sourceAnchors": [
         "exact base and head",
         "## Pull-request draft"
@@ -18,8 +18,10 @@
           "Verification evidence"
         ],
         "requiredEvidence": [
-          "base and head",
-          "exit status"
+          "the exact base and head commits, compared range, clean status, and confirmation that the displayed three-file diff is complete",
+          "mapping of the configuration parser, checkout call-site change, and tests to issue `CHK-318`, with configuration parsing identified as the first review hotspot",
+          "fresh commands, exit statuses, pass counts, skipped integration tests, and artifact locations",
+          "rollout by initially leaving the variable unset, rollback by unsetting it, and residual risk from runtime environment configuration and skipped integration coverage"
         ],
         "forbiddenClaims": [
           "guaranteed complete"

@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "The production snapshot disables the required TLS enforcement flag while the bound desired revision enables it and no exception exists.",
+      "prompt": "Perform a read-only configuration-drift analysis of this single production resource.\n\nDesired evidence:\n- Revision `cfg-4f92` at `config/prod/payments-gateway.yaml:18`, approved 2026-08-20T15:00:00Z.\n- Environment/resource identity: production AWS ALB `arn:aws:elasticloadbalancing:eu-west-1:104:loadbalancer/app/payments-gateway/7a1`, class `application-load-balancer`, owner `Payments SRE`.\n- Expected key/value: `listeners.https.enforce_tls = true`; policy `TLS-12` requires plaintext requests to redirect to HTTPS.\n\nObserved evidence:\n- Snapshot `snap-prod-8821.json`, captured by the approved inventory collector at 2026-08-21T09:30:00Z for the same ALB ARN and environment.\n- Observed `listeners.https.enforce_tls = false`.\n- The same snapshot records listener 80 action `forward:payments-target`, while the desired record specifies `redirect:https:443`.\n\nNormalization policy `norm-alb-v3`: ignore provider-generated IDs, timestamps, list ordering, and default health-check fields; preserve listener actions and `enforce_tls`. After normalization, desired and observed resource identities remain equivalent and the TLS values above remain different.\n\nApproved-exception registry `exceptions-2026-08-21T09:35:00Z.json` contains no entry for this ALB ARN, `listeners.https.enforce_tls`, or policy `TLS-12`. The snapshot is five minutes older than the registry check and newer than the approved desired revision.\n\nClassify the difference, its exception and impact status, confidence, plausible failure mode, and smallest useful next check. Do not reveal secrets, reconcile the resource, restart it, edit configuration, or approve deployment.",
       "sourceAnchors": [
         "a normalized expected-observed-exception table with evidence provenance and timestamps",
         "equivalent resource identities differ on a policy-relevant value after normalization and no valid exception covers the observation"
@@ -18,8 +18,10 @@
           "Scope reviewed"
         ],
         "requiredEvidence": [
-          "resource and key",
-          "expected and observed values"
+          "Resource ARN and key `listeners.https.enforce_tls`",
+          "Expected value `true` at revision `cfg-4f92` and observed value `false` in timestamped snapshot `snap-prod-8821.json`",
+          "Normalized listener-action evidence showing desired HTTPS redirect versus observed plaintext forwarding",
+          "Exception-registry evidence showing no applicable approved exception, with provenance and timestamps"
         ],
         "forbiddenClaims": [
           "the subject is completely safe"

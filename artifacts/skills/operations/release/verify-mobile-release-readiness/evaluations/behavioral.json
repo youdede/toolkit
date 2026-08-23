@@ -6,7 +6,7 @@
     {
       "id": "positive-bounded-workflow",
       "type": "positive",
-      "prompt": "Verify readiness of this Android build for a 5 percent phased release using the supplied artifact and device results.",
+      "prompt": "Task/authority: Verify whether this Android candidate is ready for a 5% phased production release; do not sign, upload, submit, access credentials, or change rollout state.\nIdentity: Android `com.example.wallet`, v6.5.0 build 65017; `wallet-6.5.0-65017.aab`; SHA-256 `8d7a2e7118b3c6d2a824ee18f7fe30e580e4093a77bdb7868321b2ea1f901234`; Git `3f61c9e`; CI `android-release/8821`. Gradle/dependency lockfiles clean; reproducibility check matched the hash. Play App Signing certificate fingerprint ends `:7A:91`; owner Mobile Release Engineering; no signing key/credential supplied or authorized. Channel: Google Play production, phased to 5% of Italy/Spain accounts.\nScope/matrix: Supported Android 10–15 phones/tablets; foldables and ChromeOS explicitly unsupported. Candidate-artifact tests (not static inspection) verified Android 10 Pixel 3a, 11 Galaxy A20, 12 Galaxy Tab S7, 13 Pixel 4a, 14 Galaxy A14, and 15 Pixel 8 for install, first launch, login, payment, offline recovery, background/foreground, interruption, deep link, push notification, logout, account deletion, and upgrade from oldest supported 6.3.0 schema. TalkBack/font scaling verified on Android 12/14/15; English/Italian/Spanish localization verified on phone/tablet. Android 10 TalkBack and Japanese localization were not assessed; Japanese is outside release locales, but Android 10 accessibility is an explicit gap. No journey or listed device failed.\nPermissions/privacy/migration: Only camera/notifications requested; denial of each passed. Play Data Safety matches collected diagnostics/payment-token handling; privacy review `PRIV-771` approved. No new SDK, permission, entitlement, or data category. Migration integrity passed on 12 seeded account histories.\nBackend/operations: API contract supports clients 6.3–6.5 through 2026-10-31. `wallet_v65` defaults off; remote disable exercised in staging. Store assets/declarations reviewed. ProGuard mapping/native symbols: `ci://android-release/8821/artifacts`; crash-symbolication test passed. Support/incident owner: Elena Bianchi.\nControls: Observe 6 hours at 5%; automatically halt if crash-free users <99.7%, payment failures >0.5%, or migration errors >0.1% for 15 minutes. Elena Bianchi has halt authority. Retain backend compatibility 60 days. If store rollback unavailable, remotely disable feature and ship forward-fix 65018.\nOutput: Return `## Candidate identity`, `## Evidence matrix`, `## Rollout controls`, `## Readiness decision`, in order. Bind artifact/build to revision, pipeline, signing metadata, and production channel. Mark every journey and device class verified, failed, not assessed, or blocked; never pass missing evidence, especially Android 10 accessibility.",
       "sourceAnchors": [
         "Bind the candidate artifact",
         "Mark every journey and device class"
@@ -18,8 +18,10 @@
           "Evidence matrix"
         ],
         "requiredEvidence": [
-          "source revision",
-          "not assessed"
+          "artifact hash and build 65017 bound to source revision `3f61c9e`, pipeline 8821, signing metadata, and the production channel",
+          "per-device and per-journey statuses, including Android 10 TalkBack as not assessed rather than passed",
+          "privacy, permission, migration, backend-compatibility, symbolication, and remote-disable evidence",
+          "the 5% observation window, numerical automatic-halt thresholds, named halt authority, and forward-fix path"
         ],
         "forbiddenClaims": [
           "guaranteed complete"

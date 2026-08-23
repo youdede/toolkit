@@ -6,7 +6,7 @@
     {
       "id": "positive-bounded-workflow",
       "type": "positive",
-      "prompt": "Design the migration of this daily ETL job to streaming, including a six-month backfill and consumer cutover.",
+      "prompt": "Design, but do not execute, the migration of the daily orders ETL to streaming, including a six-month backfill and consumer cutover. Business decision: provide finance and operations with order-status metrics within five minutes instead of next day. Producer owner: Diego Silva, Checkout Engineering. The producer is `checkout-api`; current immutable input is daily S3 `order_events_v1` files, and the new live source is Kafka topic `order-events-v2`. Both schemas contain `event_id` UUID, `order_id` UUID, `event_time` UTC timestamp, `producer_seq` integer, `status` enum, `amount_cents` integer, and `updated_at` UTC timestamp, and `currency` ISO 4217 code; v2 adds `schema_version=2`. Primary idempotency key is `event_id`; ordering is by `producer_seq` within Kafka partitions keyed by `order_id`. Event time drives business metrics, processing time drives freshness alerts, events may arrive up to 48 hours late, and duplicates retain the highest `producer_seq` for an `event_id`. Consumers are `finance_orders_dbt` owned by Amina Yusuf and `ops_fulfillment_dashboard` owned by Leo Martin; both have acknowledged the v2 schema and require the listed meanings, UTC units, and null behavior unchanged. Quality targets defined before rollout are zero duplicate `event_id` values, zero missing six-month partitions, exact keyed row-count agreement, exact `amount_cents` totals by day and currency, and status-count variance no greater than 0.1% with every mismatch explained. Current volume is 12 million events/day, peak 1,200 events/second, with 30% headroom required. Raw events are retained 13 months and derived tables 25 months under policy DATA-7. Environments are isolated dev, staging, and production; only the `pipeline-orders` production role may write sinks. Pipeline owner: Mei Chen. Reconciliation and cutover decision owner: Amina Yusuf.\n\nFor the backfill, use the versioned six-month S3 manifest captured at planning time as the immutable source snapshot, month/day as the chunk key, `event_id` as the idempotency key, and a checkpoint after each daily partition. Budget at most four concurrent chunks and 40% warehouse capacity; define retries, poison-record quarantine, pause/resume, and progress metrics. Keep historical writes in a shadow table so they cannot compete with live writes; reconcile there before an atomic view switch. Independent evidence consists of S3 manifest counts and object checksums, Kafka offset ranges, and sink queries. Cut over only after both consumers acknowledge a completed shadow comparison and the predefined tolerances pass. Recovery path: switch the view back to the daily table, stop streaming consumers, preserve offsets and checkpoints, and forward-repair mismatches; cleanup requires owner approval after a 14-day dual-read period. Note privacy and retention effects and any residual mismatch rather than hiding them.",
       "sourceAnchors": [
         "Trace fields from origin",
         "Design backfill windows"
@@ -18,8 +18,8 @@
           "Backfill design"
         ],
         "requiredEvidence": [
-          "idempotency",
-          "reconciliation"
+          "Idempotency and ordering are grounded in `event_id`, highest `producer_seq`, `order_id` partitioning, immutable manifests, and per-partition checkpoints",
+          "Reconciliation uses independent S3 manifests/checksums, Kafka offsets, keyed counts, duplicate checks, monetary totals, status tolerances, consumer acknowledgements, and a named decision owner"
         ],
         "forbiddenClaims": [
           "guaranteed complete"

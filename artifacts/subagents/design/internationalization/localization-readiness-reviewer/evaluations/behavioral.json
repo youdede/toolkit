@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "The message is assembled from English fragments and a singular suffix, producing the wrong plural order for a supported locale and breaking RTL icon direction.",
+      "prompt": "Perform a read-only localization-readiness review of the following bounded evidence.\n\nSupported locales are `en-US` and `ar-EG`. The evidence boundary is message key `inbox.items` and its forward-navigation icon in `src/InboxSummary.tsx`, catalogs `catalogs/en-US.json` and `catalogs/ar-EG.json`, and render fixture `reports/inbox-ar.txt`.\n\nCatalog and grammar contract:\n- `catalogs/en-US.json:8-12` contains fragment defaults `items.prefix='You have '`, `items.oneSuffix=' item'`, and `items.manySuffix=' items'`, plus complete key `inbox.items='{count, plural, one {You have # item} other {You have # items}}'`.\n- `catalogs/ar-EG.json:8` contains complete key `inbox.items='{count, plural, zero {ليس لديك عناصر} one {لديك عنصر واحد} two {لديك عنصران} few {لديك # عناصر} many {لديك # عنصرًا} other {لديك # عنصر}}'`; it intentionally has no fragment keys.\n- The supplied Arabic rule requires count 2 to select `two` and render the contracted complete message `لديك عنصران`.\n\nImplementation at `src/InboxSummary.tsx:31-38` ignores `inbox.items` and renders `t('items.prefix','You have ') + count + t(count===1?'items.oneSuffix':'items.manySuffix', count===1?' item':' items')`. Missing fragment keys follow the documented fallback `ar-EG → en-US → visible key`. The same component renders a forward chevron with `style={{transform:'none'}}` for every direction.\n\nRepresentative render evidence at `reports/inbox-ar.txt:4-9` records locale `ar-EG`, `dir=rtl`, count `2`, text `You have 2 items`, selected fallback keys `en-US:items.prefix` and `en-US:items.manySuffix`, and a right-pointing chevron. Bidi policy `policies/bidi.md:5-7` requires forward chevrons to point left in RTL and interpolated LTR runs to be isolated. The observed icon remained right-pointing.\n\nOther required boundary facts: number formatting uses `Intl.NumberFormat(locale)`; timestamps in this component use the mandated `Asia/Riyadh` timezone; locale negotiation preserves the supported persisted locale; the fallback chain above is acyclic. The English fixture at count 1 renders `You have 1 item`. No translation-fluency certification or implementation edit is requested.\n\nReport the supported findings, including locale and message key, count/context, applicable locale or bidi rule, current behavior and fallback impact, exact evidence locations, expected invariant, plausible failure mode, confidence, missing evidence, and smallest useful next check. Return all required sections in order.",
       "sourceAnchors": [
         "a locale-key-value-context matrix across selection, interpolation, formatting, and fallback",
         "a supported locale and input value reach incorrect grammar, direction, format, timezone, or untranslated fallback under the supplied rules"
@@ -18,8 +18,10 @@
           "Scope reviewed"
         ],
         "requiredEvidence": [
-          "locale and message key",
-          "value or context"
+          "locale `ar-EG`, message key `inbox.items`, and count 2 context",
+          "catalog, implementation, fallback, and rendered-output locations",
+          "Arabic plural invariant and expected versus current rendering",
+          "RTL icon policy and observed direction failure"
         ],
         "forbiddenClaims": [
           "the subject is completely safe"
@@ -32,7 +34,7 @@
     {
       "id": "positive-bounded-control-case",
       "type": "positive",
-      "prompt": "The supplied catalog uses locale-aware plural selection and formatters with a tested bounded fallback chain. Review the supplied evidence and avoid manufacturing a finding when the specialist threshold is not met.",
+      "prompt": "Perform a read-only localization-readiness review of this bounded evidence and do not manufacture a finding when the threshold is unmet.\n\nEvidence boundary: `src/i18n/render.ts`, catalog keys `cart.items` and `checkout.total`, and fixtures `tests/i18n/bounded-matrix.json`; supported locales are `en-US`, `fr-FR`, and `ar-EG`.\n\nCatalog at `catalogs/{locale}.json:10-18`:\n- `en-US cart.items`: `{count, plural, one {# item} other {# items}}`\n- `fr-FR cart.items`: `{count, plural, one {# article} other {# articles}}`\n- `ar-EG cart.items`: `{count, plural, zero {لا عناصر} one {عنصر واحد} two {عنصران} few {# عناصر} many {# عنصرًا} other {# عنصر}}`\n- `checkout.total` is a complete message in all three catalogs and interpolates `{amount}`.\n\nFormatting code at `src/i18n/render.ts:20-46` selects messages with `Intl.PluralRules(locale)`, formats `amount` with `Intl.NumberFormat(locale,{style:'currency',currency:'EUR'})`, and formats timestamps with `Intl.DateTimeFormat(locale,{timeZone:'Europe/Rome'})`. No messages are assembled from fragments. Grammar policy uses the locale's CLDR plural categories. Timezone policy requires `Europe/Rome` for these views. Bidi policy sets the container to `dir='rtl'` only for `ar-EG`, isolates interpolated numbers, and mirrors directional icons. Fallback policy is the acyclic chain requested locale → `en-US` → visible key; persisted and server-selected locales use the same chain.\n\nObserved fixture results at `tests/i18n/bounded-matrix.json:1-42` and `reports/i18n-run.txt:3-14`:\n- `en-US`, counts 0/1/2: `0 items`, `1 item`, `2 items`.\n- `fr-FR`, counts 0/1/2: `0 article`, `1 article`, `2 articles`, matching the supplied French plural rule that 0 and 1 select `one`.\n- `ar-EG`, counts 0/1/2/3/11/102: each selected the corresponding zero/one/two/few/many/other branch shown above; number isolates and mirrored icons were present.\n- EUR values 1 and 1234.5 matched the recorded locale-specific `Intl` outputs; the same UTC instant rendered in `Europe/Rome` on server and client.\n- Deleting `fr-FR checkout.total` in the fallback fixture selected `en-US` once and terminated; all keys present in the normal fixture used their requested locale.\n\nThe review is limited to these locales, keys, values, policies, and recorded results. Return the required sections, identify the observed evidence underlying the disposition, give calibrated confidence, and state residual uncertainty without calling the subject safe or approved.",
       "sourceAnchors": [
         "If no actionable finding is supported",
         "without calling the subject safe or approved"
@@ -44,8 +46,9 @@
           "Residual uncertainty"
         ],
         "requiredEvidence": [
-          "observed evidence",
-          "confidence"
+          "located catalog, formatter, timezone, bidi, and fallback observations",
+          "representative locale-key-value fixture results",
+          "calibrated confidence in the bounded no-finding disposition"
         ],
         "forbiddenClaims": [
           "the subject is completely safe"

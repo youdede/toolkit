@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "Measured peak arrivals exceed the fixed worker service rate, making the bounded queue grow beyond its limit before the stated campaign ends.",
+      "prompt": "Perform a read-only capacity-risk analysis of the fixed `campaign-dispatch` worker pool using this evidence.\n\n- `metrics/dispatch-baseline.csv`: normal arrivals are 80 jobs/s; the named campaign peak multiplier is 1.75, producing a measured peak of 140 jobs/s from 12:00–12:15 UTC. Queue depth at 12:00 is 1,000 jobs.\n- `bench/dispatch-v12.txt`: service time is 100 ms/job/worker. With 12 concurrent workers, service capacity is `12 × 10 = 120 jobs/s`.\n- `policy/dispatch-capacity.yaml`: workers are fixed at 12 for the campaign, the hard concurrency cap is 12, and required service headroom is 15%; therefore the headroom demand threshold is `120 × 0.85 = 102 jobs/s`.\n- `queue/dispatch.yaml`: FIFO queue capacity is 10,000 jobs; it accepts jobs until full and then returns `QUEUE_FULL`.\n- `limits/downstream.md`: the downstream write quota is 200 jobs/s.\n- Sensitivity scenario: arrivals are 10% below the measured peak, or 126 jobs/s; service capacity remains 120 jobs/s.\n\nAt the measured campaign peak, net queue growth is `140 - 120 = 20 jobs/s`, so exhaustion from 1,000 to 10,000 jobs occurs after `(10,000 - 1,000) / 20 = 450 seconds`, 7.5 minutes into the 15-minute campaign. Analyze the threshold crossing, first limiting resource, plausible failure mode, confidence, and smallest useful next check. Do not run a load test or change capacity.",
       "sourceAnchors": [
         "a demand-capacity equation with assumptions, sensitivity ranges, and first limiting resource",
         "supplied measurements and limits imply a threshold crossing under a named plausible load scenario"
@@ -18,8 +18,10 @@
           "Scope reviewed"
         ],
         "requiredEvidence": [
-          "limiting resource",
-          "observed baseline"
+          "The `campaign-dispatch` worker pool and bounded FIFO queue as the limiting resources",
+          "Observed baseline of 80 jobs/s, measured peak of 140 jobs/s, service capacity of 120 jobs/s, and initial queue depth of 1,000",
+          "The headroom equation and the queue-exhaustion witness showing 450 seconds to the 10,000-job limit",
+          "The named 126 jobs/s sensitivity case and supplied evidence locations"
         ],
         "forbiddenClaims": [
           "the subject is completely safe"
@@ -32,7 +34,7 @@
     {
       "id": "positive-bounded-control-case",
       "type": "positive",
-      "prompt": "Observed peak, sensitivity case, and downstream quotas all remain above the required headroom with consistent units. Review the supplied evidence and avoid manufacturing a finding when the specialist threshold is not met.",
+      "prompt": "Perform a read-only capacity-risk analysis for the `image-worker` pool using only this evidence bundle.\n\nEvidence boundary and locations:\n- `metrics/capacity-2026-08-01.csv`: measured steady demand is 92 jobs/s; the recurring weekday peak multiplier is 1.50, yielding 138 jobs/s. Current concurrency is 16 workers and measured utilization at 92 jobs/s is 46%.\n- `bench/service-rate-v7.txt`: service time is 80 ms/job/worker, so each worker serves 12.5 jobs/s and the fixed pool serves 200 jobs/s.\n- `policy/image-worker.yaml`: concurrency is fixed at 16 during the 90-day decision horizon; hard cap 16; required service-capacity headroom is 20%, so the headroom demand threshold is `200 × 0.80 = 160 jobs/s`.\n- `metrics/queue-2026-08-01.csv`: FIFO queue depth was p95 120 jobs and maximum 310 jobs; hard queue limit is 10,000; no drops were observed in the measured window.\n- `forecast/q3.json`: baseline demand growth is 2% per month. The required sensitivity case is an additional 8% above the 138 jobs/s peak, or 149.04 jobs/s. The three-month forecast peak is `92 × 1.02^3 × 1.50 = 146.36 jobs/s`.\n- `limits/downstream.md`: the first downstream quota is 300 jobs/s, with the same 20% headroom target giving 240 jobs/s.\n\nNormalize the units, assess baseline, expected peak, the named sensitivity case, queue stability, and time or load to the first threshold. The supplied peak and sensitivity remain below 160 jobs/s, so do not manufacture a finding if the evidence threshold is not met. Give a calibrated confidence and residual uncertainty without calling the system safe or approved, and do not execute tests or change scaling.",
       "sourceAnchors": [
         "If no actionable finding is supported",
         "without calling the subject safe or approved"
@@ -44,8 +46,9 @@
           "Residual uncertainty"
         ],
         "requiredEvidence": [
-          "observed evidence",
-          "confidence"
+          "Observed demand, service-rate, seasonality, queue, hard-limit, scaling-policy, and headroom evidence with the supplied locations",
+          "The threshold equation `200 × 0.80 = 160 jobs/s` and comparison with the 138, 149.04, and 146.36 jobs/s scenarios",
+          "A calibrated confidence in any no-actionable-finding disposition and the measurement that would narrow residual uncertainty"
         ],
         "forbiddenClaims": [
           "the subject is completely safe"

@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "A cent-denominated total is converted to binary float before aggregation and the supplied witness crosses the contractual rounding threshold.",
+      "prompt": "Perform a read-only numerical-correctness review of this bounded financial calculation.\n\nAt `src/money/aggregate.ts:12-19`, the implementation computes `sumCents` as signed 64-bit integer cents, then executes `dollars = float32(sumCents) / float32(100)` and returns `roundHalfEven(dollars * float32(100))` as integer cents. IEEE-754 binary32 is used for both operations. The reference equation at `contracts/money.md:4` is `resultCents = Σ itemCents`, with no intermediate unit conversion. Inputs and outputs are cents; the supported domain is 1–100 line items, each `0..20,000,000` cents, with total no greater than `2,000,000,000` cents. Final rounding mode is half-even and the contractual absolute tolerance is 0 cents.\n\nConcrete in-domain witness from `tests/aggregate-boundary.json:3`: two item values `[16,777,216, 1]` cents. Reference calculation: `16,777,216 + 1 = 16,777,217` cents. The recorded implementation trace at `reports/aggregate-f32.txt:6-10` is `sumCents=16,777,217`, `float32(sumCents)=16,777,216`, `dollars=167,772.16`, and returned `16,777,216` cents. The absolute error is `|16,777,216 − 16,777,217| = 1` cent, which exceeds the 0-cent tolerance; relative error is approximately `5.96×10^-8`. The unit conversion itself is cents → dollars → cents, while the loss occurs at the binary32 conversion before aggregation output.\n\nLimit the review to this formula, representation, rounding rule, supported domain, tolerance, witness, and trace. Do not execute code or edit the implementation. Return all required sections in order and include the witness inputs, expected and implemented results, quantified error and bound, evidence locations, expected invariant, plausible failure mode, confidence, missing evidence, and smallest useful next check.",
       "sourceAnchors": [
         "a symbolic and numeric calculation from witness inputs to expected and implemented results",
         "the derived absolute or relative error exceeds the supplied tolerance for an in-domain input"
@@ -18,8 +18,10 @@
           "Scope reviewed"
         ],
         "requiredEvidence": [
-          "witness inputs",
-          "expected result"
+          "in-domain witness inputs `[16,777,216, 1]` cents",
+          "reference result of 16,777,217 cents",
+          "implemented result of 16,777,216 cents and located binary32 trace",
+          "one-cent absolute error exceeding the zero-cent tolerance"
         ],
         "forbiddenClaims": [
           "the subject is completely safe"
@@ -32,7 +34,7 @@
     {
       "id": "positive-bounded-control-case",
       "type": "positive",
-      "prompt": "All intermediates remain inside the proven integer range and rounding occurs once using the specified half-even rule. Review the supplied evidence and avoid manufacturing a finding when the specialist threshold is not met.",
+      "prompt": "Perform a read-only numerical-correctness review of this bounded evidence and do not manufacture a finding when the numerical threshold is unmet.\n\nThe function at `src/money/roundMillicents.ts:4-18` converts a nonnegative signed-64-bit amount `m` measured in millicents to whole cents. Supported input is `0 ≤ m ≤ 9,000,000,000,000,000` millicents. The reference equation is `c = roundHalfEven(m / 1000)` cents. The contractual absolute tolerance is 0 cents.\n\nImplementation: `q = m / 1000` by integer division; `r = m % 1000`; increment `q` when `r > 500`, or when `r == 500 && q is odd`; otherwise return `q`. All operands and intermediates are signed 64-bit integers. Division and remainder occur before the single rounding decision; no binary floating-point conversion occurs.\n\nRange proof at `docs/numeric-proof.md:11-20`: `m ≤ 9.0e15 < INT64_MAX=9,223,372,036,854,775,807`; `0 ≤ q ≤ 9.0e12`; `0 ≤ r ≤ 999`; and the largest returned result is `9.0e12` cents. Thus every stated intermediate and the possible `q+1` remain within signed-64-bit range. Units are recorded as `m[millicents]`, `q[cents]`, and `r[millicents]`.\n\nLocated fixture results at `tests/roundMillicents.test:8-34` are: `m=0 → expected/implemented 0`; `499 → 0`; `500 → 0` because the lower cent is even; `1500 → 2`; `2500 → 2`; `999 → 1`; and `9,000,000,000,000,000 → 9,000,000,000,000`. The test log `reports/rounding.txt:2-9` records equality with the reference result and absolute error 0 cents for each witness.\n\nThe review boundary is this formula, representation, supported range, rounding mode, tolerance, proof, and listed witnesses. Return all required sections in order, ground any no-finding statement in the located calculations, give calibrated confidence, and state residual uncertainty without claiming safety or approval.",
       "sourceAnchors": [
         "If no actionable finding is supported",
         "without calling the subject safe or approved"
@@ -44,8 +46,10 @@
           "Residual uncertainty"
         ],
         "requiredEvidence": [
-          "observed evidence",
-          "confidence"
+          "implemented and reference equations with units",
+          "supported range, signed-64-bit representation, half-even rule, and zero-cent tolerance",
+          "located intermediate range proof and witness calculations",
+          "calibrated confidence in the bounded no-finding disposition"
         ],
         "forbiddenClaims": [
           "the subject is completely safe"

@@ -33,7 +33,7 @@
     {
       "id": "positive-bounded-control-case",
       "type": "positive",
-      "prompt": "Every step has explicit state, bounded command, observable result, failure branch, owner, and recent rehearsal evidence. Review the supplied evidence and avoid manufacturing a finding when the specialist threshold is not met.",
+      "prompt": "Read-only production-control review: find any step not executable/safely evaluable from its stated start. Do not execute/contact responders, approve action, or invent defects.\nRB-E1 `runbooks/orders-db-saturation.md:1-18`: production `orders-api/eu-west-1`; DB saturation >90%/5m, checkout errors 3%, no corruption signal. Preserve accepted orders; prevent simultaneous shifts. IC decides containment/recovery/failback; DB SRE executes DB controls after IC authorization; Edge SRE executes traffic controls; Communications Lead owns updates.\nRB-E2 lines19-34: incident ID exists; target must equal `orders-api/eu-west-1`; dashboards freshness <60s; second operator confirms target+change ticket. Named parameters: service, region, percent, incident_id, change_ticket.\nRB-E3 lines35-112 LEDGER:\nS1 diagnosis entry: saturation >90%/5m; compare saturation/errors/replication lag/active shifts. Any dashboard ≥60s old: no privileged action; Observability On-call within 5m.\nS2 containment: IC authorization+two-person confirmation; Edge SRE approved traffic control, target above, 20%. Success=edge allocation 80/20 AND source request rate falls 15–25% within 3m. Stop if errors >5%, lag >30s, signals disagree, or no confirmation after 3m; immediately escalate IC. Reversible: recorded prior allocation→100/0.\nS3 mitigation only after verified S2: DB SRE approved connection-cap operation with named parameters. Success=saturation <80% and errors <1% continuously 5m. Stop after 10m or queued writes rise; retain S2 containment; escalate DB Lead.\nS4 recovery only after S3 success+IC approval: remove cap. If saturation >85% within 5m, restore prior cap and return S3 containment.\nS5 failback after 15 stable minutes: IC may authorize Edge SRE; restore traffic in 10% increments, wait 3m each. On any S2 stop signal, stop/revert one increment. Complete only at 100/0 plus saturation <80%, errors <1%, lag <10s for 10m.\nRB-E4 lines113-157: partial shift confirmation→freeze actions+restore recorded prior allocation; traffic control unavailable→Network On-call, preserve current allocation; failed cap rollback→retain traffic containment+DB Lead; handoff requires both operators read back step,target,prior state,elapsed wait,active authorization; incident-ID lock prevents split-brain/double mitigation.\nRB-X1 `exercises/2026-08-12-orders-db.md:1-96`: staging EX-88, same topology/roles, rehearsed S1–S5 plus stale-dashboard, partial-shift, unavailable-control, failed-rollback, handoff, double-mitigation. Observed all target confirmations, stop triggers, max waits, prior-state restorations, escalation deadlines; no command exceeded bounded target. Excluded production credentials and real provider behavior.\nOUTPUT: Evaluate control gates, explicitly separate decision authority from command execution, and compare every critical branch with EX-88. Use the required stepwise operator-state ledger: …",
       "sourceAnchors": [
         "Control gates",
         "Exercise coverage"
@@ -46,8 +46,8 @@
           "Residual uncertainty"
         ],
         "requiredEvidence": [
-          "observed evidence",
-          "confidence"
+          "observed runbook and exercise evidence identified by evidence ID",
+          "calibrated confidence in the bounded finding or no-finding disposition"
         ],
         "forbiddenClaims": [
           "the subject is completely safe"

@@ -6,7 +6,7 @@
     {
       "id": "positive-cloud-cost-finops",
       "type": "positive",
-      "prompt": "Analyze the supplied 28% month-over-month cloud-cost increase. Scoped line items, usage, pricing dates, currency rules, allocation keys, credits, taxes, egress, commitments, reliability constraints, and growth forecast are included.",
+      "prompt": "Analyze the following bounded AWS cost bundle read-only and explain the 28% month-over-month net-cost increase.\n\nScope (`E-SCOPE-1`): AWS account `a-104`, product `Shop`, teams Checkout and Platform, production in `eu-west-1`; compare 2026-01-01–2026-01-31 with 2026-02-01–2026-02-28, UTC. Decision horizon is 90 days.\n\nCost source and rules (`E-CUR-77`): timestamped AWS CUR v2 export snapshot `CUR-77`, ingested 2026-03-02T04:00:00Z. Amounts below are USD thousands. Usage is provider-billed quantity. Gross excludes credits but includes support and tax; net equals gross minus credits. No currency conversion is used. Pricing identities were effective throughout both periods.\n\n| Evidence | Meter | Jan usage / cost | Feb usage / cost | Pricing basis |\n|---|---|---:|---:|---|\n| `E-EC2-1` | EC2 compute | 100,000 h / $50k | 128,000 h / $68k | `P-EC2-2026-01`; $0.60 list, with amortized savings-plan effects |\n| `E-EGR-1` | internet egress | 150 TB / $15k | 240 TB / $24k | `P-EGR-2026-01`; $0.10/GB |\n| `E-S3-1` | S3 storage | 870 TB-month / $20k | 913 TB-month / $21k | `P-S3-2026-01`; rounded CUR totals |\n| `E-FEE-1` | support fee | n/a / $10k | n/a / $11k | enterprise-support schedule v5 |\n| `E-TAX-1` | tax | n/a / $10k | n/a / $12k | invoice tax records |\n| `E-CR-1` | credits | n/a / -$5k | n/a / -$8k | promotional-credit ledger |\n\nReconciliation: January gross is $105k and net is $100k; February gross is $136k and net is $128k. Thus net cost increased $28k, or 28%. There are no refunds or other fees (`E-RECON-1`).\n\nAllocation (`E-ALLOC-9`): direct costs use the immutable `cost_center` tag. Support and tax are shared 70% to Checkout and 30% to Platform. Untagged costs remain unallocated; they must not be spread implicitly. January net separates into $90k directly allocated, $8k policy-allocated shared cost, $0 disputed, and $2k unallocated. February separates into $115k directly allocated, $9k policy-allocated shared cost, $0 disputed, and $4k unallocated.\n\nCommitments (`E-COMMIT-3`): one one-year compute savings plan has $20k monthly amortized cost, expires 2026-06-30, and is allocated in proportion to covered compute hours. Coverage fell from 80% in January to 59% in February as usage grew. There are no other reservations, negotiated discounts, or minimums.\n\nConstraints (`E-CONSTRAINT-4`): checkout must preserve 99.95% availability, p95 latency below 250 ms, and 30% peak compute headroom; object retention cannot fall below 90 days; forecast compute growth is 10% per quarter and egress is forecast flat; owners are Checkout for EC2/egress and Platform for S3/shared services.\n\nReconcile and decompose the increase into usage, price/commitment, egress, fees, credits, and allocation effects. Provide bounded optimization ranges with assumptions and reliability guardrails; do not guarantee savings, query billing systems, purchase commitments, or approve a budget.",
       "sourceAnchors": [
         "Reconcile billed totals",
         "Estimate bounded optimization ranges"
@@ -18,8 +18,10 @@
           "Cost driver ledger"
         ],
         "requiredEvidence": [
-          "cost driver",
-          "unallocated amount"
+          "Reconciled January and February gross and net totals tied to `E-CUR-77` and `E-RECON-1`",
+          "Concrete cost drivers tied to the EC2, egress, pricing, and commitment evidence IDs",
+          "Allocated, shared, disputed, and unallocated amounts under policy `E-ALLOC-9`, including February’s $4k unallocated amount",
+          "Pricing basis, commitment effect, bounded savings range, assumptions, and reliability constraints"
         ],
         "forbiddenClaims": [
           "the savings are guaranteed"

@@ -6,7 +6,7 @@
     {
       "id": "positive-bounded-workflow",
       "type": "positive",
-      "prompt": "Plan a staged OpenTofu change that moves a database subnet and rotates its security group.",
+      "prompt": "Plan, but do not apply, this staged OpenTofu production change.\n\nChange record:\n- Revision: Git commit `7c921b4`; OpenTofu 1.9.0; locked AWS provider 5.62.0; module `rds-postgres` at `v4.3.1`.\n- Target: AWS account `prod-data` (`482100000001`), region `eu-west-1`, workspace `prod-eu1`.\n- State: read-only snapshot from `s3://prod-tf-state/data/prod-eu1.tfstate`, serial 1842, captured 2026-08-21T08:50Z after a successful refresh; last successful apply was serial 1841 on 2026-08-14. No unresolved drift was reported.\n- Outcome: move RDS instance `orders-db` from subnet group `db-private-v1` to `db-private-v2` spanning the same AZs (`eu-west-1a`, `1b`, `1c`) and replace security group `sg-orders-v1` with least-privilege `sg-orders-v2`. The database endpoint, engine, storage, KMS key, credentials, and public-access setting must remain unchanged.\n- Saved environment-specific plan for `7c921b4`: 2 add, 1 change, 2 destroy. Adds `aws_db_subnet_group.db_private_v2` and `aws_security_group.orders_v2`; modifies `aws_db_instance.orders` in place to use both new resources; destroys the two v1 resources only after the instance migration. It reports no replacement, public exposure, IAM change, data movement, or storage change and an estimated recurring cost delta of €0. The provider marks the DB subnet-group modification as potentially disruptive.\n- Dependencies: applications use the unchanged RDS DNS endpoint; security-group ingress is only from `sg-orders-app`; monitoring, backups, KMS, Secrets Manager, Route 53, and read replicas are unchanged. Network inventory confirms free IP capacity of 41/38/44 in the three new subnets. No independent failure domain is hidden in this change.\n- Policy: deny public ingress, require encryption and three AZs, prohibit deletion without a final snapshot, and require database-owner plus SRE approval for a potentially disruptive production change. The saved plan passes these policy checks.\n- Ownership and authority: owner Dana Rossi, Database Platform; CAB record `CAB-2041` authorizes the named SRE to apply exactly revision `7c921b4` during 2026-08-23 01:00–02:00 UTC after the documented hold point. This request authorizes planning only, not refresh, apply, import, state edits, or cloud/cluster writes.\n- Recovery evidence: automated snapshot `orders-pre-subnet-20260820` completed and restore validation in staging passed. Staging rehearsal moved to v2 and back to v1 in 11 and 9 minutes, respectively, with zero failed integrity checks. Production recovery is to reattach the retained v1 subnet group and SG before their contract phase; after deletion, forward-fix from source or snapshot restore requires database-owner approval. RTO is 30 minutes and RPO is 5 minutes.\n\nProduce the state/blast-radius assessment, create-expand-migrate-contract-delete phases, preflight and policy gates, health signals and hold points, owners, expected diffs, and recovery path. Explicitly flag the possible disruption and keep all mutations outside scope.",
       "sourceAnchors": [
         "Separate create, expand, migrate, contract, and delete phases",
         "## Preflight gates"
@@ -18,8 +18,10 @@
           "Transition plan"
         ],
         "requiredEvidence": [
-          "state",
-          "rollback"
+          "binding of revision `7c921b4` to workspace `prod-eu1`, state serial 1842, locked tooling, and the saved 2-add/1-change/2-destroy plan",
+          "dependency and blast-radius analysis covering the unchanged endpoint, subnet capacity, security boundary, possible disruption, and absence of replacement or public exposure",
+          "a staged transition with preconditions, health checks, hold points, ownership, authorized maintenance window, and delayed destruction",
+          "recovery evidence from the completed snapshot and staging reversal rehearsal, including the 30-minute RTO and post-contract limitation"
         ],
         "forbiddenClaims": [
           "guaranteed complete"
