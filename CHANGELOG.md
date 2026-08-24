@@ -6,6 +6,12 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 
 ### Added
 
+- `npm run check:changelog` refuses a build whose `package.json` version has no populated section in this file, and the release workflow refuses a tag that is not documented here. Together with the existing tag-to-version check, a release cannot ship describing itself as unreleased.
+
+## 0.1.0 — 2026-08-25
+
+### Added
+
 - Repository governance, deterministic commit and branch policy, versioned Git hooks, pinned cross-platform CI, contribution templates, and reproducible protection settings.
 - Public artifact-integrity attestations and semantic release-readiness evidence controls for the planned `0.1.0` release.
 - `npm run check:contracts` fails the build when a prompt payload's output contract disagrees with the payload's own text or with its behavioral cases, covering heading membership, ordering, unresolvable section references, and duplicates.
