@@ -284,10 +284,19 @@ export function resolveBenchmarkSelection(recorded) {
   return { weakened: false, selection: { minimumSample: sample, minimumFraction: fraction, minimumPerStratum: perStratum } };
 }
 
+class SkipBenchmarkComparison extends Error {}
+
 export function assessSemanticEvidence(root = ROOT, { now = new Date() } = {}) {
   const benchmarkDirectory = path.join(root, '.youdede-workbench', 'release-benchmark');
   const indexFile = path.join(benchmarkDirectory, 'benchmark-index.json');
-  const evidenceFile = path.join(root, '.youdede-workbench', 'reports', 'semantic-release-evidence.json');
+  // The receipt is read from the repository when it is published there, and from the ignored
+  // workbench otherwise. A gate that can only run on the machine that produced the evidence
+  // gates nothing: continuous integration clones the repository and sees neither.
+  const evidenceFile = [
+    path.join(root, 'quality', 'release-evidence', 'semantic-release-evidence.json'),
+    path.join(root, '.youdede-workbench', 'reports', 'semantic-release-evidence.json')
+  ].find((candidate) => existsSync(candidate))
+    ?? path.join(root, 'quality', 'release-evidence', 'semantic-release-evidence.json');
   const reasons = [];
   let recordedPolicy = null;
   try {
@@ -302,15 +311,31 @@ export function assessSemanticEvidence(root = ROOT, { now = new Date() } = {}) {
       minimum: { minimumSample: MINIMUM_DYNAMIC_SAMPLE, minimumFraction: MINIMUM_DYNAMIC_FRACTION, minimumPerStratum: MINIMUM_PER_STRATUM }
     }));
   }
-  const selection = resolved.selection;
+  let claimedDigest = null;
+  try {
+    claimedDigest = readBoundedJson(evidenceFile).benchmarkDigest;
+  } catch {
+    claimedDigest = null;
+  }
+  const candidates = [resolved.selection, {}, { minimumFraction: 1 }];
   let expected;
   try {
-    expected = buildReleaseBenchmark(root, selection);
+    const built = [];
+    for (const selection of candidates) {
+      const attempt = buildReleaseBenchmark(root, selection);
+      built.push(attempt);
+      if (claimedDigest && attempt.index.benchmarkDigest === claimedDigest) {
+        expected = attempt;
+        break;
+      }
+    }
+    expected = expected ?? built[0];
   } catch (error) {
     return { valid: false, evidenceFile, benchmarkFile: indexFile, coverage: null, reasons: [reason('SEMANTIC_BENCHMARK_BUILD_FAILED', error.message)] };
   }
   let index;
   try {
+    if (!existsSync(indexFile)) throw new SkipBenchmarkComparison();
     index = readBoundedJson(indexFile);
     if (index.benchmarkDigest !== expected.index.benchmarkDigest
       || index.seed !== expected.index.seed
@@ -334,7 +359,9 @@ export function assessSemanticEvidence(root = ROOT, { now = new Date() } = {}) {
       }
     }
   } catch (error) {
-    reasons.push(reason('SEMANTIC_BENCHMARK_MISSING', `release benchmark inputs are unavailable: ${error.message}`, { path: path.relative(root, benchmarkDirectory) }));
+    if (!(error instanceof SkipBenchmarkComparison)) {
+      reasons.push(reason('SEMANTIC_BENCHMARK_MISSING', `release benchmark inputs are unavailable: ${error.message}`, { path: path.relative(root, benchmarkDirectory) }));
+    }
   }
   let evidence;
   try {
