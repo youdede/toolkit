@@ -1,8 +1,8 @@
 <img alt="Five inked comic panels: a hand placing the Youdede block into a slot, a chain breaking, agents fitting blocks together over a grid, and the word TOOLKIT across them" src="docs/assets/cover.jpg" width="100%">
 
-# youdede toolkit
+# youdede toolkit: skills, hooks and subagents for coding agents
 
-**Guardrails and procedures for coding agents. Install one at a time. Read every line before you do.**
+**Every artifact states what it refuses to do, and ships the evidence that it does.** Install one at a time. Read every line before you do.
 
 [![validate](https://github.com/udede/toolkit/actions/workflows/validate.yml/badge.svg)](https://github.com/udede/toolkit/actions/workflows/validate.yml)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
