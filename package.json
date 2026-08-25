@@ -36,6 +36,7 @@
     "quality",
     "schema",
     "scripts/build-release-benchmark.mjs",
+    "scripts/generate-catalog-docs.mjs",
     "scripts/runtime",
     "scripts/validate-changelog.mjs",
     "scripts/validate-evaluations.mjs",
@@ -46,7 +47,9 @@
   "scripts": {
     "setup:repo": "node scripts/setup-repository.mjs",
     "catalog": "node scripts/generate-catalog.mjs",
+    "catalog:docs": "node scripts/generate-catalog-docs.mjs",
     "check:catalog": "node scripts/generate-catalog.mjs --check",
+    "check:catalog-docs": "node scripts/generate-catalog-docs.mjs --check",
     "integrity": "node scripts/generate-integrity.mjs",
     "check:integrity": "node scripts/generate-integrity.mjs --check",
     "check:legal": "node scripts/verify-legal.mjs",
@@ -60,7 +63,7 @@
     "prepublishOnly": "npm run check && npm run check:readiness",
     "validate": "node scripts/validate.mjs",
     "test": "node scripts/run-tests.mjs",
-    "check": "npm run validate && npm run check:evaluations && npm run check:contracts && npm run check:quality && npm run check:catalog && npm run check:integrity && npm run check:legal && npm run check:changelog && npm run check:package && npm test"
+    "check": "npm run validate && npm run check:evaluations && npm run check:contracts && npm run check:quality && npm run check:catalog && npm run check:integrity && npm run check:catalog-docs && npm run check:legal && npm run check:changelog && npm run check:package && npm test"
   },
   "keywords": [
     "agent-skills",
