@@ -1,4 +1,4 @@
-<img alt="Five inked comic panels: agents assembling and locking interlocking blocks, spelling TOOLKIT" src="docs/assets/cover.jpg" width="100%">
+<img alt="Five inked comic panels: a hand placing the Youdede block into a slot, a chain breaking, agents fitting blocks together over a grid, and the word TOOLKIT across them" src="docs/assets/cover.jpg" width="100%">
 
 # youdede toolkit
 
@@ -54,6 +54,19 @@ npx @youdede/toolkit add commit-guard --target claude-code --dry-run
 | Hooks | yes | yes | yes | — | — | partial |
 
 Support is capability-specific, not cosmetic. A deterministic gate is withheld from a runtime whose event or failure contract is not equivalent, because a gate that silently fails open is worse than no gate. The exact matrix is in [docs/targets.md](docs/targets.md).
+
+## Browse the catalog
+
+Every artifact is listed, with what it does and which runtimes carry it, so you can read before you install:
+
+| | | |
+| --- | --- | --- |
+| [Skills](docs/catalog/skills.md) | 146 | Procedures an agent loads when a task matches |
+| [Hooks](docs/catalog/hooks.md) | 56 | Deterministic gates that block a command before it runs |
+| [Subagents](docs/catalog/subagents.md) | 62 | Specialists with a narrow brief and no authority to act |
+| [Packs](docs/catalog/packs.md) | 7 | The above composed into one outcome |
+
+Those pages are generated from the catalog and checked by the build, so they cannot drift from what the repository contains.
 
 ## Find what you need
 

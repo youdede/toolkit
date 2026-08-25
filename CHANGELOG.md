@@ -6,6 +6,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 
 ### Added
 
+- `docs/catalog/` lists every artifact with what it does, its risk, and the runtimes that carry it, so the catalog can be read before anything is installed. The pages are generated from `catalog/artifacts.json` and `npm run check` fails when they drift.
 - The semantic release receipt is published at `quality/release-evidence/`, so `npm run check:readiness` can verify a release from a clean clone. It previously read only from the ignored workbench, which meant the gate passed on the maintainer's machine and failed everywhere else.
 - `.github/allowed-signers` declares the public keys trusted to sign a release tag, so `git verify-tag` in CI can attribute a signature to a named identity rather than only confirming one exists. Without it the release workflow could not verify a tag at all.
 - `npm run check:changelog` refuses a build whose `package.json` version has no populated section in this file, and the release workflow refuses a tag that is not documented here. Together with the existing tag-to-version check, a release cannot ship describing itself as unreleased.
