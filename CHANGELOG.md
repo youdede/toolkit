@@ -6,6 +6,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 
 ### Added
 
+- `.github/allowed-signers` declares the public keys trusted to sign a release tag, so `git verify-tag` in CI can attribute a signature to a named identity rather than only confirming one exists. Without it the release workflow could not verify a tag at all.
 - `npm run check:changelog` refuses a build whose `package.json` version has no populated section in this file, and the release workflow refuses a tag that is not documented here. Together with the existing tag-to-version check, a release cannot ship describing itself as unreleased.
 
 ## 0.1.0 — 2026-08-25
