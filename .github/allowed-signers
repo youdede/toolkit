@@ -1,0 +1,11 @@
+# Public keys trusted to sign a release tag for this repository.
+#
+# git verify-tag checks an SSH signature against this list. Keeping it here, in
+# the open, means anyone can audit who is permitted to sign a release without
+# asking the maintainer. These are public keys: nothing here is a secret, and a
+# key listed here can verify a signature but never produce one.
+#
+# Removing a key revokes its ability to pass release verification from that
+# commit onward. It does not retroactively invalidate tags already verified.
+
+17805453+udede@users.noreply.github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC3Bz+9HFwCm5uex6QR+QVvcU1oUKHH0rQ7yPgfHKpIB

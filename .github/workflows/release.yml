@@ -44,6 +44,8 @@ jobs:
         env:
           TAG: ${{ inputs.tag || github.ref_name }}
         run: |
+          test -s .github/allowed-signers
+          git config gpg.ssh.allowedSignersFile .github/allowed-signers
           git verify-tag "$TAG"
           test "$(git cat-file -t "$TAG")" = tag
 
