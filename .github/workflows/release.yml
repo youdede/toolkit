@@ -56,6 +56,12 @@ jobs:
 
       - run: npm ci --ignore-scripts
 
+      - name: Require the tag version to be documented
+        env:
+          TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          grep -qE "^## v?${TAG#v}( |$)" CHANGELOG.md
+
       - name: Structural and behavioural gate
         run: npm run check
 
