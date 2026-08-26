@@ -2,7 +2,7 @@
 
 All notable changes are recorded here. Versions follow Semantic Versioning; release entries are derived from reviewed pull requests and verified against the corresponding Git tag.
 
-## Unreleased
+## 0.2.0 (2026-08-26)
 
 ### Added
 
@@ -27,7 +27,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 - `accessibility-attribute-regression-guard` compared elements with no `id`, test id or `name` by their position among siblings of the same tag, so inserting a button above another read as stripping the second one's relationships. Those elements are now judged by how many of their kind carry a name or a relationship.
 - Both markup guards ended an element at the first `>`, which in JSX falls inside an arrow function, hiding every attribute written after a handler. Tags now end at the first `>` outside quotes and braces.
 
-## 0.1.0 — 2026-08-25
+## 0.1.0 (2026-08-25)
 
 ### Added
 
