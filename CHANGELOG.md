@@ -17,6 +17,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 
 ### Changed
 
+- The `Protect main` ruleset requires one approving review from a code owner, dismisses stale reviews on push, and requires approval of the last push. `CODEOWNERS` was declared but never enforced. The repository admin role bypasses the review requirement on pull requests only, so a sole code owner is not blocked on their own work.
 - `plan-accessibility-conformance-evidence` names single-pointer alternatives to dragging among its evidence methods, covering SC 2.5.7.
 - The accessibility pack carries nine artifacts instead of six, and every member composes with the rest.
 - The release receipt covers 210 static payloads and 890 dynamic cases, with zero confirmed defects and calibration at 100% on both axes.
