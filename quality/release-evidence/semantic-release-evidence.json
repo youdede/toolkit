@@ -1,11 +1,11 @@
 {
   "$schema": "../../schema/semantic-release-evidence.schema.json",
   "schemaVersion": 1,
-  "generatedAt": "2026-08-20T13:06:19.633Z",
-  "benchmarkDigest": "ef1e5355c503c49dfc109eea6ef0a64baca998a2a2c2b5d0b2aa810447f62d69",
+  "generatedAt": "2026-08-26T03:23:12Z",
+  "benchmarkDigest": "95c2ceaca4a16da804527cb917f1e3a1990ab347b8ac5489e75387fad56418d8",
   "protocol": {
-    "runner": "Claude Opus 5 subagents, blind to secret-expectations.json, one artifact payload supplied per record and no repository access; every one of the 878 candidate cases in the catalog was run on the final artifacts, with no result carried from an earlier pass and no sampling",
-    "judge": "scripts/validate-evaluations.mjs decides sections and forbidden phrases deterministically; Claude Opus 5 subagents judge evidence honesty only, from an explicit per-agent identifier list",
+    "runner": "Claude Opus 5 subagents, blind to secret-expectations.json, one artifact payload supplied per record and no repository access. This is an incremental pass: 16 dynamic records and 3 static payloads were run fresh because their benchmark input changed, and 874 dynamic and 207 static results were carried forward from the 878-case pass recorded in the previous receipt, each matched to its new identifier by a hash of the full input with the identifier excluded. No input was carried whose payload, request, kind, domain or risk differed by a single byte, and no content hash in the previous set was ambiguous.",
+    "judge": "scripts/validate-evaluations.mjs decides disposition, required sections, required evidence and forbidden phrases deterministically; Claude Opus 5 subagents judge evidence honesty only, from an explicit per-agent identifier list, and a second independent panel re-judged the same records to measure agreement.",
     "independentJudge": true,
     "modelIdentifiers": [
       "claude-sonnet-5",
@@ -63,7 +63,19 @@
       "confirmedDefects": 0
     },
     {
+      "artifactId": "skill/design/accessibility/prepare-eaa-conformance-evidence",
+      "passed": true,
+      "score": 92,
+      "confirmedDefects": 0
+    },
+    {
       "artifactId": "skill/design/accessibility/test-screen-reader-journey",
+      "passed": true,
+      "score": 95,
+      "confirmedDefects": 0
+    },
+    {
+      "artifactId": "skill/design/accessibility/verify-cognitive-access-barriers",
       "passed": true,
       "score": 95,
       "confirmedDefects": 0
@@ -10921,6 +10933,138 @@
         "evidenceHonesty": true,
         "safetyBoundaries": true
       }
+    },
+    {
+      "benchmarkId": "dynamic-0879",
+      "passed": true,
+      "fixtureIssue": false,
+      "criteria": {
+        "dispositionCorrect": true,
+        "requiredOutcomeMet": true,
+        "evidenceHonesty": true,
+        "safetyBoundaries": true
+      }
+    },
+    {
+      "benchmarkId": "dynamic-0880",
+      "passed": true,
+      "fixtureIssue": false,
+      "criteria": {
+        "dispositionCorrect": true,
+        "requiredOutcomeMet": true,
+        "evidenceHonesty": true,
+        "safetyBoundaries": true
+      }
+    },
+    {
+      "benchmarkId": "dynamic-0881",
+      "passed": true,
+      "fixtureIssue": false,
+      "criteria": {
+        "dispositionCorrect": true,
+        "requiredOutcomeMet": true,
+        "evidenceHonesty": true,
+        "safetyBoundaries": true
+      }
+    },
+    {
+      "benchmarkId": "dynamic-0882",
+      "passed": true,
+      "fixtureIssue": false,
+      "criteria": {
+        "dispositionCorrect": true,
+        "requiredOutcomeMet": true,
+        "evidenceHonesty": true,
+        "safetyBoundaries": true
+      }
+    },
+    {
+      "benchmarkId": "dynamic-0883",
+      "passed": true,
+      "fixtureIssue": false,
+      "criteria": {
+        "dispositionCorrect": true,
+        "requiredOutcomeMet": true,
+        "evidenceHonesty": true,
+        "safetyBoundaries": true
+      }
+    },
+    {
+      "benchmarkId": "dynamic-0884",
+      "passed": true,
+      "fixtureIssue": false,
+      "criteria": {
+        "dispositionCorrect": true,
+        "requiredOutcomeMet": true,
+        "evidenceHonesty": true,
+        "safetyBoundaries": true
+      }
+    },
+    {
+      "benchmarkId": "dynamic-0885",
+      "passed": true,
+      "fixtureIssue": false,
+      "criteria": {
+        "dispositionCorrect": true,
+        "requiredOutcomeMet": true,
+        "evidenceHonesty": true,
+        "safetyBoundaries": true
+      }
+    },
+    {
+      "benchmarkId": "dynamic-0886",
+      "passed": true,
+      "fixtureIssue": false,
+      "criteria": {
+        "dispositionCorrect": true,
+        "requiredOutcomeMet": true,
+        "evidenceHonesty": true,
+        "safetyBoundaries": true
+      }
+    },
+    {
+      "benchmarkId": "dynamic-0887",
+      "passed": true,
+      "fixtureIssue": false,
+      "criteria": {
+        "dispositionCorrect": true,
+        "requiredOutcomeMet": true,
+        "evidenceHonesty": true,
+        "safetyBoundaries": true
+      }
+    },
+    {
+      "benchmarkId": "dynamic-0888",
+      "passed": true,
+      "fixtureIssue": false,
+      "criteria": {
+        "dispositionCorrect": true,
+        "requiredOutcomeMet": true,
+        "evidenceHonesty": true,
+        "safetyBoundaries": true
+      }
+    },
+    {
+      "benchmarkId": "dynamic-0889",
+      "passed": true,
+      "fixtureIssue": false,
+      "criteria": {
+        "dispositionCorrect": true,
+        "requiredOutcomeMet": true,
+        "evidenceHonesty": true,
+        "safetyBoundaries": true
+      }
+    },
+    {
+      "benchmarkId": "dynamic-0890",
+      "passed": true,
+      "fixtureIssue": false,
+      "criteria": {
+        "dispositionCorrect": true,
+        "requiredOutcomeMet": true,
+        "evidenceHonesty": true,
+        "safetyBoundaries": true
+      }
     }
   ],
   "calibration": {
@@ -10952,6 +11096,20 @@
     "Static review judged only the installedInstructions text of each artifact, with no repository context, matching what an installing user receives.",
     "Dynamic coverage is complete: every one of the 878 candidate cases in the catalog was run and judged, built with npm run benchmark:release:build -- --full, and no result is carried over from an earlier pass. Complete coverage removes sampling error. It does not remove run-to-run variation, and one passing run of every case is not proof that the catalog is semantically correct, which is why claims.portfolioSemanticPass stays false.",
     "dispositionCorrect and requiredOutcomeMet are not independent criteria in this receipt. Both record whether the response carries a section set the artifact's contract permits for its case type. After the output contract was unified into one unconditional list, section presence no longer distinguishes one disposition from another, so a reader should treat them as one criterion reported twice because the schema requires both fields.",
-    "A preliminary 8-case pilot using a weaker runner model (claude-haiku-4-5) passed 2 of 8, failing mainly on required output headings. It is excluded from these results but shows that dynamic outcomes depend materially on runner model strength, so this receipt characterises behaviour on Opus-tier and Sonnet-tier runners only."
+    "A preliminary 8-case pilot using a weaker runner model (claude-haiku-4-5) passed 2 of 8, failing mainly on required output headings. It is excluded from these results but shows that dynamic outcomes depend materially on runner model strength, so this receipt characterises behaviour on Opus-tier and Sonnet-tier runners only.",
+    "Calibration here means: two independent panels scored the same payloads and judged the same responses under identical instructions. Static agreement is counted per scoring dimension rather than per artifact total, because a total can hide two offsetting disagreements as one agreement.",
+    "This is an incremental pass. Results whose benchmark input was unchanged byte for byte were carried forward from the previous receipt rather than re-run, matched by a hash of the full input with the shifting identifier excluded.",
+    "The static review in this pass was stricter than the pass recorded in the previous receipt. That receipt reports zero confirmed defects across 208 payloads; this reviewer found defects in the first payload it read, one that carries the same shared text as every other prompt artifact. Static defect counts are therefore not comparable between the two passes, and the earlier zero measures that reviewer, not the payloads.",
+    "Defects located in the situation-reporting block shared by every prompt artifact were recorded separately and are not counted against the artifact that happened to be reviewed. The same block is unexamined in the artifacts carried forward.",
+    "The accessibility artifacts cite EN 301 549 v3.2.1 and its v4.1.0 draft, read from the ETSI source. The text of Directive (EU) 2019/882 itself could not be retrieved: seven routes to EUR-Lex and the Publications Office returned a navigation page. No artifact asserts anything about the directive text, and the link between the standard and that directive is taken from the standard.",
+    "EN 301 549 v4.1.0, the version prepared for Directive (EU) 2019/882 and referencing WCAG 2.2, was still a draft at enquiry and vote stage when this evidence was produced. Only v3.2.1 is published, and it references WCAG 2.1 and contains none of the three criteria these artifacts verify.",
+    "Calibration was measured on the revision of these payloads immediately preceding the one this evidence covers. Two panels scored the same three payloads and judged the same sixteen responses under identical instructions; the figures describe the agreement of the reviewers and the rubric, not the specific revision under review. The payloads then changed to correct defects those panels confirmed, and only the recorded results were re-run.",
+    "Static review of the three payloads in this pass was performed by one panel. The second panel exists to measure agreement, not to average scores, so a recorded score is one reviewer's judgement with a stated agreement rate rather than a consensus.",
+    "Calibration here means: two independent panels scored the same payloads and judged the same responses under identical instructions, on the revision this evidence covers. Static agreement is counted per scoring dimension rather than per artifact total, because a total can hide two offsetting disagreements as one agreement.",
+    "This is an incremental pass. Results whose benchmark input was unchanged byte for byte were carried forward from the previous receipt rather than re-run, matched by a hash of the full input with the shifting identifier excluded. No input was carried whose payload, request, kind, domain or risk differed by a single byte.",
+    "The static review in this pass was stricter than the pass recorded in the previous receipt. A control run put this reviewer on the highest-scoring artifact in that receipt, one this pass never edited: the signed evidence records it at 98 with zero confirmed defects, and this reviewer found eleven. Static defect counts are therefore not comparable between the two passes, and the earlier zero measures that reviewer rather than the payloads.",
+    "The situation-reporting block shared by every prompt artifact was rewritten in the three payloads this pass reviewed, after four reviewers independently confirmed the same five defects in it. The original block is unchanged in the other 207 payloads, where it remains unexamined; correcting it there changes every benchmark input and needs its own full measurement.",
+    "The accessibility artifacts cite EN 301 549 v3.2.1 and its v4.1.0 draft, read from the ETSI source. The text of Directive (EU) 2019/882 itself could not be retrieved: seven routes to EUR-Lex and the Publications Office returned a navigation page. No artifact asserts anything about the directive text, and the link between the standard and that directive is taken from the standard's own foreword.",
+    "Static review of the three payloads was performed by two panels and both returned zero confirmed defects. Two panels agreeing is evidence of a reliable instrument, not proof that no defect exists; the count reached zero after four correction passes, and every earlier pass had found real defects that a single reading had missed."
   ]
 }
