@@ -10,13 +10,13 @@
     "counts": {
       "artifactNodes": 285,
       "directedEdges": {
-        "composesWith": 306,
+        "composesWith": 310,
         "conflictsWith": 0,
         "supersedes": 0,
         "prerequisites": 1,
         "packIds": 37
       },
-      "compositionEdges": 153,
+      "compositionEdges": 155,
       "conflictEdges": 0,
       "crossKindCompositionEdges": 78,
       "orphanArtifacts": 176
@@ -7084,6 +7084,8 @@
           "skill/design/accessibility/prepare-eaa-conformance-evidence",
           "skill/design/accessibility/test-screen-reader-journey",
           "skill/design/accessibility/verify-cognitive-access-barriers",
+          "skill/design/design-systems/specify-component-contracts",
+          "skill/design/interaction/design-form-experience",
           "subagent/design/accessibility/accessibility-conformance-reviewer",
           "subagent/design/accessibility/accessibility-journey-tester"
         ],
@@ -7980,6 +7982,7 @@
       },
       "relationships": {
         "composesWith": [
+          "skill/design/accessibility/plan-accessibility-conformance-evidence",
           "skill/design/design-systems/govern-design-system-evolution",
           "skill/design/responsive/design-responsive-behavior"
         ],
@@ -8362,6 +8365,7 @@
       },
       "relationships": {
         "composesWith": [
+          "skill/design/accessibility/plan-accessibility-conformance-evidence",
           "skill/design/interaction/design-interface-feedback"
         ],
         "conflictsWith": [],
