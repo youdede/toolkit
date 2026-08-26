@@ -348,3 +348,30 @@ test('accessibility-attribute-regression-guard blocks a focusable element hidden
     if (want === 'block') assert.equal(result.ruleId, 'accessibility-hidden-focusable', label);
   }
 });
+
+// An element with no id, test id or name is identified by its position among siblings of the same
+// tag, so inserting one earlier shifts every position after it.
+test('accessibility-attribute-regression-guard survives an element inserted before its siblings', (context) => {
+  const root = mkdtempSync(path.join(tmpdir(), 'youdede-positional-'));
+  context.after(() => rmSync(root, { recursive: true, force: true }));
+  const submit = '<button type="submit" aria-describedby="err">Sign in</button>';
+  const decorative = '<button aria-hidden="true" tabIndex={-1}>x</button>';
+
+  const cases = [
+    ['allow', 'a button added above another button, neither with an id', 'a.jsx', submit, decorative + submit],
+    ['allow', 'a button added below', 'b.jsx', submit, submit + decorative],
+    ['allow', 'an image added above another image', 'c.jsx', '<img alt="chart" />', '<img alt="logo" /><img alt="chart" />'],
+    ['block', 'the relationship stripped from the only button', 'd.jsx', submit, '<button type="submit">Sign in</button>'],
+    ['block', 'one of two names stripped', 'e.jsx', '<img alt="a" /><img alt="b" />', '<img alt="a" /><img />'],
+    ['block', 'the relationship stripped while another button is added', 'f.jsx', submit, `${decorative}<button type="submit">Sign in</button>`]
+  ];
+
+  for (const [want, label, file, before, proposed] of cases) {
+    const absolute = path.join(root, file);
+    writeFileSync(absolute, before);
+    const input = { tool_name: 'Write', cwd: root, tool_input: { file_path: absolute, content: proposed } };
+    const result = h7.evaluate(input, h7.collectContext(input, root));
+    assert.equal(result.exitCode, want === 'allow' ? 0 : 2, `${want}: ${label}`);
+    if (want === 'block') assert.equal(result.ruleId, 'accessibility-relationship-removed', label);
+  }
+});

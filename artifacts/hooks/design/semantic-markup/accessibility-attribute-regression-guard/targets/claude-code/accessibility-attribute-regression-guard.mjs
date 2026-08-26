@@ -50,7 +50,7 @@ function elements(text) {
     const tag = match[1].toLowerCase(); const attributes = parseAttributes(region.raw);
     const stable = ['id', 'data-testid', 'data-test', 'name'].find((name) => attributes.has(name) && attributes.get(name));
     const ordinal = ordinals.get(tag) || 0; ordinals.set(tag, ordinal + 1); const key = stable ? stable + ':' + attributes.get(stable) : tag + '#' + ordinal;
-    result.set(key, { tag, attributes });
+    result.set(key, { tag, attributes, stable: Boolean(stable) });
   }
   return result;
 }
@@ -111,6 +111,25 @@ export function zoomSuppressed(element) {
 }
 const suppressedZoom = (map) => [...map.values()].filter(zoomSuppressed).length;
 
+// An element with no id, test id or name is identified only by its position among its siblings of
+// the same tag, and inserting one earlier shifts every position after it. Comparing those pairwise
+// would read an added button as an edit that stripped the next button's relationships. Positional
+// elements are therefore judged by how many of them still carry a name or a relationship, which
+// still falls when one is stripped and does not move when one is added.
+const NAMES = ['alt', 'aria-label', 'aria-labelledby'];
+const RELATIONSHIPS = ['aria-describedby', 'aria-controls', 'for', 'htmlfor'];
+function positionalCounts(map) {
+  const counts = new Map();
+  for (const element of map.values()) {
+    if (element.stable) continue;
+    const bump = (suffix) => counts.set(`${element.tag}:${suffix}`, (counts.get(`${element.tag}:${suffix}`) || 0) + 1);
+    if (NAMES.some((name) => element.attributes.has(name))) bump('name');
+    for (const attribute of RELATIONSHIPS) if (element.attributes.has(attribute)) bump(attribute);
+    if (element.attributes.has('role') && element.attributes.get('role').toLowerCase() !== implicitRole(element)) bump('role');
+  }
+  return counts;
+}
+
 export function evaluate(input, context = {}) {
   if (!input || typeof input !== 'object' || !input.tool_name) return block('accessibility-attribute-regression-input-invalid', 'the hook envelope is incomplete');
   if (!/^(?:Write|Edit|MultiEdit)$/.test(input.tool_name)) return allow();
@@ -118,7 +137,14 @@ export function evaluate(input, context = {}) {
   const file = context.file || input.tool_input.file_path || input.tool_input.file; if (!markup(file)) return allow();
   if (!context.complete) return block('accessibility-semantics-unverified', 'the markup edit could not be reconstructed');
   const before = elements(context.before || ''); const after = elements(context.proposed || '');
-  for (const [identity, element] of before) if (after.has(identity) && lostSemantics(element, after.get(identity))) return block('accessibility-relationship-removed', 'the change removes an accessible name, role, or relationship from a retained element');
+  for (const [identity, element] of before) {
+    if (!element.stable) continue;
+    if (after.has(identity) && lostSemantics(element, after.get(identity))) return block('accessibility-relationship-removed', 'the change removes an accessible name, role, or relationship from a retained element');
+  }
+  const carriedBefore = positionalCounts(before); const carriedAfter = positionalCounts(after);
+  for (const [what, count] of carriedBefore) {
+    if ((carriedAfter.get(what) || 0) < count) return block('accessibility-relationship-removed', 'the change leaves fewer elements carrying an accessible name, role, or relationship than it found');
+  }
   if (silentlyFocusable(after) > silentlyFocusable(before)) return block('accessibility-hidden-focusable', 'the change hides an element from assistive technology while it still takes keyboard focus, so a screen reader user reaches it and hears nothing');
   if (suppressedZoom(after) > suppressedZoom(before)) return block('viewport-zoom-suppressed', 'the change stops the browser zooming, which the user needs to read the page at a size they can see');
   return allow();

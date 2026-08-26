@@ -12,6 +12,7 @@ The hook is deterministic, reads at most 1 MiB from stdin, emits exit code 0 to 
 
 - It does not judge whether a name or role is accurate, only whether the change removed one that was there.
 - It does not see a focusable child inside a hidden wrapper, because it reads elements individually rather than as a tree.
+- It does not track an element that carries no `id`, test id or `name` across an edit; those are judged by how many of their kind still carry a name or a relationship, so stripping one is caught and adding one is not.
 - It does not report a hidden focusable element that the inspected edit did not introduce.
 - It does not claim accessibility conformance.
 - It does not call an LLM, execute submitted shell text, or transmit inspected content.

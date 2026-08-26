@@ -4,7 +4,7 @@
   "id": "hook/design/semantic-markup/accessibility-attribute-regression-guard",
   "slug": "accessibility-attribute-regression-guard",
   "name": "Accessibility Attribute Regression Guard",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "kind": "hook",
   "summary": "Block net removal of explicit accessibility relationships from markup changes.",
   "description": "Parses bounded markup and rejects three changes: one that drops an accessible name, role, or relationship from a retained element; one that hides a focusable element from assistive technology while it still takes keyboard focus; and one that stops the browser zooming.",
@@ -31,7 +31,7 @@
   ],
   "refuses": [
     "It does not judge whether a name or role is accurate, only whether the change removed one that was there.",
-    "It does not see a focusable child inside a hidden wrapper, because it reads elements individually rather than as a tree.",
+    "It does not see a focusable child inside a hidden wrapper, and it judges an element with no id, test id or name by how many of its kind still carry a name or relationship rather than by position.",
     "It does not read a viewport value the page computes at runtime, and it does not measure rendered text size or reflow.",
     "It does not report a problem the inspected edit did not introduce, and it does not claim accessibility conformance."
   ],
