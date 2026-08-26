@@ -27,6 +27,11 @@ import {
   normalizeShell
 } from '../artifacts/hooks/operations/git/protected-branch-guard/targets/claude-code/protected-branch-guard.mjs';
 
+// The guards prefer CLAUDE_PROJECT_DIR over the payload cwd, so a value
+// inherited from a Claude Code hook would redirect fixtures at the real
+// repository. Clear it; tests that need it pass it explicitly per spawn.
+delete process.env.CLAUDE_PROJECT_DIR;
+
 const WORKSPACE_SCRIPT = path.resolve('artifacts/hooks/security/application-security/workspace-boundary-guard/targets/claude-code/workspace-boundary-guard.mjs');
 const BRANCH_SCRIPT = path.resolve('artifacts/hooks/operations/git/protected-branch-guard/targets/claude-code/protected-branch-guard.mjs');
 
