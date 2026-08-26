@@ -1,24 +1,24 @@
 {
   "schemaVersion": 1,
   "counts": {
-    "total": 264,
-    "skills": 146,
-    "hooks": 56,
+    "total": 267,
+    "skills": 148,
+    "hooks": 57,
     "subagents": 62
   },
   "relationshipGraph": {
     "counts": {
-      "artifactNodes": 264,
+      "artifactNodes": 267,
       "directedEdges": {
-        "composesWith": 238,
+        "composesWith": 280,
         "conflictsWith": 0,
         "supersedes": 0,
         "prerequisites": 0,
-        "packIds": 34
+        "packIds": 37
       },
-      "compositionEdges": 119,
+      "compositionEdges": 140,
       "conflictEdges": 0,
-      "crossKindCompositionEdges": 64,
+      "crossKindCompositionEdges": 78,
       "orphanArtifacts": 173
     },
     "orphanCountsByKind": {
@@ -440,10 +440,96 @@
       ]
     },
     {
+      "id": "hook/design/authentication-access/authentication-accessibility-guard",
+      "slug": "authentication-accessibility-guard",
+      "name": "Authentication Accessibility Guard",
+      "version": "1.0.0",
+      "kind": "hook",
+      "summary": "Block edits that stop a password manager filling an authentication field or stop the user pasting into it.",
+      "description": "Parses bounded markup and rejects changes that newly block paste on a credential field, disable its autofill, drop its autocomplete token, or add a password-manager opt-out attribute, each a documented WCAG 2.2 SC 3.3.8 failure condition.",
+      "domain": "design",
+      "category": "authentication-access",
+      "capabilities": [
+        "enforce"
+      ],
+      "problems": [
+        "authentication-accessibility-regression"
+      ],
+      "frameworks": [
+        "agnostic"
+      ],
+      "languages": [
+        "agnostic"
+      ],
+      "lifecycle": [
+        "implementation",
+        "pre-commit"
+      ],
+      "risk": "high",
+      "license": "MIT",
+      "execution": {
+        "mode": "deterministic",
+        "entrypoints": [
+          {
+            "path": "targets/claude-code/authentication-accessibility-guard.mjs",
+            "runtime": "node",
+            "purpose": "Block edits that stop a password manager filling an authentication field or stop the user pasting into it.",
+            "sideEffects": "read-only"
+          }
+        ]
+      },
+      "relationships": {
+        "composesWith": [
+          "hook/design/keyboard-focus/focus-style-regression-guard",
+          "hook/design/semantic-markup/accessibility-attribute-regression-guard",
+          "skill/design/accessibility/plan-accessibility-conformance-evidence",
+          "skill/design/accessibility/prepare-eaa-conformance-evidence",
+          "skill/design/accessibility/test-screen-reader-journey",
+          "skill/design/accessibility/verify-cognitive-access-barriers",
+          "subagent/design/accessibility/accessibility-conformance-reviewer",
+          "subagent/design/accessibility/accessibility-journey-tester"
+        ],
+        "conflictsWith": [],
+        "supersedes": [],
+        "prerequisites": [],
+        "packIds": [
+          "pack/accessibility-assurance"
+        ]
+      },
+      "operational": {
+        "behavior": "enforcing",
+        "failurePolicy": "fail-closed",
+        "latencyClass": "immediate",
+        "dataRetention": "none"
+      },
+      "refuses": [
+        "It does not identify a credential field from a class, placeholder, or framework binding; only the password input type and a reserved autocomplete token are treated as evidence.",
+        "It does not report a paste block, disabled autofill, or manager opt-out that the inspected edit did not introduce.",
+        "It does not recognise every password manager's opt-out attribute, and it does not detect an alternative authentication method offered elsewhere.",
+        "It does not claim WCAG 3.3.8 conformance."
+      ],
+      "targets": [
+        "claude-code"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        }
+      },
+      "install": [
+        {
+          "target": "claude-code",
+          "command": "npx @youdede/toolkit add authentication-accessibility-guard --target claude-code --scope project"
+        }
+      ]
+    },
+    {
       "id": "hook/design/keyboard-focus/focus-style-regression-guard",
       "slug": "focus-style-regression-guard",
       "name": "Focus Style Regression Guard",
-      "version": "1.1.0",
+      "version": "1.3.0",
       "kind": "hook",
       "summary": "Block newly invisible CSS focus states that have no visible replacement.",
       "description": "Parses bounded CSS rule blocks and rejects net-new focus selectors that disable outlines without a visible outline, shadow, border, or text-decoration replacement.",
@@ -480,9 +566,12 @@
       },
       "relationships": {
         "composesWith": [
+          "hook/design/authentication-access/authentication-accessibility-guard",
           "hook/design/semantic-markup/accessibility-attribute-regression-guard",
           "skill/design/accessibility/plan-accessibility-conformance-evidence",
+          "skill/design/accessibility/prepare-eaa-conformance-evidence",
           "skill/design/accessibility/test-screen-reader-journey",
+          "skill/design/accessibility/verify-cognitive-access-barriers",
           "subagent/design/accessibility/accessibility-conformance-reviewer",
           "subagent/design/accessibility/accessibility-journey-tester"
         ],
@@ -525,17 +614,18 @@
       "id": "hook/design/semantic-markup/accessibility-attribute-regression-guard",
       "slug": "accessibility-attribute-regression-guard",
       "name": "Accessibility Attribute Regression Guard",
-      "version": "1.0.0",
+      "version": "1.4.0",
       "kind": "hook",
       "summary": "Block net removal of explicit accessibility relationships from markup changes.",
-      "description": "Counts bounded explicit labels, alternatives, roles, and ARIA relationships in markup revisions and blocks only a net loss while interactive markup remains.",
+      "description": "Parses bounded markup and rejects three changes: one that drops an accessible name, role, or relationship from a retained element; one that hides a focusable element from assistive technology while it still takes keyboard focus; and one that stops the browser zooming.",
       "domain": "design",
       "category": "semantic-markup",
       "capabilities": [
         "enforce"
       ],
       "problems": [
-        "accessibility-semantic-regression"
+        "accessibility-semantic-regression",
+        "zoom-suppression"
       ],
       "frameworks": [
         "agnostic"
@@ -562,9 +652,12 @@
       },
       "relationships": {
         "composesWith": [
+          "hook/design/authentication-access/authentication-accessibility-guard",
           "hook/design/keyboard-focus/focus-style-regression-guard",
           "skill/design/accessibility/plan-accessibility-conformance-evidence",
+          "skill/design/accessibility/prepare-eaa-conformance-evidence",
           "skill/design/accessibility/test-screen-reader-journey",
+          "skill/design/accessibility/verify-cognitive-access-barriers",
           "subagent/design/accessibility/accessibility-conformance-reviewer",
           "subagent/design/accessibility/accessibility-journey-tester"
         ],
@@ -582,9 +675,10 @@
         "dataRetention": "none"
       },
       "refuses": [
-        "It does not claim WCAG conformance or replace assistive-technology testing.",
-        "It does not judge visual design or keyboard behavior.",
-        "It does not infer semantics hidden inside runtime component implementations."
+        "It does not judge whether a name or role is accurate, only whether the change removed one that was there.",
+        "It does not see a focusable child inside a hidden wrapper, because it reads elements individually rather than as a tree.",
+        "It does not read a viewport value the page computes at runtime, and it does not measure rendered text size or reflow.",
+        "It does not report a problem the inspected edit did not introduce, and it does not claim accessibility conformance."
       ],
       "targets": [
         "claude-code"
@@ -6948,10 +7042,10 @@
       "id": "skill/design/accessibility/plan-accessibility-conformance-evidence",
       "slug": "plan-accessibility-conformance-evidence",
       "name": "Plan Accessibility Conformance Evidence",
-      "version": "1.4.0",
+      "version": "1.6.0",
       "kind": "skill",
       "summary": "Plan accessibility evidence across user journeys, automation, keyboard, assistive technology, and human review.",
-      "description": "Plan or audit accessibility conformance evidence for a bounded product surface using requirements, critical journeys, semantic and visual checks, keyboard use, assistive technology, zoom, motion, forms, errors, and documented coverage gaps. Use before making an accessibility claim or release decision.",
+      "description": "Plan accessibility conformance evidence for a bounded product surface using requirements, critical journeys, semantic and visual checks, keyboard use, assistive technology, zoom, motion, forms, errors, and documented coverage gaps. Use before making an accessibility claim or release decision.",
       "domain": "design",
       "category": "accessibility",
       "capabilities": [
@@ -6981,9 +7075,12 @@
       },
       "relationships": {
         "composesWith": [
+          "hook/design/authentication-access/authentication-accessibility-guard",
           "hook/design/keyboard-focus/focus-style-regression-guard",
           "hook/design/semantic-markup/accessibility-attribute-regression-guard",
+          "skill/design/accessibility/prepare-eaa-conformance-evidence",
           "skill/design/accessibility/test-screen-reader-journey",
+          "skill/design/accessibility/verify-cognitive-access-barriers",
           "subagent/design/accessibility/accessibility-conformance-reviewer",
           "subagent/design/accessibility/accessibility-journey-tester"
         ],
@@ -7075,10 +7172,143 @@
       ]
     },
     {
+      "id": "skill/design/accessibility/prepare-eaa-conformance-evidence",
+      "slug": "prepare-eaa-conformance-evidence",
+      "name": "Prepare EAA Conformance Evidence",
+      "version": "1.0.0",
+      "kind": "skill",
+      "summary": "Map accessibility results to the requirement set and version an owner declared, keeping verified, asserted, stale and absent apart.",
+      "description": "Prepare the accessibility evidence a named owner needs for a European Accessibility Act decision, resolving each requirement's precondition and marking every one verified, asserted, stale, not applicable, exempt with assessment, or absent. Use before an accessibility statement, a supplier answer, or a conformity decision.",
+      "domain": "design",
+      "category": "accessibility",
+      "capabilities": [
+        "collect",
+        "plan"
+      ],
+      "problems": [
+        "accessibility-review",
+        "regulatory-evidence-assembly"
+      ],
+      "frameworks": [
+        "agnostic"
+      ],
+      "languages": [
+        "agnostic"
+      ],
+      "lifecycle": [
+        "review",
+        "release"
+      ],
+      "risk": "high",
+      "license": "MIT",
+      "execution": {
+        "mode": "prompt",
+        "entrypoints": []
+      },
+      "relationships": {
+        "composesWith": [
+          "hook/design/authentication-access/authentication-accessibility-guard",
+          "hook/design/keyboard-focus/focus-style-regression-guard",
+          "hook/design/semantic-markup/accessibility-attribute-regression-guard",
+          "skill/design/accessibility/plan-accessibility-conformance-evidence",
+          "skill/design/accessibility/test-screen-reader-journey",
+          "skill/design/accessibility/verify-cognitive-access-barriers",
+          "subagent/design/accessibility/accessibility-conformance-reviewer",
+          "subagent/design/accessibility/accessibility-journey-tester"
+        ],
+        "conflictsWith": [],
+        "supersedes": [],
+        "prerequisites": [],
+        "packIds": [
+          "pack/accessibility-assurance"
+        ]
+      },
+      "operational": {
+        "behavior": "advisory",
+        "failurePolicy": "stop-and-report",
+        "latencyClass": "bounded",
+        "dataRetention": "runtime-managed"
+      },
+      "refuses": [
+        "It does not declare conformity, finalise a statement, or report an obligation as met.",
+        "It does not decide whether a law applies to the organisation, classify its role, or select the requirement set or its version on the owner's behalf.",
+        "It does not state a presumption of conformity as its own conclusion, nor report one from a version the owner has not shown to be cited in the Official Journal.",
+        "It does not present a supplier claim, a stale result, or a requirement excluded by precondition as verified evidence."
+      ],
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        },
+        "codex": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        },
+        "cursor": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        },
+        "gemini-cli": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        },
+        "github-copilot": {
+          "stability": "preview",
+          "limitations": [
+            "Availability depends on the GitHub Copilot surface and version that loads Agent Skills."
+          ],
+          "bindings": []
+        },
+        "opencode": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        }
+      },
+      "install": [
+        {
+          "target": "claude-code",
+          "command": "npx @youdede/toolkit add prepare-eaa-conformance-evidence --target claude-code --scope project"
+        },
+        {
+          "target": "codex",
+          "command": "npx @youdede/toolkit add prepare-eaa-conformance-evidence --target codex --scope project"
+        },
+        {
+          "target": "cursor",
+          "command": "npx @youdede/toolkit add prepare-eaa-conformance-evidence --target cursor --scope project"
+        },
+        {
+          "target": "gemini-cli",
+          "command": "npx @youdede/toolkit add prepare-eaa-conformance-evidence --target gemini-cli --scope project"
+        },
+        {
+          "target": "github-copilot",
+          "command": "npx @youdede/toolkit add prepare-eaa-conformance-evidence --target github-copilot --scope project"
+        },
+        {
+          "target": "opencode",
+          "command": "npx @youdede/toolkit add prepare-eaa-conformance-evidence --target opencode --scope project"
+        }
+      ]
+    },
+    {
       "id": "skill/design/accessibility/test-screen-reader-journey",
       "slug": "test-screen-reader-journey",
       "name": "Test Screen Reader Journey",
-      "version": "1.4.0",
+      "version": "1.6.0",
       "kind": "skill",
       "summary": "Test a bounded user journey with a real screen reader and evidence tied to interaction outcomes.",
       "description": "Test a web or application journey with a specified screen reader and browser combination, covering navigation, names, roles, state, focus, reading order, live feedback, and recovery. Use when semantic inspection alone cannot prove assistive-technology behavior.",
@@ -7108,9 +7338,12 @@
       },
       "relationships": {
         "composesWith": [
+          "hook/design/authentication-access/authentication-accessibility-guard",
           "hook/design/keyboard-focus/focus-style-regression-guard",
           "hook/design/semantic-markup/accessibility-attribute-regression-guard",
           "skill/design/accessibility/plan-accessibility-conformance-evidence",
+          "skill/design/accessibility/prepare-eaa-conformance-evidence",
+          "skill/design/accessibility/verify-cognitive-access-barriers",
           "subagent/design/accessibility/accessibility-conformance-reviewer",
           "subagent/design/accessibility/accessibility-journey-tester"
         ],
@@ -7198,6 +7431,140 @@
         {
           "target": "opencode",
           "command": "npx @youdede/toolkit add test-screen-reader-journey --target opencode --scope project"
+        }
+      ]
+    },
+    {
+      "id": "skill/design/accessibility/verify-cognitive-access-barriers",
+      "slug": "verify-cognitive-access-barriers",
+      "name": "Verify Cognitive Access Barriers",
+      "version": "1.0.0",
+      "kind": "skill",
+      "summary": "Verify consistent help, redundant entry, and accessible authentication against an observed process walkthrough.",
+      "description": "Verify three WCAG 2.2 criteria by walking a process end to end, consistent help (3.2.6, A), redundant entry (3.3.7, A) and accessible authentication (3.3.8, AA), and record the reading, recovery and time demands no in-scope criterion measures. Use when completing a task requires the user to remember, transcribe, or hunt for something.",
+      "domain": "design",
+      "category": "accessibility",
+      "capabilities": [
+        "verify",
+        "assess"
+      ],
+      "problems": [
+        "accessibility-review",
+        "cognitive-access-barrier"
+      ],
+      "frameworks": [
+        "agnostic"
+      ],
+      "languages": [
+        "agnostic"
+      ],
+      "lifecycle": [
+        "implementation",
+        "review",
+        "release"
+      ],
+      "risk": "medium",
+      "license": "MIT",
+      "execution": {
+        "mode": "prompt",
+        "entrypoints": []
+      },
+      "relationships": {
+        "composesWith": [
+          "hook/design/authentication-access/authentication-accessibility-guard",
+          "hook/design/keyboard-focus/focus-style-regression-guard",
+          "hook/design/semantic-markup/accessibility-attribute-regression-guard",
+          "skill/design/accessibility/plan-accessibility-conformance-evidence",
+          "skill/design/accessibility/prepare-eaa-conformance-evidence",
+          "skill/design/accessibility/test-screen-reader-journey",
+          "subagent/design/accessibility/accessibility-conformance-reviewer",
+          "subagent/design/accessibility/accessibility-journey-tester"
+        ],
+        "conflictsWith": [],
+        "supersedes": [],
+        "prerequisites": [],
+        "packIds": [
+          "pack/accessibility-assurance"
+        ]
+      },
+      "operational": {
+        "behavior": "advisory",
+        "failurePolicy": "stop-and-report",
+        "latencyClass": "bounded",
+        "dataRetention": "runtime-managed"
+      },
+      "refuses": [
+        "It does not claim legal compliance, certification, or full conformance from a bounded walkthrough or an automated scan.",
+        "It does not accept an essential, security, or no-longer-valid exception as satisfied because the owner asserted it.",
+        "It does not report an adjacent demand, such as reading level or a time limit, as a result against the three criteria it verifies.",
+        "It does not treat a completed walkthrough by a tester without the relevant disability as evidence of lived cognitive load."
+      ],
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        },
+        "codex": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        },
+        "cursor": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        },
+        "gemini-cli": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        },
+        "github-copilot": {
+          "stability": "preview",
+          "limitations": [
+            "Availability depends on the GitHub Copilot surface and version that loads Agent Skills."
+          ],
+          "bindings": []
+        },
+        "opencode": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        }
+      },
+      "install": [
+        {
+          "target": "claude-code",
+          "command": "npx @youdede/toolkit add verify-cognitive-access-barriers --target claude-code --scope project"
+        },
+        {
+          "target": "codex",
+          "command": "npx @youdede/toolkit add verify-cognitive-access-barriers --target codex --scope project"
+        },
+        {
+          "target": "cursor",
+          "command": "npx @youdede/toolkit add verify-cognitive-access-barriers --target cursor --scope project"
+        },
+        {
+          "target": "gemini-cli",
+          "command": "npx @youdede/toolkit add verify-cognitive-access-barriers --target gemini-cli --scope project"
+        },
+        {
+          "target": "github-copilot",
+          "command": "npx @youdede/toolkit add verify-cognitive-access-barriers --target github-copilot --scope project"
+        },
+        {
+          "target": "opencode",
+          "command": "npx @youdede/toolkit add verify-cognitive-access-barriers --target opencode --scope project"
         }
       ]
     },
@@ -24603,7 +24970,7 @@
       "id": "subagent/design/accessibility/accessibility-conformance-reviewer",
       "slug": "accessibility-conformance-reviewer",
       "name": "Accessibility Conformance Reviewer",
-      "version": "1.4.0",
+      "version": "1.6.0",
       "kind": "subagent",
       "summary": "Review a bounded interface change for evidence-led accessibility conformance risks and user barriers.",
       "description": "Review a supplied interface change against named accessibility criteria, user journeys, semantics, and available test evidence. Use before integration when a parent needs bounded read-only accessibility findings rather than implementation or certification.",
@@ -24635,10 +25002,13 @@
       },
       "relationships": {
         "composesWith": [
+          "hook/design/authentication-access/authentication-accessibility-guard",
           "hook/design/keyboard-focus/focus-style-regression-guard",
           "hook/design/semantic-markup/accessibility-attribute-regression-guard",
           "skill/design/accessibility/plan-accessibility-conformance-evidence",
+          "skill/design/accessibility/prepare-eaa-conformance-evidence",
           "skill/design/accessibility/test-screen-reader-journey",
+          "skill/design/accessibility/verify-cognitive-access-barriers",
           "subagent/design/accessibility/accessibility-journey-tester"
         ],
         "conflictsWith": [],
@@ -24714,7 +25084,7 @@
       "id": "subagent/design/accessibility/accessibility-journey-tester",
       "slug": "accessibility-journey-tester",
       "name": "Accessibility Journey Tester",
-      "version": "1.3.0",
+      "version": "1.5.0",
       "kind": "subagent",
       "summary": "Verify a bounded user journey from supplied browser, keyboard, assistive-technology, and static evidence.",
       "description": "A read-only accessibility tester that reconciles supplied runtime observations with semantics and code while clearly separating tested behavior from unassessed criteria.",
@@ -24749,10 +25119,13 @@
       },
       "relationships": {
         "composesWith": [
+          "hook/design/authentication-access/authentication-accessibility-guard",
           "hook/design/keyboard-focus/focus-style-regression-guard",
           "hook/design/semantic-markup/accessibility-attribute-regression-guard",
           "skill/design/accessibility/plan-accessibility-conformance-evidence",
+          "skill/design/accessibility/prepare-eaa-conformance-evidence",
           "skill/design/accessibility/test-screen-reader-journey",
+          "skill/design/accessibility/verify-cognitive-access-barriers",
           "subagent/design/accessibility/accessibility-conformance-reviewer"
         ],
         "conflictsWith": [],

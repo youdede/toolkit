@@ -1,0 +1,79 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/design/accessibility/verify-cognitive-access-barriers",
+  "slug": "verify-cognitive-access-barriers",
+  "name": "Verify Cognitive Access Barriers",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Verify consistent help, redundant entry, and accessible authentication against an observed process walkthrough.",
+  "description": "Verify three WCAG 2.2 criteria by walking a process end to end, consistent help (3.2.6, A), redundant entry (3.3.7, A) and accessible authentication (3.3.8, AA), and record the reading, recovery and time demands no in-scope criterion measures. Use when completing a task requires the user to remember, transcribe, or hunt for something.",
+  "domain": "design",
+  "category": "accessibility",
+  "capabilities": [
+    "verify",
+    "assess"
+  ],
+  "problems": [
+    "accessibility-review",
+    "cognitive-access-barrier"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "implementation",
+    "review",
+    "release"
+  ],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": [
+    "Youdede"
+  ],
+  "refuses": [
+    "It does not claim legal compliance, certification, or full conformance from a bounded walkthrough or an automated scan.",
+    "It does not accept an essential, security, or no-longer-valid exception as satisfied because the owner asserted it.",
+    "It does not report an adjacent demand, such as reading level or a time limit, as a result against the three criteria it verifies.",
+    "It does not treat a completed walkthrough by a tester without the relevant disability as evidence of lived cognitive load."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [
+      "hook/design/authentication-access/authentication-accessibility-guard",
+      "hook/design/keyboard-focus/focus-style-regression-guard",
+      "hook/design/semantic-markup/accessibility-attribute-regression-guard",
+      "skill/design/accessibility/plan-accessibility-conformance-evidence",
+      "skill/design/accessibility/prepare-eaa-conformance-evidence",
+      "skill/design/accessibility/test-screen-reader-journey",
+      "subagent/design/accessibility/accessibility-conformance-reviewer",
+      "subagent/design/accessibility/accessibility-journey-tester"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/accessibility-assurance"
+    ]
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  }
+}

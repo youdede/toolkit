@@ -16,6 +16,7 @@ import * as h8 from '../artifacts/hooks/design/keyboard-focus/focus-style-regres
 import * as h9 from '../artifacts/hooks/data/live-query-safety/database-query-mode-guard/targets/claude-code/database-query-mode-guard.mjs';
 import * as h10 from '../artifacts/hooks/operations/delegation-budget/subagent-fanout-guard/targets/claude-code/subagent-fanout-guard.mjs';
 import * as h11 from '../artifacts/hooks/operations/process-lifecycle/foreground-process-guard/targets/claude-code/foreground-process-guard.mjs';
+import * as h12 from '../artifacts/hooks/design/authentication-access/authentication-accessibility-guard/targets/claude-code/authentication-accessibility-guard.mjs';
 
 const scripts = {
   'schema-compatibility-guard': path.resolve('artifacts/hooks/data/compatibility/schema-compatibility-guard/targets/claude-code/schema-compatibility-guard.mjs'),
@@ -29,7 +30,8 @@ const scripts = {
   'focus-style-regression-guard': path.resolve('artifacts/hooks/design/keyboard-focus/focus-style-regression-guard/targets/claude-code/focus-style-regression-guard.mjs'),
   'database-query-mode-guard': path.resolve('artifacts/hooks/data/live-query-safety/database-query-mode-guard/targets/claude-code/database-query-mode-guard.mjs'),
   'subagent-fanout-guard': path.resolve('artifacts/hooks/operations/delegation-budget/subagent-fanout-guard/targets/claude-code/subagent-fanout-guard.mjs'),
-  'foreground-process-guard': path.resolve('artifacts/hooks/operations/process-lifecycle/foreground-process-guard/targets/claude-code/foreground-process-guard.mjs')
+  'foreground-process-guard': path.resolve('artifacts/hooks/operations/process-lifecycle/foreground-process-guard/targets/claude-code/foreground-process-guard.mjs'),
+  'authentication-accessibility-guard': path.resolve('artifacts/hooks/design/authentication-access/authentication-accessibility-guard/targets/claude-code/authentication-accessibility-guard.mjs')
 };
 const writeInput = (file) => ({ tool_name: 'Write', tool_input: { file_path: file } });
 const runHook = (slug, input) => spawnSync(process.execPath, [scripts[slug]], { input: JSON.stringify(input), encoding: 'utf8' });
@@ -70,7 +72,12 @@ test('reported false positives remain allowed without weakening the boundary', (
     [h9, { tool_name: 'Bash', tool_input: { command: 'mysql -e "SELECT `DELETE` FROM audit"' } }, {}],
     [h10, { tool_name: 'Task' }, { priorDelegations: 2 }],
     [h11, { tool_name: 'Bash', tool_input: { command: 'timeout 30 npm run dev' } }, {}],
-    [h11, { tool_name: 'Bash', tool_input: { command: 'npm run dev & echo ready' } }, {}]
+    [h11, { tool_name: 'Bash', tool_input: { command: 'npm run dev & echo ready' } }, {}],
+    [h12, writeInput('Signup.jsx'), { file: 'Signup.jsx', before: '<input type="password" name="pw" />', proposed: '<input type="password" name="pw" autocomplete="new-password" />', complete: true }],
+    [h12, writeInput('Login.jsx'), { file: 'Login.jsx', before: '<input type="password" name="pw" />', proposed: '<input type="password" name="pw" onKeyDown={e => e.preventDefault()} onPaste={handlePaste} />', complete: true }],
+    [h12, writeInput('Search.jsx'), { file: 'Search.jsx', before: '<input type="search" name="q" />', proposed: '<input type="search" name="q" autocomplete="off" />', complete: true }],
+    [h7, writeInput('index.html'), { file: 'index.html', before: '<meta name="viewport" content="width=device-width">', proposed: '<meta name="viewport" content="width=device-width, maximum-scale=2">', complete: true }],
+    [h7, writeInput('Dialog.jsx'), { file: 'Dialog.jsx', before: '<button id="close">x</button>', proposed: '<button id="close" aria-hidden="true" tabindex="-1">x</button>', complete: true }]
   ];
   for (const [module, input, context] of allowed) assert.equal(module.evaluate(input, context).exitCode, 0, JSON.stringify(input));
 });
@@ -124,6 +131,8 @@ test('reported bypasses are exercised through the installed hook processes', (t)
   cases.push(['database-query-mode-guard', { tool_name: 'Bash', tool_input: { command: 'psql --command="DELETE FROM users"' } }]);
   const transcript = path.join(root, 'transcript.jsonl'); writeFileSync(transcript, Array.from({ length: 8 }, (_, index) => JSON.stringify({ type: 'tool_use', name: 'Task', id: 'call-' + index })).join('\n')); cases.push(['subagent-fanout-guard', { tool_name: 'Task', transcript_path: transcript }]);
   cases.push(['foreground-process-guard', { tool_name: 'Bash', tool_input: { command: 'timeout 1 true; npm --prefix web run dev' } }]);
+  put('Login.tsx', '<input type="password" name="pw" autocomplete="current-password" />'); cases.push(['authentication-accessibility-guard', { tool_name: 'Write', cwd: root, tool_input: { file_path: 'Login.tsx', content: '<input type="password" name="pw" autocomplete="off" />' } }]);
+  put('page.html', '<meta name="viewport" content="width=device-width">'); cases.push(['accessibility-attribute-regression-guard', { tool_name: 'Write', cwd: root, tool_input: { file_path: 'page.html', content: '<meta name="viewport" content="width=device-width, user-scalable=no">' } }]);
   for (const [slug, input] of cases) { const result = runHook(slug, input); assert.equal(result.status, 2, slug + ': ' + result.stderr); assert.match(result.stderr, /BLOCKED/, slug); }
 });
 
@@ -198,5 +207,144 @@ test('focus-style-regression-guard accepts the paired focus-visible pattern and 
     const result = h8.evaluate(input, h8.collectContext(input, root));
     assert.equal(result.exitCode, want === 'allow' ? 0 : 2, `${want}: ${label}`);
     if (want === 'block') assert.equal(result.ruleId, 'focus-indicator-removed', label);
+  }
+});
+
+test('authentication-accessibility-guard blocks new credential barriers and leaves correct markup alone', (context) => {
+  const root = mkdtempSync(path.join(tmpdir(), 'youdede-auth-access-'));
+  context.after(() => rmSync(root, { recursive: true, force: true }));
+
+  const cases = [
+    ['allow', 'a password field gains the token that lets a manager fill it', 'a.jsx',
+      '<input type="password" name="pw" />', '<input type="password" name="pw" autocomplete="current-password" />'],
+    ['allow', 'a paste handler that reformats rather than refuses', 'b.jsx',
+      '<input type="password" name="pw" />', '<input type="password" name="pw" onPaste={e => setValue(e.clipboardData.getData("text").trim())} />'],
+    ['allow', 'preventDefault belongs to a different handler', 'c.jsx',
+      '<input type="password" name="pw" />', '<input type="password" name="pw" onKeyDown={e => e.preventDefault()} onPaste={accept} />'],
+    ['allow', 'a barrier the edit did not introduce', 'd.jsx',
+      '<input type="password" name="pw" autocomplete="off" /><p>a</p>', '<input type="password" name="pw" autocomplete="off" /><p>b</p>'],
+    ['block', 'paste refused on a password field', 'e.jsx',
+      '<input type="password" name="pw" />', '<input type="password" name="pw" onPaste={e => e.preventDefault()} />', 'credential-paste-blocked'],
+    ['block', 'paste refused inside a block body', 'f.jsx',
+      '<input type="password" name="pw" />', '<input type="password" name="pw" onPaste={e => { e.preventDefault(); }} />', 'credential-paste-blocked'],
+    ['block', 'autofill switched off on a password field', 'g.jsx',
+      '<input type="password" name="pw" />', '<input type="password" name="pw" autocomplete="off" />', 'credential-autofill-disabled'],
+    ['block', 'a one-time-code field loses its token', 'h.jsx',
+      '<input name="code" autocomplete="one-time-code" />', '<input name="code" />', 'credential-autofill-removed'],
+    ['block', 'a password manager is told to ignore the field', 'i.jsx',
+      '<input type="password" name="pw" />', '<input type="password" name="pw" data-1p-ignore />', 'credential-manager-suppressed'],
+    ['block', 'a vendor opt-out lands on a one-time-code field', 'j.jsx',
+      '<input name="code" autocomplete="one-time-code" />', '<input name="code" autocomplete="one-time-code" data-lpignore="true" />', 'credential-manager-suppressed'],
+    ['allow', 'the same opt-out on a field that holds no credential', 'k.jsx',
+      '<input type="text" name="nick" />', '<input type="text" name="nick" data-1p-ignore />'],
+    ['allow', 'an opt-out explicitly switched off', 'l.jsx',
+      '<input type="password" name="pw" />', '<input type="password" name="pw" data-lpignore="false" />'],
+    ['allow', 'renaming a field that already disabled autofill', 'm.jsx',
+      '<input type="password" name="pw" autocomplete="off" />', '<input type="password" name="password" autocomplete="off" />'],
+    ['allow', 'renaming a field that already refused paste', 'n.jsx',
+      '<input type="password" name="pw" onpaste="return false" />', '<input type="password" name="password" onpaste="return false" />'],
+    ['allow', 'wrapping a field that already opted out of managers', 'o.jsx',
+      '<input type="password" name="pw" data-1p-ignore />', '<div className="row"><input type="password" name="pw" data-1p-ignore /></div>'],
+    ['block', 'a second field gains a barrier beside one that had it', 'p.jsx',
+      '<input type="password" name="a" autocomplete="off" /><input type="password" name="b" />',
+      '<input type="password" name="a" autocomplete="off" /><input type="password" name="b" autocomplete="off" />', 'credential-autofill-disabled']
+  ];
+
+  for (const [want, label, file, before, proposed, ruleId] of cases) {
+    const absolute = path.join(root, file);
+    writeFileSync(absolute, before);
+    const input = { tool_name: 'Write', cwd: root, tool_input: { file_path: absolute, content: proposed } };
+    const result = h12.evaluate(input, h12.collectContext(input, root));
+    assert.equal(result.exitCode, want === 'allow' ? 0 : 2, `${want}: ${label}`);
+    if (want === 'block') assert.equal(result.ruleId, ruleId, label);
+  }
+});
+
+// Both markup guards ended a tag at the first '>', which in JSX is the one inside an arrow
+// function. Everything written after a handler was invisible to them.
+test('markup guards read attributes written after a JSX arrow handler', (context) => {
+  const root = mkdtempSync(path.join(tmpdir(), 'youdede-jsx-region-'));
+  context.after(() => rmSync(root, { recursive: true, force: true }));
+
+  const cases = [
+    [h7, 'block', 'accessible name after a handler is removed', 'a.jsx',
+      '<button id="save" onClick={() => save()} aria-label="Save document">S</button>',
+      '<button id="save" onClick={() => save()}>S</button>'],
+    [h7, 'block', 'alt after a handler is removed', 'b.jsx',
+      '<img id="logo" onLoad={() => track()} alt="Company logo" />',
+      '<img id="logo" onLoad={() => track()} />'],
+    [h7, 'block', 'role after a handler is removed', 'c.jsx',
+      '<div id="tab" onClick={() => go()} role="tab">Tab</div>',
+      '<div id="tab" onClick={() => go()}>Tab</div>'],
+    [h7, 'allow', 'a handler added beside a name that stays', 'd.jsx',
+      '<button id="save" aria-label="Save document">S</button>',
+      '<button id="save" onClick={() => save()} aria-label="Save document">S</button>'],
+    [h12, 'block', 'autocomplete after a handler is switched off', 'e.jsx',
+      '<input name="pw" type="password" onChange={(e) => set(e)} autocomplete="current-password" />',
+      '<input name="pw" type="password" onChange={(e) => set(e)} autocomplete="off" />'],
+    [h12, 'allow', 'a handler added beside a token that stays', 'f.jsx',
+      '<input name="pw" type="password" autocomplete="current-password" />',
+      '<input name="pw" type="password" onChange={(e) => set(e)} autocomplete="current-password" />']
+  ];
+
+  for (const [module, want, label, file, before, proposed] of cases) {
+    const absolute = path.join(root, file);
+    writeFileSync(absolute, before);
+    const input = { tool_name: 'Write', cwd: root, tool_input: { file_path: absolute, content: proposed } };
+    const result = module.evaluate(input, module.collectContext(input, root));
+    assert.equal(result.exitCode, want === 'allow' ? 0 : 2, `${want}: ${label}`);
+  }
+});
+
+// W3C ACT rule b4f0c3: user-scalable may not be no, and maximum-scale may not be below 2.
+test('the markup guard holds the ACT zoom-rule boundary in both directions', (context) => {
+  const root = mkdtempSync(path.join(tmpdir(), 'youdede-zoom-'));
+  context.after(() => rmSync(root, { recursive: true, force: true }));
+  const meta = (content) => `<meta name="viewport" content="${content}">`;
+
+  const cases = [
+    ['block', 'user-scalable=no', 'a.html', meta('width=device-width'), meta('width=device-width, user-scalable=no')],
+    ['block', 'the numeric spelling of the same thing', 'b.html', meta('width=device-width'), meta('width=device-width, user-scalable=0')],
+    ['block', 'maximum-scale just under the threshold', 'c.html', meta('width=device-width'), meta('width=device-width, maximum-scale=1.9')],
+    ['allow', 'maximum-scale exactly at the threshold', 'd.html', meta('width=device-width'), meta('width=device-width, maximum-scale=2')],
+    ['allow', 'user-scalable=yes', 'e.html', meta('width=device-width'), meta('width=device-width, user-scalable=yes')],
+    ['allow', 'a suppression this edit did not introduce', 'f.html', `${meta('user-scalable=no')}<p>a</p>`, `${meta('user-scalable=no')}<p>b</p>`],
+    ['allow', 'a suppression this edit removes', 'g.html', meta('user-scalable=no'), meta('width=device-width')],
+    ['allow', 'a content value the page computes', 'h.jsx', '<meta name="viewport" content={a} />', '<meta name="viewport" content={b} />']
+  ];
+
+  for (const [want, label, file, before, proposed] of cases) {
+    const absolute = path.join(root, file);
+    writeFileSync(absolute, before);
+    const input = { tool_name: 'Write', cwd: root, tool_input: { file_path: absolute, content: proposed } };
+    const result = h7.evaluate(input, h7.collectContext(input, root));
+    assert.equal(result.exitCode, want === 'allow' ? 0 : 2, `${want}: ${label}`);
+    if (want === 'block') assert.equal(result.ruleId, 'viewport-zoom-suppressed', label);
+  }
+});
+
+// W3C, Using ARIA: do not use role="presentation" or aria-hidden="true" on a focusable element.
+test('accessibility-attribute-regression-guard blocks a focusable element hidden from assistive technology', (context) => {
+  const root = mkdtempSync(path.join(tmpdir(), 'youdede-hidden-focusable-'));
+  context.after(() => rmSync(root, { recursive: true, force: true }));
+
+  const cases = [
+    ['block', 'a button hidden while still focusable', 'a.jsx', '<button id="x">Go</button>', '<button id="x" aria-hidden="true">Go</button>'],
+    ['block', 'a link hidden while still focusable', 'b.jsx', '<a id="y" href="/a">A</a>', '<a id="y" href="/a" aria-hidden="true">A</a>'],
+    ['block', 'presentation role on a tabbable div', 'c.jsx', '<div id="z" tabindex="0">Z</div>', '<div id="z" tabindex="0" role="presentation">Z</div>'],
+    ['allow', 'hidden and taken out of the tab order together', 'd.jsx', '<button id="x">Go</button>', '<button id="x" aria-hidden="true" tabindex="-1">Go</button>'],
+    ['allow', 'a decorative span', 'e.jsx', '<span id="s">*</span>', '<span id="s" aria-hidden="true">*</span>'],
+    ['allow', 'a disabled control', 'f.jsx', '<button id="x" disabled>Go</button>', '<button id="x" disabled aria-hidden="true">Go</button>'],
+    ['allow', 'an anchor with no href', 'g.jsx', '<a id="n">n</a>', '<a id="n" aria-hidden="true">n</a>'],
+    ['allow', 'a pairing this edit did not introduce', 'h.jsx', '<button id="x" aria-hidden="true">a</button>', '<button id="x" aria-hidden="true">b</button>']
+  ];
+
+  for (const [want, label, file, before, proposed] of cases) {
+    const absolute = path.join(root, file);
+    writeFileSync(absolute, before);
+    const input = { tool_name: 'Write', cwd: root, tool_input: { file_path: absolute, content: proposed } };
+    const result = h7.evaluate(input, h7.collectContext(input, root));
+    assert.equal(result.exitCode, want === 'allow' ? 0 : 2, `${want}: ${label}`);
+    if (want === 'block') assert.equal(result.ruleId, 'accessibility-hidden-focusable', label);
   }
 });

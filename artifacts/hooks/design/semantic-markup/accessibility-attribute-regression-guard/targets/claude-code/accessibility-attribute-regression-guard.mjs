@@ -19,13 +19,35 @@ export function collectContext(input, cwd = process.cwd()) {
 function markup(file) { return /\.(?:html?|jsx|tsx|vue|svelte)$/i.test(file); }
 function parseAttributes(raw) {
   const attributes = new Map();
-  for (const match of raw.matchAll(/\b([:@A-Za-z_][\w:.-]*)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|\{([^{}]*)\}|([^\s>]+)))?/g)) attributes.set(match[1].toLowerCase(), match[2] ?? match[3] ?? match[4] ?? match[5] ?? '');
+  for (const match of raw.matchAll(/\b([:@A-Za-z_][\w:.-]*)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|\{((?:[^{}]|\{[^{}]*\})*)\}|([^\s>]+)))?/g)) attributes.set(match[1].toLowerCase(), match[2] ?? match[3] ?? match[4] ?? match[5] ?? '');
   return attributes;
 }
+// Every JSX arrow function carries a '>', so a tag ends at the first '>' outside quotes and outside
+// a braced expression. Ending it at the first '>' truncated the tag mid-attribute and hid every
+// name, role, and relationship written after a handler.
+function attributeRegion(source, from) {
+  let depth = 0; let quote = '';
+  for (let index = from; index < source.length; index += 1) {
+    const character = source[index];
+    if (quote) { if (character === quote) quote = ''; continue; }
+    if (character === '"' || character === "'") { quote = character; continue; }
+    if (character === '{') { depth += 1; continue; }
+    if (character === '}') { if (depth > 0) depth -= 1; continue; }
+    if (depth > 0) continue;
+    if (character === '<') return null;
+    if (character === '>') return { raw: source.slice(from, index), end: index + 1 };
+  }
+  return null;
+}
 function elements(text) {
-  const result = new Map(); const ordinals = new Map();
-  for (const match of text.replace(/<!--[\s\S]*?-->/g, '').matchAll(/<([A-Za-z][\w:-]*)\b([^<>]*)>/g)) {
-    const tag = match[1].toLowerCase(); const attributes = parseAttributes(match[2]);
+  const source = text.replace(/<!--[\s\S]*?-->/g, '');
+  const result = new Map(); const ordinals = new Map(); const opening = /<([A-Za-z][\w:-]*)\b/g;
+  let match;
+  while ((match = opening.exec(source))) {
+    const region = attributeRegion(source, opening.lastIndex);
+    if (!region) continue;
+    opening.lastIndex = region.end;
+    const tag = match[1].toLowerCase(); const attributes = parseAttributes(region.raw);
     const stable = ['id', 'data-testid', 'data-test', 'name'].find((name) => attributes.has(name) && attributes.get(name));
     const ordinal = ordinals.get(tag) || 0; ordinals.set(tag, ordinal + 1); const key = stable ? stable + ':' + attributes.get(stable) : tag + '#' + ordinal;
     result.set(key, { tag, attributes });
@@ -44,6 +66,51 @@ function lostSemantics(before, after) {
   if (oldAttributes.has('role') && !next.has('role') && oldAttributes.get('role').toLowerCase() !== implicitRole(before)) return true;
   return false;
 }
+// "Do not use role='presentation' or aria-hidden='true' on a focusable element." (W3C, Using ARIA.)
+// The element keeps taking keyboard focus while the accessibility tree says nothing is there, so a
+// screen reader user lands on silence. Only the element itself is judged: this parser is flat, so a
+// focusable child inside a hidden wrapper is beyond its reach and is left to human review.
+const NATIVELY_FOCUSABLE = /^(?:button|select|textarea|iframe|summary)$/;
+function focusable(element) {
+  const tabindex = Number.parseInt(element.attributes.get('tabindex') ?? '', 10);
+  if (Number.isFinite(tabindex)) return tabindex >= 0;
+  if (element.attributes.has('disabled')) return false;
+  if (element.tag === 'a' || element.tag === 'area') return element.attributes.has('href');
+  if (element.tag === 'input') return (element.attributes.get('type') || '').trim().toLowerCase() !== 'hidden';
+  return NATIVELY_FOCUSABLE.test(element.tag);
+}
+function hiddenFromAssistiveTechnology(element) {
+  if ((element.attributes.get('aria-hidden') || '').trim().toLowerCase() === 'true') return true;
+  const role = (element.attributes.get('role') || '').trim().toLowerCase();
+  return role === 'presentation' || role === 'none';
+}
+// Counted across the file: an element that is renamed or moved keeps no identity, and pairing by
+// identity would read a pre-existing pairing as one this edit introduced.
+const silentlyFocusable = (map) => [...map.values()].filter((element) => focusable(element) && hiddenFromAssistiveTechnology(element)).length;
+
+// W3C ACT rule b4f0c3, "Meta viewport allows for zoom": a viewport meta element's content may not
+// set user-scalable to no, nor maximum-scale below 2. The rule is required for WCAG SC 1.4.4 Resize
+// text at Level AA. It reads one attribute value, so it belongs beside the other attribute checks
+// rather than in a fourth process spawned on every file edit.
+const MINIMUM_MAXIMUM_SCALE = 2;
+export function zoomSuppressed(element) {
+  if (element.tag !== 'meta' || (element.attributes.get('name') || '').trim().toLowerCase() !== 'viewport') return false;
+  const content = element.attributes.get('content');
+  // A value the page computes at runtime cannot be read here, so it is left alone.
+  if (typeof content !== 'string' || !content.trim()) return false;
+  const properties = new Map();
+  for (const pair of content.split(',')) {
+    const [name, ...rest] = pair.split('=');
+    if (rest.length) properties.set(name.trim().toLowerCase(), rest.join('=').trim().toLowerCase());
+  }
+  const scalable = properties.get('user-scalable');
+  // The rule names "no"; the numeric spelling disables zoom identically and is treated the same.
+  if (scalable === 'no' || scalable === '0') return true;
+  const maximum = Number.parseFloat(properties.get('maximum-scale'));
+  return Number.isFinite(maximum) && maximum < MINIMUM_MAXIMUM_SCALE;
+}
+const suppressedZoom = (map) => [...map.values()].filter(zoomSuppressed).length;
+
 export function evaluate(input, context = {}) {
   if (!input || typeof input !== 'object' || !input.tool_name) return block('accessibility-attribute-regression-input-invalid', 'the hook envelope is incomplete');
   if (!/^(?:Write|Edit|MultiEdit)$/.test(input.tool_name)) return allow();
@@ -52,6 +119,8 @@ export function evaluate(input, context = {}) {
   if (!context.complete) return block('accessibility-semantics-unverified', 'the markup edit could not be reconstructed');
   const before = elements(context.before || ''); const after = elements(context.proposed || '');
   for (const [identity, element] of before) if (after.has(identity) && lostSemantics(element, after.get(identity))) return block('accessibility-relationship-removed', 'the change removes an accessible name, role, or relationship from a retained element');
+  if (silentlyFocusable(after) > silentlyFocusable(before)) return block('accessibility-hidden-focusable', 'the change hides an element from assistive technology while it still takes keyboard focus, so a screen reader user reaches it and hears nothing');
+  if (suppressedZoom(after) > suppressedZoom(before)) return block('viewport-zoom-suppressed', 'the change stops the browser zooming, which the user needs to read the page at a size they can see');
   return allow();
 }
 

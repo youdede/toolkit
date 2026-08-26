@@ -8,7 +8,7 @@ A pack composes artifacts of different kinds into one outcome, so a single comma
 
 | Slug | What it composes | Artifacts |
 | --- | --- | --- |
-| `accessibility-assurance` | Plan, enforce, and independently verify accessible interface behavior from source evidence. | 6 |
+| `accessibility-assurance` | Plan, enforce, and independently verify accessible interface behavior from source evidence. | 9 |
 | `data-change-safety` | Review schema and migration changes with deterministic safety checks and independent risk analysis. | 4 |
 | `infrastructure-change-readiness` | Plan a staged infrastructure change and independently review lifecycle, blast-radius, and recovery evidence. | 3 |
 | `mobile-release-readiness` | Review mobile release evidence, accessibility, reliability, repository state, and version consistency. | 4 |

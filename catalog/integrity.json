@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "algorithm": "sha256",
   "claim": "Checksums bind published bytes to a reviewed release; they do not prove authorship, originality, license compliance, endorsement, or control downstream copying.",
-  "rootDigest": "77cd2e521feb9c31db8fc11899d829e076b411f91840506196e17b32618525f3",
+  "rootDigest": "1063d6afd4d856f4b72b23bd3004ce25260e6da8e52eae69e1d383c29e20f336",
   "artifacts": [
     {
       "artifactId": "hook/data/compatibility/schema-compatibility-guard",
@@ -101,10 +101,42 @@
       ]
     },
     {
+      "artifactId": "hook/design/authentication-access/authentication-accessibility-guard",
+      "version": "1.0.0",
+      "integrityId": "urn:youdede:artifact:sha256:5a8fffa11b3c2c90766ec31d4c0b0cde934f336eda1ef3b1f37e243ccb5b29b1",
+      "digest": "5a8fffa11b3c2c90766ec31d4c0b0cde934f336eda1ef3b1f37e243ccb5b29b1",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/hooks/design/authentication-access/authentication-accessibility-guard/adapters/claude-code.json",
+          "bytes": 891,
+          "sha256": "6240da7c6e7abff38c3c50205b6d4b1ad89db95fcffbaf6fea66dc829916ccaf"
+        },
+        {
+          "path": "artifacts/hooks/design/authentication-access/authentication-accessibility-guard/artifact.json",
+          "bytes": 2912,
+          "sha256": "d47551c8383f3cb69a15fc99869bb19b58d4bf8fc26de08b9a71eeff23fa6cef"
+        },
+        {
+          "path": "artifacts/hooks/design/authentication-access/authentication-accessibility-guard/targets/claude-code/authentication-accessibility-guard.mjs",
+          "bytes": 10041,
+          "sha256": "c424d9119a45f6e5f478c1d430f36636d641f87405d007adf0662a437ea12c12"
+        },
+        {
+          "path": "artifacts/hooks/design/authentication-access/authentication-accessibility-guard/targets/claude-code/README.md",
+          "bytes": 1917,
+          "sha256": "0c6c3dfe331ea9946d52eb20da34d49d8718e1612efe9bd68e3ffe37e67d43a7"
+        }
+      ]
+    },
+    {
       "artifactId": "hook/design/keyboard-focus/focus-style-regression-guard",
-      "version": "1.1.0",
-      "integrityId": "urn:youdede:artifact:sha256:ae7d78e003c7936b5e5d34eef90db78e6d361587d28d2c8f3102dbbf0ea9c02a",
-      "digest": "ae7d78e003c7936b5e5d34eef90db78e6d361587d28d2c8f3102dbbf0ea9c02a",
+      "version": "1.3.0",
+      "integrityId": "urn:youdede:artifact:sha256:82e43d873f2621f0d09f0dbdcdf9f977bec57b50a7e07c9a60c286de2899f1bd",
+      "digest": "82e43d873f2621f0d09f0dbdcdf9f977bec57b50a7e07c9a60c286de2899f1bd",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -117,8 +149,8 @@
         },
         {
           "path": "artifacts/hooks/design/keyboard-focus/focus-style-regression-guard/artifact.json",
-          "bytes": 2294,
-          "sha256": "3c32629beb0649226408e84ec4afdd7fd70b712bc74b537ede604d445e6c7084"
+          "bytes": 2510,
+          "sha256": "d02207f399a760d9b6aa7df9de98371ccd25712767201f27fd36f4d0c6b1e7c7"
         },
         {
           "path": "artifacts/hooks/design/keyboard-focus/focus-style-regression-guard/targets/claude-code/focus-style-regression-guard.mjs",
@@ -134,9 +166,9 @@
     },
     {
       "artifactId": "hook/design/semantic-markup/accessibility-attribute-regression-guard",
-      "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:95587e238cc2e895c1de1ba4067ca1c0eec0613717ec600ce4fd09ddb3b17eb4",
-      "digest": "95587e238cc2e895c1de1ba4067ca1c0eec0613717ec600ce4fd09ddb3b17eb4",
+      "version": "1.4.0",
+      "integrityId": "urn:youdede:artifact:sha256:685eca280c8b5a523993ebadca305f2d84c32066cd8a5403aa0a1b0f1a703558",
+      "digest": "685eca280c8b5a523993ebadca305f2d84c32066cd8a5403aa0a1b0f1a703558",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -149,18 +181,18 @@
         },
         {
           "path": "artifacts/hooks/design/semantic-markup/accessibility-attribute-regression-guard/artifact.json",
-          "bytes": 2285,
-          "sha256": "0939e669c873c60ca070ef7b7d54fd4768e429807b6642b0e7ae82ef621641b0"
+          "bytes": 2898,
+          "sha256": "6476021d86dac7535d7066a187973ace473e0b2bfeca1b7bce0d79d9ab395eb2"
         },
         {
           "path": "artifacts/hooks/design/semantic-markup/accessibility-attribute-regression-guard/targets/claude-code/accessibility-attribute-regression-guard.mjs",
-          "bytes": 6755,
-          "sha256": "516ce32f7804ca9a0355eb2a95a69c103cce5fba8b14c7151d8eff246fce831b"
+          "bytes": 11231,
+          "sha256": "b0e91016126aeeb32fb45afdf4fd5dedffe5c5045a330ef6fda259b1129b9ffa"
         },
         {
           "path": "artifacts/hooks/design/semantic-markup/accessibility-attribute-regression-guard/targets/claude-code/README.md",
-          "bytes": 726,
-          "sha256": "f9b9595fe3a78e6b1d7e39cc72e0220e313b17f60c68138aa4ed43fc3a4a3059"
+          "bytes": 1577,
+          "sha256": "b69f6ee3f196f6d3014db4369786e0c59331df249c04c6fa61193fd136b28e1b"
         }
       ]
     },
@@ -2907,9 +2939,9 @@
     },
     {
       "artifactId": "skill/design/accessibility/plan-accessibility-conformance-evidence",
-      "version": "1.4.0",
-      "integrityId": "urn:youdede:artifact:sha256:9ca49ab4e2ad08b41b86c291edddf11f9f5f8e999cbf646a5fb0a9b40b10d295",
-      "digest": "9ca49ab4e2ad08b41b86c291edddf11f9f5f8e999cbf646a5fb0a9b40b10d295",
+      "version": "1.6.0",
+      "integrityId": "urn:youdede:artifact:sha256:ce10c6e107930c0e7e4423c072f95999e8307b6437166fb4a235a6c254640d0d",
+      "digest": "ce10c6e107930c0e7e4423c072f95999e8307b6437166fb4a235a6c254640d0d",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -2952,26 +2984,88 @@
         },
         {
           "path": "artifacts/skills/design/accessibility/plan-accessibility-conformance-evidence/artifact.json",
-          "bytes": 2622,
-          "sha256": "5f3197c3f9db19cb9af1d70debda8ca26861845e3058463163ae87d2e2b9109a"
+          "bytes": 2829,
+          "sha256": "ac348ecd3d97f8aa3d940a02d046116002e59b96f9823639455d7f07e63cc50b"
         },
         {
           "path": "artifacts/skills/design/accessibility/plan-accessibility-conformance-evidence/evaluations/behavioral.json",
-          "bytes": 3090,
-          "sha256": "3fa5a5bbc4ec2a7508d82de0aaba713c1ea2517041a338701df290ec48c7178a"
+          "bytes": 3165,
+          "sha256": "e4a663707b936c8106a44a8399041ef114cff7713eb0c4f45fb6b12bb9362d76"
         },
         {
           "path": "artifacts/skills/design/accessibility/plan-accessibility-conformance-evidence/SKILL.md",
-          "bytes": 5240,
-          "sha256": "a16694182354ea0b54217a3e03bf747e5bb7ba8648985d38e410307d2a4979b3"
+          "bytes": 6601,
+          "sha256": "0afbf4f9a17f1ee61f62aa13f0e5d0e9250f6030335dc8ecc2bb3a9fa644d31a"
+        }
+      ]
+    },
+    {
+      "artifactId": "skill/design/accessibility/prepare-eaa-conformance-evidence",
+      "version": "1.0.0",
+      "integrityId": "urn:youdede:artifact:sha256:b3ac7d1d2e2933e5339c87b40f5a412f7186b618106da05b21210b51777a0490",
+      "digest": "b3ac7d1d2e2933e5339c87b40f5a412f7186b618106da05b21210b51777a0490",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/skills/design/accessibility/prepare-eaa-conformance-evidence/adapters/claude-code.json",
+          "bytes": 251,
+          "sha256": "83e4c10cfbfc23d21ba58623b11e887e45b86e57d50acdb66b2be6cd45984d54"
+        },
+        {
+          "path": "artifacts/skills/design/accessibility/prepare-eaa-conformance-evidence/adapters/codex.json",
+          "bytes": 317,
+          "sha256": "f2f89b555812db38f59ca64bb35f98476695bf1b236fd1b2c6edab322e39ef08"
+        },
+        {
+          "path": "artifacts/skills/design/accessibility/prepare-eaa-conformance-evidence/adapters/cursor.json",
+          "bytes": 292,
+          "sha256": "0959af7c41305a2a3526fcd2290f5ec73b68e0634c74f7d4fd7a2d5f7e772c07"
+        },
+        {
+          "path": "artifacts/skills/design/accessibility/prepare-eaa-conformance-evidence/adapters/gemini-cli.json",
+          "bytes": 296,
+          "sha256": "d50e03e198b6b9aa1dc5844bf21f26033b6aff2a0ea62bdb4e90ddf83b5b00fc"
+        },
+        {
+          "path": "artifacts/skills/design/accessibility/prepare-eaa-conformance-evidence/adapters/github-copilot.json",
+          "bytes": 398,
+          "sha256": "1aabf96a8fbadf58508bee7abc3710aa066e083f374ba2748ed98fc9e32399e2"
+        },
+        {
+          "path": "artifacts/skills/design/accessibility/prepare-eaa-conformance-evidence/adapters/opencode.json",
+          "bytes": 294,
+          "sha256": "e93e3afb2a5c2e5096a08815ebd49fd0e2a4b69a149fc6d89e7cadeb9de8d45a"
+        },
+        {
+          "path": "artifacts/skills/design/accessibility/prepare-eaa-conformance-evidence/agents/openai.yaml",
+          "bytes": 264,
+          "sha256": "ad0d7bbb1636c078b3d9a631d6f8ab995a588d2c8e57ffd285dcfc8fd08ea771"
+        },
+        {
+          "path": "artifacts/skills/design/accessibility/prepare-eaa-conformance-evidence/artifact.json",
+          "bytes": 2994,
+          "sha256": "4d9ffe25ecb809caf9cc4da52f1188c67b5f37232264890305a9b9f656583e30"
+        },
+        {
+          "path": "artifacts/skills/design/accessibility/prepare-eaa-conformance-evidence/evaluations/behavioral.json",
+          "bytes": 5432,
+          "sha256": "fef38b3fe5641b9b529843a13b0028d1038a12dfe9eb9c301dcc31e818f59508"
+        },
+        {
+          "path": "artifacts/skills/design/accessibility/prepare-eaa-conformance-evidence/SKILL.md",
+          "bytes": 8836,
+          "sha256": "4a7a42bebfa4a9c0a6dfb77bc1e7fe80a5288229990bd0503ff7b05f89587934"
         }
       ]
     },
     {
       "artifactId": "skill/design/accessibility/test-screen-reader-journey",
-      "version": "1.4.0",
-      "integrityId": "urn:youdede:artifact:sha256:9a7632955a66c60d0d6d4fa7ed3dc539ac1285bf71e36b9ef7ed319b6cbe030c",
-      "digest": "9a7632955a66c60d0d6d4fa7ed3dc539ac1285bf71e36b9ef7ed319b6cbe030c",
+      "version": "1.6.0",
+      "integrityId": "urn:youdede:artifact:sha256:4ab3381f95cfae2869e351ecc0c2b627fc5ee15769e4050182ebe012a22458b4",
+      "digest": "4ab3381f95cfae2869e351ecc0c2b627fc5ee15769e4050182ebe012a22458b4",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -3014,8 +3108,8 @@
         },
         {
           "path": "artifacts/skills/design/accessibility/test-screen-reader-journey/artifact.json",
-          "bytes": 2382,
-          "sha256": "49cfa1a62a1660bd3f69a607ba1e71bd2147ba6b4d3c66b5958e6a8523da93c8"
+          "bytes": 2598,
+          "sha256": "e6a98644b4365a055e900fbef418a1a1ea8e227b8cfdf85c9e25f6aaeeb8e157"
         },
         {
           "path": "artifacts/skills/design/accessibility/test-screen-reader-journey/evaluations/behavioral.json",
@@ -3026,6 +3120,68 @@
           "path": "artifacts/skills/design/accessibility/test-screen-reader-journey/SKILL.md",
           "bytes": 4292,
           "sha256": "4609330f8a1e56853ac805154ff5bbaae46b5249fd392765ee4daa0608b72ec0"
+        }
+      ]
+    },
+    {
+      "artifactId": "skill/design/accessibility/verify-cognitive-access-barriers",
+      "version": "1.0.0",
+      "integrityId": "urn:youdede:artifact:sha256:5c26366377be8cfa31003292205a248d747ff51015f12ce1df1fcc5e225344d5",
+      "digest": "5c26366377be8cfa31003292205a248d747ff51015f12ce1df1fcc5e225344d5",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/skills/design/accessibility/verify-cognitive-access-barriers/adapters/claude-code.json",
+          "bytes": 251,
+          "sha256": "83e4c10cfbfc23d21ba58623b11e887e45b86e57d50acdb66b2be6cd45984d54"
+        },
+        {
+          "path": "artifacts/skills/design/accessibility/verify-cognitive-access-barriers/adapters/codex.json",
+          "bytes": 317,
+          "sha256": "f2f89b555812db38f59ca64bb35f98476695bf1b236fd1b2c6edab322e39ef08"
+        },
+        {
+          "path": "artifacts/skills/design/accessibility/verify-cognitive-access-barriers/adapters/cursor.json",
+          "bytes": 292,
+          "sha256": "0959af7c41305a2a3526fcd2290f5ec73b68e0634c74f7d4fd7a2d5f7e772c07"
+        },
+        {
+          "path": "artifacts/skills/design/accessibility/verify-cognitive-access-barriers/adapters/gemini-cli.json",
+          "bytes": 296,
+          "sha256": "d50e03e198b6b9aa1dc5844bf21f26033b6aff2a0ea62bdb4e90ddf83b5b00fc"
+        },
+        {
+          "path": "artifacts/skills/design/accessibility/verify-cognitive-access-barriers/adapters/github-copilot.json",
+          "bytes": 398,
+          "sha256": "1aabf96a8fbadf58508bee7abc3710aa066e083f374ba2748ed98fc9e32399e2"
+        },
+        {
+          "path": "artifacts/skills/design/accessibility/verify-cognitive-access-barriers/adapters/opencode.json",
+          "bytes": 294,
+          "sha256": "e93e3afb2a5c2e5096a08815ebd49fd0e2a4b69a149fc6d89e7cadeb9de8d45a"
+        },
+        {
+          "path": "artifacts/skills/design/accessibility/verify-cognitive-access-barriers/agents/openai.yaml",
+          "bytes": 279,
+          "sha256": "e9e47e266ce8319138c2cf871f9f4c78ffb8c0574e3bb043ae3612b24e19153b"
+        },
+        {
+          "path": "artifacts/skills/design/accessibility/verify-cognitive-access-barriers/artifact.json",
+          "bytes": 2984,
+          "sha256": "09b36598f85fc1ac2c4fa606cbc8e00665e8460e329d7a986494a4402cc7e242"
+        },
+        {
+          "path": "artifacts/skills/design/accessibility/verify-cognitive-access-barriers/evaluations/behavioral.json",
+          "bytes": 5085,
+          "sha256": "3bca36718722bacabe0f8f6f261dc2e797e0def80548f1a510b5445d8854c38b"
+        },
+        {
+          "path": "artifacts/skills/design/accessibility/verify-cognitive-access-barriers/SKILL.md",
+          "bytes": 9552,
+          "sha256": "31ac75c5fcb78546bbebf601643001928d515d4871f7aa64025e4f0baecc6488"
         }
       ]
     },
@@ -12019,9 +12175,9 @@
     },
     {
       "artifactId": "subagent/design/accessibility/accessibility-conformance-reviewer",
-      "version": "1.4.0",
-      "integrityId": "urn:youdede:artifact:sha256:3616c823be385baca99a512adcb583c7073ab213cdb91bb3460eadb91d137eaa",
-      "digest": "3616c823be385baca99a512adcb583c7073ab213cdb91bb3460eadb91d137eaa",
+      "version": "1.6.0",
+      "integrityId": "urn:youdede:artifact:sha256:31d57476bbd0fc8b1838be6583756583cb691774b63fe46c08cb7a78ea1c9165",
+      "digest": "31d57476bbd0fc8b1838be6583756583cb691774b63fe46c08cb7a78ea1c9165",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -12049,8 +12205,8 @@
         },
         {
           "path": "artifacts/subagents/design/accessibility/accessibility-conformance-reviewer/artifact.json",
-          "bytes": 2400,
-          "sha256": "ac830ec494d06efe303cb463be67fd68b060fa0b4ea20a063249a653ea109860"
+          "bytes": 2616,
+          "sha256": "024349e1f9e28715738e459df185df8a05986d617f9313e93b3f69079b96cb3b"
         },
         {
           "path": "artifacts/subagents/design/accessibility/accessibility-conformance-reviewer/evaluations/behavioral.json",
@@ -12081,9 +12237,9 @@
     },
     {
       "artifactId": "subagent/design/accessibility/accessibility-journey-tester",
-      "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:b18c3a5fa2abed158f6085e5ffd2be29400f60811b6bb621720e83f0e28c6691",
-      "digest": "b18c3a5fa2abed158f6085e5ffd2be29400f60811b6bb621720e83f0e28c6691",
+      "version": "1.5.0",
+      "integrityId": "urn:youdede:artifact:sha256:0adb8bb706ae90f00c98159ad2980f4435506f9c9b663a1bfb0029c7a211d217",
+      "digest": "0adb8bb706ae90f00c98159ad2980f4435506f9c9b663a1bfb0029c7a211d217",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -12106,8 +12262,8 @@
         },
         {
           "path": "artifacts/subagents/design/accessibility/accessibility-journey-tester/artifact.json",
-          "bytes": 2480,
-          "sha256": "c71c7710ae6e3cc3a33f7e59f7fc60dfae106ebbb61ba171e41740f26c3b764c"
+          "bytes": 2696,
+          "sha256": "59fa0584a649eacc8b9a57871aa8c61596d6123f134f632ee202db0bbb5dcdd1"
         },
         {
           "path": "artifacts/subagents/design/accessibility/accessibility-journey-tester/evaluations/behavioral.json",

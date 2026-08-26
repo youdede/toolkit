@@ -11,23 +11,13 @@
   ],
   "members": [
     {
-      "artifactId": "skill/design/accessibility/plan-accessibility-conformance-evidence",
-      "role": "procedure",
+      "artifactId": "hook/design/authentication-access/authentication-accessibility-guard",
+      "role": "enforcement",
       "required": true
     },
     {
-      "artifactId": "skill/design/accessibility/test-screen-reader-journey",
-      "role": "verifier",
-      "required": true
-    },
-    {
-      "artifactId": "subagent/design/accessibility/accessibility-journey-tester",
-      "role": "specialist",
-      "required": true
-    },
-    {
-      "artifactId": "subagent/design/accessibility/accessibility-conformance-reviewer",
-      "role": "specialist",
+      "artifactId": "hook/design/keyboard-focus/focus-style-regression-guard",
+      "role": "enforcement",
       "required": true
     },
     {
@@ -36,8 +26,33 @@
       "required": true
     },
     {
-      "artifactId": "hook/design/keyboard-focus/focus-style-regression-guard",
-      "role": "enforcement",
+      "artifactId": "skill/design/accessibility/plan-accessibility-conformance-evidence",
+      "role": "procedure",
+      "required": true
+    },
+    {
+      "artifactId": "skill/design/accessibility/prepare-eaa-conformance-evidence",
+      "role": "collector",
+      "required": true
+    },
+    {
+      "artifactId": "skill/design/accessibility/test-screen-reader-journey",
+      "role": "verifier",
+      "required": true
+    },
+    {
+      "artifactId": "skill/design/accessibility/verify-cognitive-access-barriers",
+      "role": "verifier",
+      "required": true
+    },
+    {
+      "artifactId": "subagent/design/accessibility/accessibility-conformance-reviewer",
+      "role": "specialist",
+      "required": true
+    },
+    {
+      "artifactId": "subagent/design/accessibility/accessibility-journey-tester",
+      "role": "specialist",
       "required": true
     }
   ]

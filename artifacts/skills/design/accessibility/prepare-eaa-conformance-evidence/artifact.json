@@ -1,0 +1,78 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/design/accessibility/prepare-eaa-conformance-evidence",
+  "slug": "prepare-eaa-conformance-evidence",
+  "name": "Prepare EAA Conformance Evidence",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Map accessibility results to the requirement set and version an owner declared, keeping verified, asserted, stale and absent apart.",
+  "description": "Prepare the accessibility evidence a named owner needs for a European Accessibility Act decision, resolving each requirement's precondition and marking every one verified, asserted, stale, not applicable, exempt with assessment, or absent. Use before an accessibility statement, a supplier answer, or a conformity decision.",
+  "domain": "design",
+  "category": "accessibility",
+  "capabilities": [
+    "collect",
+    "plan"
+  ],
+  "problems": [
+    "accessibility-review",
+    "regulatory-evidence-assembly"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review",
+    "release"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "Youdede"
+  ],
+  "refuses": [
+    "It does not declare conformity, finalise a statement, or report an obligation as met.",
+    "It does not decide whether a law applies to the organisation, classify its role, or select the requirement set or its version on the owner's behalf.",
+    "It does not state a presumption of conformity as its own conclusion, nor report one from a version the owner has not shown to be cited in the Official Journal.",
+    "It does not present a supplier claim, a stale result, or a requirement excluded by precondition as verified evidence."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [
+      "hook/design/authentication-access/authentication-accessibility-guard",
+      "hook/design/keyboard-focus/focus-style-regression-guard",
+      "hook/design/semantic-markup/accessibility-attribute-regression-guard",
+      "skill/design/accessibility/plan-accessibility-conformance-evidence",
+      "skill/design/accessibility/test-screen-reader-journey",
+      "skill/design/accessibility/verify-cognitive-access-barriers",
+      "subagent/design/accessibility/accessibility-conformance-reviewer",
+      "subagent/design/accessibility/accessibility-journey-tester"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/accessibility-assurance"
+    ]
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  }
+}

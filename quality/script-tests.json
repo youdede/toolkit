@@ -7,6 +7,7 @@
       "artifactIds": [
         "hook/data/compatibility/schema-compatibility-guard",
         "hook/data/live-query-safety/database-query-mode-guard",
+        "hook/design/authentication-access/authentication-accessibility-guard",
         "hook/design/keyboard-focus/focus-style-regression-guard",
         "hook/design/semantic-markup/accessibility-attribute-regression-guard",
         "hook/development/assertion-integrity/test-assertion-removal-guard",
@@ -18,7 +19,9 @@
         "hook/operations/process-lifecycle/foreground-process-guard",
         "hook/security/deserialization/unsafe-deserialization-guard"
       ],
-      "testFiles": ["tests/hook-expansion-contracts.test.mjs"],
+      "testFiles": [
+        "tests/hook-expansion-contracts.test.mjs"
+      ],
       "coverage": {
         "allow": "reported false positives remain allowed without weakening the boundary",
         "deny-or-observe": "contract and orchestration guards own distinct deterministic boundaries",
@@ -37,7 +40,9 @@
         "hook/development/debugging/debug-artifact-guard",
         "hook/security/dependencies/dependency-change-guard"
       ],
-      "testFiles": ["tests/guard-expansion.test.mjs"],
+      "testFiles": [
+        "tests/guard-expansion.test.mjs"
+      ],
       "coverage": {
         "allow": "ignores project-authored",
         "deny-or-observe": "blocks direct lockfile edits and narrow unsafe flags",
@@ -54,7 +59,9 @@
         "hook/development/testing/test-integrity-guard",
         "hook/security/supply-chain/ci-trust-boundary-guard"
       ],
-      "testFiles": ["tests/hook-verification-boundaries.test.mjs"],
+      "testFiles": [
+        "tests/hook-verification-boundaries.test.mjs"
+      ],
       "coverage": {
         "allow": "allows existing suppressions",
         "deny-or-observe": "blocks only net-new findings",
@@ -75,7 +82,9 @@
         "hook/operations/observability/failure-evidence-guard",
         "hook/security/secrets/prompt-secret-guard"
       ],
-      "testFiles": ["tests/lifecycle-hooks.test.mjs"],
+      "testFiles": [
+        "tests/lifecycle-hooks.test.mjs"
+      ],
       "coverage": {
         "allow": "ordinary work",
         "deny-or-observe": "ruleId",
@@ -103,7 +112,9 @@
         "hook/security/network-control/firewall-policy-mutation-guard",
         "hook/security/transport-security/transport-security-regression-guard"
       ],
-      "testFiles": ["tests/hook-expansion-system.test.mjs"],
+      "testFiles": [
+        "tests/hook-expansion-system.test.mjs"
+      ],
       "coverage": {
         "allow": "allow boundary",
         "deny-or-observe": "block boundary",
@@ -120,7 +131,9 @@
         "hook/operations/git/protected-branch-guard",
         "hook/security/application-security/workspace-boundary-guard"
       ],
-      "testFiles": ["tests/hook-repository-boundaries.test.mjs"],
+      "testFiles": [
+        "tests/hook-repository-boundaries.test.mjs"
+      ],
       "coverage": {
         "allow": "allows contained native targets",
         "deny-or-observe": "blocks lexical traversal and absolute escape",
@@ -147,7 +160,9 @@
         "hook/security/lockfile-origins/lockfile-origin-guard",
         "hook/security/repository-links/symlink-publication-guard"
       ],
-      "testFiles": ["tests/hook-expansion-supply-chain.test.mjs"],
+      "testFiles": [
+        "tests/hook-expansion-supply-chain.test.mjs"
+      ],
       "coverage": {
         "allow": "preserve paired false positives",
         "deny-or-observe": "block their exact boundary",
@@ -164,7 +179,9 @@
         "hook/security/application-security/outbound-data-guard",
         "hook/security/secrets/sensitive-file-access-guard"
       ],
-      "testFiles": ["tests/hook-data-boundaries.test.mjs"],
+      "testFiles": [
+        "tests/hook-data-boundaries.test.mjs"
+      ],
       "coverage": {
         "allow": "permits downloads, static requests, reverse transfers, and local pipes",
         "deny-or-observe": "blocks file, stream, and local-to-remote transfer boundaries",
@@ -182,7 +199,9 @@
         "hook/security/application-security/shell-command-guard",
         "hook/security/secrets/commit-guard"
       ],
-      "testFiles": ["tests/hooks.test.mjs"],
+      "testFiles": [
+        "tests/hooks.test.mjs"
+      ],
       "coverage": {
         "allow": "preserves safe controls",
         "deny-or-observe": "blocks catastrophic commands",
@@ -200,7 +219,9 @@
         "skill/research/transcripts/extract-youtube-captions",
         "skill/writing/documentation/write-session-handoff"
       ],
-      "testFiles": ["tests/deterministic-helpers.test.mjs"],
+      "testFiles": [
+        "tests/deterministic-helpers.test.mjs"
+      ],
       "coverage": {
         "positive": "reports reproducible Git state without writing",
         "negative": "checks structure, names, placeholders, and links",
@@ -215,7 +236,9 @@
         "skill/operations/ci-cd/review-ci-workflow-change",
         "skill/writing/release-notes/write-release-notes-from-evidence"
       ],
-      "testFiles": ["tests/expansion-skills.test.mjs"],
+      "testFiles": [
+        "tests/expansion-skills.test.mjs"
+      ],
       "coverage": {
         "positive": "reports literal lines without YAML execution or semantic parsing",
         "negative": "findings, []",
@@ -225,8 +248,12 @@
     },
     {
       "id": "helper-schema-evolution",
-      "artifactIds": ["skill/data/schemas/review-schema-evolution"],
-      "testFiles": ["tests/schema-evolution-skill.test.mjs"],
+      "artifactIds": [
+        "skill/data/schemas/review-schema-evolution"
+      ],
+      "testFiles": [
+        "tests/schema-evolution-skill.test.mjs"
+      ],
       "coverage": {
         "positive": "reports stable structural signals without a compatibility verdict",
         "negative": "emits no signals for semantically reordered object keys and type arrays",
@@ -242,7 +269,9 @@
         "skill/operations/setup/author-guided-setup-wizard",
         "skill/writing/education/build-progressive-learning-exercises"
       ],
-      "testFiles": ["tests/helper-scripts-expansion.test.mjs"],
+      "testFiles": [
+        "tests/helper-scripts-expansion.test.mjs"
+      ],
       "coverage": {
         "positive": "assert.equal(valid.status, 0",
         "negative": "assert.equal(invalid.status, 1",
@@ -252,8 +281,12 @@
     },
     {
       "id": "helper-supply-chain",
-      "artifactIds": ["skill/security/supply-chain/review-supply-chain-change"],
-      "testFiles": ["tests/supply-chain-expansion.test.mjs"],
+      "artifactIds": [
+        "skill/security/supply-chain/review-supply-chain-change"
+      ],
+      "testFiles": [
+        "tests/supply-chain-expansion.test.mjs"
+      ],
       "coverage": {
         "positive": "reports only bounded observable npm manifest signals",
         "negative": "without parsing or executing YAML",
