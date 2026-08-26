@@ -4,7 +4,7 @@
   "id": "subagent/design/accessibility/accessibility-conformance-reviewer",
   "slug": "accessibility-conformance-reviewer",
   "name": "Accessibility Conformance Reviewer",
-  "version": "1.4.0",
+  "version": "1.6.0",
   "kind": "subagent",
   "summary": "Review a bounded interface change for evidence-led accessibility conformance risks and user barriers.",
   "description": "Review a supplied interface change against named accessibility criteria, user journeys, semantics, and available test evidence. Use before integration when a parent needs bounded read-only accessibility findings rather than implementation or certification.",
@@ -50,10 +50,13 @@
   ],
   "relationships": {
     "composesWith": [
+      "hook/design/authentication-access/authentication-accessibility-guard",
       "hook/design/keyboard-focus/focus-style-regression-guard",
       "hook/design/semantic-markup/accessibility-attribute-regression-guard",
       "skill/design/accessibility/plan-accessibility-conformance-evidence",
+      "skill/design/accessibility/prepare-eaa-conformance-evidence",
       "skill/design/accessibility/test-screen-reader-journey",
+      "skill/design/accessibility/verify-cognitive-access-barriers",
       "subagent/design/accessibility/accessibility-journey-tester"
     ],
     "conflictsWith": [],

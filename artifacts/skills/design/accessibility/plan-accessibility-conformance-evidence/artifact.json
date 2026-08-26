@@ -4,10 +4,10 @@
   "id": "skill/design/accessibility/plan-accessibility-conformance-evidence",
   "slug": "plan-accessibility-conformance-evidence",
   "name": "Plan Accessibility Conformance Evidence",
-  "version": "1.4.0",
+  "version": "1.6.0",
   "kind": "skill",
   "summary": "Plan accessibility evidence across user journeys, automation, keyboard, assistive technology, and human review.",
-  "description": "Plan or audit accessibility conformance evidence for a bounded product surface using requirements, critical journeys, semantic and visual checks, keyboard use, assistive technology, zoom, motion, forms, errors, and documented coverage gaps. Use before making an accessibility claim or release decision.",
+  "description": "Plan accessibility conformance evidence for a bounded product surface using requirements, critical journeys, semantic and visual checks, keyboard use, assistive technology, zoom, motion, forms, errors, and documented coverage gaps. Use before making an accessibility claim or release decision.",
   "domain": "design",
   "category": "accessibility",
   "capabilities": [
@@ -45,9 +45,12 @@
   },
   "relationships": {
     "composesWith": [
+      "hook/design/authentication-access/authentication-accessibility-guard",
       "hook/design/keyboard-focus/focus-style-regression-guard",
       "hook/design/semantic-markup/accessibility-attribute-regression-guard",
+      "skill/design/accessibility/prepare-eaa-conformance-evidence",
       "skill/design/accessibility/test-screen-reader-journey",
+      "skill/design/accessibility/verify-cognitive-access-barriers",
       "subagent/design/accessibility/accessibility-conformance-reviewer",
       "subagent/design/accessibility/accessibility-journey-tester"
     ],

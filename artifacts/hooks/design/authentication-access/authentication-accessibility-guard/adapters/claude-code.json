@@ -1,0 +1,32 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": [
+    "project"
+  ],
+  "files": [
+    {
+      "from": "targets/claude-code/authentication-accessibility-guard.mjs",
+      "to": "hooks/youdede/authentication-accessibility-guard.mjs",
+      "executable": true
+    }
+  ],
+  "settingsPatch": {
+    "hooks": {
+      "PreToolUse": [
+        {
+          "matcher": "Write|Edit|MultiEdit",
+          "description": "[youdede:authentication-accessibility-guard] Block edits that stop a password manager filling an authentication field or stop the user pasting into it",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "node \"{claudeRoot}/hooks/youdede/authentication-accessibility-guard.mjs\"",
+              "timeout": 10
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

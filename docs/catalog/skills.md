@@ -4,7 +4,7 @@
 
 A procedure an agent loads when a task matches. Each states the evidence it needs, the scope it will not widen into, and what it refuses to do.
 
-146 of them. Install one with `npx @youdede/toolkit add <slug> --target <runtime> --scope project`, or read what it refuses first with `npx @youdede/toolkit info <slug>`.
+148 of them. Install one with `npx @youdede/toolkit add <slug> --target <runtime> --scope project`, or read what it refuses first with `npx @youdede/toolkit info <slug>`.
 
 
 ## data
@@ -24,7 +24,9 @@ A procedure an agent loads when a task matches. Each states the evidence it need
 | Slug | What it does | Risk | Runtimes |
 | --- | --- | --- | --- |
 | `plan-accessibility-conformance-evidence` | Plan accessibility evidence across user journeys, automation, keyboard, assistive technology, and human review. | medium | all six |
+| `prepare-eaa-conformance-evidence` | Map accessibility results to the requirement set and version an owner declared, keeping verified, asserted, stale and absent apart. | high | all six |
 | `test-screen-reader-journey` | Test a bounded user journey with a real screen reader and evidence tied to interaction outcomes. | medium | all six |
+| `verify-cognitive-access-barriers` | Verify consistent help, redundant entry, and accessible authentication against an observed process walkthrough. | medium | all six |
 | `audit-design-system-consistency` | Audit whether rendered surfaces use a coherent design-system contract without mistaking a token inventory for user experience. | medium | all six |
 | `review-frontend-quality` | Audit web interfaces across behavior, accessibility, responsiveness, and performance. | low | all six |
 | `plan-evidence-based-design-research` | Plan decision-led design research with ethical recruitment, traceable evidence, and explicit limits on every claim. | medium | all six |

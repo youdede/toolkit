@@ -4,7 +4,7 @@
 
 A deterministic gate that inspects a command before it runs and blocks it. No model sits in the decision path, so the same input always produces the same verdict.
 
-56 of them. Install one with `npx @youdede/toolkit add <slug> --target <runtime> --scope project`, or read what it refuses first with `npx @youdede/toolkit info <slug>`.
+57 of them. Install one with `npx @youdede/toolkit add <slug> --target <runtime> --scope project`, or read what it refuses first with `npx @youdede/toolkit info <slug>`.
 
 
 ## data
@@ -19,6 +19,7 @@ A deterministic gate that inspects a command before it runs and blocks it. No mo
 
 | Slug | What it does | Risk | Runtimes |
 | --- | --- | --- | --- |
+| `authentication-accessibility-guard` | Block edits that stop a password manager filling an authentication field or stop the user pasting into it. | high | claude-code |
 | `focus-style-regression-guard` | Block newly invisible CSS focus states that have no visible replacement. | high | claude-code |
 | `accessibility-attribute-regression-guard` | Block net removal of explicit accessibility relationships from markup changes. | high | claude-code |
 

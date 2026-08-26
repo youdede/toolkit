@@ -4,7 +4,7 @@
   "id": "subagent/design/accessibility/accessibility-journey-tester",
   "slug": "accessibility-journey-tester",
   "name": "Accessibility Journey Tester",
-  "version": "1.3.0",
+  "version": "1.5.0",
   "kind": "subagent",
   "summary": "Verify a bounded user journey from supplied browser, keyboard, assistive-technology, and static evidence.",
   "description": "A read-only accessibility tester that reconciles supplied runtime observations with semantics and code while clearly separating tested behavior from unassessed criteria.",
@@ -48,10 +48,13 @@
   },
   "relationships": {
     "composesWith": [
+      "hook/design/authentication-access/authentication-accessibility-guard",
       "hook/design/keyboard-focus/focus-style-regression-guard",
       "hook/design/semantic-markup/accessibility-attribute-regression-guard",
       "skill/design/accessibility/plan-accessibility-conformance-evidence",
+      "skill/design/accessibility/prepare-eaa-conformance-evidence",
       "skill/design/accessibility/test-screen-reader-journey",
+      "skill/design/accessibility/verify-cognitive-access-barriers",
       "subagent/design/accessibility/accessibility-conformance-reviewer"
     ],
     "conflictsWith": [],

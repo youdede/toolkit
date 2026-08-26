@@ -1,0 +1,78 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/design/authentication-access/authentication-accessibility-guard",
+  "slug": "authentication-accessibility-guard",
+  "name": "Authentication Accessibility Guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block edits that stop a password manager filling an authentication field or stop the user pasting into it.",
+  "description": "Parses bounded markup and rejects changes that newly block paste on a credential field, disable its autofill, drop its autocomplete token, or add a password-manager opt-out attribute, each a documented WCAG 2.2 SC 3.3.8 failure condition.",
+  "domain": "design",
+  "category": "authentication-access",
+  "problems": [
+    "authentication-accessibility-regression"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "implementation",
+    "pre-commit"
+  ],
+  "risk": "high",
+  "license": "MIT",
+  "authors": [
+    "Youdede"
+  ],
+  "refuses": [
+    "It does not identify a credential field from a class, placeholder, or framework binding; only the password input type and a reserved autocomplete token are treated as evidence.",
+    "It does not report a paste block, disabled autofill, or manager opt-out that the inspected edit did not introduce.",
+    "It does not recognise every password manager's opt-out attribute, and it does not detect an alternative authentication method offered elsewhere.",
+    "It does not claim WCAG 3.3.8 conformance."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/authentication-accessibility-guard.mjs",
+        "runtime": "node",
+        "purpose": "Block edits that stop a password manager filling an authentication field or stop the user pasting into it.",
+        "sideEffects": "read-only"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  },
+  "capabilities": [
+    "enforce"
+  ],
+  "relationships": {
+    "composesWith": [
+      "hook/design/keyboard-focus/focus-style-regression-guard",
+      "hook/design/semantic-markup/accessibility-attribute-regression-guard",
+      "skill/design/accessibility/plan-accessibility-conformance-evidence",
+      "skill/design/accessibility/prepare-eaa-conformance-evidence",
+      "skill/design/accessibility/test-screen-reader-journey",
+      "skill/design/accessibility/verify-cognitive-access-barriers",
+      "subagent/design/accessibility/accessibility-conformance-reviewer",
+      "subagent/design/accessibility/accessibility-journey-tester"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/accessibility-assurance"
+    ]
+  },
+  "operational": {
+    "behavior": "enforcing",
+    "failurePolicy": "fail-closed",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  }
+}
