@@ -12,6 +12,10 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 
 - The `Protect main` ruleset no longer requires an approving review: only people with write access can merge, so the requirement never gated external contributions and only blocked the sole code owner's own pull requests. Pull requests, squash-only merges, signed commits, linear history, resolved review threads, and the `quality-gate` status check remain required.
 
+### Fixed
+
+- Documentation statistic checks now require the exact marker inventory for every managed file, so deleting, duplicating, renaming, or unbalancing one marker cannot silently bypass drift detection.
+
 ## 0.2.0 (2026-08-26)
 
 ### Added
