@@ -47,9 +47,9 @@ npx @youdede/toolkit add commit-guard --target claude-code --dry-run
 
 ## Six runtimes, honestly
 
-| | Claude Code | Codex | Gemini CLI | Copilot | Cursor | OpenCode |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
 <!-- stat-table:readme-matrix -->
+| | Claude Code | Codex | Gemini CLI | GitHub Copilot | Cursor | OpenCode |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | Skills (166) | 166 | 166 | 166 | 166 | 166 | 166 |
 | Hooks (57) | 57 | 22 | 22 | 0 | 22 | 22 |
 | Subagents (62) | 62 | 0 | 62 | 62 | 0 | 50 |
