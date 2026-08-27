@@ -11,11 +11,58 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { loadArtifacts, ROOT, validateRepository } from './lib/catalog.mjs';
 import { SUPPORTED_TARGETS, targetDefinition } from './lib/targets.mjs';
 
-const FILES = ['README.md', 'docs/targets.md', 'docs/publishing-checklist.md', 'docs/architecture.md', 'docs/install.md'];
 const KINDS = ['skill', 'hook', 'subagent'];
+const EXPECTED_MARKERS = {
+  'README.md': {
+    stat: { 'artifact-count': 1, 'evaluation-case-count': 1, 'hook-count': 2, 'skill-count': 2, 'subagent-count': 2 },
+    table: { 'readme-matrix': 1 },
+  },
+  'docs/targets.md': { stat: {}, table: { targets: 1 } },
+  'docs/publishing-checklist.md': { stat: { 'artifact-count': 2 }, table: {} },
+  'docs/architecture.md': { stat: {}, table: {} },
+  'docs/install.md': { stat: {}, table: {} },
+};
+const FILES = Object.keys(EXPECTED_MARKERS);
+
+function countMatches(content, pattern, keyPrefix = '') {
+  const counts = new Map();
+  for (const match of content.matchAll(pattern)) {
+    const key = `${keyPrefix}${match[1]}`;
+    counts.set(key, (counts.get(key) || 0) + 1);
+  }
+  return counts;
+}
+
+export function validateMarkerInventory(content, file) {
+  const expected = EXPECTED_MARKERS[file];
+  if (!expected) throw new Error(`${file}: no marker inventory declared`);
+
+  const scalar = countMatches(content, /<!-- stat:([a-z-]+(?::[a-z-]+)?) -->/g, 'stat:');
+  const tables = countMatches(content, /<!-- stat-table:([a-z-]+) -->/g, 'table:');
+  const actual = new Map([...scalar, ...tables]);
+  const declared = new Map([
+    ...Object.entries(expected.stat).map(([key, count]) => [`stat:${key}`, count]),
+    ...Object.entries(expected.table).map(([key, count]) => [`table:${key}`, count]),
+  ]);
+  const errors = [];
+  for (const key of [...new Set([...declared.keys(), ...actual.keys()])].sort()) {
+    const expectedCount = declared.get(key) || 0;
+    const actualCount = actual.get(key) || 0;
+    if (expectedCount !== actualCount) errors.push(`${key} expected ${expectedCount}, found ${actualCount}`);
+  }
+
+  const scalarClosings = (content.match(/<!-- \/stat -->/g) || []).length;
+  const tableClosings = (content.match(/<!-- \/stat-table -->/g) || []).length;
+  const scalarOpenings = [...scalar.values()].reduce((sum, count) => sum + count, 0);
+  const tableOpenings = [...tables.values()].reduce((sum, count) => sum + count, 0);
+  if (scalarOpenings !== scalarClosings) errors.push(`scalar marker openings ${scalarOpenings}, closings ${scalarClosings}`);
+  if (tableOpenings !== tableClosings) errors.push(`table marker openings ${tableOpenings}, closings ${tableClosings}`);
+  if (errors.length > 0) throw new Error(`${file}: invalid stat marker inventory: ${errors.join('; ')}`);
+}
 
 function computeStats() {
   const artifacts = loadArtifacts(ROOT);
@@ -87,29 +134,29 @@ function render(content, stats, file) {
   return replaced;
 }
 
-const check = process.argv.includes('--check');
-const stats = computeStats();
-let stale = 0;
-let markers = 0;
-for (const relative of FILES) {
-  const file = path.join(ROOT, relative);
-  const content = readFileSync(file, 'utf8');
-  markers += (content.match(/<!-- stat[:-]/g) || []).length;
-  const next = render(content, stats, relative);
-  if (next === content) continue;
+export function main(argv = process.argv.slice(2)) {
+  for (const option of argv) if (option !== '--check') throw new Error(`unknown argument '${option}'`);
+  const check = argv.includes('--check');
+  const stats = computeStats();
+  let stale = 0;
+  for (const relative of FILES) {
+    const file = path.join(ROOT, relative);
+    const content = readFileSync(file, 'utf8');
+    validateMarkerInventory(content, relative);
+    const next = render(content, stats, relative);
+    if (next === content) continue;
+    if (check) {
+      stale += 1;
+      process.stderr.write(`${relative}: documented figures are stale; run npm run docs:stats.\n`);
+    } else {
+      writeFileSync(file, next);
+      process.stdout.write(`Updated ${relative}.\n`);
+    }
+  }
   if (check) {
-    stale += 1;
-    process.stderr.write(`${relative}: documented figures are stale; run npm run docs:stats.\n`);
-  } else {
-    writeFileSync(file, next);
-    process.stdout.write(`Updated ${relative}.\n`);
+    if (stale > 0) process.exitCode = 1;
+    else process.stdout.write(`Documented figures match the ${stats['artifact-count']} artifact manifests.\n`);
   }
 }
-if (markers === 0) {
-  process.stderr.write('No stat markers found in any documented file; the marker set was removed or renamed.\n');
-  process.exit(1);
-}
-if (check) {
-  if (stale > 0) process.exit(1);
-  process.stdout.write(`Documented figures match the ${stats['artifact-count']} artifact manifests.\n`);
-}
+
+if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) main();
