@@ -77,7 +77,7 @@ Before the first public release, the accountable publisher must:
 
 1. Confirm the exact legal person or entity that owns or administers the `Youdede` copyright notice. Do not substitute an invented company name.
 2. Complete the planned namespace migration from the temporary private `udede/toolkit` repository to the canonical public `youdede/toolkit` repository, then update and verify every namespace reference together.
-3. Publish from a protected CI environment using npm trusted publishing or another provenance-capable OIDC flow, and create a signed release tag for the exact commit.
+3. Manually dispatch the fail-closed release workflow for a signed tag, using npm trusted publishing or another provenance-capable OIDC flow. Add an environment reviewer when the repository visibility and GitHub plan support it; never claim that approval while the control is unavailable.
 4. Publish the `catalog/integrity.json` root digest through the authenticated release page and verify it against the packed npm artifact.
 5. Confirm npm scope ownership, required two-factor authentication, and release approval authority.
 

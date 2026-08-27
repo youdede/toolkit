@@ -62,8 +62,10 @@ const required = [
   'scripts/lib/targets.mjs',
   'scripts/runtime/hook-command-bridge.mjs',
   'scripts/runtime/opencode-guard-plugin.js',
+  'scripts/lib/secret-scan.mjs',
   'scripts/validate-evaluations.mjs',
-  'scripts/validate-release-readiness.mjs'
+  'scripts/validate-release-readiness.mjs',
+  'scripts/verify-secrets.mjs'
 ];
 
 const packageManifest = JSON.parse(readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
