@@ -116,10 +116,15 @@ function targetsTable(stats) {
 // The README coverage matrix lists targets as columns, one row per kind.
 function readmeMatrix(stats) {
   const kinds = [['skill', 'Skills'], ['hook', 'Hooks'], ['subagent', 'Subagents']];
-  return kinds.map(([kind, label]) => {
+  const lines = [
+    `| | ${SUPPORTED_TARGETS.map((target) => targetDefinition(target).label).join(' | ')} |`,
+    `| --- | ${SUPPORTED_TARGETS.map(() => '---:').join(' | ')} |`,
+  ];
+  for (const [kind, label] of kinds) {
     const cells = SUPPORTED_TARGETS.map((target) => stats[`${kind}-count:${target}`]);
-    return `| ${label} (${stats[`${kind}-count`]}) | ${cells.join(' | ')} |`;
-  }).join('\n');
+    lines.push(`| ${label} (${stats[`${kind}-count`]}) | ${cells.join(' | ')} |`);
+  }
+  return lines.join('\n');
 }
 
 function render(content, stats, file) {

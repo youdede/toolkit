@@ -19,6 +19,20 @@ test('documented figures are generated, current, and drift is refused', () => {
   assert.doesNotMatch(generate.stdout, /Updated/);
 });
 
+test('the generated README matrix is a complete uninterrupted Markdown table', () => {
+  const readme = readFileSync(path.join(ROOT, 'README.md'), 'utf8');
+  const matrix = readme.match(
+    /<!-- stat-table:readme-matrix -->\n([\s\S]*?)\n<!-- \/stat-table -->/
+  )?.[1];
+  assert.ok(matrix, 'README matrix markers must delimit the generated table');
+
+  const lines = matrix.split('\n');
+  assert.match(lines[0], /^\| \| .+ \|$/);
+  assert.match(lines[1], /^\| --- \|(?: ---:\s*\|)+$/);
+  assert.equal(lines.length, 5);
+  assert.ok(lines.every((line) => line.startsWith('| ') && line.endsWith(' |')));
+});
+
 test('removing one stat marker is refused even when other markers remain', () => {
   const readme = readFileSync(path.join(ROOT, 'README.md'), 'utf8');
   const withoutOneSkillMarker = readme.replace(
