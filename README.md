@@ -1,4 +1,4 @@
-<img alt="Five inked comic panels: a hand placing the Youdede block into a slot, a chain breaking, agents fitting blocks together over a grid, and the word TOOLKIT across them" src="docs/assets/cover.jpg" width="100%">
+<img alt="Japanese-inspired AI Toolkit cover with a samurai, a coding robot, a wave, Mount Fuji, and a torii gate" src="docs/assets/cover.png" width="100%">
 
 # youdede toolkit: skills, hooks and subagents for coding agents
 
