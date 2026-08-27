@@ -15,7 +15,7 @@ short-lived branch
   -> versioned, provenance-backed release
 ```
 
-`main` is the only long-lived branch. Direct pushes, force pushes, merge commits, and branch deletion are blocked after the initial repository bootstrap. Pull requests require resolved conversations and a successful `quality-gate`. While there is one maintainer, the repository does not claim an independent approval: the required approval count is zero and the PR itself remains the durable review record.
+`main` is the only long-lived branch. Direct pushes, force pushes, merge commits, and branch deletion are blocked after the initial repository bootstrap; the ruleset's single bypass actor, the repository admin role, can act only through a pull request, never by direct push. Pull requests require resolved review threads and a successful `quality-gate`. While there is one maintainer, the repository does not claim an independent approval: the required approval count is zero and the PR itself remains the durable review record.
 
 ## Controls and evidence
 
@@ -39,12 +39,7 @@ Release tags use `vMAJOR.MINOR.PATCH`, must identify the exact package version, 
 
 ## Temporary private phase
 
-The current private repository is `udede/toolkit`. Before a public release or npm trusted-publisher setup, the maintainer will either rename the GitHub account or transfer the repository to the controlled `youdede` namespace, then update:
-
-- the Git remote;
-- `package.json`, `CITATION.cff`, README badges, and absolute links;
-- `CODEOWNERS` and security contact links;
-- the npm trusted-publisher repository identity.
+The current private repository is `udede/toolkit`. Before a public release or npm trusted-publisher setup, the maintainer will either rename the GitHub account or transfer the repository to the controlled `youdede` namespace, then update every namespace reference together; the [publishing checklist](publishing-checklist.md) lists the exact files.
 
 The repository must remain private until the full reachable history, Actions logs, issue content, and release metadata have been reviewed for publication. Making a private repository public exposes its complete reachable commit history.
 

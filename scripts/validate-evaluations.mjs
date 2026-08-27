@@ -427,7 +427,7 @@ export function validateResponseEnvelope(envelope, documents) {
       else cursor = position;
     }
     // Deterministic structure and forbidden-assertion checks decide the verdict, so the same
-    // response text always produces the same result. `expected.disposition` is not graded: it was
+    // response text always produces the same result. `expected.disposition` is not graded: a
     // response can honestly belong to two dispositions at once (refusing an embedded instruction
     // while also lacking inputs). The required sections already differ per disposition, so section
     // presence records which path was taken without asking the runner to label itself.

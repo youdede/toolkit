@@ -4,14 +4,16 @@ Support is declared per artifact. A missing adapter is an intentional refusal, n
 
 ## Coverage
 
+<!-- stat-table:targets -->
 | Target | Skills | Hooks | Subagents | Project root | User root |
 | --- | ---: | ---: | ---: | --- | --- |
-| Claude Code | 146 | 56 | 62 | `.claude` | `~/.claude` |
-| Codex | 146 | 22 | 0 | skills: `.agents`; hooks/agents: `.codex` | skills: `~/.agents`; hooks/agents: `~/.codex` |
-| Gemini CLI | 146 | 22 | 62 | `.gemini` | `~/.gemini` |
-| GitHub Copilot | 146 | 0 | 62 | `.github` | `$COPILOT_HOME` or `~/.copilot` |
-| Cursor | 146 | 22 | 0 | `.cursor` | `~/.cursor` |
-| OpenCode | 146 | 22 | 50 | `.opencode` | `~/.config/opencode` |
+| Claude Code | 166 | 57 | 62 | `.claude` | `~/.claude` |
+| Codex | 166 | 22 | 0 | skills: `.agents`; hooks/agents: `.codex` | skills: `~/.agents`; hooks/agents: `~/.codex` |
+| Gemini CLI | 166 | 22 | 62 | `.gemini` | `~/.gemini` |
+| GitHub Copilot | 166 | 0 | 62 | `.github` | `$COPILOT_HOME` or `~/.copilot` |
+| Cursor | 166 | 22 | 0 | `.cursor` | `~/.cursor` |
+| OpenCode | 166 | 22 | 50 | `.opencode` | `~/.config/opencode` |
+<!-- /stat-table -->
 
 Every skill uses the runtime's native `skills/<slug>/SKILL.md` location and carries its scripts or references through the same installation. Only Codex receives `agents/openai.yaml`.
 

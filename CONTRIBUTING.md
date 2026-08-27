@@ -59,4 +59,4 @@ Do not submit scraped prompt dumps, artifacts with unknown licenses, obfuscated 
 - Include exact validation commands and distinguish observed evidence from inference.
 - Add an architecture decision record under `docs/decisions/` when a durable tradeoff changes.
 
-`main` accepts pull requests only, uses squash merging, requires the `quality-gate` status, rejects force pushes and deletions, and maintains linear signed history. Approval count is intentionally zero while the project has a single maintainer; self-review is not represented as independent review.
+`main` accepts pull requests only, uses squash merging, requires signed commits, linear history, resolved review threads, and the `quality-gate` status check, and rejects force pushes and deletions. Approval count is intentionally zero while the project has a single maintainer; self-review is not represented as independent review.

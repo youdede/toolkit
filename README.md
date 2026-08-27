@@ -6,7 +6,7 @@
 
 [![validate](https://github.com/udede/toolkit/actions/workflows/validate.yml/badge.svg)](https://github.com/udede/toolkit/actions/workflows/validate.yml)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![artifacts](https://img.shields.io/badge/artifacts-267-2F8F83.svg)](catalog/artifacts.json)
+[![artifacts](https://img.shields.io/badge/artifacts-285-2F8F83.svg)](catalog/artifacts.json)
 [![runtimes](https://img.shields.io/badge/runtimes-6-2F8F83.svg)](docs/targets.md)
 
 ---
@@ -19,12 +19,12 @@ You cannot review every action it takes. So the rules have to live where the age
 
 ## What this is
 
-A catalog of 264 things you can install into a coding agent, one command each:
+A catalog of <!-- stat:artifact-count -->285<!-- /stat --> things you can install into a coding agent, one command each:
 
-- **57 hooks** — deterministic gates that inspect a command before it runs and block it. No model in the decision path. `commit-guard` scans staged blobs for secrets. `protected-branch-guard` refuses a force push to `main`.
-- **148 skills** — procedures an agent loads when a task matches. Each one states what it does, what evidence it requires, and what it refuses to do.
-- **62 subagents** — specialists with a deliberately narrow brief, no authority to edit or approve anything, and a required section for what they could not verify.
-- **7 packs** — the above composed into one outcome, like `release-readiness` or `secure-agent-boundaries`.
+- **<!-- stat:skill-count -->166<!-- /stat --> skills**: procedures an agent loads when a task matches. Each one states what it does, what evidence it requires, and what it refuses to do.
+- **<!-- stat:hook-count -->57<!-- /stat --> hooks**: deterministic gates that inspect a command before it runs and block it. No model in the decision path. `commit-guard` scans staged blobs for secrets. `protected-branch-guard` refuses a force push to `main`.
+- **<!-- stat:subagent-count -->62<!-- /stat --> subagents**: specialists with a deliberately narrow brief, no authority to edit or approve anything, and a required section for what they could not verify.
+- **7 packs**: the above composed into one outcome, like `release-readiness` or `secure-agent-boundaries`.
 
 Everything is MIT, plain text, and inspectable before install.
 
@@ -48,12 +48,14 @@ npx @youdede/toolkit add commit-guard --target claude-code --dry-run
 ## Six runtimes, honestly
 
 | | Claude Code | Codex | Gemini CLI | Copilot | Cursor | OpenCode |
-| --- | --- | --- | --- | --- | --- | --- |
-| Skills | yes | yes | yes | yes | yes | yes |
-| Subagents | yes | yes | yes | yes | — | yes |
-| Hooks | yes | yes | yes | — | — | partial |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+<!-- stat-table:readme-matrix -->
+| Skills (166) | 166 | 166 | 166 | 166 | 166 | 166 |
+| Hooks (57) | 57 | 22 | 22 | 0 | 22 | 22 |
+| Subagents (62) | 62 | 0 | 62 | 62 | 0 | 50 |
+<!-- /stat-table -->
 
-Support is capability-specific, not cosmetic. A deterministic gate is withheld from a runtime whose event or failure contract is not equivalent, because a gate that silently fails open is worse than no gate. The exact matrix is in [docs/targets.md](docs/targets.md).
+A count below the total is a refusal, not a gap. An artifact is withheld from a runtime whose event, permission, or failure contract is not equivalent, because a gate that silently fails open is worse than no gate. [docs/targets.md](docs/targets.md) explains every withheld adapter.
 
 ## Browse the catalog
 
@@ -61,9 +63,9 @@ Every artifact is listed, with what it does and which runtimes carry it, so you 
 
 | | | |
 | --- | --- | --- |
-| [Skills](docs/catalog/skills.md) | 146 | Procedures an agent loads when a task matches |
-| [Hooks](docs/catalog/hooks.md) | 56 | Deterministic gates that block a command before it runs |
-| [Subagents](docs/catalog/subagents.md) | 62 | Specialists with a narrow brief and no authority to act |
+| [Skills](docs/catalog/skills.md) | <!-- stat:skill-count -->166<!-- /stat --> | Procedures an agent loads when a task matches |
+| [Hooks](docs/catalog/hooks.md) | <!-- stat:hook-count -->57<!-- /stat --> | Deterministic gates that block a command before it runs |
+| [Subagents](docs/catalog/subagents.md) | <!-- stat:subagent-count -->62<!-- /stat --> | Specialists with a narrow brief and no authority to act |
 | [Packs](docs/catalog/packs.md) | 7 | The above composed into one outcome |
 
 Those pages are generated from the catalog and checked by the build, so they cannot drift from what the repository contains.
@@ -81,14 +83,14 @@ The [artifact catalog](catalog/artifacts.json) and [taxonomy](catalog/taxonomy.j
 
 ## What "tested" means here
 
-Most prompt collections are tested by having been read. This one carries evidence, and the evidence states its own limits.
+The catalog carries evidence, and the evidence states its own limits.
 
-- **890 behavioral cases.** Every prompt-bearing artifact declares positive, negative, malformed, and boundary cases. Each case names the sections a reply must carry, the phrases it must never assert, and the evidence it must supply.
+- **<!-- stat:evaluation-case-count -->968<!-- /stat --> behavioral cases.** Every prompt-bearing artifact declares positive, negative, malformed, and boundary cases. Each case names the sections a reply must carry, the phrases it must never assert, and the evidence it must supply.
 - **Deterministic gates are tested as programs.** Every hook has executable allow, block, malformed, oversized, false-positive, and process-exit tests. `npm test` runs them.
 - **Reproducible integrity.** `catalog/integrity.json` is a per-artifact checksum attestation regenerated byte-identically from the sources. `npx @youdede/toolkit verify-integrity` compares what you installed against it.
 - **A release gate that can say no.** `npm run check:readiness` refuses to report publishable on stale evidence, incomplete coverage, or a weakened sampling policy.
 
-What that evidence does **not** claim: that the catalog is semantically proven. A passing run is a passing run. The receipt records its own limitations, including the ones that are uncomfortable, and [docs/release-readiness.md](docs/release-readiness.md) explains why `portfolioSemanticPass` is permanently `false`.
+What that evidence does **not** claim: that the catalog is semantically proven. A passing run is a passing run. The receipt records its own limitations, and [docs/release-readiness.md](docs/release-readiness.md) explains why `portfolioSemanticPass` is permanently `false`.
 
 ## What every artifact promises
 
@@ -104,13 +106,11 @@ That last one is not decoration. An artifact that cannot say what it will return
 
 ## Install locations
 
-Roots are resolved by target, scope, and kind. Codex skills land in `.agents`, Codex hooks in `.codex`. Hooks stay project-scoped except for OpenCode's native local-plugin adapter. Use `--scope user` only where the adapter exposes a personal installation. Details in [docs/install.md](docs/install.md).
-
-Every adapter path is validated so it cannot escape the install root, and `remove` restores exactly what it replaced.
+Roots are resolved by target, scope, and kind, and the CLI rejects a target or scope the artifact's adapter does not declare. Every adapter path is validated so it cannot escape the install root, and `remove` restores exactly what it replaced. Paths, scopes, and collision rules are in [docs/install.md](docs/install.md).
 
 ## Contributing
 
-Read [docs/authoring.md](docs/authoring.md) first: it is five rules, and an artifact that breaks one is rejected by the build rather than by a reviewer. Then [CONTRIBUTING.md](CONTRIBUTING.md) and [docs/governance.md](docs/governance.md).
+Read [docs/authoring.md](docs/authoring.md) first: it is six rules, and an artifact that breaks one is rejected by the build rather than by a reviewer. Then [CONTRIBUTING.md](CONTRIBUTING.md) and [docs/governance.md](docs/governance.md).
 
 ```bash
 npm run check       # structure, contracts, catalog, integrity, legal, package, tests

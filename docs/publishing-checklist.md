@@ -9,9 +9,12 @@ Nothing here lowers a gate. `npm run check` and `npm run check:readiness` still 
 
 ## Applying decisions 1 and 2
 
-Both are one-line decisions with a wide blast radius: the holder string appears in 278 files and the
-namespace in 13. [`scripts/set-publisher-identity.mjs`](../scripts/set-publisher-identity.mjs) applies
-either or both in one pass, over tracked files only, and refuses to run without an explicit value.
+Both are one-line decisions with a wide blast radius: the holder string `Youdede` appears in over
+300 tracked files, including the `authors` field of all <!-- stat:artifact-count -->285<!-- /stat --> `artifact.json` manifests, and the
+namespace in the five files listed under step 2. [`scripts/set-publisher-identity.mjs`](../scripts/set-publisher-identity.mjs) applies either or
+both in one pass, over tracked files only, and refuses to run without an explicit value. Its
+`--holder` pass still targets the retired `youdede contributors` placeholder, so update its
+`PLACEHOLDER_HOLDER` constant to `Youdede` in the same change before renaming the holder.
 
 ```bash
 node scripts/set-publisher-identity.mjs --dry-run --holder "<exact legal name>" --owner "<github org>"
@@ -22,19 +25,20 @@ Check the printed file list, drop `--dry-run`, then run `npm run catalog`, `npm 
 
 ## 1. Name the copyright holder
 
-`LICENSE`, `NOTICE` and `CITATION.cff` all carry "youdede contributors". That phrase identifies no
-legal person, so it cannot answer a licence or ownership question.
+`LICENSE`, `NOTICE` and `CITATION.cff` all carry `Youdede`. Until it is confirmed which legal person
+or registered company that names, it cannot answer a licence or ownership question.
 
 Decide which is true, then make every file agree:
 
 - an individual, named in full; or
 - a registered company, with its exact registered name.
 
-Do not substitute an invented company name. `scripts/verify-legal.mjs` asserts the current string,
-so update that check in the same change.
+If `Youdede` already is that exact name, record the confirmation and change nothing. Do not
+substitute an invented company name. `scripts/verify-legal.mjs` asserts the current string, so
+update that check in the same change.
 
 **Files to update together:** `LICENSE`, `NOTICE`, `CITATION.cff`, `scripts/verify-legal.mjs`, and
-the `authors` field of all 264 `artifact.json` manifests.
+the `authors` field of all <!-- stat:artifact-count -->285<!-- /stat --> `artifact.json` manifests.
 
 ## 2. Migrate the namespace
 
@@ -70,17 +74,19 @@ In repository settings create an environment named `npm-publish` and add the acc
 as a required reviewer. The `publish` job targets that environment, so a human approves each
 release after the gates pass and before anything reaches the registry.
 
-Keep `bypass_actors` empty in `.github/rulesets/main.json`.
+The only `bypass_actors` entry in [`.github/rulesets/main.json`](../.github/rulesets/main.json)
+grants the repository admin role a pull-request-mode bypass. Do not add any other bypass actor.
 
 ## 5. Tag, publish, then attest
 
 ```bash
-git tag -s v0.1.0 -m "youdede toolkit 0.1.0"
-git push origin v0.1.0
+git tag -s v0.2.0 -m "youdede toolkit 0.2.0"
+git push origin v0.2.0
 ```
 
-The tag must be signed and annotated, and its name must equal the `package.json` version. The
-workflow verifies both and fails otherwise.
+The tag must be signed and annotated, its name must equal the `package.json` version, and
+`CHANGELOG.md` must document that version. The workflow verifies all three, checking the signature
+against `.github/allowed-signers`, and fails otherwise.
 
 After publishing, take the root digest printed by the job and put it on the authenticated GitHub
 release page. A reader can then compare it against the packed npm artifact:

@@ -53,7 +53,7 @@ The framework does not generate responses. To check an output produced elsewhere
 node scripts/validate-evaluations.mjs --responses ./responses.json
 ```
 
-The response checker is deterministic: the same response text always produces the same verdict. It fails a response when a required section is missing as a Markdown heading, or when a forbidden claim or action appears. It limits a response file to 1 MB and never starts a subprocess, contacts a service, or executes artifact code.
+The response checker is deterministic: the same response text always produces the same verdict. It fails a response when a required section is missing as a Markdown heading, or when the response asserts a forbidden claim or action; a mention that is negated, refused, or attributed to a reported source is not counted as an assertion. It limits a response file to 1 MB and never starts a subprocess, contacts a service, or executes artifact code.
 
 Two fields are deliberately not graded, and the reason matters when reading a result.
 
