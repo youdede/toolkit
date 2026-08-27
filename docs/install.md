@@ -3,7 +3,7 @@
 ## Commands
 
 ```bash
-youdede-toolkit list [--kind skill|hook|subagent] [--domain value] [--capability value] [--problem value] [--framework value]
+youdede-toolkit list [--kind skill|hook|subagent] [--target value] [--domain|--category|--capability|--problem|--framework|--language|--lifecycle|--risk|--execution value]
 youdede-toolkit info <id-or-slug>
 youdede-toolkit packs
 youdede-toolkit pack-info <id-or-slug>
@@ -17,13 +17,13 @@ youdede-toolkit verify-integrity [id-or-slug] [--json]
 
 Short slugs work only when unique. A full id is always unambiguous.
 
-Packs compose procedures, specialists, and lifecycle gates without changing the independent install contract of any member. Required members must share the requested target and scope. Installation plans every member before the first write; direct and pack ownership are tracked separately so pack removal preserves an artifact that was also installed directly.
+Packs compose procedures, specialists, and lifecycle gates without changing the independent install contract of any member. Required members must share the requested target and scope, and installation plans every member before the first write. Ownership and rollback guarantees are described in [architecture.md](architecture.md).
 
 Use `--dry-run` before installation to resolve the adapter, validate collisions, and list file and settings mutations without writing anything. Combine it with `--json` to receive stable structured output including payload sizes and SHA-256 digests.
 
 ## Scope
 
-Project scope resolves from `--cwd` or the current directory. Roots are selected by target, scope, and artifact kind rather than by target alone. Most runtimes use one native root; Codex intentionally splits skills into `.agents` and hooks or future custom agents into `.codex`. Personal roots vary by runtime. `doctor` aggregates every active component root, while install and removal mutate only the root owned by the selected artifact. The CLI rejects a target or scope not declared by the artifact adapter. See [targets.md](targets.md) for paths and coverage.
+Project scope resolves from `--cwd` or the current directory. Roots are selected by target, scope, and artifact kind rather than by target alone; [targets.md](targets.md) lists the per-target project and user roots. `doctor` aggregates every active component root, while install and removal mutate only the root owned by the selected artifact. The CLI rejects a target or scope not declared by the artifact adapter.
 
 ## Existing files
 

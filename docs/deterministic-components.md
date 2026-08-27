@@ -54,17 +54,23 @@ Every enforceable hook has one protected boundary and a deterministic policy cor
 
 Relevant malformed, oversized, ambiguous, incomplete, or failed inspections block when the artifact explicitly promises that boundary. Irrelevant events and absent optional inputs allow. No hook executes submitted shell text, calls an LLM, downloads a runtime dependency, relies on hook ordering, or reads an agent-writable exception file as proof of human approval.
 
-Claude Code, Gemini CLI, and Cursor adapters use target-native event names, matchers, time units, ownership markers, and blocking semantics. OpenCode adapters are limited to the verified `tool.execute.before` shell tranche. Repository validation rejects wildcard enforcement matchers, unbounded timeouts, unsupported events, and commands that do not resolve the installed payload. Tests exercise the pure decision, native-shaped envelopes, real process or plugin blocking, malformed input, false-positive controls, and independent install/uninstall.
+Claude Code, Codex, Gemini CLI, and Cursor adapters use target-native event names, matchers, time units, ownership markers, and blocking semantics; [targets.md](targets.md) records each runtime's registration format. OpenCode adapters are limited to the verified `tool.execute.before` shell tranche. Repository validation rejects wildcard enforcement matchers, unbounded timeouts, unsupported events, and commands that do not resolve the installed payload. Tests exercise the pure decision, native-shaped envelopes, real process or plugin blocking, malformed input, false-positive controls, and independent install/uninstall.
 
-## Current hybrid examples
+## Current hybrid skills
+
+Twelve skills are hybrid today:
 
 - `extract-youtube-captions`: deterministic json3 entity decoding and rolling-caption de-duplication;
 - `write-session-handoff`: read-only Git revision and working-state collection;
-- `author-effective-agent-skill`: structural, metadata, placeholder, and local-link validation.
+- `author-effective-agent-skill`: structural, metadata, placeholder, and local-link validation;
 - `review-database-migration-plan`: bounded, comment-aware classification of conservative SQL risk signals;
 - `review-ci-workflow-change`: line-level workflow signal collection without parsing or executing YAML;
-- `write-release-notes-from-evidence`: bounded read-only Git range, commit, and changed-file collection.
+- `write-release-notes-from-evidence`: bounded read-only Git range, commit, and changed-file collection;
 - `review-schema-evolution`: bounded JSON Schema structural signals with an explicit `not-assessed` verdict;
-- `review-supply-chain-change`: offline inventory of bounded manifest, lockfile, lifecycle-script, and workflow-reference signals.
+- `review-supply-chain-change`: offline inventory of bounded manifest, lockfile, lifecycle-script, and workflow-reference signals;
+- `enforce-typescript-module-boundaries`: static scan of cross-package deep-import forms under a caller-supplied package root;
+- `decompose-dependent-work-slices`: work-item identifier, dependency, acyclicity, order, and ready-frontier validation;
+- `author-guided-setup-wizard`: static validation of Bash syntax, secret-handling hazards, confirmation gates, and declared stage count;
+- `build-progressive-learning-exercises`: section and exercise identifier, prerequisite, sequence, variant, and objective validation.
 
 Hooks are deterministic by definition. Subagents remain prompt-mode until a reusable checker can cover part of their brief without reducing review quality; their ordinary tool calls alone do not count as bundled deterministic execution.

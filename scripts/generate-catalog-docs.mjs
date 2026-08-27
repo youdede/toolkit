@@ -6,7 +6,7 @@
 // reader can browse the repository without installing anything or running a command.
 //
 // They are generated from catalog/artifacts.json, never edited, and --check fails the build when
-// they drift. A hand-maintained index of 264 artifacts is wrong within a month, and a wrong index
+// they drift. A hand-maintained index of 285 artifacts is wrong within a month, and a wrong index
 // is worse than none: it sends a reader looking for something that moved.
 
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';

@@ -4,7 +4,7 @@
 
 A procedure an agent loads when a task matches. Each states the evidence it needs, the scope it will not widen into, and what it refuses to do.
 
-148 of them. Install one with `npx @youdede/toolkit add <slug> --target <runtime> --scope project`, or read what it refuses first with `npx @youdede/toolkit info <slug>`.
+166 of them. Install one with `npx @youdede/toolkit add <slug> --target <runtime> --scope project`, or read what it refuses first with `npx @youdede/toolkit info <slug>`.
 
 
 ## data
@@ -28,8 +28,26 @@ A procedure an agent loads when a task matches. Each states the evidence it need
 | `test-screen-reader-journey` | Test a bounded user journey with a real screen reader and evidence tied to interaction outcomes. | medium | all six |
 | `verify-cognitive-access-barriers` | Verify consistent help, redundant entry, and accessible authentication against an observed process walkthrough. | medium | all six |
 | `audit-design-system-consistency` | Audit whether rendered surfaces use a coherent design-system contract without mistaking a token inventory for user experience. | medium | all six |
+| `establish-design-tokens` | Define a tiered, themeable design token layer with naming rules and a migration path off hardcoded values. | low | all six |
+| `govern-design-system-evolution` | Plan design system governance with ownership, contribution, versioning, deprecation, and adoption tracking. | low | all six |
+| `specify-component-contracts` | Specify components with exhaustive states, variants, and usage rules engineering can build without interpretation. | low | all six |
 | `review-frontend-quality` | Audit web interfaces across behavior, accessibility, responsiveness, and performance. | low | all six |
+| `specify-engineering-handoff` | Package a design into a token-referenced, state-complete spec and verify the build against it. | low | all six |
+| `design-form-experience` | Author form structure, validation, and recovery so people finish data entry with confidence. | low | all six |
+| `design-interface-feedback` | Author timing budgets, waiting states, and failure feedback so every action earns an honest acknowledgment. | low | all six |
+| `design-navigation-and-search` | Specify navigation patterns, menu ordering, wayfinding state, and search behavior from evidence about structure, platform, and tasks. | low | all six |
+| `design-onboarding-journey` | Design a first-run journey that reaches the activation moment fast, with minimal setup, honest progress, and measurable outcomes. | low | all six |
+| `design-for-localization` | Turn locale change into explicit layout and content constraints for growth, direction, formats, and meaning. | low | all six |
+| `map-experience-journeys` | Author journey maps, experience maps, service blueprints, or user flows from evidence, with unsupported stages tagged as assumptions. | medium | all six |
 | `plan-evidence-based-design-research` | Plan decision-led design research with ethical recruitment, traceable evidence, and explicit limits on every claim. | medium | all six |
+| `synthesize-user-research-evidence` | Turn raw research sessions into clustered, traceable findings that preserve disagreement and separate observation from interpretation. | medium | all six |
+| `design-responsive-behavior` | Specify content-driven breakpoints, reflow, and input adaptation as testable behavior per viewport range. | low | all six |
+| `frame-design-direction` | Frame a design effort with an evidenced problem, ranked principles, a chosen opportunity, and owned measures. | low | all six |
+| `structure-information-architecture` | Organize content into a findable structure with evidenced groupings, tested labels, and task walkthroughs. | low | all six |
+| `compose-visual-layout` | Compose density, grid, spacing, alignment, grouping, emphasis, and depth for a screen, each choice justified by content priority. | low | all six |
+| `critique-ui-surface` | Critique a rendered screen against explicit visual criteria and return a prioritized, evidence-backed fix list. | low | all six |
+| `establish-color-system` | Define perceptual color scales, semantic roles, state colors, dark scheme derivation, and theme constraints with computed contrast. | low | all six |
+| `establish-typography-system` | Define a type scale with per-range ratios, role assignments, reading comfort rules, and fluid responsive type behavior. | low | all six |
 
 ## development
 

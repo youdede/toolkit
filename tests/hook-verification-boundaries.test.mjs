@@ -22,6 +22,11 @@ import {
   scanTestIntegrity
 } from '../artifacts/hooks/development/testing/test-integrity-guard/targets/claude-code/test-integrity-guard.mjs';
 
+// The guards prefer CLAUDE_PROJECT_DIR over the payload cwd, so a value
+// inherited from a Claude Code hook would redirect every fixture at the real
+// repository. Clear it so the suite is hermetic wherever it runs.
+delete process.env.CLAUDE_PROJECT_DIR;
+
 const ROOT = path.resolve(import.meta.dirname, '..');
 const CI_SCRIPT = path.join(ROOT, 'artifacts/hooks/security/supply-chain/ci-trust-boundary-guard/targets/claude-code/ci-trust-boundary-guard.mjs');
 const TEST_SCRIPT = path.join(ROOT, 'artifacts/hooks/development/testing/test-integrity-guard/targets/claude-code/test-integrity-guard.mjs');

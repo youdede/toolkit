@@ -57,7 +57,7 @@ export function elements(text) {
 
 // WCAG 2.2 SC 3.3.8 concerns authentication steps. Only two markers name a credential field
 // without inference: the password input type, and an autocomplete token reserved for credentials.
-// A field identified by class or placeholder is a guess, so this guard leaves it alone.
+// A field identified only by class names or visible hint text is a guess, so this guard leaves it alone.
 const CREDENTIAL_TOKEN = /\b(?:username|current-password|new-password|one-time-code)\b/;
 export function credential(element) {
   if (!element || element.tag !== 'input') return false;

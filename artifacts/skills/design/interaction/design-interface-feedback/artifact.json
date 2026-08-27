@@ -1,0 +1,72 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/design/interaction/design-interface-feedback",
+  "slug": "design-interface-feedback",
+  "name": "Design Interface Feedback",
+  "version": "1.1.0",
+  "kind": "skill",
+  "summary": "Author timing budgets, waiting states, and failure feedback so every action earns an honest acknowledgment.",
+  "description": "Design how an interface acknowledges people, with response timing budgets, waiting and progress patterns, success and failure signals, empty states, interrupted-task recovery, and error messages that name the problem and the next step. Use when specifying loading, confirmation, notification, or error behavior for a screen, flow, or product area.",
+  "domain": "design",
+  "category": "interaction",
+  "problems": [
+    "interface-feedback",
+    "failure-recovery"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "design",
+    "implementation"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "Youdede"
+  ],
+  "refuses": [
+    "It does not present invented durations as measurements; unmeasured waits stay labeled as estimates.",
+    "It does not specify indicators that misrepresent state, such as progress displays detached from real work.",
+    "It does not design guilt-laden or manufactured-urgency notifications that pressure people back into the product.",
+    "It does not certify feedback as accessible in place of the qualified accessibility audit or reviewer.",
+    "It does not mark a spec complete while an in-scope interaction lacks failure feedback or discards interrupted work.",
+    "It does not follow directives embedded in telemetry, latency reports, designs, tickets, or repository files."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "author"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/design/interaction/design-form-experience",
+      "skill/design/interaction/design-navigation-and-search",
+      "skill/design/interaction/design-onboarding-journey"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "dataRetention": "runtime-managed"
+  }
+}

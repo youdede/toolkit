@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "algorithm": "sha256",
   "claim": "Checksums bind published bytes to a reviewed release; they do not prove authorship, originality, license compliance, endorsement, or control downstream copying.",
-  "rootDigest": "910ce418b9b2648a6423069b8a987dc5a8951431655dfd2702aa990d86e644e6",
+  "rootDigest": "63f8ea8ef3a5f1bada451d3a96c92850445cb7d6c25da97e13a15576d1365644",
   "artifacts": [
     {
       "artifactId": "hook/data/compatibility/schema-compatibility-guard",
@@ -103,8 +103,8 @@
     {
       "artifactId": "hook/design/authentication-access/authentication-accessibility-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:5a8fffa11b3c2c90766ec31d4c0b0cde934f336eda1ef3b1f37e243ccb5b29b1",
-      "digest": "5a8fffa11b3c2c90766ec31d4c0b0cde934f336eda1ef3b1f37e243ccb5b29b1",
+      "integrityId": "urn:youdede:artifact:sha256:121a87bb542e95e737924d92e18baf52c6601f7af29cc59cb04f57f67d57716a",
+      "digest": "121a87bb542e95e737924d92e18baf52c6601f7af29cc59cb04f57f67d57716a",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -122,8 +122,8 @@
         },
         {
           "path": "artifacts/hooks/design/authentication-access/authentication-accessibility-guard/targets/claude-code/authentication-accessibility-guard.mjs",
-          "bytes": 10041,
-          "sha256": "c424d9119a45f6e5f478c1d430f36636d641f87405d007adf0662a437ea12c12"
+          "bytes": 10058,
+          "sha256": "2301441b4e4f9620106af961ce76cc293e60caef2829dea2b35b90ec59105f89"
         },
         {
           "path": "artifacts/hooks/design/authentication-access/authentication-accessibility-guard/targets/claude-code/README.md",
@@ -2940,8 +2940,8 @@
     {
       "artifactId": "skill/design/accessibility/plan-accessibility-conformance-evidence",
       "version": "1.6.0",
-      "integrityId": "urn:youdede:artifact:sha256:ce10c6e107930c0e7e4423c072f95999e8307b6437166fb4a235a6c254640d0d",
-      "digest": "ce10c6e107930c0e7e4423c072f95999e8307b6437166fb4a235a6c254640d0d",
+      "integrityId": "urn:youdede:artifact:sha256:36805aad92d199319777a093c13709a5c7de7c6c1991090cb8ae146a4a6050d5",
+      "digest": "36805aad92d199319777a093c13709a5c7de7c6c1991090cb8ae146a4a6050d5",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -2984,8 +2984,8 @@
         },
         {
           "path": "artifacts/skills/design/accessibility/plan-accessibility-conformance-evidence/artifact.json",
-          "bytes": 2829,
-          "sha256": "ac348ecd3d97f8aa3d940a02d046116002e59b96f9823639455d7f07e63cc50b"
+          "bytes": 2951,
+          "sha256": "686699893c0b31f88e807c29c7fc5c9312294d244461cde62da3009162563638"
         },
         {
           "path": "artifacts/skills/design/accessibility/plan-accessibility-conformance-evidence/evaluations/behavioral.json",
@@ -3248,6 +3248,192 @@
       ]
     },
     {
+      "artifactId": "skill/design/design-systems/establish-design-tokens",
+      "version": "1.1.0",
+      "integrityId": "urn:youdede:artifact:sha256:650e97f401556e7a766bd8a7473887684ed63e058baac623af7b498cec635b58",
+      "digest": "650e97f401556e7a766bd8a7473887684ed63e058baac623af7b498cec635b58",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/skills/design/design-systems/establish-design-tokens/adapters/claude-code.json",
+          "bytes": 251,
+          "sha256": "83e4c10cfbfc23d21ba58623b11e887e45b86e57d50acdb66b2be6cd45984d54"
+        },
+        {
+          "path": "artifacts/skills/design/design-systems/establish-design-tokens/adapters/codex.json",
+          "bytes": 317,
+          "sha256": "f2f89b555812db38f59ca64bb35f98476695bf1b236fd1b2c6edab322e39ef08"
+        },
+        {
+          "path": "artifacts/skills/design/design-systems/establish-design-tokens/adapters/cursor.json",
+          "bytes": 292,
+          "sha256": "0959af7c41305a2a3526fcd2290f5ec73b68e0634c74f7d4fd7a2d5f7e772c07"
+        },
+        {
+          "path": "artifacts/skills/design/design-systems/establish-design-tokens/adapters/gemini-cli.json",
+          "bytes": 296,
+          "sha256": "d50e03e198b6b9aa1dc5844bf21f26033b6aff2a0ea62bdb4e90ddf83b5b00fc"
+        },
+        {
+          "path": "artifacts/skills/design/design-systems/establish-design-tokens/adapters/github-copilot.json",
+          "bytes": 398,
+          "sha256": "1aabf96a8fbadf58508bee7abc3710aa066e083f374ba2748ed98fc9e32399e2"
+        },
+        {
+          "path": "artifacts/skills/design/design-systems/establish-design-tokens/adapters/opencode.json",
+          "bytes": 294,
+          "sha256": "e93e3afb2a5c2e5096a08815ebd49fd0e2a4b69a149fc6d89e7cadeb9de8d45a"
+        },
+        {
+          "path": "artifacts/skills/design/design-systems/establish-design-tokens/agents/openai.yaml",
+          "bytes": 209,
+          "sha256": "ae353281c8a55cf0cf1e3b910932ded80a713990716df7e05d1438926d72e091"
+        },
+        {
+          "path": "artifacts/skills/design/design-systems/establish-design-tokens/artifact.json",
+          "bytes": 2657,
+          "sha256": "65cdf0b3a98fd075075dab6c350d291e42a5ad4f1eaf51b8f6311701a3f72b44"
+        },
+        {
+          "path": "artifacts/skills/design/design-systems/establish-design-tokens/evaluations/behavioral.json",
+          "bytes": 3553,
+          "sha256": "2b812291aca15efebe10eaa35ce6b43565c9b5ae5ed19a74cfd6646c9b4b7b08"
+        },
+        {
+          "path": "artifacts/skills/design/design-systems/establish-design-tokens/SKILL.md",
+          "bytes": 7955,
+          "sha256": "ac9ddd62f6de2474fe3b32dae801201f4157459cc055fd20e50cc0a7c16a26f6"
+        }
+      ]
+    },
+    {
+      "artifactId": "skill/design/design-systems/govern-design-system-evolution",
+      "version": "1.1.0",
+      "integrityId": "urn:youdede:artifact:sha256:82b4e7d75819610939094e3173e0fa8232f798b9f7578e14cdc63b8e9f8c29a2",
+      "digest": "82b4e7d75819610939094e3173e0fa8232f798b9f7578e14cdc63b8e9f8c29a2",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/skills/design/design-systems/govern-design-system-evolution/adapters/claude-code.json",
+          "bytes": 251,
+          "sha256": "83e4c10cfbfc23d21ba58623b11e887e45b86e57d50acdb66b2be6cd45984d54"
+        },
+        {
+          "path": "artifacts/skills/design/design-systems/govern-design-system-evolution/adapters/codex.json",
+          "bytes": 317,
+          "sha256": "f2f89b555812db38f59ca64bb35f98476695bf1b236fd1b2c6edab322e39ef08"
+        },
+        {
+          "path": "artifacts/skills/design/design-systems/govern-design-system-evolution/adapters/cursor.json",
+          "bytes": 292,
+          "sha256": "0959af7c41305a2a3526fcd2290f5ec73b68e0634c74f7d4fd7a2d5f7e772c07"
+        },
+        {
+          "path": "artifacts/skills/design/design-systems/govern-design-system-evolution/adapters/gemini-cli.json",
+          "bytes": 296,
+          "sha256": "d50e03e198b6b9aa1dc5844bf21f26033b6aff2a0ea62bdb4e90ddf83b5b00fc"
+        },
+        {
+          "path": "artifacts/skills/design/design-systems/govern-design-system-evolution/adapters/github-copilot.json",
+          "bytes": 398,
+          "sha256": "1aabf96a8fbadf58508bee7abc3710aa066e083f374ba2748ed98fc9e32399e2"
+        },
+        {
+          "path": "artifacts/skills/design/design-systems/govern-design-system-evolution/adapters/opencode.json",
+          "bytes": 294,
+          "sha256": "e93e3afb2a5c2e5096a08815ebd49fd0e2a4b69a149fc6d89e7cadeb9de8d45a"
+        },
+        {
+          "path": "artifacts/skills/design/design-systems/govern-design-system-evolution/agents/openai.yaml",
+          "bytes": 230,
+          "sha256": "26c07ef237d321358d855ca855e17662698a6323b8c42dc4a6074b73256573be"
+        },
+        {
+          "path": "artifacts/skills/design/design-systems/govern-design-system-evolution/artifact.json",
+          "bytes": 2651,
+          "sha256": "ecfc80077b97c16b686849be32cf8abdd4f18a9414907600163dc26f36921dd6"
+        },
+        {
+          "path": "artifacts/skills/design/design-systems/govern-design-system-evolution/evaluations/behavioral.json",
+          "bytes": 3522,
+          "sha256": "5bd4e95f75f753392182b98bb8e5ad6a4604195bdda8fd38bedb473a9fb55cb3"
+        },
+        {
+          "path": "artifacts/skills/design/design-systems/govern-design-system-evolution/SKILL.md",
+          "bytes": 7751,
+          "sha256": "4826b1929ed94b811ffcc4c53b0fd0988c03bd7b15425dd027462566df3c716e"
+        }
+      ]
+    },
+    {
+      "artifactId": "skill/design/design-systems/specify-component-contracts",
+      "version": "1.1.0",
+      "integrityId": "urn:youdede:artifact:sha256:e9c36df9ea6a0402891e43a447fa7c116136fa5284d5848b00abae2e4bf8bdea",
+      "digest": "e9c36df9ea6a0402891e43a447fa7c116136fa5284d5848b00abae2e4bf8bdea",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/skills/design/design-systems/specify-component-contracts/adapters/claude-code.json",
+          "bytes": 251,
+          "sha256": "83e4c10cfbfc23d21ba58623b11e887e45b86e57d50acdb66b2be6cd45984d54"
+        },
+        {
+          "path": "artifacts/skills/design/design-systems/specify-component-contracts/adapters/codex.json",
+          "bytes": 317,
+          "sha256": "f2f89b555812db38f59ca64bb35f98476695bf1b236fd1b2c6edab322e39ef08"
+        },
+        {
+          "path": "artifacts/skills/design/design-systems/specify-component-contracts/adapters/cursor.json",
+          "bytes": 292,
+          "sha256": "0959af7c41305a2a3526fcd2290f5ec73b68e0634c74f7d4fd7a2d5f7e772c07"
+        },
+        {
+          "path": "artifacts/skills/design/design-systems/specify-component-contracts/adapters/gemini-cli.json",
+          "bytes": 296,
+          "sha256": "d50e03e198b6b9aa1dc5844bf21f26033b6aff2a0ea62bdb4e90ddf83b5b00fc"
+        },
+        {
+          "path": "artifacts/skills/design/design-systems/specify-component-contracts/adapters/github-copilot.json",
+          "bytes": 398,
+          "sha256": "1aabf96a8fbadf58508bee7abc3710aa066e083f374ba2748ed98fc9e32399e2"
+        },
+        {
+          "path": "artifacts/skills/design/design-systems/specify-component-contracts/adapters/opencode.json",
+          "bytes": 294,
+          "sha256": "e93e3afb2a5c2e5096a08815ebd49fd0e2a4b69a149fc6d89e7cadeb9de8d45a"
+        },
+        {
+          "path": "artifacts/skills/design/design-systems/specify-component-contracts/agents/openai.yaml",
+          "bytes": 209,
+          "sha256": "a7798aadd62e762936dd510b0ba27078cacbc40d88cf81b783aa1223bbb6dbdd"
+        },
+        {
+          "path": "artifacts/skills/design/design-systems/specify-component-contracts/artifact.json",
+          "bytes": 2683,
+          "sha256": "86eb52374595276e70c6acf449cfac58851289197ae0a4dc9e4943c1b2c99a9b"
+        },
+        {
+          "path": "artifacts/skills/design/design-systems/specify-component-contracts/evaluations/behavioral.json",
+          "bytes": 3463,
+          "sha256": "0d07e10f3d3610dba51cb59ebd38378590d99b6e17b26c2049fe5411fd744f27"
+        },
+        {
+          "path": "artifacts/skills/design/design-systems/specify-component-contracts/SKILL.md",
+          "bytes": 7461,
+          "sha256": "f97d4282c9d8ab3d1f64ac5a9dd068d3ea49b471777151efea2b5daa15bdc2d2"
+        }
+      ]
+    },
+    {
       "artifactId": "skill/design/frontend/review-frontend-quality",
       "version": "1.3.0",
       "integrityId": "urn:youdede:artifact:sha256:f36f74f2c3c474e0189cef33ad46a5b86af8b157ef3f61ade7a857ad88b9afef",
@@ -3315,6 +3501,440 @@
       ]
     },
     {
+      "artifactId": "skill/design/frontend/specify-engineering-handoff",
+      "version": "1.1.0",
+      "integrityId": "urn:youdede:artifact:sha256:95ff4c30cf9fe2c15bfb7ad695e4fb59707383c0555d2c3724510699c2f0908a",
+      "digest": "95ff4c30cf9fe2c15bfb7ad695e4fb59707383c0555d2c3724510699c2f0908a",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/skills/design/frontend/specify-engineering-handoff/adapters/claude-code.json",
+          "bytes": 251,
+          "sha256": "83e4c10cfbfc23d21ba58623b11e887e45b86e57d50acdb66b2be6cd45984d54"
+        },
+        {
+          "path": "artifacts/skills/design/frontend/specify-engineering-handoff/adapters/codex.json",
+          "bytes": 317,
+          "sha256": "f2f89b555812db38f59ca64bb35f98476695bf1b236fd1b2c6edab322e39ef08"
+        },
+        {
+          "path": "artifacts/skills/design/frontend/specify-engineering-handoff/adapters/cursor.json",
+          "bytes": 292,
+          "sha256": "0959af7c41305a2a3526fcd2290f5ec73b68e0634c74f7d4fd7a2d5f7e772c07"
+        },
+        {
+          "path": "artifacts/skills/design/frontend/specify-engineering-handoff/adapters/gemini-cli.json",
+          "bytes": 296,
+          "sha256": "d50e03e198b6b9aa1dc5844bf21f26033b6aff2a0ea62bdb4e90ddf83b5b00fc"
+        },
+        {
+          "path": "artifacts/skills/design/frontend/specify-engineering-handoff/adapters/github-copilot.json",
+          "bytes": 398,
+          "sha256": "1aabf96a8fbadf58508bee7abc3710aa066e083f374ba2748ed98fc9e32399e2"
+        },
+        {
+          "path": "artifacts/skills/design/frontend/specify-engineering-handoff/adapters/opencode.json",
+          "bytes": 294,
+          "sha256": "e93e3afb2a5c2e5096a08815ebd49fd0e2a4b69a149fc6d89e7cadeb9de8d45a"
+        },
+        {
+          "path": "artifacts/skills/design/frontend/specify-engineering-handoff/agents/openai.yaml",
+          "bytes": 247,
+          "sha256": "af6418c43c5e1eae634758b7ec0b3d7497e0a086ef998a4ae971a37b81157f4c"
+        },
+        {
+          "path": "artifacts/skills/design/frontend/specify-engineering-handoff/artifact.json",
+          "bytes": 2779,
+          "sha256": "bc11685c359a2ebceaf271568fb940e51e99e18041a287bc5520b72ec2aec12e"
+        },
+        {
+          "path": "artifacts/skills/design/frontend/specify-engineering-handoff/evaluations/behavioral.json",
+          "bytes": 3380,
+          "sha256": "cd832ee301547b4785a594e1afc9227b63f454b52feeba3a0ff5bcde38a80744"
+        },
+        {
+          "path": "artifacts/skills/design/frontend/specify-engineering-handoff/SKILL.md",
+          "bytes": 7733,
+          "sha256": "6e92f1518e5942a6f36e466072a73bf289f10047882395aeffec39e56e0b4a7f"
+        }
+      ]
+    },
+    {
+      "artifactId": "skill/design/interaction/design-form-experience",
+      "version": "1.1.0",
+      "integrityId": "urn:youdede:artifact:sha256:c19a8bd108e127754b140e8282309d45d9757135a0ec892a7b057e58b1675baa",
+      "digest": "c19a8bd108e127754b140e8282309d45d9757135a0ec892a7b057e58b1675baa",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/skills/design/interaction/design-form-experience/adapters/claude-code.json",
+          "bytes": 251,
+          "sha256": "83e4c10cfbfc23d21ba58623b11e887e45b86e57d50acdb66b2be6cd45984d54"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-form-experience/adapters/codex.json",
+          "bytes": 317,
+          "sha256": "f2f89b555812db38f59ca64bb35f98476695bf1b236fd1b2c6edab322e39ef08"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-form-experience/adapters/cursor.json",
+          "bytes": 292,
+          "sha256": "0959af7c41305a2a3526fcd2290f5ec73b68e0634c74f7d4fd7a2d5f7e772c07"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-form-experience/adapters/gemini-cli.json",
+          "bytes": 296,
+          "sha256": "d50e03e198b6b9aa1dc5844bf21f26033b6aff2a0ea62bdb4e90ddf83b5b00fc"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-form-experience/adapters/github-copilot.json",
+          "bytes": 398,
+          "sha256": "1aabf96a8fbadf58508bee7abc3710aa066e083f374ba2748ed98fc9e32399e2"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-form-experience/adapters/opencode.json",
+          "bytes": 294,
+          "sha256": "e93e3afb2a5c2e5096a08815ebd49fd0e2a4b69a149fc6d89e7cadeb9de8d45a"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-form-experience/agents/openai.yaml",
+          "bytes": 204,
+          "sha256": "3c4ca403f53e94d6d19a86bef424e1f355bada7333d06e70925267b8809857c7"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-form-experience/artifact.json",
+          "bytes": 2487,
+          "sha256": "782ca4c567dd612e595e2b912c71c66304744b00b8a6c7ef0511b6123c58ad86"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-form-experience/evaluations/behavioral.json",
+          "bytes": 5260,
+          "sha256": "5706351f429f5442a83ac98eea0244764a819405ccd5fe6f49c8bab0f9b0c983"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-form-experience/SKILL.md",
+          "bytes": 8092,
+          "sha256": "2c758f6e55e1bb0bf6cf6f0a887f4909bb75d5606208209ee420134daca4670e"
+        }
+      ]
+    },
+    {
+      "artifactId": "skill/design/interaction/design-interface-feedback",
+      "version": "1.1.0",
+      "integrityId": "urn:youdede:artifact:sha256:ded733e17f187cf6dc91a289af318e19bcc8570272d6b1325543aae58f226934",
+      "digest": "ded733e17f187cf6dc91a289af318e19bcc8570272d6b1325543aae58f226934",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/skills/design/interaction/design-interface-feedback/adapters/claude-code.json",
+          "bytes": 251,
+          "sha256": "83e4c10cfbfc23d21ba58623b11e887e45b86e57d50acdb66b2be6cd45984d54"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-interface-feedback/adapters/codex.json",
+          "bytes": 317,
+          "sha256": "f2f89b555812db38f59ca64bb35f98476695bf1b236fd1b2c6edab322e39ef08"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-interface-feedback/adapters/cursor.json",
+          "bytes": 292,
+          "sha256": "0959af7c41305a2a3526fcd2290f5ec73b68e0634c74f7d4fd7a2d5f7e772c07"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-interface-feedback/adapters/gemini-cli.json",
+          "bytes": 296,
+          "sha256": "d50e03e198b6b9aa1dc5844bf21f26033b6aff2a0ea62bdb4e90ddf83b5b00fc"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-interface-feedback/adapters/github-copilot.json",
+          "bytes": 398,
+          "sha256": "1aabf96a8fbadf58508bee7abc3710aa066e083f374ba2748ed98fc9e32399e2"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-interface-feedback/adapters/opencode.json",
+          "bytes": 294,
+          "sha256": "e93e3afb2a5c2e5096a08815ebd49fd0e2a4b69a149fc6d89e7cadeb9de8d45a"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-interface-feedback/agents/openai.yaml",
+          "bytes": 228,
+          "sha256": "dc52964780a00b60fc9f4553aef234703a63ef368dc91c30f9cf4694f22eb573"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-interface-feedback/artifact.json",
+          "bytes": 2663,
+          "sha256": "1ee46f73a5b4ddd7cae50ce61ef01156b5164a2395bd6e5545322ef3a2ff18ae"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-interface-feedback/evaluations/behavioral.json",
+          "bytes": 4521,
+          "sha256": "467496c92c58ae090016b4681a02d5a3d0e06fe94e0c339ed6b3135a5e65a298"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-interface-feedback/SKILL.md",
+          "bytes": 8120,
+          "sha256": "8bf0660ac502621ca27b6c6502b827e1df45e7e4e4a1fa42f5c2af96ba87338b"
+        }
+      ]
+    },
+    {
+      "artifactId": "skill/design/interaction/design-navigation-and-search",
+      "version": "1.1.0",
+      "integrityId": "urn:youdede:artifact:sha256:68f9a30dc2f8392f616d849c90ece9c0ff62aeee862f644951e909f81c9d8187",
+      "digest": "68f9a30dc2f8392f616d849c90ece9c0ff62aeee862f644951e909f81c9d8187",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/skills/design/interaction/design-navigation-and-search/adapters/claude-code.json",
+          "bytes": 251,
+          "sha256": "83e4c10cfbfc23d21ba58623b11e887e45b86e57d50acdb66b2be6cd45984d54"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-navigation-and-search/adapters/codex.json",
+          "bytes": 317,
+          "sha256": "f2f89b555812db38f59ca64bb35f98476695bf1b236fd1b2c6edab322e39ef08"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-navigation-and-search/adapters/cursor.json",
+          "bytes": 292,
+          "sha256": "0959af7c41305a2a3526fcd2290f5ec73b68e0634c74f7d4fd7a2d5f7e772c07"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-navigation-and-search/adapters/gemini-cli.json",
+          "bytes": 296,
+          "sha256": "d50e03e198b6b9aa1dc5844bf21f26033b6aff2a0ea62bdb4e90ddf83b5b00fc"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-navigation-and-search/adapters/github-copilot.json",
+          "bytes": 398,
+          "sha256": "1aabf96a8fbadf58508bee7abc3710aa066e083f374ba2748ed98fc9e32399e2"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-navigation-and-search/adapters/opencode.json",
+          "bytes": 294,
+          "sha256": "e93e3afb2a5c2e5096a08815ebd49fd0e2a4b69a149fc6d89e7cadeb9de8d45a"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-navigation-and-search/agents/openai.yaml",
+          "bytes": 244,
+          "sha256": "ee7185951f8e74aa648048bd0f5d80f1e04c4942d011dcc894c7b38b96e70f5b"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-navigation-and-search/artifact.json",
+          "bytes": 2702,
+          "sha256": "626949aafa94ee0e54dc1c656d81ef2515884d843bb0b5a9ffecaa14351afe14"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-navigation-and-search/evaluations/behavioral.json",
+          "bytes": 4632,
+          "sha256": "9d1e30b6db746e6d3c58830629489689e146b32ffd7d27d33390b6886a62fc6f"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-navigation-and-search/SKILL.md",
+          "bytes": 8386,
+          "sha256": "0fb0659dc943563cf4aa65fd177a09e0bfbd10c2c1cec07678af9a39268378fd"
+        }
+      ]
+    },
+    {
+      "artifactId": "skill/design/interaction/design-onboarding-journey",
+      "version": "1.1.0",
+      "integrityId": "urn:youdede:artifact:sha256:6884e1ad6c773845ab4e30cffc63f48f876b48b3b613b4bd3b89323cda998daa",
+      "digest": "6884e1ad6c773845ab4e30cffc63f48f876b48b3b613b4bd3b89323cda998daa",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/skills/design/interaction/design-onboarding-journey/adapters/claude-code.json",
+          "bytes": 251,
+          "sha256": "83e4c10cfbfc23d21ba58623b11e887e45b86e57d50acdb66b2be6cd45984d54"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-onboarding-journey/adapters/codex.json",
+          "bytes": 317,
+          "sha256": "f2f89b555812db38f59ca64bb35f98476695bf1b236fd1b2c6edab322e39ef08"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-onboarding-journey/adapters/cursor.json",
+          "bytes": 292,
+          "sha256": "0959af7c41305a2a3526fcd2290f5ec73b68e0634c74f7d4fd7a2d5f7e772c07"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-onboarding-journey/adapters/gemini-cli.json",
+          "bytes": 296,
+          "sha256": "d50e03e198b6b9aa1dc5844bf21f26033b6aff2a0ea62bdb4e90ddf83b5b00fc"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-onboarding-journey/adapters/github-copilot.json",
+          "bytes": 398,
+          "sha256": "1aabf96a8fbadf58508bee7abc3710aa066e083f374ba2748ed98fc9e32399e2"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-onboarding-journey/adapters/opencode.json",
+          "bytes": 294,
+          "sha256": "e93e3afb2a5c2e5096a08815ebd49fd0e2a4b69a149fc6d89e7cadeb9de8d45a"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-onboarding-journey/agents/openai.yaml",
+          "bytes": 232,
+          "sha256": "efb3702facba3b5f9c15bc44eb586814fa29dc66f8152eb32aa7fcc9d6c853c7"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-onboarding-journey/artifact.json",
+          "bytes": 2655,
+          "sha256": "e4a646711249a45a48e2f517fa0347a8c0dd6d99c9374b370c7230e03e8a5078"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-onboarding-journey/evaluations/behavioral.json",
+          "bytes": 4536,
+          "sha256": "8ee2d95f8d7d31304145699d7d83fe803fc2f7918b14575aee26f93c5b056650"
+        },
+        {
+          "path": "artifacts/skills/design/interaction/design-onboarding-journey/SKILL.md",
+          "bytes": 8387,
+          "sha256": "1b3108bf22d8c295401c4d101471930c58cc096a207f18298c9cffb47e2f2c8d"
+        }
+      ]
+    },
+    {
+      "artifactId": "skill/design/internationalization/design-for-localization",
+      "version": "1.1.0",
+      "integrityId": "urn:youdede:artifact:sha256:c0575b7d61f4bda02c44bbd71a655f05213e8fb509a597f3b889606bc310bf78",
+      "digest": "c0575b7d61f4bda02c44bbd71a655f05213e8fb509a597f3b889606bc310bf78",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/skills/design/internationalization/design-for-localization/adapters/claude-code.json",
+          "bytes": 251,
+          "sha256": "83e4c10cfbfc23d21ba58623b11e887e45b86e57d50acdb66b2be6cd45984d54"
+        },
+        {
+          "path": "artifacts/skills/design/internationalization/design-for-localization/adapters/codex.json",
+          "bytes": 317,
+          "sha256": "f2f89b555812db38f59ca64bb35f98476695bf1b236fd1b2c6edab322e39ef08"
+        },
+        {
+          "path": "artifacts/skills/design/internationalization/design-for-localization/adapters/cursor.json",
+          "bytes": 292,
+          "sha256": "0959af7c41305a2a3526fcd2290f5ec73b68e0634c74f7d4fd7a2d5f7e772c07"
+        },
+        {
+          "path": "artifacts/skills/design/internationalization/design-for-localization/adapters/gemini-cli.json",
+          "bytes": 296,
+          "sha256": "d50e03e198b6b9aa1dc5844bf21f26033b6aff2a0ea62bdb4e90ddf83b5b00fc"
+        },
+        {
+          "path": "artifacts/skills/design/internationalization/design-for-localization/adapters/github-copilot.json",
+          "bytes": 398,
+          "sha256": "1aabf96a8fbadf58508bee7abc3710aa066e083f374ba2748ed98fc9e32399e2"
+        },
+        {
+          "path": "artifacts/skills/design/internationalization/design-for-localization/adapters/opencode.json",
+          "bytes": 294,
+          "sha256": "e93e3afb2a5c2e5096a08815ebd49fd0e2a4b69a149fc6d89e7cadeb9de8d45a"
+        },
+        {
+          "path": "artifacts/skills/design/internationalization/design-for-localization/agents/openai.yaml",
+          "bytes": 238,
+          "sha256": "f9a161922956f6031d28b431c9335b4b0f666ef3cdf5cc39562066590847e2aa"
+        },
+        {
+          "path": "artifacts/skills/design/internationalization/design-for-localization/artifact.json",
+          "bytes": 2732,
+          "sha256": "260e5f697d9b3554090b312eb858fdd77c7a747d1c78762153c5926300b0f8f4"
+        },
+        {
+          "path": "artifacts/skills/design/internationalization/design-for-localization/evaluations/behavioral.json",
+          "bytes": 3333,
+          "sha256": "427b45685968b5c6c98423d341e05e69b3d07f01a02202728886dd96ff9e7c10"
+        },
+        {
+          "path": "artifacts/skills/design/internationalization/design-for-localization/SKILL.md",
+          "bytes": 7953,
+          "sha256": "ba84bbb95b85f4ac031c7328147cad85d31cb1a155b8a90fcfd2f16822a2dee3"
+        }
+      ]
+    },
+    {
+      "artifactId": "skill/design/research/map-experience-journeys",
+      "version": "1.1.0",
+      "integrityId": "urn:youdede:artifact:sha256:8290565f9279861752d797d867eea7cee3ef7426199ec7d4e6208c7b948ea202",
+      "digest": "8290565f9279861752d797d867eea7cee3ef7426199ec7d4e6208c7b948ea202",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/skills/design/research/map-experience-journeys/adapters/claude-code.json",
+          "bytes": 251,
+          "sha256": "83e4c10cfbfc23d21ba58623b11e887e45b86e57d50acdb66b2be6cd45984d54"
+        },
+        {
+          "path": "artifacts/skills/design/research/map-experience-journeys/adapters/codex.json",
+          "bytes": 317,
+          "sha256": "f2f89b555812db38f59ca64bb35f98476695bf1b236fd1b2c6edab322e39ef08"
+        },
+        {
+          "path": "artifacts/skills/design/research/map-experience-journeys/adapters/cursor.json",
+          "bytes": 292,
+          "sha256": "0959af7c41305a2a3526fcd2290f5ec73b68e0634c74f7d4fd7a2d5f7e772c07"
+        },
+        {
+          "path": "artifacts/skills/design/research/map-experience-journeys/adapters/gemini-cli.json",
+          "bytes": 296,
+          "sha256": "d50e03e198b6b9aa1dc5844bf21f26033b6aff2a0ea62bdb4e90ddf83b5b00fc"
+        },
+        {
+          "path": "artifacts/skills/design/research/map-experience-journeys/adapters/github-copilot.json",
+          "bytes": 398,
+          "sha256": "1aabf96a8fbadf58508bee7abc3710aa066e083f374ba2748ed98fc9e32399e2"
+        },
+        {
+          "path": "artifacts/skills/design/research/map-experience-journeys/adapters/opencode.json",
+          "bytes": 294,
+          "sha256": "e93e3afb2a5c2e5096a08815ebd49fd0e2a4b69a149fc6d89e7cadeb9de8d45a"
+        },
+        {
+          "path": "artifacts/skills/design/research/map-experience-journeys/agents/openai.yaml",
+          "bytes": 253,
+          "sha256": "c2e4825c4628c259a55d4a6677138b7b57418af31987cb59aca7047fa489560c"
+        },
+        {
+          "path": "artifacts/skills/design/research/map-experience-journeys/artifact.json",
+          "bytes": 2505,
+          "sha256": "c9fbe49321593da2ea353c844f11bfde1e21483eea7469f68e0a43c438b905f3"
+        },
+        {
+          "path": "artifacts/skills/design/research/map-experience-journeys/evaluations/behavioral.json",
+          "bytes": 4255,
+          "sha256": "20c57beed04333004f28fb671e0c4b93a3e1de1e9397034bfede220e89f777e7"
+        },
+        {
+          "path": "artifacts/skills/design/research/map-experience-journeys/SKILL.md",
+          "bytes": 8088,
+          "sha256": "0efd23332d05017266b9086d6614f66c9f572d84968ad326b52f683ade1c55cf"
+        }
+      ]
+    },
+    {
       "artifactId": "skill/design/research/plan-evidence-based-design-research",
       "version": "1.3.0",
       "integrityId": "urn:youdede:artifact:sha256:38ed556f289018c89e45b9f60402c8bf6ac3f77b2c29b90378915648789bb4ee",
@@ -3373,6 +3993,502 @@
           "path": "artifacts/skills/design/research/plan-evidence-based-design-research/SKILL.md",
           "bytes": 5454,
           "sha256": "86dec269110d0204d63d30155e5937e6b0cb3e90d74ef7143ba95569dbc13270"
+        }
+      ]
+    },
+    {
+      "artifactId": "skill/design/research/synthesize-user-research-evidence",
+      "version": "1.1.0",
+      "integrityId": "urn:youdede:artifact:sha256:bf242f20c520b6c7c2a5e89eb1f6839cc96474dc6f384f302c615c4a4dee8192",
+      "digest": "bf242f20c520b6c7c2a5e89eb1f6839cc96474dc6f384f302c615c4a4dee8192",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/skills/design/research/synthesize-user-research-evidence/adapters/claude-code.json",
+          "bytes": 251,
+          "sha256": "83e4c10cfbfc23d21ba58623b11e887e45b86e57d50acdb66b2be6cd45984d54"
+        },
+        {
+          "path": "artifacts/skills/design/research/synthesize-user-research-evidence/adapters/codex.json",
+          "bytes": 317,
+          "sha256": "f2f89b555812db38f59ca64bb35f98476695bf1b236fd1b2c6edab322e39ef08"
+        },
+        {
+          "path": "artifacts/skills/design/research/synthesize-user-research-evidence/adapters/cursor.json",
+          "bytes": 292,
+          "sha256": "0959af7c41305a2a3526fcd2290f5ec73b68e0634c74f7d4fd7a2d5f7e772c07"
+        },
+        {
+          "path": "artifacts/skills/design/research/synthesize-user-research-evidence/adapters/gemini-cli.json",
+          "bytes": 296,
+          "sha256": "d50e03e198b6b9aa1dc5844bf21f26033b6aff2a0ea62bdb4e90ddf83b5b00fc"
+        },
+        {
+          "path": "artifacts/skills/design/research/synthesize-user-research-evidence/adapters/github-copilot.json",
+          "bytes": 398,
+          "sha256": "1aabf96a8fbadf58508bee7abc3710aa066e083f374ba2748ed98fc9e32399e2"
+        },
+        {
+          "path": "artifacts/skills/design/research/synthesize-user-research-evidence/adapters/opencode.json",
+          "bytes": 294,
+          "sha256": "e93e3afb2a5c2e5096a08815ebd49fd0e2a4b69a149fc6d89e7cadeb9de8d45a"
+        },
+        {
+          "path": "artifacts/skills/design/research/synthesize-user-research-evidence/agents/openai.yaml",
+          "bytes": 261,
+          "sha256": "70a90447d1e70e81af3cffebb91c0149a957cdb03ebd1b9d31c7b103620f7501"
+        },
+        {
+          "path": "artifacts/skills/design/research/synthesize-user-research-evidence/artifact.json",
+          "bytes": 2662,
+          "sha256": "380b1b92c0ead122795570e83bc160ba4ef6736bf66dfc75959ad6cdb898c40b"
+        },
+        {
+          "path": "artifacts/skills/design/research/synthesize-user-research-evidence/evaluations/behavioral.json",
+          "bytes": 3353,
+          "sha256": "6d45538b031992277c26cfbf9189f159167eb05963a8d3785f940efde55b7004"
+        },
+        {
+          "path": "artifacts/skills/design/research/synthesize-user-research-evidence/SKILL.md",
+          "bytes": 8575,
+          "sha256": "1df021ba96596eacfef6266654ab331be84446709ffd6218b1e468a7db345837"
+        }
+      ]
+    },
+    {
+      "artifactId": "skill/design/responsive/design-responsive-behavior",
+      "version": "1.1.0",
+      "integrityId": "urn:youdede:artifact:sha256:093fc322b246025aaaad12958f77a9ced936ac543e5e01a02f22ebe766edee57",
+      "digest": "093fc322b246025aaaad12958f77a9ced936ac543e5e01a02f22ebe766edee57",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/skills/design/responsive/design-responsive-behavior/adapters/claude-code.json",
+          "bytes": 251,
+          "sha256": "83e4c10cfbfc23d21ba58623b11e887e45b86e57d50acdb66b2be6cd45984d54"
+        },
+        {
+          "path": "artifacts/skills/design/responsive/design-responsive-behavior/adapters/codex.json",
+          "bytes": 317,
+          "sha256": "f2f89b555812db38f59ca64bb35f98476695bf1b236fd1b2c6edab322e39ef08"
+        },
+        {
+          "path": "artifacts/skills/design/responsive/design-responsive-behavior/adapters/cursor.json",
+          "bytes": 292,
+          "sha256": "0959af7c41305a2a3526fcd2290f5ec73b68e0634c74f7d4fd7a2d5f7e772c07"
+        },
+        {
+          "path": "artifacts/skills/design/responsive/design-responsive-behavior/adapters/gemini-cli.json",
+          "bytes": 296,
+          "sha256": "d50e03e198b6b9aa1dc5844bf21f26033b6aff2a0ea62bdb4e90ddf83b5b00fc"
+        },
+        {
+          "path": "artifacts/skills/design/responsive/design-responsive-behavior/adapters/github-copilot.json",
+          "bytes": 398,
+          "sha256": "1aabf96a8fbadf58508bee7abc3710aa066e083f374ba2748ed98fc9e32399e2"
+        },
+        {
+          "path": "artifacts/skills/design/responsive/design-responsive-behavior/adapters/opencode.json",
+          "bytes": 294,
+          "sha256": "e93e3afb2a5c2e5096a08815ebd49fd0e2a4b69a149fc6d89e7cadeb9de8d45a"
+        },
+        {
+          "path": "artifacts/skills/design/responsive/design-responsive-behavior/agents/openai.yaml",
+          "bytes": 248,
+          "sha256": "90dda1e02f3a0bd832b10c17844c10107d10a8e513df12cbf6174f5721fbe6df"
+        },
+        {
+          "path": "artifacts/skills/design/responsive/design-responsive-behavior/artifact.json",
+          "bytes": 2753,
+          "sha256": "cf7cb59f6cc674c07f4d19bf7d8b0daffdbbce0ac504fbe61fe3bef80e3e8abe"
+        },
+        {
+          "path": "artifacts/skills/design/responsive/design-responsive-behavior/evaluations/behavioral.json",
+          "bytes": 3425,
+          "sha256": "5d2e8f6d47fbcf693d2e62bfc186220aa27334ae624541bdc2102d414471e714"
+        },
+        {
+          "path": "artifacts/skills/design/responsive/design-responsive-behavior/SKILL.md",
+          "bytes": 7105,
+          "sha256": "a206f6fa8f7c732ccb8f475c48d18e07395e7f19769586255a08dc36fae90404"
+        }
+      ]
+    },
+    {
+      "artifactId": "skill/design/strategy/frame-design-direction",
+      "version": "1.1.0",
+      "integrityId": "urn:youdede:artifact:sha256:605cfb4c9c9596f5dc231c1dde34915af6cc96a5d0a0455460269013e3fd696c",
+      "digest": "605cfb4c9c9596f5dc231c1dde34915af6cc96a5d0a0455460269013e3fd696c",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/skills/design/strategy/frame-design-direction/adapters/claude-code.json",
+          "bytes": 251,
+          "sha256": "83e4c10cfbfc23d21ba58623b11e887e45b86e57d50acdb66b2be6cd45984d54"
+        },
+        {
+          "path": "artifacts/skills/design/strategy/frame-design-direction/adapters/codex.json",
+          "bytes": 317,
+          "sha256": "f2f89b555812db38f59ca64bb35f98476695bf1b236fd1b2c6edab322e39ef08"
+        },
+        {
+          "path": "artifacts/skills/design/strategy/frame-design-direction/adapters/cursor.json",
+          "bytes": 292,
+          "sha256": "0959af7c41305a2a3526fcd2290f5ec73b68e0634c74f7d4fd7a2d5f7e772c07"
+        },
+        {
+          "path": "artifacts/skills/design/strategy/frame-design-direction/adapters/gemini-cli.json",
+          "bytes": 296,
+          "sha256": "d50e03e198b6b9aa1dc5844bf21f26033b6aff2a0ea62bdb4e90ddf83b5b00fc"
+        },
+        {
+          "path": "artifacts/skills/design/strategy/frame-design-direction/adapters/github-copilot.json",
+          "bytes": 398,
+          "sha256": "1aabf96a8fbadf58508bee7abc3710aa066e083f374ba2748ed98fc9e32399e2"
+        },
+        {
+          "path": "artifacts/skills/design/strategy/frame-design-direction/adapters/opencode.json",
+          "bytes": 294,
+          "sha256": "e93e3afb2a5c2e5096a08815ebd49fd0e2a4b69a149fc6d89e7cadeb9de8d45a"
+        },
+        {
+          "path": "artifacts/skills/design/strategy/frame-design-direction/agents/openai.yaml",
+          "bytes": 232,
+          "sha256": "99979a01d9c5884d234edef64f508dad2945fb2dbeb21c7f933c463093773f8f"
+        },
+        {
+          "path": "artifacts/skills/design/strategy/frame-design-direction/artifact.json",
+          "bytes": 2866,
+          "sha256": "487f6ffb7da5832d43b46d5f119f8d5ec7fe51839e921afdcd60076ab9a0a82b"
+        },
+        {
+          "path": "artifacts/skills/design/strategy/frame-design-direction/evaluations/behavioral.json",
+          "bytes": 3403,
+          "sha256": "31bf81c85757a846cc11514c485298eb1fa70d6d4f15e0d31cd4ab83eb793e30"
+        },
+        {
+          "path": "artifacts/skills/design/strategy/frame-design-direction/SKILL.md",
+          "bytes": 9215,
+          "sha256": "a25e54d111eecd91dc1002958e836a4168041998040f2d1d41a306893675cc3a"
+        }
+      ]
+    },
+    {
+      "artifactId": "skill/design/strategy/structure-information-architecture",
+      "version": "1.1.0",
+      "integrityId": "urn:youdede:artifact:sha256:9a3fc8c6c2c03acc1612d7479dd237b2cb9fb27834d72ab77a1c5c50831b1303",
+      "digest": "9a3fc8c6c2c03acc1612d7479dd237b2cb9fb27834d72ab77a1c5c50831b1303",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/skills/design/strategy/structure-information-architecture/adapters/claude-code.json",
+          "bytes": 251,
+          "sha256": "83e4c10cfbfc23d21ba58623b11e887e45b86e57d50acdb66b2be6cd45984d54"
+        },
+        {
+          "path": "artifacts/skills/design/strategy/structure-information-architecture/adapters/codex.json",
+          "bytes": 317,
+          "sha256": "f2f89b555812db38f59ca64bb35f98476695bf1b236fd1b2c6edab322e39ef08"
+        },
+        {
+          "path": "artifacts/skills/design/strategy/structure-information-architecture/adapters/cursor.json",
+          "bytes": 292,
+          "sha256": "0959af7c41305a2a3526fcd2290f5ec73b68e0634c74f7d4fd7a2d5f7e772c07"
+        },
+        {
+          "path": "artifacts/skills/design/strategy/structure-information-architecture/adapters/gemini-cli.json",
+          "bytes": 296,
+          "sha256": "d50e03e198b6b9aa1dc5844bf21f26033b6aff2a0ea62bdb4e90ddf83b5b00fc"
+        },
+        {
+          "path": "artifacts/skills/design/strategy/structure-information-architecture/adapters/github-copilot.json",
+          "bytes": 398,
+          "sha256": "1aabf96a8fbadf58508bee7abc3710aa066e083f374ba2748ed98fc9e32399e2"
+        },
+        {
+          "path": "artifacts/skills/design/strategy/structure-information-architecture/adapters/opencode.json",
+          "bytes": 294,
+          "sha256": "e93e3afb2a5c2e5096a08815ebd49fd0e2a4b69a149fc6d89e7cadeb9de8d45a"
+        },
+        {
+          "path": "artifacts/skills/design/strategy/structure-information-architecture/agents/openai.yaml",
+          "bytes": 249,
+          "sha256": "9cb9acce2ec544aae8d5166c55b0c23f5f2c5cdd5f3754fab1e1c58ef4f636ae"
+        },
+        {
+          "path": "artifacts/skills/design/strategy/structure-information-architecture/artifact.json",
+          "bytes": 2869,
+          "sha256": "265b78148c334bc5fc8c6dc76b7053150f978719af98789fdf9a51e8e0ab907d"
+        },
+        {
+          "path": "artifacts/skills/design/strategy/structure-information-architecture/evaluations/behavioral.json",
+          "bytes": 3512,
+          "sha256": "1fa3cfcfc0c0c5651cf14e2db4e916849f94625c8835a35e3a0d276f38ff3aba"
+        },
+        {
+          "path": "artifacts/skills/design/strategy/structure-information-architecture/SKILL.md",
+          "bytes": 9845,
+          "sha256": "c9e4e6325881e2cdba6ad5cee157103ba2a962a9e66d9799ad6fb839a0175237"
+        }
+      ]
+    },
+    {
+      "artifactId": "skill/design/visual-design/compose-visual-layout",
+      "version": "1.1.0",
+      "integrityId": "urn:youdede:artifact:sha256:23935076a10606a4e7271b0ded3e44c39ad3f2a9ad6371a55b6504ca98e06e2a",
+      "digest": "23935076a10606a4e7271b0ded3e44c39ad3f2a9ad6371a55b6504ca98e06e2a",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/skills/design/visual-design/compose-visual-layout/adapters/claude-code.json",
+          "bytes": 251,
+          "sha256": "83e4c10cfbfc23d21ba58623b11e887e45b86e57d50acdb66b2be6cd45984d54"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/compose-visual-layout/adapters/codex.json",
+          "bytes": 317,
+          "sha256": "f2f89b555812db38f59ca64bb35f98476695bf1b236fd1b2c6edab322e39ef08"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/compose-visual-layout/adapters/cursor.json",
+          "bytes": 292,
+          "sha256": "0959af7c41305a2a3526fcd2290f5ec73b68e0634c74f7d4fd7a2d5f7e772c07"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/compose-visual-layout/adapters/gemini-cli.json",
+          "bytes": 296,
+          "sha256": "d50e03e198b6b9aa1dc5844bf21f26033b6aff2a0ea62bdb4e90ddf83b5b00fc"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/compose-visual-layout/adapters/github-copilot.json",
+          "bytes": 398,
+          "sha256": "1aabf96a8fbadf58508bee7abc3710aa066e083f374ba2748ed98fc9e32399e2"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/compose-visual-layout/adapters/opencode.json",
+          "bytes": 294,
+          "sha256": "e93e3afb2a5c2e5096a08815ebd49fd0e2a4b69a149fc6d89e7cadeb9de8d45a"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/compose-visual-layout/agents/openai.yaml",
+          "bytes": 212,
+          "sha256": "335dff9f9b9e83789972fea052231208233d3f917e9184e0dbdbe06fe3f4487b"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/compose-visual-layout/artifact.json",
+          "bytes": 2319,
+          "sha256": "e4b3e44175b45088a1136446bdd74ad65d6c2ed51627530fab2ed3a76bbeadd3"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/compose-visual-layout/evaluations/behavioral.json",
+          "bytes": 3689,
+          "sha256": "b66e49bfd8954fe20f0154fbf9c53550ffb7d54d1bc100891649ed9042b1e49e"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/compose-visual-layout/SKILL.md",
+          "bytes": 7306,
+          "sha256": "b3cb264cd51688aa6e54f76e143562288e292b01d54473a13eddeff9023bac7f"
+        }
+      ]
+    },
+    {
+      "artifactId": "skill/design/visual-design/critique-ui-surface",
+      "version": "1.1.0",
+      "integrityId": "urn:youdede:artifact:sha256:ead46eb5b6b7506cada2385c36c6cb1e179a1ef21abc2c901f88ada4e3754a52",
+      "digest": "ead46eb5b6b7506cada2385c36c6cb1e179a1ef21abc2c901f88ada4e3754a52",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/skills/design/visual-design/critique-ui-surface/adapters/claude-code.json",
+          "bytes": 251,
+          "sha256": "83e4c10cfbfc23d21ba58623b11e887e45b86e57d50acdb66b2be6cd45984d54"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/critique-ui-surface/adapters/codex.json",
+          "bytes": 317,
+          "sha256": "f2f89b555812db38f59ca64bb35f98476695bf1b236fd1b2c6edab322e39ef08"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/critique-ui-surface/adapters/cursor.json",
+          "bytes": 292,
+          "sha256": "0959af7c41305a2a3526fcd2290f5ec73b68e0634c74f7d4fd7a2d5f7e772c07"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/critique-ui-surface/adapters/gemini-cli.json",
+          "bytes": 296,
+          "sha256": "d50e03e198b6b9aa1dc5844bf21f26033b6aff2a0ea62bdb4e90ddf83b5b00fc"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/critique-ui-surface/adapters/github-copilot.json",
+          "bytes": 398,
+          "sha256": "1aabf96a8fbadf58508bee7abc3710aa066e083f374ba2748ed98fc9e32399e2"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/critique-ui-surface/adapters/opencode.json",
+          "bytes": 294,
+          "sha256": "e93e3afb2a5c2e5096a08815ebd49fd0e2a4b69a149fc6d89e7cadeb9de8d45a"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/critique-ui-surface/agents/openai.yaml",
+          "bytes": 225,
+          "sha256": "d030a9802983a7d64c355f4bd2fded093bb7520fc6d6ca0f82f9d4a06fabbd87"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/critique-ui-surface/artifact.json",
+          "bytes": 2476,
+          "sha256": "d4c6ba238d391cf0abf93a70f3642b9c703f705575a96fe3aecceb473db772cf"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/critique-ui-surface/evaluations/behavioral.json",
+          "bytes": 3608,
+          "sha256": "22917da65ca65bb4e9779c89b00fdce49e33b9b459da251fcb62e6d5fed98e25"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/critique-ui-surface/SKILL.md",
+          "bytes": 6107,
+          "sha256": "5bfc8fbb106d65b50ebba15cd6d219bd1e0713418e4829ce17268af6bdba03ab"
+        }
+      ]
+    },
+    {
+      "artifactId": "skill/design/visual-design/establish-color-system",
+      "version": "1.1.0",
+      "integrityId": "urn:youdede:artifact:sha256:9efeb0dd6c2aad2d0327e7b3b476a0373befa8ee8d1f4d0b273177d543d4a469",
+      "digest": "9efeb0dd6c2aad2d0327e7b3b476a0373befa8ee8d1f4d0b273177d543d4a469",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/skills/design/visual-design/establish-color-system/adapters/claude-code.json",
+          "bytes": 251,
+          "sha256": "83e4c10cfbfc23d21ba58623b11e887e45b86e57d50acdb66b2be6cd45984d54"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/establish-color-system/adapters/codex.json",
+          "bytes": 317,
+          "sha256": "f2f89b555812db38f59ca64bb35f98476695bf1b236fd1b2c6edab322e39ef08"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/establish-color-system/adapters/cursor.json",
+          "bytes": 292,
+          "sha256": "0959af7c41305a2a3526fcd2290f5ec73b68e0634c74f7d4fd7a2d5f7e772c07"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/establish-color-system/adapters/gemini-cli.json",
+          "bytes": 296,
+          "sha256": "d50e03e198b6b9aa1dc5844bf21f26033b6aff2a0ea62bdb4e90ddf83b5b00fc"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/establish-color-system/adapters/github-copilot.json",
+          "bytes": 398,
+          "sha256": "1aabf96a8fbadf58508bee7abc3710aa066e083f374ba2748ed98fc9e32399e2"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/establish-color-system/adapters/opencode.json",
+          "bytes": 294,
+          "sha256": "e93e3afb2a5c2e5096a08815ebd49fd0e2a4b69a149fc6d89e7cadeb9de8d45a"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/establish-color-system/agents/openai.yaml",
+          "bytes": 220,
+          "sha256": "a95e2b8e27badb23ca6ffa0c416fecd16cf7effe87f974ae91d47cacf4290dff"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/establish-color-system/artifact.json",
+          "bytes": 2471,
+          "sha256": "4c8f1e4f98ac5d2b2bcb189d69db3195705fcd6650a9d6e920e30f8db76a7460"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/establish-color-system/evaluations/behavioral.json",
+          "bytes": 3520,
+          "sha256": "8ab41433eb22c12614ffe3f97a347256cd5a2a94569bc7fd93bab86d8819a341"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/establish-color-system/SKILL.md",
+          "bytes": 7119,
+          "sha256": "0064251dfca1500a9a2a042df1d7a084814087615c359f789269f632fcb0c778"
+        }
+      ]
+    },
+    {
+      "artifactId": "skill/design/visual-design/establish-typography-system",
+      "version": "1.1.0",
+      "integrityId": "urn:youdede:artifact:sha256:e637fa439a17811da029c839321bd78d0aba084e08a7065937235376bd6d4cb3",
+      "digest": "e637fa439a17811da029c839321bd78d0aba084e08a7065937235376bd6d4cb3",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/skills/design/visual-design/establish-typography-system/adapters/claude-code.json",
+          "bytes": 251,
+          "sha256": "83e4c10cfbfc23d21ba58623b11e887e45b86e57d50acdb66b2be6cd45984d54"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/establish-typography-system/adapters/codex.json",
+          "bytes": 317,
+          "sha256": "f2f89b555812db38f59ca64bb35f98476695bf1b236fd1b2c6edab322e39ef08"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/establish-typography-system/adapters/cursor.json",
+          "bytes": 292,
+          "sha256": "0959af7c41305a2a3526fcd2290f5ec73b68e0634c74f7d4fd7a2d5f7e772c07"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/establish-typography-system/adapters/gemini-cli.json",
+          "bytes": 296,
+          "sha256": "d50e03e198b6b9aa1dc5844bf21f26033b6aff2a0ea62bdb4e90ddf83b5b00fc"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/establish-typography-system/adapters/github-copilot.json",
+          "bytes": 398,
+          "sha256": "1aabf96a8fbadf58508bee7abc3710aa066e083f374ba2748ed98fc9e32399e2"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/establish-typography-system/adapters/opencode.json",
+          "bytes": 294,
+          "sha256": "e93e3afb2a5c2e5096a08815ebd49fd0e2a4b69a149fc6d89e7cadeb9de8d45a"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/establish-typography-system/agents/openai.yaml",
+          "bytes": 240,
+          "sha256": "7a935de2a7b2deda2513118043e1bc0518e417190eec3135699b6f02ce67e356"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/establish-typography-system/artifact.json",
+          "bytes": 2396,
+          "sha256": "5c48f024751b03741929f927fc676b2eea49659167be868e10b43f49892c7ef9"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/establish-typography-system/evaluations/behavioral.json",
+          "bytes": 3570,
+          "sha256": "2d8f83c6debd29fbc01f8079edf131d9b08fe1fff1d08b51bb216db43dd91c2c"
+        },
+        {
+          "path": "artifacts/skills/design/visual-design/establish-typography-system/SKILL.md",
+          "bytes": 6837,
+          "sha256": "9fabec5c7c55790eee2f79e48baff2c59a222ed23ad8d593a643ced185638e6b"
         }
       ]
     },

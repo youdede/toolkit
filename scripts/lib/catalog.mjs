@@ -7,12 +7,12 @@ export const ARTIFACTS_ROOT = path.join(ROOT, 'artifacts');
 export const PACKS_ROOT = path.join(ROOT, 'packs');
 
 const SKILL_VERBS = new Set([
-  'assess', 'audit', 'author', 'build', 'capture', 'compress', 'conduct', 'debug',
-  'decompose', 'define', 'delegate', 'deliver', 'design', 'document', 'edit', 'enforce', 'evaluate',
-  'execute', 'extract', 'generate', 'guide', 'implement', 'improve', 'interview', 'isolate',
+  'assess', 'audit', 'author', 'build', 'capture', 'compose', 'compress', 'conduct', 'critique', 'debug',
+  'decompose', 'define', 'delegate', 'deliver', 'design', 'document', 'edit', 'enforce', 'establish', 'evaluate',
+  'execute', 'extract', 'frame', 'generate', 'govern', 'guide', 'implement', 'improve', 'interview', 'isolate',
   'keep', 'load', 'make', 'map', 'optimize', 'plan', 'prepare', 'produce', 'provision', 'publish',
   'qualify', 'query', 'reconcile', 'reduce', 'request', 'research', 'resolve',
-  'review', 'schedule', 'simplify', 'surface', 'sync', 'synthesize', 'teach', 'test', 'triage', 'verify', 'write'
+  'review', 'schedule', 'simplify', 'specify', 'structure', 'surface', 'sync', 'synthesize', 'teach', 'test', 'triage', 'verify', 'write'
 ]);
 const SUBAGENT_ROLES = new Set([
   'analyst', 'auditor', 'diagnostician', 'mapper', 'planner', 'researcher',

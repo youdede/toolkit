@@ -38,9 +38,9 @@ Codex uses component-specific native roots:
 | Hook | `.codex/hooks/youdede/<slug>.mjs` plus `.codex/hooks.json` merge | deliberately unsupported |
 | Subagent | deliberately unsupported | deliberately unsupported |
 
-Codex skill adapters also package `agents/openai.yaml` and every declared helper. Twenty-two shell-only gates have native project adapters: they use the documented `PreToolUse`/`Bash` command-hook contract, bounded timeouts, and blocking exit status. Custom agents remain withheld because the current native format cannot reproduce both the catalog's closed tool allowlist and its non-inherited MCP boundary. The resolver is nevertheless kind-aware for `.codex/agents`, avoiding a future layout migration.
+Codex skill adapters also package `agents/openai.yaml` and every declared helper. Twenty-two shell-only gates have native Codex hook adapters; custom agents are withheld.
 
-Gemini CLI, GitHub Copilot, Cursor, and OpenCode use their native component roots and generated target profiles where frontmatter differs. The complete coverage and the reasons for every withheld combination are in [targets.md](targets.md). Adding a runtime requires a taxonomy entry, a component-aware root definition, target-aware validation, fixtures, and adapter files; it never means copying a Claude payload into a differently named folder and declaring success.
+Gemini CLI, GitHub Copilot, Cursor, and OpenCode use their native component roots and generated target profiles where frontmatter differs. The complete coverage, the per-runtime gate mechanics, and the reasons for every withheld combination are in [targets.md](targets.md). Adding a runtime requires a taxonomy entry, a component-aware root definition, target-aware validation, fixtures, and adapter files; it never means copying a Claude payload into a differently named folder and declaring success.
 
 ## Composition packs
 
