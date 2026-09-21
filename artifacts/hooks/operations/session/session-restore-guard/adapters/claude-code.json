@@ -1,0 +1,37 @@
+{
+  "$schema": "../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": [
+    "project"
+  ],
+  "files": [
+    {
+      "from": "targets/claude-code/session-restore-guard.mjs",
+      "to": "hooks/youdede/session-restore-guard.mjs",
+      "executable": true
+    },
+    {
+      "root": "package",
+      "from": "scripts/runtime/session-ledger.mjs",
+      "to": "hooks/youdede/lib/session-ledger.mjs"
+    }
+  ],
+  "settingsPatch": {
+    "hooks": {
+      "SessionStart": [
+        {
+          "matcher": "startup|resume|clear",
+          "description": "[youdede:session-restore-guard] Surface a bounded verified ledger summary",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "node \"{claudeRoot}/hooks/youdede/session-restore-guard.mjs\"",
+              "timeout": 10
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

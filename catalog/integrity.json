@@ -2,13 +2,13 @@
   "schemaVersion": 1,
   "algorithm": "sha256",
   "claim": "Checksums bind published bytes to a reviewed release; they do not prove authorship, originality, license compliance, endorsement, or control downstream copying.",
-  "rootDigest": "ee1052fd177c20324b6504b4a8279cf2890abd61270b0b9ca6c5c14094c950ea",
+  "rootDigest": "36230654e7aa7f9b7ee8a5adf6150843873db4a3d0570504229fe8902448cde6",
   "artifacts": [
     {
       "artifactId": "command/development/workflow/assemble-review-brief",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:fd574590ade0e6e78deb72bc5f0806477c2548b0c68377fc50f54e4e42e35629",
-      "digest": "fd574590ade0e6e78deb72bc5f0806477c2548b0c68377fc50f54e4e42e35629",
+      "integrityId": "urn:youdede:artifact:sha256:000f65b50a863951daf27105812b4f0346812830a8c354c22a24917e6ba9d6b2",
+      "digest": "000f65b50a863951daf27105812b4f0346812830a8c354c22a24917e6ba9d6b2",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -41,16 +41,16 @@
         },
         {
           "path": "scripts/runtime/command-precondition.mjs",
-          "bytes": 6650,
-          "sha256": "1284cc349a120355c135431b9d70811479eeb8f3e095070645bd1e0e69eaaefe"
+          "bytes": 6809,
+          "sha256": "3c042df67efbdb1bccb775139de89281f9d14731b0e985c9f82b13148f4c5d8b"
         }
       ]
     },
     {
       "artifactId": "command/development/workflow/audit-release-evidence",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:85c22407d05656840ba90b132a0bd3c374fc3b8b012581894056c234c56d62e9",
-      "digest": "85c22407d05656840ba90b132a0bd3c374fc3b8b012581894056c234c56d62e9",
+      "integrityId": "urn:youdede:artifact:sha256:662f95effe5090224f647601432948f19f96cc2095680e08b77c95ef8270c41f",
+      "digest": "662f95effe5090224f647601432948f19f96cc2095680e08b77c95ef8270c41f",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -83,16 +83,16 @@
         },
         {
           "path": "scripts/runtime/command-precondition.mjs",
-          "bytes": 6650,
-          "sha256": "1284cc349a120355c135431b9d70811479eeb8f3e095070645bd1e0e69eaaefe"
+          "bytes": 6809,
+          "sha256": "3c042df67efbdb1bccb775139de89281f9d14731b0e985c9f82b13148f4c5d8b"
         }
       ]
     },
     {
       "artifactId": "command/development/workflow/draft-evidenced-plan",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:bee5871c31ca160426a372d3271450ed50f4ce11d723ac9317db9e7efe03ff5c",
-      "digest": "bee5871c31ca160426a372d3271450ed50f4ce11d723ac9317db9e7efe03ff5c",
+      "integrityId": "urn:youdede:artifact:sha256:6089facdb320f45863267e1e875ff218d1fc42efb29d71bfaa9d558d75f91483",
+      "digest": "6089facdb320f45863267e1e875ff218d1fc42efb29d71bfaa9d558d75f91483",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -125,16 +125,16 @@
         },
         {
           "path": "scripts/runtime/command-precondition.mjs",
-          "bytes": 6650,
-          "sha256": "1284cc349a120355c135431b9d70811479eeb8f3e095070645bd1e0e69eaaefe"
+          "bytes": 6809,
+          "sha256": "3c042df67efbdb1bccb775139de89281f9d14731b0e985c9f82b13148f4c5d8b"
         }
       ]
     },
     {
       "artifactId": "command/development/workflow/verify-claims-against-output",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:5eeffddd1a3af2c32d480d16605148e2d6c8a7c90d5e9f2a8f6fd95fe4fc14e4",
-      "digest": "5eeffddd1a3af2c32d480d16605148e2d6c8a7c90d5e9f2a8f6fd95fe4fc14e4",
+      "integrityId": "urn:youdede:artifact:sha256:206683e1d388064cc1642fea0c8a293c81385afde6fb72d95345c892565fad36",
+      "digest": "206683e1d388064cc1642fea0c8a293c81385afde6fb72d95345c892565fad36",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -167,8 +167,102 @@
         },
         {
           "path": "scripts/runtime/command-precondition.mjs",
-          "bytes": 6650,
-          "sha256": "1284cc349a120355c135431b9d70811479eeb8f3e095070645bd1e0e69eaaefe"
+          "bytes": 6809,
+          "sha256": "3c042df67efbdb1bccb775139de89281f9d14731b0e985c9f82b13148f4c5d8b"
+        }
+      ]
+    },
+    {
+      "artifactId": "command/operations/session/record-work-checkpoint",
+      "version": "1.0.0",
+      "integrityId": "urn:youdede:artifact:sha256:5becaf60ea5373e9c4746227776234ea63b1d4bbdb86f83a70af24b633062b34",
+      "digest": "5becaf60ea5373e9c4746227776234ea63b1d4bbdb86f83a70af24b633062b34",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/commands/operations/session/record-work-checkpoint/adapters/claude-code.json",
+          "bytes": 835,
+          "sha256": "6d9338a312ab8701ed7c40e6f4f125db0affa07049f70af18dfc1ee42fb0d0d3"
+        },
+        {
+          "path": "artifacts/commands/operations/session/record-work-checkpoint/artifact.json",
+          "bytes": 2400,
+          "sha256": "9879cee61789017dca129c74ed190ed845f7a46706bd349add386416cf3c7e85"
+        },
+        {
+          "path": "artifacts/commands/operations/session/record-work-checkpoint/COMMAND.md",
+          "bytes": 1937,
+          "sha256": "7d00323745789b2e7e7eecb499841f55a5862c1fb2cc52a2e19e303ebcebe6ca"
+        },
+        {
+          "path": "artifacts/commands/operations/session/record-work-checkpoint/preconditions.json",
+          "bytes": 19,
+          "sha256": "caff5752efd7abaac4289dfac6160ab254513e4c8a5476916398d755ab4949dc"
+        },
+        {
+          "path": "artifacts/commands/operations/session/record-work-checkpoint/scripts/check-preconditions.mjs",
+          "bytes": 818,
+          "sha256": "99e4dd76e0c13f3ba63dc6beee61633dbe00735d2c98256251c249cc5c0f7c36"
+        },
+        {
+          "path": "scripts/runtime/command-precondition.mjs",
+          "bytes": 6809,
+          "sha256": "3c042df67efbdb1bccb775139de89281f9d14731b0e985c9f82b13148f4c5d8b"
+        },
+        {
+          "path": "scripts/runtime/session-ledger.mjs",
+          "bytes": 14869,
+          "sha256": "82a2f95eeb2877bf6966c8a7fa785a18de88097da9eea05fabaeb2ba214a31c7"
+        }
+      ]
+    },
+    {
+      "artifactId": "command/operations/session/verify-session-ledger",
+      "version": "1.0.0",
+      "integrityId": "urn:youdede:artifact:sha256:2bbc2290d1474df29796d88dc89de033628b51a603be95383a9afd2005299af0",
+      "digest": "2bbc2290d1474df29796d88dc89de033628b51a603be95383a9afd2005299af0",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/commands/operations/session/verify-session-ledger/adapters/claude-code.json",
+          "bytes": 832,
+          "sha256": "2d151c2625f296eb24472f7bfac935f19750cb9115951c7c1568799581d17eae"
+        },
+        {
+          "path": "artifacts/commands/operations/session/verify-session-ledger/artifact.json",
+          "bytes": 2489,
+          "sha256": "ec9a35888f37a534fa67098ffcdc52c48124ebc63a27ca938abb98143df934db"
+        },
+        {
+          "path": "artifacts/commands/operations/session/verify-session-ledger/COMMAND.md",
+          "bytes": 1646,
+          "sha256": "18ba916108aab16a7eb4643c73e3cefb430e0bafca5b0144ced0d1e1f721acc2"
+        },
+        {
+          "path": "artifacts/commands/operations/session/verify-session-ledger/preconditions.json",
+          "bytes": 19,
+          "sha256": "caff5752efd7abaac4289dfac6160ab254513e4c8a5476916398d755ab4949dc"
+        },
+        {
+          "path": "artifacts/commands/operations/session/verify-session-ledger/scripts/check-preconditions.mjs",
+          "bytes": 818,
+          "sha256": "99e4dd76e0c13f3ba63dc6beee61633dbe00735d2c98256251c249cc5c0f7c36"
+        },
+        {
+          "path": "scripts/runtime/command-precondition.mjs",
+          "bytes": 6809,
+          "sha256": "3c042df67efbdb1bccb775139de89281f9d14731b0e985c9f82b13148f4c5d8b"
+        },
+        {
+          "path": "scripts/runtime/session-ledger.mjs",
+          "bytes": 14869,
+          "sha256": "82a2f95eeb2877bf6966c8a7fa785a18de88097da9eea05fabaeb2ba214a31c7"
         }
       ]
     },
@@ -651,6 +745,38 @@
       ]
     },
     {
+      "artifactId": "hook/development/resource-management/tool-output-budget-guard",
+      "version": "1.0.0",
+      "integrityId": "urn:youdede:artifact:sha256:702afcc76dd65f529a5cc4fbd55d3963ed6951610df5c4d2bd9152a31138a3ce",
+      "digest": "702afcc76dd65f529a5cc4fbd55d3963ed6951610df5c4d2bd9152a31138a3ce",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/hooks/development/resource-management/tool-output-budget-guard/adapters/claude-code.json",
+          "bytes": 768,
+          "sha256": "aa0436663411b3e67a2836f65cebb26051ad8fde90d6a4b5a7943409b8b0a277"
+        },
+        {
+          "path": "artifacts/hooks/development/resource-management/tool-output-budget-guard/artifact.json",
+          "bytes": 1931,
+          "sha256": "aff9bec15a17e53e2363b919d415518b6aabc4f781e5100e5105f820cc831269"
+        },
+        {
+          "path": "artifacts/hooks/development/resource-management/tool-output-budget-guard/targets/claude-code/README.md",
+          "bytes": 730,
+          "sha256": "b85b95eae86043d8415da0e2e9bb96adb8634406d6d9510a6762137881b71494"
+        },
+        {
+          "path": "artifacts/hooks/development/resource-management/tool-output-budget-guard/targets/claude-code/tool-output-budget-guard.mjs",
+          "bytes": 2094,
+          "sha256": "454416371e0657ee788ce2b8e4b2b11ae5864da8483d67de2ae246215d55df46"
+        }
+      ]
+    },
+    {
       "artifactId": "hook/development/testing/test-integrity-guard",
       "version": "1.0.0",
       "integrityId": "urn:youdede:artifact:sha256:27edcc5ea6b559c408df527188f1896969f4db7d8bc4f276dde0f4e4d04615ec",
@@ -722,8 +848,8 @@
     {
       "artifactId": "hook/operations/agent-orchestration/compaction-handoff-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:781cba373078758ad10f4526350ae95c1836aea1d140c49ad1e23898399edd4c",
-      "digest": "781cba373078758ad10f4526350ae95c1836aea1d140c49ad1e23898399edd4c",
+      "integrityId": "urn:youdede:artifact:sha256:cebcd68fed675d59834e19dea528e57f26696c7c39fef28b78dd70db15e03d65",
+      "digest": "cebcd68fed675d59834e19dea528e57f26696c7c39fef28b78dd70db15e03d65",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -736,8 +862,8 @@
         },
         {
           "path": "artifacts/hooks/operations/agent-orchestration/compaction-handoff-guard/artifact.json",
-          "bytes": 2095,
-          "sha256": "fee6e1b3218fb0d27fed2542e840e64ad00defd3d783f7b04d7e0345beec078e"
+          "bytes": 2152,
+          "sha256": "705cff1d31b4a596543d0d09450a8feea9e9b929a67ca92d7bec83534337dd4b"
         },
         {
           "path": "artifacts/hooks/operations/agent-orchestration/compaction-handoff-guard/targets/claude-code/compaction-handoff-guard.mjs",
@@ -1468,6 +1594,117 @@
           "path": "scripts/runtime/opencode-guard-plugin.js",
           "bytes": 2455,
           "sha256": "c459c2a1d0cb334b3f1df047a7ca0e1e3bcab92680b05d2b6c5562e343a9881c"
+        }
+      ]
+    },
+    {
+      "artifactId": "hook/operations/session/compact-readiness-guard",
+      "version": "1.0.0",
+      "integrityId": "urn:youdede:artifact:sha256:a549d706d62aae1888723a785124c717ff21c14dd92632338ed68439c10dac6c",
+      "digest": "a549d706d62aae1888723a785124c717ff21c14dd92632338ed68439c10dac6c",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/hooks/operations/session/compact-readiness-guard/adapters/claude-code.json",
+          "bytes": 916,
+          "sha256": "c8ad10a99477b1c53dd9b1a2c251ff7f30f1653ff0fd70bb1c9b11c1e8d1b272"
+        },
+        {
+          "path": "artifacts/hooks/operations/session/compact-readiness-guard/artifact.json",
+          "bytes": 1979,
+          "sha256": "e73d30c97acbde07fd9429d58c740761854def956e43f1c7e1120ca6e6b9dcf5"
+        },
+        {
+          "path": "artifacts/hooks/operations/session/compact-readiness-guard/targets/claude-code/compact-readiness-guard.mjs",
+          "bytes": 2414,
+          "sha256": "4aa85f382f8f7804641f83163237138fc266bb285482ff650d92cb93e7b66bda"
+        },
+        {
+          "path": "artifacts/hooks/operations/session/compact-readiness-guard/targets/claude-code/README.md",
+          "bytes": 692,
+          "sha256": "79cf20f965b342a942392bc6e242f6c2e0b2f9c99a3a038b3c0be92df5fa342f"
+        },
+        {
+          "path": "scripts/runtime/session-ledger.mjs",
+          "bytes": 14869,
+          "sha256": "82a2f95eeb2877bf6966c8a7fa785a18de88097da9eea05fabaeb2ba214a31c7"
+        }
+      ]
+    },
+    {
+      "artifactId": "hook/operations/session/session-checkpoint-guard",
+      "version": "1.0.0",
+      "integrityId": "urn:youdede:artifact:sha256:4372e127715dfa3aa506136cce717b680f43e5f6c83a1122591a3a1bbd61816e",
+      "digest": "4372e127715dfa3aa506136cce717b680f43e5f6c83a1122591a3a1bbd61816e",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/hooks/operations/session/session-checkpoint-guard/adapters/claude-code.json",
+          "bytes": 907,
+          "sha256": "af2aca91503212e7ff98464c7c6ea02b6216ae15dae6ab48d41ec39788879823"
+        },
+        {
+          "path": "artifacts/hooks/operations/session/session-checkpoint-guard/artifact.json",
+          "bytes": 2095,
+          "sha256": "4f430e5d797ed46cf8e3f5c8a2a2a34500571e5b61f7ebc50f9a7c7728ff381c"
+        },
+        {
+          "path": "artifacts/hooks/operations/session/session-checkpoint-guard/targets/claude-code/README.md",
+          "bytes": 887,
+          "sha256": "1f34cb1a2e00f285fda94c03b74a6ed6580b6a6fad005cf9308907b540f25fa9"
+        },
+        {
+          "path": "artifacts/hooks/operations/session/session-checkpoint-guard/targets/claude-code/session-checkpoint-guard.mjs",
+          "bytes": 1966,
+          "sha256": "b507627e2bf2f1f0d88863c63c52c1f8fc0a2dc3f97c1c06a6eff3953ebf8a65"
+        },
+        {
+          "path": "scripts/runtime/session-ledger.mjs",
+          "bytes": 14869,
+          "sha256": "82a2f95eeb2877bf6966c8a7fa785a18de88097da9eea05fabaeb2ba214a31c7"
+        }
+      ]
+    },
+    {
+      "artifactId": "hook/operations/session/session-restore-guard",
+      "version": "1.0.0",
+      "integrityId": "urn:youdede:artifact:sha256:6a898012bbef1798237ac664cebb7694ff6af66419cda55c6865b04796bd0bcf",
+      "digest": "6a898012bbef1798237ac664cebb7694ff6af66419cda55c6865b04796bd0bcf",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/hooks/operations/session/session-restore-guard/adapters/claude-code.json",
+          "bytes": 915,
+          "sha256": "73986bf80efaf731e1c2de5feda6d7eb9ce027e76101cde9c547d1a96a5734d9"
+        },
+        {
+          "path": "artifacts/hooks/operations/session/session-restore-guard/artifact.json",
+          "bytes": 2220,
+          "sha256": "36ed139a19434032bc9ee51902dde16a09129c79163c49f68e678ef280166272"
+        },
+        {
+          "path": "artifacts/hooks/operations/session/session-restore-guard/targets/claude-code/README.md",
+          "bytes": 759,
+          "sha256": "30ec052f109690950968d5e02f5c9ca69ee245457fe2dfca10186faab7febd18"
+        },
+        {
+          "path": "artifacts/hooks/operations/session/session-restore-guard/targets/claude-code/session-restore-guard.mjs",
+          "bytes": 3107,
+          "sha256": "ca0615a45921fbcd82b20fa31130a3ce905bfa6a878684b7c29e0e2a5c6539c2"
+        },
+        {
+          "path": "scripts/runtime/session-ledger.mjs",
+          "bytes": 14869,
+          "sha256": "82a2f95eeb2877bf6966c8a7fa785a18de88097da9eea05fabaeb2ba214a31c7"
         }
       ]
     },
@@ -11110,6 +11347,68 @@
           "path": "artifacts/skills/operations/reviewability/triage-engineering-request/SKILL.md",
           "bytes": 4648,
           "sha256": "fae78bee52ef1be69ef5997d2717f024dfc46779b0ca9ba35ec3653bd55f7802"
+        }
+      ]
+    },
+    {
+      "artifactId": "skill/operations/session/resume-session-work",
+      "version": "1.0.0",
+      "integrityId": "urn:youdede:artifact:sha256:897bc97561ee0e16c897d59bebf71339c938653c74e6dc3721038166c76865cb",
+      "digest": "897bc97561ee0e16c897d59bebf71339c938653c74e6dc3721038166c76865cb",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/skills/operations/session/resume-session-work/adapters/claude-code.json",
+          "bytes": 251,
+          "sha256": "83e4c10cfbfc23d21ba58623b11e887e45b86e57d50acdb66b2be6cd45984d54"
+        },
+        {
+          "path": "artifacts/skills/operations/session/resume-session-work/adapters/codex.json",
+          "bytes": 363,
+          "sha256": "4f875f560c0926815e16cacc39f63706135d35b5aedcd5f56b05c02502a1accd"
+        },
+        {
+          "path": "artifacts/skills/operations/session/resume-session-work/adapters/cursor.json",
+          "bytes": 292,
+          "sha256": "0959af7c41305a2a3526fcd2290f5ec73b68e0634c74f7d4fd7a2d5f7e772c07"
+        },
+        {
+          "path": "artifacts/skills/operations/session/resume-session-work/adapters/gemini-cli.json",
+          "bytes": 296,
+          "sha256": "d50e03e198b6b9aa1dc5844bf21f26033b6aff2a0ea62bdb4e90ddf83b5b00fc"
+        },
+        {
+          "path": "artifacts/skills/operations/session/resume-session-work/adapters/github-copilot.json",
+          "bytes": 300,
+          "sha256": "9f95fe2f9800f99daf3008c9746529614be33da7e22c46591c6cffe543e1e30b"
+        },
+        {
+          "path": "artifacts/skills/operations/session/resume-session-work/adapters/opencode.json",
+          "bytes": 294,
+          "sha256": "e93e3afb2a5c2e5096a08815ebd49fd0e2a4b69a149fc6d89e7cadeb9de8d45a"
+        },
+        {
+          "path": "artifacts/skills/operations/session/resume-session-work/agents/openai.yaml",
+          "bytes": 235,
+          "sha256": "bb2b6019c4decd3236214924439a589f92c31a5a4ffe5acc934af4ee3411f0bf"
+        },
+        {
+          "path": "artifacts/skills/operations/session/resume-session-work/artifact.json",
+          "bytes": 2228,
+          "sha256": "75a65223d9d09fa4865c6e9d628404be81aabb6cf6dc036567d494f1e3b41f03"
+        },
+        {
+          "path": "artifacts/skills/operations/session/resume-session-work/evaluations/behavioral.json",
+          "bytes": 3840,
+          "sha256": "2da0ad3aa9209c135b188bb9fd0e6167c3a1483346091bc3b44ec57b823a0618"
+        },
+        {
+          "path": "artifacts/skills/operations/session/resume-session-work/SKILL.md",
+          "bytes": 1919,
+          "sha256": "13fa04e865c52cbff04b50a816c26cb6b84b0c86b34cd10dea91634c7f7184d1"
         }
       ]
     },

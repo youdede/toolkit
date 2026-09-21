@@ -10,7 +10,7 @@ const SKILL_VERBS = new Set([
   'assess', 'audit', 'author', 'build', 'capture', 'compose', 'compress', 'conduct', 'critique', 'debug',
   'decompose', 'define', 'delegate', 'deliver', 'design', 'document', 'edit', 'enforce', 'establish', 'evaluate',
   'execute', 'extract', 'frame', 'generate', 'govern', 'guide', 'implement', 'improve', 'interview', 'isolate',
-  'keep', 'load', 'make', 'map', 'optimize', 'plan', 'prepare', 'produce', 'provision', 'publish',
+  'keep', 'load', 'make', 'map', 'optimize', 'plan', 'prepare', 'produce', 'provision', 'publish', 'resume',
   'qualify', 'query', 'reconcile', 'reduce', 'request', 'research', 'resolve',
   'review', 'schedule', 'simplify', 'specify', 'structure', 'surface', 'sync', 'synthesize', 'teach', 'test', 'triage', 'verify', 'write'
 ]);

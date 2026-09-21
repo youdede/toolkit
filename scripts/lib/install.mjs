@@ -448,7 +448,7 @@ function ownersByFile(state, exceptKey) {
   const owners = new Map();
   for (const [key, install] of Object.entries(state.installs)) {
     if (key === exceptKey) continue;
-    for (const file of install.files || []) owners.set(file.path, key);
+    for (const file of install.files || []) owners.set(file.path, { key, file, install });
   }
   return owners;
 }
@@ -508,16 +508,24 @@ function prepareInstall(query, options = {}) {
   const displacedByPath = new Map((ownedInstall?.displacedFiles || []).map((file) => [file.path, file]));
 
   for (const item of filePlan) {
-    if (owners.has(item.relative)) throw new Error(`${item.relative} is owned by ${owners.get(item.relative)}`);
+    const sharedOwner = owners.get(item.relative);
+    if (sharedOwner && (sharedOwner.file.sha256 !== item.sourceSha256
+      || Boolean(sharedOwner.file.executable) !== Boolean(item.executable))) {
+      throw new Error(`${item.relative} conflicts with ${sharedOwner.key}`);
+    }
+    if (sharedOwner?.install.displacedFiles?.some((file) => file.path === item.relative)) {
+      throw new Error(`${item.relative} cannot be shared because ${sharedOwner.key} replaced an unmanaged file`);
+    }
     if (existsSync(item.destination)) {
       const ownedFile = ownedInstall?.files?.find((file) => file.path === item.relative);
-      if (!ownedFile && !force) {
+      const managedFile = ownedFile || sharedOwner?.file;
+      if (!managedFile && !force) {
         throw new Error(`${item.relative} already exists and is unmanaged; use --force to replace it`);
       }
-      if (!ownedFile && force && !displacedByPath.has(item.relative)) {
+      if (!managedFile && force && !displacedByPath.has(item.relative)) {
         displacedByPath.set(item.relative, displacedRecord(item.destination, item.relative));
       }
-      if (ownedFile && sha256(readFileSync(item.destination)) !== ownedFile.sha256 && !force) {
+      if (managedFile && sha256(readFileSync(item.destination)) !== managedFile.sha256 && !force) {
         throw new Error(`${item.relative} changed since installation; use --force to replace it`);
       }
     }
@@ -807,6 +815,13 @@ function removeArtifactLocked(query, options = {}) {
   }
 
   const fileBackups = new Map();
+  const sharedPaths = new Set();
+  for (const [candidateKey, candidate] of Object.entries(state.installs)) {
+    if (candidateKey === key) continue;
+    for (const file of candidate.files || []) {
+      if ((installed.files || []).some((ownedFile) => ownedFile.path === file.path)) sharedPaths.add(file.path);
+    }
+  }
   const previousState = {
     data: readFileSync(statePath(configRoot)),
     mode: statSync(statePath(configRoot)).mode & 0o777
@@ -814,6 +829,7 @@ function removeArtifactLocked(query, options = {}) {
   try {
     for (const file of installed.files || []) {
       const absolute = path.join(configRoot, file.path);
+      if (sharedPaths.has(file.path)) continue;
       fileBackups.set(absolute, existsSync(absolute)
         ? { data: readFileSync(absolute), mode: statSync(absolute).mode & 0o777 }
         : null);
@@ -844,8 +860,14 @@ function removeArtifactLocked(query, options = {}) {
     throw error;
   }
 
-  for (const file of installed.files || []) cleanupEmptyParents(path.join(configRoot, file.path), configRoot);
-  return { artifact, configRoot, removed: (installed.files || []).map((file) => path.join(configRoot, file.path)) };
+  for (const file of installed.files || []) {
+    if (!sharedPaths.has(file.path)) cleanupEmptyParents(path.join(configRoot, file.path), configRoot);
+  }
+  return {
+    artifact,
+    configRoot,
+    removed: (installed.files || []).filter((file) => !sharedPaths.has(file.path)).map((file) => path.join(configRoot, file.path))
+  };
 }
 
 export function planPackInstall(query, options = {}) {
@@ -867,10 +889,11 @@ export function planPackInstall(query, options = {}) {
     for (const mutation of [...plan.writes, ...plan.removes]) {
       const key = `${plan.configRoot}\0${mutation.path}`;
       const previous = mutations.get(key);
-      if (previous && previous !== member.artifactId) {
-        throw new Error(`${pack.id}: members ${previous} and ${member.artifactId} both mutate '${mutation.path}'`);
+      const identicalSharedWrite = typeof mutation.sha256 === 'string' && previous?.sha256 === mutation.sha256;
+      if (previous && previous.artifactId !== member.artifactId && !identicalSharedWrite) {
+        throw new Error(`${pack.id}: members ${previous.artifactId} and ${member.artifactId} both mutate '${mutation.path}'`);
       }
-      mutations.set(key, member.artifactId);
+      mutations.set(key, { artifactId: member.artifactId, sha256: mutation.sha256 });
     }
   }
   return { pack, target, scope: options.scope || 'project', members: plans };

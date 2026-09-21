@@ -1,0 +1,66 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/development/resource-management/tool-output-budget-guard",
+  "slug": "tool-output-budget-guard",
+  "name": "Tool Output Budget Guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Warn when a shell tool call returns output beyond the declared byte budget, with pagination guidance.",
+  "description": "On PostToolUse for shell calls, measure the observed output bytes and emit bounded guidance when it exceeds the 64 KiB budget, so context pressure becomes visible. Never rewrites output, never echoes content, never blocks.",
+  "domain": "development",
+  "category": "resource-management",
+  "capabilities": [
+    "operate"
+  ],
+  "problems": [
+    "context-pressure"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "operations",
+    "handoff"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "Youdede"
+  ],
+  "refuses": [
+    "It does not block, delay, or alter the observed event; it records or reports only.",
+    "It does not execute submitted content, call an LLM, or transmit any data off the machine.",
+    "It does not treat unreadable, symlinked, or oversized state as valid evidence."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/tool-output-budget-guard.mjs",
+        "runtime": "node",
+        "purpose": "Measure tool output against the byte budget and emit guidance.",
+        "sideEffects": "none"
+      }
+    ]
+  },
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "observing",
+    "failurePolicy": "fail-open",
+    "latencyClass": "bounded",
+    "dataRetention": "none"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  }
+}

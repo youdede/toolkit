@@ -1,0 +1,37 @@
+{
+  "$schema": "../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": [
+    "project"
+  ],
+  "files": [
+    {
+      "from": "targets/claude-code/compact-readiness-guard.mjs",
+      "to": "hooks/youdede/compact-readiness-guard.mjs",
+      "executable": true
+    },
+    {
+      "root": "package",
+      "from": "scripts/runtime/session-ledger.mjs",
+      "to": "hooks/youdede/lib/session-ledger.mjs"
+    }
+  ],
+  "settingsPatch": {
+    "hooks": {
+      "PreCompact": [
+        {
+          "matcher": "manual|auto",
+          "description": "[youdede:compact-readiness-guard] Warn before compaction hides unverified state",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "node \"{claudeRoot}/hooks/youdede/compact-readiness-guard.mjs\"",
+              "timeout": 10
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

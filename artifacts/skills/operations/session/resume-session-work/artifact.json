@@ -1,0 +1,70 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/operations/session/resume-session-work",
+  "slug": "resume-session-work",
+  "name": "Resume Session Work",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Reconstruct working context from the hash-chained session ledger with hash-cited claims and an explicit unverified section.",
+  "description": "Resume in-flight work by verifying the session ledger chain, reading its tail, and reconstructing context where every carried claim cites its ledger entry hash. Stale claims and integrity failures are surfaced, never smoothed over. Use when resuming after a break, compaction, or new session.",
+  "domain": "operations",
+  "category": "session",
+  "capabilities": [
+    "operate"
+  ],
+  "problems": [
+    "session-handoff",
+    "multi-session-planning"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "handoff",
+    "operations"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "Youdede"
+  ],
+  "refuses": [
+    "It does not treat a tampered or unverifiable ledger chain as ground truth.",
+    "It does not carry forward a claim without citing its ledger entry hash.",
+    "It does not rewrite, repair, or compact the append-only ledger; corruption is reported, never fixed."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "relationships": {
+    "composesWith": [
+      "command/operations/session/record-work-checkpoint",
+      "command/operations/session/verify-session-ledger",
+      "hook/operations/session/session-checkpoint-guard",
+      "hook/operations/session/session-restore-guard"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  }
+}

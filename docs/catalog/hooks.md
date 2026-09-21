@@ -4,7 +4,7 @@
 
 A deterministic gate that inspects a command before it runs and blocks it. No model sits in the decision path, so the same input always produces the same verdict.
 
-58 of them. Install one with `npx @youdede/toolkit add <slug> --target <runtime> --scope project`, or read what it refuses first with `npx @youdede/toolkit info <slug>`.
+62 of them. Install one with `npx @youdede/toolkit add <slug> --target <runtime> --scope project`, or read what it refuses first with `npx @youdede/toolkit info <slug>`.
 
 
 ## data
@@ -35,6 +35,7 @@ A deterministic gate that inspects a command before it runs and blocks it. No mo
 | `debug-artifact-guard` | Block commits containing high-confidence debugger statements or focused tests. | medium | claude-code, codex, cursor, gemini-cli, opencode |
 | `lint-suppression-guard` | Block net-new broad diagnostic suppressions while allowing scoped rule exceptions. | high | claude-code |
 | `exception-swallowing-guard` | Block newly added empty exception handlers and ignored promise rejections. | high | claude-code |
+| `tool-output-budget-guard` | Warn when a shell tool call returns output beyond the declared byte budget, with pagination guidance. | low | claude-code |
 | `test-integrity-guard` | Block newly introduced test suppressions and explicit shell removal of test sources. | medium | claude-code |
 | `phase-gate-guard` | Block phase evidence writes unless the previous phase in the spec-design-tasks-implementation chain exists and is valid. | medium | claude-code |
 
@@ -58,6 +59,9 @@ A deterministic gate that inspects a command before it runs and blocks it. No mo
 | `release-clean-state-guard` | Require a clean attached Git worktree before a recognized package or release publication command. | high | claude-code, codex, cursor, gemini-cli, opencode |
 | `large-diff-review-guard` | Require a smaller staged change when a commit exceeds bounded reviewability thresholds. | medium | claude-code, codex, cursor, gemini-cli, opencode |
 | `scheduled-task-mutation-guard` | Block direct creation, mutation, execution, and removal of operating-system scheduled tasks. | high | claude-code, codex, cursor, gemini-cli, opencode |
+| `compact-readiness-guard` | Warn before compaction when uncommitted changes or pending ledger claims would silently lose context. | low | claude-code |
+| `session-checkpoint-guard` | Append a deterministic, hash-chained session-end receipt to the local session ledger. | low | claude-code |
+| `session-restore-guard` | Inject a bounded, integrity-flagged summary of the latest session-ledger checkpoints at session start. | low | claude-code |
 | `commit-signature-intent-guard` | Require an explicit or configured cryptographic-signing intent for Git commits. | high | claude-code, codex, cursor, gemini-cli, opencode |
 | `system-service-mutation-guard` | Block direct operating-system service lifecycle and configuration mutations. | high | claude-code, codex, cursor, gemini-cli, opencode |
 | `release-version-consistency-guard` | Require package and lockfile versions to agree before a recognized publication command. | high | claude-code, codex, cursor, gemini-cli, opencode |

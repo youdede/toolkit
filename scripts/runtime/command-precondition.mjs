@@ -19,6 +19,10 @@ const MAX_PATHS_PER_CHECK = 64;
 const GIT_TIMEOUT_MS = 5000;
 const KNOWN_CHECKS = new Set(['git-clean', 'file-exists', 'evidence-valid']);
 
+function gitEnvironment() {
+  return Object.fromEntries(Object.entries(process.env).filter(([key]) => !key.startsWith('GIT_')));
+}
+
 function fail(code, message) {
   process.stdout.write(`${JSON.stringify({ ok: false, code, failures: [message] })}\n`);
   process.exit(1);
@@ -52,7 +56,8 @@ function checkGitClean(workspace) {
   const probe = spawnSync('git', ['-C', workspace, 'status', '--porcelain'], {
     encoding: 'utf8',
     timeout: GIT_TIMEOUT_MS,
-    maxBuffer: MAX_EVIDENCE_BYTES
+    maxBuffer: MAX_EVIDENCE_BYTES,
+    env: gitEnvironment()
   });
   if (probe.error || probe.status === null) return { ok: false, reason: 'git status could not run (timeout or git missing)' };
   if (probe.status !== 0) return { ok: false, reason: 'not a git worktree' };

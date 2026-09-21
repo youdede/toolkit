@@ -1,0 +1,37 @@
+{
+  "$schema": "../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": [
+    "project"
+  ],
+  "files": [
+    {
+      "from": "targets/claude-code/session-checkpoint-guard.mjs",
+      "to": "hooks/youdede/session-checkpoint-guard.mjs",
+      "executable": true
+    },
+    {
+      "root": "package",
+      "from": "scripts/runtime/session-ledger.mjs",
+      "to": "hooks/youdede/lib/session-ledger.mjs"
+    }
+  ],
+  "settingsPatch": {
+    "hooks": {
+      "SessionEnd": [
+        {
+          "matcher": ".*",
+          "description": "[youdede:session-checkpoint-guard] Record a hash-chained session-end receipt",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "node \"{claudeRoot}/hooks/youdede/session-checkpoint-guard.mjs\"",
+              "timeout": 10
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/operations/session/session-restore-guard",
+  "slug": "session-restore-guard",
+  "name": "Session Restore Guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Inject a bounded, integrity-flagged summary of the latest session-ledger checkpoints at session start.",
+  "description": "On SessionStart, read entries from the ledger's declared 30-day restore horizon and verify chain integrity, then add a short summary as context. The append-only ledger remains locally bounded to 1 MiB until explicit removal. A tampered ledger is surfaced as an integrity failure, never silently trusted; a missing ledger adds nothing.",
+  "domain": "operations",
+  "category": "session",
+  "capabilities": [
+    "operate"
+  ],
+  "problems": [
+    "session-handoff",
+    "context-pressure"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "operations",
+    "handoff"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "Youdede"
+  ],
+  "refuses": [
+    "It does not block, delay, or alter the observed event; it records or reports only.",
+    "It does not execute submitted content, call an LLM, or transmit any data off the machine.",
+    "It does not treat unreadable, symlinked, or oversized state as valid evidence."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/session-restore-guard.mjs",
+        "runtime": "node",
+        "purpose": "Inject a bounded integrity-flagged ledger summary as session context.",
+        "sideEffects": "none"
+      }
+    ]
+  },
+  "relationships": {
+    "composesWith": [
+      "command/operations/session/record-work-checkpoint",
+      "command/operations/session/verify-session-ledger",
+      "skill/operations/session/resume-session-work"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "observing",
+    "failurePolicy": "fail-open",
+    "latencyClass": "bounded",
+    "dataRetention": "local-bounded"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  }
+}
