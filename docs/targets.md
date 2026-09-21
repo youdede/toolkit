@@ -5,14 +5,14 @@ Support is declared per artifact. A missing adapter is an intentional refusal, n
 ## Coverage
 
 <!-- stat-table:targets -->
-| Target | Skills | Hooks | Subagents | Project root | User root |
-| --- | ---: | ---: | ---: | --- | --- |
-| Claude Code | 166 | 57 | 62 | `.claude` | `~/.claude` |
-| Codex | 166 | 22 | 0 | skills: `.agents`; hooks/agents: `.codex` | skills: `~/.agents`; hooks/agents: `~/.codex` |
-| Gemini CLI | 166 | 22 | 62 | `.gemini` | `~/.gemini` |
-| GitHub Copilot | 166 | 0 | 62 | `.github` | `$COPILOT_HOME` or `~/.copilot` |
-| Cursor | 166 | 22 | 0 | `.cursor` | `~/.cursor` |
-| OpenCode | 166 | 22 | 50 | `.opencode` | `~/.config/opencode` |
+| Target | Skills | Hooks | Subagents | Commands | Contexts | MCP servers | Project root | User root |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- |
+| Claude Code | 166 | 57 | 62 | 1 | 0 | 0 | `.claude` | `~/.claude` |
+| Codex | 166 | 22 | 0 | 0 | 0 | 0 | skills: `.agents`; hooks/agents: `.codex` | skills: `~/.agents`; hooks/agents: `~/.codex` |
+| Gemini CLI | 166 | 22 | 62 | 0 | 0 | 0 | `.gemini` | `~/.gemini` |
+| GitHub Copilot | 166 | 0 | 62 | 0 | 0 | 0 | `.github` | `$COPILOT_HOME` or `~/.copilot` |
+| Cursor | 166 | 22 | 0 | 0 | 0 | 0 | `.cursor` | `~/.cursor` |
+| OpenCode | 166 | 22 | 50 | 0 | 0 | 0 | `.opencode` | `~/.config/opencode` |
 <!-- /stat-table -->
 
 Every skill uses the runtime's native `skills/<slug>/SKILL.md` location and carries its scripts or references through the same installation. Only Codex receives `agents/openai.yaml`.
@@ -32,6 +32,16 @@ The first cross-runtime gate tranche contains 22 shell-only `PreToolUse` guards.
 Write/edit, MCP, prompt, transcript, compaction, configuration, worktree, failure-context, and task-completion hooks remain Claude-only until target-native fixtures prove that their preventive boundary and failure policy survive translation. GitHub Copilot hooks are withheld because documented hook timeouts always fail open, which conflicts with the fail-closed promise of the enforcement catalog.
 
 Installing an OpenCode guard executes local plugin code when OpenCode starts and requires a reload after changes. Codex exact command hooks require the workspace to be trusted; Gemini and Cursor project hooks are likewise subject to their runtime trust controls. Node.js 20 or later must remain available for JavaScript helpers and cross-runtime deterministic gates.
+
+## Commands, contexts, and MCP servers
+
+Three further kinds extend the catalog beyond procedures, gates, and specialists:
+
+- **Commands** are user-invoked workflows whose manifests declare a tool allowlist, preconditions checked before invocation, and the evidence the workflow must produce. A runtime adapter is published only where the native command surface preserves the invocation name, the tool authority boundary, and the evidence requirement; otherwise the adapter is withheld and the limitation is recorded on the artifact.
+- **Contexts** are scoped rule files. Because a context shapes every decision while installed, an adapter is published only where the runtime applies the file with its declared scope and precedence, and the install validator refuses a context that contradicts a co-installed gate.
+- **MCP servers** are vetted tool-server configurations with declared egress, secret access, and a pinned tool manifest. They install only where the runtime's MCP configuration format can express the declared boundary faithfully.
+
+The coverage table above reports each kind per runtime; a zero is an intentional refusal until target-native fixtures prove equivalence, per the same contract that governs hooks and subagents.
 
 ## Official format references
 
