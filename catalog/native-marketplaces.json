@@ -1,0 +1,136 @@
+{
+  "$schema": "../schema/native-marketplace.schema.json",
+  "schemaVersion": 1,
+  "generatedBy": "scripts/generate-marketplaces.mjs",
+  "claudeCode": {
+    "pluginCount": 10,
+    "plugins": [
+      {
+        "packId": "pack/accessibility-assurance",
+        "name": "accessibility-assurance",
+        "source": "./plugins/accessibility-assurance",
+        "refusalCount": 32,
+        "evidenceBadges": [
+          "ledger-linked-evidence",
+          "behaviorally-evaluated"
+        ]
+      },
+      {
+        "packId": "pack/daily-driver",
+        "name": "daily-driver",
+        "source": "./plugins/daily-driver",
+        "refusalCount": 16,
+        "evidenceBadges": [
+          "ledger-linked-evidence",
+          "behaviorally-evaluated"
+        ]
+      },
+      {
+        "packId": "pack/data-change-safety",
+        "name": "data-change-safety",
+        "source": "./plugins/data-change-safety",
+        "refusalCount": 14,
+        "evidenceBadges": [
+          "ledger-linked-evidence",
+          "behaviorally-evaluated"
+        ]
+      },
+      {
+        "packId": "pack/infrastructure-change-readiness",
+        "name": "infrastructure-change-readiness",
+        "source": "./plugins/infrastructure-change-readiness",
+        "refusalCount": 9,
+        "evidenceBadges": [
+          "ledger-linked-evidence",
+          "behaviorally-evaluated"
+        ]
+      },
+      {
+        "packId": "pack/mcp-baseline",
+        "name": "mcp-baseline",
+        "source": "./plugins/mcp-baseline",
+        "refusalCount": 22,
+        "evidenceBadges": [
+          "ledger-linked-evidence",
+          "behaviorally-evaluated"
+        ]
+      },
+      {
+        "packId": "pack/mobile-release-readiness",
+        "name": "mobile-release-readiness",
+        "source": "./plugins/mobile-release-readiness",
+        "refusalCount": 15,
+        "evidenceBadges": [
+          "ledger-linked-evidence",
+          "behaviorally-evaluated"
+        ]
+      },
+      {
+        "packId": "pack/release-readiness",
+        "name": "release-readiness",
+        "source": "./plugins/release-readiness",
+        "refusalCount": 24,
+        "evidenceBadges": [
+          "ledger-linked-evidence",
+          "behaviorally-evaluated"
+        ]
+      },
+      {
+        "packId": "pack/reviewable-change",
+        "name": "reviewable-change",
+        "source": "./plugins/reviewable-change",
+        "refusalCount": 19,
+        "evidenceBadges": [
+          "ledger-linked-evidence",
+          "behaviorally-evaluated"
+        ]
+      },
+      {
+        "packId": "pack/secure-agent-boundaries",
+        "name": "secure-agent-boundaries",
+        "source": "./plugins/secure-agent-boundaries",
+        "refusalCount": 23,
+        "evidenceBadges": [
+          "ledger-linked-evidence",
+          "behaviorally-evaluated"
+        ]
+      },
+      {
+        "packId": "pack/session-continuity",
+        "name": "session-continuity",
+        "source": "./plugins/session-continuity",
+        "refusalCount": 22,
+        "evidenceBadges": [
+          "ledger-linked-evidence",
+          "behaviorally-evaluated"
+        ]
+      }
+    ],
+    "omitted": [
+      {
+        "packId": "pack/plan-and-verify-loop",
+        "unsupportedArtifactIds": [
+          "context/development/testing/testing-baseline"
+        ]
+      }
+    ]
+  },
+  "codex": {
+    "pluginCount": 1,
+    "plugins": [
+      {
+        "name": "youdede-toolkit",
+        "source": "./plugins/youdede-toolkit",
+        "skillCount": 166,
+        "refusalCount": 564
+      }
+    ],
+    "withheldKinds": [
+      "command",
+      "context",
+      "hook",
+      "mcp-server",
+      "subagent"
+    ]
+  }
+}

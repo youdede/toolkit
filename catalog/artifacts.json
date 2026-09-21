@@ -24517,7 +24517,6 @@
       ],
       "targets": [
         "claude-code",
-        "codex",
         "cursor",
         "gemini-cli",
         "github-copilot",
@@ -24525,11 +24524,6 @@
       ],
       "targetCompatibility": {
         "claude-code": {
-          "stability": "stable",
-          "limitations": [],
-          "bindings": []
-        },
-        "codex": {
           "stability": "stable",
           "limitations": [],
           "bindings": []
@@ -24559,10 +24553,6 @@
         {
           "target": "claude-code",
           "command": "npx @youdede/toolkit add resume-session-work --target claude-code --scope project"
-        },
-        {
-          "target": "codex",
-          "command": "npx @youdede/toolkit add resume-session-work --target codex --scope project"
         },
         {
           "target": "cursor",

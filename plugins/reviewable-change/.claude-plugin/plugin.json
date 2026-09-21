@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "reviewable-change",
+  "displayName": "Reviewable change",
+  "version": "1.1.0",
+  "description": "Prepare bounded code changes, obtain independent review, and prevent oversized unreviewable commits.",
+  "author": {
+    "name": "Youdede",
+    "url": "https://github.com/udede/toolkit"
+  },
+  "homepage": "https://github.com/udede/toolkit/blob/main/packs/reviewable-change/pack.json",
+  "repository": "https://github.com/udede/toolkit",
+  "license": "MIT",
+  "keywords": [
+    "independent-review",
+    "reviewable-delivery",
+    "ledger-linked-evidence",
+    "behaviorally-evaluated"
+  ],
+  "hooks": "./hooks/hooks.json",
+  "metadata": {
+    "catalogId": "pack/reviewable-change",
+    "memberArtifactIds": [
+      "command/development/workflow/assemble-review-brief",
+      "skill/operations/reviewability/prepare-reviewable-pull-request",
+      "skill/development/code-quality/evaluate-code-review-feedback",
+      "skill/development/code-quality/request-independent-code-review",
+      "subagent/development/code-quality/refactor-equivalence-reviewer",
+      "hook/operations/reviewability/large-diff-review-guard"
+    ],
+    "refusalCount": 19,
+    "evidenceBadges": [
+      "ledger-linked-evidence",
+      "behaviorally-evaluated"
+    ]
+  }
+}

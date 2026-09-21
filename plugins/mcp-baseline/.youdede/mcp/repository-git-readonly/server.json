@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "serverName": "youdede-repository-git-readonly",
+  "mode": "repository-git",
+  "transport": "stdio",
+  "launch": {
+    "command": "node",
+    "args": [".youdede/mcp/runtime.mjs", "--profile", ".youdede/mcp/repository-git-readonly/server.json"]
+  },
+  "egress": ["none"],
+  "secretAccess": ["none"],
+  "allowHosts": [],
+  "tools": [
+    {
+      "name": "git_status",
+      "description": "Report bounded branch, index, worktree, and untracked-file status for the current repository.",
+      "inputSchema": { "type": "object", "additionalProperties": false, "properties": {} },
+      "annotations": { "readOnlyHint": true, "destructiveHint": false, "idempotentHint": true, "openWorldHint": false }
+    },
+    {
+      "name": "git_diff",
+      "description": "Read a bounded worktree or staged diff, optionally restricted to one portable repository-relative path.",
+      "inputSchema": { "type": "object", "additionalProperties": false, "properties": { "staged": { "type": "boolean" }, "path": { "type": "string" } } },
+      "annotations": { "readOnlyHint": true, "destructiveHint": false, "idempotentHint": true, "openWorldHint": false }
+    },
+    {
+      "name": "git_log",
+      "description": "Read up to 100 local commits as hashes, author timestamps, and subjects without contacting a remote.",
+      "inputSchema": { "type": "object", "additionalProperties": false, "properties": { "limit": { "type": "integer", "minimum": 1, "maximum": 100 } } },
+      "annotations": { "readOnlyHint": true, "destructiveHint": false, "idempotentHint": true, "openWorldHint": false }
+    }
+  ]
+}

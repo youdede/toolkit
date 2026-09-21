@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "infrastructure-change-readiness",
+  "displayName": "Infrastructure change readiness",
+  "version": "1.0.0",
+  "description": "Plan a staged infrastructure change and independently review lifecycle, blast-radius, and recovery evidence.",
+  "author": {
+    "name": "Youdede",
+    "url": "https://github.com/udede/toolkit"
+  },
+  "homepage": "https://github.com/udede/toolkit/blob/main/packs/infrastructure-change-readiness/pack.json",
+  "repository": "https://github.com/udede/toolkit",
+  "license": "MIT",
+  "keywords": [
+    "recovery-evidence",
+    "staged-infrastructure-change",
+    "ledger-linked-evidence",
+    "behaviorally-evaluated"
+  ],
+  "metadata": {
+    "catalogId": "pack/infrastructure-change-readiness",
+    "memberArtifactIds": [
+      "skill/operations/infrastructure/plan-infrastructure-change",
+      "subagent/operations/infrastructure/infrastructure-change-reviewer",
+      "subagent/operations/resilience/disaster-recovery-readiness-auditor"
+    ],
+    "refusalCount": 9,
+    "evidenceBadges": [
+      "ledger-linked-evidence",
+      "behaviorally-evaluated"
+    ]
+  }
+}

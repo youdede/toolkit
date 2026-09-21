@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "data-change-safety",
+  "displayName": "Data change safety",
+  "version": "1.0.0",
+  "description": "Review schema and migration changes with deterministic safety checks and independent risk analysis.",
+  "author": {
+    "name": "Youdede",
+    "url": "https://github.com/udede/toolkit"
+  },
+  "homepage": "https://github.com/udede/toolkit/blob/main/packs/data-change-safety/pack.json",
+  "repository": "https://github.com/udede/toolkit",
+  "license": "MIT",
+  "keywords": [
+    "compatible-data-change",
+    "migration-safety",
+    "ledger-linked-evidence",
+    "behaviorally-evaluated"
+  ],
+  "hooks": "./hooks/hooks.json",
+  "metadata": {
+    "catalogId": "pack/data-change-safety",
+    "memberArtifactIds": [
+      "skill/data/migrations/review-database-migration-plan",
+      "skill/data/schemas/review-schema-evolution",
+      "subagent/data/migrations/migration-risk-reviewer",
+      "hook/data/migrations/migration-safety-guard"
+    ],
+    "refusalCount": 14,
+    "evidenceBadges": [
+      "ledger-linked-evidence",
+      "behaviorally-evaluated"
+    ]
+  }
+}

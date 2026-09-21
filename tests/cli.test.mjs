@@ -133,10 +133,11 @@ test('verify-integrity exposes the reproducible catalog root and supports one ar
   assert.match(one, /No integrity drift found/);
 });
 
-test('list exposes the complete Codex skill adapter coverage', () => {
+test('list exposes only the supported Codex skill adapter coverage', () => {
   const output = cli(['list', '--kind', 'skill', '--target', 'codex']);
-  const expected = loadArtifacts().filter(({ manifest }) => manifest.kind === 'skill').length;
+  const expected = loadArtifacts().filter(({ manifest, adapters }) => manifest.kind === 'skill' && adapters.codex).length;
   assert.match(output, /debug-systematically/);
   assert.match(output, /author-effective-agent-skill/);
+  assert.doesNotMatch(output, /resume-session-work/);
   assert.match(output, new RegExp(`${expected} artifact\\(s\\)\\.`));
 });

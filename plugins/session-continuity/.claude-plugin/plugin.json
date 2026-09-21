@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "session-continuity",
+  "displayName": "Session continuity",
+  "version": "1.0.0",
+  "description": "Persist bounded hash-chained checkpoints, restore cited context, and verify continuity across sessions.",
+  "author": {
+    "name": "Youdede",
+    "url": "https://github.com/udede/toolkit"
+  },
+  "homepage": "https://github.com/udede/toolkit/blob/main/packs/session-continuity/pack.json",
+  "repository": "https://github.com/udede/toolkit",
+  "license": "MIT",
+  "keywords": [
+    "resumable-work",
+    "verified-session-history",
+    "ledger-linked-evidence",
+    "behaviorally-evaluated"
+  ],
+  "hooks": "./hooks/hooks.json",
+  "metadata": {
+    "catalogId": "pack/session-continuity",
+    "memberArtifactIds": [
+      "command/operations/session/record-work-checkpoint",
+      "command/operations/session/verify-session-ledger",
+      "hook/operations/session/compact-readiness-guard",
+      "hook/operations/session/session-checkpoint-guard",
+      "hook/operations/session/session-restore-guard",
+      "skill/operations/session/resume-session-work",
+      "subagent/writing/decision-support/decision-record-reviewer"
+    ],
+    "refusalCount": 22,
+    "evidenceBadges": [
+      "ledger-linked-evidence",
+      "behaviorally-evaluated"
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "name": "youdede-toolkit",
+  "version": "0.2.0",
+  "description": "166 coding-agent skills with 564 declared refusal boundaries.",
+  "author": {
+    "name": "Youdede",
+    "url": "https://github.com/udede/toolkit"
+  },
+  "homepage": "https://github.com/udede/toolkit#readme",
+  "repository": "https://github.com/udede/toolkit",
+  "license": "MIT",
+  "keywords": [
+    "coding-agents",
+    "skills",
+    "evidence",
+    "refusal-boundaries"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Youdede toolkit",
+    "shortDescription": "166 catalog skills with explicit refusal boundaries",
+    "longDescription": "166 inspectable skill artifacts generated from the catalog, carrying 564 declared refusal boundaries.",
+    "developerName": "Youdede",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Workflow"
+    ],
+    "defaultPrompt": [
+      "Find a relevant toolkit skill for this task.",
+      "Apply the selected skill and preserve its refusal boundaries.",
+      "State which evidence the selected skill requires."
+    ]
+  }
+}

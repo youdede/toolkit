@@ -8,7 +8,7 @@ Support is declared per artifact. A missing adapter is an intentional refusal, n
 | Target | Skills | Hooks | Subagents | Commands | Contexts | MCP servers | Project root | User root |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- |
 | Claude Code | 167 | 63 | 62 | 7 | 4 | 3 | `.claude` | `~/.claude` |
-| Codex | 167 | 22 | 0 | 0 | 0 | 0 | skills: `.agents`; hooks/agents: `.codex` | skills: `~/.agents`; hooks/agents: `~/.codex` |
+| Codex | 166 | 22 | 0 | 0 | 0 | 0 | skills: `.agents`; hooks/agents: `.codex` | skills: `~/.agents`; hooks/agents: `~/.codex` |
 | Gemini CLI | 167 | 22 | 62 | 0 | 0 | 0 | `.gemini` | `~/.gemini` |
 | GitHub Copilot | 167 | 0 | 62 | 0 | 4 | 0 | `.github` | `$COPILOT_HOME` or `~/.copilot` |
 | Cursor | 167 | 23 | 0 | 0 | 4 | 3 | `.cursor` | `~/.cursor` |
@@ -23,7 +23,7 @@ surface for each toolkit context. Numeric filename prefixes preserve the toolkit
 precedence order; where a runtime does not define cross-file precedence, install-set validation
 rejects known context/hook contradictions instead of claiming the runtime resolves them.
 
-Every skill uses the runtime's native `skills/<slug>/SKILL.md` location and carries its scripts or references through the same installation. Only Codex receives `agents/openai.yaml`.
+Every published skill adapter uses the runtime's native `skills/<slug>/SKILL.md` location and carries its scripts or references through the same installation. Only Codex receives `agents/openai.yaml`. `resume-session-work` is withheld from Codex because its hash-chained ledger and lifecycle hooks are not available there; installing only its prompt would fail the skill's own deterministic precondition.
 
 ## Specialist profiles
 

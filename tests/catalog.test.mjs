@@ -162,7 +162,8 @@ test('public catalog is sorted and exposes individual install commands', () => {
     assert.ok(artifact.refuses.length >= 3);
     if (artifact.execution.mode === 'prompt') assert.deepEqual(artifact.execution.entrypoints, []);
     else assert.ok(artifact.execution.entrypoints.length > 0);
-    if (artifact.kind === 'skill') assert.ok(artifact.targets.includes('codex'));
+    if (artifact.kind === 'skill' && artifact.id !== 'skill/operations/session/resume-session-work') assert.ok(artifact.targets.includes('codex'));
+    if (artifact.id === 'skill/operations/session/resume-session-work') assert.equal(artifact.targets.includes('codex'), false);
   }
 });
 

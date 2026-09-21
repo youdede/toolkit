@@ -10,7 +10,7 @@ import { doctor, installArtifact, removeArtifact } from '../scripts/lib/install.
 import { resolveConfigRoot, resolveConfigRoots, SUPPORTED_TARGETS } from '../scripts/lib/targets.mjs';
 
 const MATRIX = {
-  skill: { 'claude-code': 167, codex: 167, 'gemini-cli': 167, 'github-copilot': 167, cursor: 167, opencode: 167 },
+  skill: { 'claude-code': 167, codex: 166, 'gemini-cli': 167, 'github-copilot': 167, cursor: 167, opencode: 167 },
   hook: { 'claude-code': 63, codex: 22, 'gemini-cli': 22, 'github-copilot': 0, cursor: 23, opencode: 22 },
   subagent: { 'claude-code': 62, codex: 0, 'gemini-cli': 62, 'github-copilot': 62, cursor: 0, opencode: 50 },
   command: { 'claude-code': 7, codex: 0, 'gemini-cli': 0, 'github-copilot': 0, cursor: 0, opencode: 0 },
