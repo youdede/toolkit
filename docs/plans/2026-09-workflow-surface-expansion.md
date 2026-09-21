@@ -1,7 +1,7 @@
 # Development plan: workflow surface and artifact kind expansion
 
 - Date: 2026-09-21
-- Status: In progress — phases 0–3 complete
+- Status: In progress — phases 0–4 complete
 - ADR: [0002](../decisions/0002-extend-artifact-kinds-for-agent-workflows.md)
 
 ## Motivation
@@ -135,6 +135,14 @@ context/hook contradictions; stale contexts warn on install.
    warnings.
 
 ## Phase 4 — MCP server configs with declared trust
+
+**Completed 2026-09-21.** Three project-scoped local stdio servers provide bounded workspace-file,
+local-Git, and allowlisted-document reads for Claude Code and Cursor. Their native config entries
+are merged and removed reversibly; exact tool-description hashes, profiles, egress, secret access,
+launch commands, threat notes, and generated runtime copies are CI-verified. A fail-closed guard
+rejects unknown toolkit server/tool identities and description or inventory drift when exposed by
+the client. Re-pinning requires a deterministic proposal digest, exact human confirmation, full
+verification, and an evidence receipt.
 
 **Exit criteria:** `mcp-server` artifacts ship with egress, secret-access, and pinned-tool
 declarations; `secure-agent-boundaries` pack includes an MCP guard before any config is marked

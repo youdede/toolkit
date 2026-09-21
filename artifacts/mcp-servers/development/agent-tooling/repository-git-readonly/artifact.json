@@ -1,0 +1,41 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "mcp-server/development/agent-tooling/repository-git-readonly",
+  "slug": "repository-git-readonly",
+  "name": "Repository Git read-only MCP",
+  "version": "1.0.0",
+  "kind": "mcp-server",
+  "summary": "Expose bounded local Git status, diff, and history inspection through a pinned MCP server.",
+  "description": "Installs a local stdio MCP server that runs only fixed read-only Git status, diff, and log forms in the current repository, strips Git environment overrides, and never contacts a remote.",
+  "domain": "development",
+  "category": "agent-tooling",
+  "capabilities": ["collect"],
+  "problems": ["agent-policy-integrity"],
+  "frameworks": ["agnostic", "nodejs"],
+  "languages": ["agnostic"],
+  "lifecycle": ["implementation", "maintenance", "review"],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": ["Youdede"],
+  "refuses": [
+    "It does not commit, stage, restore, reset, switch, merge, fetch, push, or mutate repository state.",
+    "It does not accept arbitrary Git flags, revisions, subprocesses, aliases, configuration, or environment overrides.",
+    "It does not contact remotes, read credentials, or claim that inspected history is authentic or trusted."
+  ],
+  "execution": {"mode": "hybrid", "entrypoints": [{"path": "runtime/readonly-mcp-server.mjs", "runtime": "node", "purpose": "Serve three fixed bounded read-only Git inspection tools over local standard input and output.", "sideEffects": "read-only"}]},
+  "mcpServer": {
+    "transport": "stdio",
+    "egress": ["none"],
+    "secretAccess": ["none"],
+    "trustBoundary": "Only bounded output from fixed local Git status, diff, and log invocations crosses the server boundary; Git environment overrides and remote operations are excluded.",
+    "pinnedTools": [
+      {"name": "git_diff", "descriptionHash": "9486df1b1cfa757f0862d6055d7137985d6b1282eae87655b53fa77d2a511929"},
+      {"name": "git_log", "descriptionHash": "6708174da43a3a3b7737aad8bf7541ca96c638b58fd25c1f9ad33246f5db1f7b"},
+      {"name": "git_status", "descriptionHash": "58ecc9bfdf39f658fe9918563180bf64455e05e675a11539ddd3b810de7935cd"}
+    ]
+  },
+  "relationships": {"composesWith": ["hook/security/network-control/mcp-capability-drift-guard"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": []},
+  "operational": {"behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "bounded", "dataRetention": "none"},
+  "adapters": {"claude-code": "adapters/claude-code.json", "cursor": "adapters/cursor.json"}
+}

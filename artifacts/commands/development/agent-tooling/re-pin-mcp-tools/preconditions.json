@@ -1,0 +1,6 @@
+{
+  "checks": [
+    {"type": "git-clean"},
+    {"type": "file-exists", "paths": ["catalog/mcp-pins.json", "scripts/verify-mcp.mjs"]}
+  ]
+}

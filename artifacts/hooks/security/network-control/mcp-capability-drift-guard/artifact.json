@@ -1,0 +1,31 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/security/network-control/mcp-capability-drift-guard",
+  "slug": "mcp-capability-drift-guard",
+  "name": "MCP capability drift guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block toolkit MCP tool calls when the server, tool name, or observed description is not pinned.",
+  "description": "A deterministic fail-closed pre-tool gate that accepts only curated Youdede MCP server and tool identities from a generated pin registry and rejects unknown or description-drifted capabilities.",
+  "domain": "security",
+  "category": "network-control",
+  "capabilities": ["enforce"],
+  "problems": ["agent-policy-integrity"],
+  "frameworks": ["agnostic", "nodejs"],
+  "languages": ["javascript"],
+  "lifecycle": ["implementation", "maintenance", "review"],
+  "risk": "high",
+  "license": "MIT",
+  "authors": ["Youdede"],
+  "refuses": [
+    "It does not trust MCP annotations, server names, or tool descriptions that are absent from the generated pin registry.",
+    "It does not silently accept added, removed, renamed, or description-drifted tools from curated servers.",
+    "It does not widen egress, secret, filesystem, subprocess, or mutation authority for an MCP server."
+  ],
+  "execution": {"mode": "deterministic", "entrypoints": [{"path": "targets/claude-code/mcp-capability-drift-guard.mjs", "runtime": "node", "purpose": "Compare a toolkit MCP tool call and any observed inventory with the generated capability pin registry.", "sideEffects": "none"}]},
+  "hookGuard": {"blockedActions": ["invoke-unpinned-mcp-tool"]},
+  "relationships": {"composesWith": ["command/development/agent-tooling/re-pin-mcp-tools", "mcp-server/development/agent-tooling/allowlisted-fetch-readonly", "mcp-server/development/agent-tooling/repository-git-readonly", "mcp-server/development/agent-tooling/workspace-files-readonly"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": []},
+  "operational": {"behavior": "enforcing", "failurePolicy": "fail-closed", "latencyClass": "immediate", "dataRetention": "none"},
+  "adapters": {"claude-code": "adapters/claude-code.json", "cursor": "adapters/cursor.json"}
+}

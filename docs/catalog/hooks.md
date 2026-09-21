@@ -4,7 +4,7 @@
 
 A deterministic gate that inspects a command before it runs and blocks it. No model sits in the decision path, so the same input always produces the same verdict.
 
-62 of them. Install one with `npx @youdede/toolkit add <slug> --target <runtime> --scope project`, or read what it refuses first with `npx @youdede/toolkit info <slug>`.
+63 of them. Install one with `npx @youdede/toolkit add <slug> --target <runtime> --scope project`, or read what it refuses first with `npx @youdede/toolkit info <slug>`.
 
 
 ## data
@@ -87,6 +87,7 @@ A deterministic gate that inspects a command before it runs and blocks it. No mo
 | `install-lifecycle-script-guard` | Block newly introduced package lifecycle commands that execute during dependency installation. | high | claude-code |
 | `lockfile-origin-guard` | Inspect staged lockfile origins before commit and reject insecure or unverifiable package sources. | high | claude-code, codex, cursor, gemini-cli, opencode |
 | `firewall-policy-mutation-guard` | Block direct host firewall rule, policy, chain, and activation mutations. | high | claude-code, codex, cursor, gemini-cli, opencode |
+| `mcp-capability-drift-guard` | Block toolkit MCP tool calls when the server, tool name, or observed description is not pinned. | high | claude-code, cursor |
 | `symlink-publication-guard` | Prevent commits from publishing symbolic links that escape or ambiguously traverse the repository. | high | claude-code, codex, cursor, gemini-cli, opencode |
 | `commit-guard` | Block commits containing high-confidence secrets, sensitive files, or unsafe bypasses. | high | claude-code, codex, cursor, gemini-cli, opencode |
 | `prompt-secret-guard` | Block prompts containing high-confidence credential formats before model processing. | high | claude-code |

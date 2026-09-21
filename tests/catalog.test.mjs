@@ -87,10 +87,9 @@ test('the published artifact schema and the repository validator describe the sa
   }
 
   // A property the schema declares but no artifact can use is drift in the other direction.
-  // Kind-conditional contract objects (command, context, mcpServer) are introduced by the schema
-  // before their first artifact lands; each entry must be removed here as soon as one artifact of
-  // that kind exists, restoring the zero-drift invariant.
-  const pendingKindContracts = ['mcpServer'].filter((key) => declared.has(key));
+  // Kind-conditional contract objects may be introduced by the schema before their first artifact
+  // lands; every implemented kind is removed from this allowance to restore the zero-drift invariant.
+  const pendingKindContracts = [];
   const unused = [...declared].filter((key) => key !== '$schema' && !pendingKindContracts.includes(key) && !used.has(key));
   assert.deepEqual(unused, [], 'schema declares properties no artifact uses');
   for (const key of pendingKindContracts) {

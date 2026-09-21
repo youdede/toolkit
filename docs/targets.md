@@ -7,11 +7,11 @@ Support is declared per artifact. A missing adapter is an intentional refusal, n
 <!-- stat-table:targets -->
 | Target | Skills | Hooks | Subagents | Commands | Contexts | MCP servers | Project root | User root |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- |
-| Claude Code | 167 | 62 | 62 | 6 | 4 | 0 | `.claude` | `~/.claude` |
+| Claude Code | 167 | 63 | 62 | 7 | 4 | 3 | `.claude` | `~/.claude` |
 | Codex | 167 | 22 | 0 | 0 | 0 | 0 | skills: `.agents`; hooks/agents: `.codex` | skills: `~/.agents`; hooks/agents: `~/.codex` |
 | Gemini CLI | 167 | 22 | 62 | 0 | 0 | 0 | `.gemini` | `~/.gemini` |
 | GitHub Copilot | 167 | 0 | 62 | 0 | 4 | 0 | `.github` | `$COPILOT_HOME` or `~/.copilot` |
-| Cursor | 167 | 22 | 0 | 0 | 4 | 0 | `.cursor` | `~/.cursor` |
+| Cursor | 167 | 23 | 0 | 0 | 4 | 3 | `.cursor` | `~/.cursor` |
 | OpenCode | 167 | 22 | 50 | 0 | 0 | 0 | `.opencode` | `~/.config/opencode` |
 <!-- /stat-table -->
 
@@ -37,7 +37,7 @@ Codex custom agents are deliberately withheld. The native TOML format supports a
 
 The first cross-runtime gate tranche contains 22 shell-only `PreToolUse` guards. Codex registers them in `.codex/hooks.json` as synchronous `PreToolUse` command hooks matched to `Bash`; an exit code of 2 blocks the call, and each handler has a bounded timeout. Gemini registers them as `BeforeTool` with millisecond timeouts and an input bridge. Cursor registers native `preToolUse` handlers with `Shell`, `failClosed: true`, and second-based timeouts. OpenCode installs one local `.js` plugin per selected guard, filters `tool.execute.before` to shell calls, normalizes the working directory, and invokes the bounded policy core with Node.js.
 
-Write/edit, MCP, prompt, transcript, compaction, configuration, worktree, failure-context, and task-completion hooks remain Claude-only until target-native fixtures prove that their preventive boundary and failure policy survive translation. GitHub Copilot hooks are withheld because documented hook timeouts always fail open, which conflicts with the fail-closed promise of the enforcement catalog.
+Write/edit, prompt, transcript, compaction, configuration, worktree, failure-context, and task-completion hooks remain Claude-only until target-native fixtures prove that their preventive boundary and failure policy survive translation. The MCP capability-drift guard also has a Cursor preview adapter: unknown toolkit MCP identities always fail closed, while description drift is checked when Cursor supplies the description or observed inventory. GitHub Copilot hooks are withheld because documented hook timeouts always fail open, which conflicts with the fail-closed promise of the enforcement catalog.
 
 Installing an OpenCode guard executes local plugin code when OpenCode starts and requires a reload after changes. Codex exact command hooks require the workspace to be trusted; Gemini and Cursor project hooks are likewise subject to their runtime trust controls. Node.js 20 or later must remain available for JavaScript helpers and cross-runtime deterministic gates.
 
@@ -47,7 +47,7 @@ Three further kinds extend the catalog beyond procedures, gates, and specialists
 
 - **Commands** are user-invoked workflows whose manifests declare a tool allowlist, preconditions checked before invocation, and the evidence the workflow must produce. A runtime adapter is published only where the native command surface preserves the invocation name, the tool authority boundary, and the evidence requirement; otherwise the adapter is withheld and the limitation is recorded on the artifact.
 - **Contexts** are scoped rule files. Because a context shapes every decision while installed, an adapter is published only where the runtime applies the file with its declared scope and precedence, and the install validator refuses a context that contradicts a co-installed gate.
-- **MCP servers** are vetted tool-server configurations with declared egress, secret access, and a pinned tool manifest. They install only where the runtime's MCP configuration format can express the declared boundary faithfully.
+- **MCP servers** are vetted tool-server configurations with declared egress, secret access, and a pinned tool manifest. Claude Code project installs merge exact entries into `.mcp.json`; Cursor project installs use `.cursor/mcp.json`. Both receive the same generated local runtime and profiles beneath `.youdede/mcp/`. Existing unrelated configuration is preserved, uninstall restores any explicitly displaced entry, and `doctor` reports missing or modified managed entries. User-scope adapters and remote transports are withheld.
 
 The coverage table above reports each kind per runtime; a zero is an intentional refusal until target-native fixtures prove equivalence, per the same contract that governs hooks and subagents.
 

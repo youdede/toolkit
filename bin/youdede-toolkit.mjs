@@ -192,6 +192,7 @@ async function main() {
         for (const file of result.writes) process.stdout.write(`- ${file.action} ${file.path} (${file.bytes} bytes, sha256 ${file.sha256})\n`);
         for (const file of result.removes) process.stdout.write(`- ${file.action} ${file.path}\n`);
         if (result.settings) process.stdout.write(`- ${result.settings.action} ${result.settings.path}\n`);
+        if (result.mcpConfig) process.stdout.write(`- ${result.mcpConfig.action} ${result.mcpConfig.path}: ${result.mcpConfig.servers.join(', ')}\n`);
         process.stdout.write(`- update ${result.state.path}\n`);
         printRuntimeDisclosure(result.runtime);
         for (const warning of result.warnings || []) process.stdout.write(`Warning: ${warning}\n`);
@@ -207,6 +208,7 @@ async function main() {
     process.stdout.write(`Installed ${result.artifact.id} in ${result.configRoot}\n`);
     for (const file of result.files) process.stdout.write(`- ${file}\n`);
     if (result.settingsFile) process.stdout.write(`- merged ${result.settingsFile}\n`);
+    if (result.mcpConfigFile) process.stdout.write(`- merged ${result.mcpConfigFile}\n`);
     if (result.integrity) process.stdout.write(`- verified ${result.integrity.integrityId}\n`);
     printRuntimeDisclosure(result.runtime);
     for (const warning of result.warnings || []) process.stdout.write(`Warning: ${warning}\n`);

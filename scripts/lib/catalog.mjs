@@ -359,6 +359,20 @@ function validateAdapter(record, target, adapterRecord, taxonomy, errors) {
     return;
   }
 
+  if (adapter.mcpPatch !== undefined && manifest.kind !== 'mcp-server') errors.push(`adapter ${target} mcpPatch is only valid for mcp-server artifacts`);
+  if (manifest.kind === 'mcp-server') {
+    if (!adapter.mcpPatch || typeof adapter.mcpPatch !== 'object' || Array.isArray(adapter.mcpPatch)) {
+      errors.push(`mcp-server adapter ${target} requires mcpPatch`);
+    } else {
+      const normalizedPath = path.posix.normalize(String(adapter.mcpPatch.path || '').replaceAll('\\', '/'));
+      if (!normalizedPath || String(adapter.mcpPatch.path).includes('\\') || /^[A-Za-z]:/.test(normalizedPath)
+        || path.posix.isAbsolute(normalizedPath) || normalizedPath === '..' || normalizedPath.startsWith('../')) errors.push(`mcp-server adapter ${target} has unsafe mcpPatch.path`);
+      const servers = adapter.mcpPatch.servers;
+      const names = servers && typeof servers === 'object' && !Array.isArray(servers) ? Object.keys(servers) : [];
+      if (names.length !== 1 || names[0] !== `youdede-${manifest.slug}`) errors.push(`mcp-server adapter ${target} must patch exactly 'youdede-${manifest.slug}'`);
+    }
+  }
+
   const destinations = new Set();
   for (const mapping of adapter.files) {
     if (!mapping || typeof mapping.from !== 'string' || typeof mapping.to !== 'string') {

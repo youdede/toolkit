@@ -583,7 +583,7 @@ test('every catalog artifact installs and removes independently', () => {
       const installed = installArtifact(manifest.slug, { cwd: directory });
       assert.ok(installed.files.length > 0, manifest.id);
       assert.deepEqual(doctor({ cwd: directory }), {
-        configRoot: path.join(directory, '.claude'),
+        configRoot: installed.configRoot,
         installs: 1,
         findings: []
       });

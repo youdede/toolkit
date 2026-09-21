@@ -384,6 +384,56 @@
         "malformed": "malformed: invalid fields, oversized input, and corrupt tails are refused",
         "boundary": "boundary: portable absolute and traversal paths are refused"
       }
+    },
+    {
+      "id": "command-mcp-repin",
+      "artifactIds": [
+        "command/development/agent-tooling/re-pin-mcp-tools"
+      ],
+      "testFiles": [
+        "tests/mcp-trust.test.mjs"
+      ],
+      "coverage": {
+        "positive": "positive: proposal produces an exact digest",
+        "negative": "negative: drift stays visible",
+        "malformed": "malformed: unknown servers refuse",
+        "boundary": "boundary: empty inventories refuse"
+      }
+    },
+    {
+      "id": "hook-mcp-capability-drift",
+      "artifactIds": [
+        "hook/security/network-control/mcp-capability-drift-guard"
+      ],
+      "testFiles": [
+        "tests/mcp-trust.test.mjs"
+      ],
+      "coverage": {
+        "allow": "allow: an exact pinned identity passes",
+        "deny-or-observe": "deny-or-observe: incomplete inventory blocks",
+        "malformed": "malformed: non-object input blocks",
+        "oversized": "oversized: bounded stdin fails closed",
+        "boundary": "boundary: non-toolkit MCP identities are outside this guard",
+        "false-positive": "false-positive: unrelated tools remain untouched",
+        "process-exit": "process-exit: malformed native input blocks"
+      }
+    },
+    {
+      "id": "mcp-readonly-runtime",
+      "artifactIds": [
+        "mcp-server/development/agent-tooling/allowlisted-fetch-readonly",
+        "mcp-server/development/agent-tooling/repository-git-readonly",
+        "mcp-server/development/agent-tooling/workspace-files-readonly"
+      ],
+      "testFiles": [
+        "tests/mcp-trust.test.mjs"
+      ],
+      "coverage": {
+        "positive": "curated MCP profiles match pinned descriptions",
+        "negative": "reject unsafe drift",
+        "malformed": "assert.match(malformed.stdout, /Invalid request/)",
+        "boundary": "confines file reads"
+      }
     }
   ]
 }

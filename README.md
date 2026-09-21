@@ -6,7 +6,7 @@
 
 [![validate](https://github.com/udede/toolkit/actions/workflows/validate.yml/badge.svg)](https://github.com/udede/toolkit/actions/workflows/validate.yml)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![artifacts](https://img.shields.io/badge/artifacts-301-2F8F83.svg)](catalog/artifacts.json)
+[![artifacts](https://img.shields.io/badge/artifacts-306-2F8F83.svg)](catalog/artifacts.json)
 [![runtimes](https://img.shields.io/badge/runtimes-6-2F8F83.svg)](docs/targets.md)
 
 ---
@@ -19,10 +19,10 @@ You cannot review every action it takes. So the rules have to live where the age
 
 ## What this is
 
-A catalog of <!-- stat:artifact-count -->301<!-- /stat --> things you can install into a coding agent, one command each:
+A catalog of <!-- stat:artifact-count -->306<!-- /stat --> things you can install into a coding agent, one command each:
 
 - **<!-- stat:skill-count -->167<!-- /stat --> skills**: procedures an agent loads when a task matches. Each one states what it does, what evidence it requires, and what it refuses to do.
-- **<!-- stat:hook-count -->62<!-- /stat --> hooks**: deterministic gates that inspect a command before it runs and block it. No model in the decision path. `commit-guard` scans staged blobs for secrets. `protected-branch-guard` refuses a force push to `main`.
+- **<!-- stat:hook-count -->63<!-- /stat --> hooks**: deterministic gates that inspect a command before it runs and block it. No model in the decision path. `commit-guard` scans staged blobs for secrets. `protected-branch-guard` refuses a force push to `main`.
 - **<!-- stat:subagent-count -->62<!-- /stat --> subagents**: specialists with a deliberately narrow brief, no authority to edit or approve anything, and a required section for what they could not verify.
 - **7 packs**: the above composed into one outcome, like `release-readiness` or `secure-agent-boundaries`.
 
@@ -51,11 +51,11 @@ npx @youdede/toolkit add commit-guard --target claude-code --dry-run
 | | Claude Code | Codex | Gemini CLI | GitHub Copilot | Cursor | OpenCode |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | Skills (167) | 167 | 167 | 167 | 167 | 167 | 167 |
-| Hooks (62) | 62 | 22 | 22 | 0 | 22 | 22 |
+| Hooks (63) | 63 | 22 | 22 | 0 | 23 | 22 |
 | Subagents (62) | 62 | 0 | 62 | 62 | 0 | 50 |
-| Commands (6) | 6 | 0 | 0 | 0 | 0 | 0 |
+| Commands (7) | 7 | 0 | 0 | 0 | 0 | 0 |
 | Contexts (4) | 4 | 0 | 0 | 4 | 4 | 0 |
-| MCP servers (0) | 0 | 0 | 0 | 0 | 0 | 0 |
+| MCP servers (3) | 3 | 0 | 0 | 0 | 3 | 0 |
 <!-- /stat-table -->
 
 A count below the total is a refusal, not a gap. An artifact is withheld from a runtime whose event, permission, or failure contract is not equivalent, because a gate that silently fails open is worse than no gate. [docs/targets.md](docs/targets.md) explains every withheld adapter.
@@ -67,7 +67,7 @@ Every artifact is listed, with what it does and which runtimes carry it, so you 
 | | | |
 | --- | --- | --- |
 | [Skills](docs/catalog/skills.md) | <!-- stat:skill-count -->167<!-- /stat --> | Procedures an agent loads when a task matches |
-| [Hooks](docs/catalog/hooks.md) | <!-- stat:hook-count -->62<!-- /stat --> | Deterministic gates that block a command before it runs |
+| [Hooks](docs/catalog/hooks.md) | <!-- stat:hook-count -->63<!-- /stat --> | Deterministic gates that block a command before it runs |
 | [Subagents](docs/catalog/subagents.md) | <!-- stat:subagent-count -->62<!-- /stat --> | Specialists with a narrow brief and no authority to act |
 | [Packs](docs/catalog/packs.md) | 7 | The above composed into one outcome |
 

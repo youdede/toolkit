@@ -275,6 +275,18 @@ function settingsPath(target, configRoot, adapter = null, scope = 'project', kin
   return resolved;
 }
 
+function mcpConfigPath(configRoot, adapter) {
+  const relative = adapter?.mcpPatch?.path;
+  if (!relative) return null;
+  if (typeof relative !== 'string' || relative.includes('\\') || /^[A-Za-z]:/.test(relative)
+    || path.posix.isAbsolute(relative) || relative.split('/').includes('..')) {
+    throw new Error(`MCP config path '${relative}' is not a safe portable relative path`);
+  }
+  const resolved = path.resolve(configRoot, relative);
+  if (!within(configRoot, resolved)) throw new Error(`MCP config path '${relative}' escapes the installation root`);
+  return resolved;
+}
+
 function replaceTokens(value, tokens) {
   if (typeof value === 'string') {
     return Object.entries(tokens).reduce((output, [key, replacement]) => output.replaceAll(`{${key}}`, replacement), value);
@@ -439,6 +451,65 @@ function prepareSettings(target, adapter, configRoot, scope, kind, ownedInstall,
   };
 }
 
+function prepareMcpConfig(adapter, configRoot, ownedInstall, force, slug) {
+  if (!adapter.mcpPatch) return { before: null, after: null, servers: [], displacedServers: [] };
+  const file = mcpConfigPath(configRoot, adapter);
+  const beforeRaw = existsSync(file) ? readFileSync(file) : null;
+  const beforeMode = existsSync(file) ? statSync(file).mode & 0o777 : null;
+  const before = readJsonOr(file, {});
+  if (!before || Array.isArray(before) || typeof before !== 'object') throw new Error(`${file} must contain a JSON object`);
+  if (before.mcpServers !== undefined && (!before.mcpServers || Array.isArray(before.mcpServers) || typeof before.mcpServers !== 'object')) {
+    throw new Error(`${file} mcpServers must be an object`);
+  }
+  const after = structuredClone(before);
+  after.mcpServers ||= {};
+  const desired = Object.entries(replaceTokens(adapter.mcpPatch.servers, { slug }));
+  if (desired.length !== 1 || desired[0][0] !== `youdede-${slug}`
+    || !desired[0][1] || Array.isArray(desired[0][1]) || typeof desired[0][1] !== 'object') {
+    throw new Error(`MCP patch must contain exactly the object entry 'youdede-${slug}'`);
+  }
+  const desiredNames = new Set(desired.map(([name]) => name));
+  const previous = ownedInstall?.mcpServers || [];
+  const displacedServers = structuredClone(ownedInstall?.displacedMcpServers || []);
+
+  for (const server of previous) {
+    if (desiredNames.has(server.name)) continue;
+    if (!force && !sameJson(after.mcpServers[server.name], server.entry)) {
+      throw new Error(`MCP server '${server.name}' changed since installation; use --force to replace it`);
+    }
+    delete after.mcpServers[server.name];
+    const displacedIndex = displacedServers.findIndex((candidate) => candidate.name === server.name);
+    if (displacedIndex >= 0) {
+      const [displaced] = displacedServers.splice(displacedIndex, 1);
+      after.mcpServers[server.name] = displaced.entry;
+    }
+  }
+
+  const installedServers = [];
+  for (const [name, entry] of desired) {
+    const owned = previous.find((candidate) => candidate.name === name);
+    if (Object.hasOwn(after.mcpServers, name) && !sameJson(after.mcpServers[name], entry)) {
+      if (!force && (!owned || !sameJson(after.mcpServers[name], owned.entry))) {
+        throw new Error(`MCP config contains an unmanaged or modified server '${name}'; use --force to replace it`);
+      }
+      if (!owned && !displacedServers.some((candidate) => candidate.name === name)) {
+        displacedServers.push({ name, entry: structuredClone(after.mcpServers[name]) });
+      }
+    }
+    after.mcpServers[name] = entry;
+    installedServers.push({ name, entry });
+  }
+  if (Object.keys(after.mcpServers).length === 0) delete after.mcpServers;
+  return {
+    file,
+    before: beforeRaw,
+    beforeMode,
+    after: Buffer.from(`${JSON.stringify(after, null, 2)}\n`),
+    servers: installedServers,
+    displacedServers
+  };
+}
+
 function emptySettingsScaffold(target, settings) {
   if (!settings || Array.isArray(settings) || typeof settings !== 'object') return false;
   return target === 'cursor' ? sameJson(settings, { version: 1 }) : Object.keys(settings).length === 0;
@@ -498,6 +569,7 @@ function prepareInstall(query, options = {}) {
   assertNoSymlinkWithin(configRoot, configRoot, 'installation root');
   assertNoSymlinkWithin(configRoot, statePath(configRoot), 'installation state');
   if (adapter.settingsPatch) assertNoSymlinkWithin(configRoot, settingsPath(target, configRoot, adapter, scope, record.manifest.kind), 'target settings');
+  if (adapter.mcpPatch) assertNoSymlinkWithin(configRoot, mcpConfigPath(configRoot, adapter), 'target MCP config');
   const key = `${target}:${scope}:${record.manifest.id}`;
   const state = loadState(configRoot);
   if (record.manifest.kind === 'context' || record.manifest.hookGuard?.blockedActions?.length) {
@@ -551,13 +623,14 @@ function prepareInstall(query, options = {}) {
   }
 
   const settings = prepareSettings(target, adapter, configRoot, scope, record.manifest.kind, ownedInstall, force);
+  const mcp = prepareMcpConfig(adapter, configRoot, ownedInstall, force, record.manifest.slug);
   const displacedFiles = [...displacedByPath.values()].filter(({ path: displacedPath }) => newPaths.has(displacedPath));
-  return { record, target, scope, configRoot, key, state, ownedInstall, filePlan, stale, settings, integrity, displacedByPath, displacedFiles };
+  return { record, target, scope, configRoot, key, state, ownedInstall, filePlan, stale, settings, mcp, integrity, displacedByPath, displacedFiles };
 }
 
 export function planArtifactInstall(query, options = {}) {
   const prepared = prepareInstall(query, options);
-  const { record, target, scope, configRoot, filePlan, stale, settings, integrity, displacedByPath } = prepared;
+  const { record, target, scope, configRoot, filePlan, stale, settings, mcp, integrity, displacedByPath } = prepared;
   return {
     artifact: record.manifest,
     target,
@@ -578,6 +651,12 @@ export function planArtifactInstall(query, options = {}) {
       path: path.relative(configRoot, settings.file),
       action: settings.before === null ? 'create' : 'merge',
       changed: settings.before === null || !settings.before.equals(settings.after)
+    } : null,
+    mcpConfig: mcp.after ? {
+      path: path.relative(configRoot, mcp.file),
+      action: mcp.before === null ? 'create' : 'merge',
+      changed: mcp.before === null || !mcp.before.equals(mcp.after),
+      servers: mcp.servers.map(({ name }) => name)
     } : null,
     integrity,
     runtime: runtimeDisclosure(record, target, scope),
@@ -604,7 +683,7 @@ export function installArtifact(query, options = {}) {
 
 function installArtifactLocked(query, options = {}) {
   const prepared = prepareInstall(query, options);
-  const { record, target, scope, configRoot, key, state, ownedInstall, filePlan, stale, settings, displacedByPath, displacedFiles } = prepared;
+  const { record, target, scope, configRoot, key, state, ownedInstall, filePlan, stale, settings, mcp, displacedByPath, displacedFiles } = prepared;
   const owner = installOwner(options);
   const backups = new Map();
   const touched = [];
@@ -634,6 +713,7 @@ function installArtifactLocked(query, options = {}) {
       touched.push(absolute);
     }
     if (settings.after) atomicWrite(settings.file, settings.after);
+    if (mcp.after) atomicWrite(mcp.file, mcp.after);
 
     state.installs[key] = {
       artifactId: record.manifest.id,
@@ -652,6 +732,10 @@ function installArtifactLocked(query, options = {}) {
       displacedHooks: settings.displacedHooks || [],
       settingsPath: settings.after ? path.relative(configRoot, settings.file) : null,
       settingsCreated: Boolean(ownedInstall?.settingsCreated || (settings.after && settings.before === null)),
+      mcpServers: mcp.servers,
+      displacedMcpServers: mcp.displacedServers,
+      mcpConfigPath: mcp.after ? path.relative(configRoot, mcp.file) : null,
+      mcpConfigCreated: Boolean(ownedInstall?.mcpConfigCreated || (mcp.after && mcp.before === null)),
       license: record.manifest.license,
       authors: record.manifest.authors,
       owners: [...new Set([...recordedOwners(ownedInstall), owner])].sort()
@@ -670,6 +754,7 @@ function installArtifactLocked(query, options = {}) {
   } catch (error) {
     for (const destination of [...touched].reverse()) restoreFile(destination, backups.get(destination));
     if (settings.after) restoreFile(settings.file, settings.before === null ? null : { data: settings.before, mode: settings.beforeMode });
+    if (mcp.after) restoreFile(mcp.file, mcp.before === null ? null : { data: mcp.before, mode: mcp.beforeMode });
     restoreFile(statePath(configRoot), previousState);
     throw error;
   }
@@ -679,6 +764,7 @@ function installArtifactLocked(query, options = {}) {
     configRoot,
     files: filePlan.map((item) => item.destination),
     settingsFile: settings.after ? settings.file : null,
+    mcpConfigFile: mcp.after ? mcp.file : null,
     integrity: prepared.integrity,
     runtime: runtimeDisclosure(record, target, scope),
     warnings: contextInstallWarnings(record.manifest, options.now)
@@ -762,6 +848,13 @@ function removeArtifactLocked(query, options = {}) {
     ? path.resolve(configRoot, installed.settingsPath || path.relative(configRoot, settingsPath(target, configRoot, fallbackAdapter, scope, artifact.kind)))
     : null;
   if (resolvedSettingsPath) assertNoSymlinkWithin(configRoot, resolvedSettingsPath, 'target settings');
+  const resolvedMcpConfigPath = (installed.mcpServers || []).length
+    ? path.resolve(configRoot, installed.mcpConfigPath || path.relative(configRoot, mcpConfigPath(configRoot, fallbackAdapter)))
+    : null;
+  if (resolvedMcpConfigPath) {
+    if (!within(configRoot, resolvedMcpConfigPath)) throw new Error('recorded MCP config path escapes the installation root');
+    assertNoSymlinkWithin(configRoot, resolvedMcpConfigPath, 'target MCP config');
+  }
   const owner = installOwner(options);
   const owners = recordedOwners(installed);
   if (!owners.includes(owner)) throw new Error(`${artifact.id} is not owned by '${owner}' for ${target}/${scope}`);
@@ -838,6 +931,41 @@ function removeArtifactLocked(query, options = {}) {
     }
   }
 
+  const mcpFile = resolvedMcpConfigPath;
+  const mcpBefore = mcpFile && existsSync(mcpFile)
+    ? { data: readFileSync(mcpFile), mode: statSync(mcpFile).mode & 0o777 }
+    : null;
+  let mcpAfter = null;
+  let deleteMcpFile = false;
+  if ((installed.mcpServers || []).length) {
+    const config = readJsonOr(mcpFile, {});
+    if (!config.mcpServers || Array.isArray(config.mcpServers) || typeof config.mcpServers !== 'object') {
+      if (!force) throw new Error(`${mcpFile} has no valid mcpServers object; use --force to remove recorded ownership`);
+      config.mcpServers = {};
+    }
+    for (const server of installed.mcpServers) {
+      if (!force && !sameJson(config.mcpServers[server.name], server.entry)) {
+        throw new Error(`MCP server '${server.name}' changed since installation; use --force to remove it`);
+      }
+      delete config.mcpServers[server.name];
+    }
+    for (const displaced of installed.displacedMcpServers || []) {
+      if (Object.hasOwn(config.mcpServers, displaced.name) && !force) {
+        throw new Error(`MCP config already contains displaced server '${displaced.name}'`);
+      }
+      config.mcpServers[displaced.name] = displaced.entry;
+    }
+    if (Object.keys(config.mcpServers).length === 0) delete config.mcpServers;
+    mcpAfter = Buffer.from(`${JSON.stringify(config, null, 2)}\n`);
+    if (installed.mcpConfigCreated) {
+      const successor = Object.entries(state.installs).find(([candidateKey, candidate]) => candidateKey !== key
+        && (candidate.mcpServers || []).length > 0
+        && candidate.mcpConfigPath === installed.mcpConfigPath);
+      if (successor) successor[1].mcpConfigCreated = true;
+      else deleteMcpFile = Object.keys(config).length === 0;
+    }
+  }
+
   const fileBackups = new Map();
   const sharedPaths = new Set();
   for (const [candidateKey, candidate] of Object.entries(state.installs)) {
@@ -865,6 +993,10 @@ function removeArtifactLocked(query, options = {}) {
       if (deleteSettingsFile) rmSync(settingsFile, { force: true });
       else atomicWrite(settingsFile, settingsAfter);
     }
+    if (mcpAfter) {
+      if (deleteMcpFile) rmSync(mcpFile, { force: true });
+      else atomicWrite(mcpFile, mcpAfter);
+    }
     delete state.installs[key];
     writeState(configRoot, state);
 
@@ -880,6 +1012,7 @@ function removeArtifactLocked(query, options = {}) {
   } catch (error) {
     for (const [absolute, backup] of fileBackups) restoreFile(absolute, backup);
     if (settingsFile) restoreFile(settingsFile, settingsBefore);
+    if (mcpFile) restoreFile(mcpFile, mcpBefore);
     restoreFile(statePath(configRoot), previousState);
     throw error;
   }
@@ -951,6 +1084,7 @@ function packMutationPaths(planned) {
     roots.add(plan.configRoot);
     for (const mutation of [...plan.writes, ...plan.removes]) files.add(path.join(plan.configRoot, mutation.path));
     if (plan.settings) files.add(path.join(plan.configRoot, plan.settings.path));
+    if (plan.mcpConfig) files.add(path.join(plan.configRoot, plan.mcpConfig.path));
     files.add(path.join(plan.configRoot, plan.state.path));
   }
   return { files, roots };
@@ -1036,6 +1170,7 @@ function doctorRoot(target, scope, configRoot) {
   const state = loadState(configRoot);
   const findings = [];
   const settingsByPath = new Map();
+  const mcpByPath = new Map();
   for (const [key, install] of Object.entries(state.installs)) {
     for (const displaced of install.displacedFiles || []) {
       try { displacedData(displaced); } catch {
@@ -1090,6 +1225,41 @@ function doctorRoot(target, scope, configRoot) {
           status: marker.length > 0 ? 'hook-settings-modified' : 'hook-settings-missing'
         });
         else if (exact.length > 1) findings.push({ key, path: `${relativeSettings}#hooks.${event}`, status: 'hook-settings-duplicate' });
+      }
+    }
+    if ((install.mcpServers || []).length) {
+      const relativeConfig = install.mcpConfigPath;
+      const absoluteConfig = path.resolve(configRoot, relativeConfig || '');
+      if (!relativeConfig || !within(configRoot, absoluteConfig)) {
+        findings.push({ key, path: relativeConfig || '.youdede-toolkit/state.json', status: 'unsafe-mcp-config-path' });
+        continue;
+      }
+      try {
+        assertNoSymlinkWithin(configRoot, absoluteConfig, `MCP config '${relativeConfig}'`);
+      } catch {
+        findings.push({ key, path: relativeConfig, status: 'symbolic-link' });
+        continue;
+      }
+      let config = mcpByPath.get(absoluteConfig);
+      if (config === undefined) {
+        try {
+          config = readJsonOr(absoluteConfig, null);
+          if (!config || Array.isArray(config) || typeof config !== 'object'
+            || !config.mcpServers || Array.isArray(config.mcpServers) || typeof config.mcpServers !== 'object') {
+            throw new Error('MCP config has no server mapping');
+          }
+          mcpByPath.set(absoluteConfig, config);
+        } catch {
+          mcpByPath.set(absoluteConfig, null);
+          findings.push({ key: `${target}:${scope}:mcp`, path: relativeConfig, status: 'mcp-config-invalid' });
+          config = null;
+        }
+      }
+      if (!config) continue;
+      for (const server of install.mcpServers) {
+        const configured = config.mcpServers[server.name];
+        if (configured === undefined) findings.push({ key, path: `${relativeConfig}#mcpServers.${server.name}`, status: 'mcp-server-missing' });
+        else if (!sameJson(configured, server.entry)) findings.push({ key, path: `${relativeConfig}#mcpServers.${server.name}`, status: 'mcp-server-modified' });
       }
     }
   }

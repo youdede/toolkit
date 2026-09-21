@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "serverName": "youdede-allowlisted-fetch-readonly",
+  "mode": "allowlisted-fetch",
+  "transport": "stdio",
+  "launch": {
+    "command": "node",
+    "args": [".youdede/mcp/runtime.mjs", "--profile", ".youdede/mcp/allowlisted-fetch-readonly/server.json"]
+  },
+  "egress": ["developer.mozilla.org", "docs.github.com", "nodejs.org"],
+  "secretAccess": ["none"],
+  "allowHosts": ["developer.mozilla.org", "docs.github.com", "nodejs.org"],
+  "tools": [
+    {
+      "name": "fetch_url",
+      "description": "Fetch one bounded HTTPS document from the declared documentation-host allowlist without redirects or credentials.",
+      "inputSchema": { "type": "object", "additionalProperties": false, "required": ["url"], "properties": { "url": { "type": "string", "maxLength": 2048 } } },
+      "annotations": { "readOnlyHint": true, "destructiveHint": false, "idempotentHint": true, "openWorldHint": true }
+    }
+  ]
+}
