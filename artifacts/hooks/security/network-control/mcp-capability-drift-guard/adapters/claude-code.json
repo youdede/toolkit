@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": ["project"],
+  "files": [
+    {"from": "targets/claude-code/mcp-capability-drift-guard.mjs", "to": "hooks/youdede/mcp-capability-drift-guard.mjs", "executable": true},
+    {"root": "package", "from": "catalog/mcp-pins.json", "to": "hooks/youdede/mcp-pins.json"}
+  ],
+  "settingsPatch": {"hooks": {"PreToolUse": [{"matcher": "^mcp__youdede-.+__.+$", "description": "[youdede:mcp-capability-drift-guard] Require pinned MCP capabilities", "hooks": [{"type": "command", "command": "node \"{claudeRoot}/hooks/youdede/mcp-capability-drift-guard.mjs\"", "timeout": 10}]}]}},
+  "bindings": [{"event": "PreToolUse", "matcher": "^mcp__youdede-.+__.+$"}]
+}

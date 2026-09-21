@@ -2,8 +2,65 @@
   "schemaVersion": 1,
   "algorithm": "sha256",
   "claim": "Checksums bind published bytes to a reviewed release; they do not prove authorship, originality, license compliance, endorsement, or control downstream copying.",
-  "rootDigest": "6cc7d3dc769fef222a7f3139b11c678344c5221cce18176ef39633ec6b521fec",
+  "rootDigest": "0330c0415dc35a4d64b3dc4978dbf5881c7c438af7b6e50429727256d0d6e2e2",
   "artifacts": [
+    {
+      "artifactId": "command/development/agent-tooling/re-pin-mcp-tools",
+      "version": "1.0.0",
+      "integrityId": "urn:youdede:artifact:sha256:04af69e17a960b9edd457f07511ba7ed4fd7f8fd97040caf0bbbe8361c80843d",
+      "digest": "04af69e17a960b9edd457f07511ba7ed4fd7f8fd97040caf0bbbe8361c80843d",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/commands/development/agent-tooling/re-pin-mcp-tools/adapters/claude-code.json",
+          "bytes": 943,
+          "sha256": "164b75c834ccfd356eed8c0f38192d403a0e997c7041644512255aaed456c972"
+        },
+        {
+          "path": "artifacts/commands/development/agent-tooling/re-pin-mcp-tools/artifact.json",
+          "bytes": 2905,
+          "sha256": "83a1346e2a619026d467cca7541f0e376169f3c9cc543a0ae4e83376b018e333"
+        },
+        {
+          "path": "artifacts/commands/development/agent-tooling/re-pin-mcp-tools/COMMAND.md",
+          "bytes": 2266,
+          "sha256": "972ccb2dd62ab51b73def987fd5db66c9834314acce5b253ada1a42be5408d4a"
+        },
+        {
+          "path": "artifacts/commands/development/agent-tooling/re-pin-mcp-tools/preconditions.json",
+          "bytes": 139,
+          "sha256": "6ddc7fb958a9bb429f67ca74e5ea1eb9dc7b6d2c499db9d8e55530c5fa935faf"
+        },
+        {
+          "path": "artifacts/commands/development/agent-tooling/re-pin-mcp-tools/scripts/check-preconditions.mjs",
+          "bytes": 461,
+          "sha256": "4121444ea0ec996f21af4f56c706ba34cdc4bf972dbb3ddb86246ef6b75a8071"
+        },
+        {
+          "path": "artifacts/commands/development/agent-tooling/re-pin-mcp-tools/scripts/propose-repin.mjs",
+          "bytes": 2864,
+          "sha256": "93fc549ec9fa88770620b99689ecf37967566e3b6e66fcfdcaf3bb4e3775e476"
+        },
+        {
+          "path": "catalog/mcp-pins.json",
+          "bytes": 1467,
+          "sha256": "9e8fdc68687f01778ac7b3032f1d99eb06570b7000f2c13125af445cbfb759b4"
+        },
+        {
+          "path": "scripts/runtime/command-precondition.mjs",
+          "bytes": 6809,
+          "sha256": "3c042df67efbdb1bccb775139de89281f9d14731b0e985c9f82b13148f4c5d8b"
+        },
+        {
+          "path": "scripts/runtime/session-ledger.mjs",
+          "bytes": 14869,
+          "sha256": "82a2f95eeb2877bf6966c8a7fa785a18de88097da9eea05fabaeb2ba214a31c7"
+        }
+      ]
+    },
     {
       "artifactId": "command/development/workflow/assemble-review-brief",
       "version": "1.0.0",
@@ -2867,6 +2924,53 @@
       ]
     },
     {
+      "artifactId": "hook/security/network-control/mcp-capability-drift-guard",
+      "version": "1.0.0",
+      "integrityId": "urn:youdede:artifact:sha256:3fab688f31b73563dd74c6725d27339fd918fa89cbd3bb60c3f2a5c38fc4b1e1",
+      "digest": "3fab688f31b73563dd74c6725d27339fd918fa89cbd3bb60c3f2a5c38fc4b1e1",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/hooks/security/network-control/mcp-capability-drift-guard/adapters/claude-code.json",
+          "bytes": 770,
+          "sha256": "3dac1891ac1119968ee3b6ea1387ec70a2a13bc3cb4334f758d7d10435c04362"
+        },
+        {
+          "path": "artifacts/hooks/security/network-control/mcp-capability-drift-guard/adapters/cursor.json",
+          "bytes": 1146,
+          "sha256": "16f71ba7b29b739c6e0e1af5ff9f58adb17ba59839af910a0066e792aa6aa1f1"
+        },
+        {
+          "path": "artifacts/hooks/security/network-control/mcp-capability-drift-guard/artifact.json",
+          "bytes": 2220,
+          "sha256": "283a2a7fe1ee2e541d2b979ed40d40c61a8303480acdb933e1d02cee99660d24"
+        },
+        {
+          "path": "artifacts/hooks/security/network-control/mcp-capability-drift-guard/targets/claude-code/mcp-capability-drift-guard.mjs",
+          "bytes": 3437,
+          "sha256": "fd257eb9886263823216e3bf56f9d2db1c373498f8d42d3452eb8e339f02397c"
+        },
+        {
+          "path": "artifacts/hooks/security/network-control/mcp-capability-drift-guard/targets/claude-code/README.md",
+          "bytes": 540,
+          "sha256": "08b741eafc26e631c6963e2d1cfbd629dbbedbb574d8396ddc19f6645b8e091b"
+        },
+        {
+          "path": "catalog/mcp-pins.json",
+          "bytes": 1467,
+          "sha256": "9e8fdc68687f01778ac7b3032f1d99eb06570b7000f2c13125af445cbfb759b4"
+        },
+        {
+          "path": "scripts/runtime/hook-command-bridge.mjs",
+          "bytes": 3670,
+          "sha256": "c35886b2cecc8f4f5dc70ff711e5bb3b9ff56c02af593ac220fb9d2fb62940f6"
+        }
+      ]
+    },
+    {
       "artifactId": "hook/security/repository-links/symlink-publication-guard",
       "version": "1.0.0",
       "integrityId": "urn:youdede:artifact:sha256:209848118a54b410e0a62dfdf100a2e5a2997dc149a07f59af7c2d5227ab5dbb",
@@ -3115,6 +3219,132 @@
           "path": "artifacts/hooks/security/transport-security/transport-security-regression-guard/targets/claude-code/transport-security-regression-guard.mjs",
           "bytes": 7704,
           "sha256": "21d19a83a45278c5420feeea09fef645e0bb670639d3c616674245117e23db2a"
+        }
+      ]
+    },
+    {
+      "artifactId": "mcp-server/development/agent-tooling/allowlisted-fetch-readonly",
+      "version": "1.0.0",
+      "integrityId": "urn:youdede:artifact:sha256:d170c6a9d24b3b337fb8cfef45af87936fc6ca7b804de8f7af36c562f463b77d",
+      "digest": "d170c6a9d24b3b337fb8cfef45af87936fc6ca7b804de8f7af36c562f463b77d",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/mcp-servers/development/agent-tooling/allowlisted-fetch-readonly/adapters/claude-code.json",
+          "bytes": 627,
+          "sha256": "fb7d94b5a3d2dcccdf62b49f65e579ecd3f7f366f574901368971411648c5fbf"
+        },
+        {
+          "path": "artifacts/mcp-servers/development/agent-tooling/allowlisted-fetch-readonly/adapters/cursor.json",
+          "bytes": 775,
+          "sha256": "176e53f59523ce05df2543fcd4edbca33e9b56fb6df48d0ab6788137932d56d5"
+        },
+        {
+          "path": "artifacts/mcp-servers/development/agent-tooling/allowlisted-fetch-readonly/artifact.json",
+          "bytes": 2388,
+          "sha256": "ebc036b47764131ecfd8ea3f1f5b61dbb496f35c13c3d97514a37c776e992919"
+        },
+        {
+          "path": "artifacts/mcp-servers/development/agent-tooling/allowlisted-fetch-readonly/runtime/readonly-mcp-server.mjs",
+          "bytes": 10948,
+          "sha256": "4e9936a78ca3bfbbf998f1efcae8568caa388dd9e6c972c16420a74bec8654a9"
+        },
+        {
+          "path": "artifacts/mcp-servers/development/agent-tooling/allowlisted-fetch-readonly/server.json",
+          "bytes": 936,
+          "sha256": "97b23f02a379e76d877b01b672f999517f5c1eba72b76f6bb8b287a2c7820f1d"
+        },
+        {
+          "path": "artifacts/mcp-servers/development/agent-tooling/allowlisted-fetch-readonly/THREAT.md",
+          "bytes": 433,
+          "sha256": "1591a52811a1c10f4965b4a1b2e658afbe038c5e9485bed11f1f00d820fc32c7"
+        }
+      ]
+    },
+    {
+      "artifactId": "mcp-server/development/agent-tooling/repository-git-readonly",
+      "version": "1.0.0",
+      "integrityId": "urn:youdede:artifact:sha256:a8062311df2e4cbd89611e613cac60db4f5f18eb3a290b3f01382646fc0adb10",
+      "digest": "a8062311df2e4cbd89611e613cac60db4f5f18eb3a290b3f01382646fc0adb10",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/mcp-servers/development/agent-tooling/repository-git-readonly/adapters/claude-code.json",
+          "bytes": 615,
+          "sha256": "658fbfe6312f2568167f931ae8b9eb02a5874a7b63f3e81ea56d4b26155fea88"
+        },
+        {
+          "path": "artifacts/mcp-servers/development/agent-tooling/repository-git-readonly/adapters/cursor.json",
+          "bytes": 728,
+          "sha256": "df5ce60ab3a3c4a5f60b32d35dbdbfc02200e0af40fc8b80d31505a9807d369f"
+        },
+        {
+          "path": "artifacts/mcp-servers/development/agent-tooling/repository-git-readonly/artifact.json",
+          "bytes": 2595,
+          "sha256": "8521bab0e24ef0cf1c64d6c4aebef0db722fdd0b28b431e1d0d6de9c18eb4151"
+        },
+        {
+          "path": "artifacts/mcp-servers/development/agent-tooling/repository-git-readonly/runtime/readonly-mcp-server.mjs",
+          "bytes": 10948,
+          "sha256": "4e9936a78ca3bfbbf998f1efcae8568caa388dd9e6c972c16420a74bec8654a9"
+        },
+        {
+          "path": "artifacts/mcp-servers/development/agent-tooling/repository-git-readonly/server.json",
+          "bytes": 1613,
+          "sha256": "81acc1103294f64f9fc1f05ce409d785e0b50c11e16c8e68895b44d6725cccf7"
+        },
+        {
+          "path": "artifacts/mcp-servers/development/agent-tooling/repository-git-readonly/THREAT.md",
+          "bytes": 436,
+          "sha256": "98e745ea2cb9857243993314dbd379854e228ff01db06d3eac3f58d0c2b69f67"
+        }
+      ]
+    },
+    {
+      "artifactId": "mcp-server/development/agent-tooling/workspace-files-readonly",
+      "version": "1.0.0",
+      "integrityId": "urn:youdede:artifact:sha256:14a827fc0d4f86b01bf1a741707b4015de7c452f7c086486e77c85cafddeeccf",
+      "digest": "14a827fc0d4f86b01bf1a741707b4015de7c452f7c086486e77c85cafddeeccf",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/mcp-servers/development/agent-tooling/workspace-files-readonly/adapters/claude-code.json",
+          "bytes": 641,
+          "sha256": "421c96fe9ee3b9939c69a5f6f24ca45f50dc2d1beedc7b154847b8a46b36febe"
+        },
+        {
+          "path": "artifacts/mcp-servers/development/agent-tooling/workspace-files-readonly/adapters/cursor.json",
+          "bytes": 774,
+          "sha256": "6f8e7142d2e136de8cf3b6655053fe4760c596a5eeddb9abdcf53b6f2717d0db"
+        },
+        {
+          "path": "artifacts/mcp-servers/development/agent-tooling/workspace-files-readonly/artifact.json",
+          "bytes": 2574,
+          "sha256": "d3d80289cfcc77fa9d469c6e465addf4b5d1eb2327cfebfd907cfe59e0770363"
+        },
+        {
+          "path": "artifacts/mcp-servers/development/agent-tooling/workspace-files-readonly/runtime/readonly-mcp-server.mjs",
+          "bytes": 10948,
+          "sha256": "4e9936a78ca3bfbbf998f1efcae8568caa388dd9e6c972c16420a74bec8654a9"
+        },
+        {
+          "path": "artifacts/mcp-servers/development/agent-tooling/workspace-files-readonly/server.json",
+          "bytes": 1758,
+          "sha256": "ec342d902d9af9e36e86dd88ff06a9e6b133eafbeab71681337534e9a95e1e44"
+        },
+        {
+          "path": "artifacts/mcp-servers/development/agent-tooling/workspace-files-readonly/THREAT.md",
+          "bytes": 432,
+          "sha256": "210dd0ec3d316399781460bc3ec4d0e93cb895d37a76a72fc3c18b17d800e4fa"
         }
       ]
     },

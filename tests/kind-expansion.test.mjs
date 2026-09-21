@@ -111,6 +111,17 @@ function createFixture(root, kind, domain, category, slug, contractKey, contract
     scopes: ['project'],
     files: [{ from: 'payload.md', to: `${plural}/${slug}/payload.md` }]
   });
+  if (kind === 'mcp-server') {
+    const adapterPath = path.join(directory, 'adapters', 'claude-code.json');
+    const adapter = JSON.parse(readFileSync(adapterPath, 'utf8'));
+    adapter.mcpPatch = {
+      path: '.mcp.json',
+      servers: {
+        [`youdede-${slug}`]: { command: 'node', args: [`mcp-servers/${slug}/payload.md`] }
+      }
+    };
+    writeJson(adapterPath, adapter);
+  }
   if (kind === 'command') {
     const adapterPath = path.join(directory, 'adapters', 'claude-code.json');
     const adapter = JSON.parse(readFileSync(adapterPath, 'utf8'));

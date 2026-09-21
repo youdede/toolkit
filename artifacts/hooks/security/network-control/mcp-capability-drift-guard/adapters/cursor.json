@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "cursor",
+  "scopes": ["project"],
+  "files": [
+    {"from": "targets/claude-code/mcp-capability-drift-guard.mjs", "to": "hooks/youdede/mcp-capability-drift-guard.core.mjs", "executable": true},
+    {"root": "package", "from": "scripts/runtime/hook-command-bridge.mjs", "to": "hooks/youdede/mcp-capability-drift-guard.mjs", "executable": true},
+    {"root": "package", "from": "catalog/mcp-pins.json", "to": "hooks/youdede/mcp-pins.json"}
+  ],
+  "settingsPatch": {"path": "hooks.json", "hooks": {"preToolUse": [{"type": "command", "command": "node \"{cursorRoot}/hooks/youdede/mcp-capability-drift-guard.mjs\" --target cursor --failure-policy fail-closed --marker \"[youdede:mcp-capability-drift-guard]\"", "timeout": 10, "failClosed": true, "matcher": "mcp__youdede-*"}]}},
+  "bindings": [{"event": "preToolUse", "matcher": "mcp__youdede-*"}],
+  "stability": "preview",
+  "limitations": ["Description drift is checked when the native hook payload includes the tool description or observed inventory; unknown tool identities are always blocked."]
+}

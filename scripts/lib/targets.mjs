@@ -5,6 +5,9 @@ export const TARGETS = Object.freeze({
   'claude-code': Object.freeze({
     label: 'Claude Code',
     roots: Object.freeze({ project: '.claude', user: path.join(os.homedir(), '.claude') }),
+    componentRoots: Object.freeze({
+      'mcp-server': Object.freeze({ project: '.', user: path.join(os.homedir(), '.claude') })
+    }),
     settingsFiles: Object.freeze({ project: 'settings.json', user: 'settings.json' })
   }),
   codex: Object.freeze({
@@ -35,6 +38,9 @@ export const TARGETS = Object.freeze({
   cursor: Object.freeze({
     label: 'Cursor',
     roots: Object.freeze({ project: '.cursor', user: path.join(os.homedir(), '.cursor') }),
+    componentRoots: Object.freeze({
+      'mcp-server': Object.freeze({ project: '.', user: path.join(os.homedir(), '.cursor') })
+    }),
     settingsFiles: Object.freeze({ project: 'hooks.json', user: 'hooks.json' })
   }),
   opencode: Object.freeze({

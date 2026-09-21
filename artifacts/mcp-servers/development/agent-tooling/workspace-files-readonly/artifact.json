@@ -1,0 +1,41 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "mcp-server/development/agent-tooling/workspace-files-readonly",
+  "slug": "workspace-files-readonly",
+  "name": "Workspace files read-only MCP",
+  "version": "1.0.0",
+  "kind": "mcp-server",
+  "summary": "Expose bounded read-only workspace file inspection through a locally pinned MCP server.",
+  "description": "Installs a local stdio MCP server that reads regular UTF-8 files, lists directories, and searches file names only beneath the current workspace, with fixed result budgets and no network or secret authority.",
+  "domain": "development",
+  "category": "agent-tooling",
+  "capabilities": ["collect"],
+  "problems": ["agent-policy-integrity"],
+  "frameworks": ["agnostic", "nodejs"],
+  "languages": ["agnostic"],
+  "lifecycle": ["implementation", "maintenance", "review"],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": ["Youdede"],
+  "refuses": [
+    "It does not read paths or symbolic-link targets that resolve outside the current workspace.",
+    "It does not write, delete, rename, execute, upload, or otherwise mutate workspace files.",
+    "It does not access network services, environment secrets, Git internals, or toolkit state directories."
+  ],
+  "execution": {"mode": "hybrid", "entrypoints": [{"path": "runtime/readonly-mcp-server.mjs", "runtime": "node", "purpose": "Serve the pinned bounded workspace inspection tools over local standard input and output.", "sideEffects": "read-only"}]},
+  "mcpServer": {
+    "transport": "stdio",
+    "egress": ["none"],
+    "secretAccess": ["none"],
+    "trustBoundary": "Only bounded regular files and directory names inside the canonical current workspace cross the server boundary; symlinks and toolkit state are excluded.",
+    "pinnedTools": [
+      {"name": "list_directory", "descriptionHash": "1f29f7c4dddc931c6a2e2d0ebe3f6d74eb93cc9f71aa25b46dd9ee3ae1a37356"},
+      {"name": "read_file", "descriptionHash": "4e00e3444076eaef0d91e1f4da622023018e53d2a63db732a8d8464648063e39"},
+      {"name": "search_files", "descriptionHash": "81b173f6d41e01e2463d40b217fa5076fd6df64740cfff244adbb785c14cd1f3"}
+    ]
+  },
+  "relationships": {"composesWith": ["hook/security/network-control/mcp-capability-drift-guard"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": []},
+  "operational": {"behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "bounded", "dataRetention": "none"},
+  "adapters": {"claude-code": "adapters/claude-code.json", "cursor": "adapters/cursor.json"}
+}

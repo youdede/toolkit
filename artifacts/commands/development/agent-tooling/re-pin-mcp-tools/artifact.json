@@ -1,0 +1,41 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "command/development/agent-tooling/re-pin-mcp-tools",
+  "slug": "re-pin-mcp-tools",
+  "name": "Re-pin MCP tools",
+  "version": "1.0.0",
+  "kind": "command",
+  "summary": "Review an observed MCP tool inventory and update source pins only after exact human confirmation.",
+  "description": "A maintainer slash command that compares a bounded tools/list observation with the generated registry, produces a content digest, pauses for exact human confirmation, then updates source pins and records review evidence.",
+  "domain": "development",
+  "category": "agent-tooling",
+  "capabilities": ["verify"],
+  "problems": ["agent-policy-integrity"],
+  "frameworks": ["agnostic", "nodejs"],
+  "languages": ["javascript"],
+  "lifecycle": ["maintenance", "review"],
+  "risk": "high",
+  "license": "MIT",
+  "authors": ["Youdede"],
+  "refuses": [
+    "It does not accept a pin change without an exact human repetition of the deterministic proposal digest.",
+    "It does not widen egress, secret access, transport, runtime launch, or tool mutation authority.",
+    "It does not treat MCP annotations or descriptions as enforcement and does not skip the full repository checks."
+  ],
+  "execution": {"mode": "hybrid", "entrypoints": [{"path": "scripts/check-preconditions.mjs", "runtime": "node", "purpose": "Require a clean toolkit source worktree and the MCP verification inputs before review begins.", "sideEffects": "none"}, {"path": "scripts/propose-repin.mjs", "runtime": "node", "purpose": "Compare a bounded observed tool inventory with pins and produce a deterministic confirmation digest.", "sideEffects": "read-only"}]},
+  "command": {
+    "invocation": "re-pin-mcp-tools",
+    "toolAuthority": ["Bash", "Edit", "Glob", "Grep", "Read", "Write"],
+    "produces": ["an explicitly confirmed MCP pin change with a deterministic proposal digest, durable review evidence, and a hash-chained ledger citation"],
+    "requires": ["a clean Youdede toolkit source worktree and a bounded JSON tools/list observation"],
+    "flags": [
+      {"name": "server", "effect": "narrow", "description": "Restrict review to one exact curated Youdede MCP server name."},
+      {"name": "observed", "effect": "narrow", "description": "Use one bounded JSON file containing the observed tools/list result."},
+      {"name": "evidence", "effect": "narrow", "description": "Write the accepted proposal receipt to one explicit repository-relative JSON path."}
+    ]
+  },
+  "relationships": {"composesWith": ["hook/security/network-control/mcp-capability-drift-guard"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": []},
+  "operational": {"behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "bounded", "dataRetention": "local-bounded"},
+  "adapters": {"claude-code": "adapters/claude-code.json"}
+}

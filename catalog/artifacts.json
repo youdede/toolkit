@@ -1,24 +1,24 @@
 {
   "schemaVersion": 1,
   "counts": {
-    "total": 301,
+    "total": 306,
     "skills": 167,
-    "hooks": 62,
+    "hooks": 63,
     "subagents": 62
   },
   "relationshipGraph": {
     "counts": {
-      "artifactNodes": 301,
+      "artifactNodes": 306,
       "directedEdges": {
-        "composesWith": 328,
+        "composesWith": 336,
         "conflictsWith": 0,
         "supersedes": 0,
         "prerequisites": 1,
         "packIds": 37
       },
-      "compositionEdges": 164,
+      "compositionEdges": 168,
       "conflictEdges": 0,
-      "crossKindCompositionEdges": 86,
+      "crossKindCompositionEdges": 90,
       "orphanArtifacts": 186
     },
     "orphanCountsByKind": {
@@ -219,6 +219,89 @@
     ]
   },
   "artifacts": [
+    {
+      "id": "command/development/agent-tooling/re-pin-mcp-tools",
+      "slug": "re-pin-mcp-tools",
+      "name": "Re-pin MCP tools",
+      "version": "1.0.0",
+      "kind": "command",
+      "summary": "Review an observed MCP tool inventory and update source pins only after exact human confirmation.",
+      "description": "A maintainer slash command that compares a bounded tools/list observation with the generated registry, produces a content digest, pauses for exact human confirmation, then updates source pins and records review evidence.",
+      "domain": "development",
+      "category": "agent-tooling",
+      "capabilities": [
+        "verify"
+      ],
+      "problems": [
+        "agent-policy-integrity"
+      ],
+      "frameworks": [
+        "agnostic",
+        "nodejs"
+      ],
+      "languages": [
+        "javascript"
+      ],
+      "lifecycle": [
+        "maintenance",
+        "review"
+      ],
+      "risk": "high",
+      "license": "MIT",
+      "execution": {
+        "mode": "hybrid",
+        "entrypoints": [
+          {
+            "path": "scripts/check-preconditions.mjs",
+            "runtime": "node",
+            "purpose": "Require a clean toolkit source worktree and the MCP verification inputs before review begins.",
+            "sideEffects": "none"
+          },
+          {
+            "path": "scripts/propose-repin.mjs",
+            "runtime": "node",
+            "purpose": "Compare a bounded observed tool inventory with pins and produce a deterministic confirmation digest.",
+            "sideEffects": "read-only"
+          }
+        ]
+      },
+      "relationships": {
+        "composesWith": [
+          "hook/security/network-control/mcp-capability-drift-guard"
+        ],
+        "conflictsWith": [],
+        "supersedes": [],
+        "prerequisites": [],
+        "packIds": []
+      },
+      "operational": {
+        "behavior": "advisory",
+        "failurePolicy": "stop-and-report",
+        "latencyClass": "bounded",
+        "dataRetention": "local-bounded"
+      },
+      "refuses": [
+        "It does not accept a pin change without an exact human repetition of the deterministic proposal digest.",
+        "It does not widen egress, secret access, transport, runtime launch, or tool mutation authority.",
+        "It does not treat MCP annotations or descriptions as enforcement and does not skip the full repository checks."
+      ],
+      "targets": [
+        "claude-code"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        }
+      },
+      "install": [
+        {
+          "target": "claude-code",
+          "command": "npx @youdede/toolkit add re-pin-mcp-tools --target claude-code --scope project"
+        }
+      ]
+    },
     {
       "id": "command/development/workflow/assemble-review-brief",
       "slug": "assemble-review-brief",
@@ -6767,6 +6850,109 @@
       ]
     },
     {
+      "id": "hook/security/network-control/mcp-capability-drift-guard",
+      "slug": "mcp-capability-drift-guard",
+      "name": "MCP capability drift guard",
+      "version": "1.0.0",
+      "kind": "hook",
+      "summary": "Block toolkit MCP tool calls when the server, tool name, or observed description is not pinned.",
+      "description": "A deterministic fail-closed pre-tool gate that accepts only curated Youdede MCP server and tool identities from a generated pin registry and rejects unknown or description-drifted capabilities.",
+      "domain": "security",
+      "category": "network-control",
+      "capabilities": [
+        "enforce"
+      ],
+      "problems": [
+        "agent-policy-integrity"
+      ],
+      "frameworks": [
+        "agnostic",
+        "nodejs"
+      ],
+      "languages": [
+        "javascript"
+      ],
+      "lifecycle": [
+        "implementation",
+        "maintenance",
+        "review"
+      ],
+      "risk": "high",
+      "license": "MIT",
+      "execution": {
+        "mode": "deterministic",
+        "entrypoints": [
+          {
+            "path": "targets/claude-code/mcp-capability-drift-guard.mjs",
+            "runtime": "node",
+            "purpose": "Compare a toolkit MCP tool call and any observed inventory with the generated capability pin registry.",
+            "sideEffects": "none"
+          }
+        ]
+      },
+      "relationships": {
+        "composesWith": [
+          "command/development/agent-tooling/re-pin-mcp-tools",
+          "mcp-server/development/agent-tooling/allowlisted-fetch-readonly",
+          "mcp-server/development/agent-tooling/repository-git-readonly",
+          "mcp-server/development/agent-tooling/workspace-files-readonly"
+        ],
+        "conflictsWith": [],
+        "supersedes": [],
+        "prerequisites": [],
+        "packIds": []
+      },
+      "operational": {
+        "behavior": "enforcing",
+        "failurePolicy": "fail-closed",
+        "latencyClass": "immediate",
+        "dataRetention": "none"
+      },
+      "refuses": [
+        "It does not trust MCP annotations, server names, or tool descriptions that are absent from the generated pin registry.",
+        "It does not silently accept added, removed, renamed, or description-drifted tools from curated servers.",
+        "It does not widen egress, secret, filesystem, subprocess, or mutation authority for an MCP server."
+      ],
+      "targets": [
+        "claude-code",
+        "cursor"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": [
+            {
+              "event": "PreToolUse",
+              "matcher": "^mcp__youdede-.+__.+$"
+            }
+          ]
+        },
+        "cursor": {
+          "stability": "preview",
+          "limitations": [
+            "Description drift is checked when the native hook payload includes the tool description or observed inventory; unknown tool identities are always blocked."
+          ],
+          "bindings": [
+            {
+              "event": "preToolUse",
+              "matcher": "mcp__youdede-*"
+            }
+          ]
+        }
+      },
+      "install": [
+        {
+          "target": "claude-code",
+          "command": "npx @youdede/toolkit add mcp-capability-drift-guard --target claude-code --scope project"
+        },
+        {
+          "target": "cursor",
+          "command": "npx @youdede/toolkit add mcp-capability-drift-guard --target cursor --scope project"
+        }
+      ]
+    },
+    {
       "id": "hook/security/repository-links/symlink-publication-guard",
       "slug": "symlink-publication-guard",
       "name": "Symlink publication guard",
@@ -7368,6 +7554,276 @@
         {
           "target": "claude-code",
           "command": "npx @youdede/toolkit add transport-security-regression-guard --target claude-code --scope project"
+        }
+      ]
+    },
+    {
+      "id": "mcp-server/development/agent-tooling/allowlisted-fetch-readonly",
+      "slug": "allowlisted-fetch-readonly",
+      "name": "Allowlisted fetch read-only MCP",
+      "version": "1.0.0",
+      "kind": "mcp-server",
+      "summary": "Fetch bounded HTTPS documentation from three explicit hosts through a pinned MCP server.",
+      "description": "Installs a local stdio MCP server that fetches bounded documents only from the declared MDN, GitHub Docs, and Node.js documentation hosts, without credentials and without following redirects.",
+      "domain": "development",
+      "category": "agent-tooling",
+      "capabilities": [
+        "collect"
+      ],
+      "problems": [
+        "agent-policy-integrity"
+      ],
+      "frameworks": [
+        "agnostic",
+        "nodejs"
+      ],
+      "languages": [
+        "agnostic"
+      ],
+      "lifecycle": [
+        "implementation",
+        "maintenance",
+        "review"
+      ],
+      "risk": "medium",
+      "license": "MIT",
+      "execution": {
+        "mode": "hybrid",
+        "entrypoints": [
+          {
+            "path": "runtime/readonly-mcp-server.mjs",
+            "runtime": "node",
+            "purpose": "Serve one bounded credential-free HTTPS retrieval tool over local standard input and output.",
+            "sideEffects": "external"
+          }
+        ]
+      },
+      "relationships": {
+        "composesWith": [
+          "hook/security/network-control/mcp-capability-drift-guard"
+        ],
+        "conflictsWith": [],
+        "supersedes": [],
+        "prerequisites": [],
+        "packIds": []
+      },
+      "operational": {
+        "behavior": "advisory",
+        "failurePolicy": "stop-and-report",
+        "latencyClass": "bounded",
+        "dataRetention": "none"
+      },
+      "refuses": [
+        "It does not fetch from hosts outside the exact declared HTTPS documentation allowlist.",
+        "It does not send credentials, follow redirects, submit request bodies, or accept arbitrary headers.",
+        "It does not claim fetched content is trusted, current, non-malicious, or suitable for execution."
+      ],
+      "targets": [
+        "claude-code",
+        "cursor"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        },
+        "cursor": {
+          "stability": "stable",
+          "limitations": [
+            "The fixed host allowlist cannot be widened through runtime arguments or project environment variables."
+          ],
+          "bindings": []
+        }
+      },
+      "install": [
+        {
+          "target": "claude-code",
+          "command": "npx @youdede/toolkit add allowlisted-fetch-readonly --target claude-code --scope project"
+        },
+        {
+          "target": "cursor",
+          "command": "npx @youdede/toolkit add allowlisted-fetch-readonly --target cursor --scope project"
+        }
+      ]
+    },
+    {
+      "id": "mcp-server/development/agent-tooling/repository-git-readonly",
+      "slug": "repository-git-readonly",
+      "name": "Repository Git read-only MCP",
+      "version": "1.0.0",
+      "kind": "mcp-server",
+      "summary": "Expose bounded local Git status, diff, and history inspection through a pinned MCP server.",
+      "description": "Installs a local stdio MCP server that runs only fixed read-only Git status, diff, and log forms in the current repository, strips Git environment overrides, and never contacts a remote.",
+      "domain": "development",
+      "category": "agent-tooling",
+      "capabilities": [
+        "collect"
+      ],
+      "problems": [
+        "agent-policy-integrity"
+      ],
+      "frameworks": [
+        "agnostic",
+        "nodejs"
+      ],
+      "languages": [
+        "agnostic"
+      ],
+      "lifecycle": [
+        "implementation",
+        "maintenance",
+        "review"
+      ],
+      "risk": "medium",
+      "license": "MIT",
+      "execution": {
+        "mode": "hybrid",
+        "entrypoints": [
+          {
+            "path": "runtime/readonly-mcp-server.mjs",
+            "runtime": "node",
+            "purpose": "Serve three fixed bounded read-only Git inspection tools over local standard input and output.",
+            "sideEffects": "read-only"
+          }
+        ]
+      },
+      "relationships": {
+        "composesWith": [
+          "hook/security/network-control/mcp-capability-drift-guard"
+        ],
+        "conflictsWith": [],
+        "supersedes": [],
+        "prerequisites": [],
+        "packIds": []
+      },
+      "operational": {
+        "behavior": "advisory",
+        "failurePolicy": "stop-and-report",
+        "latencyClass": "bounded",
+        "dataRetention": "none"
+      },
+      "refuses": [
+        "It does not commit, stage, restore, reset, switch, merge, fetch, push, or mutate repository state.",
+        "It does not accept arbitrary Git flags, revisions, subprocesses, aliases, configuration, or environment overrides.",
+        "It does not contact remotes, read credentials, or claim that inspected history is authentic or trusted."
+      ],
+      "targets": [
+        "claude-code",
+        "cursor"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        },
+        "cursor": {
+          "stability": "stable",
+          "limitations": [
+            "The server requires a local Git repository and Node.js 20 or newer."
+          ],
+          "bindings": []
+        }
+      },
+      "install": [
+        {
+          "target": "claude-code",
+          "command": "npx @youdede/toolkit add repository-git-readonly --target claude-code --scope project"
+        },
+        {
+          "target": "cursor",
+          "command": "npx @youdede/toolkit add repository-git-readonly --target cursor --scope project"
+        }
+      ]
+    },
+    {
+      "id": "mcp-server/development/agent-tooling/workspace-files-readonly",
+      "slug": "workspace-files-readonly",
+      "name": "Workspace files read-only MCP",
+      "version": "1.0.0",
+      "kind": "mcp-server",
+      "summary": "Expose bounded read-only workspace file inspection through a locally pinned MCP server.",
+      "description": "Installs a local stdio MCP server that reads regular UTF-8 files, lists directories, and searches file names only beneath the current workspace, with fixed result budgets and no network or secret authority.",
+      "domain": "development",
+      "category": "agent-tooling",
+      "capabilities": [
+        "collect"
+      ],
+      "problems": [
+        "agent-policy-integrity"
+      ],
+      "frameworks": [
+        "agnostic",
+        "nodejs"
+      ],
+      "languages": [
+        "agnostic"
+      ],
+      "lifecycle": [
+        "implementation",
+        "maintenance",
+        "review"
+      ],
+      "risk": "medium",
+      "license": "MIT",
+      "execution": {
+        "mode": "hybrid",
+        "entrypoints": [
+          {
+            "path": "runtime/readonly-mcp-server.mjs",
+            "runtime": "node",
+            "purpose": "Serve the pinned bounded workspace inspection tools over local standard input and output.",
+            "sideEffects": "read-only"
+          }
+        ]
+      },
+      "relationships": {
+        "composesWith": [
+          "hook/security/network-control/mcp-capability-drift-guard"
+        ],
+        "conflictsWith": [],
+        "supersedes": [],
+        "prerequisites": [],
+        "packIds": []
+      },
+      "operational": {
+        "behavior": "advisory",
+        "failurePolicy": "stop-and-report",
+        "latencyClass": "bounded",
+        "dataRetention": "none"
+      },
+      "refuses": [
+        "It does not read paths or symbolic-link targets that resolve outside the current workspace.",
+        "It does not write, delete, rename, execute, upload, or otherwise mutate workspace files.",
+        "It does not access network services, environment secrets, Git internals, or toolkit state directories."
+      ],
+      "targets": [
+        "claude-code",
+        "cursor"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        },
+        "cursor": {
+          "stability": "stable",
+          "limitations": [
+            "The server is project-scoped and requires Node.js 20 or newer on the local machine."
+          ],
+          "bindings": []
+        }
+      },
+      "install": [
+        {
+          "target": "claude-code",
+          "command": "npx @youdede/toolkit add workspace-files-readonly --target claude-code --scope project"
+        },
+        {
+          "target": "cursor",
+          "command": "npx @youdede/toolkit add workspace-files-readonly --target cursor --scope project"
         }
       ]
     },

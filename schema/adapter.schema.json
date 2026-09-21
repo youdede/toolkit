@@ -43,6 +43,25 @@
         "hooks": { "type": "object", "minProperties": 1 }
       }
     },
+    "mcpPatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "servers"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^(?!/)(?![A-Za-z]:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+        },
+        "servers": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "object",
+            "minProperties": 1
+          }
+        }
+      }
+    },
     "stability": { "enum": ["stable", "preview"] },
     "limitations": {
       "type": "array",
