@@ -99,8 +99,8 @@ grants the repository admin role a pull-request-mode bypass. Do not add any othe
 ## 5. Tag, dispatch, publish, then attest
 
 ```bash
-git tag -s v0.2.0 -m "youdede toolkit 0.2.0"
-git push origin v0.2.0
+git tag -s v0.3.0 -m "youdede toolkit 0.3.0"
+git push origin v0.3.0
 ```
 
 The tag must be signed and annotated, its name must equal the `package.json` version, and
@@ -109,8 +109,8 @@ against the allowed-signers policy on the default branch, and fails if the tagge
 reachable from that branch. A tag cannot authorize its own signing key.
 
 Pushing the tag does **not** start a release. In the GitHub Actions UI, manually run the `release`
-workflow from the default branch with `tag` set to `v0.2.0` and `confirmation` set to
-`publish @youdede/toolkit v0.2.0`. A malformed tag, mismatched confirmation, private repository,
+workflow from the default branch with `tag` set to `v0.3.0` and `confirmation` set to
+`publish @youdede/toolkit v0.3.0`. A malformed tag, mismatched confirmation, private repository,
 unsupported npm runtime, history finding, or failed readiness gate stops before `npm publish`.
 
 After publishing, take the root digest printed by the job and put it on the authenticated GitHub

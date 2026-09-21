@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, rmSync, symlinkSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync, symlinkSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import {
@@ -9,7 +9,8 @@ import {
   validateResponseEnvelope,
   assertsForbidden
 } from '../scripts/validate-evaluations.mjs';
-import { ROOT, validateRepository } from '../scripts/lib/catalog.mjs';
+import { loadPacks, ROOT, validateRepository } from '../scripts/lib/catalog.mjs';
+import { validatePackEvaluations } from '../scripts/validate-pack-evaluations.mjs';
 
 test('every public skill and subagent has a complete behavioral contract', () => {
   const result = validateBehavioralEvaluations();
@@ -39,6 +40,24 @@ test('every public skill and subagent has a complete behavioral contract', () =>
       boundary.expected.requiredEvidence.some((item) => /untrusted evidence/i.test(item)),
       `${record.manifest.id} must surface the evidence trust boundary`
     );
+  }
+});
+
+test('every workflow pack records evidence-bearing behavioral scenarios', () => {
+  assert.deepEqual(validatePackEvaluations(), []);
+  const packs = loadPacks();
+  assert.equal(packs.length, 11);
+  for (const { directory, manifest } of packs) {
+    const document = JSON.parse(readFileSync(path.join(directory, 'evaluations', 'behavioral.json'), 'utf8'));
+    assert.deepEqual(
+      new Set(document.cases.map(({ type }) => type)),
+      new Set(['positive', 'missing-evidence', 'ledger-mismatch', 'unsupported-coordinate'])
+    );
+    assert.deepEqual(
+      new Set(manifest.evidence.outcomeEvidence.map(({ outcome }) => outcome)),
+      new Set(manifest.outcomes)
+    );
+    for (const item of document.cases) assert.deepEqual(new Set(item.expected.outcomes), new Set(manifest.outcomes));
   }
 });
 

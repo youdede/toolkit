@@ -4,6 +4,7 @@ import { readFileSync, renameSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { publicCatalog, publicPackCatalog, ROOT, validateRepository } from './lib/catalog.mjs';
 import { generateMarketplaces } from './generate-marketplaces.mjs';
+import { generateCapabilityDocs } from './generate-capability-docs.mjs';
 
 const check = process.argv.includes('--check');
 const { artifacts, results, packs, packResults } = validateRepository();
@@ -46,3 +47,4 @@ if (check) {
 }
 
 generateMarketplaces({ root: ROOT, check });
+generateCapabilityDocs({ root: ROOT, check });

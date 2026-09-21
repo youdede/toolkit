@@ -1,7 +1,7 @@
 # Development plan: workflow surface and artifact kind expansion
 
 - Date: 2026-09-21
-- Status: In progress — phases 0–5b complete
+- Status: In progress — phases 0–5b complete; phase 6 implementation complete, release authorization pending
 - ADR: [0002](../decisions/0002-extend-artifact-kinds-for-agent-workflows.md)
 
 ## Motivation
@@ -203,6 +203,18 @@ artifacts checked by CI.
 ## Phase 6 — Capability documentation
 
 **Exit criteria:** the docs state the catalog's capability surface honestly and it stays true.
+
+**Implemented 2026-09-21.** The capability matrix is generated from the validated catalog and
+checked byte-for-byte in CI. The main behavioral-evaluation suite now covers every pack's four
+ledger-linked evidence scenarios. The minor-release audit is recorded by the release-readiness
+gate; tag creation and OIDC publication remain deliberately pending explicit publisher authority.
+
+The `0.3.0` candidate passes every structural gate and the complete reachable-history secret scan.
+It is not publishable yet: `check:readiness` reports `SEMANTIC_BENCHMARK_DIGEST_MISMATCH`,
+`SEMANTIC_STATIC_COVERAGE_INCOMPLETE` (210 recorded of 229 required), and
+`SEMANTIC_DYNAMIC_COVERAGE_INCOMPLETE` (the prior 890-case receipt does not match the current
+deterministic 195-case sample). A new independently run and judged semantic receipt is required
+before a signed tag or publication.
 
 1. `docs/capability-matrix.md` mapping each artifact kind and pack to its guarantees
    (precondition-gated invocation, tamper-evident session records, drift-verified tool servers),
