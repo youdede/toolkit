@@ -15,7 +15,8 @@ import { fileURLToPath } from 'node:url';
 import { loadArtifacts, ROOT, validateRepository } from './lib/catalog.mjs';
 import { SUPPORTED_TARGETS, targetDefinition } from './lib/targets.mjs';
 
-const KINDS = ['skill', 'hook', 'subagent'];
+export const KINDS = ['skill', 'hook', 'subagent', 'command', 'context', 'mcp-server'];
+export const KIND_LABELS = [['skill', 'Skills'], ['hook', 'Hooks'], ['subagent', 'Subagents'], ['command', 'Commands'], ['context', 'Contexts'], ['mcp-server', 'MCP servers']];
 const EXPECTED_MARKERS = {
   'README.md': {
     stat: { 'artifact-count': 1, 'evaluation-case-count': 1, 'hook-count': 2, 'skill-count': 2, 'subagent-count': 2 },
@@ -70,9 +71,6 @@ function computeStats() {
   const byKind = Object.fromEntries(KINDS.map((kind) => [kind, artifacts.filter(({ manifest }) => manifest.kind === kind)]));
   const stats = {
     'artifact-count': String(artifacts.length),
-    'skill-count': String(byKind.skill.length),
-    'hook-count': String(byKind.hook.length),
-    'subagent-count': String(byKind.subagent.length),
     'pack-count': String(packs.length),
     'target-count': String(SUPPORTED_TARGETS.length),
     'evaluation-case-count': String(artifacts.reduce((total, { directory }) => {
@@ -80,6 +78,7 @@ function computeStats() {
       return existsSync(file) ? total + JSON.parse(readFileSync(file, 'utf8')).cases.length : total;
     }, 0)),
   };
+  for (const kind of KINDS) stats[`${kind}-count`] = String(byKind[kind].length);
   for (const target of SUPPORTED_TARGETS) {
     for (const kind of KINDS) {
       stats[`${kind}-count:${target}`] = String(byKind[kind].filter(({ adapters }) => adapters[target]).length);
@@ -102,25 +101,24 @@ const ROOT_NOTES = {
 
 function targetsTable(stats) {
   const lines = [
-    '| Target | Skills | Hooks | Subagents | Project root | User root |',
-    '| --- | ---: | ---: | ---: | --- | --- |'
+    '| Target | Skills | Hooks | Subagents | Commands | Contexts | MCP servers | Project root | User root |',
+    '| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- |'
   ];
   for (const target of SUPPORTED_TARGETS) {
     const notes = ROOT_NOTES[target];
     if (!notes) throw new Error(`docs/targets.md: no root note declared for target "${target}"`);
-    lines.push(`| ${targetDefinition(target).label} | ${stats[`skill-count:${target}`]} | ${stats[`hook-count:${target}`]} | ${stats[`subagent-count:${target}`]} | ${notes.project} | ${notes.user} |`);
+    lines.push(`| ${targetDefinition(target).label} | ${stats[`skill-count:${target}`]} | ${stats[`hook-count:${target}`]} | ${stats[`subagent-count:${target}`]} | ${stats[`command-count:${target}`]} | ${stats[`context-count:${target}`]} | ${stats[`mcp-server-count:${target}`]} | ${notes.project} | ${notes.user} |`);
   }
   return lines.join('\n');
 }
 
 // The README coverage matrix lists targets as columns, one row per kind.
 function readmeMatrix(stats) {
-  const kinds = [['skill', 'Skills'], ['hook', 'Hooks'], ['subagent', 'Subagents']];
   const lines = [
     `| | ${SUPPORTED_TARGETS.map((target) => targetDefinition(target).label).join(' | ')} |`,
     `| --- | ${SUPPORTED_TARGETS.map(() => '---:').join(' | ')} |`,
   ];
-  for (const [kind, label] of kinds) {
+  for (const [kind, label] of KIND_LABELS) {
     const cells = SUPPORTED_TARGETS.map((target) => stats[`${kind}-count:${target}`]);
     lines.push(`| ${label} (${stats[`${kind}-count`]}) | ${cells.join(' | ')} |`);
   }

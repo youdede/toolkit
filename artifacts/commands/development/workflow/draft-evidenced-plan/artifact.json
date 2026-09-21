@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "command/development/workflow/draft-evidenced-plan",
+  "slug": "draft-evidenced-plan",
+  "name": "Draft Evidenced Plan",
+  "version": "1.0.0",
+  "kind": "command",
+  "summary": "Draft an ordered implementation plan where every step cites the code it touches and the evidence that proves completion.",
+  "description": "Invoked as a slash command, drafts a bounded implementation plan whose steps each name concrete files, the verification that proves the step done, and an explicit refusal to plan what the repository does not show. Preconditions run deterministically before planning starts.",
+  "domain": "development",
+  "category": "workflow",
+  "capabilities": [
+    "plan"
+  ],
+  "problems": [
+    "workflow-delegation"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "Youdede"
+  ],
+  "refuses": [
+    "It does not edit, create, or delete any file while planning; it only reads.",
+    "It does not estimate effort or invent completion criteria for code it has not read.",
+    "It does not start when its deterministic preconditions fail; it reports the failed check and stops."
+  ],
+  "execution": {
+    "mode": "hybrid",
+    "entrypoints": [
+      {
+        "path": "scripts/check-preconditions.mjs",
+        "runtime": "node",
+        "purpose": "Evaluate the declared preconditions deterministically before the planning workflow may begin.",
+        "sideEffects": "none"
+      }
+    ]
+  },
+  "command": {
+    "invocation": "draft-evidenced-plan",
+    "toolAuthority": [
+      "Read",
+      "Grep",
+      "Glob"
+    ],
+    "produces": [
+      "an ordered implementation plan whose every step cites concrete file paths and the verification command that proves it"
+    ],
+    "requires": [],
+    "flags": [
+      {
+        "name": "scope",
+        "effect": "narrow",
+        "description": "Restrict planning to a bounded set of paths supplied by the user."
+      }
+    ]
+  },
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  }
+}

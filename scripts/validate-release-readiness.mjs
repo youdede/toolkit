@@ -99,8 +99,8 @@ export function validateScriptTestDeclarations(root = ROOT) {
 
     const records = (suite.artifactIds || []).map((id) => byId.get(id)).filter(Boolean);
     const kinds = new Set(records.map(({ manifest }) => manifest.kind));
-    if (kinds.size > 1 || (kinds.size === 1 && !['hook', 'skill'].includes([...kinds][0]))) {
-      errors.push(`${prefix}.artifactIds must declare only hooks or only hybrid skills`);
+    if (kinds.size > 1 || (kinds.size === 1 && !['hook', 'skill', 'command'].includes([...kinds][0]))) {
+      errors.push(`${prefix}.artifactIds must declare only hooks, only hybrid skills, or only commands`);
     }
     const requiredCases = kinds.has('hook') ? HOOK_CASES : HELPER_CASES;
     if (!sameMembers(Object.keys(suite.coverage || {}), requiredCases)) {

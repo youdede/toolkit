@@ -16,7 +16,7 @@ import { ROOT } from './lib/catalog.mjs';
 
 const OUTPUT = path.join(ROOT, 'docs', 'catalog');
 
-const KINDS = [
+export const KINDS = [
   {
     kind: 'skill',
     file: 'skills.md',
@@ -34,6 +34,24 @@ const KINDS = [
     file: 'subagents.md',
     title: 'Subagents',
     lead: 'A specialist with a deliberately narrow brief. None may edit, execute, or approve anything, and each must report what it could not verify.'
+  },
+  {
+    kind: 'command',
+    file: 'commands.md',
+    title: 'Commands',
+    lead: 'A user-invoked workflow with a declared tool allowlist, preconditions checked before it starts, and evidence it must produce to count as complete. Flags may only narrow its authority.'
+  },
+  {
+    kind: 'context',
+    file: 'contexts.md',
+    title: 'Contexts',
+    lead: 'A scoped rule file that shapes every decision while installed. Each rule traces to the catalog artifact it descends from, and an expired context warns instead of silently rotting.'
+  },
+  {
+    kind: 'mcp-server',
+    file: 'mcp-servers.md',
+    title: 'MCP servers',
+    lead: 'A vetted tool-server configuration with declared network egress, secret access, and a pinned tool manifest. A server that changes its tool surface after vetting is quarantined until re-vetted.'
   }
 ];
 
@@ -110,6 +128,9 @@ function indexPage(artifacts, packs) {
     `| [Skills](skills.md) | ${count('skill')} | Procedures an agent loads when a task matches |`,
     `| [Hooks](hooks.md) | ${count('hook')} | Deterministic gates that block a command before it runs |`,
     `| [Subagents](subagents.md) | ${count('subagent')} | Specialists with a narrow brief and no authority to act |`,
+    `| [Commands](commands.md) | ${count('command')} | User-invoked workflows with preconditions and required evidence |`,
+    `| [Contexts](contexts.md) | ${count('context')} | Scoped rule files with provenance and expiry |`,
+    `| [MCP servers](mcp-servers.md) | ${count('mcp-server')} | Vetted tool-server configs with declared trust boundaries |`,
     `| [Packs](packs.md) | ${packs.length} | The above composed into one outcome |`,
     '',
     'These pages are generated from the catalog and checked by `npm run check`, so they cannot drift from what the repository actually contains.',

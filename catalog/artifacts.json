@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "counts": {
-    "total": 285,
+    "total": 286,
     "skills": 166,
     "hooks": 57,
     "subagents": 62
   },
   "relationshipGraph": {
     "counts": {
-      "artifactNodes": 285,
+      "artifactNodes": 286,
       "directedEdges": {
         "composesWith": 310,
         "conflictsWith": 0,
@@ -19,14 +19,18 @@
       "compositionEdges": 155,
       "conflictEdges": 0,
       "crossKindCompositionEdges": 78,
-      "orphanArtifacts": 176
+      "orphanArtifacts": 177
     },
     "orphanCountsByKind": {
       "skill": 93,
       "hook": 39,
-      "subagent": 44
+      "subagent": 44,
+      "command": 1,
+      "context": 0,
+      "mcp-server": 0
     },
     "orphanArtifactIds": [
+      "command/development/workflow/draft-evidenced-plan",
       "hook/data/compatibility/schema-compatibility-guard",
       "hook/data/live-query-safety/database-query-mode-guard",
       "hook/development/assertion-integrity/test-assertion-removal-guard",
@@ -206,6 +210,79 @@
     ]
   },
   "artifacts": [
+    {
+      "id": "command/development/workflow/draft-evidenced-plan",
+      "slug": "draft-evidenced-plan",
+      "name": "Draft Evidenced Plan",
+      "version": "1.0.0",
+      "kind": "command",
+      "summary": "Draft an ordered implementation plan where every step cites the code it touches and the evidence that proves completion.",
+      "description": "Invoked as a slash command, drafts a bounded implementation plan whose steps each name concrete files, the verification that proves the step done, and an explicit refusal to plan what the repository does not show. Preconditions run deterministically before planning starts.",
+      "domain": "development",
+      "category": "workflow",
+      "capabilities": [
+        "plan"
+      ],
+      "problems": [
+        "workflow-delegation"
+      ],
+      "frameworks": [
+        "agnostic"
+      ],
+      "languages": [
+        "agnostic"
+      ],
+      "lifecycle": [
+        "planning"
+      ],
+      "risk": "low",
+      "license": "MIT",
+      "execution": {
+        "mode": "hybrid",
+        "entrypoints": [
+          {
+            "path": "scripts/check-preconditions.mjs",
+            "runtime": "node",
+            "purpose": "Evaluate the declared preconditions deterministically before the planning workflow may begin.",
+            "sideEffects": "none"
+          }
+        ]
+      },
+      "relationships": {
+        "composesWith": [],
+        "conflictsWith": [],
+        "supersedes": [],
+        "prerequisites": [],
+        "packIds": []
+      },
+      "operational": {
+        "behavior": "advisory",
+        "failurePolicy": "stop-and-report",
+        "latencyClass": "immediate",
+        "dataRetention": "none"
+      },
+      "refuses": [
+        "It does not edit, create, or delete any file while planning; it only reads.",
+        "It does not estimate effort or invent completion criteria for code it has not read.",
+        "It does not start when its deterministic preconditions fail; it reports the failed check and stops."
+      ],
+      "targets": [
+        "claude-code"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        }
+      },
+      "install": [
+        {
+          "target": "claude-code",
+          "command": "npx @youdede/toolkit add draft-evidenced-plan --target claude-code --scope project"
+        }
+      ]
+    },
     {
       "id": "hook/data/compatibility/schema-compatibility-guard",
       "slug": "schema-compatibility-guard",

@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { ROOT } from '../scripts/lib/catalog.mjs';
-import { buildCatalogDocs } from '../scripts/generate-catalog-docs.mjs';
+import { buildCatalogDocs, KINDS } from '../scripts/generate-catalog-docs.mjs';
 
 const catalog = JSON.parse(readFileSync(path.join(ROOT, 'catalog', 'artifacts.json'), 'utf8'));
 const artifacts = catalog.artifacts ?? catalog;
@@ -20,7 +20,7 @@ test('the committed catalog pages match the catalog', () => {
 });
 
 test('every artifact appears on the page for its kind', () => {
-  const of = { skill: pages.get('skills.md'), hook: pages.get('hooks.md'), subagent: pages.get('subagents.md') };
+  const of = Object.fromEntries(KINDS.map(({ kind, file }) => [kind, pages.get(file)]));
   const missing = artifacts.filter((a) => !of[a.kind]?.includes(`\`${a.slug}\``));
   assert.deepEqual(missing.map((a) => a.id), [], 'these artifacts are listed nowhere');
 });

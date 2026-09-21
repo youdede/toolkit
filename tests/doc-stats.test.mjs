@@ -3,7 +3,7 @@ import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import test from 'node:test';
-import { validateMarkerInventory } from '../scripts/generate-doc-stats.mjs';
+import { validateMarkerInventory, KIND_LABELS } from '../scripts/generate-doc-stats.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const SCRIPT = path.join(ROOT, 'scripts', 'generate-doc-stats.mjs');
@@ -29,7 +29,7 @@ test('the generated README matrix is a complete uninterrupted Markdown table', (
   const lines = matrix.split('\n');
   assert.match(lines[0], /^\| \| .+ \|$/);
   assert.match(lines[1], /^\| --- \|(?: ---:\s*\|)+$/);
-  assert.equal(lines.length, 5);
+  assert.equal(lines.length, KIND_LABELS.length + 2, 'one header, one separator, one row per kind');
   assert.ok(lines.every((line) => line.startsWith('| ') && line.endsWith(' |')));
 });
 

@@ -293,6 +293,22 @@
         "malformed": "rejects malformed, duplicate, unsupported, and oversized evidence",
         "boundary": "reads only explicit in-root non-symlink files"
       }
+    },
+    {
+      "id": "command-core",
+      "artifactIds": [
+        "command/development/workflow/draft-evidenced-plan"
+      ],
+      "testFiles": [
+        "tests/command-precondition.test.mjs",
+        "tests/kind-expansion.test.mjs"
+      ],
+      "coverage": {
+        "positive": "empty check lists pass",
+        "negative": "the CLI exits 0 on success and 1 with JSON failures on refusal or misuse",
+        "malformed": "unknown check types and malformed configs fail closed",
+        "boundary": "file-exists follows symlinks only inside the workspace"
+      }
     }
   ]
 }

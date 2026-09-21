@@ -37,10 +37,10 @@
         "properties": {
           "artifactId": {
             "type": "string",
-            "pattern": "^(skill|hook|subagent)/[a-z0-9-]+/[a-z0-9-]+/[a-z0-9-]+$"
+            "pattern": "^(skill|hook|subagent|command|context|mcp-server)/[a-z0-9-]+/[a-z0-9-]+/[a-z0-9-]+$"
           },
           "role": {
-            "enum": ["procedure", "collector", "specialist", "verifier", "enforcement", "observer"]
+            "enum": ["procedure", "collector", "specialist", "verifier", "enforcement", "observer", "entrypoint", "baseline", "integration"]
           },
           "required": { "type": "boolean" }
         }
