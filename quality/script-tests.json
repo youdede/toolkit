@@ -309,6 +309,24 @@
         "malformed": "unknown check types and malformed configs fail closed",
         "boundary": "file-exists follows symlinks only inside the workspace"
       }
+    },
+    {
+      "id": "command-workflows",
+      "artifactIds": [
+        "command/development/workflow/assemble-review-brief",
+        "command/development/workflow/audit-release-evidence",
+        "command/development/workflow/verify-claims-against-output"
+      ],
+      "testFiles": [
+        "tests/command-workflows.test.mjs",
+        "tests/command-precondition.test.mjs"
+      ],
+      "coverage": {
+        "positive": "clean-worktree commands refuse a dirty tree and pass a clean one",
+        "negative": "duplicate flag names within one command manifest are rejected",
+        "malformed": "unknown check types and malformed configs fail closed",
+        "boundary": "file-exists follows symlinks only inside the workspace"
+      }
     }
   ]
 }

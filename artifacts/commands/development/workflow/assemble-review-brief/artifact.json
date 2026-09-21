@@ -1,0 +1,85 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "command/development/workflow/assemble-review-brief",
+  "slug": "assemble-review-brief",
+  "name": "Assemble Review Brief",
+  "version": "1.0.0",
+  "kind": "command",
+  "summary": "Assemble a review brief from the real diff: scope, risk notes, and test evidence a reviewer can check line by line.",
+  "description": "Invoked as a slash command, collects the bounded diff, maps each changed area to its risk and its test evidence, and emits a structured review brief with explicit unverified areas. It prepares review; it never performs approval.",
+  "domain": "development",
+  "category": "workflow",
+  "capabilities": [
+    "assess"
+  ],
+  "problems": [
+    "workflow-delegation"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "Youdede"
+  ],
+  "refuses": [
+    "It does not approve, request changes, or merge; the brief informs a human reviewer.",
+    "It does not describe files it has not read or diff ranges it has not inspected.",
+    "It does not omit areas it could not verify; it lists them as unverified."
+  ],
+  "execution": {
+    "mode": "hybrid",
+    "entrypoints": [
+      {
+        "path": "scripts/check-preconditions.mjs",
+        "runtime": "node",
+        "purpose": "Evaluate the declared preconditions deterministically before the workflow may begin.",
+        "sideEffects": "none"
+      }
+    ]
+  },
+  "command": {
+    "invocation": "assemble-review-brief",
+    "toolAuthority": [
+      "Read",
+      "Grep",
+      "Glob",
+      "Bash"
+    ],
+    "produces": [
+      "a review brief mapping each changed area to its risk, evidence, and explicitly unverified claims"
+    ],
+    "requires": [],
+    "flags": [
+      {
+        "name": "scope",
+        "effect": "narrow",
+        "description": "Restrict the brief to a bounded set of paths or a named commit range."
+      }
+    ]
+  },
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  }
+}

@@ -2,8 +2,92 @@
   "schemaVersion": 1,
   "algorithm": "sha256",
   "claim": "Checksums bind published bytes to a reviewed release; they do not prove authorship, originality, license compliance, endorsement, or control downstream copying.",
-  "rootDigest": "6e2a0b937cd4b8cbb6841448cda4d42e41d2ce65bbf178a8e035058c0bc90759",
+  "rootDigest": "2ebc82ea95b5419d5a65a888e459cbfcd2d30aa5e8d5954ab64f8fe4c021d10e",
   "artifacts": [
+    {
+      "artifactId": "command/development/workflow/assemble-review-brief",
+      "version": "1.0.0",
+      "integrityId": "urn:youdede:artifact:sha256:e785f48107629ead17c2d98cb8d0734d545a39a39ca5b1cf26d7331223819716",
+      "digest": "e785f48107629ead17c2d98cb8d0734d545a39a39ca5b1cf26d7331223819716",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/commands/development/workflow/assemble-review-brief/adapters/claude-code.json",
+          "bytes": 691,
+          "sha256": "32f6abf6b328b793ef04c1d0c41ee2f0bd95c0562142eb3d2dc094dd50c02a4b"
+        },
+        {
+          "path": "artifacts/commands/development/workflow/assemble-review-brief/artifact.json",
+          "bytes": 2382,
+          "sha256": "10a153481bab2b6cd75f80c9bc6a9425847e77508a95505c894c166f573f893f"
+        },
+        {
+          "path": "artifacts/commands/development/workflow/assemble-review-brief/COMMAND.md",
+          "bytes": 1610,
+          "sha256": "f3481310ec003a041e072e7def8b111d9c60484a15a66a547eb60cd8861e5c52"
+        },
+        {
+          "path": "artifacts/commands/development/workflow/assemble-review-brief/preconditions.json",
+          "bytes": 19,
+          "sha256": "caff5752efd7abaac4289dfac6160ab254513e4c8a5476916398d755ab4949dc"
+        },
+        {
+          "path": "artifacts/commands/development/workflow/assemble-review-brief/scripts/check-preconditions.mjs",
+          "bytes": 818,
+          "sha256": "99e4dd76e0c13f3ba63dc6beee61633dbe00735d2c98256251c249cc5c0f7c36"
+        },
+        {
+          "path": "scripts/runtime/command-precondition.mjs",
+          "bytes": 6479,
+          "sha256": "83f03b74a072d79e590b2dc8a180d30f1a8fc1d5eeba2ae5f9a116f8a4f8c68b"
+        }
+      ]
+    },
+    {
+      "artifactId": "command/development/workflow/audit-release-evidence",
+      "version": "1.0.0",
+      "integrityId": "urn:youdede:artifact:sha256:528d0b3ce83a99e2fb127b3e4df740447fe4641d6ccb6177956d7f519f728130",
+      "digest": "528d0b3ce83a99e2fb127b3e4df740447fe4641d6ccb6177956d7f519f728130",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/commands/development/workflow/audit-release-evidence/adapters/claude-code.json",
+          "bytes": 694,
+          "sha256": "aa6b9165bf06eafe884cab65ee09f5551bf04b265e599db9dea5fa9d5e30674f"
+        },
+        {
+          "path": "artifacts/commands/development/workflow/audit-release-evidence/artifact.json",
+          "bytes": 2478,
+          "sha256": "310c994eb802b46ac9baed53e2be773203f76b00df11b5cda7c652346da18d30"
+        },
+        {
+          "path": "artifacts/commands/development/workflow/audit-release-evidence/COMMAND.md",
+          "bytes": 1672,
+          "sha256": "51208b5b8d679bac3959720e49365ae62a5c0e7e636a78b5d41dff2006931022"
+        },
+        {
+          "path": "artifacts/commands/development/workflow/audit-release-evidence/preconditions.json",
+          "bytes": 60,
+          "sha256": "3141819870d86e18ec5c89b66b1c14393136bbdb1e37d36e9da5955c79a687d0"
+        },
+        {
+          "path": "artifacts/commands/development/workflow/audit-release-evidence/scripts/check-preconditions.mjs",
+          "bytes": 818,
+          "sha256": "99e4dd76e0c13f3ba63dc6beee61633dbe00735d2c98256251c249cc5c0f7c36"
+        },
+        {
+          "path": "scripts/runtime/command-precondition.mjs",
+          "bytes": 6479,
+          "sha256": "83f03b74a072d79e590b2dc8a180d30f1a8fc1d5eeba2ae5f9a116f8a4f8c68b"
+        }
+      ]
+    },
     {
       "artifactId": "command/development/workflow/draft-evidenced-plan",
       "version": "1.0.0",
@@ -36,6 +120,48 @@
         },
         {
           "path": "artifacts/commands/development/workflow/draft-evidenced-plan/scripts/check-preconditions.mjs",
+          "bytes": 818,
+          "sha256": "99e4dd76e0c13f3ba63dc6beee61633dbe00735d2c98256251c249cc5c0f7c36"
+        },
+        {
+          "path": "scripts/runtime/command-precondition.mjs",
+          "bytes": 6479,
+          "sha256": "83f03b74a072d79e590b2dc8a180d30f1a8fc1d5eeba2ae5f9a116f8a4f8c68b"
+        }
+      ]
+    },
+    {
+      "artifactId": "command/development/workflow/verify-claims-against-output",
+      "version": "1.0.0",
+      "integrityId": "urn:youdede:artifact:sha256:f96fc4dfb047d6dbe9e9239541c702a1a0f2712c4a1b04028a7f601777b590ef",
+      "digest": "f96fc4dfb047d6dbe9e9239541c702a1a0f2712c4a1b04028a7f601777b590ef",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/commands/development/workflow/verify-claims-against-output/adapters/claude-code.json",
+          "bytes": 712,
+          "sha256": "7c143ccd009cee7145ab43c448f15e9b5b246771f836b2db83929927288177dd"
+        },
+        {
+          "path": "artifacts/commands/development/workflow/verify-claims-against-output/artifact.json",
+          "bytes": 2526,
+          "sha256": "40065c739c68549dbf9a39f80724415f7b6a010e8f0270753b9e7c8f482ab852"
+        },
+        {
+          "path": "artifacts/commands/development/workflow/verify-claims-against-output/COMMAND.md",
+          "bytes": 1890,
+          "sha256": "56ab903aa9d4f4347c3d952925fbabd7bec7e3b39b47bcf86889e9004978a1f7"
+        },
+        {
+          "path": "artifacts/commands/development/workflow/verify-claims-against-output/preconditions.json",
+          "bytes": 60,
+          "sha256": "3141819870d86e18ec5c89b66b1c14393136bbdb1e37d36e9da5955c79a687d0"
+        },
+        {
+          "path": "artifacts/commands/development/workflow/verify-claims-against-output/scripts/check-preconditions.mjs",
           "bytes": 818,
           "sha256": "99e4dd76e0c13f3ba63dc6beee61633dbe00735d2c98256251c249cc5c0f7c36"
         },

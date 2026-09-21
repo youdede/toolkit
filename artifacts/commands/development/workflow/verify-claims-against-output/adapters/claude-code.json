@@ -1,0 +1,28 @@
+{
+  "$schema": "../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": [
+    "project"
+  ],
+  "files": [
+    {
+      "from": "COMMAND.md",
+      "to": "commands/verify-claims-against-output.md"
+    },
+    {
+      "from": "scripts/check-preconditions.mjs",
+      "to": "commands/youdede/verify-claims-against-output/check-preconditions.mjs",
+      "executable": true
+    },
+    {
+      "from": "preconditions.json",
+      "to": "commands/youdede/verify-claims-against-output/preconditions.json"
+    },
+    {
+      "root": "package",
+      "from": "scripts/runtime/command-precondition.mjs",
+      "to": "commands/youdede/lib/command-precondition.mjs"
+    }
+  ]
+}

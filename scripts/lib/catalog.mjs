@@ -496,12 +496,17 @@ function validateKindContract(manifest, errors) {
     validateSlugList(errors, contract.produces, 'command.produces', { minItems: 1, minLength: 10 });
     validateSlugList(errors, contract.requires, 'command.requires', { minLength: 10 });
     if (!Array.isArray(contract.flags)) errors.push('command.flags must be an array');
-    else for (const [index, flag] of contract.flags.entries()) {
-      const prefix = `command.flags[${index}]`;
-      if (!flag || typeof flag !== 'object') { errors.push(`${prefix} must be an object`); continue; }
-      if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(flag.name || '')) errors.push(`${prefix}.name must use lowercase hyphen-case`);
-      if (flag.effect !== 'narrow') errors.push(`${prefix}.effect must be 'narrow': flags may only restrict authority`);
-      if (typeof flag.description !== 'string' || flag.description.length < 15) errors.push(`${prefix}.description must contain at least 15 characters`);
+    else {
+      const flagNames = new Set();
+      for (const [index, flag] of contract.flags.entries()) {
+        const prefix = `command.flags[${index}]`;
+        if (!flag || typeof flag !== 'object') { errors.push(`${prefix} must be an object`); continue; }
+        if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(flag.name || '')) errors.push(`${prefix}.name must use lowercase hyphen-case`);
+        else if (flagNames.has(flag.name)) errors.push(`${prefix}.name duplicates flag '${flag.name}'`);
+        else flagNames.add(flag.name);
+        if (flag.effect !== 'narrow') errors.push(`${prefix}.effect must be 'narrow': flags may only restrict authority`);
+        if (typeof flag.description !== 'string' || flag.description.length < 15) errors.push(`${prefix}.description must contain at least 15 characters`);
+      }
     }
     if (execution?.mode === 'deterministic') errors.push('commands direct an agent and may not declare deterministic execution');
   }
