@@ -86,6 +86,8 @@ npx @youdede/toolkit verify-pack-evidence daily-driver --report .youdede/evidenc
 
 The [artifact catalog](catalog/artifacts.json), [pack catalog](catalog/packs.json), and [taxonomy](catalog/taxonomy.json) are generated, stable, and suitable for a search index or an API of your own. The [pack evidence contract](docs/pack-evidence.md) explains what a verified report proves and what it does not.
 
+The generated [capability matrix](docs/capability-matrix.md) maps every artifact kind and pack to its checked guarantees, runtime coverage, evidence contract, and claim boundaries.
+
 Prefer a runtime-native marketplace? [Claude Code and Codex installation](docs/native-marketplaces.md)
 is generated from the same catalog, with unsupported compositions and kinds explicitly withheld.
 
