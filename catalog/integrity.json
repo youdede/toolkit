@@ -2,8 +2,50 @@
   "schemaVersion": 1,
   "algorithm": "sha256",
   "claim": "Checksums bind published bytes to a reviewed release; they do not prove authorship, originality, license compliance, endorsement, or control downstream copying.",
-  "rootDigest": "63f8ea8ef3a5f1bada451d3a96c92850445cb7d6c25da97e13a15576d1365644",
+  "rootDigest": "6e2a0b937cd4b8cbb6841448cda4d42e41d2ce65bbf178a8e035058c0bc90759",
   "artifacts": [
+    {
+      "artifactId": "command/development/workflow/draft-evidenced-plan",
+      "version": "1.0.0",
+      "integrityId": "urn:youdede:artifact:sha256:3788b1d5ba71309cc6ab559901442acdd2b4304708135dbe269b72eea05785a0",
+      "digest": "3788b1d5ba71309cc6ab559901442acdd2b4304708135dbe269b72eea05785a0",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/commands/development/workflow/draft-evidenced-plan/adapters/claude-code.json",
+          "bytes": 688,
+          "sha256": "51151480b434b0280bbf137a4ac4f6c5b3e814b44bf697df0491a358dd67a016"
+        },
+        {
+          "path": "artifacts/commands/development/workflow/draft-evidenced-plan/artifact.json",
+          "bytes": 2463,
+          "sha256": "e26926ddb545132cb5de492e1b8433a1cb3672e08daba3e5470d6391a3b6ddfa"
+        },
+        {
+          "path": "artifacts/commands/development/workflow/draft-evidenced-plan/COMMAND.md",
+          "bytes": 1796,
+          "sha256": "6412cb322349667d26745538b43e3d9899f071ebc0edc2395e70cd65151b431b"
+        },
+        {
+          "path": "artifacts/commands/development/workflow/draft-evidenced-plan/preconditions.json",
+          "bytes": 19,
+          "sha256": "caff5752efd7abaac4289dfac6160ab254513e4c8a5476916398d755ab4949dc"
+        },
+        {
+          "path": "artifacts/commands/development/workflow/draft-evidenced-plan/scripts/check-preconditions.mjs",
+          "bytes": 818,
+          "sha256": "99e4dd76e0c13f3ba63dc6beee61633dbe00735d2c98256251c249cc5c0f7c36"
+        },
+        {
+          "path": "scripts/runtime/command-precondition.mjs",
+          "bytes": 6479,
+          "sha256": "83f03b74a072d79e590b2dc8a180d30f1a8fc1d5eeba2ae5f9a116f8a4f8c68b"
+        }
+      ]
+    },
     {
       "artifactId": "hook/data/compatibility/schema-compatibility-guard",
       "version": "1.0.0",
