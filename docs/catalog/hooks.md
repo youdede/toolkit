@@ -4,7 +4,7 @@
 
 A deterministic gate that inspects a command before it runs and blocks it. No model sits in the decision path, so the same input always produces the same verdict.
 
-57 of them. Install one with `npx @youdede/toolkit add <slug> --target <runtime> --scope project`, or read what it refuses first with `npx @youdede/toolkit info <slug>`.
+58 of them. Install one with `npx @youdede/toolkit add <slug> --target <runtime> --scope project`, or read what it refuses first with `npx @youdede/toolkit info <slug>`.
 
 
 ## data
@@ -36,6 +36,7 @@ A deterministic gate that inspects a command before it runs and blocks it. No mo
 | `lint-suppression-guard` | Block net-new broad diagnostic suppressions while allowing scoped rule exceptions. | high | claude-code |
 | `exception-swallowing-guard` | Block newly added empty exception handlers and ignored promise rejections. | high | claude-code |
 | `test-integrity-guard` | Block newly introduced test suppressions and explicit shell removal of test sources. | medium | claude-code |
+| `phase-gate-guard` | Block phase evidence writes unless the previous phase in the spec-design-tasks-implementation chain exists and is valid. | medium | claude-code |
 
 ## operations
 

@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "counts": {
-    "total": 289,
+    "total": 290,
     "skills": 166,
-    "hooks": 57,
+    "hooks": 58,
     "subagents": 62
   },
   "relationshipGraph": {
     "counts": {
-      "artifactNodes": 289,
+      "artifactNodes": 290,
       "directedEdges": {
         "composesWith": 310,
         "conflictsWith": 0,
@@ -19,11 +19,11 @@
       "compositionEdges": 155,
       "conflictEdges": 0,
       "crossKindCompositionEdges": 78,
-      "orphanArtifacts": 180
+      "orphanArtifacts": 181
     },
     "orphanCountsByKind": {
       "skill": 93,
-      "hook": 39,
+      "hook": 40,
       "subagent": 44,
       "command": 4,
       "context": 0,
@@ -44,6 +44,7 @@
       "hook/development/diagnostic-suppression/lint-suppression-guard",
       "hook/development/error-handling/exception-swallowing-guard",
       "hook/development/testing/test-integrity-guard",
+      "hook/development/workflow/phase-gate-guard",
       "hook/operations/cloud-resources/cloud-resource-deletion-guard",
       "hook/operations/delegation-budget/subagent-fanout-guard",
       "hook/operations/git/protected-branch-guard",
@@ -1755,6 +1756,81 @@
         {
           "target": "claude-code",
           "command": "npx @youdede/toolkit add test-integrity-guard --target claude-code --scope project"
+        }
+      ]
+    },
+    {
+      "id": "hook/development/workflow/phase-gate-guard",
+      "slug": "phase-gate-guard",
+      "name": "Phase Gate Guard",
+      "version": "1.0.0",
+      "kind": "hook",
+      "summary": "Block phase evidence writes unless the previous phase in the spec-design-tasks-implementation chain exists and is valid.",
+      "description": "Guard the reserved .youdede/phases/ evidence directory so a phase advances only when its predecessor's evidence file exists, parses, and carries a matching phase, a real summary, and non-empty anchors. Unknown filenames, malformed evidence, and unsafe predecessors are blocked.",
+      "domain": "development",
+      "category": "workflow",
+      "capabilities": [
+        "enforce"
+      ],
+      "problems": [
+        "workflow-delegation"
+      ],
+      "frameworks": [
+        "agnostic"
+      ],
+      "languages": [
+        "agnostic"
+      ],
+      "lifecycle": [
+        "planning",
+        "implementation"
+      ],
+      "risk": "medium",
+      "license": "MIT",
+      "execution": {
+        "mode": "deterministic",
+        "entrypoints": [
+          {
+            "path": "targets/claude-code/phase-gate-guard.mjs",
+            "runtime": "node",
+            "purpose": "Evaluate Write and Edit calls against the reserved phase-evidence directory and block invalid phase advancement.",
+            "sideEffects": "none"
+          }
+        ]
+      },
+      "relationships": {
+        "composesWith": [],
+        "conflictsWith": [],
+        "supersedes": [],
+        "prerequisites": [],
+        "packIds": []
+      },
+      "operational": {
+        "behavior": "enforcing",
+        "failurePolicy": "fail-closed",
+        "latencyClass": "immediate",
+        "dataRetention": "none"
+      },
+      "refuses": [
+        "It does not judge the quality of any phase document; it verifies only the predecessor chain's presence and validity.",
+        "It does not inspect, block, or observe writes outside the reserved .youdede/phases/ directory.",
+        "It does not execute submitted content, call an LLM, download dependencies, or transmit inspected data.",
+        "It does not treat an unreadable, symlinked, or oversized predecessor file as valid evidence."
+      ],
+      "targets": [
+        "claude-code"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        }
+      },
+      "install": [
+        {
+          "target": "claude-code",
+          "command": "npx @youdede/toolkit add phase-gate-guard --target claude-code --scope project"
         }
       ]
     },

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "algorithm": "sha256",
   "claim": "Checksums bind published bytes to a reviewed release; they do not prove authorship, originality, license compliance, endorsement, or control downstream copying.",
-  "rootDigest": "2ebc82ea95b5419d5a65a888e459cbfcd2d30aa5e8d5954ab64f8fe4c021d10e",
+  "rootDigest": "7da3ba7972d941060cf7c2e440f52e6c3d7654ec3136d87189f5a9759806d2c8",
   "artifacts": [
     {
       "artifactId": "command/development/workflow/assemble-review-brief",
@@ -684,6 +684,38 @@
           "path": "artifacts/hooks/development/testing/test-integrity-guard/targets/claude-code/test-integrity-paths.mjs",
           "bytes": 2083,
           "sha256": "82743b2bf9cdd1a79ecb49e38e95d0ab694c8e2db3e1ec26fbbebc5f0c28462c"
+        }
+      ]
+    },
+    {
+      "artifactId": "hook/development/workflow/phase-gate-guard",
+      "version": "1.0.0",
+      "integrityId": "urn:youdede:artifact:sha256:ebd797a8bb7309e69f659334ff0312602196afd5197745cf31e467683456da52",
+      "digest": "ebd797a8bb7309e69f659334ff0312602196afd5197745cf31e467683456da52",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/hooks/development/workflow/phase-gate-guard/adapters/claude-code.json",
+          "bytes": 774,
+          "sha256": "c713698a6896395d777163c863ef1cfc4f081c204d79b9a2438cbdcfa10e9ebd"
+        },
+        {
+          "path": "artifacts/hooks/development/workflow/phase-gate-guard/artifact.json",
+          "bytes": 2179,
+          "sha256": "942d3d6ee2b9f9b15ea3132610121c0aa6d12cd981a46b3230aa76b3942012ca"
+        },
+        {
+          "path": "artifacts/hooks/development/workflow/phase-gate-guard/targets/claude-code/phase-gate-guard.mjs",
+          "bytes": 6756,
+          "sha256": "ea0085a2159a7cf58881c41fc172e1af6b707b5f7a684b2980a8a5fcea0da684"
+        },
+        {
+          "path": "artifacts/hooks/development/workflow/phase-gate-guard/targets/claude-code/README.md",
+          "bytes": 1095,
+          "sha256": "ba0278133d02170f06e107b8e435420561ec94d340c9db65afbce2acc17ba39a"
         }
       ]
     },
