@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "count": 7,
+  "count": 11,
   "packs": [
     {
       "$schema": "../../schema/pack.schema.json",
@@ -8,11 +8,37 @@
       "id": "pack/accessibility-assurance",
       "slug": "accessibility-assurance",
       "name": "Accessibility assurance",
+      "version": "1.0.0",
       "summary": "Plan, enforce, and independently verify accessible interface behavior from source evidence.",
       "outcomes": [
         "accessible-interface",
         "regression-prevention"
       ],
+      "evidence": {
+        "reportSchema": "../../schema/pack-evidence.schema.json",
+        "ledgerLinkRequired": true,
+        "outcomeEvidence": [
+          {
+            "outcome": "accessible-interface",
+            "memberArtifactIds": [
+              "skill/design/accessibility/plan-accessibility-conformance-evidence",
+              "skill/design/accessibility/prepare-eaa-conformance-evidence",
+              "skill/design/accessibility/test-screen-reader-journey",
+              "skill/design/accessibility/verify-cognitive-access-barriers",
+              "subagent/design/accessibility/accessibility-conformance-reviewer",
+              "subagent/design/accessibility/accessibility-journey-tester"
+            ]
+          },
+          {
+            "outcome": "regression-prevention",
+            "memberArtifactIds": [
+              "hook/design/authentication-access/authentication-accessibility-guard",
+              "hook/design/keyboard-focus/focus-style-regression-guard",
+              "hook/design/semantic-markup/accessibility-attribute-regression-guard"
+            ]
+          }
+        ]
+      },
       "members": [
         {
           "artifactId": "hook/design/authentication-access/authentication-accessibility-guard",
@@ -120,14 +146,153 @@
     {
       "$schema": "../../schema/pack.schema.json",
       "schemaVersion": 1,
+      "id": "pack/daily-driver",
+      "slug": "daily-driver",
+      "name": "Daily driver",
+      "version": "1.0.0",
+      "summary": "Deliver bounded incremental changes, prepare review evidence, and prevent unreviewable diffs.",
+      "outcomes": [
+        "incremental-delivery",
+        "review-ready-change"
+      ],
+      "evidence": {
+        "reportSchema": "../../schema/pack-evidence.schema.json",
+        "ledgerLinkRequired": true,
+        "outcomeEvidence": [
+          {
+            "outcome": "incremental-delivery",
+            "memberArtifactIds": [
+              "hook/operations/reviewability/large-diff-review-guard",
+              "skill/development/code-quality/deliver-incremental-change"
+            ]
+          },
+          {
+            "outcome": "review-ready-change",
+            "memberArtifactIds": [
+              "command/development/workflow/assemble-review-brief",
+              "skill/operations/reviewability/prepare-reviewable-pull-request",
+              "subagent/development/code-quality/refactor-equivalence-reviewer"
+            ]
+          }
+        ]
+      },
+      "members": [
+        {
+          "artifactId": "command/development/workflow/assemble-review-brief",
+          "role": "entrypoint",
+          "required": true
+        },
+        {
+          "artifactId": "hook/operations/reviewability/large-diff-review-guard",
+          "role": "enforcement",
+          "required": true
+        },
+        {
+          "artifactId": "skill/development/code-quality/deliver-incremental-change",
+          "role": "procedure",
+          "required": true
+        },
+        {
+          "artifactId": "skill/operations/reviewability/prepare-reviewable-pull-request",
+          "role": "verifier",
+          "required": true
+        },
+        {
+          "artifactId": "subagent/development/code-quality/refactor-equivalence-reviewer",
+          "role": "specialist",
+          "required": true
+        }
+      ],
+      "targets": [
+        "claude-code"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "scopes": [
+            "project"
+          ],
+          "optionalUnsupported": [],
+          "optionalUnsupportedByScope": {
+            "project": []
+          }
+        }
+      },
+      "promotion": {
+        "eligible": true,
+        "criteria": {
+          "crossKindRequiredWorkflow": true,
+          "requiredProcedure": true,
+          "independentRequiredAssurance": true,
+          "roleCompatible": true,
+          "compositionConnected": true,
+          "conflictFree": true,
+          "prerequisiteClosed": true,
+          "compatibleInstallCoordinate": true
+        },
+        "requiredKinds": [
+          "command",
+          "hook",
+          "skill",
+          "subagent"
+        ],
+        "roleCounts": {
+          "procedure": 1,
+          "collector": 0,
+          "specialist": 1,
+          "verifier": 1,
+          "enforcement": 1,
+          "observer": 0,
+          "entrypoint": 1,
+          "baseline": 0,
+          "integration": 0
+        }
+      },
+      "hookFanout": [
+        {
+          "boundary": "claude-code:PreToolUse:Bash",
+          "count": 1
+        }
+      ],
+      "install": [
+        {
+          "target": "claude-code",
+          "scope": "project",
+          "command": "npx @youdede/toolkit add-pack daily-driver --target claude-code --scope project"
+        }
+      ]
+    },
+    {
+      "$schema": "../../schema/pack.schema.json",
+      "schemaVersion": 1,
       "id": "pack/data-change-safety",
       "slug": "data-change-safety",
       "name": "Data change safety",
+      "version": "1.0.0",
       "summary": "Review schema and migration changes with deterministic safety checks and independent risk analysis.",
       "outcomes": [
         "compatible-data-change",
         "migration-safety"
       ],
+      "evidence": {
+        "reportSchema": "../../schema/pack-evidence.schema.json",
+        "ledgerLinkRequired": true,
+        "outcomeEvidence": [
+          {
+            "outcome": "compatible-data-change",
+            "memberArtifactIds": [
+              "skill/data/schemas/review-schema-evolution",
+              "subagent/data/migrations/migration-risk-reviewer"
+            ]
+          },
+          {
+            "outcome": "migration-safety",
+            "memberArtifactIds": [
+              "hook/data/migrations/migration-safety-guard",
+              "skill/data/migrations/review-database-migration-plan"
+            ]
+          }
+        ]
+      },
       "members": [
         {
           "artifactId": "skill/data/migrations/review-database-migration-plan",
@@ -213,11 +378,31 @@
       "id": "pack/infrastructure-change-readiness",
       "slug": "infrastructure-change-readiness",
       "name": "Infrastructure change readiness",
+      "version": "1.0.0",
       "summary": "Plan a staged infrastructure change and independently review lifecycle, blast-radius, and recovery evidence.",
       "outcomes": [
         "recovery-evidence",
         "staged-infrastructure-change"
       ],
+      "evidence": {
+        "reportSchema": "../../schema/pack-evidence.schema.json",
+        "ledgerLinkRequired": true,
+        "outcomeEvidence": [
+          {
+            "outcome": "recovery-evidence",
+            "memberArtifactIds": [
+              "subagent/operations/resilience/disaster-recovery-readiness-auditor"
+            ]
+          },
+          {
+            "outcome": "staged-infrastructure-change",
+            "memberArtifactIds": [
+              "skill/operations/infrastructure/plan-infrastructure-change",
+              "subagent/operations/infrastructure/infrastructure-change-reviewer"
+            ]
+          }
+        ]
+      },
       "members": [
         {
           "artifactId": "skill/operations/infrastructure/plan-infrastructure-change",
@@ -342,14 +527,165 @@
     {
       "$schema": "../../schema/pack.schema.json",
       "schemaVersion": 1,
+      "id": "pack/mcp-baseline",
+      "slug": "mcp-baseline",
+      "name": "MCP baseline",
+      "version": "1.0.0",
+      "summary": "Install a guarded read-only MCP baseline with declared authority and independent trust-boundary review.",
+      "outcomes": [
+        "bounded-tool-access",
+        "mcp-trust-evidence"
+      ],
+      "evidence": {
+        "reportSchema": "../../schema/pack-evidence.schema.json",
+        "ledgerLinkRequired": true,
+        "outcomeEvidence": [
+          {
+            "outcome": "bounded-tool-access",
+            "memberArtifactIds": [
+              "hook/security/network-control/mcp-capability-drift-guard",
+              "mcp-server/development/agent-tooling/allowlisted-fetch-readonly",
+              "mcp-server/development/agent-tooling/repository-git-readonly",
+              "mcp-server/development/agent-tooling/workspace-files-readonly"
+            ]
+          },
+          {
+            "outcome": "mcp-trust-evidence",
+            "memberArtifactIds": [
+              "skill/development/agent-tooling/author-mcp-server-contract",
+              "skill/security/threat-modeling/review-agent-tool-boundaries",
+              "subagent/security/threat-modeling/mcp-trust-boundary-reviewer"
+            ]
+          }
+        ]
+      },
+      "members": [
+        {
+          "artifactId": "hook/security/network-control/mcp-capability-drift-guard",
+          "role": "enforcement",
+          "required": true
+        },
+        {
+          "artifactId": "mcp-server/development/agent-tooling/allowlisted-fetch-readonly",
+          "role": "integration",
+          "required": true
+        },
+        {
+          "artifactId": "mcp-server/development/agent-tooling/repository-git-readonly",
+          "role": "integration",
+          "required": true
+        },
+        {
+          "artifactId": "mcp-server/development/agent-tooling/workspace-files-readonly",
+          "role": "integration",
+          "required": true
+        },
+        {
+          "artifactId": "skill/development/agent-tooling/author-mcp-server-contract",
+          "role": "procedure",
+          "required": true
+        },
+        {
+          "artifactId": "skill/security/threat-modeling/review-agent-tool-boundaries",
+          "role": "verifier",
+          "required": true
+        },
+        {
+          "artifactId": "subagent/security/threat-modeling/mcp-trust-boundary-reviewer",
+          "role": "specialist",
+          "required": true
+        }
+      ],
+      "targets": [
+        "claude-code"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "scopes": [
+            "project"
+          ],
+          "optionalUnsupported": [],
+          "optionalUnsupportedByScope": {
+            "project": []
+          }
+        }
+      },
+      "promotion": {
+        "eligible": true,
+        "criteria": {
+          "crossKindRequiredWorkflow": true,
+          "requiredProcedure": true,
+          "independentRequiredAssurance": true,
+          "roleCompatible": true,
+          "compositionConnected": true,
+          "conflictFree": true,
+          "prerequisiteClosed": true,
+          "compatibleInstallCoordinate": true
+        },
+        "requiredKinds": [
+          "hook",
+          "mcp-server",
+          "skill",
+          "subagent"
+        ],
+        "roleCounts": {
+          "procedure": 1,
+          "collector": 0,
+          "specialist": 1,
+          "verifier": 1,
+          "enforcement": 1,
+          "observer": 0,
+          "entrypoint": 0,
+          "baseline": 0,
+          "integration": 3
+        }
+      },
+      "hookFanout": [
+        {
+          "boundary": "claude-code:PreToolUse:^mcp__youdede-.+__.+$",
+          "count": 1
+        }
+      ],
+      "install": [
+        {
+          "target": "claude-code",
+          "scope": "project",
+          "command": "npx @youdede/toolkit add-pack mcp-baseline --target claude-code --scope project"
+        }
+      ]
+    },
+    {
+      "$schema": "../../schema/pack.schema.json",
+      "schemaVersion": 1,
       "id": "pack/mobile-release-readiness",
       "slug": "mobile-release-readiness",
       "name": "Mobile release readiness",
+      "version": "1.0.0",
       "summary": "Review mobile release evidence, accessibility, reliability, repository state, and version consistency.",
       "outcomes": [
         "mobile-release-evidence",
         "safe-publication"
       ],
+      "evidence": {
+        "reportSchema": "../../schema/pack-evidence.schema.json",
+        "ledgerLinkRequired": true,
+        "outcomeEvidence": [
+          {
+            "outcome": "mobile-release-evidence",
+            "memberArtifactIds": [
+              "skill/operations/release/verify-mobile-release-readiness",
+              "subagent/development/testing/mobile-reliability-accessibility-reviewer"
+            ]
+          },
+          {
+            "outcome": "safe-publication",
+            "memberArtifactIds": [
+              "hook/operations/repository-state/release-clean-state-guard",
+              "hook/operations/versioning/release-version-consistency-guard"
+            ]
+          }
+        ]
+      },
       "members": [
         {
           "artifactId": "skill/operations/release/verify-mobile-release-readiness",
@@ -451,15 +787,169 @@
     {
       "$schema": "../../schema/pack.schema.json",
       "schemaVersion": 1,
+      "id": "pack/plan-and-verify-loop",
+      "slug": "plan-and-verify-loop",
+      "name": "Plan and verify loop",
+      "version": "1.0.0",
+      "summary": "Gate implementation behind evidenced planning phases and independently verify completion claims.",
+      "outcomes": [
+        "evidenced-plan",
+        "verified-implementation"
+      ],
+      "evidence": {
+        "reportSchema": "../../schema/pack-evidence.schema.json",
+        "ledgerLinkRequired": true,
+        "outcomeEvidence": [
+          {
+            "outcome": "evidenced-plan",
+            "memberArtifactIds": [
+              "command/development/workflow/draft-evidenced-plan",
+              "context/development/testing/testing-baseline",
+              "hook/development/workflow/phase-gate-guard",
+              "skill/operations/agent-orchestration/execute-verifiable-plan"
+            ]
+          },
+          {
+            "outcome": "verified-implementation",
+            "memberArtifactIds": [
+              "command/development/workflow/verify-claims-against-output",
+              "subagent/development/testing/test-gap-reviewer"
+            ]
+          }
+        ]
+      },
+      "members": [
+        {
+          "artifactId": "command/development/workflow/draft-evidenced-plan",
+          "role": "entrypoint",
+          "required": true
+        },
+        {
+          "artifactId": "command/development/workflow/verify-claims-against-output",
+          "role": "entrypoint",
+          "required": true
+        },
+        {
+          "artifactId": "context/development/testing/testing-baseline",
+          "role": "baseline",
+          "required": true
+        },
+        {
+          "artifactId": "hook/development/workflow/phase-gate-guard",
+          "role": "enforcement",
+          "required": true
+        },
+        {
+          "artifactId": "skill/operations/agent-orchestration/execute-verifiable-plan",
+          "role": "procedure",
+          "required": true
+        },
+        {
+          "artifactId": "subagent/development/testing/test-gap-reviewer",
+          "role": "verifier",
+          "required": true
+        }
+      ],
+      "targets": [
+        "claude-code"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "scopes": [
+            "project"
+          ],
+          "optionalUnsupported": [],
+          "optionalUnsupportedByScope": {
+            "project": []
+          }
+        }
+      },
+      "promotion": {
+        "eligible": true,
+        "criteria": {
+          "crossKindRequiredWorkflow": true,
+          "requiredProcedure": true,
+          "independentRequiredAssurance": true,
+          "roleCompatible": true,
+          "compositionConnected": true,
+          "conflictFree": true,
+          "prerequisiteClosed": true,
+          "compatibleInstallCoordinate": true
+        },
+        "requiredKinds": [
+          "command",
+          "context",
+          "hook",
+          "skill",
+          "subagent"
+        ],
+        "roleCounts": {
+          "procedure": 1,
+          "collector": 0,
+          "specialist": 0,
+          "verifier": 1,
+          "enforcement": 1,
+          "observer": 0,
+          "entrypoint": 2,
+          "baseline": 1,
+          "integration": 0
+        }
+      },
+      "hookFanout": [
+        {
+          "boundary": "claude-code:PreToolUse:Write|Edit|MultiEdit",
+          "count": 1
+        }
+      ],
+      "install": [
+        {
+          "target": "claude-code",
+          "scope": "project",
+          "command": "npx @youdede/toolkit add-pack plan-and-verify-loop --target claude-code --scope project"
+        }
+      ]
+    },
+    {
+      "$schema": "../../schema/pack.schema.json",
+      "schemaVersion": 1,
       "id": "pack/release-readiness",
       "slug": "release-readiness",
       "name": "Release readiness",
+      "version": "1.1.0",
       "summary": "Build an evidence-backed release decision and stop publication from unsafe repository state.",
       "outcomes": [
         "release-evidence",
         "safe-publication"
       ],
+      "evidence": {
+        "reportSchema": "../../schema/pack-evidence.schema.json",
+        "ledgerLinkRequired": true,
+        "outcomeEvidence": [
+          {
+            "outcome": "release-evidence",
+            "memberArtifactIds": [
+              "command/development/workflow/audit-release-evidence",
+              "skill/operations/release/verify-production-release",
+              "subagent/operations/release/release-evidence-verifier",
+              "subagent/operations/release/release-risk-reviewer"
+            ]
+          },
+          {
+            "outcome": "safe-publication",
+            "memberArtifactIds": [
+              "hook/operations/package-publication/package-publish-guard",
+              "hook/operations/repository-state/release-clean-state-guard",
+              "hook/operations/versioning/release-version-consistency-guard"
+            ]
+          }
+        ]
+      },
       "members": [
+        {
+          "artifactId": "command/development/workflow/audit-release-evidence",
+          "role": "entrypoint",
+          "required": true
+        },
         {
           "artifactId": "skill/operations/release/verify-production-release",
           "role": "procedure",
@@ -492,20 +982,10 @@
         }
       ],
       "targets": [
-        "claude-code",
-        "gemini-cli"
+        "claude-code"
       ],
       "targetCompatibility": {
         "claude-code": {
-          "scopes": [
-            "project"
-          ],
-          "optionalUnsupported": [],
-          "optionalUnsupportedByScope": {
-            "project": []
-          }
-        },
-        "gemini-cli": {
           "scopes": [
             "project"
           ],
@@ -528,6 +1008,7 @@
           "compatibleInstallCoordinate": true
         },
         "requiredKinds": [
+          "command",
           "hook",
           "skill",
           "subagent"
@@ -539,7 +1020,7 @@
           "verifier": 1,
           "enforcement": 3,
           "observer": 0,
-          "entrypoint": 0,
+          "entrypoint": 1,
           "baseline": 0,
           "integration": 0
         }
@@ -548,10 +1029,6 @@
         {
           "boundary": "claude-code:PreToolUse:Bash",
           "count": 3
-        },
-        {
-          "boundary": "gemini-cli:BeforeTool:run_shell_command",
-          "count": 3
         }
       ],
       "install": [
@@ -559,11 +1036,6 @@
           "target": "claude-code",
           "scope": "project",
           "command": "npx @youdede/toolkit add-pack release-readiness --target claude-code --scope project"
-        },
-        {
-          "target": "gemini-cli",
-          "scope": "project",
-          "command": "npx @youdede/toolkit add-pack release-readiness --target gemini-cli --scope project"
         }
       ]
     },
@@ -573,12 +1045,40 @@
       "id": "pack/reviewable-change",
       "slug": "reviewable-change",
       "name": "Reviewable change",
+      "version": "1.1.0",
       "summary": "Prepare bounded code changes, obtain independent review, and prevent oversized unreviewable commits.",
       "outcomes": [
         "independent-review",
         "reviewable-delivery"
       ],
+      "evidence": {
+        "reportSchema": "../../schema/pack-evidence.schema.json",
+        "ledgerLinkRequired": true,
+        "outcomeEvidence": [
+          {
+            "outcome": "independent-review",
+            "memberArtifactIds": [
+              "command/development/workflow/assemble-review-brief",
+              "skill/development/code-quality/request-independent-code-review",
+              "subagent/development/code-quality/refactor-equivalence-reviewer"
+            ]
+          },
+          {
+            "outcome": "reviewable-delivery",
+            "memberArtifactIds": [
+              "hook/operations/reviewability/large-diff-review-guard",
+              "skill/development/code-quality/evaluate-code-review-feedback",
+              "skill/operations/reviewability/prepare-reviewable-pull-request"
+            ]
+          }
+        ]
+      },
       "members": [
+        {
+          "artifactId": "command/development/workflow/assemble-review-brief",
+          "role": "entrypoint",
+          "required": true
+        },
         {
           "artifactId": "skill/operations/reviewability/prepare-reviewable-pull-request",
           "role": "procedure",
@@ -606,9 +1106,7 @@
         }
       ],
       "targets": [
-        "claude-code",
-        "gemini-cli",
-        "opencode"
+        "claude-code"
       ],
       "targetCompatibility": {
         "claude-code": {
@@ -618,26 +1116,6 @@
           "optionalUnsupported": [],
           "optionalUnsupportedByScope": {
             "project": []
-          }
-        },
-        "gemini-cli": {
-          "scopes": [
-            "project"
-          ],
-          "optionalUnsupported": [],
-          "optionalUnsupportedByScope": {
-            "project": []
-          }
-        },
-        "opencode": {
-          "scopes": [
-            "project",
-            "user"
-          ],
-          "optionalUnsupported": [],
-          "optionalUnsupportedByScope": {
-            "project": [],
-            "user": []
           }
         }
       },
@@ -654,6 +1132,7 @@
           "compatibleInstallCoordinate": true
         },
         "requiredKinds": [
+          "command",
           "hook",
           "skill",
           "subagent"
@@ -665,7 +1144,7 @@
           "verifier": 1,
           "enforcement": 1,
           "observer": 0,
-          "entrypoint": 0,
+          "entrypoint": 1,
           "baseline": 0,
           "integration": 0
         }
@@ -674,14 +1153,6 @@
         {
           "boundary": "claude-code:PreToolUse:Bash",
           "count": 1
-        },
-        {
-          "boundary": "gemini-cli:BeforeTool:run_shell_command",
-          "count": 1
-        },
-        {
-          "boundary": "opencode:tool.execute.before:bash|shell",
-          "count": 1
         }
       ],
       "install": [
@@ -689,16 +1160,6 @@
           "target": "claude-code",
           "scope": "project",
           "command": "npx @youdede/toolkit add-pack reviewable-change --target claude-code --scope project"
-        },
-        {
-          "target": "gemini-cli",
-          "scope": "project",
-          "command": "npx @youdede/toolkit add-pack reviewable-change --target gemini-cli --scope project"
-        },
-        {
-          "target": "opencode",
-          "scope": "project",
-          "command": "npx @youdede/toolkit add-pack reviewable-change --target opencode --scope project"
         }
       ]
     },
@@ -708,11 +1169,35 @@
       "id": "pack/secure-agent-boundaries",
       "slug": "secure-agent-boundaries",
       "name": "Secure agent boundaries",
+      "version": "1.1.0",
       "summary": "Design agent integrations, review their trust boundary, and block obvious data-exposure paths.",
       "outcomes": [
         "agent-tool-security",
         "data-exposure-control"
       ],
+      "evidence": {
+        "reportSchema": "../../schema/pack-evidence.schema.json",
+        "ledgerLinkRequired": true,
+        "outcomeEvidence": [
+          {
+            "outcome": "agent-tool-security",
+            "memberArtifactIds": [
+              "hook/security/network-control/mcp-capability-drift-guard",
+              "skill/development/agent-tooling/author-mcp-server-contract",
+              "skill/security/threat-modeling/review-agent-tool-boundaries",
+              "subagent/security/application-security/application-security-reviewer",
+              "subagent/security/threat-modeling/mcp-trust-boundary-reviewer"
+            ]
+          },
+          {
+            "outcome": "data-exposure-control",
+            "memberArtifactIds": [
+              "hook/security/application-security/outbound-data-guard",
+              "hook/security/secrets/sensitive-file-access-guard"
+            ]
+          }
+        ]
+      },
       "members": [
         {
           "artifactId": "skill/security/threat-modeling/review-agent-tool-boundaries",
@@ -741,6 +1226,11 @@
         },
         {
           "artifactId": "hook/security/secrets/sensitive-file-access-guard",
+          "role": "enforcement",
+          "required": true
+        },
+        {
+          "artifactId": "hook/security/network-control/mcp-capability-drift-guard",
           "role": "enforcement",
           "required": true
         }
@@ -781,7 +1271,7 @@
           "collector": 0,
           "specialist": 2,
           "verifier": 1,
-          "enforcement": 2,
+          "enforcement": 3,
           "observer": 0,
           "entrypoint": 0,
           "baseline": 0,
@@ -789,6 +1279,10 @@
         }
       },
       "hookFanout": [
+        {
+          "boundary": "claude-code:PreToolUse:^mcp__youdede-.+__.+$",
+          "count": 1
+        },
         {
           "boundary": "claude-code:PreToolUse:Bash|PowerShell",
           "count": 1
@@ -803,6 +1297,144 @@
           "target": "claude-code",
           "scope": "project",
           "command": "npx @youdede/toolkit add-pack secure-agent-boundaries --target claude-code --scope project"
+        }
+      ]
+    },
+    {
+      "$schema": "../../schema/pack.schema.json",
+      "schemaVersion": 1,
+      "id": "pack/session-continuity",
+      "slug": "session-continuity",
+      "name": "Session continuity",
+      "version": "1.0.0",
+      "summary": "Persist bounded hash-chained checkpoints, restore cited context, and verify continuity across sessions.",
+      "outcomes": [
+        "resumable-work",
+        "verified-session-history"
+      ],
+      "evidence": {
+        "reportSchema": "../../schema/pack-evidence.schema.json",
+        "ledgerLinkRequired": true,
+        "outcomeEvidence": [
+          {
+            "outcome": "resumable-work",
+            "memberArtifactIds": [
+              "command/operations/session/record-work-checkpoint",
+              "hook/operations/session/compact-readiness-guard",
+              "hook/operations/session/session-checkpoint-guard",
+              "hook/operations/session/session-restore-guard",
+              "skill/operations/session/resume-session-work"
+            ]
+          },
+          {
+            "outcome": "verified-session-history",
+            "memberArtifactIds": [
+              "command/operations/session/verify-session-ledger",
+              "subagent/writing/decision-support/decision-record-reviewer"
+            ]
+          }
+        ]
+      },
+      "members": [
+        {
+          "artifactId": "command/operations/session/record-work-checkpoint",
+          "role": "entrypoint",
+          "required": true
+        },
+        {
+          "artifactId": "command/operations/session/verify-session-ledger",
+          "role": "entrypoint",
+          "required": true
+        },
+        {
+          "artifactId": "hook/operations/session/compact-readiness-guard",
+          "role": "observer",
+          "required": true
+        },
+        {
+          "artifactId": "hook/operations/session/session-checkpoint-guard",
+          "role": "observer",
+          "required": true
+        },
+        {
+          "artifactId": "hook/operations/session/session-restore-guard",
+          "role": "observer",
+          "required": true
+        },
+        {
+          "artifactId": "skill/operations/session/resume-session-work",
+          "role": "procedure",
+          "required": true
+        },
+        {
+          "artifactId": "subagent/writing/decision-support/decision-record-reviewer",
+          "role": "verifier",
+          "required": true
+        }
+      ],
+      "targets": [
+        "claude-code"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "scopes": [
+            "project"
+          ],
+          "optionalUnsupported": [],
+          "optionalUnsupportedByScope": {
+            "project": []
+          }
+        }
+      },
+      "promotion": {
+        "eligible": true,
+        "criteria": {
+          "crossKindRequiredWorkflow": true,
+          "requiredProcedure": true,
+          "independentRequiredAssurance": true,
+          "roleCompatible": true,
+          "compositionConnected": true,
+          "conflictFree": true,
+          "prerequisiteClosed": true,
+          "compatibleInstallCoordinate": true
+        },
+        "requiredKinds": [
+          "command",
+          "hook",
+          "skill",
+          "subagent"
+        ],
+        "roleCounts": {
+          "procedure": 1,
+          "collector": 0,
+          "specialist": 0,
+          "verifier": 1,
+          "enforcement": 0,
+          "observer": 3,
+          "entrypoint": 2,
+          "baseline": 0,
+          "integration": 0
+        }
+      },
+      "hookFanout": [
+        {
+          "boundary": "claude-code:PreCompact:manual|auto",
+          "count": 1
+        },
+        {
+          "boundary": "claude-code:SessionEnd:.*",
+          "count": 1
+        },
+        {
+          "boundary": "claude-code:SessionStart:startup|resume|clear",
+          "count": 1
+        }
+      ],
+      "install": [
+        {
+          "target": "claude-code",
+          "scope": "project",
+          "command": "npx @youdede/toolkit add-pack session-continuity --target claude-code --scope project"
         }
       ]
     }

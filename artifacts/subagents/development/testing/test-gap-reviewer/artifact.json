@@ -48,13 +48,16 @@
   ],
   "relationships": {
     "composesWith": [
+      "command/development/workflow/verify-claims-against-output",
       "skill/development/testing/assess-mutation-test-value",
       "skill/development/testing/design-property-and-fuzz-tests"
     ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],
-    "packIds": []
+    "packIds": [
+      "pack/plan-and-verify-loop"
+    ]
   },
   "operational": {
     "behavior": "advisory",

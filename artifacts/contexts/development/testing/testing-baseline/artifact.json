@@ -42,7 +42,7 @@
       { "id": "isolate-evaluation-cases", "effect": "require", "action": "isolate-evaluation-cases", "sourceArtifactId": "skill/development/testing/design-agent-evaluation-harness", "sourceField": "summary" }
     ]
   },
-  "relationships": { "composesWith": [], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": [] },
+  "relationships": { "composesWith": ["hook/development/workflow/phase-gate-guard"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": ["pack/plan-and-verify-loop"] },
   "operational": { "behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "immediate", "dataRetention": "none" },
   "adapters": {
     "claude-code": "adapters/claude-code.json",

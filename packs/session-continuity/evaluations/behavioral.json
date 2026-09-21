@@ -1,0 +1,55 @@
+{
+  "$schema": "../../../schema/pack-evaluation.schema.json",
+  "schemaVersion": 1,
+  "packId": "pack/session-continuity",
+  "cases": [
+    {
+      "id": "session-continuity-complete-evidence",
+      "type": "positive",
+      "scenario": "Every required Session continuity member contributes declared evidence, every outcome is verified, and the report cites the current ledger entry.",
+      "expected": {
+        "verdict": "accept",
+        "outcomes": [
+          "resumable-work",
+          "verified-session-history"
+        ]
+      }
+    },
+    {
+      "id": "session-continuity-missing-evidence",
+      "type": "missing-evidence",
+      "scenario": "One required Session continuity member has no evidence hash even though its mapped outcome is marked verified.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "resumable-work",
+          "verified-session-history"
+        ]
+      }
+    },
+    {
+      "id": "session-continuity-ledger-mismatch",
+      "type": "ledger-mismatch",
+      "scenario": "The Session continuity report cites a ledger entry hash that does not match the checkpoint carrying its claims.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "resumable-work",
+          "verified-session-history"
+        ]
+      }
+    },
+    {
+      "id": "session-continuity-unsupported-coordinate",
+      "type": "unsupported-coordinate",
+      "scenario": "The requested Session continuity target and scope cannot install every required member at one common coordinate.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "resumable-work",
+          "verified-session-history"
+        ]
+      }
+    }
+  ]
+}

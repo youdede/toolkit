@@ -50,12 +50,15 @@
   },
   "relationships": {
     "composesWith": [
-      "hook/operations/agent-orchestration/compaction-handoff-guard"
+      "hook/operations/agent-orchestration/compaction-handoff-guard",
+      "skill/operations/session/resume-session-work"
     ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],
-    "packIds": []
+    "packIds": [
+      "pack/session-continuity"
+    ]
   },
   "operational": {
     "behavior": "observing",

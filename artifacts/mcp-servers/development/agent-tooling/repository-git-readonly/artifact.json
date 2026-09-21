@@ -35,7 +35,7 @@
       {"name": "git_status", "descriptionHash": "58ecc9bfdf39f658fe9918563180bf64455e05e675a11539ddd3b810de7935cd"}
     ]
   },
-  "relationships": {"composesWith": ["hook/security/network-control/mcp-capability-drift-guard"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": []},
+  "relationships": {"composesWith": ["hook/security/network-control/mcp-capability-drift-guard"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": ["pack/mcp-baseline"]},
   "operational": {"behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "bounded", "dataRetention": "none"},
   "adapters": {"claude-code": "adapters/claude-code.json", "cursor": "adapters/cursor.json"}
 }

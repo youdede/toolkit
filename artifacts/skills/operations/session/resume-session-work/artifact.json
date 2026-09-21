@@ -45,13 +45,17 @@
     "composesWith": [
       "command/operations/session/record-work-checkpoint",
       "command/operations/session/verify-session-ledger",
+      "hook/operations/session/compact-readiness-guard",
       "hook/operations/session/session-checkpoint-guard",
-      "hook/operations/session/session-restore-guard"
+      "hook/operations/session/session-restore-guard",
+      "subagent/writing/decision-support/decision-record-reviewer"
     ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],
-    "packIds": []
+    "packIds": [
+      "pack/session-continuity"
+    ]
   },
   "operational": {
     "behavior": "advisory",

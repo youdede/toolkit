@@ -1,0 +1,55 @@
+{
+  "$schema": "../../../schema/pack-evaluation.schema.json",
+  "schemaVersion": 1,
+  "packId": "pack/reviewable-change",
+  "cases": [
+    {
+      "id": "reviewable-change-complete-evidence",
+      "type": "positive",
+      "scenario": "Every required Reviewable change member contributes declared evidence, every outcome is verified, and the report cites the current ledger entry.",
+      "expected": {
+        "verdict": "accept",
+        "outcomes": [
+          "independent-review",
+          "reviewable-delivery"
+        ]
+      }
+    },
+    {
+      "id": "reviewable-change-missing-evidence",
+      "type": "missing-evidence",
+      "scenario": "One required Reviewable change member has no evidence hash even though its mapped outcome is marked verified.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "independent-review",
+          "reviewable-delivery"
+        ]
+      }
+    },
+    {
+      "id": "reviewable-change-ledger-mismatch",
+      "type": "ledger-mismatch",
+      "scenario": "The Reviewable change report cites a ledger entry hash that does not match the checkpoint carrying its claims.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "independent-review",
+          "reviewable-delivery"
+        ]
+      }
+    },
+    {
+      "id": "reviewable-change-unsupported-coordinate",
+      "type": "unsupported-coordinate",
+      "scenario": "The requested Reviewable change target and scope cannot install every required member at one common coordinate.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "independent-review",
+          "reviewable-delivery"
+        ]
+      }
+    }
+  ]
+}

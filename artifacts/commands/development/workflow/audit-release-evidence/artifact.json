@@ -69,11 +69,15 @@
     ]
   },
   "relationships": {
-    "composesWith": [],
+    "composesWith": [
+      "skill/operations/release/verify-production-release"
+    ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],
-    "packIds": []
+    "packIds": [
+      "pack/release-readiness"
+    ]
   },
   "operational": {
     "behavior": "advisory",

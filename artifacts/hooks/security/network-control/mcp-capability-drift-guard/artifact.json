@@ -25,7 +25,7 @@
   ],
   "execution": {"mode": "deterministic", "entrypoints": [{"path": "targets/claude-code/mcp-capability-drift-guard.mjs", "runtime": "node", "purpose": "Compare a toolkit MCP tool call and any observed inventory with the generated capability pin registry.", "sideEffects": "none"}]},
   "hookGuard": {"blockedActions": ["invoke-unpinned-mcp-tool"]},
-  "relationships": {"composesWith": ["command/development/agent-tooling/re-pin-mcp-tools", "mcp-server/development/agent-tooling/allowlisted-fetch-readonly", "mcp-server/development/agent-tooling/repository-git-readonly", "mcp-server/development/agent-tooling/workspace-files-readonly"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": []},
+  "relationships": {"composesWith": ["command/development/agent-tooling/re-pin-mcp-tools", "mcp-server/development/agent-tooling/allowlisted-fetch-readonly", "mcp-server/development/agent-tooling/repository-git-readonly", "mcp-server/development/agent-tooling/workspace-files-readonly", "skill/security/threat-modeling/review-agent-tool-boundaries"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": ["pack/mcp-baseline", "pack/secure-agent-boundaries"]},
   "operational": {"behavior": "enforcing", "failurePolicy": "fail-closed", "latencyClass": "immediate", "dataRetention": "none"},
   "adapters": {"claude-code": "adapters/claude-code.json", "cursor": "adapters/cursor.json"}
 }

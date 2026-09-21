@@ -126,6 +126,11 @@ function intersectSets(sets) {
   );
 }
 
+function sameMembers(left, right) {
+  return left.length === right.length
+    && [...left].sort().every((value, index) => value === [...right].sort()[index]);
+}
+
 function uniquePairs(manifests, key) {
   const known = new Set(manifests.map((manifest) => manifest.id));
   const pairs = new Set();
@@ -1021,7 +1026,7 @@ export function validateRepository(root = ROOT) {
 export function validatePack(record, knownIds, artifacts, root = ROOT) {
   const { manifest, directory } = record;
   const errors = [];
-  const allowedPackKeys = ['$schema', 'schemaVersion', 'id', 'slug', 'name', 'summary', 'outcomes', 'members'];
+  const allowedPackKeys = ['$schema', 'schemaVersion', 'id', 'slug', 'name', 'version', 'summary', 'outcomes', 'evidence', 'members'];
   const packKeys = manifest && typeof manifest === 'object' && !Array.isArray(manifest) ? Object.keys(manifest) : [];
   for (const key of allowedPackKeys) if (!packKeys.includes(key)) errors.push(`pack is missing required property '${key}'`);
   for (const key of packKeys) if (!allowedPackKeys.includes(key)) errors.push(`pack has unexpected property '${key}'`);
@@ -1029,6 +1034,7 @@ export function validatePack(record, knownIds, artifacts, root = ROOT) {
     errors.push('$schema must resolve to schema/pack.schema.json');
   }
   if (manifest.schemaVersion !== 1) errors.push('schemaVersion must be 1');
+  if (!/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(manifest.version || '')) errors.push('version must be semver');
   if (!/^pack\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(manifest.id || '')) errors.push('id must use pack/<slug>');
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(manifest.slug || '')) errors.push('slug must use lowercase hyphen-case');
   if (manifest.id !== `pack/${manifest.slug}`) errors.push('id must match slug');
@@ -1037,6 +1043,33 @@ export function validatePack(record, knownIds, artifacts, root = ROOT) {
   if (typeof manifest.summary !== 'string' || manifest.summary.length < 20 || manifest.summary.length > 180) errors.push('summary must contain 20-180 characters');
   if (!Array.isArray(manifest.outcomes) || manifest.outcomes.length === 0 || new Set(manifest.outcomes).size !== manifest.outcomes.length) errors.push('outcomes must be a non-empty unique array');
   else for (const outcome of manifest.outcomes) if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(outcome)) errors.push(`outcomes contains invalid slug '${outcome}'`);
+  const evidence = manifest.evidence;
+  if (!evidence || typeof evidence !== 'object' || Array.isArray(evidence)) errors.push('evidence must be an object');
+  else {
+    const evidenceKeys = Object.keys(evidence);
+    for (const key of ['reportSchema', 'ledgerLinkRequired', 'outcomeEvidence']) if (!evidenceKeys.includes(key)) errors.push(`evidence is missing required property '${key}'`);
+    for (const key of evidenceKeys) if (!['reportSchema', 'ledgerLinkRequired', 'outcomeEvidence'].includes(key)) errors.push(`evidence has unexpected property '${key}'`);
+    if (path.resolve(directory, evidence.reportSchema || '') !== path.join(root, 'schema', 'pack-evidence.schema.json')) errors.push('evidence.reportSchema must resolve to schema/pack-evidence.schema.json');
+    if (evidence.ledgerLinkRequired !== true) errors.push('evidence.ledgerLinkRequired must be true');
+    const mappings = Array.isArray(evidence.outcomeEvidence) ? evidence.outcomeEvidence : [];
+    const mappedOutcomes = mappings.map(({ outcome }) => outcome);
+    if (new Set(mappedOutcomes).size !== mappedOutcomes.length || !sameMembers(mappedOutcomes, manifest.outcomes || [])) errors.push('evidence.outcomeEvidence must map every outcome exactly once');
+    const memberIds = new Set((manifest.members || []).map(({ artifactId }) => artifactId));
+    const requiredIds = new Set((manifest.members || []).filter(({ required }) => required).map(({ artifactId }) => artifactId));
+    const mappedIds = new Set();
+    for (const [index, mapping] of mappings.entries()) {
+      const mappingKeys = mapping && typeof mapping === 'object' && !Array.isArray(mapping) ? Object.keys(mapping) : [];
+      for (const key of ['outcome', 'memberArtifactIds']) if (!mappingKeys.includes(key)) errors.push(`evidence.outcomeEvidence[${index}] is missing required property '${key}'`);
+      for (const key of mappingKeys) if (!['outcome', 'memberArtifactIds'].includes(key)) errors.push(`evidence.outcomeEvidence[${index}] has unexpected property '${key}'`);
+      if (!Array.isArray(mapping.memberArtifactIds) || mapping.memberArtifactIds.length === 0 || new Set(mapping.memberArtifactIds).size !== mapping.memberArtifactIds.length) errors.push(`evidence.outcomeEvidence[${index}].memberArtifactIds must be non-empty and unique`);
+      for (const artifactId of mapping.memberArtifactIds || []) {
+        mappedIds.add(artifactId);
+        if (!memberIds.has(artifactId)) errors.push(`evidence.outcomeEvidence[${index}] references non-member '${artifactId}'`);
+      }
+    }
+    for (const artifactId of requiredIds) if (!mappedIds.has(artifactId)) errors.push(`evidence outcome mapping omits required member '${artifactId}'`);
+  }
+  if (!existsSync(path.join(directory, 'evaluations', 'behavioral.json'))) errors.push('pack requires evaluations/behavioral.json');
   if (!Array.isArray(manifest.members) || manifest.members.length < 2) {
     errors.push('members must contain at least two artifacts');
     return errors;
@@ -1052,11 +1085,11 @@ export function validatePack(record, knownIds, artifacts, root = ROOT) {
     const memberKeys = Object.keys(member);
     for (const key of ['artifactId', 'role', 'required']) if (!memberKeys.includes(key)) errors.push(`members[${index}] is missing required property '${key}'`);
     for (const key of memberKeys) if (!['artifactId', 'role', 'required'].includes(key)) errors.push(`members[${index}] has unexpected property '${key}'`);
-    if (typeof member.artifactId !== 'string' || !/^(skill|hook|subagent)\/[a-z0-9-]+\/[a-z0-9-]+\/[a-z0-9-]+$/.test(member.artifactId)) errors.push(`members[${index}].artifactId is invalid`);
+    if (typeof member.artifactId !== 'string' || !/^(skill|hook|subagent|command|context|mcp-server)\/[a-z0-9-]+\/[a-z0-9-]+\/[a-z0-9-]+$/.test(member.artifactId)) errors.push(`members[${index}].artifactId is invalid`);
     if (!knownIds.has(member.artifactId)) errors.push(`members[${index}] references unknown artifact '${member.artifactId}'`);
     if (ids.has(member.artifactId)) errors.push(`members repeats '${member.artifactId}'`);
     ids.add(member.artifactId);
-    if (!['procedure', 'collector', 'specialist', 'verifier', 'enforcement', 'observer'].includes(member.role)) errors.push(`members[${index}].role is invalid`);
+    if (!Object.hasOwn(PACK_ROLE_KINDS, member.role)) errors.push(`members[${index}].role is invalid`);
     if (typeof member.required !== 'boolean') errors.push(`members[${index}].required must be boolean`);
     const artifact = byId.get(member.artifactId)?.manifest;
     if (artifact && PACK_ROLE_KINDS[member.role] && !roleMatchesArtifact(member.role, artifact)) {

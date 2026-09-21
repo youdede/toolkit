@@ -1,0 +1,55 @@
+{
+  "$schema": "../../../schema/pack-evaluation.schema.json",
+  "schemaVersion": 1,
+  "packId": "pack/secure-agent-boundaries",
+  "cases": [
+    {
+      "id": "secure-agent-boundaries-complete-evidence",
+      "type": "positive",
+      "scenario": "Every required Secure agent boundaries member contributes declared evidence, every outcome is verified, and the report cites the current ledger entry.",
+      "expected": {
+        "verdict": "accept",
+        "outcomes": [
+          "agent-tool-security",
+          "data-exposure-control"
+        ]
+      }
+    },
+    {
+      "id": "secure-agent-boundaries-missing-evidence",
+      "type": "missing-evidence",
+      "scenario": "One required Secure agent boundaries member has no evidence hash even though its mapped outcome is marked verified.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "agent-tool-security",
+          "data-exposure-control"
+        ]
+      }
+    },
+    {
+      "id": "secure-agent-boundaries-ledger-mismatch",
+      "type": "ledger-mismatch",
+      "scenario": "The Secure agent boundaries report cites a ledger entry hash that does not match the checkpoint carrying its claims.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "agent-tool-security",
+          "data-exposure-control"
+        ]
+      }
+    },
+    {
+      "id": "secure-agent-boundaries-unsupported-coordinate",
+      "type": "unsupported-coordinate",
+      "scenario": "The requested Secure agent boundaries target and scope cannot install every required member at one common coordinate.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "agent-tool-security",
+          "data-exposure-control"
+        ]
+      }
+    }
+  ]
+}

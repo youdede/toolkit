@@ -50,11 +50,15 @@
     "operate"
   ],
   "relationships": {
-    "composesWith": [],
+    "composesWith": [
+      "command/development/workflow/draft-evidenced-plan"
+    ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],
-    "packIds": []
+    "packIds": [
+      "pack/plan-and-verify-loop"
+    ]
   },
   "operational": {
     "behavior": "advisory",

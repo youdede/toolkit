@@ -1,0 +1,55 @@
+{
+  "$schema": "../../../schema/pack-evaluation.schema.json",
+  "schemaVersion": 1,
+  "packId": "pack/accessibility-assurance",
+  "cases": [
+    {
+      "id": "accessibility-assurance-complete-evidence",
+      "type": "positive",
+      "scenario": "Every required Accessibility assurance member contributes declared evidence, every outcome is verified, and the report cites the current ledger entry.",
+      "expected": {
+        "verdict": "accept",
+        "outcomes": [
+          "accessible-interface",
+          "regression-prevention"
+        ]
+      }
+    },
+    {
+      "id": "accessibility-assurance-missing-evidence",
+      "type": "missing-evidence",
+      "scenario": "One required Accessibility assurance member has no evidence hash even though its mapped outcome is marked verified.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "accessible-interface",
+          "regression-prevention"
+        ]
+      }
+    },
+    {
+      "id": "accessibility-assurance-ledger-mismatch",
+      "type": "ledger-mismatch",
+      "scenario": "The Accessibility assurance report cites a ledger entry hash that does not match the checkpoint carrying its claims.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "accessible-interface",
+          "regression-prevention"
+        ]
+      }
+    },
+    {
+      "id": "accessibility-assurance-unsupported-coordinate",
+      "type": "unsupported-coordinate",
+      "scenario": "The requested Accessibility assurance target and scope cannot install every required member at one common coordinate.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "accessible-interface",
+          "regression-prevention"
+        ]
+      }
+    }
+  ]
+}

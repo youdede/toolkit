@@ -1,0 +1,55 @@
+{
+  "$schema": "../../../schema/pack-evaluation.schema.json",
+  "schemaVersion": 1,
+  "packId": "pack/data-change-safety",
+  "cases": [
+    {
+      "id": "data-change-safety-complete-evidence",
+      "type": "positive",
+      "scenario": "Every required Data change safety member contributes declared evidence, every outcome is verified, and the report cites the current ledger entry.",
+      "expected": {
+        "verdict": "accept",
+        "outcomes": [
+          "compatible-data-change",
+          "migration-safety"
+        ]
+      }
+    },
+    {
+      "id": "data-change-safety-missing-evidence",
+      "type": "missing-evidence",
+      "scenario": "One required Data change safety member has no evidence hash even though its mapped outcome is marked verified.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "compatible-data-change",
+          "migration-safety"
+        ]
+      }
+    },
+    {
+      "id": "data-change-safety-ledger-mismatch",
+      "type": "ledger-mismatch",
+      "scenario": "The Data change safety report cites a ledger entry hash that does not match the checkpoint carrying its claims.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "compatible-data-change",
+          "migration-safety"
+        ]
+      }
+    },
+    {
+      "id": "data-change-safety-unsupported-coordinate",
+      "type": "unsupported-coordinate",
+      "scenario": "The requested Data change safety target and scope cannot install every required member at one common coordinate.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "compatible-data-change",
+          "migration-safety"
+        ]
+      }
+    }
+  ]
+}

@@ -49,11 +49,17 @@
     ]
   },
   "relationships": {
-    "composesWith": [],
+    "composesWith": [
+      "command/development/workflow/draft-evidenced-plan",
+      "command/development/workflow/verify-claims-against-output",
+      "context/development/testing/testing-baseline"
+    ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],
-    "packIds": []
+    "packIds": [
+      "pack/plan-and-verify-loop"
+    ]
   },
   "operational": {
     "behavior": "enforcing",
