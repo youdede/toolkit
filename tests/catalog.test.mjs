@@ -105,10 +105,14 @@ test('pack validation enforces its strict public schema surface', () => {
   record.manifestPath = source.manifestPath;
   record.manifest.unexpected = true;
   record.manifest.outcomes[0] = 'NOT A SLUG';
+  record.manifest.evidence.unexpected = true;
+  record.manifest.evidence.outcomeEvidence[0].extra = true;
   record.manifest.members[0].extra = true;
   const errors = validatePack(record, new Set(repository.artifacts.map(({ manifest }) => manifest.id)), repository.artifacts);
   assert.ok(errors.some((error) => /unexpected property 'unexpected'/.test(error)));
   assert.ok(errors.some((error) => /invalid slug/.test(error)));
+  assert.ok(errors.some((error) => /evidence has unexpected property 'unexpected'/.test(error)));
+  assert.ok(errors.some((error) => /outcomeEvidence\[0\].*unexpected property 'extra'/.test(error)));
   assert.ok(errors.some((error) => /members\[0\].*unexpected property 'extra'/.test(error)));
 });
 

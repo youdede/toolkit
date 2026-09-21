@@ -1,0 +1,55 @@
+{
+  "$schema": "../../../schema/pack-evaluation.schema.json",
+  "schemaVersion": 1,
+  "packId": "pack/infrastructure-change-readiness",
+  "cases": [
+    {
+      "id": "infrastructure-change-readiness-complete-evidence",
+      "type": "positive",
+      "scenario": "Every required Infrastructure change readiness member contributes declared evidence, every outcome is verified, and the report cites the current ledger entry.",
+      "expected": {
+        "verdict": "accept",
+        "outcomes": [
+          "recovery-evidence",
+          "staged-infrastructure-change"
+        ]
+      }
+    },
+    {
+      "id": "infrastructure-change-readiness-missing-evidence",
+      "type": "missing-evidence",
+      "scenario": "One required Infrastructure change readiness member has no evidence hash even though its mapped outcome is marked verified.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "recovery-evidence",
+          "staged-infrastructure-change"
+        ]
+      }
+    },
+    {
+      "id": "infrastructure-change-readiness-ledger-mismatch",
+      "type": "ledger-mismatch",
+      "scenario": "The Infrastructure change readiness report cites a ledger entry hash that does not match the checkpoint carrying its claims.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "recovery-evidence",
+          "staged-infrastructure-change"
+        ]
+      }
+    },
+    {
+      "id": "infrastructure-change-readiness-unsupported-coordinate",
+      "type": "unsupported-coordinate",
+      "scenario": "The requested Infrastructure change readiness target and scope cannot install every required member at one common coordinate.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "recovery-evidence",
+          "staged-infrastructure-change"
+        ]
+      }
+    }
+  ]
+}

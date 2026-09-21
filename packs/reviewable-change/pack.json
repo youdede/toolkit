@@ -4,12 +4,26 @@
   "id": "pack/reviewable-change",
   "slug": "reviewable-change",
   "name": "Reviewable change",
+  "version": "1.1.0",
   "summary": "Prepare bounded code changes, obtain independent review, and prevent oversized unreviewable commits.",
   "outcomes": [
     "independent-review",
     "reviewable-delivery"
   ],
+  "evidence": {
+    "reportSchema": "../../schema/pack-evidence.schema.json",
+    "ledgerLinkRequired": true,
+    "outcomeEvidence": [
+      {"outcome": "independent-review", "memberArtifactIds": ["command/development/workflow/assemble-review-brief", "skill/development/code-quality/request-independent-code-review", "subagent/development/code-quality/refactor-equivalence-reviewer"]},
+      {"outcome": "reviewable-delivery", "memberArtifactIds": ["hook/operations/reviewability/large-diff-review-guard", "skill/development/code-quality/evaluate-code-review-feedback", "skill/operations/reviewability/prepare-reviewable-pull-request"]}
+    ]
+  },
   "members": [
+    {
+      "artifactId": "command/development/workflow/assemble-review-brief",
+      "role": "entrypoint",
+      "required": true
+    },
     {
       "artifactId": "skill/operations/reviewability/prepare-reviewable-pull-request",
       "role": "procedure",

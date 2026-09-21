@@ -1,0 +1,25 @@
+{
+  "$schema": "../../schema/pack.schema.json",
+  "schemaVersion": 1,
+  "id": "pack/daily-driver",
+  "slug": "daily-driver",
+  "name": "Daily driver",
+  "version": "1.0.0",
+  "summary": "Deliver bounded incremental changes, prepare review evidence, and prevent unreviewable diffs.",
+  "outcomes": ["incremental-delivery", "review-ready-change"],
+  "evidence": {
+    "reportSchema": "../../schema/pack-evidence.schema.json",
+    "ledgerLinkRequired": true,
+    "outcomeEvidence": [
+      {"outcome": "incremental-delivery", "memberArtifactIds": ["hook/operations/reviewability/large-diff-review-guard", "skill/development/code-quality/deliver-incremental-change"]},
+      {"outcome": "review-ready-change", "memberArtifactIds": ["command/development/workflow/assemble-review-brief", "skill/operations/reviewability/prepare-reviewable-pull-request", "subagent/development/code-quality/refactor-equivalence-reviewer"]}
+    ]
+  },
+  "members": [
+    {"artifactId": "command/development/workflow/assemble-review-brief", "role": "entrypoint", "required": true},
+    {"artifactId": "hook/operations/reviewability/large-diff-review-guard", "role": "enforcement", "required": true},
+    {"artifactId": "skill/development/code-quality/deliver-incremental-change", "role": "procedure", "required": true},
+    {"artifactId": "skill/operations/reviewability/prepare-reviewable-pull-request", "role": "verifier", "required": true},
+    {"artifactId": "subagent/development/code-quality/refactor-equivalence-reviewer", "role": "specialist", "required": true}
+  ]
+}

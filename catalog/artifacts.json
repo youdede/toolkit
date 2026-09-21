@@ -10,32 +10,27 @@
     "counts": {
       "artifactNodes": 306,
       "directedEdges": {
-        "composesWith": 336,
+        "composesWith": 358,
         "conflictsWith": 0,
         "supersedes": 0,
         "prerequisites": 1,
-        "packIds": 37
+        "packIds": 65
       },
-      "compositionEdges": 168,
+      "compositionEdges": 179,
       "conflictEdges": 0,
-      "crossKindCompositionEdges": 90,
-      "orphanArtifacts": 186
+      "crossKindCompositionEdges": 100,
+      "orphanArtifacts": 178
     },
     "orphanCountsByKind": {
-      "skill": 93,
-      "hook": 41,
-      "subagent": 44,
-      "command": 4,
-      "context": 4,
+      "skill": 92,
+      "hook": 40,
+      "subagent": 43,
+      "command": 0,
+      "context": 3,
       "mcp-server": 0
     },
     "orphanArtifactIds": [
-      "command/development/workflow/assemble-review-brief",
-      "command/development/workflow/audit-release-evidence",
-      "command/development/workflow/draft-evidenced-plan",
-      "command/development/workflow/verify-claims-against-output",
       "context/development/code-quality/coding-style-baseline",
-      "context/development/testing/testing-baseline",
       "context/operations/git/git-workflow-baseline",
       "context/security/threat-modeling/security-baseline",
       "hook/data/compatibility/schema-compatibility-guard",
@@ -49,7 +44,6 @@
       "hook/development/error-handling/exception-swallowing-guard",
       "hook/development/resource-management/tool-output-budget-guard",
       "hook/development/testing/test-integrity-guard",
-      "hook/development/workflow/phase-gate-guard",
       "hook/operations/cloud-resources/cloud-resource-deletion-guard",
       "hook/operations/delegation-budget/subagent-fanout-guard",
       "hook/operations/git/protected-branch-guard",
@@ -149,7 +143,6 @@
       "skill/marketing/strategy/synthesize-customer-language",
       "skill/operations/agent-orchestration/audit-agent-workflow-opportunities",
       "skill/operations/agent-orchestration/delegate-to-codex-cli",
-      "skill/operations/agent-orchestration/execute-verifiable-plan",
       "skill/operations/git/isolate-work-with-worktrees",
       "skill/operations/observability/build-macos-metrics-collector",
       "skill/operations/observability/design-observability-signals",
@@ -213,7 +206,6 @@
       "subagent/security/multi-tenancy/tenant-isolation-analyst",
       "subagent/security/supply-chain/build-provenance-reviewer",
       "subagent/security/telemetry/privacy-data-handling-auditor",
-      "subagent/writing/decision-support/decision-record-reviewer",
       "subagent/writing/documentation/api-documentation-verifier",
       "subagent/writing/documentation/procedural-documentation-tester"
     ]
@@ -341,11 +333,16 @@
         ]
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/operations/reviewability/prepare-reviewable-pull-request"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
-        "packIds": []
+        "packIds": [
+          "pack/daily-driver",
+          "pack/reviewable-change"
+        ]
       },
       "operational": {
         "behavior": "advisory",
@@ -414,11 +411,15 @@
         ]
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/operations/release/verify-production-release"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
-        "packIds": []
+        "packIds": [
+          "pack/release-readiness"
+        ]
       },
       "operational": {
         "behavior": "advisory",
@@ -487,11 +488,16 @@
         ]
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "hook/development/workflow/phase-gate-guard",
+          "skill/operations/agent-orchestration/execute-verifiable-plan"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
-        "packIds": []
+        "packIds": [
+          "pack/plan-and-verify-loop"
+        ]
       },
       "operational": {
         "behavior": "advisory",
@@ -560,11 +566,16 @@
         ]
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "hook/development/workflow/phase-gate-guard",
+          "subagent/development/testing/test-gap-reviewer"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
-        "packIds": []
+        "packIds": [
+          "pack/plan-and-verify-loop"
+        ]
       },
       "operational": {
         "behavior": "advisory",
@@ -642,7 +653,9 @@
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
-        "packIds": []
+        "packIds": [
+          "pack/session-continuity"
+        ]
       },
       "operational": {
         "behavior": "advisory",
@@ -720,7 +733,9 @@
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
-        "packIds": []
+        "packIds": [
+          "pack/session-continuity"
+        ]
       },
       "operational": {
         "behavior": "advisory",
@@ -875,11 +890,15 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "hook/development/workflow/phase-gate-guard"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
-        "packIds": []
+        "packIds": [
+          "pack/plan-and-verify-loop"
+        ]
       },
       "operational": {
         "behavior": "advisory",
@@ -2483,11 +2502,17 @@
         ]
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "command/development/workflow/draft-evidenced-plan",
+          "command/development/workflow/verify-claims-against-output",
+          "context/development/testing/testing-baseline"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
-        "packIds": []
+        "packIds": [
+          "pack/plan-and-verify-loop"
+        ]
       },
       "operational": {
         "behavior": "enforcing",
@@ -4074,6 +4099,7 @@
         "supersedes": [],
         "prerequisites": [],
         "packIds": [
+          "pack/daily-driver",
           "pack/reviewable-change"
         ]
       },
@@ -4359,12 +4385,15 @@
       },
       "relationships": {
         "composesWith": [
-          "hook/operations/agent-orchestration/compaction-handoff-guard"
+          "hook/operations/agent-orchestration/compaction-handoff-guard",
+          "skill/operations/session/resume-session-work"
         ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
-        "packIds": []
+        "packIds": [
+          "pack/session-continuity"
+        ]
       },
       "operational": {
         "behavior": "observing",
@@ -4442,7 +4471,9 @@
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
-        "packIds": []
+        "packIds": [
+          "pack/session-continuity"
+        ]
       },
       "operational": {
         "behavior": "observing",
@@ -4521,7 +4552,9 @@
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
-        "packIds": []
+        "packIds": [
+          "pack/session-continuity"
+        ]
       },
       "operational": {
         "behavior": "observing",
@@ -6895,12 +6928,16 @@
           "command/development/agent-tooling/re-pin-mcp-tools",
           "mcp-server/development/agent-tooling/allowlisted-fetch-readonly",
           "mcp-server/development/agent-tooling/repository-git-readonly",
-          "mcp-server/development/agent-tooling/workspace-files-readonly"
+          "mcp-server/development/agent-tooling/workspace-files-readonly",
+          "skill/security/threat-modeling/review-agent-tool-boundaries"
         ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
-        "packIds": []
+        "packIds": [
+          "pack/mcp-baseline",
+          "pack/secure-agent-boundaries"
+        ]
       },
       "operational": {
         "behavior": "enforcing",
@@ -7605,7 +7642,9 @@
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
-        "packIds": []
+        "packIds": [
+          "pack/mcp-baseline"
+        ]
       },
       "operational": {
         "behavior": "advisory",
@@ -7695,7 +7734,9 @@
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
-        "packIds": []
+        "packIds": [
+          "pack/mcp-baseline"
+        ]
       },
       "operational": {
         "behavior": "advisory",
@@ -7785,7 +7826,9 @@
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
-        "packIds": []
+        "packIds": [
+          "pack/mcp-baseline"
+        ]
       },
       "operational": {
         "behavior": "advisory",
@@ -12295,6 +12338,7 @@
         "supersedes": [],
         "prerequisites": [],
         "packIds": [
+          "pack/mcp-baseline",
           "pack/secure-agent-boundaries"
         ]
       },
@@ -14121,12 +14165,15 @@
       },
       "relationships": {
         "composesWith": [
-          "skill/operations/reviewability/decompose-dependent-work-slices"
+          "skill/operations/reviewability/decompose-dependent-work-slices",
+          "skill/operations/reviewability/prepare-reviewable-pull-request"
         ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
-        "packIds": []
+        "packIds": [
+          "pack/daily-driver"
+        ]
       },
       "operational": {
         "behavior": "advisory",
@@ -21962,11 +22009,15 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "command/development/workflow/draft-evidenced-plan"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
-        "packIds": []
+        "packIds": [
+          "pack/plan-and-verify-loop"
+        ]
       },
       "operational": {
         "behavior": "advisory",
@@ -23801,6 +23852,7 @@
       },
       "relationships": {
         "composesWith": [
+          "command/development/workflow/audit-release-evidence",
           "hook/operations/package-publication/package-publish-guard",
           "hook/operations/repository-state/release-clean-state-guard",
           "hook/operations/versioning/release-version-consistency-guard",
@@ -24061,7 +24113,9 @@
       },
       "relationships": {
         "composesWith": [
+          "command/development/workflow/assemble-review-brief",
           "hook/operations/reviewability/large-diff-review-guard",
+          "skill/development/code-quality/deliver-incremental-change",
           "skill/development/code-quality/evaluate-code-review-feedback",
           "skill/development/code-quality/request-independent-code-review",
           "subagent/development/code-quality/refactor-equivalence-reviewer"
@@ -24070,6 +24124,7 @@
         "supersedes": [],
         "prerequisites": [],
         "packIds": [
+          "pack/daily-driver",
           "pack/reviewable-change"
         ]
       },
@@ -24437,13 +24492,17 @@
         "composesWith": [
           "command/operations/session/record-work-checkpoint",
           "command/operations/session/verify-session-ledger",
+          "hook/operations/session/compact-readiness-guard",
           "hook/operations/session/session-checkpoint-guard",
-          "hook/operations/session/session-restore-guard"
+          "hook/operations/session/session-restore-guard",
+          "subagent/writing/decision-support/decision-record-reviewer"
         ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
-        "packIds": []
+        "packIds": [
+          "pack/session-continuity"
+        ]
       },
       "operational": {
         "behavior": "advisory",
@@ -26023,6 +26082,7 @@
       "relationships": {
         "composesWith": [
           "hook/security/application-security/outbound-data-guard",
+          "hook/security/network-control/mcp-capability-drift-guard",
           "hook/security/secrets/sensitive-file-access-guard",
           "skill/development/agent-tooling/author-mcp-server-contract",
           "skill/operations/setup/author-guided-setup-wizard",
@@ -26034,6 +26094,7 @@
         "supersedes": [],
         "prerequisites": [],
         "packIds": [
+          "pack/mcp-baseline",
           "pack/secure-agent-boundaries"
         ]
       },
@@ -30190,6 +30251,7 @@
         "supersedes": [],
         "prerequisites": [],
         "packIds": [
+          "pack/daily-driver",
           "pack/reviewable-change"
         ]
       },
@@ -31179,13 +31241,16 @@
       },
       "relationships": {
         "composesWith": [
+          "command/development/workflow/verify-claims-against-output",
           "skill/development/testing/assess-mutation-test-value",
           "skill/development/testing/design-property-and-fuzz-tests"
         ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
-        "packIds": []
+        "packIds": [
+          "pack/plan-and-verify-loop"
+        ]
       },
       "operational": {
         "behavior": "advisory",
@@ -34130,6 +34195,7 @@
         "supersedes": [],
         "prerequisites": [],
         "packIds": [
+          "pack/mcp-baseline",
           "pack/secure-agent-boundaries"
         ]
       },
@@ -34321,11 +34387,15 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/operations/session/resume-session-work"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
-        "packIds": []
+        "packIds": [
+          "pack/session-continuity"
+        ]
       },
       "operational": {
         "behavior": "advisory",

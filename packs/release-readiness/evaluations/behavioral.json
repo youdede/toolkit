@@ -1,0 +1,55 @@
+{
+  "$schema": "../../../schema/pack-evaluation.schema.json",
+  "schemaVersion": 1,
+  "packId": "pack/release-readiness",
+  "cases": [
+    {
+      "id": "release-readiness-complete-evidence",
+      "type": "positive",
+      "scenario": "Every required Release readiness member contributes declared evidence, every outcome is verified, and the report cites the current ledger entry.",
+      "expected": {
+        "verdict": "accept",
+        "outcomes": [
+          "release-evidence",
+          "safe-publication"
+        ]
+      }
+    },
+    {
+      "id": "release-readiness-missing-evidence",
+      "type": "missing-evidence",
+      "scenario": "One required Release readiness member has no evidence hash even though its mapped outcome is marked verified.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "release-evidence",
+          "safe-publication"
+        ]
+      }
+    },
+    {
+      "id": "release-readiness-ledger-mismatch",
+      "type": "ledger-mismatch",
+      "scenario": "The Release readiness report cites a ledger entry hash that does not match the checkpoint carrying its claims.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "release-evidence",
+          "safe-publication"
+        ]
+      }
+    },
+    {
+      "id": "release-readiness-unsupported-coordinate",
+      "type": "unsupported-coordinate",
+      "scenario": "The requested Release readiness target and scope cannot install every required member at one common coordinate.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "release-evidence",
+          "safe-publication"
+        ]
+      }
+    }
+  ]
+}

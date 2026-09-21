@@ -103,14 +103,15 @@ function packsPage(packs) {
     '',
     `${sorted.length} of them. Install one with \`npx @youdede/toolkit add-pack <slug> --target <runtime> --scope project\`.`,
     '',
-    '| Slug | What it composes | Artifacts |',
-    '| --- | --- | --- |'
+    '| Slug | Version | What it composes | Artifacts | Evidence |',
+    '| --- | --- | --- | ---: | --- |'
   ];
   for (const pack of sorted) {
     const members = pack.artifacts ?? pack.members ?? [];
-    lines.push(`| \`${cell(pack.slug)}\` | ${cell(pack.summary ?? pack.description)} | ${members.length} |`);
+    const evidence = pack.evidence?.ledgerLinkRequired ? 'Versioned, ledger-linked' : 'Not declared';
+    lines.push(`| \`${cell(pack.slug)}\` | ${cell(pack.version)} | ${cell(pack.summary ?? pack.description)} | ${members.length} | ${evidence} |`);
   }
-  lines.push('', '---', '', 'The machine-readable index is [catalog/packs.json](../../catalog/packs.json).', '');
+  lines.push('', '---', '', 'Each pack maps every declared outcome to the member artifacts whose evidence can support it. Validate a produced report with `npx @youdede/toolkit verify-pack-evidence <slug> --report <file>`. The [evidence-report contract](../pack-evidence.md) documents the bounded format.', '', 'The machine-readable index is [catalog/packs.json](../../catalog/packs.json).', '');
   return lines.join('\n');
 }
 

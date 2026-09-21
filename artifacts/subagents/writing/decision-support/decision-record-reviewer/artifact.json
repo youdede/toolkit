@@ -46,11 +46,15 @@
     "assess"
   ],
   "relationships": {
-    "composesWith": [],
+    "composesWith": [
+      "skill/operations/session/resume-session-work"
+    ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],
-    "packIds": []
+    "packIds": [
+      "pack/session-continuity"
+    ]
   },
   "operational": {
     "behavior": "advisory",

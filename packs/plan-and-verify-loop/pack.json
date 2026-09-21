@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schema/pack.schema.json",
+  "schemaVersion": 1,
+  "id": "pack/plan-and-verify-loop",
+  "slug": "plan-and-verify-loop",
+  "name": "Plan and verify loop",
+  "version": "1.0.0",
+  "summary": "Gate implementation behind evidenced planning phases and independently verify completion claims.",
+  "outcomes": ["evidenced-plan", "verified-implementation"],
+  "evidence": {
+    "reportSchema": "../../schema/pack-evidence.schema.json",
+    "ledgerLinkRequired": true,
+    "outcomeEvidence": [
+      {"outcome": "evidenced-plan", "memberArtifactIds": ["command/development/workflow/draft-evidenced-plan", "context/development/testing/testing-baseline", "hook/development/workflow/phase-gate-guard", "skill/operations/agent-orchestration/execute-verifiable-plan"]},
+      {"outcome": "verified-implementation", "memberArtifactIds": ["command/development/workflow/verify-claims-against-output", "subagent/development/testing/test-gap-reviewer"]}
+    ]
+  },
+  "members": [
+    {"artifactId": "command/development/workflow/draft-evidenced-plan", "role": "entrypoint", "required": true},
+    {"artifactId": "command/development/workflow/verify-claims-against-output", "role": "entrypoint", "required": true},
+    {"artifactId": "context/development/testing/testing-baseline", "role": "baseline", "required": true},
+    {"artifactId": "hook/development/workflow/phase-gate-guard", "role": "enforcement", "required": true},
+    {"artifactId": "skill/operations/agent-orchestration/execute-verifiable-plan", "role": "procedure", "required": true},
+    {"artifactId": "subagent/development/testing/test-gap-reviewer", "role": "verifier", "required": true}
+  ]
+}

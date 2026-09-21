@@ -1,0 +1,55 @@
+{
+  "$schema": "../../../schema/pack-evaluation.schema.json",
+  "schemaVersion": 1,
+  "packId": "pack/daily-driver",
+  "cases": [
+    {
+      "id": "daily-driver-complete-evidence",
+      "type": "positive",
+      "scenario": "Every required Daily driver member contributes declared evidence, every outcome is verified, and the report cites the current ledger entry.",
+      "expected": {
+        "verdict": "accept",
+        "outcomes": [
+          "incremental-delivery",
+          "review-ready-change"
+        ]
+      }
+    },
+    {
+      "id": "daily-driver-missing-evidence",
+      "type": "missing-evidence",
+      "scenario": "One required Daily driver member has no evidence hash even though its mapped outcome is marked verified.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "incremental-delivery",
+          "review-ready-change"
+        ]
+      }
+    },
+    {
+      "id": "daily-driver-ledger-mismatch",
+      "type": "ledger-mismatch",
+      "scenario": "The Daily driver report cites a ledger entry hash that does not match the checkpoint carrying its claims.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "incremental-delivery",
+          "review-ready-change"
+        ]
+      }
+    },
+    {
+      "id": "daily-driver-unsupported-coordinate",
+      "type": "unsupported-coordinate",
+      "scenario": "The requested Daily driver target and scope cannot install every required member at one common coordinate.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "incremental-delivery",
+          "review-ready-change"
+        ]
+      }
+    }
+  ]
+}

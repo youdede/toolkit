@@ -1,0 +1,55 @@
+{
+  "$schema": "../../../schema/pack-evaluation.schema.json",
+  "schemaVersion": 1,
+  "packId": "pack/mcp-baseline",
+  "cases": [
+    {
+      "id": "mcp-baseline-complete-evidence",
+      "type": "positive",
+      "scenario": "Every required MCP baseline member contributes declared evidence, every outcome is verified, and the report cites the current ledger entry.",
+      "expected": {
+        "verdict": "accept",
+        "outcomes": [
+          "bounded-tool-access",
+          "mcp-trust-evidence"
+        ]
+      }
+    },
+    {
+      "id": "mcp-baseline-missing-evidence",
+      "type": "missing-evidence",
+      "scenario": "One required MCP baseline member has no evidence hash even though its mapped outcome is marked verified.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "bounded-tool-access",
+          "mcp-trust-evidence"
+        ]
+      }
+    },
+    {
+      "id": "mcp-baseline-ledger-mismatch",
+      "type": "ledger-mismatch",
+      "scenario": "The MCP baseline report cites a ledger entry hash that does not match the checkpoint carrying its claims.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "bounded-tool-access",
+          "mcp-trust-evidence"
+        ]
+      }
+    },
+    {
+      "id": "mcp-baseline-unsupported-coordinate",
+      "type": "unsupported-coordinate",
+      "scenario": "The requested MCP baseline target and scope cannot install every required member at one common coordinate.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "bounded-tool-access",
+          "mcp-trust-evidence"
+        ]
+      }
+    }
+  ]
+}

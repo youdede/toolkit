@@ -1,0 +1,55 @@
+{
+  "$schema": "../../../schema/pack-evaluation.schema.json",
+  "schemaVersion": 1,
+  "packId": "pack/mobile-release-readiness",
+  "cases": [
+    {
+      "id": "mobile-release-readiness-complete-evidence",
+      "type": "positive",
+      "scenario": "Every required Mobile release readiness member contributes declared evidence, every outcome is verified, and the report cites the current ledger entry.",
+      "expected": {
+        "verdict": "accept",
+        "outcomes": [
+          "mobile-release-evidence",
+          "safe-publication"
+        ]
+      }
+    },
+    {
+      "id": "mobile-release-readiness-missing-evidence",
+      "type": "missing-evidence",
+      "scenario": "One required Mobile release readiness member has no evidence hash even though its mapped outcome is marked verified.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "mobile-release-evidence",
+          "safe-publication"
+        ]
+      }
+    },
+    {
+      "id": "mobile-release-readiness-ledger-mismatch",
+      "type": "ledger-mismatch",
+      "scenario": "The Mobile release readiness report cites a ledger entry hash that does not match the checkpoint carrying its claims.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "mobile-release-evidence",
+          "safe-publication"
+        ]
+      }
+    },
+    {
+      "id": "mobile-release-readiness-unsupported-coordinate",
+      "type": "unsupported-coordinate",
+      "scenario": "The requested Mobile release readiness target and scope cannot install every required member at one common coordinate.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "mobile-release-evidence",
+          "safe-publication"
+        ]
+      }
+    }
+  ]
+}

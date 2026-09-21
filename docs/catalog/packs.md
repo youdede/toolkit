@@ -4,18 +4,24 @@
 
 A pack composes artifacts of different kinds into one outcome, so a single command installs the procedure, the gate, and the specialist that outcome needs.
 
-7 of them. Install one with `npx @youdede/toolkit add-pack <slug> --target <runtime> --scope project`.
+11 of them. Install one with `npx @youdede/toolkit add-pack <slug> --target <runtime> --scope project`.
 
-| Slug | What it composes | Artifacts |
-| --- | --- | --- |
-| `accessibility-assurance` | Plan, enforce, and independently verify accessible interface behavior from source evidence. | 9 |
-| `data-change-safety` | Review schema and migration changes with deterministic safety checks and independent risk analysis. | 4 |
-| `infrastructure-change-readiness` | Plan a staged infrastructure change and independently review lifecycle, blast-radius, and recovery evidence. | 3 |
-| `mobile-release-readiness` | Review mobile release evidence, accessibility, reliability, repository state, and version consistency. | 4 |
-| `release-readiness` | Build an evidence-backed release decision and stop publication from unsafe repository state. | 6 |
-| `reviewable-change` | Prepare bounded code changes, obtain independent review, and prevent oversized unreviewable commits. | 5 |
-| `secure-agent-boundaries` | Design agent integrations, review their trust boundary, and block obvious data-exposure paths. | 6 |
+| Slug | Version | What it composes | Artifacts | Evidence |
+| --- | --- | --- | ---: | --- |
+| `accessibility-assurance` | 1.0.0 | Plan, enforce, and independently verify accessible interface behavior from source evidence. | 9 | Versioned, ledger-linked |
+| `daily-driver` | 1.0.0 | Deliver bounded incremental changes, prepare review evidence, and prevent unreviewable diffs. | 5 | Versioned, ledger-linked |
+| `data-change-safety` | 1.0.0 | Review schema and migration changes with deterministic safety checks and independent risk analysis. | 4 | Versioned, ledger-linked |
+| `infrastructure-change-readiness` | 1.0.0 | Plan a staged infrastructure change and independently review lifecycle, blast-radius, and recovery evidence. | 3 | Versioned, ledger-linked |
+| `mcp-baseline` | 1.0.0 | Install a guarded read-only MCP baseline with declared authority and independent trust-boundary review. | 7 | Versioned, ledger-linked |
+| `mobile-release-readiness` | 1.0.0 | Review mobile release evidence, accessibility, reliability, repository state, and version consistency. | 4 | Versioned, ledger-linked |
+| `plan-and-verify-loop` | 1.0.0 | Gate implementation behind evidenced planning phases and independently verify completion claims. | 6 | Versioned, ledger-linked |
+| `release-readiness` | 1.1.0 | Build an evidence-backed release decision and stop publication from unsafe repository state. | 7 | Versioned, ledger-linked |
+| `reviewable-change` | 1.1.0 | Prepare bounded code changes, obtain independent review, and prevent oversized unreviewable commits. | 6 | Versioned, ledger-linked |
+| `secure-agent-boundaries` | 1.1.0 | Design agent integrations, review their trust boundary, and block obvious data-exposure paths. | 7 | Versioned, ledger-linked |
+| `session-continuity` | 1.0.0 | Persist bounded hash-chained checkpoints, restore cited context, and verify continuity across sessions. | 7 | Versioned, ledger-linked |
 
 ---
+
+Each pack maps every declared outcome to the member artifacts whose evidence can support it. Validate a produced report with `npx @youdede/toolkit verify-pack-evidence <slug> --report <file>`. The [evidence-report contract](../pack-evidence.md) documents the bounded format.
 
 The machine-readable index is [catalog/packs.json](../../catalog/packs.json).

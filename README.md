@@ -24,7 +24,7 @@ A catalog of <!-- stat:artifact-count -->306<!-- /stat --> things you can instal
 - **<!-- stat:skill-count -->167<!-- /stat --> skills**: procedures an agent loads when a task matches. Each one states what it does, what evidence it requires, and what it refuses to do.
 - **<!-- stat:hook-count -->63<!-- /stat --> hooks**: deterministic gates that inspect a command before it runs and block it. No model in the decision path. `commit-guard` scans staged blobs for secrets. `protected-branch-guard` refuses a force push to `main`.
 - **<!-- stat:subagent-count -->62<!-- /stat --> subagents**: specialists with a deliberately narrow brief, no authority to edit or approve anything, and a required section for what they could not verify.
-- **7 packs**: the above composed into one outcome, like `release-readiness` or `secure-agent-boundaries`.
+- **11 packs**: the above composed into versioned outcomes, with explicit member-to-evidence mappings and behavioral evaluations. The workflow packs include `plan-and-verify-loop`, `session-continuity`, `daily-driver`, and `mcp-baseline`.
 
 Everything is MIT, plain text, and inspectable before install.
 
@@ -69,7 +69,7 @@ Every artifact is listed, with what it does and which runtimes carry it, so you 
 | [Skills](docs/catalog/skills.md) | <!-- stat:skill-count -->167<!-- /stat --> | Procedures an agent loads when a task matches |
 | [Hooks](docs/catalog/hooks.md) | <!-- stat:hook-count -->63<!-- /stat --> | Deterministic gates that block a command before it runs |
 | [Subagents](docs/catalog/subagents.md) | <!-- stat:subagent-count -->62<!-- /stat --> | Specialists with a narrow brief and no authority to act |
-| [Packs](docs/catalog/packs.md) | 7 | The above composed into one outcome |
+| [Packs](docs/catalog/packs.md) | 11 | The above composed into versioned, evidence-backed outcomes |
 
 Those pages are generated from the catalog and checked by the build, so they cannot drift from what the repository contains.
 
@@ -80,9 +80,11 @@ npx @youdede/toolkit list --problem commit-safety
 npx @youdede/toolkit list --domain security --risk high
 npx @youdede/toolkit list --kind hook
 npx @youdede/toolkit packs
+npx @youdede/toolkit pack-info daily-driver
+npx @youdede/toolkit verify-pack-evidence daily-driver --report .youdede/evidence/daily-driver.json
 ```
 
-The [artifact catalog](catalog/artifacts.json) and [taxonomy](catalog/taxonomy.json) are generated, stable, and suitable for a search index or an API of your own.
+The [artifact catalog](catalog/artifacts.json), [pack catalog](catalog/packs.json), and [taxonomy](catalog/taxonomy.json) are generated, stable, and suitable for a search index or an API of your own. The [pack evidence contract](docs/pack-evidence.md) explains what a verified report proves and what it does not.
 
 ## What "tested" means here
 

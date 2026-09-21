@@ -1,0 +1,55 @@
+{
+  "$schema": "../../../schema/pack-evaluation.schema.json",
+  "schemaVersion": 1,
+  "packId": "pack/plan-and-verify-loop",
+  "cases": [
+    {
+      "id": "plan-and-verify-loop-complete-evidence",
+      "type": "positive",
+      "scenario": "Every required Plan and verify loop member contributes declared evidence, every outcome is verified, and the report cites the current ledger entry.",
+      "expected": {
+        "verdict": "accept",
+        "outcomes": [
+          "evidenced-plan",
+          "verified-implementation"
+        ]
+      }
+    },
+    {
+      "id": "plan-and-verify-loop-missing-evidence",
+      "type": "missing-evidence",
+      "scenario": "One required Plan and verify loop member has no evidence hash even though its mapped outcome is marked verified.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "evidenced-plan",
+          "verified-implementation"
+        ]
+      }
+    },
+    {
+      "id": "plan-and-verify-loop-ledger-mismatch",
+      "type": "ledger-mismatch",
+      "scenario": "The Plan and verify loop report cites a ledger entry hash that does not match the checkpoint carrying its claims.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "evidenced-plan",
+          "verified-implementation"
+        ]
+      }
+    },
+    {
+      "id": "plan-and-verify-loop-unsupported-coordinate",
+      "type": "unsupported-coordinate",
+      "scenario": "The requested Plan and verify loop target and scope cannot install every required member at one common coordinate.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "evidenced-plan",
+          "verified-implementation"
+        ]
+      }
+    }
+  ]
+}

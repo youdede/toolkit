@@ -4,11 +4,20 @@
   "id": "pack/infrastructure-change-readiness",
   "slug": "infrastructure-change-readiness",
   "name": "Infrastructure change readiness",
+  "version": "1.0.0",
   "summary": "Plan a staged infrastructure change and independently review lifecycle, blast-radius, and recovery evidence.",
   "outcomes": [
     "recovery-evidence",
     "staged-infrastructure-change"
   ],
+  "evidence": {
+    "reportSchema": "../../schema/pack-evidence.schema.json",
+    "ledgerLinkRequired": true,
+    "outcomeEvidence": [
+      {"outcome": "recovery-evidence", "memberArtifactIds": ["subagent/operations/resilience/disaster-recovery-readiness-auditor"]},
+      {"outcome": "staged-infrastructure-change", "memberArtifactIds": ["skill/operations/infrastructure/plan-infrastructure-change", "subagent/operations/infrastructure/infrastructure-change-reviewer"]}
+    ]
+  },
   "members": [
     {
       "artifactId": "skill/operations/infrastructure/plan-infrastructure-change",

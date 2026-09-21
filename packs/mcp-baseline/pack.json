@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schema/pack.schema.json",
+  "schemaVersion": 1,
+  "id": "pack/mcp-baseline",
+  "slug": "mcp-baseline",
+  "name": "MCP baseline",
+  "version": "1.0.0",
+  "summary": "Install a guarded read-only MCP baseline with declared authority and independent trust-boundary review.",
+  "outcomes": ["bounded-tool-access", "mcp-trust-evidence"],
+  "evidence": {
+    "reportSchema": "../../schema/pack-evidence.schema.json",
+    "ledgerLinkRequired": true,
+    "outcomeEvidence": [
+      {"outcome": "bounded-tool-access", "memberArtifactIds": ["hook/security/network-control/mcp-capability-drift-guard", "mcp-server/development/agent-tooling/allowlisted-fetch-readonly", "mcp-server/development/agent-tooling/repository-git-readonly", "mcp-server/development/agent-tooling/workspace-files-readonly"]},
+      {"outcome": "mcp-trust-evidence", "memberArtifactIds": ["skill/development/agent-tooling/author-mcp-server-contract", "skill/security/threat-modeling/review-agent-tool-boundaries", "subagent/security/threat-modeling/mcp-trust-boundary-reviewer"]}
+    ]
+  },
+  "members": [
+    {"artifactId": "hook/security/network-control/mcp-capability-drift-guard", "role": "enforcement", "required": true},
+    {"artifactId": "mcp-server/development/agent-tooling/allowlisted-fetch-readonly", "role": "integration", "required": true},
+    {"artifactId": "mcp-server/development/agent-tooling/repository-git-readonly", "role": "integration", "required": true},
+    {"artifactId": "mcp-server/development/agent-tooling/workspace-files-readonly", "role": "integration", "required": true},
+    {"artifactId": "skill/development/agent-tooling/author-mcp-server-contract", "role": "procedure", "required": true},
+    {"artifactId": "skill/security/threat-modeling/review-agent-tool-boundaries", "role": "verifier", "required": true},
+    {"artifactId": "subagent/security/threat-modeling/mcp-trust-boundary-reviewer", "role": "specialist", "required": true}
+  ]
+}

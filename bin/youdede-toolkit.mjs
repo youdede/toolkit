@@ -5,6 +5,7 @@ import { hookBindings, loadArtifacts, loadPacks, resolvePack, ROOT, validateRepo
 import { doctor, installArtifact, installPack, planArtifactInstall, planPackInstall, removeArtifact, removePack, resolveArtifact } from '../scripts/lib/install.mjs';
 import { readIntegrityManifest, verifyArtifactAttestation, verifyIntegrityManifest } from '../scripts/lib/integrity.mjs';
 import { validateBehavioralEvaluations } from '../scripts/validate-evaluations.mjs';
+import { readPackEvidenceReport, verifyPackEvidence } from '../scripts/verify-pack-evidence.mjs';
 import { SUPPORTED_TARGETS } from '../scripts/lib/targets.mjs';
 
 function parse(argv) {
@@ -35,6 +36,7 @@ const COMMAND_FLAGS = {
   info: ['target', 'scope', 'cwd'],
   packs: [],
   'pack-info': ['target', 'scope', 'cwd'],
+  'verify-pack-evidence': ['report', 'json'],
   add: INSTALL_FLAGS,
   'add-pack': INSTALL_FLAGS,
   remove: ['target', 'scope', 'cwd', 'force'],
@@ -65,6 +67,7 @@ function help() {
   process.stdout.write(`  info <id-or-slug>\n`);
   process.stdout.write(`  packs\n`);
   process.stdout.write(`  pack-info <id-or-slug>\n`);
+  process.stdout.write(`  verify-pack-evidence <id-or-slug> --report path [--json]\n`);
   process.stdout.write(`  add <id-or-slug> [--target ${targets}] [--scope project|user] [--cwd path] [--dry-run] [--json] [--force]\n`);
   process.stdout.write(`  add-pack <id-or-slug> [--target ${targets}] [--scope project|user] [--cwd path] [--dry-run] [--json] [--force]\n`);
   process.stdout.write(`  remove <id-or-slug> [--target ${targets}] [--scope project|user] [--cwd path] [--force]\n`);
@@ -155,7 +158,7 @@ async function main() {
 
   if (command === 'pack-info') {
     const { manifest } = resolvePack(requireQuery(positional));
-    process.stdout.write(`${manifest.name}\n${manifest.id}\n\n${manifest.summary}\n\nOutcomes: ${manifest.outcomes.join(', ')}\nMembers:\n`);
+    process.stdout.write(`${manifest.name} ${manifest.version}\n${manifest.id}\n\n${manifest.summary}\n\nOutcomes: ${manifest.outcomes.join(', ')}\nEvidence: ledger-linked; schema ${manifest.evidence.reportSchema}\nMembers:\n`);
     for (const member of manifest.members) process.stdout.write(`- ${member.artifactId} (${member.role}${member.required ? ', required' : ', optional'})\n`);
     // Fan-out is catalog data. Deriving it from an install plan made a read-only query depend on
     // the working directory and fail on unrelated workspace state, and made `pack-info` stat and
@@ -174,6 +177,18 @@ async function main() {
       }
     }
     if (fanout.size) process.stdout.write(`Hook fan-out: ${[...fanout].sort((a, b) => b[1] - a[1]).map(([boundary, count]) => `${boundary}=${count}`).join(', ')}\n`);
+    return;
+  }
+
+  if (command === 'verify-pack-evidence') {
+    const { manifest } = resolvePack(requireQuery(positional));
+    if (!options.report) throw new Error('verify-pack-evidence requires --report <file>');
+    const failures = verifyPackEvidence(manifest, readPackEvidenceReport(path.resolve(options.report)));
+    const result = { ok: failures.length === 0, packId: manifest.id, packVersion: manifest.version, failures };
+    if (options.json) process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+    else if (result.ok) process.stdout.write(`Pack evidence verified for ${manifest.id}@${manifest.version}.\n`);
+    else for (const failure of failures) process.stdout.write(`- ${failure}\n`);
+    if (!result.ok) process.exitCode = 1;
     return;
   }
 

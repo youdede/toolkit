@@ -49,6 +49,7 @@
   ],
   "relationships": {
     "composesWith": [
+      "command/development/workflow/audit-release-evidence",
       "hook/operations/package-publication/package-publish-guard",
       "hook/operations/repository-state/release-clean-state-guard",
       "hook/operations/versioning/release-version-consistency-guard",

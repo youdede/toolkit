@@ -4,11 +4,20 @@
   "id": "pack/data-change-safety",
   "slug": "data-change-safety",
   "name": "Data change safety",
+  "version": "1.0.0",
   "summary": "Review schema and migration changes with deterministic safety checks and independent risk analysis.",
   "outcomes": [
     "compatible-data-change",
     "migration-safety"
   ],
+  "evidence": {
+    "reportSchema": "../../schema/pack-evidence.schema.json",
+    "ledgerLinkRequired": true,
+    "outcomeEvidence": [
+      {"outcome": "compatible-data-change", "memberArtifactIds": ["skill/data/schemas/review-schema-evolution", "subagent/data/migrations/migration-risk-reviewer"]},
+      {"outcome": "migration-safety", "memberArtifactIds": ["hook/data/migrations/migration-safety-guard", "skill/data/migrations/review-database-migration-plan"]}
+    ]
+  },
   "members": [
     {
       "artifactId": "skill/data/migrations/review-database-migration-plan",

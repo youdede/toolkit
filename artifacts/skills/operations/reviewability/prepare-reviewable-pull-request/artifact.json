@@ -44,7 +44,9 @@
   },
   "relationships": {
     "composesWith": [
+      "command/development/workflow/assemble-review-brief",
       "hook/operations/reviewability/large-diff-review-guard",
+      "skill/development/code-quality/deliver-incremental-change",
       "skill/development/code-quality/evaluate-code-review-feedback",
       "skill/development/code-quality/request-independent-code-review",
       "subagent/development/code-quality/refactor-equivalence-reviewer"
@@ -53,6 +55,7 @@
     "supersedes": [],
     "prerequisites": [],
     "packIds": [
+      "pack/daily-driver",
       "pack/reviewable-change"
     ]
   },

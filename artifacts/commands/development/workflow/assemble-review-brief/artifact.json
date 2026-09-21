@@ -67,11 +67,16 @@
     ]
   },
   "relationships": {
-    "composesWith": [],
+    "composesWith": [
+      "skill/operations/reviewability/prepare-reviewable-pull-request"
+    ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],
-    "packIds": []
+    "packIds": [
+      "pack/daily-driver",
+      "pack/reviewable-change"
+    ]
   },
   "operational": {
     "behavior": "advisory",

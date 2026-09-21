@@ -66,11 +66,16 @@
     ]
   },
   "relationships": {
-    "composesWith": [],
+    "composesWith": [
+      "hook/development/workflow/phase-gate-guard",
+      "skill/operations/agent-orchestration/execute-verifiable-plan"
+    ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],
-    "packIds": []
+    "packIds": [
+      "pack/plan-and-verify-loop"
+    ]
   },
   "operational": {
     "behavior": "advisory",

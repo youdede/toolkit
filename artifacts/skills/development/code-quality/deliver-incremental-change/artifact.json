@@ -51,12 +51,15 @@
   ],
   "relationships": {
     "composesWith": [
-      "skill/operations/reviewability/decompose-dependent-work-slices"
+      "skill/operations/reviewability/decompose-dependent-work-slices",
+      "skill/operations/reviewability/prepare-reviewable-pull-request"
     ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],
-    "packIds": []
+    "packIds": [
+      "pack/daily-driver"
+    ]
   },
   "operational": {
     "behavior": "advisory",

@@ -4,11 +4,20 @@
   "id": "pack/accessibility-assurance",
   "slug": "accessibility-assurance",
   "name": "Accessibility assurance",
+  "version": "1.0.0",
   "summary": "Plan, enforce, and independently verify accessible interface behavior from source evidence.",
   "outcomes": [
     "accessible-interface",
     "regression-prevention"
   ],
+  "evidence": {
+    "reportSchema": "../../schema/pack-evidence.schema.json",
+    "ledgerLinkRequired": true,
+    "outcomeEvidence": [
+      {"outcome": "accessible-interface", "memberArtifactIds": ["skill/design/accessibility/plan-accessibility-conformance-evidence", "skill/design/accessibility/prepare-eaa-conformance-evidence", "skill/design/accessibility/test-screen-reader-journey", "skill/design/accessibility/verify-cognitive-access-barriers", "subagent/design/accessibility/accessibility-conformance-reviewer", "subagent/design/accessibility/accessibility-journey-tester"]},
+      {"outcome": "regression-prevention", "memberArtifactIds": ["hook/design/authentication-access/authentication-accessibility-guard", "hook/design/keyboard-focus/focus-style-regression-guard", "hook/design/semantic-markup/accessibility-attribute-regression-guard"]}
+    ]
+  },
   "members": [
     {
       "artifactId": "hook/design/authentication-access/authentication-accessibility-guard",

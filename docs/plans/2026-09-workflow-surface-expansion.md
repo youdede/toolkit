@@ -1,7 +1,7 @@
 # Development plan: workflow surface and artifact kind expansion
 
 - Date: 2026-09-21
-- Status: In progress — phases 0–4 complete
+- Status: In progress — phases 0–5 complete
 - ADR: [0002](../decisions/0002-extend-artifact-kinds-for-agent-workflows.md)
 
 ## Motivation
@@ -167,6 +167,11 @@ stable.
 ## Phase 5 — Pack improvement and expansion
 
 **Exit criteria:** ≥10 packs; existing packs gain command entrypoints and evidence contracts.
+
+**Completed 2026-09-21.** The catalog now has eleven packs. All carry semantic versions,
+outcome-to-member evidence mappings, ledger-linked report contracts, and four checked behavioral
+scenarios. The four planned workflow packs and the three planned upgrades are present, and every
+new composition passes common-target install/remove coverage.
 
 1. New packs: `plan-and-verify-loop`, `session-continuity`, `daily-driver` (meta),
    `mcp-baseline`.
