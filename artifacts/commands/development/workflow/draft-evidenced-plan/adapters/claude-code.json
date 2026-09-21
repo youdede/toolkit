@@ -1,0 +1,28 @@
+{
+  "$schema": "../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": [
+    "project"
+  ],
+  "files": [
+    {
+      "from": "COMMAND.md",
+      "to": "commands/draft-evidenced-plan.md"
+    },
+    {
+      "from": "scripts/check-preconditions.mjs",
+      "to": "commands/youdede/draft-evidenced-plan/check-preconditions.mjs",
+      "executable": true
+    },
+    {
+      "from": "preconditions.json",
+      "to": "commands/youdede/draft-evidenced-plan/preconditions.json"
+    },
+    {
+      "root": "package",
+      "from": "scripts/runtime/command-precondition.mjs",
+      "to": "commands/youdede/lib/command-precondition.mjs"
+    }
+  ]
+}
