@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": [
+    "project"
+  ],
+  "files": [
+    {
+      "from": "COMMAND.md",
+      "to": "commands/verify-session-ledger.md"
+    },
+    {
+      "from": "scripts/check-preconditions.mjs",
+      "to": "commands/youdede/verify-session-ledger/check-preconditions.mjs",
+      "executable": true
+    },
+    {
+      "from": "preconditions.json",
+      "to": "commands/youdede/verify-session-ledger/preconditions.json"
+    },
+    {
+      "root": "package",
+      "from": "scripts/runtime/command-precondition.mjs",
+      "to": "commands/youdede/lib/command-precondition.mjs"
+    },
+    {
+      "root": "package",
+      "from": "scripts/runtime/session-ledger.mjs",
+      "to": "hooks/youdede/lib/session-ledger.mjs"
+    }
+  ]
+}

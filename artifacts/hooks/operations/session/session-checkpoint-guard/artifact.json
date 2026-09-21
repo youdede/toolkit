@@ -1,0 +1,70 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/operations/session/session-checkpoint-guard",
+  "slug": "session-checkpoint-guard",
+  "name": "Session Checkpoint Guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Append a deterministic, hash-chained session-end receipt to the local session ledger.",
+  "description": "On SessionEnd, append a bounded receipt (timestamp, reason, sequence, chain link, git anchor) to .youdede/session-ledger.jsonl. Rich content belongs to the record-work-checkpoint command; this hook records only what the event proves.",
+  "domain": "operations",
+  "category": "session",
+  "capabilities": [
+    "operate"
+  ],
+  "problems": [
+    "session-handoff"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "operations",
+    "handoff"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "Youdede"
+  ],
+  "refuses": [
+    "It does not block, delay, or alter the observed event; it records or reports only.",
+    "It does not execute submitted content, call an LLM, or transmit any data off the machine.",
+    "It does not treat unreadable, symlinked, or oversized state as valid evidence."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/session-checkpoint-guard.mjs",
+        "runtime": "node",
+        "purpose": "Append a tamper-evident session-end receipt to the chained ledger.",
+        "sideEffects": "writes-files"
+      }
+    ]
+  },
+  "relationships": {
+    "composesWith": [
+      "command/operations/session/record-work-checkpoint",
+      "command/operations/session/verify-session-ledger",
+      "skill/operations/session/resume-session-work"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "observing",
+    "failurePolicy": "fail-open",
+    "latencyClass": "bounded",
+    "dataRetention": "local-bounded"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  }
+}

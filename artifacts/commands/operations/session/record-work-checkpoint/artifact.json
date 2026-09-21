@@ -1,0 +1,81 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "command/operations/session/record-work-checkpoint",
+  "slug": "record-work-checkpoint",
+  "name": "Record Work Checkpoint",
+  "version": "1.0.0",
+  "kind": "command",
+  "summary": "Append a redacted, hash-chained work checkpoint to the session ledger with a verified git anchor.",
+  "description": "Invoked as a slash command, appends a structured checkpoint (goal, pending claims, decisions, touched files) to .youdede/session-ledger.jsonl. Content is redacted for secret shapes, size-bounded, and chain-linked by the deterministic ledger bridge.",
+  "domain": "operations",
+  "category": "session",
+  "capabilities": [
+    "operate"
+  ],
+  "problems": [
+    "session-handoff"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "operations",
+    "handoff"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "Youdede"
+  ],
+  "refuses": [
+    "It does not store secrets, tokens, or credentials; content matching secret shapes is redacted before append.",
+    "It does not store absolute or escaping file paths, or file contents beyond declared fields.",
+    "It does not modify or delete existing ledger entries; the ledger is append-only."
+  ],
+  "execution": {
+    "mode": "hybrid",
+    "entrypoints": [
+      {
+        "path": "scripts/check-preconditions.mjs",
+        "runtime": "node",
+        "purpose": "Evaluate the declared preconditions deterministically before the workflow may begin.",
+        "sideEffects": "none"
+      }
+    ]
+  },
+  "command": {
+    "invocation": "record-work-checkpoint",
+    "toolAuthority": [
+      "Bash"
+    ],
+    "produces": [
+      "a ledger entry whose hash, sequence, and git anchor are reported back for citation"
+    ],
+    "requires": [],
+    "flags": []
+  },
+  "relationships": {
+    "composesWith": [
+      "hook/operations/session/session-checkpoint-guard",
+      "hook/operations/session/session-restore-guard",
+      "skill/operations/session/resume-session-work"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "immediate",
+    "dataRetention": "local-bounded"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  }
+}

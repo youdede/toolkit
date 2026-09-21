@@ -1,0 +1,83 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "command/operations/session/verify-session-ledger",
+  "slug": "verify-session-ledger",
+  "name": "Verify Session Ledger",
+  "version": "1.0.0",
+  "kind": "command",
+  "summary": "Verify the hash-chained session ledger and report exactly which entries, if any, fail integrity.",
+  "description": "Invoked as a slash command, runs the deterministic chain verification over .youdede/session-ledger.jsonl and explains the result: entry count, first failing line, and what the failure means for trust in carried claims.",
+  "domain": "operations",
+  "category": "session",
+  "capabilities": [
+    "operate"
+  ],
+  "problems": [
+    "session-handoff"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "operations",
+    "handoff"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "Youdede"
+  ],
+  "refuses": [
+    "It does not repair, rewrite, or truncate the ledger; integrity failures are reported, not fixed.",
+    "It does not treat entries after a chain failure as verified, regardless of their content.",
+    "It does not transmit ledger content; the verdict carries counts and hashes only.",
+    "It does not claim authorship or resist an actor who can rewrite both the ledger and its local head seal."
+  ],
+  "execution": {
+    "mode": "hybrid",
+    "entrypoints": [
+      {
+        "path": "scripts/check-preconditions.mjs",
+        "runtime": "node",
+        "purpose": "Evaluate the declared preconditions deterministically before the workflow may begin.",
+        "sideEffects": "none"
+      }
+    ]
+  },
+  "command": {
+    "invocation": "verify-session-ledger",
+    "toolAuthority": [
+      "Read",
+      "Bash"
+    ],
+    "produces": [
+      "a ledger integrity verdict naming entry count, chain status, and the first failing line if any"
+    ],
+    "requires": [],
+    "flags": []
+  },
+  "relationships": {
+    "composesWith": [
+      "hook/operations/session/session-checkpoint-guard",
+      "hook/operations/session/session-restore-guard",
+      "skill/operations/session/resume-session-work"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "immediate",
+    "dataRetention": "local-bounded"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  }
+}

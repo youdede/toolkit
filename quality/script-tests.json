@@ -345,6 +345,45 @@
         "false-positive": "false-positive: lookalike paths and normal source writes stay untouched",
         "process-exit": "process-exit: the wired hook exits 0 to allow and 2 with a rule id to block"
       }
+    },
+    {
+      "id": "hook-session-continuity",
+      "artifactIds": [
+        "hook/development/resource-management/tool-output-budget-guard",
+        "hook/operations/session/compact-readiness-guard",
+        "hook/operations/session/session-checkpoint-guard",
+        "hook/operations/session/session-restore-guard"
+      ],
+      "testFiles": [
+        "tests/session-continuity.test.mjs",
+        "tests/session-ledger.test.mjs"
+      ],
+      "coverage": {
+        "allow": "allow: session lifecycle writes receipts, restores summaries, and removes cleanly",
+        "deny-or-observe": "deny-or-observe: a tampered ledger is surfaced as an integrity failure, never trusted silently",
+        "malformed": "malformed: hooks fail open on garbage input and still exit 0",
+        "oversized": "oversized: observing hook wrappers remain fail-open without reflecting oversized input",
+        "boundary": "boundary: compact-readiness warns only about real dirty state and pending claims",
+        "false-positive": "false-positive: the output budget guard ignores output within budget",
+        "process-exit": "process-exit: the budget guard exits 0 while flagging oversized output without echoing it"
+      }
+    },
+    {
+      "id": "command-session-continuity",
+      "artifactIds": [
+        "command/operations/session/record-work-checkpoint",
+        "command/operations/session/verify-session-ledger"
+      ],
+      "testFiles": [
+        "tests/session-continuity.test.mjs",
+        "tests/session-ledger.test.mjs"
+      ],
+      "coverage": {
+        "positive": "positive: installed session commands execute their shared deterministic precondition bridge",
+        "negative": "negative: tampering with any entry breaks verification at that line",
+        "malformed": "malformed: invalid fields, oversized input, and corrupt tails are refused",
+        "boundary": "boundary: portable absolute and traversal paths are refused"
+      }
     }
   ]
 }

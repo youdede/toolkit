@@ -1,0 +1,69 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/operations/session/compact-readiness-guard",
+  "slug": "compact-readiness-guard",
+  "name": "Compact Readiness Guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Warn before compaction when uncommitted changes or pending ledger claims would silently lose context.",
+  "description": "On PreCompact, count dirty worktree changes and read pending claims from the latest ledger checkpoint, then emit a bounded system warning when either exists. Observing only; compaction proceeds.",
+  "domain": "operations",
+  "category": "session",
+  "capabilities": [
+    "operate"
+  ],
+  "problems": [
+    "session-handoff",
+    "context-pressure"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "operations",
+    "handoff"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "Youdede"
+  ],
+  "refuses": [
+    "It does not block, delay, or alter the observed event; it records or reports only.",
+    "It does not execute submitted content, call an LLM, or transmit any data off the machine.",
+    "It does not treat unreadable, symlinked, or oversized state as valid evidence."
+  ],
+  "execution": {
+    "mode": "deterministic",
+    "entrypoints": [
+      {
+        "path": "targets/claude-code/compact-readiness-guard.mjs",
+        "runtime": "node",
+        "purpose": "Warn when compaction would hide dirty state or pending claims.",
+        "sideEffects": "none"
+      }
+    ]
+  },
+  "relationships": {
+    "composesWith": [
+      "hook/operations/agent-orchestration/compaction-handoff-guard"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "observing",
+    "failurePolicy": "fail-open",
+    "latencyClass": "bounded",
+    "dataRetention": "local-bounded"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  }
+}

@@ -86,7 +86,8 @@ state is redacted, bounded, tamper-evident, and removable; no model judgment in 
    each checkpoint embeds the previous entry's digest plus a git anchor (HEAD + dirty-set hash).
    Storage location, retention, and redaction are declared in the manifest; redaction reuses the
    secret-scanning machinery tested in `tests/secret-scan.test.mjs`. Retroactive edits break the
-   chain, making session history tamper-evident.
+   chain, while an independently stored head seal detects tail truncation. This is local integrity,
+   not authorship: an actor able to rewrite both ledger and seal is explicitly outside the threat model.
 2. `hook/operations/session/session-restore-guard` — on session start, injects a bounded summary;
    oversized or malformed state is rejected, never truncated silently.
 3. `hook/operations/session/compact-readiness-guard` — warns before compaction when uncommitted
@@ -99,9 +100,10 @@ state is redacted, bounded, tamper-evident, and removable; no model judgment in 
    proves what happened between two commits.
 6. `command/operations/session/record-work-checkpoint` — user-invoked checkpoint append into the
    ledger; refuses secrets, tokens, or file contents outside the declared schema.
-7. `hook/development/context/tool-output-budget-guard` — deterministic per-tool byte quotas with
-   head/tail preservation and structured-error extraction; refuses to truncate below the error
-   shape's needs; policy declared in the manifest.
+7. `hook/development/resource-management/tool-output-budget-guard` — deterministic per-tool byte
+   quotas with bounded retry guidance. Claude Code's post-tool hook cannot safely replace the
+   original result, so the guard observes and warns without echoing or silently truncating output;
+   adapters are withheld where an equivalent observation contract is unavailable.
 7. Tests: ledger chain integrity and tamper detection, retention expiry, redaction of planted
    secrets, malformed/oversized state, symlink and traversal on the state path,
    concurrent-session collision, git-anchor correctness on detached HEAD and dirty trees, budget

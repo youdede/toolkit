@@ -47,6 +47,28 @@ test('git-clean passes on a clean worktree and reports dirty state', () => withT
   assert.match(dirty.failures[0], /uncommitted change/);
 }));
 
+test('git-clean ignores inherited Git routing variables', () => withTempRoot((root) => {
+  git(root, ['init', '-q']);
+  writeFileSync(path.join(root, 'tracked.txt'), 'initial\n');
+  git(root, ['add', '.']);
+  git(root, ['-c', 'user.email=t@t.t', '-c', 'user.name=t', 'commit', '-qm', 'init']);
+  const other = mkdtempSync(path.join(os.tmpdir(), 'precondition-other-git-'));
+  try {
+    git(other, ['init', '-q']);
+    writeFileSync(path.join(other, 'dirty.txt'), 'dirty\n');
+    const previous = process.env.GIT_DIR;
+    process.env.GIT_DIR = path.join(other, '.git');
+    try {
+      assert.equal(evaluatePreconditions({ checks: [{ type: 'git-clean' }] }, root).ok, true);
+    } finally {
+      if (previous === undefined) delete process.env.GIT_DIR;
+      else process.env.GIT_DIR = previous;
+    }
+  } finally {
+    rmSync(other, { recursive: true, force: true });
+  }
+}));
+
 test('file-exists rejects traversal, absolute paths, and workspace escapes', () => withTempRoot((root) => {
   writeFileSync(path.join(root, 'present.txt'), 'x\n');
   assert.ok(evaluatePreconditions({ checks: [{ type: 'file-exists', paths: ['present.txt'] }] }, root).ok);

@@ -1,29 +1,29 @@
 {
   "schemaVersion": 1,
   "counts": {
-    "total": 290,
-    "skills": 166,
-    "hooks": 58,
+    "total": 297,
+    "skills": 167,
+    "hooks": 62,
     "subagents": 62
   },
   "relationshipGraph": {
     "counts": {
-      "artifactNodes": 290,
+      "artifactNodes": 297,
       "directedEdges": {
-        "composesWith": 310,
+        "composesWith": 328,
         "conflictsWith": 0,
         "supersedes": 0,
         "prerequisites": 1,
         "packIds": 37
       },
-      "compositionEdges": 155,
+      "compositionEdges": 164,
       "conflictEdges": 0,
-      "crossKindCompositionEdges": 78,
-      "orphanArtifacts": 181
+      "crossKindCompositionEdges": 86,
+      "orphanArtifacts": 182
     },
     "orphanCountsByKind": {
       "skill": 93,
-      "hook": 40,
+      "hook": 41,
       "subagent": 44,
       "command": 4,
       "context": 0,
@@ -43,6 +43,7 @@
       "hook/development/debugging/debug-artifact-guard",
       "hook/development/diagnostic-suppression/lint-suppression-guard",
       "hook/development/error-handling/exception-swallowing-guard",
+      "hook/development/resource-management/tool-output-budget-guard",
       "hook/development/testing/test-integrity-guard",
       "hook/development/workflow/phase-gate-guard",
       "hook/operations/cloud-resources/cloud-resource-deletion-guard",
@@ -503,6 +504,163 @@
         {
           "target": "claude-code",
           "command": "npx @youdede/toolkit add verify-claims-against-output --target claude-code --scope project"
+        }
+      ]
+    },
+    {
+      "id": "command/operations/session/record-work-checkpoint",
+      "slug": "record-work-checkpoint",
+      "name": "Record Work Checkpoint",
+      "version": "1.0.0",
+      "kind": "command",
+      "summary": "Append a redacted, hash-chained work checkpoint to the session ledger with a verified git anchor.",
+      "description": "Invoked as a slash command, appends a structured checkpoint (goal, pending claims, decisions, touched files) to .youdede/session-ledger.jsonl. Content is redacted for secret shapes, size-bounded, and chain-linked by the deterministic ledger bridge.",
+      "domain": "operations",
+      "category": "session",
+      "capabilities": [
+        "operate"
+      ],
+      "problems": [
+        "session-handoff"
+      ],
+      "frameworks": [
+        "agnostic"
+      ],
+      "languages": [
+        "agnostic"
+      ],
+      "lifecycle": [
+        "operations",
+        "handoff"
+      ],
+      "risk": "low",
+      "license": "MIT",
+      "execution": {
+        "mode": "hybrid",
+        "entrypoints": [
+          {
+            "path": "scripts/check-preconditions.mjs",
+            "runtime": "node",
+            "purpose": "Evaluate the declared preconditions deterministically before the workflow may begin.",
+            "sideEffects": "none"
+          }
+        ]
+      },
+      "relationships": {
+        "composesWith": [
+          "hook/operations/session/session-checkpoint-guard",
+          "hook/operations/session/session-restore-guard",
+          "skill/operations/session/resume-session-work"
+        ],
+        "conflictsWith": [],
+        "supersedes": [],
+        "prerequisites": [],
+        "packIds": []
+      },
+      "operational": {
+        "behavior": "advisory",
+        "failurePolicy": "stop-and-report",
+        "latencyClass": "immediate",
+        "dataRetention": "local-bounded"
+      },
+      "refuses": [
+        "It does not store secrets, tokens, or credentials; content matching secret shapes is redacted before append.",
+        "It does not store absolute or escaping file paths, or file contents beyond declared fields.",
+        "It does not modify or delete existing ledger entries; the ledger is append-only."
+      ],
+      "targets": [
+        "claude-code"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        }
+      },
+      "install": [
+        {
+          "target": "claude-code",
+          "command": "npx @youdede/toolkit add record-work-checkpoint --target claude-code --scope project"
+        }
+      ]
+    },
+    {
+      "id": "command/operations/session/verify-session-ledger",
+      "slug": "verify-session-ledger",
+      "name": "Verify Session Ledger",
+      "version": "1.0.0",
+      "kind": "command",
+      "summary": "Verify the hash-chained session ledger and report exactly which entries, if any, fail integrity.",
+      "description": "Invoked as a slash command, runs the deterministic chain verification over .youdede/session-ledger.jsonl and explains the result: entry count, first failing line, and what the failure means for trust in carried claims.",
+      "domain": "operations",
+      "category": "session",
+      "capabilities": [
+        "operate"
+      ],
+      "problems": [
+        "session-handoff"
+      ],
+      "frameworks": [
+        "agnostic"
+      ],
+      "languages": [
+        "agnostic"
+      ],
+      "lifecycle": [
+        "operations",
+        "handoff"
+      ],
+      "risk": "low",
+      "license": "MIT",
+      "execution": {
+        "mode": "hybrid",
+        "entrypoints": [
+          {
+            "path": "scripts/check-preconditions.mjs",
+            "runtime": "node",
+            "purpose": "Evaluate the declared preconditions deterministically before the workflow may begin.",
+            "sideEffects": "none"
+          }
+        ]
+      },
+      "relationships": {
+        "composesWith": [
+          "hook/operations/session/session-checkpoint-guard",
+          "hook/operations/session/session-restore-guard",
+          "skill/operations/session/resume-session-work"
+        ],
+        "conflictsWith": [],
+        "supersedes": [],
+        "prerequisites": [],
+        "packIds": []
+      },
+      "operational": {
+        "behavior": "advisory",
+        "failurePolicy": "stop-and-report",
+        "latencyClass": "immediate",
+        "dataRetention": "local-bounded"
+      },
+      "refuses": [
+        "It does not repair, rewrite, or truncate the ledger; integrity failures are reported, not fixed.",
+        "It does not treat entries after a chain failure as verified, regardless of their content.",
+        "It does not transmit ledger content; the verdict carries counts and hashes only.",
+        "It does not claim authorship or resist an actor who can rewrite both the ledger and its local head seal."
+      ],
+      "targets": [
+        "claude-code"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        }
+      },
+      "install": [
+        {
+          "target": "claude-code",
+          "command": "npx @youdede/toolkit add verify-session-ledger --target claude-code --scope project"
         }
       ]
     },
@@ -1674,6 +1832,80 @@
       ]
     },
     {
+      "id": "hook/development/resource-management/tool-output-budget-guard",
+      "slug": "tool-output-budget-guard",
+      "name": "Tool Output Budget Guard",
+      "version": "1.0.0",
+      "kind": "hook",
+      "summary": "Warn when a shell tool call returns output beyond the declared byte budget, with pagination guidance.",
+      "description": "On PostToolUse for shell calls, measure the observed output bytes and emit bounded guidance when it exceeds the 64 KiB budget, so context pressure becomes visible. Never rewrites output, never echoes content, never blocks.",
+      "domain": "development",
+      "category": "resource-management",
+      "capabilities": [
+        "operate"
+      ],
+      "problems": [
+        "context-pressure"
+      ],
+      "frameworks": [
+        "agnostic"
+      ],
+      "languages": [
+        "agnostic"
+      ],
+      "lifecycle": [
+        "operations",
+        "handoff"
+      ],
+      "risk": "low",
+      "license": "MIT",
+      "execution": {
+        "mode": "deterministic",
+        "entrypoints": [
+          {
+            "path": "targets/claude-code/tool-output-budget-guard.mjs",
+            "runtime": "node",
+            "purpose": "Measure tool output against the byte budget and emit guidance.",
+            "sideEffects": "none"
+          }
+        ]
+      },
+      "relationships": {
+        "composesWith": [],
+        "conflictsWith": [],
+        "supersedes": [],
+        "prerequisites": [],
+        "packIds": []
+      },
+      "operational": {
+        "behavior": "observing",
+        "failurePolicy": "fail-open",
+        "latencyClass": "bounded",
+        "dataRetention": "none"
+      },
+      "refuses": [
+        "It does not block, delay, or alter the observed event; it records or reports only.",
+        "It does not execute submitted content, call an LLM, or transmit any data off the machine.",
+        "It does not treat unreadable, symlinked, or oversized state as valid evidence."
+      ],
+      "targets": [
+        "claude-code"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        }
+      },
+      "install": [
+        {
+          "target": "claude-code",
+          "command": "npx @youdede/toolkit add tool-output-budget-guard --target claude-code --scope project"
+        }
+      ]
+    },
+    {
       "id": "hook/development/testing/test-integrity-guard",
       "slug": "test-integrity-guard",
       "name": "Test integrity guard",
@@ -1876,7 +2108,8 @@
       },
       "relationships": {
         "composesWith": [
-          "hook/operations/agent-orchestration/completion-evidence-guard"
+          "hook/operations/agent-orchestration/completion-evidence-guard",
+          "hook/operations/session/compact-readiness-guard"
         ],
         "conflictsWith": [],
         "supersedes": [],
@@ -3629,6 +3862,240 @@
         {
           "target": "opencode",
           "command": "npx @youdede/toolkit add scheduled-task-mutation-guard --target opencode --scope project"
+        }
+      ]
+    },
+    {
+      "id": "hook/operations/session/compact-readiness-guard",
+      "slug": "compact-readiness-guard",
+      "name": "Compact Readiness Guard",
+      "version": "1.0.0",
+      "kind": "hook",
+      "summary": "Warn before compaction when uncommitted changes or pending ledger claims would silently lose context.",
+      "description": "On PreCompact, count dirty worktree changes and read pending claims from the latest ledger checkpoint, then emit a bounded system warning when either exists. Observing only; compaction proceeds.",
+      "domain": "operations",
+      "category": "session",
+      "capabilities": [
+        "operate"
+      ],
+      "problems": [
+        "session-handoff",
+        "context-pressure"
+      ],
+      "frameworks": [
+        "agnostic"
+      ],
+      "languages": [
+        "agnostic"
+      ],
+      "lifecycle": [
+        "operations",
+        "handoff"
+      ],
+      "risk": "low",
+      "license": "MIT",
+      "execution": {
+        "mode": "deterministic",
+        "entrypoints": [
+          {
+            "path": "targets/claude-code/compact-readiness-guard.mjs",
+            "runtime": "node",
+            "purpose": "Warn when compaction would hide dirty state or pending claims.",
+            "sideEffects": "none"
+          }
+        ]
+      },
+      "relationships": {
+        "composesWith": [
+          "hook/operations/agent-orchestration/compaction-handoff-guard"
+        ],
+        "conflictsWith": [],
+        "supersedes": [],
+        "prerequisites": [],
+        "packIds": []
+      },
+      "operational": {
+        "behavior": "observing",
+        "failurePolicy": "fail-open",
+        "latencyClass": "bounded",
+        "dataRetention": "local-bounded"
+      },
+      "refuses": [
+        "It does not block, delay, or alter the observed event; it records or reports only.",
+        "It does not execute submitted content, call an LLM, or transmit any data off the machine.",
+        "It does not treat unreadable, symlinked, or oversized state as valid evidence."
+      ],
+      "targets": [
+        "claude-code"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        }
+      },
+      "install": [
+        {
+          "target": "claude-code",
+          "command": "npx @youdede/toolkit add compact-readiness-guard --target claude-code --scope project"
+        }
+      ]
+    },
+    {
+      "id": "hook/operations/session/session-checkpoint-guard",
+      "slug": "session-checkpoint-guard",
+      "name": "Session Checkpoint Guard",
+      "version": "1.0.0",
+      "kind": "hook",
+      "summary": "Append a deterministic, hash-chained session-end receipt to the local session ledger.",
+      "description": "On SessionEnd, append a bounded receipt (timestamp, reason, sequence, chain link, git anchor) to .youdede/session-ledger.jsonl. Rich content belongs to the record-work-checkpoint command; this hook records only what the event proves.",
+      "domain": "operations",
+      "category": "session",
+      "capabilities": [
+        "operate"
+      ],
+      "problems": [
+        "session-handoff"
+      ],
+      "frameworks": [
+        "agnostic"
+      ],
+      "languages": [
+        "agnostic"
+      ],
+      "lifecycle": [
+        "operations",
+        "handoff"
+      ],
+      "risk": "low",
+      "license": "MIT",
+      "execution": {
+        "mode": "deterministic",
+        "entrypoints": [
+          {
+            "path": "targets/claude-code/session-checkpoint-guard.mjs",
+            "runtime": "node",
+            "purpose": "Append a tamper-evident session-end receipt to the chained ledger.",
+            "sideEffects": "writes-files"
+          }
+        ]
+      },
+      "relationships": {
+        "composesWith": [
+          "command/operations/session/record-work-checkpoint",
+          "command/operations/session/verify-session-ledger",
+          "skill/operations/session/resume-session-work"
+        ],
+        "conflictsWith": [],
+        "supersedes": [],
+        "prerequisites": [],
+        "packIds": []
+      },
+      "operational": {
+        "behavior": "observing",
+        "failurePolicy": "fail-open",
+        "latencyClass": "bounded",
+        "dataRetention": "local-bounded"
+      },
+      "refuses": [
+        "It does not block, delay, or alter the observed event; it records or reports only.",
+        "It does not execute submitted content, call an LLM, or transmit any data off the machine.",
+        "It does not treat unreadable, symlinked, or oversized state as valid evidence."
+      ],
+      "targets": [
+        "claude-code"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        }
+      },
+      "install": [
+        {
+          "target": "claude-code",
+          "command": "npx @youdede/toolkit add session-checkpoint-guard --target claude-code --scope project"
+        }
+      ]
+    },
+    {
+      "id": "hook/operations/session/session-restore-guard",
+      "slug": "session-restore-guard",
+      "name": "Session Restore Guard",
+      "version": "1.0.0",
+      "kind": "hook",
+      "summary": "Inject a bounded, integrity-flagged summary of the latest session-ledger checkpoints at session start.",
+      "description": "On SessionStart, read entries from the ledger's declared 30-day restore horizon and verify chain integrity, then add a short summary as context. The append-only ledger remains locally bounded to 1 MiB until explicit removal. A tampered ledger is surfaced as an integrity failure, never silently trusted; a missing ledger adds nothing.",
+      "domain": "operations",
+      "category": "session",
+      "capabilities": [
+        "operate"
+      ],
+      "problems": [
+        "session-handoff",
+        "context-pressure"
+      ],
+      "frameworks": [
+        "agnostic"
+      ],
+      "languages": [
+        "agnostic"
+      ],
+      "lifecycle": [
+        "operations",
+        "handoff"
+      ],
+      "risk": "low",
+      "license": "MIT",
+      "execution": {
+        "mode": "deterministic",
+        "entrypoints": [
+          {
+            "path": "targets/claude-code/session-restore-guard.mjs",
+            "runtime": "node",
+            "purpose": "Inject a bounded integrity-flagged ledger summary as session context.",
+            "sideEffects": "none"
+          }
+        ]
+      },
+      "relationships": {
+        "composesWith": [
+          "command/operations/session/record-work-checkpoint",
+          "command/operations/session/verify-session-ledger",
+          "skill/operations/session/resume-session-work"
+        ],
+        "conflictsWith": [],
+        "supersedes": [],
+        "prerequisites": [],
+        "packIds": []
+      },
+      "operational": {
+        "behavior": "observing",
+        "failurePolicy": "fail-open",
+        "latencyClass": "bounded",
+        "dataRetention": "local-bounded"
+      },
+      "refuses": [
+        "It does not block, delay, or alter the observed event; it records or reports only.",
+        "It does not execute submitted content, call an LLM, or transmit any data off the machine.",
+        "It does not treat unreadable, symlinked, or oversized state as valid evidence."
+      ],
+      "targets": [
+        "claude-code"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        }
+      },
+      "install": [
+        {
+          "target": "claude-code",
+          "command": "npx @youdede/toolkit add session-restore-guard --target claude-code --scope project"
         }
       ]
     },
@@ -23105,6 +23572,129 @@
         {
           "target": "opencode",
           "command": "npx @youdede/toolkit add triage-engineering-request --target opencode --scope project"
+        }
+      ]
+    },
+    {
+      "id": "skill/operations/session/resume-session-work",
+      "slug": "resume-session-work",
+      "name": "Resume Session Work",
+      "version": "1.0.0",
+      "kind": "skill",
+      "summary": "Reconstruct working context from the hash-chained session ledger with hash-cited claims and an explicit unverified section.",
+      "description": "Resume in-flight work by verifying the session ledger chain, reading its tail, and reconstructing context where every carried claim cites its ledger entry hash. Stale claims and integrity failures are surfaced, never smoothed over. Use when resuming after a break, compaction, or new session.",
+      "domain": "operations",
+      "category": "session",
+      "capabilities": [
+        "operate"
+      ],
+      "problems": [
+        "session-handoff",
+        "multi-session-planning"
+      ],
+      "frameworks": [
+        "agnostic"
+      ],
+      "languages": [
+        "agnostic"
+      ],
+      "lifecycle": [
+        "handoff",
+        "operations"
+      ],
+      "risk": "low",
+      "license": "MIT",
+      "execution": {
+        "mode": "prompt",
+        "entrypoints": []
+      },
+      "relationships": {
+        "composesWith": [
+          "command/operations/session/record-work-checkpoint",
+          "command/operations/session/verify-session-ledger",
+          "hook/operations/session/session-checkpoint-guard",
+          "hook/operations/session/session-restore-guard"
+        ],
+        "conflictsWith": [],
+        "supersedes": [],
+        "prerequisites": [],
+        "packIds": []
+      },
+      "operational": {
+        "behavior": "advisory",
+        "failurePolicy": "stop-and-report",
+        "latencyClass": "immediate",
+        "dataRetention": "none"
+      },
+      "refuses": [
+        "It does not treat a tampered or unverifiable ledger chain as ground truth.",
+        "It does not carry forward a claim without citing its ledger entry hash.",
+        "It does not rewrite, repair, or compact the append-only ledger; corruption is reported, never fixed."
+      ],
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        },
+        "codex": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        },
+        "cursor": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        },
+        "gemini-cli": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        },
+        "github-copilot": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        },
+        "opencode": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        }
+      },
+      "install": [
+        {
+          "target": "claude-code",
+          "command": "npx @youdede/toolkit add resume-session-work --target claude-code --scope project"
+        },
+        {
+          "target": "codex",
+          "command": "npx @youdede/toolkit add resume-session-work --target codex --scope project"
+        },
+        {
+          "target": "cursor",
+          "command": "npx @youdede/toolkit add resume-session-work --target cursor --scope project"
+        },
+        {
+          "target": "gemini-cli",
+          "command": "npx @youdede/toolkit add resume-session-work --target gemini-cli --scope project"
+        },
+        {
+          "target": "github-copilot",
+          "command": "npx @youdede/toolkit add resume-session-work --target github-copilot --scope project"
+        },
+        {
+          "target": "opencode",
+          "command": "npx @youdede/toolkit add resume-session-work --target opencode --scope project"
         }
       ]
     },

@@ -1,0 +1,32 @@
+{
+  "$schema": "../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": [
+    "project"
+  ],
+  "files": [
+    {
+      "from": "targets/claude-code/tool-output-budget-guard.mjs",
+      "to": "hooks/youdede/tool-output-budget-guard.mjs",
+      "executable": true
+    }
+  ],
+  "settingsPatch": {
+    "hooks": {
+      "PostToolUse": [
+        {
+          "matcher": "Bash",
+          "description": "[youdede:tool-output-budget-guard] Flag oversized tool output with guidance",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "node \"{claudeRoot}/hooks/youdede/tool-output-budget-guard.mjs\"",
+              "timeout": 10
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
