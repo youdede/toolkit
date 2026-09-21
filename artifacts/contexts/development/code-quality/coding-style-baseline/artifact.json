@@ -1,0 +1,50 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "context/development/code-quality/coding-style-baseline",
+  "slug": "coding-style-baseline",
+  "name": "Coding Style Baseline",
+  "version": "1.0.0",
+  "kind": "context",
+  "summary": "Apply behavior-preserving code-quality and module-boundary guidance to implementation files.",
+  "description": "A scoped, generated context assembled from catalog guidance for simplification, module boundaries, and generated-file safety. Every rule names its source artifact and can be regenerated without hand-copied prose.",
+  "domain": "development",
+  "category": "code-quality",
+  "capabilities": ["operate"],
+  "problems": ["regression-prevention"],
+  "frameworks": ["agnostic"],
+  "languages": ["agnostic"],
+  "lifecycle": ["implementation", "maintenance"],
+  "risk": "low",
+  "license": "MIT",
+  "authors": ["Youdede"],
+  "refuses": [
+    "It does not override repository-local style, formatter, lint, or architecture configuration.",
+    "It does not turn advisory context into permission to edit generated files or widen module boundaries.",
+    "It does not remain silently authoritative after its declared expiry date."
+  ],
+  "execution": { "mode": "prompt", "entrypoints": [] },
+  "context": {
+    "scope": "glob",
+    "globs": ["**/*.c", "**/*.cpp", "**/*.go", "**/*.java", "**/*.js", "**/*.jsx", "**/*.mjs", "**/*.py", "**/*.rs", "**/*.ts", "**/*.tsx"],
+    "precedence": 100,
+    "expires": "2027-09-21",
+    "provenance": [
+      "skill/development/code-quality/simplify-code-with-invariants",
+      "skill/development/architecture/enforce-typescript-module-boundaries",
+      "hook/development/code-quality/generated-file-guard"
+    ],
+    "rules": [
+      { "id": "preserve-observable-behavior", "effect": "require", "action": "preserve-observable-behavior", "sourceArtifactId": "skill/development/code-quality/simplify-code-with-invariants", "sourceField": "summary" },
+      { "id": "respect-module-entrypoints", "effect": "require", "action": "respect-module-entrypoints", "sourceArtifactId": "skill/development/architecture/enforce-typescript-module-boundaries", "sourceField": "summary" },
+      { "id": "do-not-edit-generated-files", "effect": "forbid", "action": "edit-generated-files", "sourceArtifactId": "hook/development/code-quality/generated-file-guard", "sourceField": "refuses", "sourceIndex": 0 }
+    ]
+  },
+  "relationships": { "composesWith": [], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": [] },
+  "operational": { "behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "immediate", "dataRetention": "none" },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "cursor": "adapters/cursor.json",
+    "github-copilot": "adapters/github-copilot.json"
+  }
+}

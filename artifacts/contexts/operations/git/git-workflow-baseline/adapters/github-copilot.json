@@ -1,0 +1,9 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "github-copilot",
+  "scopes": ["project"],
+  "files": [{ "from": "targets/github-copilot/git-workflow-baseline.md", "to": "instructions/0800-git-workflow-baseline.instructions.md" }],
+  "stability": "stable",
+  "limitations": ["GitHub Copilot combines matching instruction files without a documented general precedence order; conflicts are rejected before installation."]
+}

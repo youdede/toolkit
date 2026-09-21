@@ -60,6 +60,13 @@ function contextContract(overrides = {}) {
     scope: 'always',
     precedence: 100,
     provenance: ['skill/development/testing/deliver-test-first'],
+    rules: [{
+      id: 'deliver-test-first',
+      effect: 'require',
+      action: 'deliver-test-first',
+      sourceArtifactId: 'skill/development/testing/deliver-test-first',
+      sourceField: 'summary'
+    }],
     ...overrides
   };
 }
@@ -163,7 +170,13 @@ test('context contracts enforce scope, provenance, and prompt-only execution', (
   assert.ok(globErrors.some((error) => error.includes('require a non-empty globs list')));
 
   const traversal = validateFixture(root, 'context', 'development', 'workflow', 'coding-style-baseline', 'context', contextContract({ scope: 'glob', globs: ['../escape/**'] }));
-  assert.ok(traversal.some((error) => error.includes('not a safe relative glob')));
+  assert.ok(traversal.some((error) => error.includes('not a safe portable relative glob')));
+
+  const windowsPath = validateFixture(root, 'context', 'development', 'workflow', 'coding-style-baseline', 'context', contextContract({ scope: 'glob', globs: ['C:\\source\\**'] }));
+  assert.ok(windowsPath.some((error) => error.includes('not a safe portable relative glob')));
+
+  const expiry = validateFixture(root, 'context', 'development', 'workflow', 'coding-style-baseline', 'context', contextContract({ expires: '2027-02-30' }));
+  assert.ok(expiry.some((error) => error.includes('real ISO calendar date')));
 
   const provenance = validateFixture(root, 'context', 'development', 'workflow', 'coding-style-baseline', 'context', contextContract({ provenance: [] }));
   assert.ok(provenance.some((error) => error.includes('context.provenance')));

@@ -1,7 +1,7 @@
 # Development plan: workflow surface and artifact kind expansion
 
 - Date: 2026-09-21
-- Status: Proposed
+- Status: In progress — phases 0–3 complete
 - ADR: [0002](../decisions/0002-extend-artifact-kinds-for-agent-workflows.md)
 
 ## Motivation
@@ -113,6 +113,13 @@ The ledger and its verification command ship in the same phase, and pack evidenc
 consume it immediately, so the chain is exercised from its first release.
 
 ## Phase 3 — Contexts
+
+**Completed 2026-09-21.** The four baselines are generated from catalog fields into native,
+project-scoped Claude Code, Cursor, and GitHub Copilot rule files. Rule contracts name an action,
+effect, source field, and source artifact; hooks may declare blocked actions, allowing the installer
+to reject a contradictory co-installation with the exact rule and hook named. Context generation is
+CI-checked, expiry emits a non-blocking install warning, and unsupported aggregate-only targets are
+withheld rather than written through unsafe shared-file merges.
 
 **Exit criteria:** users can install scoped, non-conflicting rule files; the validator rejects
 context/hook contradictions; stale contexts warn on install.

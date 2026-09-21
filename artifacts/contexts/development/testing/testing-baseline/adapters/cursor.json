@@ -1,0 +1,9 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "cursor",
+  "scopes": ["project"],
+  "files": [{ "from": "targets/cursor/testing-baseline.mdc", "to": "rules/0200-testing-baseline.mdc" }],
+  "stability": "stable",
+  "limitations": ["Cursor combines applicable rules without a documented cross-file precedence guarantee; the numeric prefix preserves deterministic toolkit ordering."]
+}

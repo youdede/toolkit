@@ -14,7 +14,7 @@ const MATRIX = {
   hook: { 'claude-code': 62, codex: 22, 'gemini-cli': 22, 'github-copilot': 0, cursor: 22, opencode: 22 },
   subagent: { 'claude-code': 62, codex: 0, 'gemini-cli': 62, 'github-copilot': 62, cursor: 0, opencode: 50 },
   command: { 'claude-code': 6, codex: 0, 'gemini-cli': 0, 'github-copilot': 0, cursor: 0, opencode: 0 },
-  context: { 'claude-code': 0, codex: 0, 'gemini-cli': 0, 'github-copilot': 0, cursor: 0, opencode: 0 },
+  context: { 'claude-code': 4, codex: 0, 'gemini-cli': 0, 'github-copilot': 4, cursor: 4, opencode: 0 },
   'mcp-server': { 'claude-code': 0, codex: 0, 'gemini-cli': 0, 'github-copilot': 0, cursor: 0, opencode: 0 }
 };
 

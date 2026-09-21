@@ -6,7 +6,7 @@
 
 [![validate](https://github.com/udede/toolkit/actions/workflows/validate.yml/badge.svg)](https://github.com/udede/toolkit/actions/workflows/validate.yml)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![artifacts](https://img.shields.io/badge/artifacts-297-2F8F83.svg)](catalog/artifacts.json)
+[![artifacts](https://img.shields.io/badge/artifacts-301-2F8F83.svg)](catalog/artifacts.json)
 [![runtimes](https://img.shields.io/badge/runtimes-6-2F8F83.svg)](docs/targets.md)
 
 ---
@@ -19,7 +19,7 @@ You cannot review every action it takes. So the rules have to live where the age
 
 ## What this is
 
-A catalog of <!-- stat:artifact-count -->297<!-- /stat --> things you can install into a coding agent, one command each:
+A catalog of <!-- stat:artifact-count -->301<!-- /stat --> things you can install into a coding agent, one command each:
 
 - **<!-- stat:skill-count -->167<!-- /stat --> skills**: procedures an agent loads when a task matches. Each one states what it does, what evidence it requires, and what it refuses to do.
 - **<!-- stat:hook-count -->62<!-- /stat --> hooks**: deterministic gates that inspect a command before it runs and block it. No model in the decision path. `commit-guard` scans staged blobs for secrets. `protected-branch-guard` refuses a force push to `main`.
@@ -54,7 +54,7 @@ npx @youdede/toolkit add commit-guard --target claude-code --dry-run
 | Hooks (62) | 62 | 22 | 22 | 0 | 22 | 22 |
 | Subagents (62) | 62 | 0 | 62 | 62 | 0 | 50 |
 | Commands (6) | 6 | 0 | 0 | 0 | 0 | 0 |
-| Contexts (0) | 0 | 0 | 0 | 0 | 0 | 0 |
+| Contexts (4) | 4 | 0 | 0 | 4 | 4 | 0 |
 | MCP servers (0) | 0 | 0 | 0 | 0 | 0 | 0 |
 <!-- /stat-table -->
 

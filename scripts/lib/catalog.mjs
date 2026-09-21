@@ -480,6 +480,12 @@ function validateSlugList(errors, values, prefix, { minItems = 0, minLength = 1,
   }
 }
 
+function isIsoCalendarDate(value) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value || '')) return false;
+  const date = new Date(`${value}T00:00:00.000Z`);
+  return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value;
+}
+
 function validateKindContract(manifest, errors) {
   const execution = manifest.execution;
   if (manifest.kind === 'command') {
@@ -520,12 +526,43 @@ function validateKindContract(manifest, errors) {
     if (contract.scope === 'glob' && (!Array.isArray(contract.globs) || contract.globs.length === 0)) errors.push('glob-scoped contexts require a non-empty globs list');
     if (contract.scope === 'always' && Array.isArray(contract.globs) && contract.globs.length > 0) errors.push('always-scoped contexts may not declare globs');
     for (const glob of contract.globs || []) {
-      if (typeof glob === 'string' && (glob.startsWith('/') || glob.split('/').includes('..'))) errors.push(`context.globs entry '${glob}' is not a safe relative glob`);
+      if (typeof glob === 'string' && (glob.startsWith('/') || glob.split('/').includes('..') || glob.includes('\\') || /^[A-Za-z]:/.test(glob))) errors.push(`context.globs entry '${glob}' is not a safe portable relative glob`);
     }
+    if (Array.isArray(contract.globs) && new Set(contract.globs).size !== contract.globs.length) errors.push('context.globs contains duplicates');
     if (!Number.isInteger(contract.precedence) || contract.precedence < 0 || contract.precedence > 1000) errors.push('context.precedence must be an integer between 0 and 1000');
-    if (contract.expires !== undefined && !/^\d{4}-\d{2}-\d{2}$/.test(contract.expires)) errors.push('context.expires must be an ISO date');
+    if (contract.expires !== undefined && !isIsoCalendarDate(contract.expires)) errors.push('context.expires must be a real ISO calendar date');
     if (!Array.isArray(contract.provenance) || contract.provenance.length === 0) errors.push('context.provenance must list the catalog artifacts its rules descend from');
+    else if (new Set(contract.provenance).size !== contract.provenance.length) errors.push('context.provenance contains duplicates');
+    if (!Array.isArray(contract.rules) || contract.rules.length === 0) errors.push('context.rules must contain at least one provenance-linked rule');
+    else {
+      const ruleIds = new Set();
+      for (const [index, rule] of contract.rules.entries()) {
+        const prefix = `context.rules[${index}]`;
+        if (!rule || typeof rule !== 'object' || Array.isArray(rule)) { errors.push(`${prefix} must be an object`); continue; }
+        if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(rule.id || '')) errors.push(`${prefix}.id must use lowercase hyphen-case`);
+        else if (ruleIds.has(rule.id)) errors.push(`${prefix}.id duplicates rule '${rule.id}'`);
+        else ruleIds.add(rule.id);
+        if (!['require', 'forbid'].includes(rule.effect)) errors.push(`${prefix}.effect must be require or forbid`);
+        if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(rule.action || '')) errors.push(`${prefix}.action must use lowercase hyphen-case`);
+        if (!(contract.provenance || []).includes(rule.sourceArtifactId)) errors.push(`${prefix}.sourceArtifactId must appear in context.provenance`);
+        if (!['summary', 'refuses'].includes(rule.sourceField)) errors.push(`${prefix}.sourceField must be summary or refuses`);
+        if (rule.sourceField === 'summary' && rule.sourceIndex !== undefined) errors.push(`${prefix}.sourceIndex is only valid for refuses`);
+        if (rule.sourceField === 'summary' && rule.effect !== 'require') errors.push(`${prefix} sourced from summary must require its action`);
+        if (rule.sourceField === 'refuses' && (!Number.isInteger(rule.sourceIndex) || rule.sourceIndex < 0)) errors.push(`${prefix}.sourceIndex must select a refusal`);
+        if (rule.sourceField === 'refuses' && rule.effect !== 'forbid') errors.push(`${prefix} sourced from refuses must forbid its action`);
+      }
+    }
     if (execution && (execution.mode !== 'prompt' || execution.entrypoints.length !== 0)) errors.push('contexts are pure content and must declare prompt execution without entrypoints');
+  }
+  if (manifest.hookGuard !== undefined) {
+    if (manifest.kind !== 'hook') errors.push('hookGuard is only valid on hook artifacts');
+    if (!Array.isArray(manifest.hookGuard?.blockedActions) || manifest.hookGuard.blockedActions.length === 0) errors.push('hookGuard.blockedActions must contain at least one action');
+    else {
+      if (new Set(manifest.hookGuard.blockedActions).size !== manifest.hookGuard.blockedActions.length) errors.push('hookGuard.blockedActions contains duplicates');
+      for (const action of manifest.hookGuard.blockedActions) {
+        if (typeof action !== 'string' || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(action)) errors.push(`hookGuard.blockedActions entry '${action}' must use lowercase hyphen-case`);
+      }
+    }
   }
   if (manifest.kind === 'mcp-server') {
     const contract = manifest.mcpServer;
@@ -855,6 +892,16 @@ export function validateRelationshipIntegrity(results, packs) {
       if (sourceId === manifest.id) result.errors.push('context.provenance may not reference the context itself');
       else if (!knownIds.has(sourceId)) result.errors.push(`context.provenance references unknown artifact '${sourceId}'`);
     }
+    for (const [index, rule] of (manifest.context?.rules || []).entries()) {
+      const source = resultById.get(rule.sourceArtifactId)?.record.manifest;
+      if (!source) continue;
+      if (rule.sourceField === 'summary' && typeof source.summary !== 'string') {
+        result.errors.push(`context.rules[${index}] references a missing summary on '${rule.sourceArtifactId}'`);
+      }
+      if (rule.sourceField === 'refuses' && typeof source.refuses?.[rule.sourceIndex] !== 'string') {
+        result.errors.push(`context.rules[${index}] references missing refusal ${rule.sourceIndex} on '${rule.sourceArtifactId}'`);
+      }
+    }
   }
 
   for (const { manifest: pack } of packs) {
@@ -900,6 +947,34 @@ export function validateRelationshipIntegrity(results, packs) {
       resultById.get(cycle[0])?.errors.push(`relationships.${key} contains cycle '${cycle.join(' -> ')}'`);
     }
   }
+}
+
+export function findContextHookConflicts(records) {
+  const contexts = records.filter(({ manifest }) => manifest.kind === 'context');
+  const hooks = records.filter(({ manifest }) => manifest.kind === 'hook' && manifest.hookGuard?.blockedActions?.length);
+  const conflicts = [];
+  for (const context of contexts) {
+    for (const rule of context.manifest.context?.rules || []) {
+      if (rule.effect !== 'require') continue;
+      for (const hook of hooks) {
+        if (!hook.manifest.hookGuard.blockedActions.includes(rule.action)) continue;
+        conflicts.push({
+          contextId: context.manifest.id,
+          ruleId: rule.id,
+          action: rule.action,
+          hookId: hook.manifest.id
+        });
+      }
+    }
+  }
+  return conflicts.sort((left, right) => JSON.stringify(left).localeCompare(JSON.stringify(right)));
+}
+
+export function orderContextRecords(records) {
+  return records
+    .filter(({ manifest }) => manifest.kind === 'context')
+    .sort((left, right) => left.manifest.context.precedence - right.manifest.context.precedence
+      || left.manifest.id.localeCompare(right.manifest.id));
 }
 
 export function validateRepository(root = ROOT) {

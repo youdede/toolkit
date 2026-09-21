@@ -7,13 +7,21 @@ Support is declared per artifact. A missing adapter is an intentional refusal, n
 <!-- stat-table:targets -->
 | Target | Skills | Hooks | Subagents | Commands | Contexts | MCP servers | Project root | User root |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- |
-| Claude Code | 167 | 62 | 62 | 6 | 0 | 0 | `.claude` | `~/.claude` |
+| Claude Code | 167 | 62 | 62 | 6 | 4 | 0 | `.claude` | `~/.claude` |
 | Codex | 167 | 22 | 0 | 0 | 0 | 0 | skills: `.agents`; hooks/agents: `.codex` | skills: `~/.agents`; hooks/agents: `~/.codex` |
 | Gemini CLI | 167 | 22 | 62 | 0 | 0 | 0 | `.gemini` | `~/.gemini` |
-| GitHub Copilot | 167 | 0 | 62 | 0 | 0 | 0 | `.github` | `$COPILOT_HOME` or `~/.copilot` |
-| Cursor | 167 | 22 | 0 | 0 | 0 | 0 | `.cursor` | `~/.cursor` |
+| GitHub Copilot | 167 | 0 | 62 | 0 | 4 | 0 | `.github` | `$COPILOT_HOME` or `~/.copilot` |
+| Cursor | 167 | 22 | 0 | 0 | 4 | 0 | `.cursor` | `~/.cursor` |
 | OpenCode | 167 | 22 | 50 | 0 | 0 | 0 | `.opencode` | `~/.config/opencode` |
 <!-- /stat-table -->
+
+Context adapters are intentionally project-scoped. Claude Code receives `.claude/rules/youdede/*.md`,
+Cursor receives `.cursor/rules/*.mdc`, and GitHub Copilot receives
+`.github/instructions/*.instructions.md`. Codex, Gemini CLI, and OpenCode adapters are withheld
+because their aggregate instruction files do not provide an independently removable, path-scoped
+surface for each toolkit context. Numeric filename prefixes preserve the toolkit's declared
+precedence order; where a runtime does not define cross-file precedence, install-set validation
+rejects known context/hook contradictions instead of claiming the runtime resolves them.
 
 Every skill uses the runtime's native `skills/<slug>/SKILL.md` location and carries its scripts or references through the same installation. Only Codex receives `agents/openai.yaml`.
 
