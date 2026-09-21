@@ -1,0 +1,28 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "description": "[youdede:release-clean-state-guard] Require a clean Git release state",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/youdede/release-clean-state-guard.mjs\"",
+            "timeout": 20
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "description": "[youdede:release-version-consistency-guard] Verify package release version consistency",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/youdede/release-version-consistency-guard.mjs\"",
+            "timeout": 20
+          }
+        ]
+      }
+    ]
+  }
+}

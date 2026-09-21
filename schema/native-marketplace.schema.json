@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://youdede.dev/schemas/native-marketplace-v1.json",
+  "title": "youdede native marketplace compatibility report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schemaVersion", "generatedBy", "claudeCode", "codex"],
+  "properties": {
+    "$schema": { "const": "../schema/native-marketplace.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "generatedBy": { "const": "scripts/generate-marketplaces.mjs" },
+    "claudeCode": { "$ref": "#/$defs/runtime" },
+    "codex": { "$ref": "#/$defs/runtime" }
+  },
+  "$defs": {
+    "runtime": {
+      "type": "object",
+      "required": ["pluginCount", "plugins"],
+      "properties": {
+        "pluginCount": { "type": "integer", "minimum": 0 },
+        "plugins": { "type": "array" },
+        "omitted": { "type": "array" },
+        "withheldKinds": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      }
+    }
+  }
+}

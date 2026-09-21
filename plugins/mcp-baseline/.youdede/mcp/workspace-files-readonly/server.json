@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "serverName": "youdede-workspace-files-readonly",
+  "mode": "workspace-files",
+  "transport": "stdio",
+  "launch": {
+    "command": "node",
+    "args": [".youdede/mcp/runtime.mjs", "--profile", ".youdede/mcp/workspace-files-readonly/server.json"]
+  },
+  "egress": ["none"],
+  "secretAccess": ["none"],
+  "allowHosts": [],
+  "tools": [
+    {
+      "name": "read_file",
+      "description": "Read one bounded UTF-8 file beneath the current workspace without following paths outside it.",
+      "inputSchema": { "type": "object", "additionalProperties": false, "required": ["path"], "properties": { "path": { "type": "string" }, "maxBytes": { "type": "integer", "minimum": 1, "maximum": 131072 } } },
+      "annotations": { "readOnlyHint": true, "destructiveHint": false, "idempotentHint": true, "openWorldHint": false }
+    },
+    {
+      "name": "list_directory",
+      "description": "List up to 500 direct entries in one workspace directory without reading file contents.",
+      "inputSchema": { "type": "object", "additionalProperties": false, "properties": { "path": { "type": "string" } } },
+      "annotations": { "readOnlyHint": true, "destructiveHint": false, "idempotentHint": true, "openWorldHint": false }
+    },
+    {
+      "name": "search_files",
+      "description": "Find up to 200 workspace-relative file names containing a literal query, excluding toolkit and Git state.",
+      "inputSchema": { "type": "object", "additionalProperties": false, "required": ["query"], "properties": { "path": { "type": "string" }, "query": { "type": "string", "minLength": 1, "maxLength": 200 } } },
+      "annotations": { "readOnlyHint": true, "destructiveHint": false, "idempotentHint": true, "openWorldHint": false }
+    }
+  ]
+}

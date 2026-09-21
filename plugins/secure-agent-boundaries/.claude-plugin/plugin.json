@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "secure-agent-boundaries",
+  "displayName": "Secure agent boundaries",
+  "version": "1.1.0",
+  "description": "Design agent integrations, review their trust boundary, and block obvious data-exposure paths.",
+  "author": {
+    "name": "Youdede",
+    "url": "https://github.com/udede/toolkit"
+  },
+  "homepage": "https://github.com/udede/toolkit/blob/main/packs/secure-agent-boundaries/pack.json",
+  "repository": "https://github.com/udede/toolkit",
+  "license": "MIT",
+  "keywords": [
+    "agent-tool-security",
+    "data-exposure-control",
+    "ledger-linked-evidence",
+    "behaviorally-evaluated"
+  ],
+  "hooks": "./hooks/hooks.json",
+  "metadata": {
+    "catalogId": "pack/secure-agent-boundaries",
+    "memberArtifactIds": [
+      "skill/security/threat-modeling/review-agent-tool-boundaries",
+      "skill/development/agent-tooling/author-mcp-server-contract",
+      "subagent/security/application-security/application-security-reviewer",
+      "subagent/security/threat-modeling/mcp-trust-boundary-reviewer",
+      "hook/security/application-security/outbound-data-guard",
+      "hook/security/secrets/sensitive-file-access-guard",
+      "hook/security/network-control/mcp-capability-drift-guard"
+    ],
+    "refusalCount": 23,
+    "evidenceBadges": [
+      "ledger-linked-evidence",
+      "behaviorally-evaluated"
+    ]
+  }
+}

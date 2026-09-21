@@ -3,6 +3,7 @@
 import { readFileSync, renameSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { publicCatalog, publicPackCatalog, ROOT, validateRepository } from './lib/catalog.mjs';
+import { generateMarketplaces } from './generate-marketplaces.mjs';
 
 const check = process.argv.includes('--check');
 const { artifacts, results, packs, packResults } = validateRepository();
@@ -43,3 +44,5 @@ if (check) {
   renameSync(packTemp, packOutputPath);
   process.stdout.write(`Generated ${path.relative(ROOT, outputPath)} with ${artifacts.length} artifacts and ${path.relative(ROOT, packOutputPath)} with ${packs.length} packs.\n`);
 }
+
+generateMarketplaces({ root: ROOT, check });

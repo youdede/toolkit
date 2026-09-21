@@ -215,8 +215,8 @@ test('new hybrid helpers run from installed absolute paths for both targets in a
   }
 });
 
-test('every skill installs and removes independently for Codex', () => {
-  for (const { manifest } of loadArtifacts().filter(({ manifest }) => manifest.kind === 'skill')) {
+test('every Codex-supported skill installs and removes independently', () => {
+  for (const { manifest } of loadArtifacts().filter(({ manifest, adapters }) => manifest.kind === 'skill' && adapters.codex)) {
     const directory = mkdtempSync(path.join(os.tmpdir(), `youdede-codex-${manifest.slug}-`));
     try {
       const installed = installArtifact(manifest.slug, { cwd: directory, target: 'codex' });

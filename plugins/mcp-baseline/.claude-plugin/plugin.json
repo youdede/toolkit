@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "mcp-baseline",
+  "displayName": "MCP baseline",
+  "version": "1.0.0",
+  "description": "Install a guarded read-only MCP baseline with declared authority and independent trust-boundary review.",
+  "author": {
+    "name": "Youdede",
+    "url": "https://github.com/udede/toolkit"
+  },
+  "homepage": "https://github.com/udede/toolkit/blob/main/packs/mcp-baseline/pack.json",
+  "repository": "https://github.com/udede/toolkit",
+  "license": "MIT",
+  "keywords": [
+    "bounded-tool-access",
+    "mcp-trust-evidence",
+    "ledger-linked-evidence",
+    "behaviorally-evaluated"
+  ],
+  "hooks": "./hooks/hooks.json",
+  "mcpServers": "./.mcp.json",
+  "metadata": {
+    "catalogId": "pack/mcp-baseline",
+    "memberArtifactIds": [
+      "hook/security/network-control/mcp-capability-drift-guard",
+      "mcp-server/development/agent-tooling/allowlisted-fetch-readonly",
+      "mcp-server/development/agent-tooling/repository-git-readonly",
+      "mcp-server/development/agent-tooling/workspace-files-readonly",
+      "skill/development/agent-tooling/author-mcp-server-contract",
+      "skill/security/threat-modeling/review-agent-tool-boundaries",
+      "subagent/security/threat-modeling/mcp-trust-boundary-reviewer"
+    ],
+    "refusalCount": 22,
+    "evidenceBadges": [
+      "ledger-linked-evidence",
+      "behaviorally-evaluated"
+    ]
+  }
+}

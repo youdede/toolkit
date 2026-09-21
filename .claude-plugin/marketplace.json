@@ -1,0 +1,331 @@
+{
+  "name": "youdede-toolkit",
+  "owner": {
+    "name": "Youdede",
+    "url": "https://github.com/udede/toolkit"
+  },
+  "version": "0.2.0",
+  "description": "10 complete evidence-backed workflow packs generated from the catalog; 1 composition omitted where native semantics are incomplete.",
+  "plugins": [
+    {
+      "name": "accessibility-assurance",
+      "source": "./plugins/accessibility-assurance",
+      "description": "Plan, enforce, and independently verify accessible interface behavior from source evidence.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Youdede",
+        "url": "https://github.com/udede/toolkit"
+      },
+      "homepage": "https://github.com/udede/toolkit/blob/main/packs/accessibility-assurance/pack.json",
+      "repository": "https://github.com/udede/toolkit",
+      "license": "MIT",
+      "keywords": [
+        "accessible-interface",
+        "regression-prevention",
+        "ledger-linked-evidence",
+        "behaviorally-evaluated"
+      ],
+      "tags": [
+        "ledger-linked-evidence",
+        "behaviorally-evaluated",
+        "refusals-32"
+      ],
+      "metadata": {
+        "catalogId": "pack/accessibility-assurance",
+        "refusalCount": 32,
+        "evidenceBadges": [
+          "ledger-linked-evidence",
+          "behaviorally-evaluated"
+        ]
+      }
+    },
+    {
+      "name": "daily-driver",
+      "source": "./plugins/daily-driver",
+      "description": "Deliver bounded incremental changes, prepare review evidence, and prevent unreviewable diffs.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Youdede",
+        "url": "https://github.com/udede/toolkit"
+      },
+      "homepage": "https://github.com/udede/toolkit/blob/main/packs/daily-driver/pack.json",
+      "repository": "https://github.com/udede/toolkit",
+      "license": "MIT",
+      "keywords": [
+        "incremental-delivery",
+        "review-ready-change",
+        "ledger-linked-evidence",
+        "behaviorally-evaluated"
+      ],
+      "tags": [
+        "ledger-linked-evidence",
+        "behaviorally-evaluated",
+        "refusals-16"
+      ],
+      "metadata": {
+        "catalogId": "pack/daily-driver",
+        "refusalCount": 16,
+        "evidenceBadges": [
+          "ledger-linked-evidence",
+          "behaviorally-evaluated"
+        ]
+      }
+    },
+    {
+      "name": "data-change-safety",
+      "source": "./plugins/data-change-safety",
+      "description": "Review schema and migration changes with deterministic safety checks and independent risk analysis.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Youdede",
+        "url": "https://github.com/udede/toolkit"
+      },
+      "homepage": "https://github.com/udede/toolkit/blob/main/packs/data-change-safety/pack.json",
+      "repository": "https://github.com/udede/toolkit",
+      "license": "MIT",
+      "keywords": [
+        "compatible-data-change",
+        "migration-safety",
+        "ledger-linked-evidence",
+        "behaviorally-evaluated"
+      ],
+      "tags": [
+        "ledger-linked-evidence",
+        "behaviorally-evaluated",
+        "refusals-14"
+      ],
+      "metadata": {
+        "catalogId": "pack/data-change-safety",
+        "refusalCount": 14,
+        "evidenceBadges": [
+          "ledger-linked-evidence",
+          "behaviorally-evaluated"
+        ]
+      }
+    },
+    {
+      "name": "infrastructure-change-readiness",
+      "source": "./plugins/infrastructure-change-readiness",
+      "description": "Plan a staged infrastructure change and independently review lifecycle, blast-radius, and recovery evidence.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Youdede",
+        "url": "https://github.com/udede/toolkit"
+      },
+      "homepage": "https://github.com/udede/toolkit/blob/main/packs/infrastructure-change-readiness/pack.json",
+      "repository": "https://github.com/udede/toolkit",
+      "license": "MIT",
+      "keywords": [
+        "recovery-evidence",
+        "staged-infrastructure-change",
+        "ledger-linked-evidence",
+        "behaviorally-evaluated"
+      ],
+      "tags": [
+        "ledger-linked-evidence",
+        "behaviorally-evaluated",
+        "refusals-9"
+      ],
+      "metadata": {
+        "catalogId": "pack/infrastructure-change-readiness",
+        "refusalCount": 9,
+        "evidenceBadges": [
+          "ledger-linked-evidence",
+          "behaviorally-evaluated"
+        ]
+      }
+    },
+    {
+      "name": "mcp-baseline",
+      "source": "./plugins/mcp-baseline",
+      "description": "Install a guarded read-only MCP baseline with declared authority and independent trust-boundary review.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Youdede",
+        "url": "https://github.com/udede/toolkit"
+      },
+      "homepage": "https://github.com/udede/toolkit/blob/main/packs/mcp-baseline/pack.json",
+      "repository": "https://github.com/udede/toolkit",
+      "license": "MIT",
+      "keywords": [
+        "bounded-tool-access",
+        "mcp-trust-evidence",
+        "ledger-linked-evidence",
+        "behaviorally-evaluated"
+      ],
+      "tags": [
+        "ledger-linked-evidence",
+        "behaviorally-evaluated",
+        "refusals-22"
+      ],
+      "metadata": {
+        "catalogId": "pack/mcp-baseline",
+        "refusalCount": 22,
+        "evidenceBadges": [
+          "ledger-linked-evidence",
+          "behaviorally-evaluated"
+        ]
+      }
+    },
+    {
+      "name": "mobile-release-readiness",
+      "source": "./plugins/mobile-release-readiness",
+      "description": "Review mobile release evidence, accessibility, reliability, repository state, and version consistency.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Youdede",
+        "url": "https://github.com/udede/toolkit"
+      },
+      "homepage": "https://github.com/udede/toolkit/blob/main/packs/mobile-release-readiness/pack.json",
+      "repository": "https://github.com/udede/toolkit",
+      "license": "MIT",
+      "keywords": [
+        "mobile-release-evidence",
+        "safe-publication",
+        "ledger-linked-evidence",
+        "behaviorally-evaluated"
+      ],
+      "tags": [
+        "ledger-linked-evidence",
+        "behaviorally-evaluated",
+        "refusals-15"
+      ],
+      "metadata": {
+        "catalogId": "pack/mobile-release-readiness",
+        "refusalCount": 15,
+        "evidenceBadges": [
+          "ledger-linked-evidence",
+          "behaviorally-evaluated"
+        ]
+      }
+    },
+    {
+      "name": "release-readiness",
+      "source": "./plugins/release-readiness",
+      "description": "Build an evidence-backed release decision and stop publication from unsafe repository state.",
+      "version": "1.1.0",
+      "author": {
+        "name": "Youdede",
+        "url": "https://github.com/udede/toolkit"
+      },
+      "homepage": "https://github.com/udede/toolkit/blob/main/packs/release-readiness/pack.json",
+      "repository": "https://github.com/udede/toolkit",
+      "license": "MIT",
+      "keywords": [
+        "release-evidence",
+        "safe-publication",
+        "ledger-linked-evidence",
+        "behaviorally-evaluated"
+      ],
+      "tags": [
+        "ledger-linked-evidence",
+        "behaviorally-evaluated",
+        "refusals-24"
+      ],
+      "metadata": {
+        "catalogId": "pack/release-readiness",
+        "refusalCount": 24,
+        "evidenceBadges": [
+          "ledger-linked-evidence",
+          "behaviorally-evaluated"
+        ]
+      }
+    },
+    {
+      "name": "reviewable-change",
+      "source": "./plugins/reviewable-change",
+      "description": "Prepare bounded code changes, obtain independent review, and prevent oversized unreviewable commits.",
+      "version": "1.1.0",
+      "author": {
+        "name": "Youdede",
+        "url": "https://github.com/udede/toolkit"
+      },
+      "homepage": "https://github.com/udede/toolkit/blob/main/packs/reviewable-change/pack.json",
+      "repository": "https://github.com/udede/toolkit",
+      "license": "MIT",
+      "keywords": [
+        "independent-review",
+        "reviewable-delivery",
+        "ledger-linked-evidence",
+        "behaviorally-evaluated"
+      ],
+      "tags": [
+        "ledger-linked-evidence",
+        "behaviorally-evaluated",
+        "refusals-19"
+      ],
+      "metadata": {
+        "catalogId": "pack/reviewable-change",
+        "refusalCount": 19,
+        "evidenceBadges": [
+          "ledger-linked-evidence",
+          "behaviorally-evaluated"
+        ]
+      }
+    },
+    {
+      "name": "secure-agent-boundaries",
+      "source": "./plugins/secure-agent-boundaries",
+      "description": "Design agent integrations, review their trust boundary, and block obvious data-exposure paths.",
+      "version": "1.1.0",
+      "author": {
+        "name": "Youdede",
+        "url": "https://github.com/udede/toolkit"
+      },
+      "homepage": "https://github.com/udede/toolkit/blob/main/packs/secure-agent-boundaries/pack.json",
+      "repository": "https://github.com/udede/toolkit",
+      "license": "MIT",
+      "keywords": [
+        "agent-tool-security",
+        "data-exposure-control",
+        "ledger-linked-evidence",
+        "behaviorally-evaluated"
+      ],
+      "tags": [
+        "ledger-linked-evidence",
+        "behaviorally-evaluated",
+        "refusals-23"
+      ],
+      "metadata": {
+        "catalogId": "pack/secure-agent-boundaries",
+        "refusalCount": 23,
+        "evidenceBadges": [
+          "ledger-linked-evidence",
+          "behaviorally-evaluated"
+        ]
+      }
+    },
+    {
+      "name": "session-continuity",
+      "source": "./plugins/session-continuity",
+      "description": "Persist bounded hash-chained checkpoints, restore cited context, and verify continuity across sessions.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Youdede",
+        "url": "https://github.com/udede/toolkit"
+      },
+      "homepage": "https://github.com/udede/toolkit/blob/main/packs/session-continuity/pack.json",
+      "repository": "https://github.com/udede/toolkit",
+      "license": "MIT",
+      "keywords": [
+        "resumable-work",
+        "verified-session-history",
+        "ledger-linked-evidence",
+        "behaviorally-evaluated"
+      ],
+      "tags": [
+        "ledger-linked-evidence",
+        "behaviorally-evaluated",
+        "refusals-22"
+      ],
+      "metadata": {
+        "catalogId": "pack/session-continuity",
+        "refusalCount": 22,
+        "evidenceBadges": [
+          "ledger-linked-evidence",
+          "behaviorally-evaluated"
+        ]
+      }
+    }
+  ]
+}

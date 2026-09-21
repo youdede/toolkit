@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "daily-driver",
+  "displayName": "Daily driver",
+  "version": "1.0.0",
+  "description": "Deliver bounded incremental changes, prepare review evidence, and prevent unreviewable diffs.",
+  "author": {
+    "name": "Youdede",
+    "url": "https://github.com/udede/toolkit"
+  },
+  "homepage": "https://github.com/udede/toolkit/blob/main/packs/daily-driver/pack.json",
+  "repository": "https://github.com/udede/toolkit",
+  "license": "MIT",
+  "keywords": [
+    "incremental-delivery",
+    "review-ready-change",
+    "ledger-linked-evidence",
+    "behaviorally-evaluated"
+  ],
+  "hooks": "./hooks/hooks.json",
+  "metadata": {
+    "catalogId": "pack/daily-driver",
+    "memberArtifactIds": [
+      "command/development/workflow/assemble-review-brief",
+      "hook/operations/reviewability/large-diff-review-guard",
+      "skill/development/code-quality/deliver-incremental-change",
+      "skill/operations/reviewability/prepare-reviewable-pull-request",
+      "subagent/development/code-quality/refactor-equivalence-reviewer"
+    ],
+    "refusalCount": 16,
+    "evidenceBadges": [
+      "ledger-linked-evidence",
+      "behaviorally-evaluated"
+    ]
+  }
+}

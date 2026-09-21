@@ -1,0 +1,28 @@
+{
+  "mcpServers": {
+    "youdede-allowlisted-fetch-readonly": {
+      "command": "node",
+      "args": [
+        "${CLAUDE_PLUGIN_ROOT}/.youdede/mcp/runtime.mjs",
+        "--profile",
+        "${CLAUDE_PLUGIN_ROOT}/.youdede/mcp/allowlisted-fetch-readonly/server.json"
+      ]
+    },
+    "youdede-repository-git-readonly": {
+      "command": "node",
+      "args": [
+        "${CLAUDE_PLUGIN_ROOT}/.youdede/mcp/runtime.mjs",
+        "--profile",
+        "${CLAUDE_PLUGIN_ROOT}/.youdede/mcp/repository-git-readonly/server.json"
+      ]
+    },
+    "youdede-workspace-files-readonly": {
+      "command": "node",
+      "args": [
+        "${CLAUDE_PLUGIN_ROOT}/.youdede/mcp/runtime.mjs",
+        "--profile",
+        "${CLAUDE_PLUGIN_ROOT}/.youdede/mcp/workspace-files-readonly/server.json"
+      ]
+    }
+  }
+}

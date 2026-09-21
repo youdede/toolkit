@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "mobile-release-readiness",
+  "displayName": "Mobile release readiness",
+  "version": "1.0.0",
+  "description": "Review mobile release evidence, accessibility, reliability, repository state, and version consistency.",
+  "author": {
+    "name": "Youdede",
+    "url": "https://github.com/udede/toolkit"
+  },
+  "homepage": "https://github.com/udede/toolkit/blob/main/packs/mobile-release-readiness/pack.json",
+  "repository": "https://github.com/udede/toolkit",
+  "license": "MIT",
+  "keywords": [
+    "mobile-release-evidence",
+    "safe-publication",
+    "ledger-linked-evidence",
+    "behaviorally-evaluated"
+  ],
+  "hooks": "./hooks/hooks.json",
+  "metadata": {
+    "catalogId": "pack/mobile-release-readiness",
+    "memberArtifactIds": [
+      "skill/operations/release/verify-mobile-release-readiness",
+      "subagent/development/testing/mobile-reliability-accessibility-reviewer",
+      "hook/operations/repository-state/release-clean-state-guard",
+      "hook/operations/versioning/release-version-consistency-guard"
+    ],
+    "refusalCount": 15,
+    "evidenceBadges": [
+      "ledger-linked-evidence",
+      "behaviorally-evaluated"
+    ]
+  }
+}

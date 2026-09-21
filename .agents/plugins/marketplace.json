@@ -1,0 +1,20 @@
+{
+  "name": "youdede-toolkit",
+  "interface": {
+    "displayName": "Youdede toolkit"
+  },
+  "plugins": [
+    {
+      "name": "youdede-toolkit",
+      "source": {
+        "source": "local",
+        "path": "./plugins/youdede-toolkit"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

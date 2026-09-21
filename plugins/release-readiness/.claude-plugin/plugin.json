@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "release-readiness",
+  "displayName": "Release readiness",
+  "version": "1.1.0",
+  "description": "Build an evidence-backed release decision and stop publication from unsafe repository state.",
+  "author": {
+    "name": "Youdede",
+    "url": "https://github.com/udede/toolkit"
+  },
+  "homepage": "https://github.com/udede/toolkit/blob/main/packs/release-readiness/pack.json",
+  "repository": "https://github.com/udede/toolkit",
+  "license": "MIT",
+  "keywords": [
+    "release-evidence",
+    "safe-publication",
+    "ledger-linked-evidence",
+    "behaviorally-evaluated"
+  ],
+  "hooks": "./hooks/hooks.json",
+  "metadata": {
+    "catalogId": "pack/release-readiness",
+    "memberArtifactIds": [
+      "command/development/workflow/audit-release-evidence",
+      "skill/operations/release/verify-production-release",
+      "subagent/operations/release/release-risk-reviewer",
+      "subagent/operations/release/release-evidence-verifier",
+      "hook/operations/repository-state/release-clean-state-guard",
+      "hook/operations/versioning/release-version-consistency-guard",
+      "hook/operations/package-publication/package-publish-guard"
+    ],
+    "refusalCount": 24,
+    "evidenceBadges": [
+      "ledger-linked-evidence",
+      "behaviorally-evaluated"
+    ]
+  }
+}

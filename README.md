@@ -50,7 +50,7 @@ npx @youdede/toolkit add commit-guard --target claude-code --dry-run
 <!-- stat-table:readme-matrix -->
 | | Claude Code | Codex | Gemini CLI | GitHub Copilot | Cursor | OpenCode |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Skills (167) | 167 | 167 | 167 | 167 | 167 | 167 |
+| Skills (167) | 167 | 166 | 167 | 167 | 167 | 167 |
 | Hooks (63) | 63 | 22 | 22 | 0 | 23 | 22 |
 | Subagents (62) | 62 | 0 | 62 | 62 | 0 | 50 |
 | Commands (7) | 7 | 0 | 0 | 0 | 0 | 0 |
@@ -85,6 +85,9 @@ npx @youdede/toolkit verify-pack-evidence daily-driver --report .youdede/evidenc
 ```
 
 The [artifact catalog](catalog/artifacts.json), [pack catalog](catalog/packs.json), and [taxonomy](catalog/taxonomy.json) are generated, stable, and suitable for a search index or an API of your own. The [pack evidence contract](docs/pack-evidence.md) explains what a verified report proves and what it does not.
+
+Prefer a runtime-native marketplace? [Claude Code and Codex installation](docs/native-marketplaces.md)
+is generated from the same catalog, with unsupported compositions and kinds explicitly withheld.
 
 ## What "tested" means here
 
