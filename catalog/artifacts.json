@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "counts": {
-    "total": 286,
+    "total": 290,
     "skills": 166,
-    "hooks": 57,
+    "hooks": 58,
     "subagents": 62
   },
   "relationshipGraph": {
     "counts": {
-      "artifactNodes": 286,
+      "artifactNodes": 290,
       "directedEdges": {
         "composesWith": 310,
         "conflictsWith": 0,
@@ -19,18 +19,21 @@
       "compositionEdges": 155,
       "conflictEdges": 0,
       "crossKindCompositionEdges": 78,
-      "orphanArtifacts": 177
+      "orphanArtifacts": 181
     },
     "orphanCountsByKind": {
       "skill": 93,
-      "hook": 39,
+      "hook": 40,
       "subagent": 44,
-      "command": 1,
+      "command": 4,
       "context": 0,
       "mcp-server": 0
     },
     "orphanArtifactIds": [
+      "command/development/workflow/assemble-review-brief",
+      "command/development/workflow/audit-release-evidence",
       "command/development/workflow/draft-evidenced-plan",
+      "command/development/workflow/verify-claims-against-output",
       "hook/data/compatibility/schema-compatibility-guard",
       "hook/data/live-query-safety/database-query-mode-guard",
       "hook/development/assertion-integrity/test-assertion-removal-guard",
@@ -41,6 +44,7 @@
       "hook/development/diagnostic-suppression/lint-suppression-guard",
       "hook/development/error-handling/exception-swallowing-guard",
       "hook/development/testing/test-integrity-guard",
+      "hook/development/workflow/phase-gate-guard",
       "hook/operations/cloud-resources/cloud-resource-deletion-guard",
       "hook/operations/delegation-budget/subagent-fanout-guard",
       "hook/operations/git/protected-branch-guard",
@@ -211,6 +215,152 @@
   },
   "artifacts": [
     {
+      "id": "command/development/workflow/assemble-review-brief",
+      "slug": "assemble-review-brief",
+      "name": "Assemble Review Brief",
+      "version": "1.0.0",
+      "kind": "command",
+      "summary": "Assemble a review brief from the real diff: scope, risk notes, and test evidence a reviewer can check line by line.",
+      "description": "Invoked as a slash command, collects the bounded diff, maps each changed area to its risk and its test evidence, and emits a structured review brief with explicit unverified areas. It prepares review; it never performs approval.",
+      "domain": "development",
+      "category": "workflow",
+      "capabilities": [
+        "assess"
+      ],
+      "problems": [
+        "workflow-delegation"
+      ],
+      "frameworks": [
+        "agnostic"
+      ],
+      "languages": [
+        "agnostic"
+      ],
+      "lifecycle": [
+        "review"
+      ],
+      "risk": "low",
+      "license": "MIT",
+      "execution": {
+        "mode": "hybrid",
+        "entrypoints": [
+          {
+            "path": "scripts/check-preconditions.mjs",
+            "runtime": "node",
+            "purpose": "Evaluate the declared preconditions deterministically before the workflow may begin.",
+            "sideEffects": "none"
+          }
+        ]
+      },
+      "relationships": {
+        "composesWith": [],
+        "conflictsWith": [],
+        "supersedes": [],
+        "prerequisites": [],
+        "packIds": []
+      },
+      "operational": {
+        "behavior": "advisory",
+        "failurePolicy": "stop-and-report",
+        "latencyClass": "immediate",
+        "dataRetention": "none"
+      },
+      "refuses": [
+        "It does not approve, request changes, or merge; the brief informs a human reviewer.",
+        "It does not describe files it has not read or diff ranges it has not inspected.",
+        "It does not omit areas it could not verify; it lists them as unverified."
+      ],
+      "targets": [
+        "claude-code"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        }
+      },
+      "install": [
+        {
+          "target": "claude-code",
+          "command": "npx @youdede/toolkit add assemble-review-brief --target claude-code --scope project"
+        }
+      ]
+    },
+    {
+      "id": "command/development/workflow/audit-release-evidence",
+      "slug": "audit-release-evidence",
+      "name": "Audit Release Evidence",
+      "version": "1.0.0",
+      "kind": "command",
+      "summary": "Audit the release evidence chain for the current version and emit a machine-readable verdict report.",
+      "description": "Invoked as a slash command, re-runs the repository release-readiness checks, verifies version consistency and changelog coverage, and emits a bounded release evidence report. It audits evidence; publication authority stays with the human release process.",
+      "domain": "development",
+      "category": "workflow",
+      "capabilities": [
+        "verify"
+      ],
+      "problems": [
+        "workflow-delegation"
+      ],
+      "frameworks": [
+        "agnostic"
+      ],
+      "languages": [
+        "agnostic"
+      ],
+      "lifecycle": [
+        "release"
+      ],
+      "risk": "low",
+      "license": "MIT",
+      "execution": {
+        "mode": "hybrid",
+        "entrypoints": [
+          {
+            "path": "scripts/check-preconditions.mjs",
+            "runtime": "node",
+            "purpose": "Evaluate the declared preconditions deterministically before the workflow may begin.",
+            "sideEffects": "none"
+          }
+        ]
+      },
+      "relationships": {
+        "composesWith": [],
+        "conflictsWith": [],
+        "supersedes": [],
+        "prerequisites": [],
+        "packIds": []
+      },
+      "operational": {
+        "behavior": "advisory",
+        "failurePolicy": "stop-and-report",
+        "latencyClass": "immediate",
+        "dataRetention": "none"
+      },
+      "refuses": [
+        "It does not publish, tag, bump versions, or bypass any release guard.",
+        "It does not treat a skipped check as a passed check; skips are reported as unknowns.",
+        "It does not start on a dirty worktree, because release evidence must attribute to the candidate."
+      ],
+      "targets": [
+        "claude-code"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        }
+      },
+      "install": [
+        {
+          "target": "claude-code",
+          "command": "npx @youdede/toolkit add audit-release-evidence --target claude-code --scope project"
+        }
+      ]
+    },
+    {
       "id": "command/development/workflow/draft-evidenced-plan",
       "slug": "draft-evidenced-plan",
       "name": "Draft Evidenced Plan",
@@ -280,6 +430,79 @@
         {
           "target": "claude-code",
           "command": "npx @youdede/toolkit add draft-evidenced-plan --target claude-code --scope project"
+        }
+      ]
+    },
+    {
+      "id": "command/development/workflow/verify-claims-against-output",
+      "slug": "verify-claims-against-output",
+      "name": "Verify Claims Against Output",
+      "version": "1.0.0",
+      "kind": "command",
+      "summary": "Re-run declared checks and compare every completion claim against fresh command output before accepting it.",
+      "description": "Invoked as a slash command, executes the verification commands a change declares, hashes their output, and emits a verification report that separates verified claims from unverified ones. Runs only on a clean worktree so results attribute to committed state.",
+      "domain": "development",
+      "category": "workflow",
+      "capabilities": [
+        "verify"
+      ],
+      "problems": [
+        "workflow-delegation"
+      ],
+      "frameworks": [
+        "agnostic"
+      ],
+      "languages": [
+        "agnostic"
+      ],
+      "lifecycle": [
+        "review"
+      ],
+      "risk": "low",
+      "license": "MIT",
+      "execution": {
+        "mode": "hybrid",
+        "entrypoints": [
+          {
+            "path": "scripts/check-preconditions.mjs",
+            "runtime": "node",
+            "purpose": "Evaluate the declared preconditions deterministically before the workflow may begin.",
+            "sideEffects": "none"
+          }
+        ]
+      },
+      "relationships": {
+        "composesWith": [],
+        "conflictsWith": [],
+        "supersedes": [],
+        "prerequisites": [],
+        "packIds": []
+      },
+      "operational": {
+        "behavior": "advisory",
+        "failurePolicy": "stop-and-report",
+        "latencyClass": "immediate",
+        "dataRetention": "none"
+      },
+      "refuses": [
+        "It does not approve, merge, or sign off on a change; it only reports what output proves.",
+        "It does not rerun checks with flags, environment, or inputs the user did not declare.",
+        "It does not start on a dirty worktree, because results would not attribute to a known state."
+      ],
+      "targets": [
+        "claude-code"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        }
+      },
+      "install": [
+        {
+          "target": "claude-code",
+          "command": "npx @youdede/toolkit add verify-claims-against-output --target claude-code --scope project"
         }
       ]
     },
@@ -1533,6 +1756,81 @@
         {
           "target": "claude-code",
           "command": "npx @youdede/toolkit add test-integrity-guard --target claude-code --scope project"
+        }
+      ]
+    },
+    {
+      "id": "hook/development/workflow/phase-gate-guard",
+      "slug": "phase-gate-guard",
+      "name": "Phase Gate Guard",
+      "version": "1.0.0",
+      "kind": "hook",
+      "summary": "Block phase evidence writes unless the previous phase in the spec-design-tasks-implementation chain exists and is valid.",
+      "description": "Guard the reserved .youdede/phases/ evidence directory so a phase advances only when its predecessor's evidence file exists, parses, and carries a matching phase, a real summary, and non-empty anchors. Unknown filenames, malformed evidence, and unsafe predecessors are blocked.",
+      "domain": "development",
+      "category": "workflow",
+      "capabilities": [
+        "enforce"
+      ],
+      "problems": [
+        "workflow-delegation"
+      ],
+      "frameworks": [
+        "agnostic"
+      ],
+      "languages": [
+        "agnostic"
+      ],
+      "lifecycle": [
+        "planning",
+        "implementation"
+      ],
+      "risk": "medium",
+      "license": "MIT",
+      "execution": {
+        "mode": "deterministic",
+        "entrypoints": [
+          {
+            "path": "targets/claude-code/phase-gate-guard.mjs",
+            "runtime": "node",
+            "purpose": "Evaluate Write and Edit calls against the reserved phase-evidence directory and block invalid phase advancement.",
+            "sideEffects": "none"
+          }
+        ]
+      },
+      "relationships": {
+        "composesWith": [],
+        "conflictsWith": [],
+        "supersedes": [],
+        "prerequisites": [],
+        "packIds": []
+      },
+      "operational": {
+        "behavior": "enforcing",
+        "failurePolicy": "fail-closed",
+        "latencyClass": "immediate",
+        "dataRetention": "none"
+      },
+      "refuses": [
+        "It does not judge the quality of any phase document; it verifies only the predecessor chain's presence and validity.",
+        "It does not inspect, block, or observe writes outside the reserved .youdede/phases/ directory.",
+        "It does not execute submitted content, call an LLM, download dependencies, or transmit inspected data.",
+        "It does not treat an unreadable, symlinked, or oversized predecessor file as valid evidence."
+      ],
+      "targets": [
+        "claude-code"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        }
+      },
+      "install": [
+        {
+          "target": "claude-code",
+          "command": "npx @youdede/toolkit add phase-gate-guard --target claude-code --scope project"
         }
       ]
     },

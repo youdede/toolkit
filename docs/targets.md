@@ -7,7 +7,7 @@ Support is declared per artifact. A missing adapter is an intentional refusal, n
 <!-- stat-table:targets -->
 | Target | Skills | Hooks | Subagents | Commands | Contexts | MCP servers | Project root | User root |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- |
-| Claude Code | 166 | 57 | 62 | 1 | 0 | 0 | `.claude` | `~/.claude` |
+| Claude Code | 166 | 58 | 62 | 4 | 0 | 0 | `.claude` | `~/.claude` |
 | Codex | 166 | 22 | 0 | 0 | 0 | 0 | skills: `.agents`; hooks/agents: `.codex` | skills: `~/.agents`; hooks/agents: `~/.codex` |
 | Gemini CLI | 166 | 22 | 62 | 0 | 0 | 0 | `.gemini` | `~/.gemini` |
 | GitHub Copilot | 166 | 0 | 62 | 0 | 0 | 0 | `.github` | `$COPILOT_HOME` or `~/.copilot` |

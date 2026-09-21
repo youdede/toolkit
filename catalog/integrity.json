@@ -2,13 +2,97 @@
   "schemaVersion": 1,
   "algorithm": "sha256",
   "claim": "Checksums bind published bytes to a reviewed release; they do not prove authorship, originality, license compliance, endorsement, or control downstream copying.",
-  "rootDigest": "6e2a0b937cd4b8cbb6841448cda4d42e41d2ce65bbf178a8e035058c0bc90759",
+  "rootDigest": "ee1052fd177c20324b6504b4a8279cf2890abd61270b0b9ca6c5c14094c950ea",
   "artifacts": [
+    {
+      "artifactId": "command/development/workflow/assemble-review-brief",
+      "version": "1.0.0",
+      "integrityId": "urn:youdede:artifact:sha256:fd574590ade0e6e78deb72bc5f0806477c2548b0c68377fc50f54e4e42e35629",
+      "digest": "fd574590ade0e6e78deb72bc5f0806477c2548b0c68377fc50f54e4e42e35629",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/commands/development/workflow/assemble-review-brief/adapters/claude-code.json",
+          "bytes": 691,
+          "sha256": "32f6abf6b328b793ef04c1d0c41ee2f0bd95c0562142eb3d2dc094dd50c02a4b"
+        },
+        {
+          "path": "artifacts/commands/development/workflow/assemble-review-brief/artifact.json",
+          "bytes": 2382,
+          "sha256": "10a153481bab2b6cd75f80c9bc6a9425847e77508a95505c894c166f573f893f"
+        },
+        {
+          "path": "artifacts/commands/development/workflow/assemble-review-brief/COMMAND.md",
+          "bytes": 1610,
+          "sha256": "f3481310ec003a041e072e7def8b111d9c60484a15a66a547eb60cd8861e5c52"
+        },
+        {
+          "path": "artifacts/commands/development/workflow/assemble-review-brief/preconditions.json",
+          "bytes": 19,
+          "sha256": "caff5752efd7abaac4289dfac6160ab254513e4c8a5476916398d755ab4949dc"
+        },
+        {
+          "path": "artifacts/commands/development/workflow/assemble-review-brief/scripts/check-preconditions.mjs",
+          "bytes": 818,
+          "sha256": "99e4dd76e0c13f3ba63dc6beee61633dbe00735d2c98256251c249cc5c0f7c36"
+        },
+        {
+          "path": "scripts/runtime/command-precondition.mjs",
+          "bytes": 6650,
+          "sha256": "1284cc349a120355c135431b9d70811479eeb8f3e095070645bd1e0e69eaaefe"
+        }
+      ]
+    },
+    {
+      "artifactId": "command/development/workflow/audit-release-evidence",
+      "version": "1.0.0",
+      "integrityId": "urn:youdede:artifact:sha256:85c22407d05656840ba90b132a0bd3c374fc3b8b012581894056c234c56d62e9",
+      "digest": "85c22407d05656840ba90b132a0bd3c374fc3b8b012581894056c234c56d62e9",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/commands/development/workflow/audit-release-evidence/adapters/claude-code.json",
+          "bytes": 694,
+          "sha256": "aa6b9165bf06eafe884cab65ee09f5551bf04b265e599db9dea5fa9d5e30674f"
+        },
+        {
+          "path": "artifacts/commands/development/workflow/audit-release-evidence/artifact.json",
+          "bytes": 2478,
+          "sha256": "310c994eb802b46ac9baed53e2be773203f76b00df11b5cda7c652346da18d30"
+        },
+        {
+          "path": "artifacts/commands/development/workflow/audit-release-evidence/COMMAND.md",
+          "bytes": 1672,
+          "sha256": "51208b5b8d679bac3959720e49365ae62a5c0e7e636a78b5d41dff2006931022"
+        },
+        {
+          "path": "artifacts/commands/development/workflow/audit-release-evidence/preconditions.json",
+          "bytes": 60,
+          "sha256": "3141819870d86e18ec5c89b66b1c14393136bbdb1e37d36e9da5955c79a687d0"
+        },
+        {
+          "path": "artifacts/commands/development/workflow/audit-release-evidence/scripts/check-preconditions.mjs",
+          "bytes": 818,
+          "sha256": "99e4dd76e0c13f3ba63dc6beee61633dbe00735d2c98256251c249cc5c0f7c36"
+        },
+        {
+          "path": "scripts/runtime/command-precondition.mjs",
+          "bytes": 6650,
+          "sha256": "1284cc349a120355c135431b9d70811479eeb8f3e095070645bd1e0e69eaaefe"
+        }
+      ]
+    },
     {
       "artifactId": "command/development/workflow/draft-evidenced-plan",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:3788b1d5ba71309cc6ab559901442acdd2b4304708135dbe269b72eea05785a0",
-      "digest": "3788b1d5ba71309cc6ab559901442acdd2b4304708135dbe269b72eea05785a0",
+      "integrityId": "urn:youdede:artifact:sha256:bee5871c31ca160426a372d3271450ed50f4ce11d723ac9317db9e7efe03ff5c",
+      "digest": "bee5871c31ca160426a372d3271450ed50f4ce11d723ac9317db9e7efe03ff5c",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -41,8 +125,50 @@
         },
         {
           "path": "scripts/runtime/command-precondition.mjs",
-          "bytes": 6479,
-          "sha256": "83f03b74a072d79e590b2dc8a180d30f1a8fc1d5eeba2ae5f9a116f8a4f8c68b"
+          "bytes": 6650,
+          "sha256": "1284cc349a120355c135431b9d70811479eeb8f3e095070645bd1e0e69eaaefe"
+        }
+      ]
+    },
+    {
+      "artifactId": "command/development/workflow/verify-claims-against-output",
+      "version": "1.0.0",
+      "integrityId": "urn:youdede:artifact:sha256:5eeffddd1a3af2c32d480d16605148e2d6c8a7c90d5e9f2a8f6fd95fe4fc14e4",
+      "digest": "5eeffddd1a3af2c32d480d16605148e2d6c8a7c90d5e9f2a8f6fd95fe4fc14e4",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/commands/development/workflow/verify-claims-against-output/adapters/claude-code.json",
+          "bytes": 712,
+          "sha256": "7c143ccd009cee7145ab43c448f15e9b5b246771f836b2db83929927288177dd"
+        },
+        {
+          "path": "artifacts/commands/development/workflow/verify-claims-against-output/artifact.json",
+          "bytes": 2526,
+          "sha256": "40065c739c68549dbf9a39f80724415f7b6a010e8f0270753b9e7c8f482ab852"
+        },
+        {
+          "path": "artifacts/commands/development/workflow/verify-claims-against-output/COMMAND.md",
+          "bytes": 1890,
+          "sha256": "56ab903aa9d4f4347c3d952925fbabd7bec7e3b39b47bcf86889e9004978a1f7"
+        },
+        {
+          "path": "artifacts/commands/development/workflow/verify-claims-against-output/preconditions.json",
+          "bytes": 60,
+          "sha256": "3141819870d86e18ec5c89b66b1c14393136bbdb1e37d36e9da5955c79a687d0"
+        },
+        {
+          "path": "artifacts/commands/development/workflow/verify-claims-against-output/scripts/check-preconditions.mjs",
+          "bytes": 818,
+          "sha256": "99e4dd76e0c13f3ba63dc6beee61633dbe00735d2c98256251c249cc5c0f7c36"
+        },
+        {
+          "path": "scripts/runtime/command-precondition.mjs",
+          "bytes": 6650,
+          "sha256": "1284cc349a120355c135431b9d70811479eeb8f3e095070645bd1e0e69eaaefe"
         }
       ]
     },
@@ -558,6 +684,38 @@
           "path": "artifacts/hooks/development/testing/test-integrity-guard/targets/claude-code/test-integrity-paths.mjs",
           "bytes": 2083,
           "sha256": "82743b2bf9cdd1a79ecb49e38e95d0ab694c8e2db3e1ec26fbbebc5f0c28462c"
+        }
+      ]
+    },
+    {
+      "artifactId": "hook/development/workflow/phase-gate-guard",
+      "version": "1.0.0",
+      "integrityId": "urn:youdede:artifact:sha256:7118f0a7a86e0c83b423055319f4885031c4058c1dec6820ef988dd63ba78872",
+      "digest": "7118f0a7a86e0c83b423055319f4885031c4058c1dec6820ef988dd63ba78872",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/hooks/development/workflow/phase-gate-guard/adapters/claude-code.json",
+          "bytes": 774,
+          "sha256": "c713698a6896395d777163c863ef1cfc4f081c204d79b9a2438cbdcfa10e9ebd"
+        },
+        {
+          "path": "artifacts/hooks/development/workflow/phase-gate-guard/artifact.json",
+          "bytes": 2179,
+          "sha256": "942d3d6ee2b9f9b15ea3132610121c0aa6d12cd981a46b3230aa76b3942012ca"
+        },
+        {
+          "path": "artifacts/hooks/development/workflow/phase-gate-guard/targets/claude-code/phase-gate-guard.mjs",
+          "bytes": 6812,
+          "sha256": "324836ae68837dd0c326939fd1620ad0a33080281ff11dafe97126c16bdadfc8"
+        },
+        {
+          "path": "artifacts/hooks/development/workflow/phase-gate-guard/targets/claude-code/README.md",
+          "bytes": 1095,
+          "sha256": "ba0278133d02170f06e107b8e435420561ec94d340c9db65afbce2acc17ba39a"
         }
       ]
     },

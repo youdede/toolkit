@@ -1,0 +1,87 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "command/development/workflow/verify-claims-against-output",
+  "slug": "verify-claims-against-output",
+  "name": "Verify Claims Against Output",
+  "version": "1.0.0",
+  "kind": "command",
+  "summary": "Re-run declared checks and compare every completion claim against fresh command output before accepting it.",
+  "description": "Invoked as a slash command, executes the verification commands a change declares, hashes their output, and emits a verification report that separates verified claims from unverified ones. Runs only on a clean worktree so results attribute to committed state.",
+  "domain": "development",
+  "category": "workflow",
+  "capabilities": [
+    "verify"
+  ],
+  "problems": [
+    "workflow-delegation"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "Youdede"
+  ],
+  "refuses": [
+    "It does not approve, merge, or sign off on a change; it only reports what output proves.",
+    "It does not rerun checks with flags, environment, or inputs the user did not declare.",
+    "It does not start on a dirty worktree, because results would not attribute to a known state."
+  ],
+  "execution": {
+    "mode": "hybrid",
+    "entrypoints": [
+      {
+        "path": "scripts/check-preconditions.mjs",
+        "runtime": "node",
+        "purpose": "Evaluate the declared preconditions deterministically before the workflow may begin.",
+        "sideEffects": "none"
+      }
+    ]
+  },
+  "command": {
+    "invocation": "verify-claims-against-output",
+    "toolAuthority": [
+      "Read",
+      "Grep",
+      "Glob",
+      "Bash"
+    ],
+    "produces": [
+      "a verification report whose every claim cites the fresh command output hash that proves or refutes it"
+    ],
+    "requires": [
+      "a clean git worktree so results attribute to committed state"
+    ],
+    "flags": [
+      {
+        "name": "scope",
+        "effect": "narrow",
+        "description": "Restrict verification to a declared subset of checks."
+      }
+    ]
+  },
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "command/development/workflow/audit-release-evidence",
+  "slug": "audit-release-evidence",
+  "name": "Audit Release Evidence",
+  "version": "1.0.0",
+  "kind": "command",
+  "summary": "Audit the release evidence chain for the current version and emit a machine-readable verdict report.",
+  "description": "Invoked as a slash command, re-runs the repository release-readiness checks, verifies version consistency and changelog coverage, and emits a bounded release evidence report. It audits evidence; publication authority stays with the human release process.",
+  "domain": "development",
+  "category": "workflow",
+  "capabilities": [
+    "verify"
+  ],
+  "problems": [
+    "workflow-delegation"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "release"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "Youdede"
+  ],
+  "refuses": [
+    "It does not publish, tag, bump versions, or bypass any release guard.",
+    "It does not treat a skipped check as a passed check; skips are reported as unknowns.",
+    "It does not start on a dirty worktree, because release evidence must attribute to the candidate."
+  ],
+  "execution": {
+    "mode": "hybrid",
+    "entrypoints": [
+      {
+        "path": "scripts/check-preconditions.mjs",
+        "runtime": "node",
+        "purpose": "Evaluate the declared preconditions deterministically before the workflow may begin.",
+        "sideEffects": "none"
+      }
+    ]
+  },
+  "command": {
+    "invocation": "audit-release-evidence",
+    "toolAuthority": [
+      "Read",
+      "Grep",
+      "Glob",
+      "Bash"
+    ],
+    "produces": [
+      "a machine-readable release evidence report naming every check, its output, and its verdict"
+    ],
+    "requires": [
+      "a clean git worktree so evidence attributes to the release candidate"
+    ],
+    "flags": [
+      {
+        "name": "scope",
+        "effect": "narrow",
+        "description": "Restrict the audit to a declared subset of release checks."
+      }
+    ]
+  },
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  }
+}

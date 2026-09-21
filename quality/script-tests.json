@@ -309,6 +309,42 @@
         "malformed": "unknown check types and malformed configs fail closed",
         "boundary": "file-exists follows symlinks only inside the workspace"
       }
+    },
+    {
+      "id": "command-workflows",
+      "artifactIds": [
+        "command/development/workflow/assemble-review-brief",
+        "command/development/workflow/audit-release-evidence",
+        "command/development/workflow/verify-claims-against-output"
+      ],
+      "testFiles": [
+        "tests/command-workflows.test.mjs",
+        "tests/command-precondition.test.mjs"
+      ],
+      "coverage": {
+        "positive": "clean-worktree commands refuse a dirty tree and pass a clean one",
+        "negative": "duplicate flag names within one command manifest are rejected",
+        "malformed": "unknown check types and malformed configs fail closed",
+        "boundary": "file-exists follows symlinks only inside the workspace"
+      }
+    },
+    {
+      "id": "hook-phase-gates",
+      "artifactIds": [
+        "hook/development/workflow/phase-gate-guard"
+      ],
+      "testFiles": [
+        "tests/phase-gate-guard.test.mjs"
+      ],
+      "coverage": {
+        "allow": "allow: irrelevant writes and a valid first-phase spec pass",
+        "deny-or-observe": "deny-or-observe: advancing a phase without valid predecessor evidence blocks",
+        "malformed": "malformed: invalid JSON, phase mismatch, and weak summaries block",
+        "oversized": "oversized: stdin beyond the cap and oversized evidence files are refused",
+        "boundary": "boundary: symlinked predecessors and escaping evidence directories block, never follow",
+        "false-positive": "false-positive: lookalike paths and normal source writes stay untouched",
+        "process-exit": "process-exit: the wired hook exits 0 to allow and 2 with a rule id to block"
+      }
     }
   ]
 }

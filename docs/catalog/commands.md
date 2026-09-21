@@ -4,14 +4,17 @@
 
 A user-invoked workflow with a declared tool allowlist, preconditions checked before it starts, and evidence it must produce to count as complete. Flags may only narrow its authority.
 
-1 of them. Install one with `npx @youdede/toolkit add <slug> --target <runtime> --scope project`, or read what it refuses first with `npx @youdede/toolkit info <slug>`.
+4 of them. Install one with `npx @youdede/toolkit add <slug> --target <runtime> --scope project`, or read what it refuses first with `npx @youdede/toolkit info <slug>`.
 
 
 ## development
 
 | Slug | What it does | Risk | Runtimes |
 | --- | --- | --- | --- |
+| `assemble-review-brief` | Assemble a review brief from the real diff: scope, risk notes, and test evidence a reviewer can check line by line. | low | claude-code |
+| `audit-release-evidence` | Audit the release evidence chain for the current version and emit a machine-readable verdict report. | low | claude-code |
 | `draft-evidenced-plan` | Draft an ordered implementation plan where every step cites the code it touches and the evidence that proves completion. | low | claude-code |
+| `verify-claims-against-output` | Re-run declared checks and compare every completion claim against fresh command output before accepting it. | low | claude-code |
 
 ---
 
