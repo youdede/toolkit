@@ -20,13 +20,24 @@ const SUBAGENT_ROLES = new Set([
 ]);
 const MAX_PACK_HOOK_FANOUT = 3;
 const ARTIFACT_RELATIONSHIP_KEYS = ['composesWith', 'conflictsWith', 'supersedes', 'prerequisites'];
+const KIND_PLURALS = Object.freeze({
+  skill: 'skills',
+  hook: 'hooks',
+  subagent: 'subagents',
+  command: 'commands',
+  context: 'contexts',
+  'mcp-server': 'mcp-servers'
+});
 const PACK_ROLE_KINDS = {
   procedure: new Set(['skill']),
   collector: new Set(['skill', 'subagent']),
   specialist: new Set(['subagent']),
   verifier: new Set(['skill', 'subagent']),
   enforcement: new Set(['hook']),
-  observer: new Set(['hook'])
+  observer: new Set(['hook']),
+  entrypoint: new Set(['command']),
+  baseline: new Set(['context']),
+  integration: new Set(['mcp-server'])
 };
 const SUPPORTED_HOOK_EVENTS = new Set([
   'SessionStart', 'Setup', 'InstructionsLoaded', 'UserPromptSubmit', 'UserPromptExpansion',
@@ -142,7 +153,7 @@ export function analyzeRelationshipGraph(artifacts) {
       .every((key) => (manifest.relationships?.[key]?.length || 0) === 0))
     .map((manifest) => manifest.id)
     .sort();
-  const orphanCountsByKind = Object.fromEntries(['skill', 'hook', 'subagent'].map((kind) => [
+  const orphanCountsByKind = Object.fromEntries(Object.keys(KIND_PLURALS).map((kind) => [
     kind,
     orphanArtifactIds.filter((id) => byId.get(id)?.kind === kind).length
   ]));
@@ -456,6 +467,88 @@ function validateAdapter(record, target, adapterRecord, taxonomy, errors) {
   }
 }
 
+function validateSlugList(errors, values, prefix, { minItems = 0, minLength = 1, maxLength = 200 } = {}) {
+  if (!Array.isArray(values) || values.length < minItems) {
+    errors.push(`${prefix} must be an array with at least ${minItems} entries`);
+    return;
+  }
+  if (new Set(values).size !== values.length) errors.push(`${prefix} contains duplicates`);
+  for (const value of values) {
+    if (typeof value !== 'string' || value.length < minLength || value.length > maxLength) {
+      errors.push(`${prefix} entries must be strings of ${minLength}-${maxLength} characters`);
+    }
+  }
+}
+
+function validateKindContract(manifest, errors) {
+  const execution = manifest.execution;
+  if (manifest.kind === 'command') {
+    const contract = manifest.command;
+    if (!contract || typeof contract !== 'object' || Array.isArray(contract)) {
+      errors.push('command artifacts require a command contract object');
+      return;
+    }
+    if (contract.invocation !== manifest.slug) errors.push('command.invocation must match the slug');
+    validateSlugList(errors, contract.toolAuthority, 'command.toolAuthority');
+    for (const tool of contract.toolAuthority || []) {
+      if (typeof tool === 'string' && !/^[A-Za-z][A-Za-z0-9_-]*$/.test(tool)) errors.push(`command.toolAuthority entry '${tool}' is not a valid tool name`);
+    }
+    validateSlugList(errors, contract.produces, 'command.produces', { minItems: 1, minLength: 10 });
+    validateSlugList(errors, contract.requires, 'command.requires', { minLength: 10 });
+    if (!Array.isArray(contract.flags)) errors.push('command.flags must be an array');
+    else for (const [index, flag] of contract.flags.entries()) {
+      const prefix = `command.flags[${index}]`;
+      if (!flag || typeof flag !== 'object') { errors.push(`${prefix} must be an object`); continue; }
+      if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(flag.name || '')) errors.push(`${prefix}.name must use lowercase hyphen-case`);
+      if (flag.effect !== 'narrow') errors.push(`${prefix}.effect must be 'narrow': flags may only restrict authority`);
+      if (typeof flag.description !== 'string' || flag.description.length < 15) errors.push(`${prefix}.description must contain at least 15 characters`);
+    }
+    if (execution?.mode === 'deterministic') errors.push('commands direct an agent and may not declare deterministic execution');
+  }
+  if (manifest.kind === 'context') {
+    const contract = manifest.context;
+    if (!contract || typeof contract !== 'object' || Array.isArray(contract)) {
+      errors.push('context artifacts require a context contract object');
+      return;
+    }
+    if (!['always', 'glob'].includes(contract.scope)) errors.push('context.scope must be always or glob');
+    if (contract.scope === 'glob' && (!Array.isArray(contract.globs) || contract.globs.length === 0)) errors.push('glob-scoped contexts require a non-empty globs list');
+    if (contract.scope === 'always' && Array.isArray(contract.globs) && contract.globs.length > 0) errors.push('always-scoped contexts may not declare globs');
+    for (const glob of contract.globs || []) {
+      if (typeof glob === 'string' && (glob.startsWith('/') || glob.split('/').includes('..'))) errors.push(`context.globs entry '${glob}' is not a safe relative glob`);
+    }
+    if (!Number.isInteger(contract.precedence) || contract.precedence < 0 || contract.precedence > 1000) errors.push('context.precedence must be an integer between 0 and 1000');
+    if (contract.expires !== undefined && !/^\d{4}-\d{2}-\d{2}$/.test(contract.expires)) errors.push('context.expires must be an ISO date');
+    if (!Array.isArray(contract.provenance) || contract.provenance.length === 0) errors.push('context.provenance must list the catalog artifacts its rules descend from');
+    if (execution && (execution.mode !== 'prompt' || execution.entrypoints.length !== 0)) errors.push('contexts are pure content and must declare prompt execution without entrypoints');
+  }
+  if (manifest.kind === 'mcp-server') {
+    const contract = manifest.mcpServer;
+    if (!contract || typeof contract !== 'object' || Array.isArray(contract)) {
+      errors.push('mcp-server artifacts require an mcpServer contract object');
+      return;
+    }
+    if (!['stdio', 'sse', 'http'].includes(contract.transport)) errors.push('mcpServer.transport must be stdio, sse, or http');
+    validateSlugList(errors, contract.egress, 'mcpServer.egress', { minItems: 1 });
+    if ((contract.egress || []).includes('none') && contract.egress.length !== 1) errors.push("mcpServer.egress 'none' may not be combined with destinations");
+    validateSlugList(errors, contract.secretAccess, 'mcpServer.secretAccess', { minItems: 1 });
+    if ((contract.secretAccess || []).includes('none') && contract.secretAccess.length !== 1) errors.push("mcpServer.secretAccess 'none' may not be combined with variable names");
+    for (const name of contract.secretAccess || []) {
+      if (typeof name === 'string' && name !== 'none' && !/^[A-Z][A-Z0-9_]*$/.test(name)) errors.push(`mcpServer.secretAccess entry '${name}' must be an ENV-style variable name`);
+    }
+    if (typeof contract.trustBoundary !== 'string' || contract.trustBoundary.length < 40 || contract.trustBoundary.length > 400) errors.push('mcpServer.trustBoundary must contain 40-400 characters');
+    if (!Array.isArray(contract.pinnedTools)) errors.push('mcpServer.pinnedTools must be an array');
+    else for (const [index, tool] of contract.pinnedTools.entries()) {
+      const prefix = `mcpServer.pinnedTools[${index}]`;
+      if (!tool || typeof tool !== 'object') { errors.push(`${prefix} must be an object`); continue; }
+      if (!/^[a-z0-9]+(?:[_-][a-z0-9]+)*$/.test(tool.name || '')) errors.push(`${prefix}.name must use lowercase tool-name format`);
+      if (!/^[0-9a-f]{64}$/.test(tool.descriptionHash || '')) errors.push(`${prefix}.descriptionHash must be a lowercase sha256 hex digest`);
+    }
+    if (execution && execution.mode === 'deterministic') errors.push('mcp-server artifacts declare configuration and may not declare deterministic execution');
+    if (manifest.risk === 'low' && (contract.egress || []).some((d) => d !== 'none')) errors.push('an mcp-server with network egress may not declare low risk');
+  }
+}
+
 export function validateArtifact(record, taxonomy, artifactsRoot = ARTIFACTS_ROOT) {
   const { directory, manifest, adapters } = record;
   const errors = [];
@@ -483,7 +576,8 @@ export function validateArtifact(record, taxonomy, artifactsRoot = ARTIFACTS_ROO
   if (!Array.isArray(manifest.refuses) || manifest.refuses.length < 3) errors.push('refuses must contain at least three boundaries');
   else for (const refusal of manifest.refuses) if (typeof refusal !== 'string' || refusal.length < 15) errors.push('refuses entries must contain at least 15 characters');
 
-  const plural = { skill: 'skills', hook: 'hooks', subagent: 'subagents' }[manifest.kind];
+  const plural = KIND_PLURALS[manifest.kind];
+  if (!plural) errors.push(`no directory mapping for kind '${manifest.kind}'`);
   const expectedRelative = [plural, manifest.domain, manifest.category, manifest.slug].join(path.sep);
   const actualRelative = path.relative(artifactsRoot, directory);
   if (actualRelative !== expectedRelative) errors.push(`directory must match ${expectedRelative}`);
@@ -541,6 +635,8 @@ export function validateArtifact(record, taxonomy, artifactsRoot = ARTIFACTS_ROO
       }
     }
   }
+
+  validateKindContract(manifest, errors);
 
   const operational = manifest.operational;
   if (!operational || typeof operational !== 'object' || Array.isArray(operational)) {
@@ -608,6 +704,35 @@ export function validateArtifact(record, taxonomy, artifactsRoot = ARTIFACTS_ROO
         }
       }
     }
+  }
+
+  if (manifest.kind === 'command') {
+    const commandFile = path.join(directory, 'COMMAND.md');
+    if (!existsSync(commandFile)) {
+      errors.push('command requires COMMAND.md');
+    } else {
+      const { fields, raw } = parseFrontmatter(commandFile);
+      if (!fields) {
+        errors.push('COMMAND.md requires YAML frontmatter');
+      } else {
+        if (!fields.description || fields.description.length < 40) errors.push('COMMAND.md description is too weak');
+        if (!/\bUse (?:when|for|before|after)\b/i.test(fields.description || '')) errors.push('COMMAND.md description needs an explicit Use when/for/before/after trigger');
+        const declaredTools = new Set(manifest.command?.toolAuthority || []);
+        const frontmatterTools = new Set(String(fields['allowed-tools'] || '').split(',').map((tool) => tool.trim()).filter(Boolean));
+        if (declaredTools.size !== frontmatterTools.size || [...declaredTools].some((tool) => !frontmatterTools.has(tool))) {
+          errors.push('COMMAND.md allowed-tools must match command.toolAuthority exactly');
+        }
+      }
+      if (!raw.includes('## Refusals') || refusalBulletCount(raw) < 3) errors.push('COMMAND.md must document at least three refusals');
+    }
+    for (const [target, adapter] of Object.entries(adapters)) {
+      for (const mapping of adapter.data.files || []) {
+        if (mapping.root === 'package') continue;
+        if (!String(mapping.to).startsWith('commands/')) errors.push(`adapter ${target} destination '${mapping.to}' must stay under commands/`);
+      }
+    }
+    const preconditionsFile = path.join(directory, 'preconditions.json');
+    if (!existsSync(preconditionsFile)) errors.push('command requires a declared preconditions.json');
   }
 
   if (manifest.kind === 'subagent') {
@@ -720,6 +845,10 @@ export function validateRelationshipIntegrity(results, packs) {
     }
     for (const packId of relationships.packIds || []) {
       if (!packIds.has(packId)) result.errors.push(`relationships.packIds references unknown pack '${packId}'`);
+    }
+    for (const sourceId of manifest.context?.provenance || []) {
+      if (sourceId === manifest.id) result.errors.push('context.provenance may not reference the context itself');
+      else if (!knownIds.has(sourceId)) result.errors.push(`context.provenance references unknown artifact '${sourceId}'`);
     }
   }
 

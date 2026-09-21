@@ -64,8 +64,10 @@ export function resolveConfigRoot(target, scope, cwd = process.cwd(), kind = nul
   return resolveRootValue(roots[scope], scope, cwd);
 }
 
+export const ARTIFACT_KINDS = Object.freeze(['skill', 'hook', 'subagent', 'command', 'context', 'mcp-server']);
+
 export function resolveConfigRoots(target, scope, cwd = process.cwd()) {
-  const roots = ['skill', 'hook', 'subagent'].map((kind) => resolveConfigRoot(target, scope, cwd, kind));
+  const roots = ARTIFACT_KINDS.map((kind) => resolveConfigRoot(target, scope, cwd, kind));
   return Object.freeze([...new Set(roots)]);
 }
 
