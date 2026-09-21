@@ -4,8 +4,27 @@
 
 A scoped rule file that shapes every decision while installed. Each rule traces to the catalog artifact it descends from, and an expired context warns instead of silently rotting.
 
-0 of them. Install one with `npx @youdede/toolkit add <slug> --target <runtime> --scope project`, or read what it refuses first with `npx @youdede/toolkit info <slug>`.
+4 of them. Install one with `npx @youdede/toolkit add <slug> --target <runtime> --scope project`, or read what it refuses first with `npx @youdede/toolkit info <slug>`.
 
+
+## development
+
+| Slug | What it does | Risk | Runtimes |
+| --- | --- | --- | --- |
+| `coding-style-baseline` | Apply behavior-preserving code-quality and module-boundary guidance to implementation files. | low | claude-code, cursor, github-copilot |
+| `testing-baseline` | Apply test-first, evidence-backed, integrity-preserving guidance when working with test files. | low | claude-code, cursor, github-copilot |
+
+## operations
+
+| Slug | What it does | Risk | Runtimes |
+| --- | --- | --- | --- |
+| `git-workflow-baseline` | Keep branch integration recoverable, explicit, and backed by fresh repository evidence. | low | claude-code, cursor, github-copilot |
+
+## security
+
+| Slug | What it does | Risk | Runtimes |
+| --- | --- | --- | --- |
+| `security-baseline` | Apply least-authority guidance for agent tools, credentials, sensitive files, and outbound data. | medium | claude-code, cursor, github-copilot |
 
 ---
 

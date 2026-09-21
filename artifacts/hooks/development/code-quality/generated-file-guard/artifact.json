@@ -44,6 +44,9 @@
       }
     ]
   },
+  "hookGuard": {
+    "blockedActions": ["edit-generated-files"]
+  },
   "adapters": {
     "claude-code": "adapters/claude-code.json"
   },

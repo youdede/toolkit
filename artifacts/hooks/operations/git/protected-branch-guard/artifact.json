@@ -46,6 +46,9 @@
       }
     ]
   },
+  "hookGuard": {
+    "blockedActions": ["mutate-protected-branch"]
+  },
   "adapters": {
     "claude-code": "adapters/claude-code.json"
   },

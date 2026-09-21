@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "counts": {
-    "total": 297,
+    "total": 301,
     "skills": 167,
     "hooks": 62,
     "subagents": 62
   },
   "relationshipGraph": {
     "counts": {
-      "artifactNodes": 297,
+      "artifactNodes": 301,
       "directedEdges": {
         "composesWith": 328,
         "conflictsWith": 0,
@@ -19,14 +19,14 @@
       "compositionEdges": 164,
       "conflictEdges": 0,
       "crossKindCompositionEdges": 86,
-      "orphanArtifacts": 182
+      "orphanArtifacts": 186
     },
     "orphanCountsByKind": {
       "skill": 93,
       "hook": 41,
       "subagent": 44,
       "command": 4,
-      "context": 0,
+      "context": 4,
       "mcp-server": 0
     },
     "orphanArtifactIds": [
@@ -34,6 +34,10 @@
       "command/development/workflow/audit-release-evidence",
       "command/development/workflow/draft-evidenced-plan",
       "command/development/workflow/verify-claims-against-output",
+      "context/development/code-quality/coding-style-baseline",
+      "context/development/testing/testing-baseline",
+      "context/operations/git/git-workflow-baseline",
+      "context/security/threat-modeling/security-baseline",
       "hook/data/compatibility/schema-compatibility-guard",
       "hook/data/live-query-safety/database-query-mode-guard",
       "hook/development/assertion-integrity/test-assertion-removal-guard",
@@ -661,6 +665,371 @@
         {
           "target": "claude-code",
           "command": "npx @youdede/toolkit add verify-session-ledger --target claude-code --scope project"
+        }
+      ]
+    },
+    {
+      "id": "context/development/code-quality/coding-style-baseline",
+      "slug": "coding-style-baseline",
+      "name": "Coding Style Baseline",
+      "version": "1.0.0",
+      "kind": "context",
+      "summary": "Apply behavior-preserving code-quality and module-boundary guidance to implementation files.",
+      "description": "A scoped, generated context assembled from catalog guidance for simplification, module boundaries, and generated-file safety. Every rule names its source artifact and can be regenerated without hand-copied prose.",
+      "domain": "development",
+      "category": "code-quality",
+      "capabilities": [
+        "operate"
+      ],
+      "problems": [
+        "regression-prevention"
+      ],
+      "frameworks": [
+        "agnostic"
+      ],
+      "languages": [
+        "agnostic"
+      ],
+      "lifecycle": [
+        "implementation",
+        "maintenance"
+      ],
+      "risk": "low",
+      "license": "MIT",
+      "execution": {
+        "mode": "prompt",
+        "entrypoints": []
+      },
+      "relationships": {
+        "composesWith": [],
+        "conflictsWith": [],
+        "supersedes": [],
+        "prerequisites": [],
+        "packIds": []
+      },
+      "operational": {
+        "behavior": "advisory",
+        "failurePolicy": "stop-and-report",
+        "latencyClass": "immediate",
+        "dataRetention": "none"
+      },
+      "refuses": [
+        "It does not override repository-local style, formatter, lint, or architecture configuration.",
+        "It does not turn advisory context into permission to edit generated files or widen module boundaries.",
+        "It does not remain silently authoritative after its declared expiry date."
+      ],
+      "targets": [
+        "claude-code",
+        "cursor",
+        "github-copilot"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        },
+        "cursor": {
+          "stability": "stable",
+          "limitations": [
+            "Cursor combines applicable rules without a documented cross-file precedence guarantee; the numeric prefix preserves deterministic toolkit ordering."
+          ],
+          "bindings": []
+        },
+        "github-copilot": {
+          "stability": "stable",
+          "limitations": [
+            "GitHub Copilot combines matching instruction files without a documented general precedence order; conflicts are rejected before installation."
+          ],
+          "bindings": []
+        }
+      },
+      "install": [
+        {
+          "target": "claude-code",
+          "command": "npx @youdede/toolkit add coding-style-baseline --target claude-code --scope project"
+        },
+        {
+          "target": "cursor",
+          "command": "npx @youdede/toolkit add coding-style-baseline --target cursor --scope project"
+        },
+        {
+          "target": "github-copilot",
+          "command": "npx @youdede/toolkit add coding-style-baseline --target github-copilot --scope project"
+        }
+      ]
+    },
+    {
+      "id": "context/development/testing/testing-baseline",
+      "slug": "testing-baseline",
+      "name": "Testing Baseline",
+      "version": "1.0.0",
+      "kind": "context",
+      "summary": "Apply test-first, evidence-backed, integrity-preserving guidance when working with test files.",
+      "description": "A path-scoped generated testing context derived from test-first delivery, completion evidence, test-integrity enforcement, and reproducible evaluation guidance in the catalog.",
+      "domain": "development",
+      "category": "testing",
+      "capabilities": [
+        "operate"
+      ],
+      "problems": [
+        "test-strategy"
+      ],
+      "frameworks": [
+        "agnostic"
+      ],
+      "languages": [
+        "agnostic"
+      ],
+      "lifecycle": [
+        "implementation",
+        "maintenance"
+      ],
+      "risk": "low",
+      "license": "MIT",
+      "execution": {
+        "mode": "prompt",
+        "entrypoints": []
+      },
+      "relationships": {
+        "composesWith": [],
+        "conflictsWith": [],
+        "supersedes": [],
+        "prerequisites": [],
+        "packIds": []
+      },
+      "operational": {
+        "behavior": "advisory",
+        "failurePolicy": "stop-and-report",
+        "latencyClass": "immediate",
+        "dataRetention": "none"
+      },
+      "refuses": [
+        "It does not prescribe a test command or framework before inspecting repository configuration.",
+        "It does not permit assertion weakening, suppression, or test deletion to manufacture a passing result.",
+        "It does not treat stale, partial, or second-hand output as fresh completion evidence."
+      ],
+      "targets": [
+        "claude-code",
+        "cursor",
+        "github-copilot"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        },
+        "cursor": {
+          "stability": "stable",
+          "limitations": [
+            "Cursor combines applicable rules without a documented cross-file precedence guarantee; the numeric prefix preserves deterministic toolkit ordering."
+          ],
+          "bindings": []
+        },
+        "github-copilot": {
+          "stability": "stable",
+          "limitations": [
+            "GitHub Copilot combines matching instruction files without a documented general precedence order; conflicts are rejected before installation."
+          ],
+          "bindings": []
+        }
+      },
+      "install": [
+        {
+          "target": "claude-code",
+          "command": "npx @youdede/toolkit add testing-baseline --target claude-code --scope project"
+        },
+        {
+          "target": "cursor",
+          "command": "npx @youdede/toolkit add testing-baseline --target cursor --scope project"
+        },
+        {
+          "target": "github-copilot",
+          "command": "npx @youdede/toolkit add testing-baseline --target github-copilot --scope project"
+        }
+      ]
+    },
+    {
+      "id": "context/operations/git/git-workflow-baseline",
+      "slug": "git-workflow-baseline",
+      "name": "Git Workflow Baseline",
+      "version": "1.0.0",
+      "kind": "context",
+      "summary": "Keep branch integration recoverable, explicit, and backed by fresh repository evidence.",
+      "description": "An always-on generated context for branch isolation, integration evidence, protected branches, and commit-secret safety. Its prose is selected from catalog artifacts through machine-readable rule provenance.",
+      "domain": "operations",
+      "category": "git",
+      "capabilities": [
+        "operate"
+      ],
+      "problems": [
+        "workflow-delegation"
+      ],
+      "frameworks": [
+        "agnostic"
+      ],
+      "languages": [
+        "agnostic"
+      ],
+      "lifecycle": [
+        "implementation",
+        "maintenance"
+      ],
+      "risk": "low",
+      "license": "MIT",
+      "execution": {
+        "mode": "prompt",
+        "entrypoints": []
+      },
+      "relationships": {
+        "composesWith": [],
+        "conflictsWith": [],
+        "supersedes": [],
+        "prerequisites": [],
+        "packIds": []
+      },
+      "operational": {
+        "behavior": "advisory",
+        "failurePolicy": "stop-and-report",
+        "latencyClass": "immediate",
+        "dataRetention": "none"
+      },
+      "refuses": [
+        "It does not authorize commits, pushes, merges, rebases, branch deletion, or worktree removal.",
+        "It does not treat local test success as proof that remote integration or publication happened.",
+        "It does not weaken protected-branch or secret-scanning hooks when their policy blocks an operation."
+      ],
+      "targets": [
+        "claude-code",
+        "cursor",
+        "github-copilot"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        },
+        "cursor": {
+          "stability": "stable",
+          "limitations": [
+            "Cursor combines applicable rules without a documented cross-file precedence guarantee; the numeric prefix preserves deterministic toolkit ordering."
+          ],
+          "bindings": []
+        },
+        "github-copilot": {
+          "stability": "stable",
+          "limitations": [
+            "GitHub Copilot combines matching instruction files without a documented general precedence order; conflicts are rejected before installation."
+          ],
+          "bindings": []
+        }
+      },
+      "install": [
+        {
+          "target": "claude-code",
+          "command": "npx @youdede/toolkit add git-workflow-baseline --target claude-code --scope project"
+        },
+        {
+          "target": "cursor",
+          "command": "npx @youdede/toolkit add git-workflow-baseline --target cursor --scope project"
+        },
+        {
+          "target": "github-copilot",
+          "command": "npx @youdede/toolkit add git-workflow-baseline --target github-copilot --scope project"
+        }
+      ]
+    },
+    {
+      "id": "context/security/threat-modeling/security-baseline",
+      "slug": "security-baseline",
+      "name": "Security Baseline",
+      "version": "1.0.0",
+      "kind": "context",
+      "summary": "Apply least-authority guidance for agent tools, credentials, sensitive files, and outbound data.",
+      "description": "An always-on generated security context derived from the catalog's threat-modeling and deterministic guard boundaries. It guides model decisions without claiming to replace enforcement hooks.",
+      "domain": "security",
+      "category": "threat-modeling",
+      "capabilities": [
+        "operate"
+      ],
+      "problems": [
+        "application-security-review"
+      ],
+      "frameworks": [
+        "agnostic"
+      ],
+      "languages": [
+        "agnostic"
+      ],
+      "lifecycle": [
+        "planning",
+        "implementation",
+        "maintenance"
+      ],
+      "risk": "medium",
+      "license": "MIT",
+      "execution": {
+        "mode": "prompt",
+        "entrypoints": []
+      },
+      "relationships": {
+        "composesWith": [],
+        "conflictsWith": [],
+        "supersedes": [],
+        "prerequisites": [],
+        "packIds": []
+      },
+      "operational": {
+        "behavior": "advisory",
+        "failurePolicy": "stop-and-report",
+        "latencyClass": "immediate",
+        "dataRetention": "none"
+      },
+      "refuses": [
+        "It does not claim prompt instructions can enforce a security boundary independently of deterministic controls.",
+        "It does not authorize reading credentials, protected files, or undeclared data for additional context.",
+        "It does not authorize network transmission, credential expansion, or bypasses beyond installed guard policy."
+      ],
+      "targets": [
+        "claude-code",
+        "cursor",
+        "github-copilot"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        },
+        "cursor": {
+          "stability": "stable",
+          "limitations": [
+            "Cursor combines applicable rules without a documented cross-file precedence guarantee; the numeric prefix preserves deterministic toolkit ordering."
+          ],
+          "bindings": []
+        },
+        "github-copilot": {
+          "stability": "stable",
+          "limitations": [
+            "GitHub Copilot combines matching instruction files without a documented general precedence order; conflicts are rejected before installation."
+          ],
+          "bindings": []
+        }
+      },
+      "install": [
+        {
+          "target": "claude-code",
+          "command": "npx @youdede/toolkit add security-baseline --target claude-code --scope project"
+        },
+        {
+          "target": "cursor",
+          "command": "npx @youdede/toolkit add security-baseline --target cursor --scope project"
+        },
+        {
+          "target": "github-copilot",
+          "command": "npx @youdede/toolkit add security-baseline --target github-copilot --scope project"
         }
       ]
     },

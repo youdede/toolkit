@@ -1,0 +1,51 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "context/security/threat-modeling/security-baseline",
+  "slug": "security-baseline",
+  "name": "Security Baseline",
+  "version": "1.0.0",
+  "kind": "context",
+  "summary": "Apply least-authority guidance for agent tools, credentials, sensitive files, and outbound data.",
+  "description": "An always-on generated security context derived from the catalog's threat-modeling and deterministic guard boundaries. It guides model decisions without claiming to replace enforcement hooks.",
+  "domain": "security",
+  "category": "threat-modeling",
+  "capabilities": ["operate"],
+  "problems": ["application-security-review"],
+  "frameworks": ["agnostic"],
+  "languages": ["agnostic"],
+  "lifecycle": ["planning", "implementation", "maintenance"],
+  "risk": "medium",
+  "license": "MIT",
+  "authors": ["Youdede"],
+  "refuses": [
+    "It does not claim prompt instructions can enforce a security boundary independently of deterministic controls.",
+    "It does not authorize reading credentials, protected files, or undeclared data for additional context.",
+    "It does not authorize network transmission, credential expansion, or bypasses beyond installed guard policy."
+  ],
+  "execution": { "mode": "prompt", "entrypoints": [] },
+  "context": {
+    "scope": "always",
+    "precedence": 900,
+    "expires": "2027-09-21",
+    "provenance": [
+      "skill/security/threat-modeling/review-agent-tool-boundaries",
+      "hook/security/secrets/prompt-secret-guard",
+      "hook/security/secrets/sensitive-file-access-guard",
+      "hook/security/application-security/outbound-data-guard"
+    ],
+    "rules": [
+      { "id": "review-tool-authority", "effect": "require", "action": "review-tool-authority", "sourceArtifactId": "skill/security/threat-modeling/review-agent-tool-boundaries", "sourceField": "summary" },
+      { "id": "do-not-reveal-detected-credentials", "effect": "forbid", "action": "reveal-detected-credentials", "sourceArtifactId": "hook/security/secrets/prompt-secret-guard", "sourceField": "refuses", "sourceIndex": 0 },
+      { "id": "do-not-read-protected-files", "effect": "forbid", "action": "read-protected-files", "sourceArtifactId": "hook/security/secrets/sensitive-file-access-guard", "sourceField": "refuses", "sourceIndex": 0 },
+      { "id": "do-not-upload-local-payloads", "effect": "forbid", "action": "upload-local-payloads", "sourceArtifactId": "hook/security/application-security/outbound-data-guard", "sourceField": "refuses", "sourceIndex": 0 }
+    ]
+  },
+  "relationships": { "composesWith": [], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": [] },
+  "operational": { "behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "immediate", "dataRetention": "none" },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "cursor": "adapters/cursor.json",
+    "github-copilot": "adapters/github-copilot.json"
+  }
+}

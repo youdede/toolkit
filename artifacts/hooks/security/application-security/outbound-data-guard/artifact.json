@@ -45,6 +45,9 @@
       }
     ]
   },
+  "hookGuard": {
+    "blockedActions": ["upload-local-payloads"]
+  },
   "adapters": {
     "claude-code": "adapters/claude-code.json",
     "codex": "adapters/codex.json",

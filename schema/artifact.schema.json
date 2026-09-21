@@ -149,7 +149,7 @@
     "context": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["scope", "precedence", "provenance"],
+      "required": ["scope", "precedence", "provenance", "rules"],
       "properties": {
         "scope": { "enum": ["always", "glob"] },
         "globs": {
@@ -167,6 +167,39 @@
             "type": "string",
             "pattern": "^(skill|hook|subagent|command|context|mcp-server)/[a-z0-9-]+/[a-z0-9-]+/[a-z0-9-]+$"
           }
+        },
+        "rules": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "effect", "action", "sourceArtifactId", "sourceField"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+              "effect": { "enum": ["require", "forbid"] },
+              "action": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+              "sourceArtifactId": {
+                "type": "string",
+                "pattern": "^(skill|hook|subagent|command|context|mcp-server)/[a-z0-9-]+/[a-z0-9-]+/[a-z0-9-]+$"
+              },
+              "sourceField": { "enum": ["summary", "refuses"] },
+              "sourceIndex": { "type": "integer", "minimum": 0 }
+            }
+          }
+        }
+      }
+    },
+    "hookGuard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["blockedActions"],
+      "properties": {
+        "blockedActions": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" }
         }
       }
     },

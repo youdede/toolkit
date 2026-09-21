@@ -17,7 +17,7 @@ import {
 } from 'node:fs';
 import { createHash, randomBytes } from 'node:crypto';
 import path from 'node:path';
-import { loadArtifacts, resolvePack, ROOT } from './catalog.mjs';
+import { findContextHookConflicts, loadArtifacts, resolvePack, ROOT } from './catalog.mjs';
 import { readIntegrityManifest, verifyArtifactAttestation } from './integrity.mjs';
 import { defaultSettingsPath, resolveConfigRoot, resolveConfigRoots } from './targets.mjs';
 
@@ -500,6 +500,18 @@ function prepareInstall(query, options = {}) {
   if (adapter.settingsPatch) assertNoSymlinkWithin(configRoot, settingsPath(target, configRoot, adapter, scope, record.manifest.kind), 'target settings');
   const key = `${target}:${scope}:${record.manifest.id}`;
   const state = loadState(configRoot);
+  if (record.manifest.kind === 'context' || record.manifest.hookGuard?.blockedActions?.length) {
+    const installedIds = new Set(Object.values(state.installs)
+      .filter((install) => install.target === target && install.scope === scope)
+      .map((install) => install.artifactId));
+    const installedRecords = loadArtifacts(root).filter((candidate) => installedIds.has(candidate.manifest.id)
+      && (candidate.manifest.kind === 'context' || candidate.manifest.hookGuard?.blockedActions?.length));
+    const setConflicts = findContextHookConflicts([...installedRecords, record]);
+    if (setConflicts.length > 0) {
+      const conflict = setConflicts[0];
+      throw new Error(`context rule '${conflict.ruleId}' in ${conflict.contextId} requires '${conflict.action}', but ${conflict.hookId} blocks it`);
+    }
+  }
   const ownedInstall = state.installs[key];
   const owners = ownersByFile(state, key);
   const filePlan = buildFilePlan(record, adapter, configRoot);
@@ -569,6 +581,7 @@ export function planArtifactInstall(query, options = {}) {
     } : null,
     integrity,
     runtime: runtimeDisclosure(record, target, scope),
+    warnings: contextInstallWarnings(record.manifest, options.now),
     state: { path: path.relative(configRoot, statePath(configRoot)), action: 'update' }
   };
 }
@@ -667,8 +680,19 @@ function installArtifactLocked(query, options = {}) {
     files: filePlan.map((item) => item.destination),
     settingsFile: settings.after ? settings.file : null,
     integrity: prepared.integrity,
-    runtime: runtimeDisclosure(record, target, scope)
+    runtime: runtimeDisclosure(record, target, scope),
+    warnings: contextInstallWarnings(record.manifest, options.now)
   };
+}
+
+export function contextInstallWarnings(manifest, now = new Date()) {
+  if (manifest.kind !== 'context' || !manifest.context?.expires) return [];
+  const current = now instanceof Date ? now : new Date(now);
+  if (Number.isNaN(current.getTime())) throw new Error('context warning clock must be a valid date');
+  const today = current.toISOString().slice(0, 10);
+  return manifest.context.expires < today
+    ? [`${manifest.id} expired on ${manifest.context.expires}; review its provenance before relying on it`]
+    : [];
 }
 
 export function removeArtifact(query, options = {}) {

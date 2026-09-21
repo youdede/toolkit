@@ -90,7 +90,7 @@ test('the published artifact schema and the repository validator describe the sa
   // Kind-conditional contract objects (command, context, mcpServer) are introduced by the schema
   // before their first artifact lands; each entry must be removed here as soon as one artifact of
   // that kind exists, restoring the zero-drift invariant.
-  const pendingKindContracts = ['context', 'mcpServer'].filter((key) => declared.has(key));
+  const pendingKindContracts = ['mcpServer'].filter((key) => declared.has(key));
   const unused = [...declared].filter((key) => key !== '$schema' && !pendingKindContracts.includes(key) && !used.has(key));
   assert.deepEqual(unused, [], 'schema declares properties no artifact uses');
   for (const key of pendingKindContracts) {

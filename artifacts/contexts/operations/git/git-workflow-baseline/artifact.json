@@ -1,0 +1,51 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "context/operations/git/git-workflow-baseline",
+  "slug": "git-workflow-baseline",
+  "name": "Git Workflow Baseline",
+  "version": "1.0.0",
+  "kind": "context",
+  "summary": "Keep branch integration recoverable, explicit, and backed by fresh repository evidence.",
+  "description": "An always-on generated context for branch isolation, integration evidence, protected branches, and commit-secret safety. Its prose is selected from catalog artifacts through machine-readable rule provenance.",
+  "domain": "operations",
+  "category": "git",
+  "capabilities": ["operate"],
+  "problems": ["workflow-delegation"],
+  "frameworks": ["agnostic"],
+  "languages": ["agnostic"],
+  "lifecycle": ["implementation", "maintenance"],
+  "risk": "low",
+  "license": "MIT",
+  "authors": ["Youdede"],
+  "refuses": [
+    "It does not authorize commits, pushes, merges, rebases, branch deletion, or worktree removal.",
+    "It does not treat local test success as proof that remote integration or publication happened.",
+    "It does not weaken protected-branch or secret-scanning hooks when their policy blocks an operation."
+  ],
+  "execution": { "mode": "prompt", "entrypoints": [] },
+  "context": {
+    "scope": "always",
+    "precedence": 800,
+    "expires": "2027-09-21",
+    "provenance": [
+      "skill/operations/git/prepare-branch-integration",
+      "skill/operations/git/isolate-work-with-worktrees",
+      "hook/operations/git/protected-branch-guard",
+      "hook/security/secrets/commit-guard"
+    ],
+    "rules": [
+      { "id": "prepare-integration-evidence", "effect": "require", "action": "prepare-integration-evidence", "sourceArtifactId": "skill/operations/git/prepare-branch-integration", "sourceField": "summary" },
+      { "id": "isolate-concurrent-work", "effect": "require", "action": "isolate-concurrent-work", "sourceArtifactId": "skill/operations/git/isolate-work-with-worktrees", "sourceField": "summary" },
+      { "id": "do-not-mutate-protected-branch", "effect": "forbid", "action": "mutate-protected-branch", "sourceArtifactId": "hook/operations/git/protected-branch-guard", "sourceField": "refuses", "sourceIndex": 0 },
+      { "id": "do-not-bypass-secret-guard", "effect": "forbid", "action": "bypass-commit-secret-guard", "sourceArtifactId": "hook/security/secrets/commit-guard", "sourceField": "refuses", "sourceIndex": 3 }
+    ]
+  },
+  "relationships": { "composesWith": [], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": [] },
+  "operational": { "behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "immediate", "dataRetention": "none" },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "cursor": "adapters/cursor.json",
+    "github-copilot": "adapters/github-copilot.json"
+  }
+}

@@ -194,6 +194,7 @@ async function main() {
         if (result.settings) process.stdout.write(`- ${result.settings.action} ${result.settings.path}\n`);
         process.stdout.write(`- update ${result.state.path}\n`);
         printRuntimeDisclosure(result.runtime);
+        for (const warning of result.warnings || []) process.stdout.write(`Warning: ${warning}\n`);
       }
       return;
     }
@@ -208,6 +209,7 @@ async function main() {
     if (result.settingsFile) process.stdout.write(`- merged ${result.settingsFile}\n`);
     if (result.integrity) process.stdout.write(`- verified ${result.integrity.integrityId}\n`);
     printRuntimeDisclosure(result.runtime);
+    for (const warning of result.warnings || []) process.stdout.write(`Warning: ${warning}\n`);
     return;
   }
 

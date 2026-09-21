@@ -1,0 +1,52 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "context/development/testing/testing-baseline",
+  "slug": "testing-baseline",
+  "name": "Testing Baseline",
+  "version": "1.0.0",
+  "kind": "context",
+  "summary": "Apply test-first, evidence-backed, integrity-preserving guidance when working with test files.",
+  "description": "A path-scoped generated testing context derived from test-first delivery, completion evidence, test-integrity enforcement, and reproducible evaluation guidance in the catalog.",
+  "domain": "development",
+  "category": "testing",
+  "capabilities": ["operate"],
+  "problems": ["test-strategy"],
+  "frameworks": ["agnostic"],
+  "languages": ["agnostic"],
+  "lifecycle": ["implementation", "maintenance"],
+  "risk": "low",
+  "license": "MIT",
+  "authors": ["Youdede"],
+  "refuses": [
+    "It does not prescribe a test command or framework before inspecting repository configuration.",
+    "It does not permit assertion weakening, suppression, or test deletion to manufacture a passing result.",
+    "It does not treat stale, partial, or second-hand output as fresh completion evidence."
+  ],
+  "execution": { "mode": "prompt", "entrypoints": [] },
+  "context": {
+    "scope": "glob",
+    "globs": ["**/test/**", "**/tests/**", "**/*.test.*", "**/*.spec.*"],
+    "precedence": 200,
+    "expires": "2027-09-21",
+    "provenance": [
+      "skill/development/testing/deliver-test-first",
+      "skill/development/testing/verify-completion-evidence",
+      "hook/development/testing/test-integrity-guard",
+      "skill/development/testing/design-agent-evaluation-harness"
+    ],
+    "rules": [
+      { "id": "use-red-green-refactor", "effect": "require", "action": "use-red-green-refactor", "sourceArtifactId": "skill/development/testing/deliver-test-first", "sourceField": "summary" },
+      { "id": "verify-with-fresh-evidence", "effect": "require", "action": "verify-with-fresh-evidence", "sourceArtifactId": "skill/development/testing/verify-completion-evidence", "sourceField": "summary" },
+      { "id": "do-not-weaken-test-integrity", "effect": "forbid", "action": "weaken-test-integrity", "sourceArtifactId": "hook/development/testing/test-integrity-guard", "sourceField": "refuses", "sourceIndex": 0 },
+      { "id": "isolate-evaluation-cases", "effect": "require", "action": "isolate-evaluation-cases", "sourceArtifactId": "skill/development/testing/design-agent-evaluation-harness", "sourceField": "summary" }
+    ]
+  },
+  "relationships": { "composesWith": [], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": [] },
+  "operational": { "behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "immediate", "dataRetention": "none" },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "cursor": "adapters/cursor.json",
+    "github-copilot": "adapters/github-copilot.json"
+  }
+}
