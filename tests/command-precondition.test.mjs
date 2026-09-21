@@ -50,7 +50,7 @@ test('git-clean passes on a clean worktree and reports dirty state', () => withT
 test('file-exists rejects traversal, absolute paths, and workspace escapes', () => withTempRoot((root) => {
   writeFileSync(path.join(root, 'present.txt'), 'x\n');
   assert.ok(evaluatePreconditions({ checks: [{ type: 'file-exists', paths: ['present.txt'] }] }, root).ok);
-  for (const bad of ['../escape.txt', '/etc/passwd', 'a/../../b']) {
+  for (const bad of ['../escape.txt', '..\\escape.txt', '/etc/passwd', 'C:\\Windows\\secret', 'a/../../b']) {
     const result = evaluatePreconditions({ checks: [{ type: 'file-exists', paths: [bad] }] }, root);
     assert.ok(!result.ok, bad);
   }

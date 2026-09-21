@@ -10,6 +10,7 @@
 import { existsSync, readFileSync, realpathSync, statSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const MAX_CONFIG_BYTES = 64 * 1024;
 const MAX_EVIDENCE_BYTES = 1024 * 1024;
@@ -25,7 +26,8 @@ function fail(code, message) {
 
 function safeRelative(candidate) {
   if (typeof candidate !== 'string' || candidate.length === 0) return null;
-  if (path.isAbsolute(candidate) || candidate.split('/').includes('..')) return null;
+  if (/\0/.test(candidate) || path.posix.isAbsolute(candidate) || path.win32.isAbsolute(candidate)) return null;
+  if (candidate.split(/[\\/]+/).some((segment) => !segment || segment === '.' || segment === '..')) return null;
   return candidate;
 }
 
@@ -140,6 +142,6 @@ export function main(argv = process.argv.slice(2)) {
   process.exit(result.ok ? 0 : 1);
 }
 
-if (process.argv[1] && import.meta.url === new URL(`file://${path.resolve(process.argv[1])}`).href) {
+if (process.argv[1] && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)) {
   main();
 }

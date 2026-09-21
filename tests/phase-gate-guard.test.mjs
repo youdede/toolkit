@@ -58,6 +58,12 @@ test('oversized: stdin beyond the cap and oversized evidence files are refused',
   mkdirSync(path.join(root, '.youdede', 'phases'), { recursive: true });
   writeFileSync(path.join(root, '.youdede', 'phases', 'spec.json'), `{"pad":"${'x'.repeat(70 * 1024)}`);
   assert.equal(evaluate(collectContext(writePhase(root, 'design', evidence('design')))).ruleId, 'predecessor-unsafe');
+  const oversizedTarget = collectContext({
+    tool_name: 'Edit',
+    cwd: root,
+    tool_input: { file_path: '.youdede/phases/spec.json', old_string: 'x', new_string: 'y' }
+  });
+  assert.equal(evaluate(oversizedTarget).ruleId, 'inspection-failed');
 }));
 
 test('boundary: symlinked predecessors and escaping evidence directories block, never follow', () => withTempRoot((root) => {
@@ -76,6 +82,7 @@ test('boundary: symlinked predecessors and escaping evidence directories block, 
 test('false-positive: lookalike paths and normal source writes stay untouched', () => withTempRoot((root) => {
   const inputs = [
     { tool_name: 'Write', cwd: root, tool_input: { file_path: '.youdede/phases-notes/design.json', content: '{}' } },
+    { tool_name: 'Write', cwd: root, tool_input: { file_path: 'docs/.youdede/phases/spec.json', content: '{}' } },
     { tool_name: 'Write', cwd: root, tool_input: { file_path: 'docs/.youdede.bak/spec.json', content: '{}' } },
     { tool_name: 'Bash', cwd: root, tool_input: { command: 'echo hi' } }
   ];

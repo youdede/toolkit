@@ -2,11 +2,12 @@
 
 import { existsSync, lstatSync, readFileSync, realpathSync, statSync } from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 export const MAX_STDIN_BYTES = 1024 * 1024;
 const MAX_EVIDENCE_BYTES = 64 * 1024;
 const PHASES = ['spec', 'design', 'tasks', 'implementation'];
-const EVIDENCE_PATTERN = /^(?:.*\/)?\.youdede\/phases\/([a-z-]+)\.json$/;
+const EVIDENCE_PATTERN = /^\.youdede\/phases\/([a-z-]+)\.json$/;
 
 function allow() { return { exitCode: 0, message: '' }; }
 function block(ruleId, detail) { return { exitCode: 2, ruleId, message: 'BLOCKED by phase-gate-guard [' + ruleId + ']: ' + detail + '.' }; }
@@ -61,7 +62,7 @@ export function collectContext(input, cwd = process.cwd()) {
     }
     if (existsSync(absolute)) {
       const stat = lstatSync(absolute);
-      if (stat.isSymbolicLink() || !stat.isFile()) return { relevant: true, inspectionError: 'unsafe-target' };
+      if (stat.isSymbolicLink() || !stat.isFile() || stat.size > MAX_EVIDENCE_BYTES) return { relevant: true, inspectionError: 'unsafe-target' };
       context.before = readFileSync(absolute, 'utf8');
     }
     const rebuilt = rebuildProposed(input, context.before || '');
@@ -114,7 +115,7 @@ async function readStdin() {
   return Buffer.concat(chunks).toString('utf8');
 }
 
-if (process.argv[1] && import.meta.url === new URL(`file://${path.resolve(process.argv[1])}`).href) {
+if (process.argv[1] && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {
     const raw = await readStdin();
     const input = raw.trim() ? JSON.parse(raw) : {};
