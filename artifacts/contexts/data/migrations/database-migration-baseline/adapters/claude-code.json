@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": [
+    "project"
+  ],
+  "files": [
+    {
+      "from": "targets/claude-code/database-migration-baseline.md",
+      "to": "rules/youdede/0400-database-migration-baseline.md"
+    }
+  ]
+}

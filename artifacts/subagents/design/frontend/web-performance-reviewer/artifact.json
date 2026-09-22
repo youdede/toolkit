@@ -46,11 +46,15 @@
     "assess"
   ],
   "relationships": {
-    "composesWith": [],
+    "composesWith": [
+      "skill/development/testing/test-interface-in-browser"
+    ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],
-    "packIds": []
+    "packIds": [
+      "pack/browser-verification"
+    ]
   },
   "operational": {
     "behavior": "advisory",

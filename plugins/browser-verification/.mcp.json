@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "youdede-playwright-local-isolated": {
+      "command": "npx",
+      "args": [
+        "--yes",
+        "@playwright/mcp@0.0.82",
+        "--isolated",
+        "--block-service-workers",
+        "--allowed-hosts",
+        "127.0.0.1",
+        "--allowed-origins",
+        "http://127.0.0.1:*"
+      ]
+    }
+  }
+}

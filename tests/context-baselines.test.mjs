@@ -10,6 +10,10 @@ import { installArtifact, planArtifactInstall, removeArtifact } from '../scripts
 const expectedIds = [
   'context/development/code-quality/coding-style-baseline',
   'context/development/testing/testing-baseline',
+  'context/development/api/api-contract-baseline',
+  'context/data/migrations/database-migration-baseline',
+  'context/operations/ci-cd/ci-workflow-baseline',
+  'context/security/dependencies/dependency-change-baseline',
   'context/operations/git/git-workflow-baseline',
   'context/security/threat-modeling/security-baseline'
 ];
@@ -28,7 +32,7 @@ test('context baselines have deterministic precedence and exact provenance cover
   const records = loadArtifacts();
   const contexts = orderContextRecords(records);
   assert.deepEqual(contexts.map(({ manifest }) => manifest.id), expectedIds);
-  assert.deepEqual(contexts.map(({ manifest }) => manifest.context.precedence), [100, 200, 800, 900]);
+  assert.deepEqual(contexts.map(({ manifest }) => manifest.context.precedence), [100, 200, 300, 400, 500, 600, 800, 900]);
   for (const { manifest } of contexts) {
     const provenance = [...manifest.context.provenance].sort();
     const used = [...new Set(manifest.context.rules.map((rule) => rule.sourceArtifactId))].sort();
@@ -60,7 +64,7 @@ test('generated target contexts carry native scope metadata and catalog source t
 test('context generation is reproducible', () => {
   const result = spawnSync(process.execPath, ['scripts/generate-contexts.mjs', '--check'], { cwd: ROOT, encoding: 'utf8' });
   assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stdout, /4 generated contexts are current/);
+  assert.match(result.stdout, /8 generated contexts are current/);
 });
 
 test('contexts install and remove independently without leaving rule files', () => withTempDirectory('contexts-install-', (project) => {

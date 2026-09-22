@@ -176,7 +176,7 @@ export function assessStructuralEvidence(root = ROOT) {
     valid: reasons.length === 0,
     artifacts: {
       total: repository.artifacts.length,
-      byKind: Object.fromEntries(['skill', 'hook', 'subagent'].map((kind) => [kind, repository.artifacts.filter(({ manifest }) => manifest.kind === kind).length]))
+      byKind: Object.fromEntries(['skill', 'hook', 'subagent', 'command', 'context', 'mcp-server'].map((kind) => [kind, repository.artifacts.filter(({ manifest }) => manifest.kind === kind).length]))
     },
     behavioral: {
       artifacts: behavioral.documents.length,

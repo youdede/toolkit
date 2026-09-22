@@ -246,6 +246,7 @@ test('the shipped draft-evidenced-plan installs, evaluates preconditions, and re
   const repoRoot = path.resolve(import.meta.dirname, '..');
   const project = path.join(root, 'project');
   mkdirSync(project, { recursive: true });
+  installArtifact('coding-style-baseline', { root: repoRoot, target: 'claude-code', scope: 'project', cwd: project });
   installArtifact('draft-evidenced-plan', { root: repoRoot, target: 'claude-code', scope: 'project', cwd: project });
   const commandFile = path.join(project, '.claude', 'commands', 'draft-evidenced-plan.md');
   const wrapper = path.join(project, '.claude', 'commands', 'youdede', 'draft-evidenced-plan', 'check-preconditions.mjs');
@@ -255,5 +256,6 @@ test('the shipped draft-evidenced-plan installs, evaluates preconditions, and re
   assert.equal(run.status, 0, run.stdout);
   assert.equal(JSON.parse(run.stdout.trim()).ok, true);
   removeArtifact('draft-evidenced-plan', { root: repoRoot, target: 'claude-code', scope: 'project', cwd: project });
+  removeArtifact('coding-style-baseline', { root: repoRoot, target: 'claude-code', scope: 'project', cwd: project });
   assert.ok(!existsSync(commandFile), 'expected removal to delete the installed command');
 }));

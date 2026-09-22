@@ -1,0 +1,103 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "context/operations/ci-cd/ci-workflow-baseline",
+  "slug": "ci-workflow-baseline",
+  "name": "CI Workflow Baseline",
+  "version": "1.0.0",
+  "kind": "context",
+  "summary": "Apply a provenance-backed ci workflow baseline to the repository files where that decision surface is active.",
+  "description": "A generated scoped context whose ordered rules are copied from catalog summaries and remain traceable to their source artifacts without hand-maintained policy prose.",
+  "domain": "operations",
+  "category": "ci-cd",
+  "capabilities": [
+    "operate",
+    "verify"
+  ],
+  "problems": [
+    "ci-trust-boundary",
+    "repository-quality-gates"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "implementation",
+    "review"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "Youdede"
+  ],
+  "refuses": [
+    "It does not override narrower repository-local policy or explicit human approval requirements.",
+    "It does not turn advisory guidance into permission to mutate external systems or protected state.",
+    "It does not remain silently authoritative after its declared expiry date."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "context": {
+    "scope": "glob",
+    "globs": [
+      ".github/workflows/**",
+      ".gitlab-ci.yml",
+      "azure-pipelines.yml",
+      "Jenkinsfile"
+    ],
+    "precedence": 500,
+    "expires": "2027-09-21",
+    "provenance": [
+      "skill/operations/ci-cd/review-ci-workflow-change",
+      "skill/operations/setup/build-repository-quality-gates",
+      "hook/security/supply-chain/ci-trust-boundary-guard"
+    ],
+    "rules": [
+      {
+        "id": "01-review-ci-change",
+        "effect": "require",
+        "action": "review-ci-change",
+        "sourceArtifactId": "skill/operations/ci-cd/review-ci-workflow-change",
+        "sourceField": "summary"
+      },
+      {
+        "id": "02-preserve-quality-gates",
+        "effect": "require",
+        "action": "preserve-quality-gates",
+        "sourceArtifactId": "skill/operations/setup/build-repository-quality-gates",
+        "sourceField": "summary"
+      },
+      {
+        "id": "03-expand-ci-privilege",
+        "effect": "require",
+        "action": "expand-ci-privilege",
+        "sourceArtifactId": "hook/security/supply-chain/ci-trust-boundary-guard",
+        "sourceField": "summary"
+      }
+    ]
+  },
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "cursor": "adapters/cursor.json",
+    "github-copilot": "adapters/github-copilot.json"
+  }
+}

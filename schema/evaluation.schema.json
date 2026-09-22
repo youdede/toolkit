@@ -11,7 +11,7 @@
     "schemaVersion": { "const": 1 },
     "artifactId": {
       "type": "string",
-      "pattern": "^(skill|hook|subagent)/[a-z0-9-]+/[a-z0-9-]+/[a-z0-9-]+$"
+      "pattern": "^(skill|subagent|command|context)/[a-z0-9-]+/[a-z0-9-]+/[a-z0-9-]+$"
     },
     "cases": {
       "type": "array",

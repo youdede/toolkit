@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "count": 11,
+  "count": 13,
   "packs": [
     {
       "$schema": "../../schema/pack.schema.json",
@@ -140,6 +140,100 @@
           "target": "claude-code",
           "scope": "project",
           "command": "npx @youdede/toolkit add-pack accessibility-assurance --target claude-code --scope project"
+        }
+      ]
+    },
+    {
+      "$schema": "../../schema/pack.schema.json",
+      "schemaVersion": 1,
+      "id": "pack/browser-verification",
+      "slug": "browser-verification",
+      "name": "Browser verification",
+      "version": "1.0.0",
+      "summary": "Exercise an unauthenticated local interface in an isolated browser and preserve journey-level verification evidence.",
+      "outcomes": [
+        "local-browser-verification"
+      ],
+      "evidence": {
+        "reportSchema": "../../schema/pack-evidence.schema.json",
+        "ledgerLinkRequired": true,
+        "outcomeEvidence": [
+          {
+            "outcome": "local-browser-verification",
+            "memberArtifactIds": [
+              "skill/development/testing/test-interface-in-browser",
+              "subagent/design/frontend/web-performance-reviewer",
+              "mcp-server/development/testing/playwright-local-isolated"
+            ]
+          }
+        ]
+      },
+      "members": [
+        {
+          "artifactId": "skill/development/testing/test-interface-in-browser",
+          "role": "procedure",
+          "required": true
+        },
+        {
+          "artifactId": "subagent/design/frontend/web-performance-reviewer",
+          "role": "verifier",
+          "required": true
+        },
+        {
+          "artifactId": "mcp-server/development/testing/playwright-local-isolated",
+          "role": "integration",
+          "required": true
+        }
+      ],
+      "targets": [
+        "claude-code"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "scopes": [
+            "project"
+          ],
+          "optionalUnsupported": [],
+          "optionalUnsupportedByScope": {
+            "project": []
+          }
+        }
+      },
+      "promotion": {
+        "eligible": true,
+        "criteria": {
+          "crossKindRequiredWorkflow": true,
+          "requiredProcedure": true,
+          "independentRequiredAssurance": true,
+          "roleCompatible": true,
+          "compositionConnected": true,
+          "conflictFree": true,
+          "prerequisiteClosed": true,
+          "compatibleInstallCoordinate": true
+        },
+        "requiredKinds": [
+          "mcp-server",
+          "skill",
+          "subagent"
+        ],
+        "roleCounts": {
+          "procedure": 1,
+          "collector": 0,
+          "specialist": 0,
+          "verifier": 1,
+          "enforcement": 0,
+          "observer": 0,
+          "entrypoint": 0,
+          "baseline": 0,
+          "integration": 1
+        }
+      },
+      "hookFanout": [],
+      "install": [
+        {
+          "target": "claude-code",
+          "scope": "project",
+          "command": "npx @youdede/toolkit add-pack browser-verification --target claude-code --scope project"
         }
       ]
     },
@@ -1036,6 +1130,113 @@
           "target": "claude-code",
           "scope": "project",
           "command": "npx @youdede/toolkit add-pack release-readiness --target claude-code --scope project"
+        }
+      ]
+    },
+    {
+      "$schema": "../../schema/pack.schema.json",
+      "schemaVersion": 1,
+      "id": "pack/remote-review-evidence",
+      "slug": "remote-review-evidence",
+      "name": "Remote review evidence",
+      "version": "1.0.0",
+      "summary": "Collect bounded GitHub evidence in read-only mode and turn failing CI evidence into a traceable diagnosis.",
+      "outcomes": [
+        "remote-review-evidence",
+        "ci-failure-diagnosis"
+      ],
+      "evidence": {
+        "reportSchema": "../../schema/pack-evidence.schema.json",
+        "ledgerLinkRequired": true,
+        "outcomeEvidence": [
+          {
+            "outcome": "remote-review-evidence",
+            "memberArtifactIds": [
+              "mcp-server/development/agent-tooling/github-readonly"
+            ]
+          },
+          {
+            "outcome": "ci-failure-diagnosis",
+            "memberArtifactIds": [
+              "command/operations/ci-cd/diagnose-ci-failure",
+              "skill/operations/ci-cd/debug-ci-failure",
+              "subagent/operations/ci-cd/ci-failure-analyst"
+            ]
+          }
+        ]
+      },
+      "members": [
+        {
+          "artifactId": "command/operations/ci-cd/diagnose-ci-failure",
+          "role": "entrypoint",
+          "required": true
+        },
+        {
+          "artifactId": "skill/operations/ci-cd/debug-ci-failure",
+          "role": "procedure",
+          "required": true
+        },
+        {
+          "artifactId": "subagent/operations/ci-cd/ci-failure-analyst",
+          "role": "specialist",
+          "required": true
+        },
+        {
+          "artifactId": "mcp-server/development/agent-tooling/github-readonly",
+          "role": "integration",
+          "required": true
+        }
+      ],
+      "targets": [
+        "claude-code"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "scopes": [
+            "project"
+          ],
+          "optionalUnsupported": [],
+          "optionalUnsupportedByScope": {
+            "project": []
+          }
+        }
+      },
+      "promotion": {
+        "eligible": true,
+        "criteria": {
+          "crossKindRequiredWorkflow": true,
+          "requiredProcedure": true,
+          "independentRequiredAssurance": true,
+          "roleCompatible": true,
+          "compositionConnected": true,
+          "conflictFree": true,
+          "prerequisiteClosed": true,
+          "compatibleInstallCoordinate": true
+        },
+        "requiredKinds": [
+          "command",
+          "mcp-server",
+          "skill",
+          "subagent"
+        ],
+        "roleCounts": {
+          "procedure": 1,
+          "collector": 0,
+          "specialist": 1,
+          "verifier": 0,
+          "enforcement": 0,
+          "observer": 0,
+          "entrypoint": 1,
+          "baseline": 0,
+          "integration": 1
+        }
+      },
+      "hookFanout": [],
+      "install": [
+        {
+          "target": "claude-code",
+          "scope": "project",
+          "command": "npx @youdede/toolkit add-pack remote-review-evidence --target claude-code --scope project"
         }
       ]
     },

@@ -4,6 +4,16 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 
 ## Unreleased
 
+### Added
+
+- Three bounded workflow commands cover CI diagnosis, redacted environment preflight, and repository-instruction audits; four generated contexts add API, migration, CI, and dependency baselines at precedences 300–600.
+- Preview external MCP profiles pin the official GitHub server `v1.12.2` in read-only reduced-toolset mode and Playwright MCP `0.0.82` in isolated loopback-only mode. They ship in the separate `remote-review-evidence` and `browser-verification` packs rather than widening `mcp-baseline`.
+
+### Changed
+
+- Behavioral evaluation coverage now includes every skill, subagent, command, and context. Release benchmark inputs, package verification, readiness counts, catalog documentation, and naming/authoring guidance use the same six-kind model.
+- Command documentation now states the actual enforcement boundary: deterministic preconditions are a mandatory first prompt action, not a pre-invocation parser supplied by the native slash-command runtime.
+
 ## 0.3.0 (2026-09-21)
 
 ### Added

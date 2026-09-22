@@ -18,9 +18,9 @@ function temporary(context, prefix) {
 
 test('curated MCP profiles match pinned descriptions and reject unsafe drift', (context) => {
   const records = loadArtifacts().filter(({ manifest }) => manifest.kind === 'mcp-server');
-  assert.equal(records.length, 3);
+  assert.equal(records.length, 5);
   for (const record of records) {
-    assert.equal(record.manifest.execution.entrypoints[0].path, 'runtime/readonly-mcp-server.mjs');
+    if (record.manifest.execution.entrypoints.length) assert.equal(record.manifest.execution.entrypoints[0].path, 'runtime/readonly-mcp-server.mjs');
     assert.deepEqual(verifyMcpRecord(record), []);
   }
 
@@ -42,6 +42,21 @@ test('curated MCP profiles match pinned descriptions and reject unsafe drift', (
   const authorityFailures = verifyMcpRecord(drifted);
   assert.ok(authorityFailures.some((failure) => /egress differs/.test(failure)));
   assert.ok(authorityFailures.some((failure) => /secretAccess differs/.test(failure)));
+});
+
+test('external vendor MCP profiles enforce exact versions and confinement flags', (context) => {
+  const records = loadArtifacts().filter(({ manifest }) => manifest.kind === 'mcp-server' && manifest.execution.entrypoints.length === 0);
+  assert.equal(records.length, 2);
+  for (const source of records) {
+    const directory = temporary(context, `youdede-external-mcp-${source.manifest.slug}-`);
+    const profile = JSON.parse(readFileSync(path.join(source.directory, 'server.json'), 'utf8'));
+    profile.launch.args = profile.launch.args.filter((argument) => argument !== profile.provider.requiredArgs[0]);
+    writeFileSync(path.join(directory, 'server.json'), JSON.stringify(profile));
+    writeFileSync(path.join(directory, 'THREAT.md'), '# Threat boundary\n');
+    const failures = verifyMcpRecord({ ...source, directory });
+    assert.ok(failures.some((failure) => /mandatory confinement argument/.test(failure)), source.manifest.id);
+    assert.ok(failures.some((failure) => /MCP config differs/.test(failure)), source.manifest.id);
+  }
 });
 
 test('MCP install merges exact servers, diagnoses drift, and removes reversibly', (context) => {

@@ -1,0 +1,37 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "mcp-server/development/testing/playwright-local-isolated",
+  "slug": "playwright-local-isolated",
+  "name": "Playwright Local Isolated MCP",
+  "version": "1.0.0",
+  "kind": "mcp-server",
+  "summary": "Verify local browser interfaces through an exact Playwright MCP release with isolated state and loopback-only origins.",
+  "description": "Launches the official Playwright MCP package at an exact npm version with isolated browser state, blocked service workers, and an origin allowlist restricted to the local loopback host.",
+  "domain": "development",
+  "category": "testing",
+  "capabilities": ["verify"],
+  "problems": ["browser-testing", "safe-browsing-readiness"],
+  "frameworks": ["agnostic"],
+  "languages": ["agnostic"],
+  "lifecycle": ["implementation", "review"],
+  "risk": "high",
+  "license": "MIT",
+  "authors": ["Youdede"],
+  "refuses": [
+    "It does not browse non-loopback origins, authenticated production sessions, or user browser profiles.",
+    "It does not treat allowed origins as a complete security boundary or assume redirects remain in scope.",
+    "It does not upload files, persist browser state, or claim an observed journey proves all interface behavior."
+  ],
+  "execution": {"mode": "prompt", "entrypoints": []},
+  "mcpServer": {
+    "transport": "stdio",
+    "egress": ["127.0.0.1", "registry.npmjs.org"],
+    "secretAccess": ["none"],
+    "trustBoundary": "Only unauthenticated loopback browser journeys are in scope; isolated state and blocked service workers reduce persistence, while page content and redirects remain untrusted and must be checked against the explicit origin boundary.",
+    "pinnedTools": []
+  },
+  "relationships": {"composesWith": ["skill/development/testing/test-interface-in-browser"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": ["pack/browser-verification"]},
+  "operational": {"behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "bounded", "dataRetention": "runtime-managed"},
+  "adapters": {"claude-code": "adapters/claude-code.json", "cursor": "adapters/cursor.json"}
+}

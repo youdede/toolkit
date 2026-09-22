@@ -1,6 +1,6 @@
 # Behavioral evaluations
 
-Behavioral evaluation contracts make prompt expectations reviewable without calling a model. They are mandatory for every public skill and subagent. Each contract lives in `evaluations/behavioral.json` beside its artifact; the runner validates complete catalog coverage.
+Behavioral evaluation contracts make prompt expectations reviewable without calling a model. They are mandatory for every public prompt-bearing skill, subagent, command, and context. Each contract lives in `evaluations/behavioral.json` beside its artifact; the runner validates complete catalog coverage.
 
 Each contract contains one realistic case for every required type:
 
@@ -19,7 +19,7 @@ The JSON format is defined by [evaluation.schema.json](../schema/evaluation.sche
 node scripts/validate-evaluations.mjs
 ```
 
-Use `--json` for stable machine-readable output. The runner discovers every skill and subagent from its manifest, so a newly added prompt-bearing artifact fails validation until it has a behavioral contract. Deterministic hooks and hybrid helpers are covered by declared executable event, boundary, malformed-input, false-positive, and process tests. The declarations and freshness-bound semantic release workflow are enforced by the [release-readiness gate](release-readiness.md).
+Use `--json` for stable machine-readable output. The runner discovers every skill, subagent, command, and context from its manifest, so a newly added prompt-bearing artifact fails validation until it has a behavioral contract. Deterministic hooks and MCP runtimes are covered by executable and trust-contract tests instead. The declarations and freshness-bound semantic release workflow are enforced by the [release-readiness gate](release-readiness.md).
 
 ## Output contract consistency
 

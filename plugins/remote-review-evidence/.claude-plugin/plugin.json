@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "remote-review-evidence",
+  "displayName": "Remote review evidence",
+  "version": "1.0.0",
+  "description": "Collect bounded GitHub evidence in read-only mode and turn failing CI evidence into a traceable diagnosis.",
+  "author": {
+    "name": "Youdede",
+    "url": "https://github.com/udede/toolkit"
+  },
+  "homepage": "https://github.com/udede/toolkit/blob/main/packs/remote-review-evidence/pack.json",
+  "repository": "https://github.com/udede/toolkit",
+  "license": "MIT",
+  "keywords": [
+    "remote-review-evidence",
+    "ci-failure-diagnosis",
+    "ledger-linked-evidence",
+    "behaviorally-evaluated"
+  ],
+  "mcpServers": "./.mcp.json",
+  "metadata": {
+    "catalogId": "pack/remote-review-evidence",
+    "memberArtifactIds": [
+      "command/operations/ci-cd/diagnose-ci-failure",
+      "skill/operations/ci-cd/debug-ci-failure",
+      "subagent/operations/ci-cd/ci-failure-analyst",
+      "mcp-server/development/agent-tooling/github-readonly"
+    ],
+    "refusalCount": 12,
+    "evidenceBadges": [
+      "ledger-linked-evidence",
+      "behaviorally-evaluated"
+    ]
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "context/development/api/api-contract-baseline",
+  "slug": "api-contract-baseline",
+  "name": "API Contract Baseline",
+  "version": "1.0.0",
+  "kind": "context",
+  "summary": "Apply a provenance-backed api contract baseline to the repository files where that decision surface is active.",
+  "description": "A generated scoped context whose ordered rules are copied from catalog summaries and remain traceable to their source artifacts without hand-maintained policy prose.",
+  "domain": "development",
+  "category": "api",
+  "capabilities": [
+    "operate",
+    "verify"
+  ],
+  "problems": [
+    "api-contract",
+    "api-contract-change-control"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "implementation",
+    "review"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "Youdede"
+  ],
+  "refuses": [
+    "It does not override narrower repository-local policy or explicit human approval requirements.",
+    "It does not turn advisory guidance into permission to mutate external systems or protected state.",
+    "It does not remain silently authoritative after its declared expiry date."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "context": {
+    "scope": "glob",
+    "globs": [
+      "**/*.graphql",
+      "**/*.json",
+      "**/*.proto",
+      "**/*.raml",
+      "**/*.yaml",
+      "**/*.yml"
+    ],
+    "precedence": 300,
+    "expires": "2027-09-21",
+    "provenance": [
+      "skill/development/api/design-stable-api-contract",
+      "skill/development/api/build-openapi-contract",
+      "hook/development/contract-compatibility/api-contract-compatibility-guard"
+    ],
+    "rules": [
+      {
+        "id": "01-design-stable-contracts",
+        "effect": "require",
+        "action": "design-stable-contracts",
+        "sourceArtifactId": "skill/development/api/design-stable-api-contract",
+        "sourceField": "summary"
+      },
+      {
+        "id": "02-keep-openapi-evidence",
+        "effect": "require",
+        "action": "keep-openapi-evidence",
+        "sourceArtifactId": "skill/development/api/build-openapi-contract",
+        "sourceField": "summary"
+      },
+      {
+        "id": "03-remove-contract-surface",
+        "effect": "require",
+        "action": "remove-contract-surface",
+        "sourceArtifactId": "hook/development/contract-compatibility/api-contract-compatibility-guard",
+        "sourceField": "summary"
+      }
+    ]
+  },
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "cursor": "adapters/cursor.json",
+    "github-copilot": "adapters/github-copilot.json"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schema/pack.schema.json",
+  "schemaVersion": 1,
+  "id": "pack/remote-review-evidence",
+  "slug": "remote-review-evidence",
+  "name": "Remote review evidence",
+  "version": "1.0.0",
+  "summary": "Collect bounded GitHub evidence in read-only mode and turn failing CI evidence into a traceable diagnosis.",
+  "outcomes": ["remote-review-evidence", "ci-failure-diagnosis"],
+  "evidence": {
+    "reportSchema": "../../schema/pack-evidence.schema.json",
+    "ledgerLinkRequired": true,
+    "outcomeEvidence": [
+      {"outcome": "remote-review-evidence", "memberArtifactIds": ["mcp-server/development/agent-tooling/github-readonly"]},
+      {"outcome": "ci-failure-diagnosis", "memberArtifactIds": ["command/operations/ci-cd/diagnose-ci-failure", "skill/operations/ci-cd/debug-ci-failure", "subagent/operations/ci-cd/ci-failure-analyst"]}
+    ]
+  },
+  "members": [
+    {"artifactId": "command/operations/ci-cd/diagnose-ci-failure", "role": "entrypoint", "required": true},
+    {"artifactId": "skill/operations/ci-cd/debug-ci-failure", "role": "procedure", "required": true},
+    {"artifactId": "subagent/operations/ci-cd/ci-failure-analyst", "role": "specialist", "required": true},
+    {"artifactId": "mcp-server/development/agent-tooling/github-readonly", "role": "integration", "required": true}
+  ]
+}

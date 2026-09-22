@@ -23,7 +23,8 @@ test('capability claims name the enforced evidence and publication boundaries', 
   const content = renderCapabilityMatrix();
   assert.match(content, /preconditions/);
   assert.match(content, /hash-chained checkpoints/);
-  assert.match(content, /tool-description hashes/);
+  assert.match(content, /local tools use description pins/);
+  assert.match(content, /preview vendor servers use exact package and launch pins/);
   assert.match(content, /hash-linked session-ledger/);
   assert.match(content, /not authorship or semantic correctness/);
   assert.match(content, /provenance-capable OIDC workflow/);

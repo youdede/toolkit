@@ -4,7 +4,7 @@
 
 A vetted tool-server configuration with declared network egress, secret access, and a pinned tool manifest. A server that changes its tool surface after vetting is quarantined until re-vetted.
 
-3 of them. Install one with `npx @youdede/toolkit add <slug> --target <runtime> --scope project`, or read what it refuses first with `npx @youdede/toolkit info <slug>`.
+5 of them. Install one with `npx @youdede/toolkit add <slug> --target <runtime> --scope project`, or read what it refuses first with `npx @youdede/toolkit info <slug>`.
 
 
 ## development
@@ -12,8 +12,10 @@ A vetted tool-server configuration with declared network egress, secret access, 
 | Slug | What it does | Risk | Runtimes |
 | --- | --- | --- | --- |
 | `allowlisted-fetch-readonly` | Fetch bounded HTTPS documentation from three explicit hosts through a pinned MCP server. | medium | claude-code, cursor |
+| `github-readonly` | Inspect bounded GitHub repository, issue, pull-request, and Actions evidence through the official server in read-only mode. | high | claude-code, cursor |
 | `repository-git-readonly` | Expose bounded local Git status, diff, and history inspection through a pinned MCP server. | medium | claude-code, cursor |
 | `workspace-files-readonly` | Expose bounded read-only workspace file inspection through a locally pinned MCP server. | medium | claude-code, cursor |
+| `playwright-local-isolated` | Verify local browser interfaces through an exact Playwright MCP release with isolated state and loopback-only origins. | high | claude-code, cursor |
 
 ---
 

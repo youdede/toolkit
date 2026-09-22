@@ -1,0 +1,94 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "command/development/agent-tooling/preflight-change-environment",
+  "slug": "preflight-change-environment",
+  "name": "Preflight Change Environment",
+  "version": "1.0.0",
+  "kind": "command",
+  "summary": "Collect a deterministic redacted environment snapshot before a repository change begins.",
+  "description": "Runs a local bounded collector that reports runtime, package-manager markers, and redacted git state without emitting paths, environment values, file contents, or remote URLs.",
+  "domain": "development",
+  "category": "agent-tooling",
+  "capabilities": [
+    "collect",
+    "verify"
+  ],
+  "problems": [
+    "environment-parity",
+    "completion-verification"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "implementation"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "Youdede"
+  ],
+  "refuses": [
+    "Do not print environment-variable names or values, remote URLs, absolute paths, usernames, or file contents.",
+    "Do not install dependencies, change configuration, or repair the environment.",
+    "Do not claim parity with CI or production from a local snapshot."
+  ],
+  "execution": {
+    "mode": "hybrid",
+    "entrypoints": [
+      {
+        "path": "scripts/check-preconditions.mjs",
+        "runtime": "node",
+        "purpose": "Evaluate declared local command preconditions before the prompt workflow may continue.",
+        "sideEffects": "none"
+      },
+      {
+        "path": "scripts/collect-environment.mjs",
+        "runtime": "node",
+        "purpose": "Collect a bounded redacted environment snapshot without reading environment values or file contents.",
+        "sideEffects": "none"
+      }
+    ]
+  },
+  "command": {
+    "invocation": "preflight-change-environment",
+    "toolAuthority": [
+      "Bash",
+      "Read"
+    ],
+    "produces": [
+      "a redacted JSON environment snapshot and an explicit list of missing prerequisites"
+    ],
+    "requires": [],
+    "flags": [
+      {
+        "name": "scope",
+        "effect": "narrow",
+        "description": "Restrict follow-up inspection to a user-supplied relative path."
+      }
+    ]
+  },
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [
+      "skill/development/testing/verify-completion-evidence"
+    ],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  }
+}

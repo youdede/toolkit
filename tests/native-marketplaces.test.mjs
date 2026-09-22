@@ -24,7 +24,7 @@ test('Claude marketplace publishes only complete native pack compositions', () =
   const artifacts = loadArtifacts();
   const byId = new Map(artifacts.map((record) => [record.manifest.id, record]));
   const packs = loadPacks().map(({ manifest }) => manifest);
-  assert.equal(marketplace.plugins.length, 10);
+  assert.equal(marketplace.plugins.length, 12);
   assert.deepEqual(report.claudeCode.omitted, [{
     packId: 'pack/plan-and-verify-loop',
     unsupportedArtifactIds: ['context/development/testing/testing-baseline']

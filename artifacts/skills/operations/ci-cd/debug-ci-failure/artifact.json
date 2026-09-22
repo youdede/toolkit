@@ -43,13 +43,16 @@
   },
   "relationships": {
     "composesWith": [
+      "command/operations/ci-cd/diagnose-ci-failure",
       "skill/operations/ci-cd/review-ci-workflow-change",
       "subagent/operations/ci-cd/ci-failure-analyst"
     ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],
-    "packIds": []
+    "packIds": [
+      "pack/remote-review-evidence"
+    ]
   },
   "operational": {
     "behavior": "advisory",

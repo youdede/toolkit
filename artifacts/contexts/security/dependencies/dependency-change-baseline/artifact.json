@@ -1,0 +1,109 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "context/security/dependencies/dependency-change-baseline",
+  "slug": "dependency-change-baseline",
+  "name": "Dependency Change Baseline",
+  "version": "1.0.0",
+  "kind": "context",
+  "summary": "Apply a provenance-backed dependency change baseline to the repository files where that decision surface is active.",
+  "description": "A generated scoped context whose ordered rules are copied from catalog summaries and remain traceable to their source artifacts without hand-maintained policy prose.",
+  "domain": "security",
+  "category": "dependencies",
+  "capabilities": [
+    "operate",
+    "verify"
+  ],
+  "problems": [
+    "dependency-change-control",
+    "dependency-risk"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "implementation",
+    "review"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "Youdede"
+  ],
+  "refuses": [
+    "It does not override narrower repository-local policy or explicit human approval requirements.",
+    "It does not turn advisory guidance into permission to mutate external systems or protected state.",
+    "It does not remain silently authoritative after its declared expiry date."
+  ],
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
+  "context": {
+    "scope": "glob",
+    "globs": [
+      "**/package.json",
+      "**/package-lock.json",
+      "**/pnpm-lock.yaml",
+      "**/yarn.lock",
+      "**/pyproject.toml",
+      "**/requirements*.txt",
+      "**/Cargo.toml",
+      "**/Cargo.lock",
+      "**/go.mod",
+      "**/go.sum"
+    ],
+    "precedence": 600,
+    "expires": "2027-09-21",
+    "provenance": [
+      "skill/security/dependencies/plan-dependency-upgrade",
+      "skill/security/supply-chain/review-supply-chain-change",
+      "hook/security/dependencies/dependency-change-guard"
+    ],
+    "rules": [
+      {
+        "id": "01-plan-dependency-upgrade",
+        "effect": "require",
+        "action": "plan-dependency-upgrade",
+        "sourceArtifactId": "skill/security/dependencies/plan-dependency-upgrade",
+        "sourceField": "summary"
+      },
+      {
+        "id": "02-review-supply-chain-change",
+        "effect": "require",
+        "action": "review-supply-chain-change",
+        "sourceArtifactId": "skill/security/supply-chain/review-supply-chain-change",
+        "sourceField": "summary"
+      },
+      {
+        "id": "03-bypass-dependency-safety",
+        "effect": "require",
+        "action": "bypass-dependency-safety",
+        "sourceArtifactId": "hook/security/dependencies/dependency-change-guard",
+        "sourceField": "summary"
+      }
+    ]
+  },
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "cursor": "adapters/cursor.json",
+    "github-copilot": "adapters/github-copilot.json"
+  }
+}

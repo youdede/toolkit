@@ -9,7 +9,7 @@ Names are contracts for people, search, and installers. The canonical identity i
 The directory must use the plural kind and the same remaining segments:
 
 ```text
-artifacts/<skills|hooks|subagents>/<domain>/<category>/<slug>/
+artifacts/<skills|hooks|subagents|commands|contexts|mcp-servers>/<domain>/<category>/<slug>/
 ```
 
 All segments use lowercase ASCII hyphen-case. Slugs are unique across the full catalog, contain at most 64 characters, and do not include version numbers. A vendor name belongs in the slug only when that integration is the capability itself.
@@ -38,3 +38,15 @@ Use `<narrow-scope>-<role>`. Approved role suffixes describe responsibility rath
 
 - `dependency-risk-reviewer`
 - `test-gap-reviewer`
+
+## Commands: action plus bounded outcome
+
+Use an imperative verb and the evidence-bearing workflow outcome, such as `diagnose-ci-failure` or `audit-repository-instructions`. A command name must match its native invocation exactly.
+
+## Contexts: scope plus baseline
+
+Use a narrow decision surface followed by `-baseline`, such as `api-contract-baseline`. Precedence expresses composition order; the slug does not encode the numeric precedence.
+
+## MCP servers: authority plus mode
+
+Name the bounded resource and the operative trust property, such as `workspace-files-readonly`. Do not use `safe`, `secure`, or `official` as a substitute for explicit egress, secret, and tool contracts.

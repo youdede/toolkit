@@ -90,7 +90,7 @@ export function selectStratifiedSample(candidates, {
 }
 
 export function buildReleaseBenchmark(root = ROOT, options = {}) {
-  const artifacts = loadArtifacts(root).filter(({ manifest }) => manifest.kind === 'skill' || manifest.kind === 'subagent');
+  const artifacts = loadArtifacts(root).filter(({ manifest }) => ['skill', 'subagent', 'command', 'context'].includes(manifest.kind));
   const staticInputs = artifacts.map((record) => ({
     artifactId: record.manifest.id,
     kind: record.manifest.kind,

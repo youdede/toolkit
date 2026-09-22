@@ -48,12 +48,15 @@
   ],
   "relationships": {
     "composesWith": [
+      "command/operations/ci-cd/diagnose-ci-failure",
       "skill/operations/ci-cd/debug-ci-failure"
     ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],
-    "packIds": []
+    "packIds": [
+      "pack/remote-review-evidence"
+    ]
   },
   "operational": {
     "behavior": "advisory",

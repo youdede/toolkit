@@ -1,0 +1,6 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json", "schemaVersion": 1, "target": "claude-code", "scopes": ["project"], "stability": "preview",
+  "limitations": ["Restricted to unauthenticated 127.0.0.1 origins; redirects require explicit runtime inspection and the observed external tool inventory is not yet description-pinned."],
+  "files": [{"from": "server.json", "to": ".youdede/mcp/playwright-local-isolated/server.json"}, {"from": "THREAT.md", "to": ".youdede/mcp/playwright-local-isolated/THREAT.md"}],
+  "mcpPatch": {"path": ".mcp.json", "servers": {"youdede-playwright-local-isolated": {"command": "npx", "args": ["--yes", "@playwright/mcp@0.0.82", "--isolated", "--block-service-workers", "--allowed-hosts", "127.0.0.1", "--allowed-origins", "http://127.0.0.1:*"]}}}
+}

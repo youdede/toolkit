@@ -7,7 +7,7 @@
   "version": "1.0.0",
   "kind": "command",
   "summary": "Draft an ordered implementation plan where every step cites the code it touches and the evidence that proves completion.",
-  "description": "Invoked as a slash command, drafts a bounded implementation plan whose steps each name concrete files, the verification that proves the step done, and an explicit refusal to plan what the repository does not show. Preconditions run deterministically before planning starts.",
+  "description": "Invoked as a slash command, drafts a bounded implementation plan whose steps each name concrete files, the verification that proves the step done, and an explicit refusal to plan what the repository does not show. Its mandatory first action runs the deterministic precondition bridge.",
   "domain": "development",
   "category": "workflow",
   "capabilities": [
@@ -56,7 +56,9 @@
     "produces": [
       "an ordered implementation plan whose every step cites concrete file paths and the verification command that proves it"
     ],
-    "requires": [],
+    "requires": [
+      "the generated coding-style baseline must already be installed in the project"
+    ],
     "flags": [
       {
         "name": "scope",

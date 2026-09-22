@@ -1,0 +1,6 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json", "schemaVersion": 1, "target": "cursor", "scopes": ["project"], "stability": "preview",
+  "limitations": ["Requires Docker and an environment-supplied least-privilege GitHub token; the external tool inventory must be observed and pinned before description-level drift coverage is claimed."],
+  "files": [{"from": "server.json", "to": ".youdede/mcp/github-readonly/server.json"}, {"from": "THREAT.md", "to": ".youdede/mcp/github-readonly/THREAT.md"}],
+  "mcpPatch": {"path": ".cursor/mcp.json", "servers": {"youdede-github-readonly": {"command": "docker", "args": ["run", "-i", "--rm", "-e", "GITHUB_PERSONAL_ACCESS_TOKEN", "ghcr.io/github/github-mcp-server@sha256:508a0857ec762b1ab1cece29193345b501fab1dd9d1228a7b617062954cecac6", "stdio", "--read-only", "--toolsets", "repos,pull_requests,issues,actions"]}}}
+}

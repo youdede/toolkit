@@ -27,7 +27,7 @@ Extend `catalog/taxonomy.json` and `schema/artifact.schema.json` with three new 
 1. A schema extension carrying kind-specific required fields:
    - `command`: `invocation` (slash name), `toolAuthority` (allowlist of tools the command may
      use), `produces` (evidence artifacts the command must emit), `requires` (preconditions checked
-     deterministically before invocation), constraint-narrowing-only `flags`, and the shared
+     deterministically as the command's mandatory first action), constraint-narrowing-only `flags`, and the shared
      `refuses` list.
    - `context`: `scope` (`always` | `glob`), `precedence`, optional `expires` (stale contexts warn
      on install), rule-level `provenance` links to catalog artifact IDs, and a required
