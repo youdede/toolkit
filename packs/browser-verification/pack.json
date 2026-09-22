@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schema/pack.schema.json",
+  "schemaVersion": 1,
+  "id": "pack/browser-verification",
+  "slug": "browser-verification",
+  "name": "Browser verification",
+  "version": "1.0.0",
+  "summary": "Exercise an unauthenticated local interface in an isolated browser and preserve journey-level verification evidence.",
+  "outcomes": ["local-browser-verification"],
+  "evidence": {
+    "reportSchema": "../../schema/pack-evidence.schema.json",
+    "ledgerLinkRequired": true,
+    "outcomeEvidence": [
+      {"outcome": "local-browser-verification", "memberArtifactIds": ["skill/development/testing/test-interface-in-browser", "subagent/design/frontend/web-performance-reviewer", "mcp-server/development/testing/playwright-local-isolated"]}
+    ]
+  },
+  "members": [
+    {"artifactId": "skill/development/testing/test-interface-in-browser", "role": "procedure", "required": true},
+    {"artifactId": "subagent/design/frontend/web-performance-reviewer", "role": "verifier", "required": true},
+    {"artifactId": "mcp-server/development/testing/playwright-local-isolated", "role": "integration", "required": true}
+  ]
+}

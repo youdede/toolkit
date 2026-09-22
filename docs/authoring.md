@@ -2,9 +2,9 @@
 
 ## 1. Choose the smallest useful unit
 
-Publish one procedure, one gate, or one specialist. Do not bundle unrelated behaviors merely because they share a framework.
+Publish one procedure, gate, specialist, command, context, or MCP profile. Do not bundle unrelated behaviors merely because they share a framework.
 
-Choose the canonical slug from [the naming contract](naming.md): verb-first skills, `-guard` hooks, and role-suffixed subagents. Slugs describe the artifact's own behavior, never its inspiration.
+Choose the canonical slug from [the naming contract](naming.md): verb-first skills, `-guard` hooks, role-suffixed subagents, action/outcome commands, `-baseline` contexts, and authority-explicit MCP profiles. Slugs describe the artifact's own behavior, never its inspiration.
 
 ## 2. Place it by problem
 
@@ -26,7 +26,7 @@ Do not publish a target adapter merely because a runtime accepts a similarly nam
 
 ## 5. Validate behavior
 
-Add fixtures for deterministic hooks. Test allow, block, malformed, oversized, ambiguous, false-positive, process-exit, and boundary inputs. File gates include traversal and symlink cases; shell gates include quoting, wrappers, static nested shells, and dynamic-control arguments. For skills and subagents, ensure the trigger is narrow, the steps are testable, and completion claims require evidence.
+Add fixtures for deterministic hooks. Test allow, block, malformed, oversized, ambiguous, false-positive, process-exit, and boundary inputs. File gates include traversal and symlink cases; shell gates include quoting, wrappers, static nested shells, and dynamic-control arguments. For skills, subagents, commands, and contexts, add a four-case behavioral contract and ensure the trigger is narrow, scope is explicit, and completion claims require evidence. Commands also need executable precondition tests; MCP servers need trust-contract and capability-drift tests.
 
 Run:
 

@@ -13,9 +13,9 @@ const MATRIX = {
   skill: { 'claude-code': 167, codex: 166, 'gemini-cli': 167, 'github-copilot': 167, cursor: 167, opencode: 167 },
   hook: { 'claude-code': 63, codex: 22, 'gemini-cli': 22, 'github-copilot': 0, cursor: 23, opencode: 22 },
   subagent: { 'claude-code': 62, codex: 0, 'gemini-cli': 62, 'github-copilot': 62, cursor: 0, opencode: 50 },
-  command: { 'claude-code': 7, codex: 0, 'gemini-cli': 0, 'github-copilot': 0, cursor: 0, opencode: 0 },
-  context: { 'claude-code': 4, codex: 0, 'gemini-cli': 0, 'github-copilot': 4, cursor: 4, opencode: 0 },
-  'mcp-server': { 'claude-code': 3, codex: 0, 'gemini-cli': 0, 'github-copilot': 0, cursor: 3, opencode: 0 }
+  command: { 'claude-code': 10, codex: 0, 'gemini-cli': 0, 'github-copilot': 0, cursor: 0, opencode: 0 },
+  context: { 'claude-code': 8, codex: 0, 'gemini-cli': 0, 'github-copilot': 8, cursor: 8, opencode: 0 },
+  'mcp-server': { 'claude-code': 5, codex: 0, 'gemini-cli': 0, 'github-copilot': 0, cursor: 5, opencode: 0 }
 };
 
 function temporary(context, prefix) {

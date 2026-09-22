@@ -32,7 +32,7 @@ test('generation is deterministic', () => {
 
 test('a summary containing a pipe cannot break its table row', () => {
   // Every row must keep exactly the four columns the header declares.
-  for (const name of ['skills.md', 'hooks.md', 'subagents.md']) {
+  for (const name of KINDS.map(({ file }) => file)) {
     for (const line of pages.get(name).split('\n')) {
       if (!line.startsWith('| `')) continue;
       const columns = line.replace(/\\\|/g, '').split('|').length - 2;
@@ -51,7 +51,7 @@ test('a summary is never carried across lines', () => {
 
 test('the index reports the counts the catalog actually holds', () => {
   const index = pages.get('README.md');
-  for (const kind of ['skill', 'hook', 'subagent']) {
+  for (const { kind } of KINDS) {
     const count = artifacts.filter((a) => a.kind === kind).length;
     assert.match(index, new RegExp(`\\| ${count} \\|`), `index does not report ${count} for ${kind}`);
   }

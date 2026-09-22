@@ -40,14 +40,15 @@ suite passes with zero artifacts of the new kinds present.
 
 ## Phase 1 — Commands: evidence-contract workflows
 
-**Exit criteria:** users can invoke workflow commands whose preconditions are verified before
-invocation and whose completion requires declared evidence.
+**Exit criteria:** users can invoke workflow commands whose mandatory first action verifies
+preconditions deterministically and whose completion requires declared evidence.
 
 A command is an **evidence contract with an invocation**. The manifest declares:
 
 - `produces`: evidence artifacts the command must emit to count as complete.
-- `requires`: preconditions checked deterministically before the prompt loads; a command whose
-  preconditions fail refuses to be invoked and names the missing precondition.
+- `requires`: preconditions checked deterministically as Step 0; a command whose preconditions
+  fail must stop and name the missing precondition. Native slash-command runtimes load the prompt
+  before this bridge runs, so the repository does not claim a pre-invocation parser.
 - `flags`: constraint-narrowing only (`--scope=`, `--budget=`); a flag may shrink what a command
   may do, never expand its authority. Unknown combinations fail validation.
 
@@ -63,7 +64,8 @@ Initial command set (each with `toolAuthority` allowlist and refusals):
 Preconditions are evaluated by one shared deterministic runtime bridge
 (`scripts/runtime/command-precondition.mjs`, following the `hook-command-bridge.mjs` pattern):
 bounded checks for clean tree, required files, installed contexts, and valid prior evidence.
-Commands declare preconditions as data; no command ships its own ad-hoc check logic.
+Commands declare preconditions as data and ship only a thin wrapper around the shared evaluator.
+The runtime/model must honor Step 0 before continuing the workflow.
 
 Tests: invocation parsing, precondition refusal fixtures, flag-combination validation,
 authority-boundary fixtures (command attempts tool outside allowlist → refused), refusal presence,

@@ -124,7 +124,7 @@ export function validateEvaluationDocument(document, record, source = payloadFor
 
 export function loadBehavioralEvaluations(root = ROOT) {
   const { artifacts, results } = validateRepository(root);
-  const requiredRecords = artifacts.filter(({ manifest }) => manifest.kind === 'skill' || manifest.kind === 'subagent');
+  const requiredRecords = artifacts.filter(({ manifest }) => ['skill', 'subagent', 'command', 'context'].includes(manifest.kind));
   const requiredIds = new Set(requiredRecords.map(({ manifest }) => manifest.id));
   const records = artifacts.filter((record) => requiredIds.has(record.manifest.id) || existsSync(evaluationPath(record)));
   const evaluatedIds = new Set(records.map(({ manifest }) => manifest.id));

@@ -369,6 +369,23 @@
       }
     },
     {
+      "id": "command-surface-expansion",
+      "artifactIds": [
+        "command/development/agent-tooling/audit-repository-instructions",
+        "command/development/agent-tooling/preflight-change-environment",
+        "command/operations/ci-cd/diagnose-ci-failure"
+      ],
+      "testFiles": [
+        "tests/surface-expansion.test.mjs"
+      ],
+      "coverage": {
+        "positive": "positive command wrappers run check-preconditions.mjs before bounded work",
+        "negative": "negative collection never enumerates process environment values",
+        "malformed": "malformed extra collector input cannot widen the snapshot",
+        "boundary": "boundary snapshot contains no absolute workspace path or remote URL"
+      }
+    },
+    {
       "id": "command-session-continuity",
       "artifactIds": [
         "command/operations/session/record-work-checkpoint",

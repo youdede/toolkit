@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": [
+    "project"
+  ],
+  "files": [
+    {
+      "from": "COMMAND.md",
+      "to": "commands/preflight-change-environment.md"
+    },
+    {
+      "from": "scripts/check-preconditions.mjs",
+      "to": "commands/youdede/preflight-change-environment/check-preconditions.mjs",
+      "executable": true
+    },
+    {
+      "from": "scripts/collect-environment.mjs",
+      "to": "commands/youdede/preflight-change-environment/collect-environment.mjs",
+      "executable": true
+    },
+    {
+      "from": "preconditions.json",
+      "to": "commands/youdede/preflight-change-environment/preconditions.json"
+    },
+    {
+      "root": "package",
+      "from": "scripts/runtime/command-precondition.mjs",
+      "to": "commands/youdede/lib/command-precondition.mjs"
+    }
+  ]
+}

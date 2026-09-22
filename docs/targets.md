@@ -7,11 +7,11 @@ Support is declared per artifact. A missing adapter is an intentional refusal, n
 <!-- stat-table:targets -->
 | Target | Skills | Hooks | Subagents | Commands | Contexts | MCP servers | Project root | User root |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- |
-| Claude Code | 167 | 63 | 62 | 7 | 4 | 3 | `.claude` | `~/.claude` |
+| Claude Code | 167 | 63 | 62 | 10 | 8 | 5 | `.claude` | `~/.claude` |
 | Codex | 166 | 22 | 0 | 0 | 0 | 0 | skills: `.agents`; hooks/agents: `.codex` | skills: `~/.agents`; hooks/agents: `~/.codex` |
 | Gemini CLI | 167 | 22 | 62 | 0 | 0 | 0 | `.gemini` | `~/.gemini` |
-| GitHub Copilot | 167 | 0 | 62 | 0 | 4 | 0 | `.github` | `$COPILOT_HOME` or `~/.copilot` |
-| Cursor | 167 | 23 | 0 | 0 | 4 | 3 | `.cursor` | `~/.cursor` |
+| GitHub Copilot | 167 | 0 | 62 | 0 | 8 | 0 | `.github` | `$COPILOT_HOME` or `~/.copilot` |
+| Cursor | 167 | 23 | 0 | 0 | 8 | 5 | `.cursor` | `~/.cursor` |
 | OpenCode | 167 | 22 | 50 | 0 | 0 | 0 | `.opencode` | `~/.config/opencode` |
 <!-- /stat-table -->
 
@@ -45,7 +45,7 @@ Installing an OpenCode guard executes local plugin code when OpenCode starts and
 
 Three further kinds extend the catalog beyond procedures, gates, and specialists:
 
-- **Commands** are user-invoked workflows whose manifests declare a tool allowlist, preconditions checked before invocation, and the evidence the workflow must produce. A runtime adapter is published only where the native command surface preserves the invocation name, the tool authority boundary, and the evidence requirement; otherwise the adapter is withheld and the limitation is recorded on the artifact.
+- **Commands** are user-invoked workflows whose manifests declare a tool allowlist, a mandatory deterministic precondition check as their first action, and the evidence the workflow must produce. The native command surface does not provide a pre-prompt dispatcher, so the installed prompt instructs the runtime to run that check before any other workflow step; invocation-time enforcement remains a runtime/model boundary. A runtime adapter is published only where the native command surface preserves the invocation name, tool authority, and evidence requirement.
 - **Contexts** are scoped rule files. Because a context shapes every decision while installed, an adapter is published only where the runtime applies the file with its declared scope and precedence, and the install validator refuses a context that contradicts a co-installed gate.
 - **MCP servers** are vetted tool-server configurations with declared egress, secret access, and a pinned tool manifest. Claude Code project installs merge exact entries into `.mcp.json`; Cursor project installs use `.cursor/mcp.json`. Both receive the same generated local runtime and profiles beneath `.youdede/mcp/`. Existing unrelated configuration is preserved, uninstall restores any explicitly displaced entry, and `doctor` reports missing or modified managed entries. User-scope adapters and remote transports are withheld.
 

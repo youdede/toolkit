@@ -1,0 +1,94 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "command/operations/ci-cd/diagnose-ci-failure",
+  "slug": "diagnose-ci-failure",
+  "name": "Diagnose CI Failure",
+  "version": "1.0.0",
+  "kind": "command",
+  "summary": "Diagnose a failing CI run from supplied logs and repository evidence without mutating workflows or rerunning jobs.",
+  "description": "A bounded command wrapper around the CI failure procedure and specialist. It collects the failing step, ranks evidence-backed hypotheses, and returns discriminating checks without changing CI state.",
+  "domain": "operations",
+  "category": "ci-cd",
+  "capabilities": [
+    "diagnose"
+  ],
+  "problems": [
+    "anomaly-root-cause",
+    "root-cause-analysis"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review",
+    "incident"
+  ],
+  "risk": "low",
+  "license": "MIT",
+  "authors": [
+    "Youdede"
+  ],
+  "refuses": [
+    "Do not rerun, cancel, approve, or mutate any CI job or workflow.",
+    "Do not claim a root cause from a downstream error without causal evidence.",
+    "Do not inspect unrelated logs, secrets, or repository areas outside the bounded failure."
+  ],
+  "execution": {
+    "mode": "hybrid",
+    "entrypoints": [
+      {
+        "path": "scripts/check-preconditions.mjs",
+        "runtime": "node",
+        "purpose": "Evaluate declared local command preconditions before the prompt workflow may continue.",
+        "sideEffects": "none"
+      }
+    ]
+  },
+  "command": {
+    "invocation": "diagnose-ci-failure",
+    "toolAuthority": [
+      "Read",
+      "Grep",
+      "Glob"
+    ],
+    "produces": [
+      "a ranked CI failure diagnosis with cited log evidence, competing hypotheses, and the next discriminating check"
+    ],
+    "requires": [
+      "the failing job, step, or bounded log excerpt must be identified by the user"
+    ],
+    "flags": [
+      {
+        "name": "job",
+        "effect": "narrow",
+        "description": "Restrict diagnosis to one named CI job or step."
+      }
+    ]
+  },
+  "relationships": {
+    "composesWith": [
+      "mcp-server/development/agent-tooling/github-readonly",
+      "skill/operations/ci-cd/debug-ci-failure",
+      "subagent/operations/ci-cd/ci-failure-analyst"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+      "packIds": [
+        "pack/remote-review-evidence"
+      ]
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "immediate",
+    "dataRetention": "none"
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json"
+  }
+}

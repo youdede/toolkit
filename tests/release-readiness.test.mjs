@@ -22,11 +22,11 @@ import { ROOT, validateRepository } from '../scripts/lib/catalog.mjs';
 test('release structure covers every artifact contract, behavioral case, and executable entrypoint', () => {
   const repository = validateRepository(ROOT);
   const result = assessStructuralEvidence(ROOT);
-  const promptArtifacts = repository.artifacts.filter(({ manifest }) => manifest.kind === 'skill' || manifest.kind === 'subagent');
+  const promptArtifacts = repository.artifacts.filter(({ manifest }) => ['skill', 'subagent', 'command', 'context'].includes(manifest.kind));
   const entrypoints = repository.artifacts.flatMap(({ manifest }) => manifest.execution.entrypoints);
   assert.equal(result.valid, true, JSON.stringify(result.reasons, null, 2));
   assert.equal(result.artifacts.total, repository.artifacts.length);
-  for (const kind of ['skill', 'hook', 'subagent']) {
+  for (const kind of ['skill', 'hook', 'subagent', 'command', 'context', 'mcp-server']) {
     assert.equal(result.artifacts.byKind[kind], repository.artifacts.filter(({ manifest }) => manifest.kind === kind).length);
   }
   assert.equal(result.behavioral.artifacts, promptArtifacts.length);
@@ -61,7 +61,7 @@ test('release benchmark reviews every prompt statically and keeps sampled inputs
   const repository = validateRepository(ROOT);
   const left = buildReleaseBenchmark(ROOT);
   const right = buildReleaseBenchmark(ROOT);
-  const promptCount = repository.artifacts.filter(({ manifest }) => manifest.kind === 'skill' || manifest.kind === 'subagent').length;
+  const promptCount = repository.artifacts.filter(({ manifest }) => ['skill', 'subagent', 'command', 'context'].includes(manifest.kind)).length;
   assert.equal(left.index.benchmarkDigest, right.index.benchmarkDigest);
   assert.equal(left.index.seed, RELEASE_BENCHMARK_SEED);
   assert.equal(left.staticInputs.length, promptCount);

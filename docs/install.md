@@ -3,7 +3,7 @@
 ## Commands
 
 ```bash
-youdede-toolkit list [--kind skill|hook|subagent] [--target value] [--domain|--category|--capability|--problem|--framework|--language|--lifecycle|--risk|--execution value]
+youdede-toolkit list [--kind skill|hook|subagent|command|context|mcp-server] [--target value] [--domain|--category|--capability|--problem|--framework|--language|--lifecycle|--risk|--execution value]
 youdede-toolkit info <id-or-slug>
 youdede-toolkit packs
 youdede-toolkit pack-info <id-or-slug>

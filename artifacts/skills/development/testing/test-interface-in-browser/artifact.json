@@ -49,11 +49,16 @@
     "verify"
   ],
   "relationships": {
-    "composesWith": [],
+    "composesWith": [
+      "mcp-server/development/testing/playwright-local-isolated",
+      "subagent/design/frontend/web-performance-reviewer"
+    ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],
-    "packIds": []
+    "packIds": [
+      "pack/browser-verification"
+    ]
   },
   "operational": {
     "behavior": "advisory",

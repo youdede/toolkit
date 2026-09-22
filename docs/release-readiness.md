@@ -2,7 +2,7 @@
 
 Release readiness has two independent evidence layers. Structural quality can pass while the package remains not publishable:
 
-1. Structural evidence validates every artifact manifest and payload contract, every skill and subagent behavioral contract, all required positive, negative, malformed, and boundary cases, and every executable hook or hybrid-helper test declaration.
+1. Structural evidence validates every artifact manifest and payload contract, every skill, subagent, command, and context behavioral contract, all required positive, negative, malformed, and boundary cases, and every executable hook or hybrid-helper test declaration.
 2. Semantic evidence reviews every prompt-bearing artifact statically and evaluates a deterministic stratified sample of behavioral cases. It expires after 30 days and becomes invalid immediately when the benchmark input digest changes.
 
 Run the independently useful structural gate with:

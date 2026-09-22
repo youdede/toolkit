@@ -27,7 +27,7 @@ function reportFor(pack) {
 
 test('every pack has a versioned ledger-linked evidence contract and behavioral evaluation', () => {
   const repository = validateRepository();
-  assert.equal(repository.packs.length, 11);
+  assert.equal(repository.packs.length, 13);
   assert.deepEqual(repository.packResults.flatMap(({ errors }) => errors), []);
   assert.deepEqual(validatePackEvaluations(), []);
   for (const { manifest } of loadPacks()) {

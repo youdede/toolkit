@@ -4,13 +4,20 @@
 
 A scoped rule file that shapes every decision while installed. Each rule traces to the catalog artifact it descends from, and an expired context warns instead of silently rotting.
 
-4 of them. Install one with `npx @youdede/toolkit add <slug> --target <runtime> --scope project`, or read what it refuses first with `npx @youdede/toolkit info <slug>`.
+8 of them. Install one with `npx @youdede/toolkit add <slug> --target <runtime> --scope project`, or read what it refuses first with `npx @youdede/toolkit info <slug>`.
 
+
+## data
+
+| Slug | What it does | Risk | Runtimes |
+| --- | --- | --- | --- |
+| `database-migration-baseline` | Apply a provenance-backed database migration baseline to the repository files where that decision surface is active. | low | claude-code, cursor, github-copilot |
 
 ## development
 
 | Slug | What it does | Risk | Runtimes |
 | --- | --- | --- | --- |
+| `api-contract-baseline` | Apply a provenance-backed api contract baseline to the repository files where that decision surface is active. | low | claude-code, cursor, github-copilot |
 | `coding-style-baseline` | Apply behavior-preserving code-quality and module-boundary guidance to implementation files. | low | claude-code, cursor, github-copilot |
 | `testing-baseline` | Apply test-first, evidence-backed, integrity-preserving guidance when working with test files. | low | claude-code, cursor, github-copilot |
 
@@ -18,12 +25,14 @@ A scoped rule file that shapes every decision while installed. Each rule traces 
 
 | Slug | What it does | Risk | Runtimes |
 | --- | --- | --- | --- |
+| `ci-workflow-baseline` | Apply a provenance-backed ci workflow baseline to the repository files where that decision surface is active. | low | claude-code, cursor, github-copilot |
 | `git-workflow-baseline` | Keep branch integration recoverable, explicit, and backed by fresh repository evidence. | low | claude-code, cursor, github-copilot |
 
 ## security
 
 | Slug | What it does | Risk | Runtimes |
 | --- | --- | --- | --- |
+| `dependency-change-baseline` | Apply a provenance-backed dependency change baseline to the repository files where that decision surface is active. | low | claude-code, cursor, github-copilot |
 | `security-baseline` | Apply least-authority guidance for agent tools, credentials, sensitive files, and outbound data. | medium | claude-code, cursor, github-copilot |
 
 ---

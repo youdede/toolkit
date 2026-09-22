@@ -1,0 +1,55 @@
+{
+  "$schema": "../../../schema/pack-evaluation.schema.json",
+  "schemaVersion": 1,
+  "packId": "pack/remote-review-evidence",
+  "cases": [
+    {
+      "id": "remote-review-evidence-complete-evidence",
+      "type": "positive",
+      "scenario": "Every required Remote review evidence member contributes declared evidence, every outcome is verified, and the report cites the current ledger entry.",
+      "expected": {
+        "verdict": "accept",
+        "outcomes": [
+          "remote-review-evidence",
+          "ci-failure-diagnosis"
+        ]
+      }
+    },
+    {
+      "id": "remote-review-evidence-missing-evidence",
+      "type": "missing-evidence",
+      "scenario": "One required Remote review evidence member has no evidence hash even though its mapped outcome is marked verified.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "remote-review-evidence",
+          "ci-failure-diagnosis"
+        ]
+      }
+    },
+    {
+      "id": "remote-review-evidence-ledger-mismatch",
+      "type": "ledger-mismatch",
+      "scenario": "The Remote review evidence report cites a ledger entry hash that does not match the checkpoint carrying its claims.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "remote-review-evidence",
+          "ci-failure-diagnosis"
+        ]
+      }
+    },
+    {
+      "id": "remote-review-evidence-unsupported-coordinate",
+      "type": "unsupported-coordinate",
+      "scenario": "The requested Remote review evidence target and scope cannot install every required member at one common coordinate.",
+      "expected": {
+        "verdict": "refuse",
+        "outcomes": [
+          "remote-review-evidence",
+          "ci-failure-diagnosis"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "browser-verification",
+  "displayName": "Browser verification",
+  "version": "1.0.0",
+  "description": "Exercise an unauthenticated local interface in an isolated browser and preserve journey-level verification evidence.",
+  "author": {
+    "name": "Youdede",
+    "url": "https://github.com/udede/toolkit"
+  },
+  "homepage": "https://github.com/udede/toolkit/blob/main/packs/browser-verification/pack.json",
+  "repository": "https://github.com/udede/toolkit",
+  "license": "MIT",
+  "keywords": [
+    "local-browser-verification",
+    "ledger-linked-evidence",
+    "behaviorally-evaluated"
+  ],
+  "mcpServers": "./.mcp.json",
+  "metadata": {
+    "catalogId": "pack/browser-verification",
+    "memberArtifactIds": [
+      "skill/development/testing/test-interface-in-browser",
+      "subagent/design/frontend/web-performance-reviewer",
+      "mcp-server/development/testing/playwright-local-isolated"
+    ],
+    "refusalCount": 9,
+    "evidenceBadges": [
+      "ledger-linked-evidence",
+      "behaviorally-evaluated"
+    ]
+  }
+}

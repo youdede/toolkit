@@ -1,0 +1,16 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "cursor",
+  "scopes": [
+    "project"
+  ],
+  "stability": "stable",
+  "limitations": ["Cursor does not guarantee cross-file rule precedence; numeric filenames preserve deterministic toolkit ordering."],
+  "files": [
+    {
+      "from": "targets/cursor/api-contract-baseline.mdc",
+      "to": ".cursor/rules/youdede-0300-api-contract-baseline.mdc"
+    }
+  ]
+}

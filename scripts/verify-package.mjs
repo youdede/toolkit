@@ -115,7 +115,7 @@ for (const record of loadArtifacts(ROOT)) {
     const entrypointPath = `${artifactRoot}/${entrypoint.path}`.replaceAll('\\', '/');
     if (!files.has(entrypointPath)) fail(`deterministic entrypoint '${entrypointPath}' is missing from the package`);
   }
-  if (record.manifest.kind === 'skill' || record.manifest.kind === 'subagent') {
+  if (['skill', 'subagent', 'command', 'context'].includes(record.manifest.kind)) {
     const evaluationPath = `${artifactRoot}/evaluations/behavioral.json`;
     if (!files.has(evaluationPath)) fail(`behavioral contract '${evaluationPath}' is missing from the package`);
   }

@@ -7,6 +7,8 @@ allowed-tools: Read, Grep, Glob
 
 Produce an implementation plan whose claims are anchored to code you have actually read.
 
+The generated coding-style baseline must already exist at `.claude/rules/youdede/0100-coding-style-baseline.md`.
+
 ## Step 0 — Preconditions (mandatory, deterministic)
 
 Before anything else, run:

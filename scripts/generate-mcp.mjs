@@ -21,7 +21,7 @@ export function expectedMcpOutputs(root = ROOT) {
   for (const record of loadArtifacts(root).filter(({ manifest }) => manifest.kind === 'mcp-server')) {
     const profileFile = path.join(record.directory, 'server.json');
     const profile = JSON.parse(readFileSync(profileFile, 'utf8'));
-    outputs.set(path.join(record.directory, 'runtime/readonly-mcp-server.mjs'), runtime);
+    if (profile.mode !== 'external-vendor') outputs.set(path.join(record.directory, 'runtime/readonly-mcp-server.mjs'), runtime);
     servers[profile.serverName] = {
       artifactId: record.manifest.id,
       profileSha256: sha256(readFileSync(profileFile)),

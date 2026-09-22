@@ -12,11 +12,11 @@ import {
 import { loadPacks, ROOT, validateRepository } from '../scripts/lib/catalog.mjs';
 import { validatePackEvaluations } from '../scripts/validate-pack-evaluations.mjs';
 
-test('every public skill and subagent has a complete behavioral contract', () => {
+test('every public prompt-bearing artifact has a complete behavioral contract', () => {
   const result = validateBehavioralEvaluations();
   assert.equal(result.valid, true, result.errors.join('\n'));
   const expectedIds = validateRepository().artifacts
-    .filter((record) => record.manifest.kind === 'skill' || record.manifest.kind === 'subagent')
+    .filter((record) => ['skill', 'subagent', 'command', 'context'].includes(record.manifest.kind))
     .map(({ manifest }) => manifest.id)
     .sort();
   assert.ok(expectedIds.length > 0);
@@ -46,7 +46,7 @@ test('every public skill and subagent has a complete behavioral contract', () =>
 test('every workflow pack records evidence-bearing behavioral scenarios', () => {
   assert.deepEqual(validatePackEvaluations(), []);
   const packs = loadPacks();
-  assert.equal(packs.length, 11);
+  assert.equal(packs.length, 13);
   for (const { directory, manifest } of packs) {
     const document = JSON.parse(readFileSync(path.join(directory, 'evaluations', 'behavioral.json'), 'utf8'));
     assert.deepEqual(

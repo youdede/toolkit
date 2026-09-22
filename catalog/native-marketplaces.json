@@ -3,13 +3,23 @@
   "schemaVersion": 1,
   "generatedBy": "scripts/generate-marketplaces.mjs",
   "claudeCode": {
-    "pluginCount": 10,
+    "pluginCount": 12,
     "plugins": [
       {
         "packId": "pack/accessibility-assurance",
         "name": "accessibility-assurance",
         "source": "./plugins/accessibility-assurance",
         "refusalCount": 32,
+        "evidenceBadges": [
+          "ledger-linked-evidence",
+          "behaviorally-evaluated"
+        ]
+      },
+      {
+        "packId": "pack/browser-verification",
+        "name": "browser-verification",
+        "source": "./plugins/browser-verification",
+        "refusalCount": 9,
         "evidenceBadges": [
           "ledger-linked-evidence",
           "behaviorally-evaluated"
@@ -70,6 +80,16 @@
         "name": "release-readiness",
         "source": "./plugins/release-readiness",
         "refusalCount": 24,
+        "evidenceBadges": [
+          "ledger-linked-evidence",
+          "behaviorally-evaluated"
+        ]
+      },
+      {
+        "packId": "pack/remote-review-evidence",
+        "name": "remote-review-evidence",
+        "source": "./plugins/remote-review-evidence",
+        "refusalCount": 12,
         "evidenceBadges": [
           "ledger-linked-evidence",
           "behaviorally-evaluated"

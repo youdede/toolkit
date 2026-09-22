@@ -35,10 +35,19 @@ export function verifyMcpRecord(record) {
   if (JSON.stringify(profile.secretAccess) !== JSON.stringify(manifest.mcpServer.secretAccess)) errors.push('secretAccess differs from the manifest');
   if (profile.env && Object.keys(profile.env).length) errors.push('profiles may not embed environment values');
   const networked = manifest.mcpServer.egress.some((entry) => entry !== 'none');
-  if (networked !== (profile.mode === 'allowlisted-fetch')) errors.push('network authority does not match the runtime mode');
-  if (networked && JSON.stringify(profile.allowHosts) !== JSON.stringify(manifest.mcpServer.egress)) errors.push('allowHosts must exactly match declared egress');
+  const external = profile.mode === 'external-vendor';
+  if (!external && networked !== (profile.mode === 'allowlisted-fetch')) errors.push('network authority does not match the runtime mode');
+  if (networked && !external && JSON.stringify(profile.allowHosts) !== JSON.stringify(manifest.mcpServer.egress)) errors.push('allowHosts must exactly match declared egress');
   if (!networked && (profile.allowHosts?.length || profile.egress.join() !== 'none')) errors.push('closed-world profiles must have no host allowlist');
-  if (profile.launch?.command !== 'node' || JSON.stringify(profile.launch?.args) !== JSON.stringify([
+  if (external) {
+    if (!profile.provider || !/^[a-z0-9@/._-]+$/i.test(profile.provider.package || '') || !/^v?\d+\.\d+\.\d+$/.test(profile.provider.version || '')) errors.push('external vendor profile requires an exact package and semantic version');
+    const joined = (profile.launch?.args || []).join(' ');
+    const dockerPinned = profile.launch?.command === 'docker' && /^sha256:[0-9a-f]{64}$/.test(profile.provider.digest || '') && joined.includes(`${profile.provider.package}@${profile.provider.digest}`);
+    const packagePinned = ['npx', 'go'].includes(profile.launch?.command) && joined.includes(`${profile.provider.package}@${profile.provider.version}`);
+    if (!dockerPinned && !packagePinned) errors.push('external launch must pin the declared package and exact version or container digest');
+    if (!Array.isArray(profile.provider?.requiredArgs) || profile.provider.requiredArgs.length === 0 || profile.provider.requiredArgs.some((argument) => !profile.launch?.args?.includes(argument))) errors.push('external launch omits a declared mandatory confinement argument');
+    if (profile.tools?.length) errors.push('external vendor tools must be observed and re-pinned before claiming description-level drift coverage');
+  } else if (profile.launch?.command !== 'node' || JSON.stringify(profile.launch?.args) !== JSON.stringify([
     '.youdede/mcp/runtime.mjs', '--profile', `.youdede/mcp/${manifest.slug}/server.json`
   ])) errors.push('launch command is outside the pinned local runtime contract');
   const names = new Set();
@@ -46,7 +55,7 @@ export function verifyMcpRecord(record) {
     if (names.has(tool.name)) errors.push(`tool '${tool.name}' is duplicated`);
     names.add(tool.name);
     if (typeof tool.description !== 'string' || tool.description.length < 20 || POISONING.test(tool.description) || /[\u0000-\u0008\u000B\u000C\u000E-\u001F]/u.test(tool.description)) errors.push(`tool '${tool.name}' has an unsafe description`);
-    if (tool.annotations?.readOnlyHint !== true || tool.annotations?.destructiveHint !== false) errors.push(`tool '${tool.name}' is not declared read-only`);
+    if (!external && (tool.annotations?.readOnlyHint !== true || tool.annotations?.destructiveHint !== false)) errors.push(`tool '${tool.name}' is not declared read-only`);
     if (tool.annotations?.openWorldHint !== networked) errors.push(`tool '${tool.name}' has the wrong open-world annotation`);
   }
   const drift = compareObservedTools(manifest.mcpServer.pinnedTools, profile.tools);

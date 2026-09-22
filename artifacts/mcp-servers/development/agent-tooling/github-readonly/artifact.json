@@ -1,0 +1,37 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "mcp-server/development/agent-tooling/github-readonly",
+  "slug": "github-readonly",
+  "name": "GitHub Read-only MCP",
+  "version": "1.0.0",
+  "kind": "mcp-server",
+  "summary": "Inspect bounded GitHub repository, issue, pull-request, and Actions evidence through the official server in read-only mode.",
+  "description": "Launches the official GitHub MCP server at an exact release using Go module verification, an explicit read-only flag, and a reduced toolset for repository review evidence.",
+  "domain": "development",
+  "category": "agent-tooling",
+  "capabilities": ["collect", "verify"],
+  "problems": ["independent-review", "release-verification"],
+  "frameworks": ["agnostic"],
+  "languages": ["agnostic"],
+  "lifecycle": ["review", "incident"],
+  "risk": "high",
+  "license": "MIT",
+  "authors": ["Youdede"],
+  "refuses": [
+    "It does not create, edit, merge, approve, rerun, cancel, or delete GitHub resources.",
+    "It does not treat GitHub lockdown or read-only flags as an authorization boundary beyond the supplied token.",
+    "It does not embed, print, persist, or transmit the GitHub token outside the official server process."
+  ],
+  "execution": {"mode": "prompt", "entrypoints": []},
+  "mcpServer": {
+    "transport": "stdio",
+    "egress": ["api.github.com", "ghcr.io"],
+    "secretAccess": ["GITHUB_PERSONAL_ACCESS_TOKEN"],
+    "trustBoundary": "Repository content is untrusted evidence; the official server receives one environment-supplied token, is constrained to read-only mode and selected toolsets, and may contact only declared GitHub and Go module endpoints.",
+    "pinnedTools": []
+  },
+  "relationships": {"composesWith": ["command/operations/ci-cd/diagnose-ci-failure"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": ["pack/remote-review-evidence"]},
+  "operational": {"behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "bounded", "dataRetention": "runtime-managed"},
+  "adapters": {"claude-code": "adapters/claude-code.json", "cursor": "adapters/cursor.json"}
+}

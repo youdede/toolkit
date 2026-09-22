@@ -13,7 +13,7 @@ const KIND_GUARANTEES = Object.freeze({
   subagent: 'Narrow specialist whose native payload declares bounded tools or permissions and repeats its refusal boundary.',
   command: 'User invocation with an exact tool allowlist, declared preconditions, required evidence output, and authority-narrowing flags only.',
   context: 'Scoped and ordered rules with source provenance; expiry and hook contradictions are checked before installation.',
-  'mcp-server': 'Transport, egress, secret access, trust boundary, and tool-description hashes are declared and drift-checked.'
+  'mcp-server': 'Transport, egress, secret access, and trust boundaries are declared; local tools use description pins, while preview vendor servers use exact package and launch pins.'
 });
 
 function escapeCell(value) {
@@ -36,7 +36,7 @@ function artifactKindRows(artifacts) {
     const behaviors = [...new Set(records.map(({ manifest }) => manifest.operational.behavior))].sort();
     const failurePolicies = [...new Set(records.map(({ manifest }) => manifest.operational.failurePolicy))].sort();
     const modes = [...new Set(records.map(({ manifest }) => manifest.execution.mode))].sort();
-    const evidence = kind === 'skill' || kind === 'subagent'
+    const evidence = ['skill', 'subagent', 'command', 'context'].includes(kind)
       ? 'A checked four-case behavioral contract per artifact.'
       : kind === 'hook'
         ? 'Declared executable test coverage and process-exit behavior.'
@@ -44,7 +44,7 @@ function artifactKindRows(artifacts) {
           ? 'Declared precondition runtime plus executable helper tests where applicable.'
           : kind === 'context'
             ? 'Deterministic generation, provenance coverage, precedence, conflict, expiry, and removal tests.'
-            : 'Profile/config parity, capability-drift, egress, secret-access, install, and removal tests.';
+            : 'Profile/config parity, local capability drift, external exact-version launch, egress, secret-access, install, and removal tests.';
     return `| \`${kind}\` | ${records.length} | ${escapeCell(KIND_GUARANTEES[kind])} | modes: ${list(modes)}; behavior: ${list(behaviors)}; failure: ${list(failurePolicies)} | ${targetCoverage(records)} | ${escapeCell(evidence)} |`;
   });
 }
