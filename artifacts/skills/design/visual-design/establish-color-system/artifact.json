@@ -24,6 +24,7 @@
     "implementation"
   ],
   "risk": "low",
+  "risk_reason": "This skill defines perceptual color scales, semantic roles, state colors, dark scheme derivation, and theme constraints with computed contrast; it does not encode status or interactive meaning through hue alone.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -63,6 +64,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill defines perceptual color scales, semantic roles, state colors, dark scheme derivation, and theme constraints with computed contrast, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

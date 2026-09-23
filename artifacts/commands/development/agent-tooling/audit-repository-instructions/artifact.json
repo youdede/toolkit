@@ -30,6 +30,7 @@
     "maintenance"
   ],
   "risk": "low",
+  "risk_reason": "This command audits repository and folder instruction files for drift, precedence conflicts, and missing operational boundaries; it does not edit, create, delete, or normalize instruction files.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -84,7 +85,8 @@
   "operational": {
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
-    "latencyClass": "immediate",
+    "latencyClass": "bounded",
+    "latency_reason": "The command follows a precondition check and multiple workflow steps while it audits repository and folder instruction files for drift, precedence conflicts, and missing operational boundaries.",
     "dataRetention": "none"
   },
   "adapters": {

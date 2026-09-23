@@ -25,6 +25,7 @@
     "review"
   ],
   "risk": "medium",
+  "risk_reason": "This skill designs a reproducible agent evaluation harness with isolated cases, traces, judges, and regression gates; it does not treat one successful stochastic run as reliable behavior.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -62,6 +63,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill designs a reproducible agent evaluation harness with isolated cases, traces, judges, and regression gates, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

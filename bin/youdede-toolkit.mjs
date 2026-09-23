@@ -138,8 +138,10 @@ async function main() {
       process.stdout.write(`- ${target} (${adapter.stability || 'stable'}; scopes: ${adapter.scopes.join(', ')})${limitations}\n`);
     }
     process.stdout.write(`Risk: ${manifest.risk}\n`);
+    process.stdout.write(`Risk reason: ${manifest.risk_reason}\n`);
     process.stdout.write(`Execution: ${manifest.execution.mode}\n`);
     process.stdout.write(`Behavior: ${manifest.operational.behavior}; failure policy: ${manifest.operational.failurePolicy}; latency: ${manifest.operational.latencyClass}\n`);
+    process.stdout.write(`Latency reason: ${manifest.operational.latency_reason}\n`);
     if (manifest.relationships.packIds.length) process.stdout.write(`Packs: ${manifest.relationships.packIds.join(', ')}\n`);
     process.stdout.write(`\nRefuses:\n`);
     for (const refusal of manifest.refuses) process.stdout.write(`- ${refusal}\n`);

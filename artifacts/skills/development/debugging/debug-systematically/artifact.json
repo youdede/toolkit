@@ -25,6 +25,7 @@
     "incident"
   ],
   "risk": "low",
+  "risk_reason": "This skill traces failures to an evidenced root cause before making a bounded repair; it does not claim resolution without fresh regression verification.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill traces failures to an evidenced root cause before making a bounded repair, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

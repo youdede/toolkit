@@ -27,6 +27,7 @@
     "maintenance"
   ],
   "risk": "medium",
+  "risk_reason": "This skill writes lean root agent guidance from verified project commands, boundaries, and canonical context; it does not overwrite existing agent guidance or choose a new runtime filename without review.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -63,6 +64,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill writes lean root agent guidance from verified project commands, boundaries, and canonical context, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

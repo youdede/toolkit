@@ -25,6 +25,7 @@
     "maintenance"
   ],
   "risk": "medium",
+  "risk_reason": "This skill assesses whether verifiable site content can be discovered, understood, and cited by answer systems; it does not guarantee citation, placement, traffic, or model behavior.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill assesses whether verifiable site content can be discovered, understood, and cited by answer systems, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

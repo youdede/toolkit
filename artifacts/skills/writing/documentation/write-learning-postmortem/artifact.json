@@ -25,6 +25,7 @@
     "learning"
   ],
   "risk": "medium",
+  "risk_reason": "This skill writes a blameless incident record that ties impact, timeline, contributing conditions, and actions to evidence; it does not invent a single root cause, exact impact, or participant intent.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill writes a blameless incident record that ties impact, timeline, contributing conditions, and actions to evidence, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

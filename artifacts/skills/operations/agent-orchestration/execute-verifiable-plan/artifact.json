@@ -25,6 +25,7 @@
     "handoff"
   ],
   "risk": "medium",
+  "risk_reason": "This skill executes an approved plan in bounded batches with checkpoints, evidence, and controlled deviation; it does not treat an old plan as authority over current evidence.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -64,6 +65,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill executes an approved plan in bounded batches with checkpoints, evidence, and controlled deviation, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

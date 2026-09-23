@@ -29,6 +29,7 @@
     "maintenance"
   ],
   "risk": "medium",
+  "risk_reason": "This read-only specialist diagnoses repeated-test instability from supplied run evidence without rerunning, quarantining, or editing tests; its findings may affect a decision but it cannot edit or approve changes.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -54,6 +55,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The specialist diagnoses repeated-test instability from supplied run evidence without rerunning, quarantining, or editing tests, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   },
   "adapters": {

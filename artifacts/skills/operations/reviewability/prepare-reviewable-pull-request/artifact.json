@@ -29,6 +29,7 @@
     "handoff"
   ],
   "risk": "medium",
+  "risk_reason": "This skill prepares a focused pull-request narrative whose claims trace to the diff, tests, risks, and review order; it does not claim the pull request is ready or approved solely because its description is complete.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -63,6 +64,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill prepares a focused pull-request narrative whose claims trace to the diff, tests, risks, and review order, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   },
   "adapters": {

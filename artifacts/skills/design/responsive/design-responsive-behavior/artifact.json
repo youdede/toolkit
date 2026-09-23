@@ -24,6 +24,7 @@
     "implementation"
   ],
   "risk": "low",
+  "risk_reason": "This skill specifies content-driven breakpoints, reflow, and input adaptation as testable behavior per viewport range; it does not specify targets below the platform minimum, or hover-only affordances on touch ranges.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -66,6 +67,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill specifies content-driven breakpoints, reflow, and input adaptation as testable behavior per viewport range, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

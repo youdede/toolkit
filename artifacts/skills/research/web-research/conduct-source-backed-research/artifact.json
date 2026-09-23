@@ -24,6 +24,7 @@
     "review"
   ],
   "risk": "low",
+  "risk_reason": "This skill researches a decision with primary sources, claim-level citations, and a gap pass; it does not present inference, forecasts, or forum anecdotes as confirmed fact.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -61,6 +62,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill researches a decision with primary sources, claim-level citations, and a gap pass, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

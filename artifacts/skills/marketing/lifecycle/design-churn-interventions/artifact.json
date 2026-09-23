@@ -25,6 +25,7 @@
     "implementation"
   ],
   "risk": "medium",
+  "risk_reason": "This skill diagnoses voluntary and payment churn, then design respectful interventions with guardrails; it does not contact users without valid consent or continue after an opt-out.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill diagnoses voluntary and payment churn, then design respectful interventions with guardrails, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

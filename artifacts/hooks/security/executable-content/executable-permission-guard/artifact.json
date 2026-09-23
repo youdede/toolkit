@@ -26,6 +26,7 @@
     "release"
   ],
   "risk": "medium",
+  "risk_reason": "This automatic gate rejects suspicious staged executable-bit additions before they enter repository history; a false denial can interrupt legitimate work, but it does not execute the blocked action.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -67,7 +68,8 @@
   "operational": {
     "behavior": "enforcing",
     "failurePolicy": "fail-closed",
-    "latencyClass": "immediate",
+    "latencyClass": "bounded",
+    "latency_reason": "To reject suspicious staged executable-bit additions before they enter repository history, the entrypoint may run a bounded local subprocess before returning.",
     "dataRetention": "none"
   }
 }

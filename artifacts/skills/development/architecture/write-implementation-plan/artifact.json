@@ -24,6 +24,7 @@
     "handoff"
   ],
   "risk": "medium",
+  "risk_reason": "This skill writes a repository-grounded implementation plan with bounded steps, proof, dependencies, and decisions; it does not hide design decisions inside implementation steps.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -61,6 +62,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill writes a repository-grounded implementation plan with bounded steps, proof, dependencies, and decisions, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

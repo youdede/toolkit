@@ -25,6 +25,7 @@
     "review"
   ],
   "risk": "medium",
+  "risk_reason": "This skill isolates concurrent Git work and integrate only reviewed, verified changes; it does not reuse a branch already checked out elsewhere.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill isolates concurrent Git work and integrate only reviewed, verified changes, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

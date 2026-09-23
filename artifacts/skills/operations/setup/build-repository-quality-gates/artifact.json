@@ -29,6 +29,7 @@
     "maintenance"
   ],
   "risk": "medium",
+  "risk_reason": "This skill builds proportionate local and CI quality gates from the repository’s actual risks and commands; it does not place slow, network-dependent, privileged, or flaky work in a blocking commit hook.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -56,6 +57,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill builds proportionate local and CI quality gates from the repository’s actual risks and commands, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   },
   "adapters": {

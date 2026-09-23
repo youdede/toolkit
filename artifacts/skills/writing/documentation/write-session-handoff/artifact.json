@@ -23,6 +23,7 @@
     "handoff"
   ],
   "risk": "low",
+  "risk_reason": "This skill captures verified working state so another agent can resume without reconstruction; it does not invent completed work, passing checks, or decisions.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -65,6 +66,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill captures verified working state so another agent can resume without reconstruction, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

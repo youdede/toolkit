@@ -29,6 +29,7 @@
     "review"
   ],
   "risk": "medium",
+  "risk_reason": "This skill uses bounded mutation testing to expose weak assertions while separating equivalent and irrelevant mutants; it does not claim effective tests from line coverage, killed-mutant counts, or one tool run alone.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -55,6 +56,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill uses bounded mutation testing to expose weak assertions while separating equivalent and irrelevant mutants, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   },
   "adapters": {

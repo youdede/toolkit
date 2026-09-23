@@ -25,6 +25,7 @@
     "review"
   ],
   "risk": "medium",
+  "risk_reason": "This skill splits independent work into non-overlapping subagent briefs with owned outputs; it does not delegate an entire ambiguous project as one subtask.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -63,6 +64,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill splits independent work into non-overlapping subagent briefs with owned outputs, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

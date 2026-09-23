@@ -27,6 +27,7 @@
     "handoff"
   ],
   "risk": "low",
+  "risk_reason": "This observer appends a deterministic, hash-chained session-end receipt to the local session ledger; it writes only bounded local receipts and cannot block the event.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -64,6 +65,7 @@
     "behavior": "observing",
     "failurePolicy": "fail-open",
     "latencyClass": "bounded",
+    "latency_reason": "To append a deterministic, hash-chained session-end receipt to the local session ledger, the entrypoint may run a bounded local subprocess before returning.",
     "dataRetention": "local-bounded"
   },
   "adapters": {

@@ -21,6 +21,7 @@
     "languages",
     "lifecycle",
     "risk",
+    "risk_reason",
     "license",
     "authors",
     "refuses",
@@ -50,6 +51,7 @@
     "languages": { "$ref": "#/$defs/nonEmptySlugs" },
     "lifecycle": { "$ref": "#/$defs/nonEmptySlugs" },
     "risk": { "enum": ["low", "medium", "high"] },
+    "risk_reason": { "type": "string", "minLength": 25, "maxLength": 400, "pattern": "\\S" },
     "license": { "const": "MIT" },
     "authors": {
       "type": "array",
@@ -92,11 +94,12 @@
     "operational": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["behavior", "failurePolicy", "latencyClass", "dataRetention"],
+      "required": ["behavior", "failurePolicy", "latencyClass", "latency_reason", "dataRetention"],
       "properties": {
         "behavior": { "enum": ["advisory", "enforcing", "observing"] },
         "failurePolicy": { "enum": ["stop-and-report", "fail-closed", "fail-open"] },
         "latencyClass": { "enum": ["immediate", "bounded", "background"] },
+        "latency_reason": { "type": "string", "minLength": 25, "maxLength": 400, "pattern": "\\S" },
         "dataRetention": { "enum": ["none", "runtime-managed", "local-bounded"] }
       }
     },

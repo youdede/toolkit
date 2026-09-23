@@ -29,6 +29,7 @@
     "implementation"
   ],
   "risk": "low",
+  "risk_reason": "This command collects a deterministic redacted environment snapshot before a repository change begins; it does not claim parity with CI or production from a local snapshot.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -85,7 +86,8 @@
   "operational": {
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
-    "latencyClass": "immediate",
+    "latencyClass": "bounded",
+    "latency_reason": "The command follows a precondition check and multiple workflow steps while it collects a deterministic redacted environment snapshot before a repository change begins.",
     "dataRetention": "none"
   },
   "adapters": {

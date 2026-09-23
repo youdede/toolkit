@@ -30,6 +30,7 @@
     "review"
   ],
   "risk": "low",
+  "risk_reason": "This context applies a provenance-backed dependency change baseline to the repository files where that decision surface is active; it supplies guidance without tool or approval authority.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -99,6 +100,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "immediate",
+    "latency_reason": "The runtime loads static guidance to apply a provenance-backed dependency change baseline to the repository files where that decision surface is active in the matching file scope.",
     "dataRetention": "none"
   },
   "adapters": {

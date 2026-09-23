@@ -27,6 +27,7 @@
     "maintenance"
   ],
   "risk": "medium",
+  "risk_reason": "This automatic gate stops an agent from silently weakening existing quality and ownership policy files; a false denial can interrupt legitimate work, but it does not execute the blocked action.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -66,6 +67,7 @@
     "behavior": "enforcing",
     "failurePolicy": "fail-closed",
     "latencyClass": "immediate",
+    "latency_reason": "The entrypoint handles one intercepted event to stop an agent from silently weakening existing quality and ownership policy files without deferred work.",
     "dataRetention": "none"
   }
 }

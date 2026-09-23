@@ -11,20 +11,20 @@ A procedure an agent loads when a task matches. Each states the evidence it need
 
 | Slug | What it does | Risk | Runtimes |
 | --- | --- | --- | --- |
-| `design-data-quality-controls` | Design data-quality contracts, checks, ownership, and incident behavior around real decisions. | high | all six |
+| `design-data-quality-controls` | Design data-quality contracts, checks, ownership, and incident behavior around real decisions. | medium | all six |
 | `provision-postgres-readonly-role` | Design and verify a least-privilege PostgreSQL role for bounded read access. | high | all six |
 | `query-production-readonly` | Answer a bounded question from production data without mutating or exporting it. | high | all six |
-| `design-private-data-lifecycle` | Define a private-data lifecycle with classification, purpose, access, retention, deletion, and verification evidence. | high | all six |
-| `review-database-migration-plan` | Review a database migration plan for explicit SQL hazards and an evidenced rollout, rollback, lock, and backfill plan. | high | all six |
-| `design-data-pipeline-change` | Design a data-pipeline transition with explicit contracts, replay safety, backfill controls, and reconciliation. | high | all six |
-| `review-schema-evolution` | Review schema evolution across real readers, writers, stored records, rollout order, compatibility policy, and recovery. | high | all six |
+| `design-private-data-lifecycle` | Define a private-data lifecycle with classification, purpose, access, retention, deletion, and verification evidence. | medium | all six |
+| `review-database-migration-plan` | Review a database migration plan for explicit SQL hazards and an evidenced rollout, rollback, lock, and backfill plan. | medium | all six |
+| `design-data-pipeline-change` | Design a data-pipeline transition with explicit contracts, replay safety, backfill controls, and reconciliation. | medium | all six |
+| `review-schema-evolution` | Review schema evolution across real readers, writers, stored records, rollout order, compatibility policy, and recovery. | medium | all six |
 
 ## design
 
 | Slug | What it does | Risk | Runtimes |
 | --- | --- | --- | --- |
 | `plan-accessibility-conformance-evidence` | Plan accessibility evidence across user journeys, automation, keyboard, assistive technology, and human review. | medium | all six |
-| `prepare-eaa-conformance-evidence` | Map accessibility results to the requirement set and version an owner declared, keeping verified, asserted, stale and absent apart. | high | all six |
+| `prepare-eaa-conformance-evidence` | Map accessibility results to the requirement set and version an owner declared, keeping verified, asserted, stale and absent apart. | medium | all six |
 | `test-screen-reader-journey` | Test a bounded user journey with a real screen reader and evidence tied to interaction outcomes. | medium | all six |
 | `verify-cognitive-access-barriers` | Verify consistent help, redundant entry, and accessible authentication against an observed process walkthrough. | medium | all six |
 | `audit-design-system-consistency` | Audit whether rendered surfaces use a coherent design-system contract without mistaking a token inventory for user experience. | medium | all six |
@@ -54,11 +54,11 @@ A procedure an agent loads when a task matches. Each states the evidence it need
 | Slug | What it does | Risk | Runtimes |
 | --- | --- | --- | --- |
 | `audit-agent-guidance-drift` | Audit agent guidance against repository changes and propose only evidence-backed minimal corrections. | low | all six |
-| `author-deterministic-agent-hook` | Author a narrow deterministic agent hook whose native event and failure semantics are tested. | high | all six |
+| `author-deterministic-agent-hook` | Author a narrow deterministic agent hook whose native event and failure semantics are tested. | medium | all six |
 | `author-effective-agent-skill` | Author a focused agent skill with reliable routing, progressive disclosure, and tests. | low | all six |
-| `author-mcp-server-contract` | Design an MCP server with narrow tools, safe schemas, authority boundaries, and protocol evidence. | high | all six |
+| `author-mcp-server-contract` | Design an MCP server with narrow tools, safe schemas, authority boundaries, and protocol evidence. | medium | all six |
 | `evaluate-agent-guidance-value` | Measure whether always-loaded agent guidance changes outcomes before pruning or promoting it. | medium | all six |
-| `publish-agent-skill` | Publish a validated agent skill with provenance, versioning, and release evidence. | medium | all six |
+| `publish-agent-skill` | Publish a validated agent skill with provenance, versioning, and release evidence. | high | all six |
 | `sync-skills-across-agents` | Synchronize a skill across configured agent roots without assuming personal paths. | medium | all six |
 | `write-folder-agent-guidance` | Write scoped agent guidance files that inherit cleanly and avoid contradiction. | medium | all six |
 | `write-project-agent-guidance` | Write lean root agent guidance from verified project commands, boundaries, and canonical context. | medium | all six |
@@ -68,13 +68,13 @@ A procedure an agent loads when a task matches. Each states the evidence it need
 | `define-domain-language` | Define a precise domain glossary and record only durable, consequential design decisions. | medium | all six |
 | `design-deep-module-interface` | Design a small stable interface that concentrates behavior, change, and testing behind one seam. | medium | all six |
 | `enforce-typescript-module-boundaries` | Detect and enforce TypeScript package entry-point boundaries without assuming one repository layout. | medium | all six |
-| `plan-compatible-deprecation` | Plan a reversible deprecation with consumer discovery, migration proof, telemetry, and removal gates. | high | all six |
+| `plan-compatible-deprecation` | Plan a reversible deprecation with consumer discovery, migration proof, telemetry, and removal gates. | medium | all six |
 | `write-implementation-plan` | Write a repository-grounded implementation plan with bounded steps, proof, dependencies, and decisions. | medium | all six |
 | `write-verifiable-specification` | Write an implementation-ready specification with decisions, invariants, boundaries, and acceptance evidence. | medium | all six |
 | `deliver-incremental-change` | Deliver a change in independently verifiable slices that preserve a working system. | medium | all six |
 | `evaluate-code-review-feedback` | Evaluate review feedback against the code, contract, and evidence before applying a bounded correction. | medium | all six |
 | `optimize-with-performance-profile` | Optimize a measured bottleneck with representative workloads, guardrails, and regression proof. | medium | all six |
-| `request-independent-code-review` | Obtain a neutral second review and reconcile it against the actual change. | low | all six |
+| `request-independent-code-review` | Obtain a neutral second review and reconcile it against the actual change. | medium | all six |
 | `simplify-code-with-invariants` | Simplify a bounded code path while preserving observable behavior and repository conventions. | medium | all six |
 | `debug-systematically` | Trace failures to an evidenced root cause before making a bounded repair. | low | all six |
 | `assess-mutation-test-value` | Use bounded mutation testing to expose weak assertions while separating equivalent and irrelevant mutants. | medium | all six |
@@ -83,7 +83,7 @@ A procedure an agent loads when a task matches. Each states the evidence it need
 | `design-llm-evaluation` | Design an LLM evaluation around real tasks, controlled judges, failure taxonomy, and decision thresholds. | medium | all six |
 | `design-property-and-fuzz-tests` | Translate stable invariants and threat boundaries into reproducible property-based and fuzz tests. | medium | all six |
 | `evaluate-retrieval-system` | Evaluate retrieval and grounded generation separately across relevance, attribution, abstention, cost, and latency. | medium | all six |
-| `plan-load-test` | Design a capacity experiment with a representative workload, safety envelope, observability, and stop rules. | high | all six |
+| `plan-load-test` | Design a capacity experiment with a representative workload, safety envelope, observability, and stop rules. | medium | all six |
 | `test-interface-in-browser` | Exercise a bounded browser journey with state, network, console, accessibility, and visual evidence. | medium | all six |
 | `verify-completion-evidence` | Verify completion claims with fresh commands, inspectable artifacts, and explicit remaining uncertainty. | medium | all six |
 
@@ -93,7 +93,7 @@ A procedure an agent loads when a task matches. Each states the evidence it need
 | --- | --- | --- | --- |
 | `design-controlled-experiment` | Turn a decision into a measurable experiment with guardrails and an explicit stopping rule. | medium | all six |
 | `design-marketing-measurement` | Translate marketing decisions into a governed event, property, quality, and reporting plan. | medium | all six |
-| `reconcile-marketing-attribution` | Reconcile conflicting channel credit while preserving uncertainty and causal limits. | high | all six |
+| `reconcile-marketing-attribution` | Reconcile conflicting channel credit while preserving uncertainty and causal limits. | medium | all six |
 | `capture-content-idea` | Append a content idea to an approved backlog with provenance and no rewording. | low | all six |
 | `document-brand-voice` | Document a usable brand voice from real examples, audience context, boundaries, and review tests. | low | all six |
 | `edit-marketing-copy` | Edit existing marketing copy in bounded passes while preserving truth, voice, and intent. | low | all six |
@@ -101,37 +101,37 @@ A procedure an agent loads when a task matches. Each states the evidence it need
 | `plan-evidence-led-content` | Build a content portfolio around audience decisions, distribution, evidence, and operating capacity. | low | all six |
 | `write-conversion-copy` | Write persuasive page copy from audience evidence, product truth, objections, and one primary action. | medium | all six |
 | `audit-app-store-listing` | Review an app listing for discoverability, truthful persuasion, visual sequence, and testable gaps. | medium | all six |
-| `audit-ethical-persuasion` | Audit persuasive design for informed choice, evidence, accessibility, and avoidable manipulation. | high | all six |
+| `audit-ethical-persuasion` | Audit persuasive design for informed choice, evidence, accessibility, and avoidable manipulation. | medium | all six |
 | `design-respectful-conversion-overlay` | Design a contextual overlay that is accessible, dismissible, frequency-bounded, and measurable. | medium | all six |
-| `reduce-signup-friction` | Reduce account-creation friction while preserving security, consent, accessibility, and recovery. | high | all six |
+| `reduce-signup-friction` | Reduce account-creation friction while preserving security, consent, accessibility, and recovery. | medium | all six |
 | `review-conversion-friction` | Review a conversion journey for evidence-backed clarity, trust, effort, and measurement gaps. | medium | all six |
-| `review-upgrade-moment` | Review an in-product upgrade request for timing, value evidence, terms, recovery, and autonomy. | high | all six |
+| `review-upgrade-moment` | Review an in-product upgrade request for timing, value evidence, terms, recovery, and autonomy. | medium | all six |
 | `design-community-growth-system` | Design a member-value community system with governance, operating loops, and health measures. | medium | all six |
 | `design-measurable-growth-loop` | Design a compounding acquisition or engagement loop with explicit actors, states, and constraints. | medium | all six |
 | `design-qualified-lead-magnet` | Design an optional resource that delivers standalone value and signals genuine customer fit. | medium | all six |
-| `design-referral-program` | Design a referral system with product fit, balanced incentives, fraud controls, and durable economics. | high | all six |
+| `design-referral-program` | Design a referral system with product fit, balanced incentives, fraud controls, and durable economics. | medium | all six |
 | `evaluate-free-tool-growth` | Evaluate whether a free utility can create genuine user value and a measurable acquisition loop. | medium | all six |
-| `plan-product-launch` | Plan a staged product launch with readiness gates, audience sequencing, ownership, and recovery. | high | all six |
+| `plan-product-launch` | Plan a staged product launch with readiness gates, audience sequencing, ownership, and recovery. | medium | all six |
 | `design-churn-interventions` | Diagnose voluntary and payment churn, then design respectful interventions with guardrails. | medium | all six |
-| `design-lifecycle-email-sequence` | Design consent-aware lifecycle email sequences tied to user state, value, and exit rules. | high | all six |
+| `design-lifecycle-email-sequence` | Design consent-aware lifecycle email sequences tied to user state, value, and exit rules. | medium | all six |
 | `improve-product-activation` | Improve first-use activation by removing barriers to a verified user value event. | medium | all six |
 | `qualify-co-marketing-partner` | Evaluate a joint-marketing partner and define a balanced, measurable campaign agreement. | medium | all six |
-| `qualify-influencer-partnership` | Qualify creator partnerships using audience evidence, brand safety, rights, disclosure, and economics. | high | all six |
-| `plan-paid-acquisition` | Design a bounded paid-acquisition plan with economics, controls, and evidence-led optimization. | high | all six |
+| `qualify-influencer-partnership` | Qualify creator partnerships using audience evidence, brand safety, rights, disclosure, and economics. | medium | all six |
+| `plan-paid-acquisition` | Design a bounded paid-acquisition plan with economics, controls, and evidence-led optimization. | medium | all six |
 | `produce-testable-ad-creative` | Create platform-fit ad variants whose hypotheses and claims can be reviewed and measured. | medium | all six |
 | `build-competitor-evidence-profile` | Build a dated competitor profile that separates observed facts, claims, inference, and unknowns. | medium | all six |
-| `design-evidence-backed-offer` | Design an offer whose value, scope, proof, risk allocation, and terms can withstand review. | high | all six |
-| `design-pricing-and-packaging` | Design pricing and packaging from customer value, economics, segmentation, and operational evidence. | high | all six |
+| `design-evidence-backed-offer` | Design an offer whose value, scope, proof, risk allocation, and terms can withstand review. | medium | all six |
+| `design-pricing-and-packaging` | Design pricing and packaging from customer value, economics, segmentation, and operational evidence. | medium | all six |
 | `document-product-positioning` | Create a reusable positioning record with evidence, decisions, boundaries, and unresolved questions. | low | all six |
 | `write-honest-comparison-page` | Write a useful comparison page from sourced differences, fit criteria, and acknowledged tradeoffs. | medium | all six |
-| `plan-earned-media-outreach` | Plan evidence-led earned-media outreach around genuine news value and respectful journalist relevance. | high | all six |
-| `build-compliant-prospect-list` | Build a bounded B2B prospect list from lawful sources, explicit fit rules, and traceable evidence. | high | all six |
+| `plan-earned-media-outreach` | Plan evidence-led earned-media outreach around genuine news value and respectful journalist relevance. | medium | all six |
+| `build-compliant-prospect-list` | Build a bounded B2B prospect list from lawful sources, explicit fit rules, and traceable evidence. | medium | all six |
 | `build-sales-enablement-asset` | Build a seller-ready asset from a specific buyer decision, evidence set, and usage context. | medium | all six |
-| `define-revenue-lifecycle` | Define revenue stages, ownership, data contracts, handoffs, and reconciliation across teams. | high | all six |
-| `write-compliant-cold-email` | Write concise B2B outreach grounded in relevance, verifiable claims, and respectful follow-up. | high | all six |
+| `define-revenue-lifecycle` | Define revenue stages, ownership, data contracts, handoffs, and reconciliation across teams. | medium | all six |
+| `write-compliant-cold-email` | Write concise B2B outreach grounded in relevance, verifiable claims, and respectful follow-up. | medium | all six |
 | `audit-ai-search-visibility` | Assess whether verifiable site content can be discovered, understood, and cited by answer systems. | medium | all six |
 | `audit-technical-seo` | Audit discoverability from crawl and index signals through templates, performance, and content evidence. | medium | all six |
-| `design-safe-programmatic-seo` | Design data-backed templated pages with unique utility, quality gates, and controlled indexing. | high | all six |
+| `design-safe-programmatic-seo` | Design data-backed templated pages with unique utility, quality gates, and controlled indexing. | medium | all six |
 | `implement-valid-structured-data` | Implement evidence-backed JSON-LD that matches visible content and current validator requirements. | medium | all six |
 | `build-marketing-operating-plan` | Build a constrained marketing operating plan that ties choices, owners, evidence, and review cadence. | medium | all six |
 | `generate-marketing-experiments` | Generate a bounded portfolio of marketing experiments from constraints, evidence, and bottlenecks. | low | all six |
@@ -148,26 +148,26 @@ A procedure an agent loads when a task matches. Each states the evidence it need
 | `design-delegable-workflow` | Design a repeatable workflow with explicit triggers, deterministic steps, authority, checkpoints, and evidence. | medium | all six |
 | `execute-verifiable-plan` | Execute an approved plan in bounded batches with checkpoints, evidence, and controlled deviation. | medium | all six |
 | `map-multi-session-decisions` | Map a large uncertain effort as bounded decisions, dependencies, frontier work, and explicit fog. | medium | all six |
-| `schedule-agent-runs` | Design and verify recurring agent work without hiding state, authority, or failure. | medium | all six |
+| `schedule-agent-runs` | Design and verify recurring agent work without hiding state, authority, or failure. | high | all six |
 | `write-verifiable-goal-loop` | Turn an open-ended objective into a bounded loop with evidence and stop rules. | medium | all six |
 | `debug-ci-failure` | Trace a failing CI job to the earliest actionable divergence and a minimal discriminating check. | medium | all six |
-| `review-ci-workflow-change` | Review a CI workflow change for observable trigger, permission, command, artifact, and rollback evidence. | high | all six |
+| `review-ci-workflow-change` | Review a CI workflow change for observable trigger, permission, command, artifact, and rollback evidence. | medium | all six |
 | `isolate-work-with-worktrees` | Isolate concurrent Git work and integrate only reviewed, verified changes. | medium | all six |
 | `prepare-branch-integration` | Prepare a development branch for integration with clean evidence, explicit options, and recoverable actions. | high | all six |
-| `resolve-merge-conflicts-by-intent` | Resolve Git conflicts by reconstructing both changes, preserving intent, and verifying the merged behavior. | high | all six |
-| `plan-infrastructure-change` | Plan an infrastructure change from current state through staged transition, verification, and recovery. | high | all six |
+| `resolve-merge-conflicts-by-intent` | Resolve Git conflicts by reconstructing both changes, preserving intent, and verifying the merged behavior. | medium | all six |
+| `plan-infrastructure-change` | Plan an infrastructure change from current state through staged transition, verification, and recovery. | medium | all six |
 | `build-macos-metrics-collector` | Build a low-overhead local macOS metrics collector with private-by-default storage. | medium | all six |
 | `design-observability-signals` | Design logs, metrics, traces, and alerts around decisions, failure modes, cost, and privacy. | medium | all six |
 | `design-service-level-objectives` | Design service objectives from user journeys, measurable indicators, error budgets, and response policy. | medium | all six |
-| `write-incident-runbook` | Write an executable incident runbook with detection, authority, diagnosis, containment, and recovery. | high | all six |
-| `verify-mobile-release-readiness` | Verify a mobile release candidate across identity, signing evidence, journeys, compatibility, rollout, and recovery. | high | all six |
+| `write-incident-runbook` | Write an executable incident runbook with detection, authority, diagnosis, containment, and recovery. | medium | all six |
+| `verify-mobile-release-readiness` | Verify a mobile release candidate across identity, signing evidence, journeys, compatibility, rollout, and recovery. | medium | all six |
 | `verify-production-release` | Release an exact revision through CI and prove deployment health before completion. | high | all six |
 | `decompose-dependent-work-slices` | Decompose approved work into independently verifiable vertical slices with an acyclic dependency graph. | medium | all six |
 | `prepare-reviewable-pull-request` | Prepare a focused pull-request narrative whose claims trace to the diff, tests, risks, and review order. | medium | all six |
 | `review-plan-execution-divergence` | Reconcile an approved plan with actual changes and turn recurring divergence into process improvements. | low | all six |
 | `triage-engineering-request` | Triage an incoming issue or pull request into an evidenced next state without silently acting on it. | medium | all six |
 | `resume-session-work` | Reconstruct working context from the hash-chained session ledger with hash-cited claims and an explicit unverified section. | low | claude-code, cursor, gemini-cli, github-copilot, opencode |
-| `author-guided-setup-wizard` | Author a resumable human-guided setup script with safe secret handling and verified checkpoints. | high | all six |
+| `author-guided-setup-wizard` | Author a resumable human-guided setup script with safe secret handling and verified checkpoints. | medium | all six |
 | `build-repository-quality-gates` | Build proportionate local and CI quality gates from the repository’s actual risks and commands. | medium | all six |
 | `guide-stepwise-setup` | Guide unfamiliar setup one verified action at a time while retaining the full checklist. | low | all six |
 | `keep-macos-awake` | Keep macOS awake for approved work with reversible and observable controls. | medium | all six |
@@ -178,7 +178,7 @@ A procedure an agent loads when a task matches. Each states the evidence it need
 | --- | --- | --- | --- |
 | `research-online-purchase` | Compare fair price, reputable sellers, and purchase fit without placing an order. | medium | all six |
 | `write-source-backed-research-brief` | Turn a vague research need into a self-contained, evidence-oriented brief. | low | all six |
-| `extract-youtube-captions` | Extract available YouTube captions into clean text without downloading media. | low | all six |
+| `extract-youtube-captions` | Extract available YouTube captions into clean text without downloading media. | medium | all six |
 | `conduct-source-backed-research` | Research a decision with primary sources, claim-level citations, and a gap pass. | low | all six |
 
 ## security
@@ -186,10 +186,10 @@ A procedure an agent loads when a task matches. Each states the evidence it need
 | Slug | What it does | Risk | Runtimes |
 | --- | --- | --- | --- |
 | `audit-safe-browsing-readiness` | Audit a public site for security, transparency, and reputation readiness. | medium | all six |
-| `review-auth-boundary` | Review authentication and authorization boundaries through concrete identities, resources, and denied paths. | high | all six |
-| `plan-dependency-upgrade` | Plan a dependency upgrade from release evidence, compatibility surface, migration steps, and rollback. | high | all six |
-| `review-supply-chain-change` | Review changed package and build inputs from bounded, offline repository evidence. | high | all six |
-| `review-agent-tool-boundaries` | Review agent and MCP tool authority against prompt injection, confused-deputy, exfiltration, and unsafe side effects. | high | all six |
+| `review-auth-boundary` | Review authentication and authorization boundaries through concrete identities, resources, and denied paths. | medium | all six |
+| `plan-dependency-upgrade` | Plan a dependency upgrade from release evidence, compatibility surface, migration steps, and rollback. | medium | all six |
+| `review-supply-chain-change` | Review changed package and build inputs from bounded, offline repository evidence. | medium | all six |
+| `review-agent-tool-boundaries` | Review agent and MCP tool authority against prompt injection, confused-deputy, exfiltration, and unsafe side effects. | medium | all six |
 
 ## writing
 

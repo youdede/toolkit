@@ -23,7 +23,8 @@
     "planning",
     "operations"
   ],
-  "risk": "medium",
+  "risk": "high",
+  "risk_reason": "It installs a recurring agent job that can act after the initiating session, so mistakes can repeat until stopped.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -61,6 +62,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill designs and verifies recurring agent work without hiding state, authority, or failure, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

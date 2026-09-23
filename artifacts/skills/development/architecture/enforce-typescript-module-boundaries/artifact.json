@@ -29,6 +29,7 @@
     "review"
   ],
   "risk": "medium",
+  "risk_reason": "This skill detects and enforce TypeScript package entry-point boundaries without assuming one repository layout; it does not treat unresolved aliases or generated imports as proven violations.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -63,6 +64,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill detects and enforce TypeScript package entry-point boundaries without assuming one repository layout, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   },
   "adapters": {

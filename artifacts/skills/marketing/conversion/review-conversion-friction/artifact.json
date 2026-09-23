@@ -24,6 +24,7 @@
     "review"
   ],
   "risk": "medium",
+  "risk_reason": "This skill reviews a conversion journey for evidence-backed clarity, trust, effort, and measurement gaps; it does not redesign the page or launch experiments unless separately authorized.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -59,6 +60,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill reviews a conversion journey for evidence-backed clarity, trust, effort, and measurement gaps, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

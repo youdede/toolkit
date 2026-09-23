@@ -30,6 +30,7 @@
     "release"
   ],
   "risk": "medium",
+  "risk_reason": "This skill verifies consistent help, redundant entry, and accessible authentication against an observed process walkthrough; it does not accept an essential, security, or no-longer-valid exception as satisfied because the owner asserted it.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -66,6 +67,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill verifies consistent help, redundant entry, and accessible authentication against an observed process walkthrough, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   },
   "adapters": {

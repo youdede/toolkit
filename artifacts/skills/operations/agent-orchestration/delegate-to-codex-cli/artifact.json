@@ -24,6 +24,7 @@
     "review"
   ],
   "risk": "medium",
+  "risk_reason": "This skill delegates a bounded task to Codex CLI in an isolated, reviewable workspace; it does not accept a delegate claim as proof without parent-side review.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -59,6 +60,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill delegates a bounded task to Codex CLI in an isolated, reviewable workspace, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

@@ -29,6 +29,7 @@
     "planning"
   ],
   "risk": "medium",
+  "risk_reason": "This skill designs a repeatable workflow with explicit triggers, deterministic steps, authority, checkpoints, and evidence; it does not add an agent, schedule, or human checkpoint when the workflow does not require one.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -56,6 +57,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill designs a repeatable workflow with explicit triggers, deterministic steps, authority, checkpoints, and evidence, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   },
   "adapters": {

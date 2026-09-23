@@ -25,6 +25,7 @@
     "implementation"
   ],
   "risk": "low",
+  "risk_reason": "This skill specifies navigation patterns, menu ordering, wayfinding state, and search behavior from evidence about structure, platform, and tasks; it does not claim accessibility conformance for navigation or search states in place of an accessibility audit.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -66,6 +67,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill specifies navigation patterns, menu ordering, wayfinding state, and search behavior from evidence about structure, platform, and tasks, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

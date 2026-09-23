@@ -24,6 +24,7 @@
     "review"
   ],
   "risk": "low",
+  "risk_reason": "This skill edits existing marketing copy in bounded passes while preserving truth, voice, and intent; it does not overwrite a distinctive voice with generic conversion jargon.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -61,6 +62,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill edits existing marketing copy in bounded passes while preserving truth, voice, and intent, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

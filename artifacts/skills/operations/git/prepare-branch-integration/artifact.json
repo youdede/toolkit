@@ -25,6 +25,7 @@
     "handoff"
   ],
   "risk": "high",
+  "risk_reason": "It may push, merge, or delete branch and worktree state after authorization, affecting shared history or recoverability.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -62,6 +63,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill prepares a development branch for integration with clean evidence, explicit options, and recoverable actions, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

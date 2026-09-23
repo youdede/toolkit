@@ -24,6 +24,7 @@
     "review"
   ],
   "risk": "low",
+  "risk_reason": "This read-only specialist finds meaningful unproved behaviors in a bounded change without writing or running tests; it cannot edit or approve changes.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -63,6 +64,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The specialist finds meaningful unproved behaviors in a bounded change without writing or running tests, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

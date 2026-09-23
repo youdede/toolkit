@@ -26,6 +26,7 @@
     "planning"
   ],
   "risk": "low",
+  "risk_reason": "This command drafts an ordered implementation plan where every step cites the code it touches and the evidence that proves completion; it does not edit, create, or delete any file while planning; it only reads.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -82,7 +83,8 @@
   "operational": {
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
-    "latencyClass": "immediate",
+    "latencyClass": "bounded",
+    "latency_reason": "The command follows a precondition check and multiple workflow steps while it drafts an ordered implementation plan where every step cites the code it touches and the evidence that proves completion.",
     "dataRetention": "none"
   },
   "adapters": {

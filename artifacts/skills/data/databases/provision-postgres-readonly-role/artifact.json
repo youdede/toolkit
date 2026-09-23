@@ -24,6 +24,7 @@
     "operations"
   ],
   "risk": "high",
+  "risk_reason": "It can apply production role grants after explicit authorization, changing live database access.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -59,6 +60,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill designs and verifies a least-privilege PostgreSQL role for bounded read access, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

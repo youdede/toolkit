@@ -16,6 +16,7 @@
   "languages": ["agnostic"],
   "lifecycle": ["implementation", "maintenance"],
   "risk": "low",
+  "risk_reason": "This context applies behavior-preserving code-quality and module-boundary guidance to implementation files; it supplies guidance without tool or approval authority.",
   "license": "MIT",
   "authors": ["Youdede"],
   "refuses": [
@@ -41,7 +42,7 @@
     ]
   },
   "relationships": { "composesWith": [], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": [] },
-  "operational": { "behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "immediate", "dataRetention": "none" },
+  "operational": { "behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "immediate", "latency_reason": "The runtime loads static guidance to apply behavior-preserving code-quality and module-boundary guidance to implementation files in the matching file scope.", "dataRetention": "none" },
   "adapters": {
     "claude-code": "adapters/claude-code.json",
     "cursor": "adapters/cursor.json",

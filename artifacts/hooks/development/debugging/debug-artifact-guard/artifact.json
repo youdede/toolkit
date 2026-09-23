@@ -31,6 +31,7 @@
     "review"
   ],
   "risk": "medium",
+  "risk_reason": "This automatic gate blocks commits containing high-confidence debugger statements or focused tests; a false denial can interrupt legitimate work, but it does not execute the blocked action.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -71,7 +72,8 @@
   "operational": {
     "behavior": "enforcing",
     "failurePolicy": "fail-closed",
-    "latencyClass": "immediate",
+    "latencyClass": "bounded",
+    "latency_reason": "To block commits containing high-confidence debugger statements or focused tests, the entrypoint may run a bounded local subprocess before returning.",
     "dataRetention": "none"
   }
 }

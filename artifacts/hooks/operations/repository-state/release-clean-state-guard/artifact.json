@@ -25,7 +25,8 @@
     "release",
     "operations"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This automatic gate requires a clean attached Git worktree before a recognized package or release publication command; a false denial can interrupt legitimate work, but it does not execute the blocked action.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -79,7 +80,8 @@
   "operational": {
     "behavior": "enforcing",
     "failurePolicy": "fail-closed",
-    "latencyClass": "immediate",
+    "latencyClass": "bounded",
+    "latency_reason": "To require a clean attached Git worktree before a recognized package or release publication command, the entrypoint may run a bounded local subprocess before returning.",
     "dataRetention": "none"
   }
 }

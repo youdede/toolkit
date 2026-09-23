@@ -30,6 +30,7 @@ function baseManifest(kind, domain, category, slug) {
     languages: ['agnostic'],
     lifecycle: ['implementation'],
     risk: 'medium',
+    risk_reason: 'The fixture can shape a scoped decision but grants no unreviewed external mutation.',
     license: 'MIT',
     authors: ['Youdede'],
     refuses: [
@@ -39,7 +40,7 @@ function baseManifest(kind, domain, category, slug) {
     ],
     execution: { mode: 'prompt', entrypoints: [] },
     relationships: { composesWith: [], conflictsWith: [], supersedes: [], prerequisites: [], packIds: [] },
-    operational: { behavior: 'advisory', failurePolicy: 'stop-and-report', latencyClass: 'immediate', dataRetention: 'none' },
+    operational: { behavior: 'advisory', failurePolicy: 'stop-and-report', latencyClass: 'immediate', latency_reason: 'The fixture evaluates one local input without a follow-up workflow.', dataRetention: 'none' },
     adapters: { 'claude-code': 'adapters/claude-code.json' }
   };
 }

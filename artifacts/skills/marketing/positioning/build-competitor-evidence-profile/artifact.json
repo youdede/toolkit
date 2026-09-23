@@ -25,6 +25,7 @@
     "maintenance"
   ],
   "risk": "medium",
+  "risk_reason": "This skill builds a dated competitor profile that separates observed facts, claims, inference, and unknowns; it does not turn inference or anonymous commentary into an established fact.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill builds a dated competitor profile that separates observed facts, claims, inference, and unknowns, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

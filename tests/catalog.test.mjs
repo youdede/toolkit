@@ -26,6 +26,45 @@ test('all artifact manifests and adapters validate', () => {
   assert.deepEqual(errors, []);
 });
 
+test('risk and latency reasons are required by both validator and schema', () => {
+  const schema = JSON.parse(readFileSync(new URL('../schema/artifact.schema.json', import.meta.url), 'utf8'));
+  assert.ok(schema.required.includes('risk_reason'));
+  assert.ok(schema.properties.operational.required.includes('latency_reason'));
+  const { artifacts, taxonomy } = validateRepository();
+  for (const { manifest } of artifacts) {
+    const keys = Object.keys(manifest);
+    const operationalKeys = Object.keys(manifest.operational);
+    assert.equal(keys.indexOf('risk_reason'), keys.indexOf('risk') + 1, manifest.id);
+    assert.equal(operationalKeys.indexOf('latency_reason'), operationalKeys.indexOf('latencyClass') + 1, manifest.id);
+    assert.doesNotMatch(manifest.risk_reason, /\b(?:not proven locally|boundaries remain unverified|not tested)\b/i, manifest.id);
+  }
+  const source = artifacts.find(({ manifest }) => manifest.kind === 'skill');
+  for (const field of ['risk_reason', 'latency_reason']) {
+    const broken = structuredClone(source);
+    broken.adapters = source.adapters;
+    if (field === 'risk_reason') broken.manifest.risk_reason = '  ';
+    else broken.manifest.operational.latency_reason = '  ';
+    const errors = validateArtifact(broken, taxonomy);
+    assert.ok(errors.some((error) => error.includes(field)), field);
+  }
+});
+
+test('classifications follow artifact authority rather than subject severity', () => {
+  const byId = new Map(validateRepository().artifacts.map(({ manifest }) => [manifest.id, manifest]));
+  assert.equal(byId.get('subagent/security/application-security/application-security-reviewer').risk, 'medium');
+  assert.equal(byId.get('skill/data/migrations/review-database-migration-plan').risk, 'medium');
+  assert.equal(byId.get('skill/operations/release/verify-production-release').risk, 'high');
+  assert.equal(byId.get('skill/development/agent-tooling/publish-agent-skill').risk, 'high');
+  assert.equal(byId.get('skill/operations/agent-orchestration/schedule-agent-runs').risk, 'high');
+  assert.equal(byId.get('skill/operations/git/prepare-branch-integration').risk, 'high');
+  assert.match(byId.get('mcp-server/development/agent-tooling/github-readonly').risk_reason, /GitHub token.*Docker server/);
+  assert.match(byId.get('mcp-server/development/testing/playwright-local-isolated').risk_reason, /npx.*loopback web apps/);
+  assert.equal(byId.get('hook/security/secrets/commit-guard').operational.latencyClass, 'bounded');
+  assert.equal(byId.get('hook/development/resource-management/tool-output-budget-guard').operational.latencyClass, 'immediate');
+  assert.equal(byId.get('hook/operations/delegation-budget/subagent-fanout-guard').operational.latencyClass, 'bounded');
+  assert.equal(byId.get('command/development/workflow/verify-claims-against-output').operational.latencyClass, 'bounded');
+});
+
 test('skill trigger and refusal contracts stay stricter than format validity', () => {
   const { artifacts } = validateRepository();
   for (const { directory, manifest } of artifacts) {
@@ -157,6 +196,11 @@ test('public catalog is sorted and exposes individual install commands', () => {
   const ids = catalog.artifacts.map((artifact) => artifact.id);
   assert.deepEqual(ids, [...ids].sort());
   for (const artifact of catalog.artifacts) {
+    const source = artifacts.find(({ manifest }) => manifest.id === artifact.id).manifest;
+    assert.equal(artifact.risk_reason, source.risk_reason);
+    assert.equal(artifact.operational.latency_reason, source.operational.latency_reason);
+    assert.ok(artifact.risk_reason.trim().length >= 25);
+    assert.ok(artifact.operational.latency_reason.trim().length >= 25);
     assert.ok(artifact.install.length > 0);
     assert.match(artifact.install[0].command, new RegExp(`add ${artifact.slug}`));
     assert.ok(artifact.refuses.length >= 3);

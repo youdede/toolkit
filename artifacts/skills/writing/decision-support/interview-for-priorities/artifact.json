@@ -24,6 +24,7 @@
     "planning"
   ],
   "risk": "low",
+  "risk_reason": "This skill uses a focused interview to expose priorities, avoided work, and hidden constraints; it does not manufacture urgency or shame avoided work.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -59,6 +60,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill uses a focused interview to expose priorities, avoided work, and hidden constraints, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

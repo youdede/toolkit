@@ -16,6 +16,7 @@
   "languages": ["agnostic"],
   "lifecycle": ["implementation", "maintenance", "review"],
   "risk": "medium",
+  "risk_reason": "This MCP profile exposes bounded read-only workspace file inspection through a locally pinned MCP server; it does not write, delete, rename, execute, upload, or otherwise mutate workspace files.",
   "license": "MIT",
   "authors": ["Youdede"],
   "refuses": [
@@ -36,6 +37,6 @@
     ]
   },
   "relationships": {"composesWith": ["hook/security/network-control/mcp-capability-drift-guard"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": ["pack/mcp-baseline"]},
-  "operational": {"behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "bounded", "dataRetention": "none"},
+  "operational": {"behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "bounded", "latency_reason": "A call reads bounded workspace files through the local server before returning.", "dataRetention": "none"},
   "adapters": {"claude-code": "adapters/claude-code.json", "cursor": "adapters/cursor.json"}
 }

@@ -24,7 +24,8 @@
     "review",
     "pre-commit"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This skill reviews a CI workflow change for observable trigger, permission, command, artifact, and rollback evidence; it does not parse YAML as a complete semantic model or claim that omitted signals are absent.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -70,6 +71,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill reviews a CI workflow change for observable trigger, permission, command, artifact, and rollback evidence, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

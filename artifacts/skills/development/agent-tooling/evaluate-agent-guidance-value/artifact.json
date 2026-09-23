@@ -25,6 +25,7 @@
     "maintenance"
   ],
   "risk": "medium",
+  "risk_reason": "This skill measures whether always-loaded agent guidance changes outcomes before pruning or promoting it; it does not delete or rewrite guidance from a single clean run.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -61,6 +62,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill measures whether always-loaded agent guidance changes outcomes before pruning or promoting it, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

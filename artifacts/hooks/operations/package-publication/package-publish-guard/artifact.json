@@ -28,7 +28,8 @@
   "lifecycle": [
     "release"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This automatic gate blocks real ecosystem package publication while allowing local packaging and dry runs; a false denial can interrupt legitimate work, but it does not execute the blocked action.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -78,6 +79,7 @@
     "behavior": "enforcing",
     "failurePolicy": "fail-closed",
     "latencyClass": "immediate",
+    "latency_reason": "The entrypoint handles one intercepted event to block real ecosystem package publication while allowing local packaging and dry runs without deferred work.",
     "dataRetention": "none"
   }
 }

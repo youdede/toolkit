@@ -25,6 +25,7 @@
     "review"
   ],
   "risk": "medium",
+  "risk_reason": "This skill writes a useful comparison page from sourced differences, fit criteria, and acknowledged tradeoffs; it does not impersonate an independent review or hide the publisher’s commercial interest.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill writes a useful comparison page from sourced differences, fit criteria, and acknowledged tradeoffs, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

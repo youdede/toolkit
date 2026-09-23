@@ -24,7 +24,8 @@
     "implementation",
     "operations"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This skill designs data-quality contracts, checks, ownership, and incident behavior around real decisions; it does not equate passing schema checks with trustworthy analytical meaning.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill designs data-quality contracts, checks, ownership, and incident behavior around real decisions, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

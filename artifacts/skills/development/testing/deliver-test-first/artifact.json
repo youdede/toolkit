@@ -25,6 +25,7 @@
     "maintenance"
   ],
   "risk": "low",
+  "risk_reason": "This skill delivers behavior changes through a verified red-green-refactor loop; it does not weaken assertions or configuration to manufacture a passing result.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -64,6 +65,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill delivers behavior changes through a verified red-green-refactor loop, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

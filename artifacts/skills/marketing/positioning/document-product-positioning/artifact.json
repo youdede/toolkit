@@ -25,6 +25,7 @@
     "handoff"
   ],
   "risk": "low",
+  "risk_reason": "This skill creates a reusable positioning record with evidence, decisions, boundaries, and unresolved questions; it does not turn uncertain assumptions into universal brand claims.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill creates a reusable positioning record with evidence, decisions, boundaries, and unresolved questions, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

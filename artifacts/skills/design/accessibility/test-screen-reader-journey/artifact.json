@@ -24,6 +24,7 @@
     "review"
   ],
   "risk": "medium",
+  "risk_reason": "This skill tests a bounded user journey with a real screen reader and evidence tied to interaction outcomes; it does not expose private spoken content or mutate production data without authority.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -70,6 +71,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill tests a bounded user journey with a real screen reader and evidence tied to interaction outcomes, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

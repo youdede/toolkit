@@ -28,6 +28,7 @@
     "operations"
   ],
   "risk": "low",
+  "risk_reason": "This skill reconstructs working context from the hash-chained session ledger with hash-cited claims and an explicit unverified section; it does not carry forward a claim without citing its ledger entry hash.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,7 +61,8 @@
   "operational": {
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
-    "latencyClass": "immediate",
+    "latencyClass": "bounded",
+    "latency_reason": "It verifies ledger hashes and reconstructs cited session context from multiple entries.",
     "dataRetention": "none"
   },
   "adapters": {

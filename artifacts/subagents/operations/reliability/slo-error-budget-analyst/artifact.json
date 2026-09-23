@@ -24,6 +24,7 @@
     "operations"
   ],
   "risk": "medium",
+  "risk_reason": "This read-only specialist analyzes supplied SLI and error-budget evidence for eligibility, window, exclusion, and burn-rate errors; its findings may affect a decision but it cannot edit or approve changes.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -57,6 +58,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The specialist analyzes supplied SLI and error-budget evidence for eligibility, window, exclusion, and burn-rate errors, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

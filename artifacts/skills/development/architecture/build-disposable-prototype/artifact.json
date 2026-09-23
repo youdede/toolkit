@@ -28,6 +28,7 @@
     "design"
   ],
   "risk": "medium",
+  "risk_reason": "This skill builds a bounded throwaway prototype that answers one behavior or interface design question; it does not claim usability, feasibility, or correctness from the author's own walkthrough alone.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -55,6 +56,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill builds a bounded throwaway prototype that answers one behavior or interface design question, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   },
   "adapters": {

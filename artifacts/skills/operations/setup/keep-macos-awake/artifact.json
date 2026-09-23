@@ -24,6 +24,7 @@
     "operations"
   ],
   "risk": "medium",
+  "risk_reason": "This skill keeps macOS awake for approved work with reversible and observable controls; it does not claim success without inspecting the active power assertion.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -59,6 +60,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill keeps macOS awake for approved work with reversible and observable controls, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

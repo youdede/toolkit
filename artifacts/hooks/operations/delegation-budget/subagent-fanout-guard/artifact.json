@@ -23,7 +23,8 @@
     "implementation",
     "pre-commit"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This automatic gate caps per-session subagent delegation using a bounded transcript count; a false denial can interrupt legitimate work, but it does not execute the blocked action.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,7 +61,8 @@
   "operational": {
     "behavior": "enforcing",
     "failurePolicy": "fail-closed",
-    "latencyClass": "immediate",
+    "latencyClass": "bounded",
+    "latency_reason": "The entrypoint reads and parses up to 4 MiB of transcript before deciding whether to allow delegation.",
     "dataRetention": "none"
   }
 }

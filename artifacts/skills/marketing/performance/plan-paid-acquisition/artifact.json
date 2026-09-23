@@ -24,7 +24,8 @@
     "implementation",
     "operations"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This skill designs a bounded paid-acquisition plan with economics, controls, and evidence-led optimization; it does not present platform attribution or industry benchmarks as guaranteed business economics.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill designs a bounded paid-acquisition plan with economics, controls, and evidence-led optimization, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

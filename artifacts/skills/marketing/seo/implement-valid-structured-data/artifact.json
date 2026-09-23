@@ -25,6 +25,7 @@
     "maintenance"
   ],
   "risk": "medium",
+  "risk_reason": "This skill implements evidence-backed JSON-LD that matches visible content and current validator requirements; it does not guarantee rich results, ranking, indexing, or knowledge-panel changes.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill implements evidence-backed JSON-LD that matches visible content and current validator requirements, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

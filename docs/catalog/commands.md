@@ -13,7 +13,7 @@ A user-invoked workflow with a declared tool allowlist, a mandatory deterministi
 | --- | --- | --- | --- |
 | `audit-repository-instructions` | Audit repository and folder instruction files for drift, precedence conflicts, and missing operational boundaries. | low | claude-code |
 | `preflight-change-environment` | Collect a deterministic redacted environment snapshot before a repository change begins. | low | claude-code |
-| `re-pin-mcp-tools` | Review an observed MCP tool inventory and update source pins only after exact human confirmation. | high | claude-code |
+| `re-pin-mcp-tools` | Review an observed MCP tool inventory and update source pins only after exact human confirmation. | medium | claude-code |
 | `assemble-review-brief` | Assemble a review brief from the real diff: scope, risk notes, and test evidence a reviewer can check line by line. | low | claude-code |
 | `audit-release-evidence` | Audit the release evidence chain for the current version and emit a machine-readable verdict report. | low | claude-code |
 | `draft-evidenced-plan` | Draft an ordered implementation plan where every step cites the code it touches and the evidence that proves completion. | low | claude-code |

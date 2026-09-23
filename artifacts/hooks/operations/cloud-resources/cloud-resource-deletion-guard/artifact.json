@@ -24,7 +24,8 @@
     "setup",
     "operations"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This automatic gate blocks high-confidence direct cloud CLI deletion, termination, and purge operations; a false denial can interrupt legitimate work, but it does not execute the blocked action.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -66,6 +67,7 @@
     "behavior": "enforcing",
     "failurePolicy": "fail-closed",
     "latencyClass": "immediate",
+    "latency_reason": "The entrypoint handles one intercepted event to block high-confidence direct cloud CLI deletion, termination, and purge operations without deferred work.",
     "dataRetention": "none"
   }
 }

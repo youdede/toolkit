@@ -23,6 +23,7 @@
     "review"
   ],
   "risk": "medium",
+  "risk_reason": "This read-only specialist statically walk a procedure for prerequisites, state, observable results, retries, and recovery branches; its findings may affect a decision but it cannot edit or approve changes.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -56,6 +57,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The specialist statically walk a procedure for prerequisites, state, observable results, retries, and recovery branches, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

@@ -25,7 +25,8 @@
     "implementation",
     "operations"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This automatic gate blocks explicit container privilege expansion in commands and recognized deployment configuration; a false denial can interrupt legitimate work, but it does not execute the blocked action.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -63,6 +64,7 @@
     "behavior": "enforcing",
     "failurePolicy": "fail-closed",
     "latencyClass": "immediate",
+    "latency_reason": "The entrypoint handles one intercepted event to block explicit container privilege expansion in commands and recognized deployment configuration without deferred work.",
     "dataRetention": "none"
   }
 }

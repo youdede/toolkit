@@ -25,6 +25,7 @@
     "maintenance"
   ],
   "risk": "medium",
+  "risk_reason": "This skill reviews an app listing for discoverability, truthful persuasion, visual sequence, and testable gaps; it does not promise rank or installs from metadata changes.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill reviews an app listing for discoverability, truthful persuasion, visual sequence, and testable gaps, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

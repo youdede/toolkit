@@ -23,7 +23,8 @@
     "review",
     "pre-commit"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This read-only specialist reviews a bounded schema or data migration for compatibility, integrity, lock, and recovery risk; its findings may affect a decision but it cannot edit or approve changes.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -63,6 +64,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The specialist reviews a bounded schema or data migration for compatibility, integrity, lock, and recovery risk, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

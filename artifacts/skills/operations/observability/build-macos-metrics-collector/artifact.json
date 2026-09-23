@@ -27,6 +27,7 @@
     "operations"
   ],
   "risk": "medium",
+  "risk_reason": "This skill builds a low-overhead local macOS metrics collector with private-by-default storage; it does not require private APIs for core operation.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -62,6 +63,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill builds a low-overhead local macOS metrics collector with private-by-default storage, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

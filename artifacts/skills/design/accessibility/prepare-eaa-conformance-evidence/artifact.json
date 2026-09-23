@@ -28,7 +28,8 @@
     "review",
     "release"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This skill maps accessibility results to the requirement set and version an owner declared, keeping verified, asserted, stale and absent apart; it does not declare conformity, finalise a statement, or report an obligation as met.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -65,6 +66,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill maps accessibility results to the requirement set and version an owner declared, keeping verified, asserted, stale and absent apart, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   },
   "adapters": {

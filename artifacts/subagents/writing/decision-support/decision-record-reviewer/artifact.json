@@ -23,6 +23,7 @@
     "review"
   ],
   "risk": "low",
+  "risk_reason": "This read-only specialist reviews a bounded decision record for evidence, alternatives, tradeoffs, consequences, and revisit triggers; it cannot edit or approve changes.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The specialist reviews a bounded decision record for evidence, alternatives, tradeoffs, consequences, and revisit triggers, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

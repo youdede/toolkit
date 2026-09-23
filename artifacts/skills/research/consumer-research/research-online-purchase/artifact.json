@@ -23,6 +23,7 @@
     "discovery"
   ],
   "risk": "medium",
+  "risk_reason": "This skill compares fair price, reputable sellers, and purchase fit without placing an order; it does not recommend an unknown seller solely because it is cheapest.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -58,6 +59,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill compares fair price, reputable sellers, and purchase fit without placing an order, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

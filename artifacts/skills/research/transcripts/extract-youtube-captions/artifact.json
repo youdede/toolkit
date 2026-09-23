@@ -23,7 +23,8 @@
   "lifecycle": [
     "discovery"
   ],
-  "risk": "low",
+  "risk": "medium",
+  "risk_reason": "It fetches captions from YouTube and writes local output, with network and downloaded-content exposure.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -66,6 +67,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill extracts available YouTube captions into clean text without downloading media, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

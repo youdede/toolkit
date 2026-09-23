@@ -29,6 +29,7 @@
     "maintenance"
   ],
   "risk": "medium",
+  "risk_reason": "This skill defines a precise domain glossary and records only durable, consequential design decisions; it does not create a decision record for routine, reversible, or uncontested choices.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -56,6 +57,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill defines a precise domain glossary and records only durable, consequential design decisions, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   },
   "adapters": {

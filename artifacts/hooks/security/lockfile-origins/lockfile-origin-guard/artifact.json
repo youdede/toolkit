@@ -27,7 +27,8 @@
     "review",
     "maintenance"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This automatic gate inspects staged lockfile origins before commit and reject insecure or unverifiable package sources; a false denial can interrupt legitimate work, but it does not execute the blocked action.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -69,7 +70,8 @@
   "operational": {
     "behavior": "enforcing",
     "failurePolicy": "fail-closed",
-    "latencyClass": "immediate",
+    "latencyClass": "bounded",
+    "latency_reason": "To inspect staged lockfile origins before commit and reject insecure or unverifiable package sources, the entrypoint may run a bounded local subprocess before returning.",
     "dataRetention": "none"
   }
 }

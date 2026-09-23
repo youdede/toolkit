@@ -25,6 +25,7 @@
     "review"
   ],
   "risk": "medium",
+  "risk_reason": "This skill builds an OpenAPI contract from verified behavior, reusable schemas, failures, and executable checks; it does not invent endpoints, fields, examples, status codes, or security scopes.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill builds an OpenAPI contract from verified behavior, reusable schemas, failures, and executable checks, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

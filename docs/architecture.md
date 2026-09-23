@@ -8,6 +8,8 @@ The repository separates the meaning of an artifact from the way a specific agen
 
 Each manifest also declares a controlled capability, operational behavior and failure policy, plus typed relationships. `composesWith`, `conflictsWith`, `supersedes`, and `prerequisites` reference stable artifact ids; `packIds` connects the artifact to installable outcome packs.
 
+The adjacent `risk_reason` and `operational.latency_reason` explain those two classifications for each artifact. `risk` concerns what using the artifact can do, not the severity of a problem under review; `latencyClass` concerns the steps and operations required, not an unmeasured time estimate. The [catalog audit](audits/risk-latency-2026-09-23.md) records the evidence and unresolved external-runtime cases behind the current values.
+
 It also declares whether execution is `prompt`, `hybrid`, or `deterministic`. Hybrid and deterministic artifacts list executable entrypoints, their runtimes, purposes, and side-effect classes. See [deterministic components](deterministic-components.md).
 
 The stable path is:

@@ -23,6 +23,7 @@
     "planning"
   ],
   "risk": "low",
+  "risk_reason": "This skill turns a vague research need into a self-contained, evidence-oriented brief; it does not combine unrelated research missions into one brief.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -58,6 +59,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill turns a vague research need into a self-contained, evidence-oriented brief, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

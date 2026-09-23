@@ -25,6 +25,7 @@
     "review"
   ],
   "risk": "medium",
+  "risk_reason": "This skill builds a seller-ready asset from a specific buyer decision, evidence set, and usage context; it does not create personalized financial conclusions from unsupported assumptions.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill builds a seller-ready asset from a specific buyer decision, evidence set, and usage context, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

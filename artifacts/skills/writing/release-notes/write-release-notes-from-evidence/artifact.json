@@ -24,6 +24,7 @@
     "handoff"
   ],
   "risk": "medium",
+  "risk_reason": "This skill writes release notes from bounded Git evidence while separating verified changes, user impact, and unresolved claims; it does not publish, tag, push, or modify Git history.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -66,6 +67,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill writes release notes from bounded Git evidence while separating verified changes, user impact, and unresolved claims, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

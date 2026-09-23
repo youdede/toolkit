@@ -26,6 +26,7 @@
     "review"
   ],
   "risk": "low",
+  "risk_reason": "This command assembles a review brief from the real diff: scope, risk notes, and test evidence a reviewer can check line by line; it does not omit areas it could not verify; it lists them as unverified.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -81,7 +82,8 @@
   "operational": {
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
-    "latencyClass": "immediate",
+    "latencyClass": "bounded",
+    "latency_reason": "The command follows a precondition check and multiple workflow steps while it assembles a review brief from the real diff: scope, risk notes, and test evidence a reviewer can check line by line.",
     "dataRetention": "none"
   },
   "adapters": {

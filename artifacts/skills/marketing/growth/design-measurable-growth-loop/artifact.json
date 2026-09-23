@@ -25,6 +25,7 @@
     "implementation"
   ],
   "risk": "medium",
+  "risk_reason": "This skill designs a compounding acquisition or engagement loop with explicit actors, states, and constraints; it does not manufacture sharing, contacts, content, reviews, or invitations.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill designs a compounding acquisition or engagement loop with explicit actors, states, and constraints, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

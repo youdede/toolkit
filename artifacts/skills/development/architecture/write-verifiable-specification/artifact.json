@@ -25,6 +25,7 @@
     "design"
   ],
   "risk": "medium",
+  "risk_reason": "This skill writes an implementation-ready specification with decisions, invariants, boundaries, and acceptance evidence; it does not start implementation or present unresolved scope as approved.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -64,6 +65,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill writes an implementation-ready specification with decisions, invariants, boundaries, and acceptance evidence, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

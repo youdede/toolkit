@@ -28,6 +28,7 @@
     "handoff"
   ],
   "risk": "low",
+  "risk_reason": "This observer warns before compaction when uncommitted changes or pending ledger claims would silently lose context; it cannot block the event or mutate the inspected state.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -64,6 +65,7 @@
     "behavior": "observing",
     "failurePolicy": "fail-open",
     "latencyClass": "bounded",
+    "latency_reason": "To warn before compaction when uncommitted changes or pending ledger claims would silently lose context, the entrypoint may run a bounded local subprocess before returning.",
     "dataRetention": "local-bounded"
   },
   "adapters": {

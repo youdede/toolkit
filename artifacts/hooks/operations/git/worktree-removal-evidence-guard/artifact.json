@@ -28,7 +28,8 @@
     "handoff",
     "maintenance"
   ],
-  "risk": "medium",
+  "risk": "low",
+  "risk_reason": "This observer observes dirty Git state immediately before Claude Code removes an isolated worktree; it cannot block the event or mutate the inspected state.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -63,6 +64,7 @@
     "behavior": "observing",
     "failurePolicy": "fail-open",
     "latencyClass": "bounded",
+    "latency_reason": "To observe dirty Git state immediately before Claude Code removes an isolated worktree, the entrypoint may run a bounded local subprocess before returning.",
     "dataRetention": "none"
   },
   "adapters": {

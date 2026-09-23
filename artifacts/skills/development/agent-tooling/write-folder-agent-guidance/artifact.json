@@ -24,6 +24,7 @@
     "implementation"
   ],
   "risk": "medium",
+  "risk_reason": "This skill writes scoped agent guidance files that inherit cleanly and avoid contradiction; it does not duplicate the root guidance into every folder.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -59,6 +60,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill writes scoped agent guidance files that inherit cleanly and avoid contradiction, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

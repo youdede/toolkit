@@ -12,6 +12,12 @@ Choose a kind, domain, and narrow category from `catalog/taxonomy.json`. Add pro
 
 Declare at least one controlled capability separately from granular problem tags. Record operational behavior, failure policy, latency class, and retention truthfully. Add typed relationships only when the referenced artifact has a concrete compatibility, prerequisite, conflict, replacement, or composition role.
 
+Place a one-sentence `risk_reason` next to `risk` and a one-sentence `latency_reason` next to `operational.latencyClass`. Explain the artifact's own permitted actions, inputs, and limits, citing its payload or executable path during review. Do not grade a read-only reviewer by the severity of the defect it studies. Use `low` for bounded advice or ordinary reversible local work, `medium` for automatic blocking, sensitive decisions or data, external read access, and control-surface edits, and `high` for production access, live publication, shared-history mutation, persistent scheduled action, or external processes with unresolved privileged authority.
+
+Use `immediate` for one synchronous bounded event check or static context load, `bounded` for multi-step work, subprocesses, repository scans, or network responses, and `background` only for autonomous asynchronous work. The class describes the operation, not an unmeasured millisecond target. If an external runtime's authority is not proven, keep the classification provisional and document the evidence gap rather than inventing certainty.
+
+A missing test or unverified external boundary is an evidence gap, not a `risk_reason`. The reason must name the observed or declared capability that creates the risk; record what remains unproven separately in the audit.
+
 When a user outcome needs multiple artifact kinds, add a pack instead of broadening a single artifact. Every required pack member must install on a common target, and the role must match the member kind.
 
 ## 3. State refusals

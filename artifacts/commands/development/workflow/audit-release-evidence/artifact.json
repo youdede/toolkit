@@ -26,6 +26,7 @@
     "release"
   ],
   "risk": "low",
+  "risk_reason": "This command audits the release evidence chain for the current version and emits a machine-readable verdict report; it does not publish, tag, bump versions, or bypass any release guard.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -82,7 +83,8 @@
   "operational": {
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
-    "latencyClass": "immediate",
+    "latencyClass": "bounded",
+    "latency_reason": "The command follows a precondition check and multiple workflow steps while it audits the release evidence chain for the current version and emits a machine-readable verdict report.",
     "dataRetention": "none"
   },
   "adapters": {

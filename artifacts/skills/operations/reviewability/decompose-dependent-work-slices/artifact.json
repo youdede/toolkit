@@ -28,6 +28,7 @@
     "handoff"
   ],
   "risk": "medium",
+  "risk_reason": "This skill decomposes approved work into independently verifiable vertical slices with an acyclic dependency graph; it does not disguise a cyclic plan by omitting or weakening real blocking edges.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -62,6 +63,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill decomposes approved work into independently verifiable vertical slices with an acyclic dependency graph, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   },
   "adapters": {

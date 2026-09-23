@@ -27,6 +27,7 @@
     "handoff"
   ],
   "risk": "low",
+  "risk_reason": "This observer warns when a shell tool call returns output beyond the declared byte budget, with pagination guidance; it cannot block the event or mutate the inspected state.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -57,7 +58,8 @@
   "operational": {
     "behavior": "observing",
     "failurePolicy": "fail-open",
-    "latencyClass": "bounded",
+    "latencyClass": "immediate",
+    "latency_reason": "The entrypoint counts one tool response against a fixed byte budget and returns guidance in the same event.",
     "dataRetention": "none"
   },
   "adapters": {

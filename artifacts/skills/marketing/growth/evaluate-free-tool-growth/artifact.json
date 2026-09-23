@@ -25,6 +25,7 @@
     "review"
   ],
   "risk": "medium",
+  "risk_reason": "This skill evaluates whether a free utility can create genuine user value and a measurable acquisition loop; it does not gate the core result behind surprise lead capture.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill evaluates whether a free utility can create genuine user value and a measurable acquisition loop, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

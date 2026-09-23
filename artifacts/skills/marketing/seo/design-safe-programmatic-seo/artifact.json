@@ -24,7 +24,8 @@
     "planning",
     "implementation"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This skill designs data-backed templated pages with unique utility, quality gates, and controlled indexing; it does not promise rankings or indexation from page volume.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill designs data-backed templated pages with unique utility, quality gates, and controlled indexing, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

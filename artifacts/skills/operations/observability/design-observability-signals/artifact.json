@@ -25,6 +25,7 @@
     "operations"
   ],
   "risk": "medium",
+  "risk_reason": "This skill designs logs, metrics, traces, and alerts around decisions, failure modes, cost, and privacy; it does not log secrets, raw customer payloads, or unnecessary identifiers.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill designs logs, metrics, traces, and alerts around decisions, failure modes, cost, and privacy, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }
