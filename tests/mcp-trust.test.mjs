@@ -105,12 +105,17 @@ test('local MCP runtime lists pinned tools and confines file reads', (context) =
   const directory = temporary(context, 'youdede-mcp-runtime-');
   writeFileSync(path.join(directory, 'safe.txt'), 'bounded workspace value\n');
   installArtifact('workspace-files-readonly', { cwd: directory });
+  mkdirSync(path.join(directory, '.git'));
+  writeFileSync(path.join(directory, '.git/config'), 'protected Git state\n');
   const runtime = path.join(directory, '.youdede/mcp/runtime.mjs');
   const input = [
     { jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2025-03-26' } },
     { jsonrpc: '2.0', id: 2, method: 'tools/list' },
     { jsonrpc: '2.0', id: 3, method: 'tools/call', params: { name: 'read_file', arguments: { path: 'safe.txt' } } },
-    { jsonrpc: '2.0', id: 4, method: 'tools/call', params: { name: 'read_file', arguments: { path: '../outside.txt' } } }
+    { jsonrpc: '2.0', id: 4, method: 'tools/call', params: { name: 'read_file', arguments: { path: '../outside.txt' } } },
+    { jsonrpc: '2.0', id: 5, method: 'tools/call', params: { name: 'read_file', arguments: { path: '.git/config' } } },
+    { jsonrpc: '2.0', id: 6, method: 'tools/call', params: { name: 'read_file', arguments: { path: '.youdede/mcp/runtime.mjs' } } },
+    { jsonrpc: '2.0', id: 7, method: 'tools/call', params: { name: 'list_directory', arguments: { path: '.' } } }
   ].map((value) => JSON.stringify(value)).join('\n');
   const result = spawnSync(process.execPath, [runtime, '--profile', '.youdede/mcp/workspace-files-readonly/server.json'], { cwd: directory, input, encoding: 'utf8' });
   assert.equal(result.status, 0, result.stderr);
@@ -119,6 +124,10 @@ test('local MCP runtime lists pinned tools and confines file reads', (context) =
   assert.equal(output[2].result.content[0].text, 'bounded workspace value\n');
   assert.equal(output[3].result.isError, true);
   assert.match(output[3].result.content[0].text, /portable relative path/);
+  assert.equal(output[4].result.isError, true);
+  assert.match(output[4].result.content[0].text, /protected workspace directory/);
+  assert.equal(output[5].result.isError, true);
+  assert.doesNotMatch(output[6].result.content[0].text, /\.git|\.youdede/);
 
   const malformed = spawnSync(process.execPath, [runtime, '--profile', '.youdede/mcp/workspace-files-readonly/server.json'], { cwd: directory, input: '{malformed\n', encoding: 'utf8' });
   assert.equal(malformed.status, 0);

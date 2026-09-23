@@ -45,6 +45,8 @@ const required = [
   'catalog/artifacts.json',
   'catalog/reasons.it.json',
   'catalog/reasons.nl.json',
+  'catalog/narratives.it.json',
+  'catalog/narratives.nl.json',
   'catalog/integrity.json',
   'catalog/packs.json',
   'catalog/taxonomy.json',

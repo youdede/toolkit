@@ -12,6 +12,8 @@ const MAX_MESSAGE_BYTES = 1024 * 1024;
 const MAX_PROFILE_BYTES = 64 * 1024;
 const MAX_RESULT_BYTES = 256 * 1024;
 const MAX_WALK_ENTRIES = 2000;
+const PRIVATE_DIRECTORIES = new Set(['.git', '.youdede', '.youdede-toolkit']);
+const isPrivateDirectory = (name) => PRIVATE_DIRECTORIES.has(name.toLowerCase());
 const MODES = Object.freeze({
   'workspace-files': new Set(['read_file', 'list_directory', 'search_files']),
   'repository-git': new Set(['git_status', 'git_diff', 'git_log']),
@@ -35,11 +37,19 @@ function safeRelative(value, label = 'path') {
   return value;
 }
 
+function rejectPrivatePath(workspace, candidate) {
+  if (path.relative(workspace, candidate).split(path.sep).some(isPrivateDirectory)) {
+    throw new Error('path enters a protected workspace directory');
+  }
+}
+
 function existingWorkspacePath(workspace, relative, { directory = false } = {}) {
   const target = path.resolve(workspace, safeRelative(relative));
   if (!within(workspace, target)) throw new Error('path escapes the workspace');
+  rejectPrivatePath(workspace, target);
   const resolved = realpathSync(target);
   if (!within(workspace, resolved)) throw new Error('path resolves outside the workspace');
+  rejectPrivatePath(workspace, resolved);
   const metadata = statSync(resolved);
   if (directory ? !metadata.isDirectory() : !metadata.isFile()) throw new Error(directory ? 'path is not a directory' : 'path is not a file');
   return { resolved, metadata };
@@ -77,7 +87,7 @@ function readProfile(file) {
 function walk(directory, workspace, output = []) {
   for (const entry of readdirSync(directory, { withFileTypes: true }).sort((left, right) => left.name.localeCompare(right.name))) {
     if (output.length >= MAX_WALK_ENTRIES) break;
-    if (entry.name === '.git' || entry.name === '.youdede' || entry.name === '.youdede-toolkit') continue;
+    if (isPrivateDirectory(entry.name)) continue;
     const absolute = path.join(directory, entry.name);
     const relative = path.relative(workspace, absolute).split(path.sep).join('/');
     if (entry.isSymbolicLink()) continue;
@@ -133,6 +143,7 @@ async function callTool(profile, workspace, name, input) {
   if (name === 'list_directory') {
     const { resolved } = existingWorkspacePath(workspace, input.path || '.', { directory: true });
     return readdirSync(resolved, { withFileTypes: true })
+      .filter((entry) => !isPrivateDirectory(entry.name))
       .slice(0, 500)
       .map((entry) => `${entry.isDirectory() ? 'directory' : entry.isFile() ? 'file' : 'other'}\t${entry.name}`)
       .join('\n');
