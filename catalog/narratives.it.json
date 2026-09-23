@@ -1,0 +1,61 @@
+{
+  "sourceHash": "2daaa423de5b4a0c1b648c2d998e54a1953b7b41d9811acbd2214e7292dbe42d",
+  "narratives": {
+    "allowlisted-fetch-readonly": {
+      "summary": "Recupera documentazione HTTPS da tre siti dichiarati, con limiti sulla risposta.",
+      "description": "Installa un server MCP locale che legge documenti solo da MDN, GitHub Docs e dalla documentazione di Node.js. Non usa credenziali né segue i reindirizzamenti.",
+      "purposes": [
+        "Espone tramite input e output standard uno strumento HTTPS senza credenziali e con risposta limitata."
+      ],
+      "refuses": [
+        "Non recupera contenuti da siti fuori dall'elenco HTTPS dichiarato.",
+        "Non invia credenziali, non segue reindirizzamenti, non invia corpi di richiesta e non accetta intestazioni arbitrarie.",
+        "Non considera i contenuti recuperati affidabili, aggiornati, innocui o pronti per essere eseguiti."
+      ]
+    },
+    "github-readonly": {
+      "summary": "Consulta repository, issue, pull request e Actions su GitHub tramite il server ufficiale in modalità di sola lettura.",
+      "description": "Avvia il server MCP ufficiale di GitHub da un'immagine container fissata tramite digest, con modalità di sola lettura e strumenti selezionati per esaminare le prove del repository.",
+      "purposes": [],
+      "refuses": [
+        "Non crea, modifica, unisce, approva, riavvia, annulla o elimina risorse GitHub.",
+        "Non considera le opzioni di blocco e sola lettura un limite ai permessi del token fornito.",
+        "Non incorpora, stampa o conserva il token GitHub, né lo invia fuori dal processo del server ufficiale."
+      ]
+    },
+    "repository-git-readonly": {
+      "summary": "Consulta stato, differenze e cronologia Git locali tramite un server MCP con risposte limitate.",
+      "description": "Installa un server MCP locale che esegue solo forme prestabilite di git status, diff e log nel repository corrente. Ignora le variabili d'ambiente di Git e non contatta i remoti.",
+      "purposes": [
+        "Espone tramite input e output standard tre strumenti Git di sola lettura, con risposte limitate."
+      ],
+      "refuses": [
+        "Non esegue commit, stage, restore, reset, switch, merge, fetch o push e non modifica i contenuti del repository.",
+        "Non accetta opzioni Git arbitrarie, revisioni, sottoprocessi, alias, configurazioni o variabili d'ambiente sostitutive.",
+        "Non contatta i remoti, non legge credenziali e non presume che la cronologia consultata sia autentica o affidabile."
+      ]
+    },
+    "workspace-files-readonly": {
+      "summary": "Legge e cerca file nell'area di lavoro tramite un server MCP locale con limiti espliciti.",
+      "description": "Installa un server MCP locale che legge file di testo, elenca directory e cerca nomi di file solo nell'area di lavoro corrente. Limita la dimensione delle risposte e non usa la rete o variabili d'ambiente riservate.",
+      "purposes": [
+        "Espone tramite input e output standard gli strumenti di lettura dei file previsti dal profilo, con risposte limitate."
+      ],
+      "refuses": [
+        "Non legge percorsi o destinazioni di link simbolici fuori dall'area di lavoro corrente.",
+        "Non scrive, elimina, rinomina, esegue o carica file e non modifica l'area di lavoro.",
+        "Non usa servizi di rete o variabili d'ambiente riservate e non legge i file interni di Git o del toolkit."
+      ]
+    },
+    "playwright-local-isolated": {
+      "summary": "Verifica interfacce web locali con una versione precisa di Playwright MCP e una sessione isolata.",
+      "description": "Avvia il pacchetto ufficiale Playwright MCP a una versione precisa, con sessione del browser isolata, service worker bloccati e origini consentite limitate all'indirizzo locale 127.0.0.1.",
+      "purposes": [],
+      "refuses": [
+        "Non naviga su origini remote, sessioni di produzione autenticate o profili browser dell'utente.",
+        "Non considera l'elenco delle origini consentite una barriera di sicurezza completa e non presume che i reindirizzamenti restino nel perimetro.",
+        "Non carica file, non conserva lo stato del browser e non sostiene che un percorso osservato dimostri ogni comportamento dell'interfaccia."
+      ]
+    }
+  }
+}

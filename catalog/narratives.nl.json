@@ -1,0 +1,61 @@
+{
+  "sourceHash": "2daaa423de5b4a0c1b648c2d998e54a1953b7b41d9811acbd2214e7292dbe42d",
+  "narratives": {
+    "allowlisted-fetch-readonly": {
+      "summary": "Haalt HTTPS-documentatie op van drie opgegeven hosts, met een limiet op de respons.",
+      "description": "Installeert een lokale MCP-server die alleen documenten van MDN, GitHub Docs en de Node.js-documentatie ophaalt. Hij gebruikt geen inloggegevens en volgt geen omleidingen.",
+      "purposes": [
+        "Biedt via standaardinvoer en -uitvoer één HTTPS-hulpmiddel zonder inloggegevens en met een beperkte respons."
+      ],
+      "refuses": [
+        "Haalt geen inhoud op van hosts buiten de opgegeven HTTPS-lijst.",
+        "Verstuurt geen inloggegevens, volgt geen omleidingen, verzendt geen aanvraagbody en accepteert geen willekeurige headers.",
+        "Beschouwt opgehaalde inhoud niet automatisch als betrouwbaar, actueel, onschadelijk of geschikt om uit te voeren."
+      ]
+    },
+    "github-readonly": {
+      "summary": "Bekijkt repositories, issues, pull requests en Actions op GitHub via de officiële server in alleen-lezenmodus.",
+      "description": "Start de officiële GitHub MCP-server vanuit een containerimage met vastgelegde digest, in alleen-lezenmodus en met geselecteerde hulpmiddelen voor het beoordelen van repositorygegevens.",
+      "purposes": [],
+      "refuses": [
+        "Maakt geen GitHub-resources aan en wijzigt, merge, keurt goed, herstart, annuleert of verwijdert ze niet.",
+        "Beschouwt lockdown- en alleen-lezenopties niet als een beperking van de rechten van het verstrekte token.",
+        "Neemt het GitHub-token niet op in bestanden of uitvoer, bewaart het niet en verzendt het niet buiten het proces van de officiële server."
+      ]
+    },
+    "repository-git-readonly": {
+      "summary": "Bekijkt lokale Git-status, verschillen en geschiedenis via een MCP-server met beperkte antwoorden.",
+      "description": "Installeert een lokale MCP-server die alleen vaste vormen van git status, diff en log uitvoert in de huidige repository. Hij negeert Git-omgevingsvariabelen en benadert geen remotes.",
+      "purposes": [
+        "Biedt via standaardinvoer en -uitvoer drie vaste Git-hulpmiddelen voor alleen lezen, met beperkte antwoorden."
+      ],
+      "refuses": [
+        "Voert geen commit, stage, restore, reset, switch, merge, fetch of push uit en wijzigt de inhoud van de repository niet.",
+        "Accepteert geen willekeurige Git-opties, revisies, subprocessen, aliassen, configuratie of vervangende omgevingsvariabelen.",
+        "Benadert geen remotes, leest geen inloggegevens en neemt niet aan dat de bekeken geschiedenis authentiek of betrouwbaar is."
+      ]
+    },
+    "workspace-files-readonly": {
+      "summary": "Leest en zoekt bestanden in de werkruimte via een lokale MCP-server met expliciete limieten.",
+      "description": "Installeert een lokale MCP-server die tekstbestanden leest, mappen toont en bestandsnamen zoekt binnen de huidige werkruimte. Hij beperkt de responsgrootte en gebruikt geen netwerk of geheime omgevingsvariabelen.",
+      "purposes": [
+        "Biedt via standaardinvoer en -uitvoer de vastgelegde hulpmiddelen om bestanden te bekijken, met beperkte antwoorden."
+      ],
+      "refuses": [
+        "Leest geen paden of doelen van symbolische links buiten de huidige werkruimte.",
+        "Schrijft, verwijdert, hernoemt, voert of uploadt geen bestanden en wijzigt de werkruimte niet.",
+        "Gebruikt geen netwerkdiensten of geheime omgevingsvariabelen en leest geen interne Git- of toolkitbestanden."
+      ]
+    },
+    "playwright-local-isolated": {
+      "summary": "Controleert lokale webinterfaces met een exacte Playwright MCP-versie en een geïsoleerde sessie.",
+      "description": "Start het officiële Playwright MCP-pakket op een exacte versie, met een geïsoleerde browsersessie, geblokkeerde serviceworkers en toegestane origins beperkt tot het lokale adres 127.0.0.1.",
+      "purposes": [],
+      "refuses": [
+        "Bezoekt geen externe origins, aangemelde productiesessies of browserprofielen van de gebruiker.",
+        "Beschouwt de lijst met toegestane origins niet als volledige beveiligingsgrens en neemt niet aan dat omleidingen binnen het bereik blijven.",
+        "Uploadt geen bestanden, bewaart geen browserstatus en beweert niet dat één gecontroleerd traject elk interfacegedrag bewijst."
+      ]
+    }
+  }
+}

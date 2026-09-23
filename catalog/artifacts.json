@@ -8482,7 +8482,7 @@
       "version": "1.0.0",
       "kind": "mcp-server",
       "summary": "Inspect bounded GitHub repository, issue, pull-request, and Actions evidence through the official server in read-only mode.",
-      "description": "Launches the official GitHub MCP server at an exact release using Go module verification, an explicit read-only flag, and a reduced toolset for repository review evidence.",
+      "description": "Launches the official GitHub MCP server from a container image pinned by digest, with read-only mode and selected toolsets for repository review evidence.",
       "domain": "development",
       "category": "agent-tooling",
       "capabilities": [
