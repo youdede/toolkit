@@ -19,7 +19,7 @@ export const KINDS = ['skill', 'hook', 'subagent', 'command', 'context', 'mcp-se
 export const KIND_LABELS = [['skill', 'Skills'], ['hook', 'Hooks'], ['subagent', 'Subagents'], ['command', 'Commands'], ['context', 'Contexts'], ['mcp-server', 'MCP servers']];
 const EXPECTED_MARKERS = {
   'README.md': {
-    stat: { 'artifact-count': 1, 'evaluation-case-count': 1, 'hook-count': 2, 'skill-count': 2, 'subagent-count': 2 },
+    stat: { 'artifact-count': 1, 'evaluation-case-count': 1, 'hook-count': 2, 'pack-count': 2, 'skill-count': 2, 'subagent-count': 2 },
     table: { 'readme-matrix': 1 },
   },
   'docs/targets.md': { stat: {}, table: { targets: 1 } },
