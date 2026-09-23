@@ -16,6 +16,7 @@
   "languages": ["agnostic"],
   "lifecycle": ["review", "incident"],
   "risk": "high",
+  "risk_reason": "The adapter passes a GitHub token to a Docker server configured for repository, pull-request, issue, and Actions toolsets.",
   "license": "MIT",
   "authors": ["Youdede"],
   "refuses": [
@@ -32,6 +33,6 @@
     "pinnedTools": []
   },
   "relationships": {"composesWith": ["command/operations/ci-cd/diagnose-ci-failure"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": ["pack/remote-review-evidence"]},
-  "operational": {"behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "bounded", "dataRetention": "runtime-managed"},
+  "operational": {"behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "bounded", "latency_reason": "A call waits for the external GitHub server and its API response, within a bounded request.", "dataRetention": "runtime-managed"},
   "adapters": {"claude-code": "adapters/claude-code.json", "cursor": "adapters/cursor.json"}
 }

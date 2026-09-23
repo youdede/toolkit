@@ -23,6 +23,7 @@
     "learning"
   ],
   "risk": "low",
+  "risk_reason": "This skill teaches toward a real mission using short lessons, retrieval, feedback, and records; it does not persist personal learning records without explicit consent.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill teaches toward a real mission using short lessons, retrieval, feedback, and records, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

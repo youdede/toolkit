@@ -24,7 +24,8 @@
     "planning",
     "review"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This skill designs an offer whose value, scope, proof, risk allocation, and terms can withstand review; it does not recommend an offer the organization cannot fulfill consistently.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill designs an offer whose value, scope, proof, risk allocation, and terms can withstand review, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

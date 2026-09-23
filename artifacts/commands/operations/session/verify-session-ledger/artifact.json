@@ -27,6 +27,7 @@
     "handoff"
   ],
   "risk": "low",
+  "risk_reason": "This command verifies the hash-chained session ledger and reports exactly which entries, if any, fail integrity; it does not transmit ledger content; the verdict carries counts and hashes only.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -76,7 +77,8 @@
   "operational": {
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
-    "latencyClass": "immediate",
+    "latencyClass": "bounded",
+    "latency_reason": "The command follows a precondition check and multiple workflow steps while it verifies the hash-chained session ledger and reports exactly which entries, if any, fail integrity.",
     "dataRetention": "local-bounded"
   },
   "adapters": {

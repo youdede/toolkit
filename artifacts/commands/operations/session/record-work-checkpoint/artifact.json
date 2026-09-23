@@ -27,6 +27,7 @@
     "handoff"
   ],
   "risk": "low",
+  "risk_reason": "This command appends a redacted, hash-chained work checkpoint to the session ledger with a verified git anchor; it does not modify or delete existing ledger entries; the ledger is append-only.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -74,7 +75,8 @@
   "operational": {
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
-    "latencyClass": "immediate",
+    "latencyClass": "bounded",
+    "latency_reason": "The command follows a precondition check and multiple workflow steps while it appends a redacted, hash-chained work checkpoint to the session ledger with a verified git anchor.",
     "dataRetention": "local-bounded"
   },
   "adapters": {

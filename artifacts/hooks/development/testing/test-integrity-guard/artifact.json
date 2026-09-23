@@ -35,6 +35,7 @@
     "review"
   ],
   "risk": "medium",
+  "risk_reason": "This automatic gate blocks newly introduced test suppressions and explicit shell removal of test sources; a false denial can interrupt legitimate work, but it does not execute the blocked action.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -76,6 +77,7 @@
     "behavior": "enforcing",
     "failurePolicy": "fail-closed",
     "latencyClass": "immediate",
+    "latency_reason": "The entrypoint handles one intercepted event to block newly introduced test suppressions and explicit shell removal of test sources without deferred work.",
     "dataRetention": "none"
   }
 }

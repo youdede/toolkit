@@ -32,6 +32,7 @@
     "operations"
   ],
   "risk": "medium",
+  "risk_reason": "This read-only specialist reconciles a bounded cloud-cost question to usage, allocation, pricing, commitments, and uncertainty evidence; its findings may affect a decision but it cannot edit or approve changes.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -57,6 +58,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The specialist reconciles a bounded cloud-cost question to usage, allocation, pricing, commitments, and uncertainty evidence, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   },
   "adapters": {

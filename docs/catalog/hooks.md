@@ -11,30 +11,30 @@ A deterministic gate that inspects a command before it runs and blocks it. No mo
 
 | Slug | What it does | Risk | Runtimes |
 | --- | --- | --- | --- |
-| `schema-compatibility-guard` | Block provably incompatible JSON Schema, Avro, and Protobuf contract edits. | high | claude-code |
-| `database-query-mode-guard` | Block mutating SQL sent directly to database command and connector tools. | high | claude-code |
-| `migration-safety-guard` | Require explicit approval for high-confidence destructive database migration actions. | high | claude-code |
+| `schema-compatibility-guard` | Block provably incompatible JSON Schema, Avro, and Protobuf contract edits. | medium | claude-code |
+| `database-query-mode-guard` | Block mutating SQL sent directly to database command and connector tools. | medium | claude-code |
+| `migration-safety-guard` | Require explicit approval for high-confidence destructive database migration actions. | medium | claude-code |
 
 ## design
 
 | Slug | What it does | Risk | Runtimes |
 | --- | --- | --- | --- |
-| `authentication-accessibility-guard` | Block edits that stop a password manager filling an authentication field or stop the user pasting into it. | high | claude-code |
-| `focus-style-regression-guard` | Block newly invisible CSS focus states that have no visible replacement. | high | claude-code |
-| `accessibility-attribute-regression-guard` | Block net removal of explicit accessibility relationships from markup changes. | high | claude-code |
+| `authentication-accessibility-guard` | Block edits that stop a password manager filling an authentication field or stop the user pasting into it. | medium | claude-code |
+| `focus-style-regression-guard` | Block newly invisible CSS focus states that have no visible replacement. | medium | claude-code |
+| `accessibility-attribute-regression-guard` | Block net removal of explicit accessibility relationships from markup changes. | medium | claude-code |
 
 ## development
 
 | Slug | What it does | Risk | Runtimes |
 | --- | --- | --- | --- |
-| `test-assertion-removal-guard` | Block removal of the last recognizable assertion from an existing test file. | high | claude-code |
-| `binary-mutation-guard` | Block text-editor mutations against existing binary or binary-signature files. | high | claude-code |
+| `test-assertion-removal-guard` | Block removal of the last recognizable assertion from an existing test file. | medium | claude-code |
+| `binary-mutation-guard` | Block text-editor mutations against existing binary or binary-signature files. | medium | claude-code |
 | `generated-file-guard` | Prevent direct agent edits to files that are conclusively generated artifacts. | medium | claude-code |
 | `policy-file-guard` | Stop an agent from silently weakening existing quality and ownership policy files. | medium | claude-code |
-| `api-contract-compatibility-guard` | Block high-confidence removals from bounded OpenAPI contract edits. | high | claude-code |
+| `api-contract-compatibility-guard` | Block high-confidence removals from bounded OpenAPI contract edits. | medium | claude-code |
 | `debug-artifact-guard` | Block commits containing high-confidence debugger statements or focused tests. | medium | claude-code, codex, cursor, gemini-cli, opencode |
-| `lint-suppression-guard` | Block net-new broad diagnostic suppressions while allowing scoped rule exceptions. | high | claude-code |
-| `exception-swallowing-guard` | Block newly added empty exception handlers and ignored promise rejections. | high | claude-code |
+| `lint-suppression-guard` | Block net-new broad diagnostic suppressions while allowing scoped rule exceptions. | medium | claude-code |
+| `exception-swallowing-guard` | Block newly added empty exception handlers and ignored promise rejections. | medium | claude-code |
 | `tool-output-budget-guard` | Warn when a shell tool call returns output beyond the declared byte budget, with pagination guidance. | low | claude-code |
 | `test-integrity-guard` | Block newly introduced test suppressions and explicit shell removal of test sources. | medium | claude-code |
 | `phase-gate-guard` | Block phase evidence writes unless the previous phase in the spec-design-tasks-implementation chain exists and is valid. | medium | claude-code |
@@ -43,57 +43,57 @@ A deterministic gate that inspects a command before it runs and blocks it. No mo
 
 | Slug | What it does | Risk | Runtimes |
 | --- | --- | --- | --- |
-| `compaction-handoff-guard` | Record bounded, content-free receipts before and after conversation compaction. | medium | claude-code |
-| `completion-evidence-guard` | Require a structured pass receipt before an explicitly marked task or verifier can finish. | high | claude-code |
-| `cloud-resource-deletion-guard` | Block high-confidence direct cloud CLI deletion, termination, and purge operations. | high | claude-code, codex, cursor, gemini-cli, opencode |
-| `instruction-config-integrity-guard` | Guard project configuration against explicit enforcement bypasses and observe instruction path drift. | high | claude-code |
-| `subagent-fanout-guard` | Cap per-session subagent delegation using a bounded transcript count. | high | claude-code |
-| `protected-branch-guard` | Block native edits and direct Git mutations that target a protected branch. | high | claude-code |
-| `worktree-removal-evidence-guard` | Observe dirty Git state immediately before Claude Code removes an isolated worktree. | medium | claude-code |
-| `container-registry-publish-guard` | Block direct publication of container images, Helm charts, and OCI artifacts. | high | claude-code, codex, cursor, gemini-cli, opencode |
-| `infrastructure-apply-guard` | Block direct infrastructure and cluster state mutation commands while allowing planning operations. | high | claude-code, codex, cursor, gemini-cli, opencode |
-| `failure-evidence-guard` | Normalize failed tool calls into bounded, non-sensitive evidence for the next model step. | medium | claude-code |
-| `package-publish-guard` | Block real ecosystem package publication while allowing local packaging and dry runs. | high | claude-code, codex, cursor, gemini-cli, opencode |
+| `compaction-handoff-guard` | Record bounded, content-free receipts before and after conversation compaction. | low | claude-code |
+| `completion-evidence-guard` | Require a structured pass receipt before an explicitly marked task or verifier can finish. | medium | claude-code |
+| `cloud-resource-deletion-guard` | Block high-confidence direct cloud CLI deletion, termination, and purge operations. | medium | claude-code, codex, cursor, gemini-cli, opencode |
+| `instruction-config-integrity-guard` | Guard project configuration against explicit enforcement bypasses and observe instruction path drift. | medium | claude-code |
+| `subagent-fanout-guard` | Cap per-session subagent delegation using a bounded transcript count. | medium | claude-code |
+| `protected-branch-guard` | Block native edits and direct Git mutations that target a protected branch. | medium | claude-code |
+| `worktree-removal-evidence-guard` | Observe dirty Git state immediately before Claude Code removes an isolated worktree. | low | claude-code |
+| `container-registry-publish-guard` | Block direct publication of container images, Helm charts, and OCI artifacts. | medium | claude-code, codex, cursor, gemini-cli, opencode |
+| `infrastructure-apply-guard` | Block direct infrastructure and cluster state mutation commands while allowing planning operations. | medium | claude-code, codex, cursor, gemini-cli, opencode |
+| `failure-evidence-guard` | Normalize failed tool calls into bounded, non-sensitive evidence for the next model step. | low | claude-code |
+| `package-publish-guard` | Block real ecosystem package publication while allowing local packaging and dry runs. | medium | claude-code, codex, cursor, gemini-cli, opencode |
 | `path-portability-guard` | Block new repository paths that are invalid or collision-prone across common filesystems. | medium | claude-code |
-| `foreground-process-guard` | Block recognizable indefinite development processes launched in the foreground. | high | claude-code, codex, cursor, gemini-cli, opencode |
-| `release-clean-state-guard` | Require a clean attached Git worktree before a recognized package or release publication command. | high | claude-code, codex, cursor, gemini-cli, opencode |
+| `foreground-process-guard` | Block recognizable indefinite development processes launched in the foreground. | medium | claude-code, codex, cursor, gemini-cli, opencode |
+| `release-clean-state-guard` | Require a clean attached Git worktree before a recognized package or release publication command. | medium | claude-code, codex, cursor, gemini-cli, opencode |
 | `large-diff-review-guard` | Require a smaller staged change when a commit exceeds bounded reviewability thresholds. | medium | claude-code, codex, cursor, gemini-cli, opencode |
-| `scheduled-task-mutation-guard` | Block direct creation, mutation, execution, and removal of operating-system scheduled tasks. | high | claude-code, codex, cursor, gemini-cli, opencode |
+| `scheduled-task-mutation-guard` | Block direct creation, mutation, execution, and removal of operating-system scheduled tasks. | medium | claude-code, codex, cursor, gemini-cli, opencode |
 | `compact-readiness-guard` | Warn before compaction when uncommitted changes or pending ledger claims would silently lose context. | low | claude-code |
 | `session-checkpoint-guard` | Append a deterministic, hash-chained session-end receipt to the local session ledger. | low | claude-code |
 | `session-restore-guard` | Inject a bounded, integrity-flagged summary of the latest session-ledger checkpoints at session start. | low | claude-code |
-| `commit-signature-intent-guard` | Require an explicit or configured cryptographic-signing intent for Git commits. | high | claude-code, codex, cursor, gemini-cli, opencode |
-| `system-service-mutation-guard` | Block direct operating-system service lifecycle and configuration mutations. | high | claude-code, codex, cursor, gemini-cli, opencode |
-| `release-version-consistency-guard` | Require package and lockfile versions to agree before a recognized publication command. | high | claude-code, codex, cursor, gemini-cli, opencode |
+| `commit-signature-intent-guard` | Require an explicit or configured cryptographic-signing intent for Git commits. | medium | claude-code, codex, cursor, gemini-cli, opencode |
+| `system-service-mutation-guard` | Block direct operating-system service lifecycle and configuration mutations. | medium | claude-code, codex, cursor, gemini-cli, opencode |
+| `release-version-consistency-guard` | Require package and lockfile versions to agree before a recognized publication command. | medium | claude-code, codex, cursor, gemini-cli, opencode |
 
 ## security
 
 | Slug | What it does | Risk | Runtimes |
 | --- | --- | --- | --- |
-| `outbound-data-guard` | Block explicit local-file uploads and dynamic payloads sent by common network commands. | high | claude-code, codex, cursor, gemini-cli, opencode |
-| `shell-command-guard` | Block high-confidence destructive shell commands before Claude Code executes them. | high | claude-code, codex, cursor, gemini-cli, opencode |
-| `workspace-boundary-guard` | Block native file edits whose resolved target escapes the active project workspace. | high | claude-code |
-| `archive-extraction-guard` | Block agent-driven archive extraction when entry containment cannot be proven before execution. | high | claude-code, codex, cursor, gemini-cli, opencode |
-| `ci-reference-pinning-guard` | Require immutable commit or digest references when CI workflows acquire external execution. | high | claude-code |
-| `dynamic-code-execution-guard` | Block new direct dynamic code execution primitives in supported source files. | high | claude-code |
-| `container-privilege-guard` | Block explicit container privilege expansion in commands and recognized deployment configuration. | high | claude-code |
-| `dependency-change-guard` | Keep dependency changes reproducible and block explicit package-manager safety bypasses. | high | claude-code |
-| `dependency-source-guard` | Reject newly introduced dependencies that bypass an authenticated package registry. | high | claude-code |
-| `unsafe-deserialization-guard` | Block newly introduced executable or unsafe deserialization primitives. | high | claude-code |
+| `outbound-data-guard` | Block explicit local-file uploads and dynamic payloads sent by common network commands. | medium | claude-code, codex, cursor, gemini-cli, opencode |
+| `shell-command-guard` | Block high-confidence destructive shell commands before Claude Code executes them. | medium | claude-code, codex, cursor, gemini-cli, opencode |
+| `workspace-boundary-guard` | Block native file edits whose resolved target escapes the active project workspace. | medium | claude-code |
+| `archive-extraction-guard` | Block agent-driven archive extraction when entry containment cannot be proven before execution. | medium | claude-code, codex, cursor, gemini-cli, opencode |
+| `ci-reference-pinning-guard` | Require immutable commit or digest references when CI workflows acquire external execution. | medium | claude-code |
+| `dynamic-code-execution-guard` | Block new direct dynamic code execution primitives in supported source files. | medium | claude-code |
+| `container-privilege-guard` | Block explicit container privilege expansion in commands and recognized deployment configuration. | medium | claude-code |
+| `dependency-change-guard` | Keep dependency changes reproducible and block explicit package-manager safety bypasses. | medium | claude-code |
+| `dependency-source-guard` | Reject newly introduced dependencies that bypass an authenticated package registry. | medium | claude-code |
+| `unsafe-deserialization-guard` | Block newly introduced executable or unsafe deserialization primitives. | medium | claude-code |
 | `executable-permission-guard` | Reject suspicious staged executable-bit additions before they enter repository history. | medium | claude-code, codex, cursor, gemini-cli, opencode |
-| `submodule-target-guard` | Reject newly introduced Git submodules with relative, mutable, local, or insecure targets. | high | claude-code |
-| `system-path-mutation-guard` | Block explicit file mutation commands targeting protected operating-system paths. | high | claude-code, codex, cursor, gemini-cli, opencode |
-| `user-account-mutation-guard` | Block direct local user, group, password, and privilege-assignment mutations. | high | claude-code, codex, cursor, gemini-cli, opencode |
-| `install-lifecycle-script-guard` | Block newly introduced package lifecycle commands that execute during dependency installation. | high | claude-code |
-| `lockfile-origin-guard` | Inspect staged lockfile origins before commit and reject insecure or unverifiable package sources. | high | claude-code, codex, cursor, gemini-cli, opencode |
-| `firewall-policy-mutation-guard` | Block direct host firewall rule, policy, chain, and activation mutations. | high | claude-code, codex, cursor, gemini-cli, opencode |
-| `mcp-capability-drift-guard` | Block toolkit MCP tool calls when the server, tool name, or observed description is not pinned. | high | claude-code, cursor |
-| `symlink-publication-guard` | Prevent commits from publishing symbolic links that escape or ambiguously traverse the repository. | high | claude-code, codex, cursor, gemini-cli, opencode |
-| `commit-guard` | Block commits containing high-confidence secrets, sensitive files, or unsafe bypasses. | high | claude-code, codex, cursor, gemini-cli, opencode |
-| `prompt-secret-guard` | Block prompts containing high-confidence credential formats before model processing. | high | claude-code |
-| `sensitive-file-access-guard` | Block deterministic access to credential files, private keys, and environment secret files. | high | claude-code |
-| `ci-trust-boundary-guard` | Block newly introduced high-confidence CI credential and execution privilege expansions. | high | claude-code |
-| `transport-security-regression-guard` | Block high-confidence source and configuration changes that disable transport verification. | high | claude-code |
+| `submodule-target-guard` | Reject newly introduced Git submodules with relative, mutable, local, or insecure targets. | medium | claude-code |
+| `system-path-mutation-guard` | Block explicit file mutation commands targeting protected operating-system paths. | medium | claude-code, codex, cursor, gemini-cli, opencode |
+| `user-account-mutation-guard` | Block direct local user, group, password, and privilege-assignment mutations. | medium | claude-code, codex, cursor, gemini-cli, opencode |
+| `install-lifecycle-script-guard` | Block newly introduced package lifecycle commands that execute during dependency installation. | medium | claude-code |
+| `lockfile-origin-guard` | Inspect staged lockfile origins before commit and reject insecure or unverifiable package sources. | medium | claude-code, codex, cursor, gemini-cli, opencode |
+| `firewall-policy-mutation-guard` | Block direct host firewall rule, policy, chain, and activation mutations. | medium | claude-code, codex, cursor, gemini-cli, opencode |
+| `mcp-capability-drift-guard` | Block toolkit MCP tool calls when the server, tool name, or observed description is not pinned. | medium | claude-code, cursor |
+| `symlink-publication-guard` | Prevent commits from publishing symbolic links that escape or ambiguously traverse the repository. | medium | claude-code, codex, cursor, gemini-cli, opencode |
+| `commit-guard` | Block commits containing high-confidence secrets, sensitive files, or unsafe bypasses. | medium | claude-code, codex, cursor, gemini-cli, opencode |
+| `prompt-secret-guard` | Block prompts containing high-confidence credential formats before model processing. | medium | claude-code |
+| `sensitive-file-access-guard` | Block deterministic access to credential files, private keys, and environment secret files. | medium | claude-code |
+| `ci-trust-boundary-guard` | Block newly introduced high-confidence CI credential and execution privilege expansions. | medium | claude-code |
+| `transport-security-regression-guard` | Block high-confidence source and configuration changes that disable transport verification. | medium | claude-code |
 
 ---
 

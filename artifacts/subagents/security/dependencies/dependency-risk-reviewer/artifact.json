@@ -25,6 +25,7 @@
     "maintenance"
   ],
   "risk": "low",
+  "risk_reason": "This read-only specialist reviews dependency deltas for supply-chain and compatibility risk without mutating the repo; it cannot edit or approve changes.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -58,6 +59,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The specialist reviews dependency deltas for supply-chain and compatibility risk without mutating the repo, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

@@ -24,6 +24,7 @@
     "pre-commit"
   ],
   "risk": "medium",
+  "risk_reason": "This read-only specialist compares a bounded before-and-after refactor for unintended observable behavior changes; its findings may affect a decision but it cannot edit or approve changes.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -65,6 +66,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The specialist compares a bounded before-and-after refactor for unintended observable behavior changes, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

@@ -16,6 +16,7 @@
   "languages": ["agnostic"],
   "lifecycle": ["implementation", "maintenance"],
   "risk": "low",
+  "risk_reason": "This context keeps branch integration recoverable, explicit, and backed by fresh repository evidence; it supplies guidance without tool or approval authority.",
   "license": "MIT",
   "authors": ["Youdede"],
   "refuses": [
@@ -42,7 +43,7 @@
     ]
   },
   "relationships": { "composesWith": [], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": [] },
-  "operational": { "behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "immediate", "dataRetention": "none" },
+  "operational": { "behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "immediate", "latency_reason": "The runtime loads static guidance to keep branch integration recoverable, explicit, and backed by fresh repository evidence in the matching file scope.", "dataRetention": "none" },
   "adapters": {
     "claude-code": "adapters/claude-code.json",
     "cursor": "adapters/cursor.json",

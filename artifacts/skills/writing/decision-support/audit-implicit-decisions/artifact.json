@@ -24,6 +24,7 @@
     "handoff"
   ],
   "risk": "low",
+  "risk_reason": "This skill exposes uncertain choices made during work and compares credible alternatives; it does not pretend uncertainty merely to create discussion.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -59,6 +60,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill exposes uncertain choices made during work and compares credible alternatives, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

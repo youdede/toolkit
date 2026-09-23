@@ -28,7 +28,8 @@
     "review",
     "handoff"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This automatic gate requires a structured pass receipt before an explicitly marked task or verifier can finish; a false denial can interrupt legitimate work, but it does not execute the blocked action.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -64,6 +65,7 @@
     "behavior": "enforcing",
     "failurePolicy": "fail-closed",
     "latencyClass": "bounded",
+    "latency_reason": "To require a structured pass receipt before an explicitly marked task or verifier can finish, the entrypoint inspects bounded session, tool, or repository state.",
     "dataRetention": "none"
   },
   "adapters": {

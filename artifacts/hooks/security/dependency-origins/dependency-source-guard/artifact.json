@@ -26,7 +26,8 @@
     "review",
     "maintenance"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This automatic gate rejects newly introduced dependencies that bypass an authenticated package registry; a false denial can interrupt legitimate work, but it does not execute the blocked action.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -65,6 +66,7 @@
     "behavior": "enforcing",
     "failurePolicy": "fail-closed",
     "latencyClass": "immediate",
+    "latency_reason": "The entrypoint handles one intercepted event to reject newly introduced dependencies that bypass an authenticated package registry without deferred work.",
     "dataRetention": "none"
   }
 }

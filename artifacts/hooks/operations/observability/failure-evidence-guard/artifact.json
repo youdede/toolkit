@@ -28,7 +28,8 @@
     "operations",
     "incident"
   ],
-  "risk": "medium",
+  "risk": "low",
+  "risk_reason": "This observer normalizes failed tool calls into bounded, non-sensitive evidence for the next model step; it cannot block the event or mutate the inspected state.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -63,6 +64,7 @@
     "behavior": "observing",
     "failurePolicy": "fail-open",
     "latencyClass": "immediate",
+    "latency_reason": "The entrypoint handles one intercepted event to normalize failed tool calls into bounded, non-sensitive evidence for the next model step without deferred work.",
     "dataRetention": "none"
   },
   "adapters": {

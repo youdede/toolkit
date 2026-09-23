@@ -26,6 +26,7 @@
     "maintenance"
   ],
   "risk": "medium",
+  "risk_reason": "This skill audits current-state claims in notes or agent memory against newer evidence without rewriting history; it does not bulk-restructure notes or rewrite append-only history.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -62,6 +63,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill audits current-state claims in notes or agent memory against newer evidence without rewriting history, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

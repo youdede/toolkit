@@ -22,7 +22,8 @@
   "lifecycle": [
     "review"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This read-only specialist audits a bounded role-action-resource matrix against concrete authorization enforcement points; its findings may affect a decision but it cannot edit or approve changes.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -56,6 +57,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The specialist audits a bounded role-action-resource matrix against concrete authorization enforcement points, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

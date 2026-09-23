@@ -24,7 +24,8 @@
     "planning",
     "review"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This skill designs pricing and packaging from customer value, economics, segmentation, and operational evidence; it does not guarantee willingness to pay, revenue lift, or optimal price from a benchmark.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill designs pricing and packaging from customer value, economics, segmentation, and operational evidence, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

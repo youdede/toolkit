@@ -24,7 +24,8 @@
     "operations",
     "incident"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This skill writes an executable incident runbook with detection, authority, diagnosis, containment, and recovery; it does not claim a runbook is tested from document review alone.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill writes an executable incident runbook with detection, authority, diagnosis, containment, and recovery, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

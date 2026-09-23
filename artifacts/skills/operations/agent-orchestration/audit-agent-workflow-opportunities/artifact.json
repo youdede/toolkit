@@ -26,6 +26,7 @@
     "maintenance"
   ],
   "risk": "medium",
+  "risk_reason": "This skill discovers durable agent-workflow improvements from one failed run or a bounded history window; it does not ingest an unbounded transcript corpus or retain raw sensitive history.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -62,6 +63,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill discovers durable agent-workflow improvements from one failed run or a bounded history window, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

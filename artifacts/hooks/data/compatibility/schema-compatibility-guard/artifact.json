@@ -23,7 +23,8 @@
     "implementation",
     "pre-commit"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This automatic gate blocks provably incompatible JSON Schema, Avro, and Protobuf contract edits; a false denial can interrupt legitimate work, but it does not execute the blocked action.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -61,6 +62,7 @@
     "behavior": "enforcing",
     "failurePolicy": "fail-closed",
     "latencyClass": "immediate",
+    "latency_reason": "The entrypoint handles one intercepted event to block provably incompatible JSON Schema, Avro, and Protobuf contract edits without deferred work.",
     "dataRetention": "none"
   }
 }

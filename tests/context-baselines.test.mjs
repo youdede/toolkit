@@ -105,11 +105,11 @@ test('install-set validation names a context rule contradicted by a hook', () =>
     summary: 'Fixture summary long enough for the installer.',
     description: 'Fixture description long enough for the installer conflict test.',
     domain: 'development', category: 'workflow', capabilities: ['enforce'], problems: ['workflow-delegation'],
-    frameworks: ['agnostic'], languages: ['agnostic'], lifecycle: ['implementation'], risk: 'low', license: 'MIT', authors: ['Youdede'],
+    frameworks: ['agnostic'], languages: ['agnostic'], lifecycle: ['implementation'], risk: 'low', risk_reason: 'The fixture changes only local guidance and grants no external authority.', license: 'MIT', authors: ['Youdede'],
     refuses: ['One sufficiently long refusal statement.', 'Another sufficiently long refusal statement.', 'A third sufficiently long refusal statement.'],
     execution: { mode: 'prompt', entrypoints: [] },
     relationships: { composesWith: [], conflictsWith: [], supersedes: [], prerequisites: [], packIds: [] },
-    operational: { behavior: 'advisory', failurePolicy: 'stop-and-report', latencyClass: 'immediate', dataRetention: 'none' },
+    operational: { behavior: 'advisory', failurePolicy: 'stop-and-report', latencyClass: 'immediate', latency_reason: 'The fixture loads static local guidance in a single event.', dataRetention: 'none' },
     adapters: { 'claude-code': 'adapters/claude-code.json' }
   });
   writeJson(path.join(hookDirectory, 'artifact.json'), {

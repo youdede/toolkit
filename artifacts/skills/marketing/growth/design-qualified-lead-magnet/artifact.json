@@ -25,6 +25,7 @@
     "implementation"
   ],
   "risk": "medium",
+  "risk_reason": "This skill designs an optional resource that delivers standalone value and signals genuine customer fit; it does not require unnecessary personal data or preselect promotional consent.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill designs an optional resource that delivers standalone value and signals genuine customer fit, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

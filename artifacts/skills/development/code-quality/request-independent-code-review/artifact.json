@@ -22,7 +22,8 @@
   "lifecycle": [
     "review"
   ],
-  "risk": "low",
+  "risk": "medium",
+  "risk_reason": "It sends a bounded diff to another reviewer, so code disclosure remains possible despite its confidentiality stop rule.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -65,6 +66,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill obtains a neutral second review and reconciles it against the actual change, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

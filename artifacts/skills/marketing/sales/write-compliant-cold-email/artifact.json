@@ -24,7 +24,8 @@
     "implementation",
     "review"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This skill writes concise B2B outreach grounded in relevance, verifiable claims, and respectful follow-up; it does not bypass opt-outs, spam controls, platform rules, or legal review.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill writes concise B2B outreach grounded in relevance, verifiable claims, and respectful follow-up, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

@@ -24,7 +24,8 @@
     "implementation",
     "review"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This skill designs an MCP server with narrow tools, safe schemas, authority boundaries, and protocol evidence; it does not place secrets in prompts, tool results, source, or client-visible errors.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -69,6 +70,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill designs an MCP server with narrow tools, safe schemas, authority boundaries, and protocol evidence, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

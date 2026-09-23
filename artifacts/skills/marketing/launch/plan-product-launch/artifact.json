@@ -24,7 +24,8 @@
     "release",
     "operations"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This skill plans a staged product launch with readiness gates, audience sequencing, ownership, and recovery; it does not hide known defects, availability limits, pricing terms, or operational risk.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill plans a staged product launch with readiness gates, audience sequencing, ownership, and recovery, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

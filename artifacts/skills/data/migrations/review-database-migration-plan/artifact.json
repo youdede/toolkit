@@ -24,7 +24,8 @@
     "review",
     "pre-commit"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This skill reviews a database migration plan for explicit SQL hazards and an evidenced rollout, rollback, lock, and backfill plan; it does not execute SQL, apply a migration, or approve a production change.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -73,6 +74,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill reviews a database migration plan for explicit SQL hazards and an evidenced rollout, rollback, lock, and backfill plan, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

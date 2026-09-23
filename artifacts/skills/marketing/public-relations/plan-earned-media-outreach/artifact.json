@@ -24,7 +24,8 @@
     "planning",
     "release"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This skill plans evidence-led earned-media outreach around genuine news value and respectful journalist relevance; it does not promise coverage or pressure editorial independence.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill plans evidence-led earned-media outreach around genuine news value and respectful journalist relevance, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

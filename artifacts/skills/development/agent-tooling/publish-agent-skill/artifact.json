@@ -22,7 +22,8 @@
   "lifecycle": [
     "release"
   ],
-  "risk": "medium",
+  "risk": "high",
+  "risk_reason": "It commits and pushes an agent skill to a destination repository after authorization, making externally visible release changes.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -58,6 +59,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill publishes a validated agent skill with provenance, versioning, and release evidence, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

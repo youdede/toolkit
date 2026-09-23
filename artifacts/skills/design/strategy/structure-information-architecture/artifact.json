@@ -25,6 +25,7 @@
     "design"
   ],
   "risk": "low",
+  "risk_reason": "This skill organizes content into a findable structure with evidenced groupings, tested labels, and task walkthroughs; it does not report a walkthrough as clean without naming the weakest branch for each task.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -67,6 +68,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill organizes content into a findable structure with evidenced groupings, tested labels, and task walkthroughs, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

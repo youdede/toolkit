@@ -25,6 +25,7 @@
     "review"
   ],
   "risk": "medium",
+  "risk_reason": "This skill designs an interface contract around consumers, invariants, compatibility, and failure semantics; it does not label a breaking change safe because current tests pass.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill designs an interface contract around consumers, invariants, compatibility, and failure semantics, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

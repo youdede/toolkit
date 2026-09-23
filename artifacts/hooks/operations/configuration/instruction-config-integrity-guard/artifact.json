@@ -29,7 +29,8 @@
     "operations",
     "maintenance"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This automatic gate guards project configuration against explicit enforcement bypasses and observe instruction path drift; a false denial can interrupt legitimate work, but it does not execute the blocked action.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -64,6 +65,7 @@
     "behavior": "enforcing",
     "failurePolicy": "fail-closed",
     "latencyClass": "bounded",
+    "latency_reason": "To guard project configuration against explicit enforcement bypasses and observe instruction path drift, the entrypoint inspects bounded session, tool, or repository state.",
     "dataRetention": "none"
   },
   "adapters": {

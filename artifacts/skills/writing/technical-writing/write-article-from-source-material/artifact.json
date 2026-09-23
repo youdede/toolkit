@@ -30,6 +30,7 @@
     "review"
   ],
   "risk": "low",
+  "risk_reason": "This skill develops an article from bounded source material while preserving claims, reader grounding, and author control; it does not publish, post, or optimize for a platform without separate authorization.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -57,6 +58,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill develops an article from bounded source material while preserving claims, reader grounding, and author control, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   },
   "adapters": {

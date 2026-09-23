@@ -24,7 +24,8 @@
     "planning",
     "review"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This skill builds a bounded B2B prospect list from lawful sources, explicit fit rules, and traceable evidence; it does not present a fit score as consent, intent, or permission to send outreach.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill builds a bounded B2B prospect list from lawful sources, explicit fit rules, and traceable evidence, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

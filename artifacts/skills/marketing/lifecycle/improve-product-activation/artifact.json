@@ -25,6 +25,7 @@
     "review"
   ],
   "risk": "medium",
+  "risk_reason": "This skill improves first-use activation by removing barriers to a verified user value event; it does not hide required setup, data use, or irreversible actions.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill improves first-use activation by removing barriers to a verified user value event, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

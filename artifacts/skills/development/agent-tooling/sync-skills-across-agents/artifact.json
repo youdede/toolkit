@@ -24,6 +24,7 @@
     "release"
   ],
   "risk": "medium",
+  "risk_reason": "This skill synchronizes a skill across configured agent roots without assuming personal paths; it does not overwrite divergent or unmanaged copies without approval.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -59,6 +60,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill synchronizes a skill across configured agent roots without assuming personal paths, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

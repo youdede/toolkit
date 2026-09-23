@@ -25,6 +25,7 @@
     "review"
   ],
   "risk": "medium",
+  "risk_reason": "This skill translates marketing decisions into a governed event, property, quality, and reporting plan; it does not collect personal or sensitive data merely because a tool supports it.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill translates marketing decisions into a governed event, property, quality, and reporting plan, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

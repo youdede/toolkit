@@ -33,7 +33,8 @@
     "pre-commit",
     "maintenance"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This automatic gate keeps dependency changes reproducible and block explicit package-manager safety bypasses; a false denial can interrupt legitimate work, but it does not execute the blocked action.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -70,7 +71,8 @@
   "operational": {
     "behavior": "enforcing",
     "failurePolicy": "fail-closed",
-    "latencyClass": "immediate",
+    "latencyClass": "bounded",
+    "latency_reason": "To keep dependency changes reproducible and block explicit package-manager safety bypasses, the entrypoint may run a bounded local subprocess before returning.",
     "dataRetention": "none"
   }
 }

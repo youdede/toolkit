@@ -24,6 +24,7 @@
     "planning"
   ],
   "risk": "low",
+  "risk_reason": "This skill generates a bounded portfolio of marketing experiments from constraints, evidence, and bottlenecks; it does not assign precise impact or confidence without evidence.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -59,6 +60,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill generates a bounded portfolio of marketing experiments from constraints, evidence, and bottlenecks, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

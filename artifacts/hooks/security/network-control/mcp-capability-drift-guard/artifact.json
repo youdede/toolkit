@@ -15,7 +15,8 @@
   "frameworks": ["agnostic", "nodejs"],
   "languages": ["javascript"],
   "lifecycle": ["implementation", "maintenance", "review"],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This automatic gate blocks toolkit MCP tool calls when the server, tool name, or observed description is not pinned; a false denial can interrupt legitimate work, but it does not execute the blocked action.",
   "license": "MIT",
   "authors": ["Youdede"],
   "refuses": [
@@ -26,6 +27,6 @@
   "execution": {"mode": "deterministic", "entrypoints": [{"path": "targets/claude-code/mcp-capability-drift-guard.mjs", "runtime": "node", "purpose": "Compare a toolkit MCP tool call and any observed inventory with the generated capability pin registry.", "sideEffects": "none"}]},
   "hookGuard": {"blockedActions": ["invoke-unpinned-mcp-tool"]},
   "relationships": {"composesWith": ["command/development/agent-tooling/re-pin-mcp-tools", "mcp-server/development/agent-tooling/allowlisted-fetch-readonly", "mcp-server/development/agent-tooling/repository-git-readonly", "mcp-server/development/agent-tooling/workspace-files-readonly", "skill/security/threat-modeling/review-agent-tool-boundaries"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": ["pack/mcp-baseline", "pack/secure-agent-boundaries"]},
-  "operational": {"behavior": "enforcing", "failurePolicy": "fail-closed", "latencyClass": "immediate", "dataRetention": "none"},
+  "operational": {"behavior": "enforcing", "failurePolicy": "fail-closed", "latencyClass": "immediate", "latency_reason": "The entrypoint handles one intercepted event to block toolkit MCP tool calls when the server, tool name, or observed description is not pinned without deferred work.", "dataRetention": "none"},
   "adapters": {"claude-code": "adapters/claude-code.json", "cursor": "adapters/cursor.json"}
 }

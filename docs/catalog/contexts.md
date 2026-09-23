@@ -33,7 +33,7 @@ A scoped rule file that shapes every decision while installed. Each rule traces 
 | Slug | What it does | Risk | Runtimes |
 | --- | --- | --- | --- |
 | `dependency-change-baseline` | Apply a provenance-backed dependency change baseline to the repository files where that decision surface is active. | low | claude-code, cursor, github-copilot |
-| `security-baseline` | Apply least-authority guidance for agent tools, credentials, sensitive files, and outbound data. | medium | claude-code, cursor, github-copilot |
+| `security-baseline` | Apply least-authority guidance for agent tools, credentials, sensitive files, and outbound data. | low | claude-code, cursor, github-copilot |
 
 ---
 

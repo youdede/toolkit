@@ -27,7 +27,8 @@
     "review",
     "release"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This read-only specialist verifies whether a bounded release claim is supported by fresh, correctly identified, criterion-linked evidence; its findings may affect a decision but it cannot edit or approve changes.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -61,6 +62,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The specialist verifies whether a bounded release claim is supported by fresh, correctly identified, criterion-linked evidence, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   },
   "adapters": {

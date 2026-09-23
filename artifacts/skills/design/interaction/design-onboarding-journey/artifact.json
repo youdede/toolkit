@@ -25,6 +25,7 @@
     "implementation"
   ],
   "risk": "low",
+  "risk_reason": "This skill designs a first-run journey that reaches the activation moment fast, with minimal setup, honest progress, and measurable outcomes; it does not fabricate activation rates, funnel numbers, benchmark comparisons, or user reactions.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -65,6 +66,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill designs a first-run journey that reaches the activation moment fast, with minimal setup, honest progress, and measurable outcomes, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

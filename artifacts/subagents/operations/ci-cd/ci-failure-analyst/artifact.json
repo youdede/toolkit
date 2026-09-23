@@ -24,6 +24,7 @@
     "review"
   ],
   "risk": "medium",
+  "risk_reason": "This read-only specialist analyzes one bounded CI failure for evidenced cause, discriminating checks, and safe next steps; its findings may affect a decision but it cannot edit or approve changes.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -62,6 +63,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The specialist analyzes one bounded CI failure for evidenced cause, discriminating checks, and safe next steps, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

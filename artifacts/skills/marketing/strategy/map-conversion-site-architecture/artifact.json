@@ -25,6 +25,7 @@
     "design"
   ],
   "risk": "medium",
+  "risk_reason": "This skill maps a website around user decisions, content ownership, navigation, and crawlable relationships; it does not create pages solely to occupy keywords or mirror the company org chart.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill maps a website around user decisions, content ownership, navigation, and crawlable relationships, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

@@ -25,6 +25,7 @@
     "operations"
   ],
   "risk": "medium",
+  "risk_reason": "This skill designs service objectives from user journeys, measurable indicators, error budgets, and response policy; it does not create paging alerts or release blocks without owner approval.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill designs service objectives from user journeys, measurable indicators, error budgets, and response policy, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

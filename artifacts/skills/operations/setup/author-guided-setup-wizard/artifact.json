@@ -27,7 +27,8 @@
     "planning",
     "setup"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This skill authors a resumable human-guided setup script with safe secret handling and verified checkpoints; it does not ask users to paste secrets into chat, logs, arguments, or visible terminal input.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -62,6 +63,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill authors a resumable human-guided setup script with safe secret handling and verified checkpoints, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   },
   "adapters": {

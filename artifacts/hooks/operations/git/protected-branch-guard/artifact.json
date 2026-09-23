@@ -25,7 +25,8 @@
     "pre-commit",
     "release"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This automatic gate blocks native edits and direct Git mutations that target a protected branch; a false denial can interrupt legitimate work, but it does not execute the blocked action.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -65,7 +66,8 @@
   "operational": {
     "behavior": "enforcing",
     "failurePolicy": "fail-closed",
-    "latencyClass": "immediate",
+    "latencyClass": "bounded",
+    "latency_reason": "To block native edits and direct Git mutations that target a protected branch, the entrypoint may run a bounded local subprocess before returning.",
     "dataRetention": "none"
   }
 }

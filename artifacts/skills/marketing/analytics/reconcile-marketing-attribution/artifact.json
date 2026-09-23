@@ -24,7 +24,8 @@
     "review",
     "operations"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This skill reconciles conflicting channel credit while preserving uncertainty and causal limits; it does not expose individual journeys or bypass consent to close identity gaps.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill reconciles conflicting channel credit while preserving uncertainty and causal limits, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

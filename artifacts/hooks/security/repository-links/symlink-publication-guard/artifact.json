@@ -25,7 +25,8 @@
     "review",
     "release"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This automatic gate prevents commits from publishing symbolic links that escape or ambiguously traverse the repository; a false denial can interrupt legitimate work, but it does not execute the blocked action.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -67,7 +68,8 @@
   "operational": {
     "behavior": "enforcing",
     "failurePolicy": "fail-closed",
-    "latencyClass": "immediate",
+    "latencyClass": "bounded",
+    "latency_reason": "To prevent commits from publishing symbolic links that escape or ambiguously traverse the repository, the entrypoint may run a bounded local subprocess before returning.",
     "dataRetention": "none"
   }
 }

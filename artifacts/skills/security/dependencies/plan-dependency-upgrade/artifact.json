@@ -24,7 +24,8 @@
     "implementation",
     "maintenance"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This skill plans a dependency upgrade from release evidence, compatibility surface, migration steps, and rollback; it does not upgrade unrelated packages to achieve a clean latest state.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill plans a dependency upgrade from release evidence, compatibility surface, migration steps, and rollback, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

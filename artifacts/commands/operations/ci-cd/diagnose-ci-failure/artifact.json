@@ -28,6 +28,7 @@
     "incident"
   ],
   "risk": "low",
+  "risk_reason": "This command diagnoses a failing CI run from supplied logs and repository evidence without mutating workflows or rerunning jobs; it does not rerun, cancel, approve, or mutate any CI job or workflow.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -85,7 +86,8 @@
   "operational": {
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
-    "latencyClass": "immediate",
+    "latencyClass": "bounded",
+    "latency_reason": "The command follows a precondition check and multiple workflow steps while it diagnoses a failing CI run from supplied logs and repository evidence without mutating workflows or rerunning jobs.",
     "dataRetention": "none"
   },
   "adapters": {

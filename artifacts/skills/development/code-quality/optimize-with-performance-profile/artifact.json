@@ -25,6 +25,7 @@
     "review"
   ],
   "risk": "medium",
+  "risk_reason": "This skill optimizes a measured bottleneck with representative workloads, guardrails, and regression proof; it does not hide correctness, readability, cost, energy, or accessibility regressions.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -62,6 +63,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill optimizes a measured bottleneck with representative workloads, guardrails, and regression proof, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

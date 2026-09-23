@@ -24,6 +24,7 @@
     "review"
   ],
   "risk": "medium",
+  "risk_reason": "This read-only specialist analyzes measured demand, service rate, queues, and limits to expose a bounded saturation threshold; its findings may affect a decision but it cannot edit or approve changes.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -59,6 +60,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The specialist analyzes measured demand, service rate, queues, and limits to expose a bounded saturation threshold, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

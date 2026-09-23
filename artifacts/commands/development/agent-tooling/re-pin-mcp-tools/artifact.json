@@ -15,7 +15,8 @@
   "frameworks": ["agnostic", "nodejs"],
   "languages": ["javascript"],
   "lifecycle": ["maintenance", "review"],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "It changes source MCP pins after an exact human digest confirmation, altering future tool trust decisions.",
   "license": "MIT",
   "authors": ["Youdede"],
   "refuses": [
@@ -36,6 +37,6 @@
     ]
   },
   "relationships": {"composesWith": ["hook/security/network-control/mcp-capability-drift-guard"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": []},
-  "operational": {"behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "bounded", "dataRetention": "local-bounded"},
+  "operational": {"behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "bounded", "latency_reason": "The command follows a precondition check and multiple workflow steps while it reviews an observed MCP tool inventory and updates source pins only after exact human confirmation.", "dataRetention": "local-bounded"},
   "adapters": {"claude-code": "adapters/claude-code.json"}
 }

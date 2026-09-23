@@ -23,6 +23,7 @@
     "setup"
   ],
   "risk": "low",
+  "risk_reason": "This skill guides unfamiliar setup one verified action at a time while retaining the full checklist; it does not dump a long unprioritized setup guide on the user.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill guides unfamiliar setup one verified action at a time while retaining the full checklist, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

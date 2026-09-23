@@ -29,6 +29,7 @@
     "learning"
   ],
   "risk": "low",
+  "risk_reason": "This skill builds sequenced learning exercises with explicit objectives, prerequisites, variants, and validation; it does not auto-commit, renumber unrelated content, or rely on one proprietary course linter.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -63,6 +64,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill builds sequenced learning exercises with explicit objectives, prerequisites, variants, and validation, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   },
   "adapters": {

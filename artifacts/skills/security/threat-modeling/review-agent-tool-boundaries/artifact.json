@@ -27,7 +27,8 @@
     "design",
     "review"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This skill reviews agent and MCP tool authority against prompt injection, confused-deputy, exfiltration, and unsafe side effects; it does not rely on prompt wording alone to protect secrets, writes, tenants, or external systems.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -64,6 +65,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill reviews agent and MCP tool authority against prompt injection, confused-deputy, exfiltration, and unsafe side effects, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   },
   "adapters": {

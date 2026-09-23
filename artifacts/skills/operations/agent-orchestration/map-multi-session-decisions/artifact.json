@@ -29,6 +29,7 @@
     "handoff"
   ],
   "risk": "medium",
+  "risk_reason": "This skill maps a large uncertain effort as bounded decisions, dependencies, frontier work, and explicit fog; it does not pre-slice unknown territory into invented tasks merely to make the map look complete.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -56,6 +57,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill maps a large uncertain effort as bounded decisions, dependencies, frontier work, and explicit fog, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   },
   "adapters": {

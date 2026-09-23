@@ -29,7 +29,8 @@
     "review",
     "maintenance"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This skill defines a private-data lifecycle with classification, purpose, access, retention, deletion, and verification evidence; it does not claim legal compliance, anonymization, deletion, or consent from design intent alone.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -57,6 +58,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill defines a private-data lifecycle with classification, purpose, access, retention, deletion, and verification evidence, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   },
   "adapters": {

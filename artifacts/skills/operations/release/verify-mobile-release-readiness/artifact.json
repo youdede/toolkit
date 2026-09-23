@@ -27,7 +27,8 @@
     "review",
     "release"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This skill verifies a mobile release candidate across identity, signing evidence, journeys, compatibility, rollout, and recovery; it does not claim device, upgrade, accessibility, permission, or store verification from static source inspection alone.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill verifies a mobile release candidate across identity, signing evidence, journeys, compatibility, rollout, and recovery, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   },
   "adapters": {

@@ -24,7 +24,8 @@
     "implementation",
     "pre-commit"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This automatic gate blocks net removal of explicit accessibility relationships from markup changes; a false denial can interrupt legitimate work, but it does not execute the blocked action.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -74,6 +75,7 @@
     "behavior": "enforcing",
     "failurePolicy": "fail-closed",
     "latencyClass": "immediate",
+    "latency_reason": "The entrypoint handles one intercepted event to block net removal of explicit accessibility relationships from markup changes without deferred work.",
     "dataRetention": "none"
   }
 }

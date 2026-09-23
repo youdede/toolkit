@@ -23,7 +23,8 @@
     "implementation",
     "pre-commit"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This automatic gate blocks removal of the last recognizable assertion from an existing test file; a false denial can interrupt legitimate work, but it does not execute the blocked action.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -61,6 +62,7 @@
     "behavior": "enforcing",
     "failurePolicy": "fail-closed",
     "latencyClass": "immediate",
+    "latency_reason": "The entrypoint handles one intercepted event to block removal of the last recognizable assertion from an existing test file without deferred work.",
     "dataRetention": "none"
   }
 }

@@ -23,7 +23,8 @@
   "lifecycle": [
     "release"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This automatic gate blocks direct publication of container images, Helm charts, and OCI artifacts; a false denial can interrupt legitimate work, but it does not execute the blocked action.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -65,6 +66,7 @@
     "behavior": "enforcing",
     "failurePolicy": "fail-closed",
     "latencyClass": "immediate",
+    "latency_reason": "The entrypoint handles one intercepted event to block direct publication of container images, Helm charts, and OCI artifacts without deferred work.",
     "dataRetention": "none"
   }
 }

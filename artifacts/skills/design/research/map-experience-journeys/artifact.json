@@ -26,6 +26,7 @@
     "design"
   ],
   "risk": "medium",
+  "risk_reason": "This skill authors journey maps, experience maps, service blueprints, or user flows from evidence, with unsupported stages tagged as assumptions; it does not collapse conflicting evidence about a stage into one smooth narrative.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -66,6 +67,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill authors journey maps, experience maps, service blueprints, or user flows from evidence, with unsupported stages tagged as assumptions, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

@@ -26,6 +26,7 @@
     "review"
   ],
   "risk": "low",
+  "risk_reason": "This command re-runs declared checks and compare every completion claim against fresh command output before accepting it; it does not rerun checks with flags, environment, or inputs the user did not declare.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -83,7 +84,8 @@
   "operational": {
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
-    "latencyClass": "immediate",
+    "latencyClass": "bounded",
+    "latency_reason": "The command follows a precondition check and multiple workflow steps while it re-runs declared checks and compare every completion claim against fresh command output before accepting it.",
     "dataRetention": "none"
   },
   "adapters": {

@@ -25,6 +25,7 @@
     "review"
   ],
   "risk": "medium",
+  "risk_reason": "This skill creates platform-fit ad variants whose hypotheses and claims can be reviewed and measured; it does not generate large batches whose differences cannot produce interpretable learning.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill creates platform-fit ad variants whose hypotheses and claims can be reviewed and measured, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

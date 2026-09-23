@@ -29,6 +29,7 @@
     "review"
   ],
   "risk": "medium",
+  "risk_reason": "This skill triages an incoming issue or pull request into an evidenced next state without silently acting on it; it does not close, relabel, assign, comment, or merge without explicit approval.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -56,6 +57,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill triages an incoming issue or pull request into an evidenced next state without silently acting on it, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   },
   "adapters": {

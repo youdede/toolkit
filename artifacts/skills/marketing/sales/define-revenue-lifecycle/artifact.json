@@ -24,7 +24,8 @@
     "planning",
     "operations"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This skill defines revenue stages, ownership, data contracts, handoffs, and reconciliation across teams; it does not force incompatible revenue and pipeline definitions to match.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill defines revenue stages, ownership, data contracts, handoffs, and reconciliation across teams, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

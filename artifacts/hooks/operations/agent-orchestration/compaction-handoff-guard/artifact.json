@@ -27,7 +27,8 @@
     "handoff",
     "operations"
   ],
-  "risk": "medium",
+  "risk": "low",
+  "risk_reason": "This observer records bounded, content-free receipts before and after conversation compaction; it writes only bounded local receipts and cannot block the event.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -63,6 +64,7 @@
     "behavior": "observing",
     "failurePolicy": "fail-open",
     "latencyClass": "bounded",
+    "latency_reason": "To record bounded, content-free receipts before and after conversation compaction, the entrypoint reads or writes bounded local state before returning.",
     "dataRetention": "local-bounded"
   },
   "adapters": {

@@ -25,6 +25,7 @@
     "review"
   ],
   "risk": "medium",
+  "risk_reason": "This skill evaluates a joint-marketing partner and define a balanced, measurable campaign agreement; it does not recommend a partner solely because of follower count or brand prestige.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill evaluates a joint-marketing partner and define a balanced, measurable campaign agreement, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

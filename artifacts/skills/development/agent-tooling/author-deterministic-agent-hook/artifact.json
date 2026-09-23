@@ -26,7 +26,8 @@
     "implementation",
     "review"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This skill authors a narrow deterministic agent hook whose native event and failure semantics are tested; it does not execute submitted commands, trust project-authored exemptions, or use eval to inspect input.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -64,6 +65,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill authors a narrow deterministic agent hook whose native event and failure semantics are tested, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

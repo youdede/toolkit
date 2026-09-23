@@ -24,7 +24,8 @@
     "design",
     "review"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This skill reduces account-creation friction while preserving security, consent, accessibility, and recovery; it does not claim conversion improvement from static review alone.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill reduces account-creation friction while preserving security, consent, accessibility, and recovery, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

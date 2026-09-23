@@ -25,6 +25,7 @@
     "operations"
   ],
   "risk": "medium",
+  "risk_reason": "This skill builds a constrained marketing operating plan that ties choices, owners, evidence, and review cadence; it does not assign work or spend beyond documented authority and capacity.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill builds a constrained marketing operating plan that ties choices, owners, evidence, and review cadence, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

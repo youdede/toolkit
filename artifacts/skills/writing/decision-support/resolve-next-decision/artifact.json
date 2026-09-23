@@ -24,6 +24,7 @@
     "design"
   ],
   "risk": "low",
+  "risk_reason": "This skill resolves the highest-impact open decision one evidence-backed choice at a time; it does not ask several decisions in one interaction.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -61,6 +62,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill resolves the highest-impact open decision one evidence-backed choice at a time, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

@@ -24,6 +24,7 @@
     "review"
   ],
   "risk": "low",
+  "risk_reason": "This skill critiques a rendered screen against explicit visual criteria and returns a prioritized, evidence-backed fix list; it does not report findings about screens, states, or breakpoints that were not supplied.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -62,6 +63,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill critiques a rendered screen against explicit visual criteria and returns a prioritized, evidence-backed fix list, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

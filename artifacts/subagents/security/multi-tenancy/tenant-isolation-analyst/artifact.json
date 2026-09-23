@@ -22,7 +22,8 @@
   "lifecycle": [
     "review"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This read-only specialist traces a tenant identity through storage, cache, job, and query boundaries for isolation failures; its findings may affect a decision but it cannot edit or approve changes.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -56,6 +57,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The specialist traces a tenant identity through storage, cache, job, and query boundaries for isolation failures, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

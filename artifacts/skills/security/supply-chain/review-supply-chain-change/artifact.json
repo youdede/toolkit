@@ -24,7 +24,8 @@
     "pre-commit",
     "release"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This skill reviews changed package and build inputs from bounded, offline repository evidence; it does not install, update, resolve, execute, quarantine, or remove dependencies or workflow actions.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -68,6 +69,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill reviews changed package and build inputs from bounded, offline repository evidence, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

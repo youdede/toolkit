@@ -24,6 +24,7 @@
     "review"
   ],
   "risk": "medium",
+  "risk_reason": "This skill exercises a bounded browser journey with state, network, console, accessibility, and visual evidence; it does not bypass authentication, bot protection, access controls, or consent.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -64,6 +65,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill exercises a bounded browser journey with state, network, console, accessibility, and visual evidence, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

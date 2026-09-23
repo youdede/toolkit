@@ -24,7 +24,8 @@
     "planning",
     "implementation"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This skill designs a referral system with product fit, balanced incentives, fraud controls, and durable economics; it does not buy undisclosed endorsements, reviews, or testimonials.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill designs a referral system with product fit, balanced incentives, fraud controls, and durable economics, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

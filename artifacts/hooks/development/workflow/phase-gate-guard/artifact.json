@@ -27,6 +27,7 @@
     "implementation"
   ],
   "risk": "medium",
+  "risk_reason": "This automatic gate blocks phase evidence writes unless the previous phase in the spec-design-tasks-implementation chain exists and is valid; a false denial can interrupt legitimate work, but it does not execute the blocked action.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -65,6 +66,7 @@
     "behavior": "enforcing",
     "failurePolicy": "fail-closed",
     "latencyClass": "immediate",
+    "latency_reason": "The entrypoint handles one intercepted event to block phase evidence writes unless the previous phase in the spec-design-tasks-implementation chain exists and is valid without deferred work.",
     "dataRetention": "none"
   },
   "adapters": {

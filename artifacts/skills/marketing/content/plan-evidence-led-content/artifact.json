@@ -25,6 +25,7 @@
     "maintenance"
   ],
   "risk": "low",
+  "risk_reason": "This skill builds a content portfolio around audience decisions, distribution, evidence, and operating capacity; it does not manufacture a high-volume calendar from keyword tools alone.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -60,6 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill builds a content portfolio around audience decisions, distribution, evidence, and operating capacity, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

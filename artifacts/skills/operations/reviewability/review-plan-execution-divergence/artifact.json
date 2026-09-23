@@ -27,6 +27,7 @@
     "learning"
   ],
   "risk": "low",
+  "risk_reason": "This skill reconciles an approved plan with actual changes and turn recurring divergence into process improvements; it does not grade plan adherence as a proxy for implementation quality.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -63,6 +64,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill reconciles an approved plan with actual changes and turn recurring divergence into process improvements, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

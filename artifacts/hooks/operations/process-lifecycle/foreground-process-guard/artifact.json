@@ -23,7 +23,8 @@
     "implementation",
     "pre-commit"
   ],
-  "risk": "high",
+  "risk": "medium",
+  "risk_reason": "This automatic gate blocks recognizable indefinite development processes launched in the foreground; a false denial can interrupt legitimate work, but it does not execute the blocked action.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -65,6 +66,7 @@
     "behavior": "enforcing",
     "failurePolicy": "fail-closed",
     "latencyClass": "immediate",
+    "latency_reason": "The entrypoint handles one intercepted event to block recognizable indefinite development processes launched in the foreground without deferred work.",
     "dataRetention": "none"
   }
 }

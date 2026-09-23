@@ -24,6 +24,7 @@
     "implementation"
   ],
   "risk": "low",
+  "risk_reason": "This skill turns locale change into explicit layout and content constraints for growth, direction, formats, and meaning; it does not state a growth allowance without the length band it derives from.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -66,6 +67,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill turns locale change into explicit layout and content constraints for growth, direction, formats, and meaning, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

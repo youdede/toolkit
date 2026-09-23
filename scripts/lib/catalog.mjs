@@ -626,6 +626,9 @@ export function validateArtifact(record, taxonomy, artifactsRoot = ARTIFACTS_ROO
   if (!Object.hasOwn(taxonomy.domains, manifest.domain)) errors.push(`unknown domain '${manifest.domain}'`);
   else if (!taxonomy.domains[manifest.domain].includes(manifest.category)) errors.push(`category '${manifest.category}' does not belong to '${manifest.domain}'`);
   if (!taxonomy.risk.includes(manifest.risk)) errors.push(`unknown risk '${manifest.risk}'`);
+  if (typeof manifest.risk_reason !== 'string' || manifest.risk_reason.trim().length < 25 || manifest.risk_reason.length > 400) {
+    errors.push('risk_reason must be a concrete 25-400 character explanation');
+  }
   if (manifest.license !== 'MIT') errors.push('artifact license must be MIT');
   pushArrayErrors(errors, manifest, 'problems', taxonomy.problems);
   pushArrayErrors(errors, manifest, 'capabilities', taxonomy.capabilities);
@@ -706,6 +709,9 @@ export function validateArtifact(record, taxonomy, artifactsRoot = ARTIFACTS_ROO
     if (!['advisory', 'enforcing', 'observing'].includes(operational.behavior)) errors.push('operational.behavior is invalid');
     if (!['stop-and-report', 'fail-closed', 'fail-open'].includes(operational.failurePolicy)) errors.push('operational.failurePolicy is invalid');
     if (!['immediate', 'bounded', 'background'].includes(operational.latencyClass)) errors.push('operational.latencyClass is invalid');
+    if (typeof operational.latency_reason !== 'string' || operational.latency_reason.trim().length < 25 || operational.latency_reason.length > 400) {
+      errors.push('operational.latency_reason must be a concrete 25-400 character explanation');
+    }
     if (!['none', 'runtime-managed', 'local-bounded'].includes(operational.dataRetention)) errors.push('operational.dataRetention is invalid');
     if (manifest.kind === 'hook' && operational.behavior === 'advisory') errors.push('hooks may not declare advisory behavior');
     if (operational.behavior === 'enforcing' && operational.failurePolicy === 'stop-and-report') errors.push('enforcing artifacts require fail-open or fail-closed policy');
@@ -1143,6 +1149,7 @@ export function publicCatalog(artifacts) {
       languages: manifest.languages,
       lifecycle: manifest.lifecycle,
       risk: manifest.risk,
+      risk_reason: manifest.risk_reason,
       license: manifest.license,
       execution: manifest.execution,
       relationships: manifest.relationships,

@@ -27,6 +27,7 @@
     "handoff"
   ],
   "risk": "low",
+  "risk_reason": "This skill packages a design into a token-referenced, state-complete spec and verifies the build against it; it does not certify accessibility conformance; it routes those audits to the accessibility skills.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -69,6 +70,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill packages a design into a token-referenced, state-complete spec and verifies the build against it, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

@@ -29,6 +29,7 @@
     "review"
   ],
   "risk": "medium",
+  "risk_reason": "This skill translates stable invariants and threat boundaries into reproducible property-based and fuzz tests; it does not execute unbounded fuzz campaigns or target production and shared services.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -56,6 +57,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill translates stable invariants and threat boundaries into reproducible property-based and fuzz tests, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   },
   "adapters": {

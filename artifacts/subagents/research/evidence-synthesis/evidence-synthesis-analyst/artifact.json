@@ -24,6 +24,7 @@
     "review"
   ],
   "risk": "medium",
+  "risk_reason": "This read-only specialist synthesizes a bounded source packet while preserving population, method, context, and contradiction differences; its findings may affect a decision but it cannot edit or approve changes.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -57,6 +58,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The specialist synthesizes a bounded source packet while preserving population, method, context, and contradiction differences, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

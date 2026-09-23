@@ -15,7 +15,8 @@
   "frameworks": ["agnostic"],
   "languages": ["agnostic"],
   "lifecycle": ["planning", "implementation", "maintenance"],
-  "risk": "medium",
+  "risk": "low",
+  "risk_reason": "It supplies least-authority guidance without granting tool access or changing credentials.",
   "license": "MIT",
   "authors": ["Youdede"],
   "refuses": [
@@ -42,7 +43,7 @@
     ]
   },
   "relationships": { "composesWith": [], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": [] },
-  "operational": { "behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "immediate", "dataRetention": "none" },
+  "operational": { "behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "immediate", "latency_reason": "The runtime loads static guidance to apply least-authority guidance for agent tools, credentials, sensitive files, and outbound data in the matching file scope.", "dataRetention": "none" },
   "adapters": {
     "claude-code": "adapters/claude-code.json",
     "cursor": "adapters/cursor.json",

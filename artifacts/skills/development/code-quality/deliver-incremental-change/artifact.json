@@ -25,6 +25,7 @@
     "review"
   ],
   "risk": "medium",
+  "risk_reason": "This skill delivers a change in independently verifiable slices that preserve a working system; it does not hide new scope inside an implementation checkpoint.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -65,6 +66,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill delivers a change in independently verifiable slices that preserve a working system, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

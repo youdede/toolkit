@@ -24,6 +24,7 @@
     "operations"
   ],
   "risk": "medium",
+  "risk_reason": "This skill turns an open-ended objective into a bounded loop with evidence and stop rules; it does not loop indefinitely or hide repeated failure.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -61,6 +62,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
+    "latency_reason": "The skill turns an open-ended objective into a bounded loop with evidence and stop rules, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }
