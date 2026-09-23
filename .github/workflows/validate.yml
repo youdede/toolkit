@@ -73,10 +73,26 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm run check
 
+  mcp-live:
+    name: mcp-live
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - run: npm run test:mcp:live
+      - name: Read this repository with the temporary contents-only token
+        if: github.event_name == 'push'
+        run: npm run test:mcp:live -- --authenticated-read
+        env:
+          GITHUB_PERSONAL_ACCESS_TOKEN: ${{ github.token }}
+
   quality-gate:
     name: quality-gate
     if: ${{ always() }}
-    needs: [policy, verify]
+    needs: [policy, verify, mcp-live]
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
@@ -84,6 +100,8 @@ jobs:
         env:
           POLICY_RESULT: ${{ needs.policy.result }}
           VERIFY_RESULT: ${{ needs.verify.result }}
+          MCP_LIVE_RESULT: ${{ needs['mcp-live'].result }}
         run: |
           test "$POLICY_RESULT" = success
           test "$VERIFY_RESULT" = success
+          test "$MCP_LIVE_RESULT" = success
