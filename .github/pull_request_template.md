@@ -20,6 +20,10 @@
 
 ## Documentation and release impact
 
+<!-- Check README when public behavior, installation, runtime coverage, counts, or evidence claims change. Update it if affected; otherwise say why no change is needed. This is a review prompt, not a required README edit. -->
+
+README impact: updated / no change needed (reason: ...)
+
 - [ ] User-facing behavior and refusal boundaries are documented
 - [ ] Backward compatibility and migration needs are stated
 - [ ] Release impact is classified: none / patch / minor / major

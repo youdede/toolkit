@@ -46,8 +46,9 @@ Use `!` and a `BREAKING CHANGE:` footer for incompatible changes. Do not use `WI
 2. Add one original, narrow artifact or one cohesive repository change.
 3. Add fixtures or tests proportional to its risk.
 4. Regenerate catalogs and integrity metadata when the artifact surface changes.
-5. Run `npm run check`.
-6. Explain the problem, refusal boundary, risk, validation evidence, and release impact in the pull request.
+5. Review README when public behavior, installation, runtime coverage, counts, or evidence claims change. Update it when affected; otherwise note why it needs no change in the pull request. A README edit is not required for every change.
+6. Run `npm run check`.
+7. Explain the problem, refusal boundary, risk, validation evidence, and release impact in the pull request.
 
 Do not submit scraped prompt dumps, artifacts with unknown licenses, obfuscated scripts, telemetry, credential collection, silent network calls, or code that weakens host permissions.
 
