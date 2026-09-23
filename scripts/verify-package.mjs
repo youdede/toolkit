@@ -43,6 +43,8 @@ const required = [
   'README.md',
   'bin/youdede-toolkit.mjs',
   'catalog/artifacts.json',
+  'catalog/reasons.it.json',
+  'catalog/reasons.nl.json',
   'catalog/integrity.json',
   'catalog/packs.json',
   'catalog/taxonomy.json',
