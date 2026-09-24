@@ -4,15 +4,16 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 
 const readJson = (file) => JSON.parse(readFileSync(file, 'utf8'));
-const artifacts = readJson('catalog/artifacts.json').artifacts.filter(({ kind }) => kind === 'mcp-server');
-const source = artifacts.map(({ slug, summary, description, execution, refuses }) =>
-  [slug, summary, description, execution.entrypoints.map(({ purpose }) => purpose), refuses]);
-source.sort(([left], [right]) => left.localeCompare(right));
-const sourceHash = createHash('sha256').update(JSON.stringify(source)).digest('hex');
-const known = new Set(artifacts.map(({ slug }) => slug));
+const allArtifacts = readJson('catalog/artifacts.json').artifacts;
 const problems = [];
 
 for (const locale of ['it', 'nl']) {
+  const artifacts = locale === 'it' ? allArtifacts : allArtifacts.filter(({ kind }) => kind === 'mcp-server');
+  const source = artifacts.map(({ slug, summary, description, execution, refuses }) =>
+    [slug, summary, description, execution.entrypoints.map(({ purpose }) => purpose), refuses]);
+  source.sort(([left], [right]) => left.localeCompare(right));
+  const sourceHash = createHash('sha256').update(JSON.stringify(source)).digest('hex');
+  const known = new Set(artifacts.map(({ slug }) => slug));
   const bundle = readJson(`catalog/narratives.${locale}.json`);
   if (bundle.sourceHash !== sourceHash) problems.push(`${locale}: source narratives changed`);
   for (const artifact of artifacts) {
@@ -38,4 +39,4 @@ if (problems.length) {
   for (const problem of problems) process.stderr.write(`${problem}\n`);
   process.exit(1);
 }
-process.stdout.write(`${artifacts.length} MCP narratives translated in it and nl\n`);
+process.stdout.write(`${allArtifacts.length} Italian narratives and ${allArtifacts.filter(({ kind }) => kind === 'mcp-server').length} Dutch MCP narratives verified\n`);
