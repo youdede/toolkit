@@ -8,7 +8,7 @@ const allArtifacts = readJson('catalog/artifacts.json').artifacts;
 const problems = [];
 
 for (const locale of ['it', 'nl']) {
-  const artifacts = locale === 'it' ? allArtifacts : allArtifacts.filter(({ kind }) => kind === 'mcp-server');
+  const artifacts = allArtifacts;
   const source = artifacts.map(({ slug, summary, description, execution, refuses }) =>
     [slug, summary, description, execution.entrypoints.map(({ purpose }) => purpose), refuses]);
   source.sort(([left], [right]) => left.localeCompare(right));
@@ -39,4 +39,4 @@ if (problems.length) {
   for (const problem of problems) process.stderr.write(`${problem}\n`);
   process.exit(1);
 }
-process.stdout.write(`${allArtifacts.length} Italian narratives and ${allArtifacts.filter(({ kind }) => kind === 'mcp-server').length} Dutch MCP narratives verified\n`);
+process.stdout.write(`${allArtifacts.length} catalog narratives translated in it and nl\n`);
