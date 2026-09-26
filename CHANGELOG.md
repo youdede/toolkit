@@ -37,6 +37,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 - `decompose-dependent-work-slices` did not document the JSON its graph validator expects (`tickets` with `id`, `title`, `blockedBy`), so a graph written from the skill's own field list was rejected, and it gave a path relative to the skill folder. The skill now shows the format and the `<skill-root>` path, and the validator no longer reports a dependency cycle for a missing blocker or a self-block.
 - Six skills told the agent to run `node scripts/...` from the installed skill folder, which fails from the project directory where agents run commands (and, for `extract-youtube-captions`, wrote relative outputs inside the installed skill). They now use `node "<skill-root>/scripts/..."` like the other skills. The `build-progressive-learning-exercises` plan validator also reports a non-object exercise as an error instead of crashing with a stack trace.
 - The `author-effective-agent-skill` validator rejected skills that follow the Agent Skills specification: the optional `license`, `compatibility`, `metadata`, and `allowed-tools` fields, folded (`>-`) descriptions, and CRLF files. It now accepts them, and the skill names the two checks that are this catalog's conventions rather than the specification's.
+- `design-interface-feedback` classified a specification built on estimated budgets both as applying and as reduced scope; applying now requires every budget to rest on named duration evidence.
 
 ## 0.3.0 (2026-09-21)
 
