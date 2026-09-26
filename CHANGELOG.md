@@ -25,6 +25,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 - The read-only MCP runtime negotiates `protocolVersion` against the versions it implements (`2025-11-25`, `2025-06-18`, `2025-03-26`, `2024-11-05`) instead of echoing any value, and answers unparsable JSON with `-32700`. JSON-RPC batches, required by `2025-03-26`, are still refused.
 - Removing the last artifact from an install root now deletes the empty installer state, and the state lock retry is bounded by the lock timeout.
 - The release workflow publishes the exact commit the `verify` job inspected rather than re-resolving the tag.
+- `add --dry-run` now lists `.youdede-toolkit/NOTICE.md`, which the real install writes; the JSON plan gains a `notice` entry. Before, the dry-run omitted that file.
 
 ## 0.3.0 (2026-09-21)
 
