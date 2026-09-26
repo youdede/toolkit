@@ -1,8 +1,8 @@
 # Lockfile origin guard for Claude Code
 
-This hook examines staged lockfile metadata only when a Git commit is attempted. It reports stable rule identifiers without echoing origin URLs or integrity material.
+This hook examines lockfile metadata only when a Git commit is attempted. It reads the command through the shared shell and commit-content analysis, so wrappers (`sudo`, `time`, `env`, `eval`, `sh -c`) and Git aliases are resolved. It inspects the staged lockfiles and, when the commit takes working-tree content (`-a`, a pathspec, or `git add` earlier in the same command), the changed or untracked lockfiles on disk. It reports stable rule identifiers without echoing origin URLs or integrity material.
 
-HTTPS package origins with integrity metadata, lockfiles not staged for commit, and unrelated Git commands remain allowed.
+HTTPS package origins with integrity metadata, lockfiles the commit does not take, and unrelated Git commands remain allowed. A commit after `cd` or with `git -C`/`--git-dir`/`--work-tree` is refused as uninspectable.
 
 The first scanner covers npm package-lock JSON. Unsupported lockfile formats are ignored rather than treated as validated.
 

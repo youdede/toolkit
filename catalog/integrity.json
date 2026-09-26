@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "algorithm": "sha256",
   "claim": "Checksums bind published bytes to a reviewed release; they do not prove authorship, originality, license compliance, endorsement, or control downstream copying.",
-  "rootDigest": "dc79808689eb877ee6998427ebd2acda71a084800a5e7ef8e1dcfc9112ab1fb5",
+  "rootDigest": "64a76f57f7416fb2ce5aecbea213b80be6712320fc7638ded5a228625dd522ed",
   "artifacts": [
     {
       "artifactId": "command/development/agent-tooling/audit-repository-instructions",
@@ -918,8 +918,8 @@
     {
       "artifactId": "hook/data/compatibility/schema-compatibility-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:54f589f6e16c3bd5547d5984418d41fcbf00bd80c359c80341156281da41f026",
-      "digest": "54f589f6e16c3bd5547d5984418d41fcbf00bd80c359c80341156281da41f026",
+      "integrityId": "urn:youdede:artifact:sha256:e070925256f9f6e6b5107852249d62faaf47f0e6bdd4cda2254d6db0e32b67e5",
+      "digest": "e070925256f9f6e6b5107852249d62faaf47f0e6bdd4cda2254d6db0e32b67e5",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -937,21 +937,21 @@
         },
         {
           "path": "artifacts/hooks/data/compatibility/schema-compatibility-guard/targets/claude-code/README.md",
-          "bytes": 707,
-          "sha256": "34e3fe3af1904b7b316f213b22a6d6698df7093dd1990cfea6f92aefe7365971"
+          "bytes": 922,
+          "sha256": "a2111893f7deb0255a77ecedee1711450a04b678145bcdaf38fa4bff505c6ac7"
         },
         {
           "path": "artifacts/hooks/data/compatibility/schema-compatibility-guard/targets/claude-code/schema-compatibility-guard.mjs",
-          "bytes": 10599,
-          "sha256": "0303e62b1809f6f938d8c5df71f32a1782dc696e24d93255ce010910ff912484"
+          "bytes": 12361,
+          "sha256": "374c965cc3de2edad6757a1844f79323f8c739891f6af4969892db2ecf692c3a"
         }
       ]
     },
     {
       "artifactId": "hook/data/live-query-safety/database-query-mode-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:b630fd17597a2bca28b4eeb08144dbc297ce55d0666bef9ee5657582bb80420b",
-      "digest": "b630fd17597a2bca28b4eeb08144dbc297ce55d0666bef9ee5657582bb80420b",
+      "integrityId": "urn:youdede:artifact:sha256:29849d2750105f7306189d6591303d5b698337023f4a02de74b3a67bb278f1af",
+      "digest": "29849d2750105f7306189d6591303d5b698337023f4a02de74b3a67bb278f1af",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -964,26 +964,26 @@
         },
         {
           "path": "artifacts/hooks/data/live-query-safety/database-query-mode-guard/artifact.json",
-          "bytes": 2211,
-          "sha256": "b8a5f8ee538f1ab419a3fd9a0e1ef9f2ffd375cf4192007c5a49c26ceefd6089"
+          "bytes": 2296,
+          "sha256": "79f14c259498fb4d8008a6102ebca2e0e2c401314362ece2982917539e018cb5"
         },
         {
           "path": "artifacts/hooks/data/live-query-safety/database-query-mode-guard/targets/claude-code/database-query-mode-guard.mjs",
-          "bytes": 6438,
-          "sha256": "65e29a6c55e3ebe0122ee0158e4d859831b106aec5d5bafb3a0ba5f1f1eba5de"
+          "bytes": 29052,
+          "sha256": "dcf21a3b4a6507ad97efc0434a96558dfc88d390685c19de679504a2abb051d6"
         },
         {
           "path": "artifacts/hooks/data/live-query-safety/database-query-mode-guard/targets/claude-code/README.md",
-          "bytes": 732,
-          "sha256": "2c27db77a287540ad286c2900b89c3a1c00943d66fce9aee53c9b5033dca3cc3"
+          "bytes": 979,
+          "sha256": "e184b0ecb0131bb9ad8c80f46d2e9ca5519672dae30334369926996d972643db"
         }
       ]
     },
     {
       "artifactId": "hook/data/migrations/migration-safety-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:edc1c79c2614550df9820ad95b015d5b34810afaa4309347bc8a9c779db7b0d3",
-      "digest": "edc1c79c2614550df9820ad95b015d5b34810afaa4309347bc8a9c779db7b0d3",
+      "integrityId": "urn:youdede:artifact:sha256:a68ea2055c5449a15b4cbda00959308ae958a9d72fd7ce3b576bc763c79fc8d1",
+      "digest": "a68ea2055c5449a15b4cbda00959308ae958a9d72fd7ce3b576bc763c79fc8d1",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -1001,21 +1001,21 @@
         },
         {
           "path": "artifacts/hooks/data/migrations/migration-safety-guard/targets/claude-code/migration-safety-guard.mjs",
-          "bytes": 17860,
-          "sha256": "7df7406b206f68530884f21027a954610c8a0630ee60569f8740f5de96f59789"
+          "bytes": 34652,
+          "sha256": "ef58dcd5f2472fec932a8c1ffa8ae3d5591e88f169bc3ffc7bfca8292d366721"
         },
         {
           "path": "artifacts/hooks/data/migrations/migration-safety-guard/targets/claude-code/README.md",
-          "bytes": 1861,
-          "sha256": "74a528c21d455f172aa57335f63bfdb71d4ad7c34bfe97e63e90e59ef09895c0"
+          "bytes": 2414,
+          "sha256": "aa3a0f8639f70cbfc081cf2e7def4054d12f07e0815b60358e29aa4889a690a0"
         }
       ]
     },
     {
       "artifactId": "hook/design/authentication-access/authentication-accessibility-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:d14ad311c82fe4a74ab962d38b530d2083ea651c513a0e1d93a39a60cc956cb2",
-      "digest": "d14ad311c82fe4a74ab962d38b530d2083ea651c513a0e1d93a39a60cc956cb2",
+      "integrityId": "urn:youdede:artifact:sha256:4b274a7ee9057b7c1f947d2f2a5b77111256b55d1d4078738498659a8bc2cbb5",
+      "digest": "4b274a7ee9057b7c1f947d2f2a5b77111256b55d1d4078738498659a8bc2cbb5",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -1028,13 +1028,13 @@
         },
         {
           "path": "artifacts/hooks/design/authentication-access/authentication-accessibility-guard/artifact.json",
-          "bytes": 3354,
-          "sha256": "b14af0aeed3cda76cd088c44475f5b1b27cf8f4228c5a421f5b641d57dfd0220"
+          "bytes": 3376,
+          "sha256": "723675d38e0ecf58ec82172d6096eb3005e4c231607a49b6f9097c281b7f7171"
         },
         {
           "path": "artifacts/hooks/design/authentication-access/authentication-accessibility-guard/targets/claude-code/authentication-accessibility-guard.mjs",
-          "bytes": 10058,
-          "sha256": "2301441b4e4f9620106af961ce76cc293e60caef2829dea2b35b90ec59105f89"
+          "bytes": 10092,
+          "sha256": "97d224261becda7f1ad9e26bed6f4b3d8e9e30580cf24376d079a724045cc3f1"
         },
         {
           "path": "artifacts/hooks/design/authentication-access/authentication-accessibility-guard/targets/claude-code/README.md",
@@ -1046,8 +1046,8 @@
     {
       "artifactId": "hook/design/keyboard-focus/focus-style-regression-guard",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:bd48ed81324a695cdb454d98bebe7313b441e8d2a9e9d98a112ded0370ea0d02",
-      "digest": "bd48ed81324a695cdb454d98bebe7313b441e8d2a9e9d98a112ded0370ea0d02",
+      "integrityId": "urn:youdede:artifact:sha256:2453139c1e2efd751d0cfe2c9e5aab50f3d549b8478f3939eef59141fe8b30a8",
+      "digest": "2453139c1e2efd751d0cfe2c9e5aab50f3d549b8478f3939eef59141fe8b30a8",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -1060,26 +1060,26 @@
         },
         {
           "path": "artifacts/hooks/design/keyboard-focus/focus-style-regression-guard/artifact.json",
-          "bytes": 2884,
-          "sha256": "c90b72c20e8d833f2bb5331daeb49bfd75f816cfdc419681e07676209f4c7f27"
+          "bytes": 2904,
+          "sha256": "e90389a6d2e6dc2506ef6f9cd5d611f03ccaab1fe92d99705d664cf7561c9c48"
         },
         {
           "path": "artifacts/hooks/design/keyboard-focus/focus-style-regression-guard/targets/claude-code/focus-style-regression-guard.mjs",
-          "bytes": 6941,
-          "sha256": "0ab9c0ee6d19bd10d91348c4117cf5514880a6a7d09ff869c9d886d11aaea211"
+          "bytes": 6975,
+          "sha256": "85d8219d516cd6d13df7d4c2bca3e7686885c14d0ec041aefaeea0338d73241a"
         },
         {
           "path": "artifacts/hooks/design/keyboard-focus/focus-style-regression-guard/targets/claude-code/README.md",
-          "bytes": 720,
-          "sha256": "4e8c99a1be14fea12fcf437566fd646bef16fe8f973991d44de8beeccf7fc34e"
+          "bytes": 798,
+          "sha256": "c87e34b496e6f1b3ae7f2e5930f869ef28a62c434d6c6c1fd10a9af51a0d10f6"
         }
       ]
     },
     {
       "artifactId": "hook/design/semantic-markup/accessibility-attribute-regression-guard",
       "version": "1.5.0",
-      "integrityId": "urn:youdede:artifact:sha256:25f81e9a94b48887ea75e8f8dbc6fd7c56f27a9558fba62e84211dd10be17e9e",
-      "digest": "25f81e9a94b48887ea75e8f8dbc6fd7c56f27a9558fba62e84211dd10be17e9e",
+      "integrityId": "urn:youdede:artifact:sha256:df7c0b9aa10dfae5b6cf5a15ce4799eed5c085150e2b7e73901cd62ae48d4b50",
+      "digest": "df7c0b9aa10dfae5b6cf5a15ce4799eed5c085150e2b7e73901cd62ae48d4b50",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -1097,21 +1097,21 @@
         },
         {
           "path": "artifacts/hooks/design/semantic-markup/accessibility-attribute-regression-guard/targets/claude-code/accessibility-attribute-regression-guard.mjs",
-          "bytes": 12831,
-          "sha256": "680a6d84c2534358329a76969766de706517db8a83b30069b71ae2037257bfe9"
+          "bytes": 12865,
+          "sha256": "0f599c3f736fc4a81c3c7e7d2ff5e0506923f2eb8ff505200bd8f3e5f238330f"
         },
         {
           "path": "artifacts/hooks/design/semantic-markup/accessibility-attribute-regression-guard/targets/claude-code/README.md",
-          "bytes": 1795,
-          "sha256": "98fbc80f967b2e80caeb9aca39962cbd89cf10d355604e650d1faf472e596c7f"
+          "bytes": 1902,
+          "sha256": "58f357c98a8859b3241ce2616f5ab5e1ec06e639419780eb22fde39bd62eaccc"
         }
       ]
     },
     {
       "artifactId": "hook/development/assertion-integrity/test-assertion-removal-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:35388078102fb1b6601a294bc45ae9863af726545f299783aeb60ae4ec84b45f",
-      "digest": "35388078102fb1b6601a294bc45ae9863af726545f299783aeb60ae4ec84b45f",
+      "integrityId": "urn:youdede:artifact:sha256:52abc417276d56eadc5d1e63de5bdd24078bee73333a6c9c43219b56d489a952",
+      "digest": "52abc417276d56eadc5d1e63de5bdd24078bee73333a6c9c43219b56d489a952",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -1124,26 +1124,26 @@
         },
         {
           "path": "artifacts/hooks/development/assertion-integrity/test-assertion-removal-guard/artifact.json",
-          "bytes": 2230,
-          "sha256": "664a4f74147e588a1ad4909b7c281bf32a9f42913d1858a66d04c1c907bae647"
+          "bytes": 2207,
+          "sha256": "db696d34de2bee94ae8772f05c57dbd9b274cc62c440668a94dee873f23c348e"
         },
         {
           "path": "artifacts/hooks/development/assertion-integrity/test-assertion-removal-guard/targets/claude-code/README.md",
-          "bytes": 712,
-          "sha256": "75bfec083088c92cd3d6ccb2c79b9e31106831baeae31649205462d8a6a16b27"
+          "bytes": 836,
+          "sha256": "05a7000117de400c83e8f57f3e51db2d4d0c9bfe8c4b7077dc4d09119e6a622e"
         },
         {
           "path": "artifacts/hooks/development/assertion-integrity/test-assertion-removal-guard/targets/claude-code/test-assertion-removal-guard.mjs",
-          "bytes": 9066,
-          "sha256": "eae3d8e95ba8db8cd362a8a6dd8ed52595fc8f1872b01c6dd43a526ea019268a"
+          "bytes": 9124,
+          "sha256": "842485bc8ad573f6683209c3306be025ce1574e1c0b6139809bc43b14ca5abdb"
         }
       ]
     },
     {
       "artifactId": "hook/development/binary-integrity/binary-mutation-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:34496682109027e5a511c31d3836aab4b6ca00d1bfaa9b10aebb699bf00cb67d",
-      "digest": "34496682109027e5a511c31d3836aab4b6ca00d1bfaa9b10aebb699bf00cb67d",
+      "integrityId": "urn:youdede:artifact:sha256:6968cb37b9bdfdf59ef5c91a3008fb02a80e88e814b0a2fb51a65ca662146108",
+      "digest": "6968cb37b9bdfdf59ef5c91a3008fb02a80e88e814b0a2fb51a65ca662146108",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -1161,21 +1161,21 @@
         },
         {
           "path": "artifacts/hooks/development/binary-integrity/binary-mutation-guard/targets/claude-code/binary-mutation-guard.mjs",
-          "bytes": 4652,
-          "sha256": "3272c94ce556f0338a5b323e06afe09ac185d6512aba4fd983261ec219291e3e"
+          "bytes": 4953,
+          "sha256": "816dc7acdfbb5d545a7bee492633e0c97d05f1da2245ecd9f2cd7be014b47f7d"
         },
         {
           "path": "artifacts/hooks/development/binary-integrity/binary-mutation-guard/targets/claude-code/README.md",
-          "bytes": 713,
-          "sha256": "68ea86f1b7b926e5acae6b12beeede0335ec2b656aa9b7537cbc82d748f05f32"
+          "bytes": 921,
+          "sha256": "517198d8ad9eefd8e38e31a83d55c0463c12254f23fcc7a88fd609151f7c1c53"
         }
       ]
     },
     {
       "artifactId": "hook/development/code-quality/generated-file-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:495e8f7ad618b1caa023f2706093554163c5b7b069821600fa6f57b6fb449003",
-      "digest": "495e8f7ad618b1caa023f2706093554163c5b7b069821600fa6f57b6fb449003",
+      "integrityId": "urn:youdede:artifact:sha256:584193657d13b8d00c306bc280a5e47ab22afd43f7034ec0d856e310e3f33bdf",
+      "digest": "584193657d13b8d00c306bc280a5e47ab22afd43f7034ec0d856e310e3f33bdf",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -1188,26 +1188,26 @@
         },
         {
           "path": "artifacts/hooks/development/code-quality/generated-file-guard/artifact.json",
-          "bytes": 2441,
-          "sha256": "186d68cf0704d29d805b263dbfc5f8080b583088f99263b003f897547c3a1c91"
+          "bytes": 2477,
+          "sha256": "7025041ee06e2d8d511bee68081685868f2dc3edc62caa9e05a2717b8863df9e"
         },
         {
           "path": "artifacts/hooks/development/code-quality/generated-file-guard/targets/claude-code/generated-file-guard.mjs",
-          "bytes": 5674,
-          "sha256": "1b556509ea96dbb408ab449e678e93ec7e8a753615603c639f017ed0565f6201"
+          "bytes": 6308,
+          "sha256": "386ee7718151cd527f66029366fda5fbfe47e6c718c295e7e8de720d95a979e6"
         },
         {
           "path": "artifacts/hooks/development/code-quality/generated-file-guard/targets/claude-code/README.md",
-          "bytes": 1686,
-          "sha256": "750f04b7e62175953e994f3dfa27682af912a1538688be6e2a12386c2db53113"
+          "bytes": 1871,
+          "sha256": "5dbc856750ca5c60713ae7c5370e76e818671caaffb61eb6e09092a66c02700a"
         }
       ]
     },
     {
       "artifactId": "hook/development/code-quality/policy-file-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:b4a641aaacf785efa750e132bfd65e973fe855d835e957ec4035436c8cdc5d90",
-      "digest": "b4a641aaacf785efa750e132bfd65e973fe855d835e957ec4035436c8cdc5d90",
+      "integrityId": "urn:youdede:artifact:sha256:676c0b520ef95cfcb0cb01b02c36b92caf9a168801a9bfff7212e49d2f523349",
+      "digest": "676c0b520ef95cfcb0cb01b02c36b92caf9a168801a9bfff7212e49d2f523349",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -1220,26 +1220,26 @@
         },
         {
           "path": "artifacts/hooks/development/code-quality/policy-file-guard/artifact.json",
-          "bytes": 2344,
-          "sha256": "83c7e393910f29e0f9e88b749be5f20dde6588df7bac92272a849a7b046ffec6"
+          "bytes": 2415,
+          "sha256": "c94154d23a0c0dbf45c57dee322b4e35acc14cd1f6aa6f7cd0df17c97560aa74"
         },
         {
           "path": "artifacts/hooks/development/code-quality/policy-file-guard/targets/claude-code/policy-file-guard.mjs",
-          "bytes": 2965,
-          "sha256": "aa4006aec9f5e37350ba6b151912cd99b87a9721a38be6fc05962bacc30d114e"
+          "bytes": 3242,
+          "sha256": "3fe891a0d0770a91332be0eff5a07a92469be162510547ca97a6ab5e883fab41"
         },
         {
           "path": "artifacts/hooks/development/code-quality/policy-file-guard/targets/claude-code/README.md",
-          "bytes": 1034,
-          "sha256": "d45f12692f6c70ddffbb82dc39fe2a8bcace7b4caac8615f76bebd7444b9fe2f"
+          "bytes": 1107,
+          "sha256": "a8ad9cd3839143d4b240030f226c60849d8b4fe1dc86c4a421fc1eacb1d72f40"
         }
       ]
     },
     {
       "artifactId": "hook/development/contract-compatibility/api-contract-compatibility-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:f8ba689ce462efcdd1601053e8a7efdb2c7fc2e28b0348d9de1e24c71f5a5f70",
-      "digest": "f8ba689ce462efcdd1601053e8a7efdb2c7fc2e28b0348d9de1e24c71f5a5f70",
+      "integrityId": "urn:youdede:artifact:sha256:5bc23af13ac1fed67f3c68a698fc7a69112d152a92bdf5997121f6888686e05d",
+      "digest": "5bc23af13ac1fed67f3c68a698fc7a69112d152a92bdf5997121f6888686e05d",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -1257,8 +1257,8 @@
         },
         {
           "path": "artifacts/hooks/development/contract-compatibility/api-contract-compatibility-guard/targets/claude-code/api-contract-compatibility-guard.mjs",
-          "bytes": 10081,
-          "sha256": "a8e9799255ae16f72d7e40e1e87ec8894422941ff61ca1691d17dc7c5680cc35"
+          "bytes": 10126,
+          "sha256": "e23d4644cf50676fc70e6c2d6e8922539251751ba1db65863a5036b0bf7f7067"
         },
         {
           "path": "artifacts/hooks/development/contract-compatibility/api-contract-compatibility-guard/targets/claude-code/README.md",
@@ -1270,8 +1270,8 @@
     {
       "artifactId": "hook/development/debugging/debug-artifact-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:27d555f470cd327435d656ba167b86d0b6f76ef5ae41c47dcbc42ec611bc2dc6",
-      "digest": "27d555f470cd327435d656ba167b86d0b6f76ef5ae41c47dcbc42ec611bc2dc6",
+      "integrityId": "urn:youdede:artifact:sha256:e454d4371aec54e59dc9f2d2340fbe1f465a46039321f47f6ec28d0d8567cbbb",
+      "digest": "e454d4371aec54e59dc9f2d2340fbe1f465a46039321f47f6ec28d0d8567cbbb",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -1304,18 +1304,18 @@
         },
         {
           "path": "artifacts/hooks/development/debugging/debug-artifact-guard/artifact.json",
-          "bytes": 2666,
-          "sha256": "d6a052cc4b913bbd5ce9b2a6f2ed7a92937acd9c3e25d6a307bb1a5f8ef0f230"
+          "bytes": 2763,
+          "sha256": "a6e139d92baa07bf056cabbcae1589a786a6222a9886747181fb7c61534e3dee"
         },
         {
           "path": "artifacts/hooks/development/debugging/debug-artifact-guard/targets/claude-code/debug-artifact-guard.mjs",
-          "bytes": 15586,
-          "sha256": "87f7155571833385e3414b2cd8868cdcfcab8eec02d94714271c5336764fb6fc"
+          "bytes": 43193,
+          "sha256": "566c90c4c8eef2e44fc4045f460ddd4b587812f8065c51bd5810d29091d18b1a"
         },
         {
           "path": "artifacts/hooks/development/debugging/debug-artifact-guard/targets/claude-code/README.md",
-          "bytes": 2066,
-          "sha256": "cb8445a3c3f6a544481844726e85295862e27556bf17024d54f44fc234c8e48f"
+          "bytes": 2588,
+          "sha256": "d14cd14edec30194473f05248ffdf8b523754b9364d07c9819815f1058d34566"
         },
         {
           "path": "scripts/runtime/hook-command-bridge.mjs",
@@ -1332,8 +1332,8 @@
     {
       "artifactId": "hook/development/diagnostic-suppression/lint-suppression-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:2f8956222df3419d6ac8597841334b8fd3481fd7958fb996bdeee2eaa5ffaad0",
-      "digest": "2f8956222df3419d6ac8597841334b8fd3481fd7958fb996bdeee2eaa5ffaad0",
+      "integrityId": "urn:youdede:artifact:sha256:c8149f6f093073ee5ccdfa0c99e5508734fdec4efb44df6e489eab1e18dfebb2",
+      "digest": "c8149f6f093073ee5ccdfa0c99e5508734fdec4efb44df6e489eab1e18dfebb2",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -1346,26 +1346,26 @@
         },
         {
           "path": "artifacts/hooks/development/diagnostic-suppression/lint-suppression-guard/artifact.json",
-          "bytes": 2214,
-          "sha256": "186a1ffc15b063e91a2a8850980d77eb41fff9899d74bc15d34100c001bb4fcc"
+          "bytes": 2263,
+          "sha256": "0cc539d470dcc3fd49786cf2398c1f414341a3a8d3f1df21d37e7fa02400f71b"
         },
         {
           "path": "artifacts/hooks/development/diagnostic-suppression/lint-suppression-guard/targets/claude-code/lint-suppression-guard.mjs",
-          "bytes": 6101,
-          "sha256": "dcab01ae9bc68432ecb9c0854833987b82bfbe9d9552081aa32475c04a7d5c80"
+          "bytes": 7803,
+          "sha256": "da330ffc30d0c6e17ad998b7fc52bd116abd9d5850d9b787404c67c834d3ca7a"
         },
         {
           "path": "artifacts/hooks/development/diagnostic-suppression/lint-suppression-guard/targets/claude-code/README.md",
-          "bytes": 678,
-          "sha256": "f4d22845a2806a41829387194eb3bba4d25329dd1aaa7b1184e27bac61fcf919"
+          "bytes": 818,
+          "sha256": "b0a977e4a2b480f00a9ddccf8f1b34ad4c14bb025a4e2e229b60e1dcbe581d42"
         }
       ]
     },
     {
       "artifactId": "hook/development/error-handling/exception-swallowing-guard",
       "version": "1.1.0",
-      "integrityId": "urn:youdede:artifact:sha256:7622cdab7a0bfc276124789250111c237e719d24f4594919736301077515cc5e",
-      "digest": "7622cdab7a0bfc276124789250111c237e719d24f4594919736301077515cc5e",
+      "integrityId": "urn:youdede:artifact:sha256:48d0ad922b841b8f6220158e722693b1ccf63bc89aeecc645bb060b96fd3761b",
+      "digest": "48d0ad922b841b8f6220158e722693b1ccf63bc89aeecc645bb060b96fd3761b",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -1383,21 +1383,21 @@
         },
         {
           "path": "artifacts/hooks/development/error-handling/exception-swallowing-guard/targets/claude-code/exception-swallowing-guard.mjs",
-          "bytes": 8931,
-          "sha256": "87b9bf85558074eebd0f2469084bd0527865a628e5b1e9d0e548d480e4c24673"
+          "bytes": 8965,
+          "sha256": "90c6a93d42db2ebf059c2a8c41f6bb1288ef2fc218379c7129ce0adcb720eb8f"
         },
         {
           "path": "artifacts/hooks/development/error-handling/exception-swallowing-guard/targets/claude-code/README.md",
-          "bytes": 706,
-          "sha256": "56cbef4922e9bb9896ef8c380e8bbed0d5755ea212571ae696009f3a72ab803f"
+          "bytes": 849,
+          "sha256": "c420bc68c6ac5dc63af36b5393cbe3f8cc2f92af38eef74717156497d8fa20f7"
         }
       ]
     },
     {
       "artifactId": "hook/development/resource-management/tool-output-budget-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:f722a7d8e7f26d954eee2d23e5cadbce290d633298077c6d1e22c9d2c3a97cf9",
-      "digest": "f722a7d8e7f26d954eee2d23e5cadbce290d633298077c6d1e22c9d2c3a97cf9",
+      "integrityId": "urn:youdede:artifact:sha256:0ff2235270f20f20fb19d063c47b657c06a9ca5bb364562773cc942d59633844",
+      "digest": "0ff2235270f20f20fb19d063c47b657c06a9ca5bb364562773cc942d59633844",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -1410,26 +1410,26 @@
         },
         {
           "path": "artifacts/hooks/development/resource-management/tool-output-budget-guard/artifact.json",
-          "bytes": 2260,
-          "sha256": "4e138409a10b37fe6696e691dc75db62683e6542020dd45dc55996679e1adc02"
+          "bytes": 2248,
+          "sha256": "32bcd42883bbbc688defb712a1e67288c6f98b33b71d76a07d4f11828089a645"
         },
         {
           "path": "artifacts/hooks/development/resource-management/tool-output-budget-guard/targets/claude-code/README.md",
-          "bytes": 730,
-          "sha256": "b85b95eae86043d8415da0e2e9bb96adb8634406d6d9510a6762137881b71494"
+          "bytes": 803,
+          "sha256": "1d463a4ef7b89f9c51e8e60121ba9a48c8b64fcd03392e4badd8f344b729ef1a"
         },
         {
           "path": "artifacts/hooks/development/resource-management/tool-output-budget-guard/targets/claude-code/tool-output-budget-guard.mjs",
-          "bytes": 2094,
-          "sha256": "454416371e0657ee788ce2b8e4b2b11ae5864da8483d67de2ae246215d55df46"
+          "bytes": 2410,
+          "sha256": "3be77e079fc76f9fe41afc6e70f52da6c63e3aa33efaeffc2e1d2f53aeafee3e"
         }
       ]
     },
     {
       "artifactId": "hook/development/testing/test-integrity-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:1a172a06b9d43028e5816f51245b466a9873ef6271d3294eada1da7bbceed3d4",
-      "digest": "1a172a06b9d43028e5816f51245b466a9873ef6271d3294eada1da7bbceed3d4",
+      "integrityId": "urn:youdede:artifact:sha256:be1001a158729630e7e9f5fbe4c9abda909bee960c22213c5fe830b3afe056bb",
+      "digest": "be1001a158729630e7e9f5fbe4c9abda909bee960c22213c5fe830b3afe056bb",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -1447,26 +1447,26 @@
         },
         {
           "path": "artifacts/hooks/development/testing/test-integrity-guard/targets/claude-code/README.md",
-          "bytes": 1914,
-          "sha256": "4f8289f0281d5df9b8442e530f4b6dff73664f9b9b2726cca1c8c849fb9e1b18"
+          "bytes": 2257,
+          "sha256": "bf036bc99d942131d237e0d8e9a1e4cc65b5e84071fe78c614ec5874b73aa756"
         },
         {
           "path": "artifacts/hooks/development/testing/test-integrity-guard/targets/claude-code/test-integrity-guard.mjs",
-          "bytes": 21107,
-          "sha256": "9c6fad8ede843424068c1cff8c68be2fca15f4c0fe74da1682075e784f633375"
+          "bytes": 41307,
+          "sha256": "092ab072c8cd72b160ac4aa7472faeca856192de71afb1f32b0b107e43de13a5"
         },
         {
           "path": "artifacts/hooks/development/testing/test-integrity-guard/targets/claude-code/test-integrity-paths.mjs",
-          "bytes": 2083,
-          "sha256": "82743b2bf9cdd1a79ecb49e38e95d0ab694c8e2db3e1ec26fbbebc5f0c28462c"
+          "bytes": 1368,
+          "sha256": "b2a42cc2b39e3b8db288ab8388ee2e8ae39944a8a3cd046fb115f727bcbc43e9"
         }
       ]
     },
     {
       "artifactId": "hook/development/workflow/phase-gate-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:169d86d503dc73caa10035ffd63414dd8a3745bf2ee6d32b4afe6fd701828058",
-      "digest": "169d86d503dc73caa10035ffd63414dd8a3745bf2ee6d32b4afe6fd701828058",
+      "integrityId": "urn:youdede:artifact:sha256:89f2ab1c9f3f87f8fdf6b53ae009af5572261c99c86f113a8b67ff2fa989aa88",
+      "digest": "89f2ab1c9f3f87f8fdf6b53ae009af5572261c99c86f113a8b67ff2fa989aa88",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -1484,8 +1484,8 @@
         },
         {
           "path": "artifacts/hooks/development/workflow/phase-gate-guard/targets/claude-code/phase-gate-guard.mjs",
-          "bytes": 6812,
-          "sha256": "324836ae68837dd0c326939fd1620ad0a33080281ff11dafe97126c16bdadfc8"
+          "bytes": 7085,
+          "sha256": "cba060a162198f13f8c51b0c510ea1b66fa96f1a3e8c01ccbdddb64d42df22c1"
         },
         {
           "path": "artifacts/hooks/development/workflow/phase-gate-guard/targets/claude-code/README.md",
@@ -1561,8 +1561,8 @@
     {
       "artifactId": "hook/operations/cloud-resources/cloud-resource-deletion-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:2b5af9d1d4c4c295d6af1b53e86756a7c7eab111f3bfd375bfe4a7bfed4150fa",
-      "digest": "2b5af9d1d4c4c295d6af1b53e86756a7c7eab111f3bfd375bfe4a7bfed4150fa",
+      "integrityId": "urn:youdede:artifact:sha256:eafb0fb43d501567b2505fef344f3e8fbc85fd7e1c6374598c2333c4847cb136",
+      "digest": "eafb0fb43d501567b2505fef344f3e8fbc85fd7e1c6374598c2333c4847cb136",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -1600,8 +1600,8 @@
         },
         {
           "path": "artifacts/hooks/operations/cloud-resources/cloud-resource-deletion-guard/targets/claude-code/cloud-resource-deletion-guard.mjs",
-          "bytes": 26537,
-          "sha256": "6f9acbe38e05cc05da4962e8193ac9625e30a6df209c07782825984adc913c87"
+          "bytes": 31265,
+          "sha256": "b0b8d84a3fedf6af3b946b960380578ff714dba57903055bd42449f2640fe09d"
         },
         {
           "path": "artifacts/hooks/operations/cloud-resources/cloud-resource-deletion-guard/targets/claude-code/README.md",
@@ -1687,8 +1687,8 @@
     {
       "artifactId": "hook/operations/git/protected-branch-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:dc1d73eca04dec43802aa593cd6e5feefa2b3247402244f1604b77e9728f76c2",
-      "digest": "dc1d73eca04dec43802aa593cd6e5feefa2b3247402244f1604b77e9728f76c2",
+      "integrityId": "urn:youdede:artifact:sha256:1c44c1abedc65de00815e40a9311c276eaddc182a6209ffeaeb0a4dd68e8c224",
+      "digest": "1c44c1abedc65de00815e40a9311c276eaddc182a6209ffeaeb0a4dd68e8c224",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -1706,8 +1706,8 @@
         },
         {
           "path": "artifacts/hooks/operations/git/protected-branch-guard/targets/claude-code/protected-branch-guard.mjs",
-          "bytes": 52275,
-          "sha256": "24beafa14b69c01b2551f9ea41074da55011361fd2a6927f762f21a41e9983f3"
+          "bytes": 57077,
+          "sha256": "448e47a5a6ec9cc238bef35a95f3d9c7761ea7f9e56ba63267ea5fb88fcb3a95"
         },
         {
           "path": "artifacts/hooks/operations/git/protected-branch-guard/targets/claude-code/README.md",
@@ -1751,8 +1751,8 @@
     {
       "artifactId": "hook/operations/image-publication/container-registry-publish-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:60286dee67f547a09c72b7f1f904696de902d8608349312cce827974c883cefb",
-      "digest": "60286dee67f547a09c72b7f1f904696de902d8608349312cce827974c883cefb",
+      "integrityId": "urn:youdede:artifact:sha256:cd448a3c7dc5b0e6eb89aaa98b22078f74d6ad28d3a44c8eb2c294d6bfc050ba",
+      "digest": "cd448a3c7dc5b0e6eb89aaa98b22078f74d6ad28d3a44c8eb2c294d6bfc050ba",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -1790,8 +1790,8 @@
         },
         {
           "path": "artifacts/hooks/operations/image-publication/container-registry-publish-guard/targets/claude-code/container-registry-publish-guard.mjs",
-          "bytes": 26981,
-          "sha256": "4cad00d777e14069a5682608309de8f6028825875eed2d39f4fac60b34ea5c3f"
+          "bytes": 31709,
+          "sha256": "fc8ea721db7d4c9312d7606b200d71c6b3866126ad2bf01b74db7fafdb45e84e"
         },
         {
           "path": "artifacts/hooks/operations/image-publication/container-registry-publish-guard/targets/claude-code/README.md",
@@ -1813,8 +1813,8 @@
     {
       "artifactId": "hook/operations/infrastructure-execution/infrastructure-apply-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:dd4280912d51aca485e1a7a7794558f83260e1a0848a1739295584fd1c3d5c4d",
-      "digest": "dd4280912d51aca485e1a7a7794558f83260e1a0848a1739295584fd1c3d5c4d",
+      "integrityId": "urn:youdede:artifact:sha256:53ce802ddf3b35e3625bf14e88c31d073b01dc1a6173f342b9a3534181a9a5d7",
+      "digest": "53ce802ddf3b35e3625bf14e88c31d073b01dc1a6173f342b9a3534181a9a5d7",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -1852,8 +1852,8 @@
         },
         {
           "path": "artifacts/hooks/operations/infrastructure-execution/infrastructure-apply-guard/targets/claude-code/infrastructure-apply-guard.mjs",
-          "bytes": 26655,
-          "sha256": "e4cb9a7a586aff89043908b8dbc15267c10da37a623e5cc2dcdf183e3d853726"
+          "bytes": 31383,
+          "sha256": "5a5d3859171a3318bbf861e064c8ec1a504d830de72be4bd044be057f059be17"
         },
         {
           "path": "artifacts/hooks/operations/infrastructure-execution/infrastructure-apply-guard/targets/claude-code/README.md",
@@ -1907,8 +1907,8 @@
     {
       "artifactId": "hook/operations/package-publication/package-publish-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:67c2f9a8fb44cc7b5d9dbdc4e06e1059d4cca6b5b517b5e69a04e782a70587f6",
-      "digest": "67c2f9a8fb44cc7b5d9dbdc4e06e1059d4cca6b5b517b5e69a04e782a70587f6",
+      "integrityId": "urn:youdede:artifact:sha256:0cadeae32011771273cb6e9acbbdccd93c419dbf7db79cc4e03a01f362e6396d",
+      "digest": "0cadeae32011771273cb6e9acbbdccd93c419dbf7db79cc4e03a01f362e6396d",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -1946,8 +1946,8 @@
         },
         {
           "path": "artifacts/hooks/operations/package-publication/package-publish-guard/targets/claude-code/package-publish-guard.mjs",
-          "bytes": 26279,
-          "sha256": "3c6fb66238419f4f71cef336f735d59dcbd2c34450c03e73230fcbcf3be737c3"
+          "bytes": 31007,
+          "sha256": "9f055f0323bf229cab60c20f9f8c021957e5e504b3610c9499533e675206e4a8"
         },
         {
           "path": "artifacts/hooks/operations/package-publication/package-publish-guard/targets/claude-code/README.md",
@@ -2001,8 +2001,8 @@
     {
       "artifactId": "hook/operations/process-lifecycle/foreground-process-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:1b901b2590e21629100f1e773f3b0ba5888fa069dafb89ed5ac229f706075f8d",
-      "digest": "1b901b2590e21629100f1e773f3b0ba5888fa069dafb89ed5ac229f706075f8d",
+      "integrityId": "urn:youdede:artifact:sha256:5c7b1c7d1e9c1cd2081d2a25be2ecfa2be6bbdbd57924ff6f6654318b7782ada",
+      "digest": "5c7b1c7d1e9c1cd2081d2a25be2ecfa2be6bbdbd57924ff6f6654318b7782ada",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -2040,8 +2040,8 @@
         },
         {
           "path": "artifacts/hooks/operations/process-lifecycle/foreground-process-guard/targets/claude-code/foreground-process-guard.mjs",
-          "bytes": 22109,
-          "sha256": "e56535a8c7314e846bce874861535dd18335ca6605825c18d6cfefd6f50246ab"
+          "bytes": 26911,
+          "sha256": "b72c2a6ad1c4d5db817c4c39ab7a4e450cf0dc67b8c4c1dc82e7b2238c832f0e"
         },
         {
           "path": "artifacts/hooks/operations/process-lifecycle/foreground-process-guard/targets/claude-code/README.md",
@@ -2063,8 +2063,8 @@
     {
       "artifactId": "hook/operations/repository-state/release-clean-state-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:404945e13b90cb4cf603024d5eda0bf881cb0aea4eaa65b027843a751dd03c99",
-      "digest": "404945e13b90cb4cf603024d5eda0bf881cb0aea4eaa65b027843a751dd03c99",
+      "integrityId": "urn:youdede:artifact:sha256:840fb1456eadae71574302188f8ec0f9954659cc8318b417f614ca72a75d7ade",
+      "digest": "840fb1456eadae71574302188f8ec0f9954659cc8318b417f614ca72a75d7ade",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -2107,8 +2107,8 @@
         },
         {
           "path": "artifacts/hooks/operations/repository-state/release-clean-state-guard/targets/claude-code/release-clean-state-guard.mjs",
-          "bytes": 27373,
-          "sha256": "2abb733f5d936b434202d72b027c4ca68f3f6c4242d7eae200056cc18dcc9f2b"
+          "bytes": 32175,
+          "sha256": "752c56a01f9e58b4bebcdac9cb1c4c8c09ba217c88a31b010c02fc50ff685d36"
         },
         {
           "path": "scripts/runtime/hook-command-bridge.mjs",
@@ -2125,8 +2125,8 @@
     {
       "artifactId": "hook/operations/reviewability/large-diff-review-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:1a7e86b189400846a113f10122e804a6d2e48d09f70cc4f208ba03d7c261301a",
-      "digest": "1a7e86b189400846a113f10122e804a6d2e48d09f70cc4f208ba03d7c261301a",
+      "integrityId": "urn:youdede:artifact:sha256:ef36bd9850742550c9907847fee1566bce4bd52b30f69ac38eb448758139226d",
+      "digest": "ef36bd9850742550c9907847fee1566bce4bd52b30f69ac38eb448758139226d",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -2164,8 +2164,8 @@
         },
         {
           "path": "artifacts/hooks/operations/reviewability/large-diff-review-guard/targets/claude-code/large-diff-review-guard.mjs",
-          "bytes": 38717,
-          "sha256": "17f68922d187dc999f63f9b3539ab59e33b077fda24e23bb9c3dedc3a5f386ec"
+          "bytes": 43519,
+          "sha256": "16805706c44e1e6261aaf592a3d235487bdfaa7c123e66149ceba0e10e72cb83"
         },
         {
           "path": "artifacts/hooks/operations/reviewability/large-diff-review-guard/targets/claude-code/README.md",
@@ -2187,8 +2187,8 @@
     {
       "artifactId": "hook/operations/scheduled-execution/scheduled-task-mutation-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:eb57ec8c69918597c55591934e3263f73f8c4fb3b5235cbaa35c881195544a33",
-      "digest": "eb57ec8c69918597c55591934e3263f73f8c4fb3b5235cbaa35c881195544a33",
+      "integrityId": "urn:youdede:artifact:sha256:c08f1268e01508dc2377cd00416dc5cfe19bb8f93a325302ed2ba8dda48c55ec",
+      "digest": "c08f1268e01508dc2377cd00416dc5cfe19bb8f93a325302ed2ba8dda48c55ec",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -2231,8 +2231,8 @@
         },
         {
           "path": "artifacts/hooks/operations/scheduled-execution/scheduled-task-mutation-guard/targets/claude-code/scheduled-task-mutation-guard.mjs",
-          "bytes": 28630,
-          "sha256": "158d394175a0f4e82bc470a67e3698f756f349bfafabf4530ef4c321bde2364f"
+          "bytes": 33358,
+          "sha256": "b032c66a6a36705d11c106942580952a486448804071b8e14029912311ce4218"
         },
         {
           "path": "scripts/runtime/hook-command-bridge.mjs",
@@ -2360,8 +2360,8 @@
     {
       "artifactId": "hook/operations/signed-history/commit-signature-intent-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:e914bcd519c440e075df350be87032328d958bfc5bc9403fadad33d00285d54f",
-      "digest": "e914bcd519c440e075df350be87032328d958bfc5bc9403fadad33d00285d54f",
+      "integrityId": "urn:youdede:artifact:sha256:cdef90a4a2a1819da8be1091b1debb0f09551ec2882b42adab1ac07937ea5cb0",
+      "digest": "cdef90a4a2a1819da8be1091b1debb0f09551ec2882b42adab1ac07937ea5cb0",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -2399,8 +2399,8 @@
         },
         {
           "path": "artifacts/hooks/operations/signed-history/commit-signature-intent-guard/targets/claude-code/commit-signature-intent-guard.mjs",
-          "bytes": 36321,
-          "sha256": "d0424a308d4f4803708a1d37bc7afaf9a47d194ab1637be7a1d25664dbfd774e"
+          "bytes": 41123,
+          "sha256": "bd11468b75dc17001bb8f3a372dcac571d4d9223c8d56127518938bdfdbd8648"
         },
         {
           "path": "artifacts/hooks/operations/signed-history/commit-signature-intent-guard/targets/claude-code/README.md",
@@ -2422,8 +2422,8 @@
     {
       "artifactId": "hook/operations/system-services/system-service-mutation-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:2289cf1ff946b28b75d5d02d72d95e9bc29febf7bcc3994cd15d173bcbcf8247",
-      "digest": "2289cf1ff946b28b75d5d02d72d95e9bc29febf7bcc3994cd15d173bcbcf8247",
+      "integrityId": "urn:youdede:artifact:sha256:9133451921002b2baf31dc75fd22b0c537270ca1899efd4be2a6082b733c0ce8",
+      "digest": "9133451921002b2baf31dc75fd22b0c537270ca1899efd4be2a6082b733c0ce8",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -2466,8 +2466,8 @@
         },
         {
           "path": "artifacts/hooks/operations/system-services/system-service-mutation-guard/targets/claude-code/system-service-mutation-guard.mjs",
-          "bytes": 26591,
-          "sha256": "d4622d10965a04f4ef17e33f88c63ea2046985bc28caf9a62373fcc5b4a6a342"
+          "bytes": 31319,
+          "sha256": "4cd3a708ababe8936f332f26479cc627d6dc618f9e89740d549a35bee15929e9"
         },
         {
           "path": "scripts/runtime/hook-command-bridge.mjs",
@@ -2484,8 +2484,8 @@
     {
       "artifactId": "hook/operations/versioning/release-version-consistency-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:6ae0d285f957866ce27adefe2e05f6c25d5293a4a2bb17676ba5ababadb7694e",
-      "digest": "6ae0d285f957866ce27adefe2e05f6c25d5293a4a2bb17676ba5ababadb7694e",
+      "integrityId": "urn:youdede:artifact:sha256:336a2bfccd0831c9f8173548c34cd84c5053009a49b407e5ea940d360a9960ea",
+      "digest": "336a2bfccd0831c9f8173548c34cd84c5053009a49b407e5ea940d360a9960ea",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -2528,8 +2528,8 @@
         },
         {
           "path": "artifacts/hooks/operations/versioning/release-version-consistency-guard/targets/claude-code/release-version-consistency-guard.mjs",
-          "bytes": 33479,
-          "sha256": "6159ef2a6015b9c75ce7548f01c933e631623690c5391bf2ee2f53073d6f99d1"
+          "bytes": 38281,
+          "sha256": "a4b2081d8a18982b968cc9f879d48fe7c985709fc09cce65bd28f22c6c7aa588"
         },
         {
           "path": "scripts/runtime/hook-command-bridge.mjs",
@@ -2546,8 +2546,8 @@
     {
       "artifactId": "hook/security/application-security/outbound-data-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:1a76d8686e469238626ab809fddc5ef725f73b89cac6edf74c3c774a5f530558",
-      "digest": "1a76d8686e469238626ab809fddc5ef725f73b89cac6edf74c3c774a5f530558",
+      "integrityId": "urn:youdede:artifact:sha256:3030911004192c9c143f904a58d401b2554893da21a72bed63d9e209b11ac3d4",
+      "digest": "3030911004192c9c143f904a58d401b2554893da21a72bed63d9e209b11ac3d4",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -2585,13 +2585,13 @@
         },
         {
           "path": "artifacts/hooks/security/application-security/outbound-data-guard/targets/claude-code/outbound-data-guard.mjs",
-          "bytes": 20799,
-          "sha256": "7dd035b0f7667d18e234d3a9dd4e6bee7816252f028a5c656938d12660c8abd4"
+          "bytes": 37217,
+          "sha256": "94cd7a7e055b67aaf58af5467d0c256b0c635ed6db0c44dadcab2307ffec0a07"
         },
         {
           "path": "artifacts/hooks/security/application-security/outbound-data-guard/targets/claude-code/README.md",
-          "bytes": 1811,
-          "sha256": "3be9bba85a28890facf27ee1d99697851e8878435d2d472fd5f1f5ba3a0a8075"
+          "bytes": 2367,
+          "sha256": "9d7914aa3a1e668c5acdd975164a89fb695177a3251c806f89b7be2fa4bcc675"
         },
         {
           "path": "scripts/runtime/hook-command-bridge.mjs",
@@ -2608,8 +2608,8 @@
     {
       "artifactId": "hook/security/application-security/shell-command-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:62db6b0be7cd9c1d9657eaa47c57f240e616d8743895955f587e25d81dbd5019",
-      "digest": "62db6b0be7cd9c1d9657eaa47c57f240e616d8743895955f587e25d81dbd5019",
+      "integrityId": "urn:youdede:artifact:sha256:7ac9850ebd27e8d5a4f6b47c57d2c978ac145742e22a1ddef9fbfeff4f6661e3",
+      "digest": "7ac9850ebd27e8d5a4f6b47c57d2c978ac145742e22a1ddef9fbfeff4f6661e3",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -2652,8 +2652,8 @@
         },
         {
           "path": "artifacts/hooks/security/application-security/shell-command-guard/targets/claude-code/shell-command-guard.mjs",
-          "bytes": 30624,
-          "sha256": "c7ca399e1597baa104e5389edfa9c0c631dbc18e3cd29d4cc53e6efa1de4e65d"
+          "bytes": 35426,
+          "sha256": "cdc40032b88ba6a0f0cc11449eb8a29963a4e2d557d522ad21c7a7298bdf83e9"
         },
         {
           "path": "scripts/runtime/hook-command-bridge.mjs",
@@ -2702,8 +2702,8 @@
     {
       "artifactId": "hook/security/archive-extraction/archive-extraction-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:9344fea796db585d504fd8da08f6dcbbc2fa21e8db7852364d6a8627ce8085a2",
-      "digest": "9344fea796db585d504fd8da08f6dcbbc2fa21e8db7852364d6a8627ce8085a2",
+      "integrityId": "urn:youdede:artifact:sha256:6490b16cdbf0fd999b44740fc003ed8a43fc598e9752c0511858bf9fb2b6069f",
+      "digest": "6490b16cdbf0fd999b44740fc003ed8a43fc598e9752c0511858bf9fb2b6069f",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -2741,13 +2741,13 @@
         },
         {
           "path": "artifacts/hooks/security/archive-extraction/archive-extraction-guard/targets/claude-code/archive-extraction-guard.mjs",
-          "bytes": 7450,
-          "sha256": "348c81138de77608761da8f11034e7101699528bfa4508b95a212a49e7198310"
+          "bytes": 26141,
+          "sha256": "c5ad559871eb291f0edd799e595bd8ac4194d5dce8fcba674eaf71fb15bad0b5"
         },
         {
           "path": "artifacts/hooks/security/archive-extraction/archive-extraction-guard/targets/claude-code/README.md",
-          "bytes": 965,
-          "sha256": "29030dcc4ec08e811bd1a47fa92c455289717ac35c4e70da59439aef5cf37607"
+          "bytes": 1271,
+          "sha256": "2274a19c3d06cd19e0ff32d947be851cccab1c3c0abcc0560e72f2fb3094e0e7"
         },
         {
           "path": "scripts/runtime/hook-command-bridge.mjs",
@@ -2764,8 +2764,8 @@
     {
       "artifactId": "hook/security/ci-references/ci-reference-pinning-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:b379b4e774bb19c520d137db40a019d719ccc2d41b0b89c74662c8a67a5baa19",
-      "digest": "b379b4e774bb19c520d137db40a019d719ccc2d41b0b89c74662c8a67a5baa19",
+      "integrityId": "urn:youdede:artifact:sha256:8aad9f2124a125dcb4c7f78a8cbeb01897fe041671cdd0bbdea65f97605a4f87",
+      "digest": "8aad9f2124a125dcb4c7f78a8cbeb01897fe041671cdd0bbdea65f97605a4f87",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -2783,21 +2783,21 @@
         },
         {
           "path": "artifacts/hooks/security/ci-references/ci-reference-pinning-guard/targets/claude-code/ci-reference-pinning-guard.mjs",
-          "bytes": 6748,
-          "sha256": "77fde78d096287989214ae6e4544d8e9501f611c99536f98fd2dea733da19a3d"
+          "bytes": 8358,
+          "sha256": "92e7b92a0604808324451aff8a28b64350396bedd9f558d4e59c000eaa5dbd73"
         },
         {
           "path": "artifacts/hooks/security/ci-references/ci-reference-pinning-guard/targets/claude-code/README.md",
-          "bytes": 1016,
-          "sha256": "0a209703dcdd0c070677bc806c372cfa724706d8898898f5c8addff4356eccee"
+          "bytes": 1426,
+          "sha256": "b0447dadee6611680e8aa155be4a28742a266b09c41ce397e33a5f21ad6c5d05"
         }
       ]
     },
     {
       "artifactId": "hook/security/code-execution/dynamic-code-execution-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:ca64316fe17fe2dd9c91060cebc7d88f61ec5fb93f2e3fcec29596ad5d5ca1c8",
-      "digest": "ca64316fe17fe2dd9c91060cebc7d88f61ec5fb93f2e3fcec29596ad5d5ca1c8",
+      "integrityId": "urn:youdede:artifact:sha256:2511c69dc4e901a6bee0d4e96870c7bc03c118e98121ef19453ac7cff534d814",
+      "digest": "2511c69dc4e901a6bee0d4e96870c7bc03c118e98121ef19453ac7cff534d814",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -2810,26 +2810,26 @@
         },
         {
           "path": "artifacts/hooks/security/code-execution/dynamic-code-execution-guard/artifact.json",
-          "bytes": 2295,
-          "sha256": "e11fb09b64ac30c38d5fd4135e20d82e86e61bde290fb8e65ae3a030dde81e71"
+          "bytes": 2300,
+          "sha256": "7aac09869c5c5ff7b3dac81284f9ec37f385084e64277eb503922e5d4a85ebb1"
         },
         {
           "path": "artifacts/hooks/security/code-execution/dynamic-code-execution-guard/targets/claude-code/dynamic-code-execution-guard.mjs",
-          "bytes": 7665,
-          "sha256": "2401dd6efbda404803dfdd7519c5024a4f11a267fb7e76aab1fdd81cfc5fce1c"
+          "bytes": 8504,
+          "sha256": "62a3b7062cb35b0fc2a678816f343de39641fd79c1b7ff6cbfa5eb653f9bf759"
         },
         {
           "path": "artifacts/hooks/security/code-execution/dynamic-code-execution-guard/targets/claude-code/README.md",
-          "bytes": 901,
-          "sha256": "f76c27145c2983f2c8977362238bafa1f55f8523c3dd3d2c5b1fe2fde8e5bbe5"
+          "bytes": 1118,
+          "sha256": "411876c8a3ffb46547963112f44c5318860125899c24936ef1f6c5d70aff9b62"
         }
       ]
     },
     {
       "artifactId": "hook/security/container-runtime/container-privilege-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:bb6441ab3348a3851abc5e32b0cdf2185596e53b581f13cbffdc855105018afc",
-      "digest": "bb6441ab3348a3851abc5e32b0cdf2185596e53b581f13cbffdc855105018afc",
+      "integrityId": "urn:youdede:artifact:sha256:7d2796111aa5cdff0416b3881e5a1b66749faf959f82ec86e1353bf0d3aadf5e",
+      "digest": "7d2796111aa5cdff0416b3881e5a1b66749faf959f82ec86e1353bf0d3aadf5e",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -2847,21 +2847,21 @@
         },
         {
           "path": "artifacts/hooks/security/container-runtime/container-privilege-guard/targets/claude-code/container-privilege-guard.mjs",
-          "bytes": 11515,
-          "sha256": "1e4fa64126c37969e1f795a13bfad2ce5a1480101f0465642e67c9341afd031c"
+          "bytes": 33174,
+          "sha256": "d92fc8cfa8993f6adbad7be577bc0672401fc56cba54127c1e3b041953a50cf8"
         },
         {
           "path": "artifacts/hooks/security/container-runtime/container-privilege-guard/targets/claude-code/README.md",
-          "bytes": 981,
-          "sha256": "fe7bffd65616d4df386e450c41908cc81e829c144f3fe58a514bbb397d72bcad"
+          "bytes": 1460,
+          "sha256": "0f0011e91cfc5c818fc2486044e604a985671c4aca4cbedc201963742ae392eb"
         }
       ]
     },
     {
       "artifactId": "hook/security/dependencies/dependency-change-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:88c5b05b11257eec7c3a770061ab30716abf560a8067bec4995fa8c5ae9de23a",
-      "digest": "88c5b05b11257eec7c3a770061ab30716abf560a8067bec4995fa8c5ae9de23a",
+      "integrityId": "urn:youdede:artifact:sha256:949e95cd8d33c691e2038ebd3b3c3b267cb3d05ff7b365aec4e7a496ac30ac95",
+      "digest": "949e95cd8d33c691e2038ebd3b3c3b267cb3d05ff7b365aec4e7a496ac30ac95",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -2879,21 +2879,21 @@
         },
         {
           "path": "artifacts/hooks/security/dependencies/dependency-change-guard/targets/claude-code/dependency-change-guard.mjs",
-          "bytes": 22218,
-          "sha256": "1915281d25384904a9a7c854ed25bad0dd2671091e4bb05169f7384c5f6ba88b"
+          "bytes": 50174,
+          "sha256": "65901c5e6815b9171f83c8a22335423aa99219d435a1a44db0a1f2b0b8ad4646"
         },
         {
           "path": "artifacts/hooks/security/dependencies/dependency-change-guard/targets/claude-code/README.md",
-          "bytes": 2237,
-          "sha256": "b69dd1e958e192d492675f6622341d441f120f74e3dda98846000e4ca701b029"
+          "bytes": 2537,
+          "sha256": "0573fd7c940eb36cb379cbb54a7d150c2270e564f025fa1a35cfe8d629981319"
         }
       ]
     },
     {
       "artifactId": "hook/security/dependency-origins/dependency-source-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:b0031487b6ee548a7987d7835c20a8c54003e0feece69f2b9476b63a4c0cd529",
-      "digest": "b0031487b6ee548a7987d7835c20a8c54003e0feece69f2b9476b63a4c0cd529",
+      "integrityId": "urn:youdede:artifact:sha256:dc119b3714ca60a4fb8d2cf8f72fb9868bd9785ed00540009eca03c0cc908cef",
+      "digest": "dc119b3714ca60a4fb8d2cf8f72fb9868bd9785ed00540009eca03c0cc908cef",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -2911,8 +2911,8 @@
         },
         {
           "path": "artifacts/hooks/security/dependency-origins/dependency-source-guard/targets/claude-code/dependency-source-guard.mjs",
-          "bytes": 6807,
-          "sha256": "fb5584f40a5f08a44fa8f59e8ae39e551b2566d7c907f225e8df47c7072c6856"
+          "bytes": 7261,
+          "sha256": "ffbbd778f48ae7f1282e364a0f336ecbef2ba3a8f43e3db7a18fa8fed9bff72c"
         },
         {
           "path": "artifacts/hooks/security/dependency-origins/dependency-source-guard/targets/claude-code/README.md",
@@ -2924,8 +2924,8 @@
     {
       "artifactId": "hook/security/deserialization/unsafe-deserialization-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:ea9e6c984f00148d9bdcc8af7438c278ab7913c34f6e173332d71d5f60137e6d",
-      "digest": "ea9e6c984f00148d9bdcc8af7438c278ab7913c34f6e173332d71d5f60137e6d",
+      "integrityId": "urn:youdede:artifact:sha256:12b16c8d57147a5afce60cd88ea1c27af58597c26d38ed0aa541748d2e13d1fb",
+      "digest": "12b16c8d57147a5afce60cd88ea1c27af58597c26d38ed0aa541748d2e13d1fb",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -2943,21 +2943,21 @@
         },
         {
           "path": "artifacts/hooks/security/deserialization/unsafe-deserialization-guard/targets/claude-code/README.md",
-          "bytes": 706,
-          "sha256": "a681a4b8539a68676367aa3f2a0a68e705c1a9a644dbd4276c2af70d2068f55c"
+          "bytes": 1724,
+          "sha256": "410fa57adcd718f3318736ee88badf3a559f1b809cbe36086c1f44349b76e2ba"
         },
         {
           "path": "artifacts/hooks/security/deserialization/unsafe-deserialization-guard/targets/claude-code/unsafe-deserialization-guard.mjs",
-          "bytes": 7234,
-          "sha256": "7bfc178bae5bab31e7e2581a92d5a2c2bab5cf5642773329a828d83b1117f082"
+          "bytes": 9128,
+          "sha256": "dc98ff4eff5f1325e934e3ee606a2e1698cb255420b1abcb560eef96c1aad91c"
         }
       ]
     },
     {
       "artifactId": "hook/security/executable-content/executable-permission-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:93228da85313c902607fe32eb4a66ec1429de16cb5ec439be7e268bb2cd83d1f",
-      "digest": "93228da85313c902607fe32eb4a66ec1429de16cb5ec439be7e268bb2cd83d1f",
+      "integrityId": "urn:youdede:artifact:sha256:c7f66ea1d973de3828ee9b88109e159d1120a97b454a12968e6615220a025426",
+      "digest": "c7f66ea1d973de3828ee9b88109e159d1120a97b454a12968e6615220a025426",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -2995,13 +2995,13 @@
         },
         {
           "path": "artifacts/hooks/security/executable-content/executable-permission-guard/targets/claude-code/executable-permission-guard.mjs",
-          "bytes": 6525,
-          "sha256": "c99ba4a7845b616773abfb0bc5548fed8edc3ed1ee6736b07e7d491eb6f34a7f"
+          "bytes": 41852,
+          "sha256": "7417da31ea6d49f11776f129b5adead6743c8b42650e699d68a73c19e3fca474"
         },
         {
           "path": "artifacts/hooks/security/executable-content/executable-permission-guard/targets/claude-code/README.md",
-          "bytes": 800,
-          "sha256": "9b852ede9e5608a6e14304b0281a30c8ae1d8466facd4e03f7154e02992d8908"
+          "bytes": 1190,
+          "sha256": "5677d52d39914c0c69907c4d9ca9a34f50b1d8dda668d6b637142914b5342414"
         },
         {
           "path": "scripts/runtime/hook-command-bridge.mjs",
@@ -3018,8 +3018,8 @@
     {
       "artifactId": "hook/security/git-submodules/submodule-target-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:78145a41d0f7f52487f1b153eb60a6294077e910930b6ff7e9cb3b7464635b0b",
-      "digest": "78145a41d0f7f52487f1b153eb60a6294077e910930b6ff7e9cb3b7464635b0b",
+      "integrityId": "urn:youdede:artifact:sha256:01d37e0e6887d208f3649349bcade7d25ed0a52cb7e9f199466eea871020a121",
+      "digest": "01d37e0e6887d208f3649349bcade7d25ed0a52cb7e9f199466eea871020a121",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -3037,21 +3037,21 @@
         },
         {
           "path": "artifacts/hooks/security/git-submodules/submodule-target-guard/targets/claude-code/README.md",
-          "bytes": 850,
-          "sha256": "b4c8187e22b2e15c951fcc332bd195e53c999a685f9c2773610d0bb69494f0c8"
+          "bytes": 1387,
+          "sha256": "d26169dd5caa1769b17ea4aa224b2edeac22c85693c39972b529e74bc48b1580"
         },
         {
           "path": "artifacts/hooks/security/git-submodules/submodule-target-guard/targets/claude-code/submodule-target-guard.mjs",
-          "bytes": 8532,
-          "sha256": "0679780b2e81dde0ffa78ad161621a6d74e652ab50304fb703f23e4123eb6802"
+          "bytes": 29991,
+          "sha256": "6c0ba5a387dde52dc4490a1cb0944ab18e8ff8ab99f5476c728f8d73176851e8"
         }
       ]
     },
     {
       "artifactId": "hook/security/host-filesystem/system-path-mutation-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:1a4fe968658e2367fdd11d1455fc2a8638758682589f044b5109903ed2024b91",
-      "digest": "1a4fe968658e2367fdd11d1455fc2a8638758682589f044b5109903ed2024b91",
+      "integrityId": "urn:youdede:artifact:sha256:d95c93cb9b0137eb00350b447c9acd33fd571700a62475a430cf9453c136d416",
+      "digest": "d95c93cb9b0137eb00350b447c9acd33fd571700a62475a430cf9453c136d416",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -3089,13 +3089,13 @@
         },
         {
           "path": "artifacts/hooks/security/host-filesystem/system-path-mutation-guard/targets/claude-code/README.md",
-          "bytes": 735,
-          "sha256": "459345c588c59b440f853406cdf3d3641c48ad9488bf88aef2832873e20d8b51"
+          "bytes": 2604,
+          "sha256": "1ad244591b171b7ea7acb149da48973bd7612bda1440801702a6310e55ec9823"
         },
         {
           "path": "artifacts/hooks/security/host-filesystem/system-path-mutation-guard/targets/claude-code/system-path-mutation-guard.mjs",
-          "bytes": 8178,
-          "sha256": "e6545af96393163b87f3a3df422c555c5b10acf9bbbe8b25937395f2fe2b3eed"
+          "bytes": 31841,
+          "sha256": "22220f04a8efdccbce5346d18d1d7a14a531bd6e1dd04ad3220779161dd55db7"
         },
         {
           "path": "scripts/runtime/hook-command-bridge.mjs",
@@ -3112,8 +3112,8 @@
     {
       "artifactId": "hook/security/identity-administration/user-account-mutation-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:6fcaae670d04bf8b6f9211d5eb2cc7cc428994d80ae761470c9c133f94670f4e",
-      "digest": "6fcaae670d04bf8b6f9211d5eb2cc7cc428994d80ae761470c9c133f94670f4e",
+      "integrityId": "urn:youdede:artifact:sha256:fec89cd121908b16928707021a58b1f3f5356bd10aa1793dc5dc79d8a2643e5e",
+      "digest": "fec89cd121908b16928707021a58b1f3f5356bd10aa1793dc5dc79d8a2643e5e",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -3151,13 +3151,13 @@
         },
         {
           "path": "artifacts/hooks/security/identity-administration/user-account-mutation-guard/targets/claude-code/README.md",
-          "bytes": 755,
-          "sha256": "00216d09205b8dccd47e16f2a142d40c5e1634caaa9372f1a32b631d642f5637"
+          "bytes": 2348,
+          "sha256": "6bf7c5681cbc65fa65e38c926e3a035cf2d71a3c03a084520cc046ae182e7d52"
         },
         {
           "path": "artifacts/hooks/security/identity-administration/user-account-mutation-guard/targets/claude-code/user-account-mutation-guard.mjs",
-          "bytes": 7552,
-          "sha256": "0ce8916b6a205102ec224f6708b742d83fd0aa007733a749c2fbe7fef20684ad"
+          "bytes": 28032,
+          "sha256": "f3e4ad7c684b6bfcbb21a6ec79cf7e9a497e9b84ac3fa25ecf005d620eaceeae"
         },
         {
           "path": "scripts/runtime/hook-command-bridge.mjs",
@@ -3174,8 +3174,8 @@
     {
       "artifactId": "hook/security/lifecycle-scripts/install-lifecycle-script-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:2ea5dbddbd1335400155f91f0213c3c52e5da1c193fbe9115da2ca10e95f824b",
-      "digest": "2ea5dbddbd1335400155f91f0213c3c52e5da1c193fbe9115da2ca10e95f824b",
+      "integrityId": "urn:youdede:artifact:sha256:c3dbc5d23be89f4fac9209509be8127b58faf6ec1a6dacab083d46c4f4f0fb67",
+      "digest": "c3dbc5d23be89f4fac9209509be8127b58faf6ec1a6dacab083d46c4f4f0fb67",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -3183,8 +3183,8 @@
       "files": [
         {
           "path": "artifacts/hooks/security/lifecycle-scripts/install-lifecycle-script-guard/adapters/claude-code.json",
-          "bytes": 630,
-          "sha256": "d40ead6e29c833b45af2a2bada939b60775878549d67543a7ebfb58172f61e40"
+          "bytes": 635,
+          "sha256": "430cafb1c5c3bd47b7a567b720858c5e4bd2aad4c8a8f5bb14bd5a5479b7cc1b"
         },
         {
           "path": "artifacts/hooks/security/lifecycle-scripts/install-lifecycle-script-guard/artifact.json",
@@ -3193,21 +3193,21 @@
         },
         {
           "path": "artifacts/hooks/security/lifecycle-scripts/install-lifecycle-script-guard/targets/claude-code/install-lifecycle-script-guard.mjs",
-          "bytes": 5433,
-          "sha256": "4c70fe411920a78b6b7a7375742ec2df3fbbf953aae36964ba9c7a763f2a5d65"
+          "bytes": 30515,
+          "sha256": "b215aa6594b8353742e70b44c92390203bb3970199a7398524c980cd61c48fa5"
         },
         {
           "path": "artifacts/hooks/security/lifecycle-scripts/install-lifecycle-script-guard/targets/claude-code/README.md",
-          "bytes": 843,
-          "sha256": "ebde539448d398c9b2f0033f06a96472c468b5cb2818cd7e671e9834d36ceecb"
+          "bytes": 1195,
+          "sha256": "539276c0d74c3bd0b6ab9131d910e713dee525085c73a70ae0e924b26092ce42"
         }
       ]
     },
     {
       "artifactId": "hook/security/lockfile-origins/lockfile-origin-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:16c77948baabf985b59ee891d3ee010a29b7901e616df7ebeb1772e703b8cc1e",
-      "digest": "16c77948baabf985b59ee891d3ee010a29b7901e616df7ebeb1772e703b8cc1e",
+      "integrityId": "urn:youdede:artifact:sha256:60d664416146a059d167cf14fd099b966137e542115cecfd9e8beb43587b2fd1",
+      "digest": "60d664416146a059d167cf14fd099b966137e542115cecfd9e8beb43587b2fd1",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -3245,13 +3245,13 @@
         },
         {
           "path": "artifacts/hooks/security/lockfile-origins/lockfile-origin-guard/targets/claude-code/lockfile-origin-guard.mjs",
-          "bytes": 7911,
-          "sha256": "08351b1c51225cc1c788322ade82d633936d47463c0db12a07035aed4372b82b"
+          "bytes": 41765,
+          "sha256": "375658c5d0c0d7ce6e9c118c14997f17b46ff2d27e34cf7edff919c45403ae13"
         },
         {
           "path": "artifacts/hooks/security/lockfile-origins/lockfile-origin-guard/targets/claude-code/README.md",
-          "bytes": 849,
-          "sha256": "3ae68a4d154d49b430e34923c99db6a0cedacd93941428d7d1f5350595c24292"
+          "bytes": 1282,
+          "sha256": "ccaa5cefc42d50a463df83cbca45e4b91f929f2e7d4c563c14865312ea678083"
         },
         {
           "path": "scripts/runtime/hook-command-bridge.mjs",
@@ -3268,8 +3268,8 @@
     {
       "artifactId": "hook/security/network-control/firewall-policy-mutation-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:2a74a18d6e77fd2ba7f3221e3522bf6e766a654bba4a4bcc0a60fae2fac7b5e1",
-      "digest": "2a74a18d6e77fd2ba7f3221e3522bf6e766a654bba4a4bcc0a60fae2fac7b5e1",
+      "integrityId": "urn:youdede:artifact:sha256:0c13bff64a1b49649cb806603eeae18791e7c6f74557337894406651c4b32ba9",
+      "digest": "0c13bff64a1b49649cb806603eeae18791e7c6f74557337894406651c4b32ba9",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -3307,13 +3307,13 @@
         },
         {
           "path": "artifacts/hooks/security/network-control/firewall-policy-mutation-guard/targets/claude-code/firewall-policy-mutation-guard.mjs",
-          "bytes": 8104,
-          "sha256": "e6327f6a59b651ccfc7d92d40794811ff5fea78c3f037be332bf5bab5f825d65"
+          "bytes": 29038,
+          "sha256": "bd30b99dd7e7c0ededeb3fb1c3cc7b4559e2ed97259066d053c770b085c406a4"
         },
         {
           "path": "artifacts/hooks/security/network-control/firewall-policy-mutation-guard/targets/claude-code/README.md",
-          "bytes": 729,
-          "sha256": "1098348193eef39b718db1ee7493b3e0cbb62659f5c0be86941fb2f9fbc0d1f5"
+          "bytes": 1139,
+          "sha256": "7deec91598bfc8d4c5f8e62ae8958082df9c10579673ea3934c1e3cfe4018c26"
         },
         {
           "path": "scripts/runtime/hook-command-bridge.mjs",
@@ -3330,8 +3330,8 @@
     {
       "artifactId": "hook/security/network-control/mcp-capability-drift-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:eef9e029abaaa3d2e83ae6b1d561f0b09685b51b739452834db57736f1961b72",
-      "digest": "eef9e029abaaa3d2e83ae6b1d561f0b09685b51b739452834db57736f1961b72",
+      "integrityId": "urn:youdede:artifact:sha256:35e3a11f013bd6444740ff078df79a15fbfb660d7be5f2c119b14a3d205ec434",
+      "digest": "35e3a11f013bd6444740ff078df79a15fbfb660d7be5f2c119b14a3d205ec434",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -3339,28 +3339,28 @@
       "files": [
         {
           "path": "artifacts/hooks/security/network-control/mcp-capability-drift-guard/adapters/claude-code.json",
-          "bytes": 770,
-          "sha256": "3dac1891ac1119968ee3b6ea1387ec70a2a13bc3cb4334f758d7d10435c04362"
+          "bytes": 1210,
+          "sha256": "d6db5a9b58af3a423156c0abb95d3c43b63df3dc6aa0ba05053518b1ed81a6f6"
         },
         {
           "path": "artifacts/hooks/security/network-control/mcp-capability-drift-guard/adapters/cursor.json",
-          "bytes": 1146,
-          "sha256": "16f71ba7b29b739c6e0e1af5ff9f58adb17ba59839af910a0066e792aa6aa1f1"
+          "bytes": 1346,
+          "sha256": "88edcd2c74bb7772adf6a841f2b5107ff3fc0c4a217c890b9c89519fac927670"
         },
         {
           "path": "artifacts/hooks/security/network-control/mcp-capability-drift-guard/artifact.json",
-          "bytes": 2750,
-          "sha256": "00a9f8c4b6b0e9a0f0fca3f9dea863248e1055084a3ebcb55d4ab35d2a46aeb1"
+          "bytes": 2898,
+          "sha256": "59f6a9ac2d77cb5613de40363e1489c9d4339f6ae93ad6864ba00fa2e2de89b2"
         },
         {
           "path": "artifacts/hooks/security/network-control/mcp-capability-drift-guard/targets/claude-code/mcp-capability-drift-guard.mjs",
-          "bytes": 3437,
-          "sha256": "fd257eb9886263823216e3bf56f9d2db1c373498f8d42d3452eb8e339f02397c"
+          "bytes": 4431,
+          "sha256": "35ab6cfa55c23908ba6f2a897d99efa614a6289f3bebd227d7248a7a728f58c5"
         },
         {
           "path": "artifacts/hooks/security/network-control/mcp-capability-drift-guard/targets/claude-code/README.md",
-          "bytes": 540,
-          "sha256": "08b741eafc26e631c6963e2d1cfbd629dbbedbb574d8396ddc19f6645b8e091b"
+          "bytes": 1020,
+          "sha256": "dd12573983720cfc61b3f595b53a74a2cc5e1e8ddc7f63172f502d0914c1cfcb"
         },
         {
           "path": "catalog/mcp-pins.json",
@@ -3424,8 +3424,8 @@
     {
       "artifactId": "hook/security/repository-links/symlink-publication-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:8111d961fdc77339aaa48fe336df85d1185a756e9d3faead7169a90c4200dcf4",
-      "digest": "8111d961fdc77339aaa48fe336df85d1185a756e9d3faead7169a90c4200dcf4",
+      "integrityId": "urn:youdede:artifact:sha256:398383a7c81009fa553d71df330691bae84265a5041a06dd149d2fc6bee3f607",
+      "digest": "398383a7c81009fa553d71df330691bae84265a5041a06dd149d2fc6bee3f607",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -3458,18 +3458,18 @@
         },
         {
           "path": "artifacts/hooks/security/repository-links/symlink-publication-guard/artifact.json",
-          "bytes": 2716,
-          "sha256": "f40ebc7daa0f28389ea2a3b50b7b950df06a3878c22437bd5832ec81fb301c83"
+          "bytes": 2749,
+          "sha256": "d32afadcb595bfc606313e963c82afc70d8721e9346e061eb58bdc78402f2838"
         },
         {
           "path": "artifacts/hooks/security/repository-links/symlink-publication-guard/targets/claude-code/README.md",
-          "bytes": 799,
-          "sha256": "3a313d866b2d70b3329be692c876f416b24db34804c8e14e36c5abfe158feccc"
+          "bytes": 1669,
+          "sha256": "839a81bc42b225c92d912f5c400ca07e8758dffd3006b4e394d8fcf5c3d65867"
         },
         {
           "path": "artifacts/hooks/security/repository-links/symlink-publication-guard/targets/claude-code/symlink-publication-guard.mjs",
-          "bytes": 5840,
-          "sha256": "34b0d18d9b05cf5c8a1cb8df17ad9cd765b694bf59387989195c688d17cc684a"
+          "bytes": 40660,
+          "sha256": "365c831cc7f64eb6fa5ecaae34c2a158cdd021fe5262bd10d682bc604cd0e1f8"
         },
         {
           "path": "scripts/runtime/hook-command-bridge.mjs",
@@ -3486,8 +3486,8 @@
     {
       "artifactId": "hook/security/secrets/commit-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:3eca933732994022a79cd9e6fa02e6db5767f2511e1deb188cb93fc77020915d",
-      "digest": "3eca933732994022a79cd9e6fa02e6db5767f2511e1deb188cb93fc77020915d",
+      "integrityId": "urn:youdede:artifact:sha256:a1c2454f9a1ee2a3559442326db487da4d862d97b424ba8fef60c79535d6d2f7",
+      "digest": "a1c2454f9a1ee2a3559442326db487da4d862d97b424ba8fef60c79535d6d2f7",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -3525,8 +3525,8 @@
         },
         {
           "path": "artifacts/hooks/security/secrets/commit-guard/targets/claude-code/commit-guard.mjs",
-          "bytes": 38091,
-          "sha256": "ab6f187bbd6bd2647fc130e9c52a965c159c0ec9fae7aaead322e3c20a232236"
+          "bytes": 42893,
+          "sha256": "ae103f15330cc38a14661152ce9fbb4548e316673ef4f26ce8275e6b37dfb279"
         },
         {
           "path": "artifacts/hooks/security/secrets/commit-guard/targets/claude-code/README.md",
@@ -3548,8 +3548,8 @@
     {
       "artifactId": "hook/security/secrets/prompt-secret-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:64a8a63c2c9f573d9262ad1ab853688a3e875e13ee52f41f66c997ae254f6e84",
-      "digest": "64a8a63c2c9f573d9262ad1ab853688a3e875e13ee52f41f66c997ae254f6e84",
+      "integrityId": "urn:youdede:artifact:sha256:4db3a112ec89050a9ef8973f567ab00a59245c52ac741a1ad0c8e4001fdcad2e",
+      "digest": "4db3a112ec89050a9ef8973f567ab00a59245c52ac741a1ad0c8e4001fdcad2e",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -3567,21 +3567,21 @@
         },
         {
           "path": "artifacts/hooks/security/secrets/prompt-secret-guard/targets/claude-code/prompt-secret-guard.mjs",
-          "bytes": 2727,
-          "sha256": "dbfb67af6a5a3e0e3b8aa963936d48d69e81c760a5ab2b30e1af94b026b08cb4"
+          "bytes": 3276,
+          "sha256": "feacd2f11ccf3c7f2d16f9539b522ab1b8edbec5ecbe58dea6409d6b1146e838"
         },
         {
           "path": "artifacts/hooks/security/secrets/prompt-secret-guard/targets/claude-code/README.md",
-          "bytes": 954,
-          "sha256": "ef5fff74c1d7c4a71e3c6900bca04a09d608945731d8e76ae57fe33b1b306766"
+          "bytes": 1244,
+          "sha256": "9a9c8eaa8180c606d32d4ee21b1d58ca96d7e89805e5bce5d8270a4db21bb353"
         }
       ]
     },
     {
       "artifactId": "hook/security/secrets/sensitive-file-access-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:118ea2f1f1d498fbe30f1e46b00c34ceb2b90b0e4bbeabaee351a019d251dd22",
-      "digest": "118ea2f1f1d498fbe30f1e46b00c34ceb2b90b0e4bbeabaee351a019d251dd22",
+      "integrityId": "urn:youdede:artifact:sha256:7cbd9d40eca0a7bc0e582462706426e8d3ebc8776a5837be7350cf7ec6cd6d82",
+      "digest": "7cbd9d40eca0a7bc0e582462706426e8d3ebc8776a5837be7350cf7ec6cd6d82",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -3599,21 +3599,21 @@
         },
         {
           "path": "artifacts/hooks/security/secrets/sensitive-file-access-guard/targets/claude-code/README.md",
-          "bytes": 3116,
-          "sha256": "0c1c4517de47a381f2d3fa954a3ae6a86008c7f27c4a45e929e1953e3d4bbd4b"
+          "bytes": 5449,
+          "sha256": "4615a8ef80aa7894feef57b367122c9c0cc84805d35a5fcd390fcce90d76ddd1"
         },
         {
           "path": "artifacts/hooks/security/secrets/sensitive-file-access-guard/targets/claude-code/sensitive-file-access-guard.mjs",
-          "bytes": 28622,
-          "sha256": "418b9208226a3d66d3d1b2f0e2b7f516c5fbc06c8c1510715ce5ba04798f0bf2"
+          "bytes": 55306,
+          "sha256": "ffdfab29ef8bb375cadac07351b9e5801880bbb9dd1951c1caeb68692b05bbd4"
         }
       ]
     },
     {
       "artifactId": "hook/security/supply-chain/ci-trust-boundary-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:df397f2ddea0c989d60bcd1388d207f267e90e7eb27ac23bb359a0c1657400dd",
-      "digest": "df397f2ddea0c989d60bcd1388d207f267e90e7eb27ac23bb359a0c1657400dd",
+      "integrityId": "urn:youdede:artifact:sha256:bc3b495eb72c879d71840bb307815ac357786e696b95eae800c1de657d85ea10",
+      "digest": "bc3b495eb72c879d71840bb307815ac357786e696b95eae800c1de657d85ea10",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -3631,21 +3631,21 @@
         },
         {
           "path": "artifacts/hooks/security/supply-chain/ci-trust-boundary-guard/targets/claude-code/ci-trust-boundary-guard.mjs",
-          "bytes": 15331,
-          "sha256": "507074ea496ba007796e8535a35a83c6b6b5b2a7935144d3a7f9a432c72301f4"
+          "bytes": 15810,
+          "sha256": "afb0642bc764d4a6a492b5ca704b86bd4a71ac993efb47585af8445adc08021e"
         },
         {
           "path": "artifacts/hooks/security/supply-chain/ci-trust-boundary-guard/targets/claude-code/README.md",
-          "bytes": 1891,
-          "sha256": "07ea4710ca8ba2a700c859e69ef6e839c240a214abf95e89a162fa4bf529a697"
+          "bytes": 2064,
+          "sha256": "3d8cfc13fcdb788be3984343a58667a6bd9730fd3ee910e1a997fdd2a6c4df81"
         }
       ]
     },
     {
       "artifactId": "hook/security/transport-security/transport-security-regression-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:f1cfc23e41b6f588fa3ee7de9e19ec2eaa7d266de6ed81b88721ac235712b9a3",
-      "digest": "f1cfc23e41b6f588fa3ee7de9e19ec2eaa7d266de6ed81b88721ac235712b9a3",
+      "integrityId": "urn:youdede:artifact:sha256:836346a30e34879b967e7691cc9d3370d66b578f7cfb8202689106acab1eae48",
+      "digest": "836346a30e34879b967e7691cc9d3370d66b578f7cfb8202689106acab1eae48",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -3658,18 +3658,18 @@
         },
         {
           "path": "artifacts/hooks/security/transport-security/transport-security-regression-guard/artifact.json",
-          "bytes": 2362,
-          "sha256": "5ccb57343db36b6102904f87027bd0123048385012e01d0d27a1f4e661daab9c"
+          "bytes": 2367,
+          "sha256": "a164ded46499b2074218226a074acfbdc5ddc4a52e8b995f6e6a47091149781a"
         },
         {
           "path": "artifacts/hooks/security/transport-security/transport-security-regression-guard/targets/claude-code/README.md",
-          "bytes": 900,
-          "sha256": "2ad9d3d1e1539c1f4f0e8226bbefff8cf800ae85cb185fb465c89a84e6ac4002"
+          "bytes": 1540,
+          "sha256": "f3d1054e9b8b6dc59b9c6b563ac95228522f26b0ff93e96333ff05a8cdc5379f"
         },
         {
           "path": "artifacts/hooks/security/transport-security/transport-security-regression-guard/targets/claude-code/transport-security-regression-guard.mjs",
-          "bytes": 7704,
-          "sha256": "21d19a83a45278c5420feeea09fef645e0bb670639d3c616674245117e23db2a"
+          "bytes": 9287,
+          "sha256": "352dab9d509d24fa2c47d252020b3fa14982d93f08e3618895665b24200eb386"
         }
       ]
     },

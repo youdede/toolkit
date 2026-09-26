@@ -45,7 +45,7 @@
         "path": "targets/claude-code/dynamic-code-execution-guard.mjs",
         "runtime": "node",
         "purpose": "Recognize direct dynamic execution primitives in bounded proposed source content.",
-        "sideEffects": "none"
+        "sideEffects": "read-only"
       }
     ]
   },

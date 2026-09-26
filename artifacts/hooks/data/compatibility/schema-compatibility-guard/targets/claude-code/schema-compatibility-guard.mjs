@@ -38,7 +38,7 @@ function rebuildRevision(input, before) {
 export function collectContext(input, cwd = process.cwd()) {
   const file = input?.tool_input?.file_path || input?.tool_input?.file || '';
   if (typeof file !== 'string' || !file) return { file: '', complete: false };
-  const root = path.resolve(input?.cwd || cwd); const absolute = path.resolve(root, file);
+  const root = path.resolve(process.env.CLAUDE_PROJECT_DIR || input?.cwd || cwd); const absolute = path.resolve(root, file);
   if (!within(root, absolute)) return { file, complete: false, inspectionError: 'path-escape' };
   try {
     const canonicalRoot = realpathSync(root);
@@ -70,7 +70,8 @@ function lostAllowedTypes(before, after) {
   const oldTypes = typeSet(before); const newTypes = typeSet(after);
   if (oldTypes === null) return newTypes !== null;
   if (newTypes === null) return false;
-  return [...oldTypes].some((entry) => !newTypes.has(entry));
+  // Every integer is a number, so integer -> number widens the type.
+  return [...oldTypes].some((entry) => !newTypes.has(entry) && !(entry === '"integer"' && newTypes.has('"number"')));
 }
 function jsonIssues(before, after, issues = []) {
   if (!before || typeof before !== 'object' || !after || typeof after !== 'object') return issues;
@@ -102,8 +103,11 @@ function jsonIssues(before, after, issues = []) {
 function avroIssues(before, after, issues = []) {
   const oldFields = Array.isArray(before?.fields) ? Object.fromEntries(before.fields.map((field) => [field.name, field])) : {};
   const newFields = Array.isArray(after?.fields) ? Object.fromEntries(after.fields.map((field) => [field.name, field])) : {};
+  // Backward compatibility: a reader with the new schema must decode old data, so a new field needs
+  // a default. A removed field needs one too, so old readers can still decode new data.
+  for (const [name, field] of Object.entries(newFields)) if (!Object.hasOwn(oldFields, name) && !Object.hasOwn(field, 'default')) issues.push('field-added-without-default');
   for (const [name, field] of Object.entries(oldFields)) {
-    if (!Object.hasOwn(newFields, name)) { issues.push('field-removed'); continue; }
+    if (!Object.hasOwn(newFields, name)) { if (!Object.hasOwn(field, 'default')) issues.push('field-removed'); continue; }
     if (lostAllowedTypes(field.type, newFields[name].type)) issues.push('field-type-narrowed');
     const oldNested = Array.isArray(field.type) ? field.type.find((entry) => entry && typeof entry === 'object' && entry.type === 'record') : field.type;
     const newType = newFields[name].type;
@@ -119,21 +123,41 @@ function declaredJsonSchema(text) {
   } catch { return false; }
 }
 function stripProtoComments(text) { return text.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/\/\/[^\r\n]*/g, ' '); }
+// Field numbers and names of each message, and the numbers and names it reserves.
 function protoFields(text) {
-  const fields = new Map(); const stack = []; let invalid = false; const source = stripProtoComments(text);
-  const tokens = /\bmessage\s+([A-Za-z_]\w*)\s*\{|(?:optional\s+|required\s+|repeated\s+)?(map\s*<[^>]+>|[A-Za-z_][\w.]*)\s+([A-Za-z_]\w*)\s*=\s*(\d+)(?:\s*\[[^\]]*\])?\s*;|[{}]/g;
+  const fields = new Map(); const reserved = new Set(); const stack = []; let invalid = false; const source = stripProtoComments(text);
+  const tokens = /\bmessage\s+([A-Za-z_]\w*)\s*\{|\breserved\s+([^;{}]+);|(?:optional\s+|required\s+|repeated\s+)?(map\s*<[^>]+>|[A-Za-z_][\w.]*)\s+([A-Za-z_]\w*)\s*=\s*(\d+)(?:\s*\[[^\]]*\])?\s*;|[{}]/g;
   for (const token of source.matchAll(tokens)) {
     if (token[1]) { stack.push(token[1]); continue; }
+    const scope = stack.filter(Boolean).join('.');
     if (token[2]) {
-      const scope = stack.filter(Boolean).join('.'); if (!scope) continue; const key = `${scope}:${token[4]}`;
-      if (fields.has(key)) invalid = true; else fields.set(key, `${token[2].replace(/\s+/g, '')}:${token[3]}`);
+      for (const part of token[2].split(',').map((entry) => entry.trim())) {
+        const range = /^(\d+)(?:\s+to\s+(\d+|max))?$/.exec(part);
+        if (range) reserved.add(`${scope}:${range[1]}${range[2] ? `-${range[2]}` : ''}`);
+        else reserved.add(`${scope}:name:${part.replace(/^["']|["']$/g, '')}`);
+      }
+      continue;
+    }
+    if (token[3]) {
+      if (!scope) continue; const key = `${scope}:${token[5]}`;
+      if (fields.has(key)) invalid = true; else fields.set(key, `${token[3].replace(/\s+/g, '')}:${token[4]}`);
       continue;
     }
     if (token[0] === '{') stack.push(null);
     else if (!stack.length) invalid = true; else stack.pop();
   }
   if (stack.length) invalid = true;
-  return { fields, invalid };
+  return { fields, reserved, invalid };
+}
+// A field may be deleted when its message reserves the field number (protobuf.dev: "you must
+// reserve the deleted field number").
+function protoNumberReserved(model, identityKey) {
+  const separator = identityKey.lastIndexOf(':'); const scope = identityKey.slice(0, separator); const number = Number(identityKey.slice(separator + 1));
+  for (const entry of model.reserved) {
+    const range = entry.startsWith(`${scope}:`) && /^(\d+)(?:-(\d+|max))?$/.exec(entry.slice(scope.length + 1));
+    if (range && number >= Number(range[1]) && (range[2] === 'max' ? true : number <= Number(range[2] ?? range[1]))) return true;
+  }
+  return false;
 }
 function jsonDocumentIssues(kind, beforeText, afterText) {
   const issues = [];
@@ -152,7 +176,7 @@ export function evaluate(input, context = {}) {
   if (kind === 'proto') {
     const oldModel = protoFields(context.before); const nextModel = protoFields(context.proposed);
     if (oldModel.invalid || nextModel.invalid) return block('schema-compatibility-unverified', 'the Protobuf message structure is not statically balanced');
-    for (const [identityKey, identity] of oldModel.fields) if (!nextModel.fields.has(identityKey) || nextModel.fields.get(identityKey) !== identity) return block('protobuf-field-identity-changed', 'a Protobuf field number was removed or reused within its message');
+    for (const [identityKey, identity] of oldModel.fields) if (nextModel.fields.has(identityKey) ? nextModel.fields.get(identityKey) !== identity : !protoNumberReserved(nextModel, identityKey)) return block('protobuf-field-identity-changed', 'a Protobuf field number was removed or reused within its message');
     return allow();
   }
   try {

@@ -1,12 +1,12 @@
 # CI trust boundary guard for Claude Code
 
-The hook runs before Write, Edit, or MultiEdit on recognized root CI files for GitHub Actions, GitLab CI, CircleCI, Buildkite, and Azure Pipelines. It reconstructs the complete proposed file within a 512 KiB bound and compares normalized findings with the existing file. MultiEdit is refused when its complete result cannot be reconstructed. An unchanged legacy finding does not freeze an otherwise safe edit; only a net-new high-confidence trust expansion is blocked.
+The hook runs before Write, Edit, or MultiEdit on recognized root CI files for GitHub Actions, GitLab CI, CircleCI, Buildkite, and Azure Pipelines. It reconstructs the complete proposed file within a 512 KiB bound and compares normalized findings with the existing file. MultiEdit edits are applied in order; a MultiEdit is refused when its complete result cannot be reconstructed. An unchanged legacy finding does not freeze an otherwise safe edit; only a net-new high-confidence trust expansion is blocked.
 
 The bounded policy covers:
 
 - GitHub Actions `permissions: write-all` and selected high-authority `write` scopes;
 - broad reusable-workflow secret inheritance;
-- contributor-controlled checkout combined with an untrusted trigger and secret or write-token authority;
+- contributor-controlled checkout (head refs of the pull request or workflow run, or `refs/pull/<n>/head`) combined with an untrusted trigger (`pull_request_target`, `workflow_run`, or `issue_comment`) and secret or write-token authority;
 - Azure checkout credential persistence;
 - GitLab secret trace logging;
 - explicit privileged executors and Docker or Podman host-socket mounts in any recognized provider file.

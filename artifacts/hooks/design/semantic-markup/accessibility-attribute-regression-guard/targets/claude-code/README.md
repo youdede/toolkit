@@ -1,6 +1,6 @@
 # accessibility-attribute-regression-guard
 
-Parses bounded markup and rejects two changes: one that drops an accessible name, role, or relationship from an element the edit keeps, and one that hides a focusable element from assistive technology while it still takes keyboard focus.
+Parses bounded markup and rejects three changes: one that drops an accessible name, role, or relationship from an element the edit keeps; one that hides a focusable element from assistive technology while it still takes keyboard focus; and one that stops the browser zooming (`user-scalable=no` or `maximum-scale` below 2, W3C ACT rule b4f0c3).
 
 The second check is the rule W3C states in Using ARIA: do not use `role="presentation"` or `aria-hidden="true"` on a focusable element. The element keeps taking focus while the accessibility tree says nothing is there, so a screen reader user reaches it and hears silence. Pairing `aria-hidden="true"` with `tabindex="-1"`, which is how an element is correctly taken out of both, is not blocked.
 

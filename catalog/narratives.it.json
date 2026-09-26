@@ -1,5 +1,5 @@
 {
-  "sourceHash": "838c2c762f4048903ff527e58e926c2df276e9b3bc740dab8cc4373d47b33c51",
+  "sourceHash": "74339ca3cd137648bd6bd11c90458d22d82357c8dd9d99c58b3cc6632611ac31",
   "narratives": {
     "abuse-resistance-analyst": {
       "summary": "Analizza una singola operazione per individuare costi moltiplicati da input controllati da un attaccante, richieste a cascata ed elusione delle quote.",
@@ -86,7 +86,7 @@
       "refuses": [
         "Non chiama un'API o rigenera client.",
         "Non deduce un comportamento del consumatore non documentato.",
-        "Non approva un rilascio di versione interrotta."
+        "Non approva il rilascio di una versione con modifiche incompatibili."
       ]
     },
     "api-contract-compatibility-reviewer": {
@@ -290,7 +290,7 @@
     },
     "authentication-accessibility-guard": {
       "summary": "Blocca le modifiche che impediscono a un gestore di password di compilare un campo di autenticazione o impediscono all'utente di incollarvi.",
-      "description": "Analizza markup limitato e rifiuta le modifiche che bloccano di nuovo l'incolla su un campo di credenziali, disabilitano la sua compilazione automatica, eliminano il token di completamento automatico o aggiungono un attributo di esclusione del gestore di password, ciascuno una condizione di errore documentata WCAG 2.2 SC 3.3.8.",
+      "description": "Analizza markup limitato e rifiuta le modifiche che bloccano di nuovo l'incolla su un campo di credenziali, disabilitano la sua compilazione automatica o aggiungono un attributo di esclusione del gestore di password, cioè gli errori documentati da WCAG 2.2 SC 3.3.8, e, per precauzione, le modifiche che eliminano il suo token di completamento automatico.",
       "purposes": [
         "Blocca le modifiche che impediscono a un gestore di password di compilare un campo di autenticazione o impediscono all'utente di incollarvi."
       ],
@@ -802,14 +802,15 @@
       "refuses": [
         "Non ispeziona file di migrazione o modifiche dello schema del database.",
         "Non si connette a un database né esegue EXPLAIN.",
-        "Non tratta le stored procedure come di sola lettura senza un contratto statico esplicito."
+        "Non tratta le stored procedure come di sola lettura senza un contratto statico esplicito.",
+        "Non ispeziona SQL inviato da interpreti, script o codice applicativo."
       ]
     },
     "debug-artifact-guard": {
       "summary": "Blocca commit contenenti istruzioni di debug ad alta confidenza o test focalizzati.",
-      "description": "Un controllo Claude Code PreToolUse deterministico per commit che legge blob in fase di preparazione e rifiuta marcatori di merge irrisolti, breakpoint di debug autonomi e test JavaScript, TypeScript o Ruby focalizzati senza duplicare la scansione di segreti.",
+      "description": "Un controllo Claude Code PreToolUse deterministico per commit che legge blob in fase di preparazione, e i file della working tree che un commit includerebbe, e rifiuta marcatori di merge irrisolti, breakpoint di debug autonomi e test JavaScript, TypeScript o Ruby focalizzati senza duplicare la scansione di segreti.",
       "purposes": [
-        "Legge blob in fase di preparazione e rifiuta deterministicamente residui di debug ad alta confidenza."
+        "Legge blob in fase di preparazione e i file della working tree che un commit includerebbe, e rifiuta deterministicamente residui di debug ad alta confidenza."
       ],
       "refuses": [
         "Non esegue la scansione di credenziali, rischi di dipendenza, errori di lint, log normali o commenti TODO incompleti.",
@@ -1587,7 +1588,7 @@
     },
     "focus-style-regression-guard": {
       "summary": "Blocca nuovi stati di focus CSS invisibili che non hanno una sostituzione visibile.",
-      "description": "Analizza blocchi di regole CSS limitati e rifiuta selettori di focus nuovi che disabilitano i contorni senza una sostituzione di contorno, ombra, bordo o decorazione del testo visibile.",
+      "description": "Analizza blocchi di regole CSS limitati e rifiuta selettori di focus nuovi che disabilitano i contorni senza una sostituzione visibile di contorno, ombra, bordo, decorazione del testo, sfondo o filtro.",
       "purposes": [
         "Blocca nuovi stati di focus CSS invisibili che non hanno una sostituzione visibile."
       ],
@@ -1635,7 +1636,7 @@
     },
     "generated-file-guard": {
       "summary": "Impedisce modifiche dirette da parte dell'agente a file che sono inequivocabilmente artefatti generati.",
-      "description": "Un controllo deterministico Claude Code PreToolUse per Write ed Edit che riconosce intestazioni esplicite dei file generati, convenzioni ristrette per i loro nomi e percorsi precisi delle policy di progetto, senza presumere che intere directory di build siano generate.",
+      "description": "Un controllo deterministico Claude Code PreToolUse per Write ed Edit che riconosce intestazioni esplicite dei file generati, convenzioni ristrette per i loro nomi e le directory di output gestite dai framework (.next, .nuxt, .svelte-kit), senza presumere che intere directory di build siano generate.",
       "purposes": [
         "Legge un’intestazione di file con limiti definiti e protegge in modo deterministico gli output la cui generazione è confermata."
       ],
@@ -1842,7 +1843,7 @@
     },
     "lint-suppression-guard": {
       "summary": "Blocca nuove soppressioni diagnostiche ampie, consentendo eccezioni di regola con ambito.",
-      "description": "Confronta revisioni di origine limitate e rifiuta nuove soppressioni a livello di file o senza codice ESLint, TypeScript, Python, Go e IDE, consentendo identificatori ristretti.",
+      "description": "Confronta revisioni di origine limitate e rifiuta nuove soppressioni ESLint, Python, Go e IDE che non nominano una regola e nuove direttive TypeScript @ts-ignore o @ts-nocheck, consentendo le direttive che nominano una regola.",
       "purposes": [
         "Blocca nuove soppressioni diagnostiche ampie, consentendo eccezioni di regola con ambito."
       ],
@@ -1929,14 +1930,14 @@
       ]
     },
     "mcp-capability-drift-guard": {
-      "summary": "Blocca le chiamate allo strumento MCP del toolkit quando il server, il nome dello strumento o la descrizione osservata non sono fissati.",
+      "summary": "Blocca le chiamate MCP del toolkit il cui server o strumento non è fissato nel registro dei pin, o la cui descrizione fornita differisce dal pin.",
       "description": "Un controllo pre-tool fail-closed deterministico che accetta solo identità curate del server e dello strumento MCP di Youdede da un registro di pin generato e rifiuta capacità sconosciute o con deriva della descrizione.",
       "purposes": [
         "Confronta una chiamata allo strumento MCP del toolkit con qualsiasi inventario osservato con il registro di pin generato."
       ],
       "refuses": [
         "Non si fida delle annotazioni MCP, dei nomi del server o delle descrizioni degli strumenti che non sono presenti nel registro di pin generato.",
-        "Non accetta silenziosamente strumenti aggiunti, rimossi, rinominati o con deriva della descrizione da server curati.",
+        "Non accetta silenziosamente strumenti aggiunti, rimossi o rinominati da server curati, né strumenti con una descrizione cambiata quando il client fornisce la descrizione.",
         "Non allarga l'autorità di uscita, segreto, filesystem, sottoprocesso o modifica per un server MCP."
       ]
     },
@@ -2229,7 +2230,8 @@
       "refuses": [
         "Non decide se una modifica della policy è legittima per conto dell'agente.",
         "Non modifica la configurazione protetta o espone eccezioni scrivibili dall'agente.",
-        "Non ispeziona o blocca file al di fuori della root del progetto attivo."
+        "Non ispeziona o blocca file al di fuori della root del progetto attivo.",
+        "Non intercetta i comandi di shell che modificano un file di policy."
       ]
     },
     "positioning-evidence-analyst": {
@@ -2976,7 +2978,7 @@
       "refuses": [
         "Non crea, riscrive, risolve, segue, approva o rimuove un collegamento simbolico.",
         "Non afferma che un target di collegamento simbolico contenuto esista o sia sicuro da consumare.",
-        "Non ispeziona collegamenti non staged o collegamenti prodotti al di fuori del percorso di commit git intercettato.",
+        "Non ispeziona collegamenti che il commit Git intercettato non può pubblicare, né collegamenti prodotti al di fuori del percorso del commit Git intercettato.",
         "Non espone una lista di eccezioni controllata dal repository o un bypass da riga di comando."
       ]
     },
@@ -3059,7 +3061,7 @@
     },
     "test-assertion-removal-guard": {
       "summary": "Blocca la rimozione dell'ultima asserzione riconoscibile da un file di test esistente.",
-      "description": "Confronta revisioni di file di test limitati e interrompe una modifica quando rimangono test riconoscibili ma tutti i primitivi di asserzione o di errore scompaiono da un file precedentemente assertivo.",
+      "description": "Confronta revisioni di file di test limitati e interrompe una modifica quando un test che resta nel file perde ogni asserzione o primitiva di errore riconoscibile.",
       "purposes": [
         "Blocca la rimozione dell'ultima asserzione riconoscibile da un file di test esistente."
       ],
@@ -3141,7 +3143,7 @@
       "refuses": [
         "Non blocca, ritarda o altera l'evento osservato; registra o segnala solo.",
         "Non esegue il contenuto inviato, chiama un LLM o trasmette dati al di fuori della macchina.",
-        "Non tratta uno stato illeggibile, symlinked o di grandi dimensioni come prova valida."
+        "Non misura l'output di strumenti diversi dai comandi di shell."
       ]
     },
     "transport-security-regression-guard": {

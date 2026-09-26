@@ -138,7 +138,7 @@
     },
     "phase-gate-guard": {
       "risk": "Questo controllo automatico blocca le scritture delle prove di fase a meno che la fase precedente nella catena spec-design-tasks-implementation esista ed sia valida; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
-      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare le scritture delle prove della fase a meno che la fase precedente nella catena specifica-attività-attività-implementazione esista e sia valida senza lavoro differito."
+      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare le scritture delle prove della fase a meno che la fase precedente nella catena spec-design-tasks-implementation esista e sia valida senza lavoro differito."
     },
     "compaction-handoff-guard": {
       "risk": "Questo osservatore registra le ricevute delimitate e prive di contenuto prima e dopo la compattazione della conversazione; scrive solo ricevute locali delimitate e non può bloccare l'evento.",
@@ -297,8 +297,8 @@
       "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare le mutazioni dirette di regole firewall host, policy, catena e attivazione senza attività differite."
     },
     "mcp-capability-drift-guard": {
-      "risk": "Questo controllo automatico blocca le chiamate dello strumento MCP quando il server, il nome dello strumento o la descrizione osservata non sono bloccati; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
-      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare le chiamate dello strumento toolkit MCP quando il server, il nome dello strumento o la descrizione osservata non vengono bloccati senza attività differite."
+      "risk": "Questo controllo automatico blocca le chiamate agli strumenti MCP del toolkit quando il server o il nome dello strumento non sono fissati nel registro dei pin, oppure quando il client fornisce una descrizione diversa da quella fissata; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
+      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare le chiamate agli strumenti MCP del toolkit quando il server o il nome dello strumento non sono fissati nel registro dei pin, oppure quando una descrizione fornita è diversa da quella fissata, senza attività differite."
     },
     "mcp-egress-guard": {
       "risk": "Questo controllo automatico blocca le chiamate agli strumenti MCP del toolkit i cui argomenti indicano un host fuori dall'egress dichiarato; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
@@ -1265,5 +1265,5 @@
       "latency": "Lo specialista segue staticamente una procedura per prerequisiti, stato, risultati osservabili, nuovi tentativi e rami di ripristino, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     }
   },
-  "sourceHash": "fc38328c243180cb292355d8987bf723b864aea9a7f22dbdb2aad19d2b71a1c7"
+  "sourceHash": "2ad7b324e156cf51abfc04c38b79995cfa71a2a9e4c6365aa07bf88a1fb1e628"
 }

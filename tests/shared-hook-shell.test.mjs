@@ -76,6 +76,14 @@ const SHELL_PROBES = [
   ['xargs', ['xargs|echo <P> []']],
   ['xargs --bogus rm', ['AMBIGUOUS']],
   ['exec time noglob command nohup git status', ['exec+time+noglob+command+nohup|git status []']],
+  ['doas -u root rm -rf /', ['doas|rm -rf / []']],
+  ['doas --', ['AMBIGUOUS']],
+  ['setsid -f cp x /etc/hosts', ['setsid|cp x /etc/hosts []']],
+  ["pwsh -NoProfile -Command 'Remove-Item -Recurse x'", ['pwsh|Remove-Item -Recurse x []']],
+  ['powershell.exe -NonInteractive Get-Content .env', ['powershell|Get-Content .env []']],
+  ['pwsh -EncodedCommand AAA', ['AMBIGUOUS']],
+  ['pwsh -File build.ps1', ['|pwsh -File build.ps1 []']],
+  ['pwsh build.ps1', ['|pwsh build.ps1 []']],
   ['command -v git', ['|command -v git []']],
   ["bash -lc 'git status && rm -rf /tmp/x'", ['bash|git status [&&]', 'bash|rm -rf /tmp/x []']],
   ["sudo bash -c 'rm -rf /tmp/x'", ['sudo+bash|rm -rf /tmp/x []']],
@@ -101,7 +109,30 @@ const SHELL_PROBES = [
 test('the shell module normalizes segments, operators, quoting, wrappers, and compound commands', () => {
   for (const [command, expected] of SHELL_PROBES) assert.deepEqual(render(command), expected, command);
   assert.deepEqual(parseShellCommands(undefined), { commands: [] });
+  const segmentText = (command) => parseShellCommands(command).commands.map((entry) => entry.segment?.map((token) => token.value).join(' ') ?? null);
+  assert.deepEqual(segmentText('git status && sudo -D /tmp rm x; npm test'), [null, 'sudo -D /tmp rm x', null]);
+  assert.deepEqual(segmentText("bash -c 'ls; env -C / rm tests/a.py'"), [null, 'env -C / rm tests/a.py']);
   assert.equal(parseShellCommands('x'.repeat(SHELL_MAX_COMMAND_BYTES + 1)).error, 'command exceeds analysis limit');
+});
+
+test('the shell module marks unquoted globs and, on request, separates redirections', () => {
+  const [wc] = parseShellCommands("wc -l src/*.js 'a*' b\\? [x]").commands;
+  assert.deepEqual(wc.tokens.map((token) => Boolean(token.glob)), [false, false, true, false, false, true]);
+  assert.equal(parseShellCommands('echo x > /etc/hosts').commands[0].redirections, undefined, 'redirections are opt-in');
+  const redirected = (command) => {
+    const parsed = parseShellCommands(command, 0, [], { redirections: true });
+    if (parsed.error) return `ERROR ${parsed.error}`;
+    return parsed.commands.map((entry) => `${entry.tokens.map((token) => token.value).join(' ')} {${(entry.redirections ?? []).map((item) => `${item.operator}${item.target.value}`).join(' ')}}`);
+  };
+  assert.deepEqual(redirected('echo x>/etc/hosts'), ['echo x {>/etc/hosts}']);
+  assert.deepEqual(redirected('npm test 2>&1 | tail -5'), ['npm test {2>&1}', 'tail -5 {}']);
+  assert.deepEqual(redirected('make &>>log; cat <.env'), ['make {&>>log}', 'cat {<.env}']);
+  assert.deepEqual(redirected('echo "a>b" "2">f 3<>g x >|h'), ['echo a>b 2 x {>f 3<>g >|h}']);
+  assert.deepEqual(redirected('> /etc/hosts'), [' {>/etc/hosts}']);
+  assert.deepEqual(redirected("bash -c 'cat .env > out' 2>err"), ['cat .env {>out 2>err}']);
+  assert.deepEqual(redirected('cat <<-EOF'), ['cat {<<-EOF}']);
+  assert.deepEqual(redirected('diff <(sort a) b'), ['diff <(sort a) b {}']);
+  for (const broken of ['echo >', 'echo > ; ls', 'cat < < x']) assert.equal(redirected(broken), 'ERROR redirection without target', broken);
 });
 
 test('the shell module reads Git global options before the subcommand', () => {
@@ -224,6 +255,10 @@ const ADVERSARIAL = [
   '\\'.repeat(200001),
   'bash -c '.repeat(20000),
   'eval '.repeat(40000),
+  'pwsh -Command '.repeat(20000),
+  'doas -- '.repeat(20000),
+  '2>&1 '.repeat(40000),
+  '<'.repeat(200000),
   `git ${'-c a=b '.repeat(30000)}commit`,
   `git commit ${'-n'.repeat(100000)}`,
   `x=${'y'.repeat(SHELL_MAX_COMMAND_BYTES - 2)}`
@@ -235,6 +270,7 @@ test('the analysis terminates quickly on adversarial input', () => {
   for (const command of [...ADVERSARIAL, 'git a0', 'git self']) {
     const started = performance.now();
     parseShellCommands(command);
+    parseShellCommands(command, 0, [], { redirections: true });
     analyzeCommitContent(command, { aliases: loops });
     const elapsed = performance.now() - started;
     assert.ok(elapsed < TIME_LIMIT_MS, `${JSON.stringify(command.slice(0, 40))} took ${Math.round(elapsed)} ms`);

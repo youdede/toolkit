@@ -15,7 +15,7 @@ A pack composes artifacts of different kinds into one outcome, so a single comma
 | `infrastructure-change-readiness` | 1.0.0 | Plan a staged infrastructure change and independently review lifecycle, blast-radius, and recovery evidence. | 3 | Versioned, ledger-linked |
 | `mcp-baseline` | 1.0.0 | Install a guarded read-only MCP baseline with declared authority and independent trust-boundary review. | 7 | Versioned, ledger-linked |
 | `mobile-release-readiness` | 1.0.2 | Review mobile release evidence, accessibility, and reliability. Guards stop fastlane-action, EAS, Xcode, and Gradle uploads from a dirty tree or bad versions; custom lanes pass. | 4 | Versioned, ledger-linked |
-| `plan-and-verify-loop` | 1.1.0 | Gate implementation behind evidenced planning phases and independently verify completion claims. | 7 | Versioned, ledger-linked |
+| `plan-and-verify-loop` | 1.1.1 | Validate the order of phase evidence files under .youdede/phases/ and independently verify completion claims. | 7 | Versioned, ledger-linked |
 | `release-readiness` | 1.1.0 | Build an evidence-backed release decision and stop publication from unsafe repository state. | 7 | Versioned, ledger-linked |
 | `remote-review-evidence` | 1.0.0 | Collect bounded GitHub evidence in read-only mode and turn failing CI evidence into a traceable diagnosis. | 4 | Versioned, ledger-linked |
 | `reviewable-change` | 1.1.0 | Prepare bounded code changes, obtain independent review, and prevent oversized unreviewable commits. | 6 | Versioned, ledger-linked |

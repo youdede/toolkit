@@ -85,8 +85,8 @@
       "latency": "Het toegangspunt verwerkt één onderschepte gebeurtenis waarvoor expliciete goedkeuring vereist is voor destructieve databasemigratieacties met hoge betrouwbaarheid zonder uitgestelde verwerking."
     },
     "authentication-accessibility-guard": {
-      "risk": "Deze automatische controle blokkeert bewerkingen die voorkomen dat een wachtwoordbeheerder een authenticatieveld invult of dat de gebruiker erin stopt; een onterechte blokkering kan het legitieme werk onderbreken, maar voert de geblokkeerde actie niet uit.",
-      "latency": "Het toegangspunt verwerkt één onderschepte gebeurtenis om bewerkingen te blokkeren die voorkomen dat een wachtwoordbeheerder een authenticatieveld invult of dat de gebruiker erin stopt zonder uitstel van werk."
+      "risk": "Deze automatische controle blokkeert bewerkingen die voorkomen dat een wachtwoordbeheerder een authenticatieveld invult of dat de gebruiker erin plakt; een onterechte blokkering kan het legitieme werk onderbreken, maar voert de geblokkeerde actie niet uit.",
+      "latency": "Het toegangspunt verwerkt één onderschepte gebeurtenis om bewerkingen te blokkeren die voorkomen dat een wachtwoordbeheerder een authenticatieveld invult of dat de gebruiker erin plakt zonder uitstel van werk."
     },
     "focus-style-regression-guard": {
       "risk": "Deze automatische controle blokkeert nieuwe onzichtbare CSS-focusstatussen die geen zichtbare vervanging hebben; een onterechte blokkering kan het legitieme werk onderbreken, maar voert de geblokkeerde actie niet uit.",
@@ -125,7 +125,7 @@
       "latency": "Het toegangspunt verwerkt één onderschepte gebeurtenis om netto nieuwe brede diagnostische onderdrukkingen te blokkeren, terwijl regeluitzonderingen met een bereik worden toegestaan zonder uitgestelde verwerking."
     },
     "exception-swallowing-guard": {
-      "risk": "Deze automatische controle blokkeert nieuw toegevoegde lege uitzonderingshandlers en negeert afwijzingen van beloften; een onterechte blokkering kan het legitieme werk onderbreken, maar voert de geblokkeerde actie niet uit.",
+      "risk": "Deze automatische controle blokkeert nieuw toegevoegde lege uitzonderingshandlers en genegeerde afwijzingen van beloften; een onterechte blokkering kan het legitieme werk onderbreken, maar voert de geblokkeerde actie niet uit.",
       "latency": "Het toegangspunt verwerkt één onderschepte gebeurtenis om nieuw toegevoegde lege uitzonderingshandlers en genegeerde afwijzingen van beloften te blokkeren zonder uitgestelde verwerking."
     },
     "tool-output-budget-guard": {
@@ -297,8 +297,8 @@
       "latency": "Het toegangspunt verwerkt één onderschepte gebeurtenis om directe hostfirewallregel-, beleids-, keten- en activeringsmutaties te blokkeren zonder uitgestelde verwerking."
     },
     "mcp-capability-drift-guard": {
-      "risk": "Deze automatische controle blokkeert toolkit MCP-tooloproepen wanneer de server, toolnaam of waargenomen beschrijving niet is vastgezet; een onterechte blokkering kan het legitieme werk onderbreken, maar voert de geblokkeerde actie niet uit.",
-      "latency": "Het toegangspunt verwerkt één onderschepte gebeurtenis om toolkit MCP-tooloproepen te blokkeren wanneer de server, toolnaam of waargenomen beschrijving niet is vastgezet zonder uitgestelde verwerking."
+      "risk": "Deze automatische controle blokkeert aanroepen van MCP-tools van de toolkit wanneer de server of toolnaam niet is vastgezet, of wanneer de client een beschrijving meestuurt die afwijkt van de vastgezette beschrijving; een onterechte blokkering kan legitiem werk onderbreken, maar voert de geblokkeerde actie niet uit.",
+      "latency": "Het toegangspunt verwerkt één onderschepte gebeurtenis om aanroepen van MCP-tools van de toolkit te blokkeren wanneer de server of toolnaam niet is vastgezet, of wanneer een meegestuurde beschrijving afwijkt van de vastgezette beschrijving, zonder uitgestelde verwerking."
     },
     "mcp-egress-guard": {
       "risk": "Deze automatische controle blokkeert toolkit MCP-tooloproepen waarvan de argumenten een host buiten het gedeclareerde uitgaande verkeer noemen; een onterechte blokkering kan het legitieme werk onderbreken, maar voert de geblokkeerde actie niet uit.",
@@ -1265,5 +1265,5 @@
       "latency": "De specialist voert op statische wijze een procedure uit voor vereisten, status, waarneembare resultaten, nieuwe pogingen en herstelvertakkingen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     }
   },
-  "sourceHash": "fc38328c243180cb292355d8987bf723b864aea9a7f22dbdb2aad19d2b71a1c7"
+  "sourceHash": "2ad7b324e156cf51abfc04c38b79995cfa71a2a9e4c6365aa07bf88a1fb1e628"
 }

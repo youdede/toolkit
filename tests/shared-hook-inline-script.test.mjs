@@ -19,8 +19,9 @@ const PROBES = [
   ['perl -e \'system("systemctl restart nginx")\'', ['systemctl restart nginx']],
   ['php -r \'exec("docker push reg.io/app:1");\'', ['docker push reg.io/app:1']],
   ['deno eval "Deno.run({cmd: [\'ls\']})"', ['ls']],
-  ["pwsh -c 'Restart-Service spooler'", ['Restart-Service spooler']],
-  ['powershell -Command Stop-Service spooler', ['Stop-Service spooler']],
+  // The shell block unwraps PowerShell itself, so its payload is an ordinary command, not an inline one.
+  ["pwsh -c 'Restart-Service spooler'", []],
+  ['powershell -Command Stop-Service spooler', []],
   ['cmd /c "sc stop spooler"', ['sc stop spooler']],
   ['sudo python3 -c "print(\'x\')"', ['x']],
   ['python3 script.py', []],

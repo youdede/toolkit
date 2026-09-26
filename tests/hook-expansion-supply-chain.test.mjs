@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
+import { chmodSync, mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
@@ -298,13 +298,37 @@ test('Git gates normalize wrappers and reject commit-time auto-staging', (contex
 
   const autoStageRoot = repository(context, 'youdede-git-autostage-');
   writeFileSync(path.join(autoStageRoot, 'README.md'), 'unstaged change\n');
+  // largeDiff measures what -a can take against HEAD; one changed line is within the limits.
   for (const command of ['git commit -am update', 'env MODE=safe /usr/bin/git commit -am update', "bash -lc 'git commit -am update'"]) {
-    for (const name of ['lockfile', 'symlink', 'executable']) {
-      assert.equal(invoke(name, { cwd: autoStageRoot, tool_input: { command } }, { cwd: autoStageRoot }).status, 2, `${name}: ${command}`);
-    }
-    // largeDiff measures what -a can take against HEAD; one changed line is within the limits.
     assert.equal(invoke('largeDiff', { cwd: autoStageRoot, tool_input: { command } }, { cwd: autoStageRoot }).status, 0, `largeDiff: ${command}`);
   }
+  // The lockfile and executable-permission guards inspect what -a will commit instead of refusing it.
+  for (const name of ['lockfile', 'executable']) {
+    for (const command of ['git commit -am update', 'env MODE=safe /usr/bin/git commit -am update', "bash -lc 'git commit -am update'"]) {
+      assert.equal(invoke(name, { cwd: autoStageRoot, tool_input: { command } }, { cwd: autoStageRoot }).status, 0, `${name}: ${command}`);
+    }
+  }
+  const unsafeRoot = repository(context, 'youdede-git-autostage-unsafe-');
+  writeFileSync(path.join(unsafeRoot, 'package-lock.json'), '{"lockfileVersion":3,"packages":{}}\n');
+  writeFileSync(path.join(unsafeRoot, 'metadata.json'), '{}\n');
+  git(unsafeRoot, ['add', '-A']);
+  git(unsafeRoot, ['commit', '-qm', 'setup']);
+  writeFileSync(path.join(unsafeRoot, 'package-lock.json'), '{"lockfileVersion":3,"packages":{"node_modules/x":{"resolved":"http://example.invalid/x.tgz"}}}\n');
+  chmodSync(path.join(unsafeRoot, 'metadata.json'), 0o755);
+  for (const [name, command] of [['lockfile', 'git commit -am update'], ['lockfile', 'git switch -c next && git commit -am update'], ['executable', 'git commit -am update'], ['executable', 'git add -A && git commit -m update']]) {
+    assert.equal(invoke(name, { cwd: unsafeRoot, tool_input: { command } }, { cwd: unsafeRoot }).status, 2, `${name}: ${command}`);
+  }
+  assert.equal(invoke('lockfile', { cwd: unsafeRoot, tool_input: { command: 'git commit -m update' } }, { cwd: unsafeRoot }).status, 0);
+  // symlink-publication-guard reads the working-tree links that git commit -a would publish.
+  for (const command of ['git commit -am update', 'env MODE=safe /usr/bin/git commit -am update', "bash -lc 'git commit -am update'"]) {
+    assert.equal(invoke('symlink', { cwd: autoStageRoot, tool_input: { command } }, { cwd: autoStageRoot }).status, 0, `symlink: ${command}`);
+  }
+  symlinkSync('README.md', path.join(autoStageRoot, 'escape'));
+  git(autoStageRoot, ['add', 'escape']);
+  git(autoStageRoot, ['commit', '-qm', 'link', '--no-verify']);
+  rmSync(path.join(autoStageRoot, 'escape'));
+  symlinkSync('../outside', path.join(autoStageRoot, 'escape'));
+  assert.equal(invoke('symlink', { cwd: autoStageRoot, tool_input: { command: 'git commit -am update' } }, { cwd: autoStageRoot }).status, 2);
 });
 
 test('path portability checks every path component', (context) => {

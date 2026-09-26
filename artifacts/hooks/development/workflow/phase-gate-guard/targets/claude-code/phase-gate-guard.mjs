@@ -46,12 +46,14 @@ function evidenceError(raw, expectedPhase) {
 export function collectContext(input, cwd = process.cwd()) {
   const file = input?.tool_input?.file_path || input?.tool_input?.file || '';
   if (typeof file !== 'string' || !file) return { relevant: false };
-  const root = path.resolve(input?.cwd || cwd);
+  const root = path.resolve(process.env.CLAUDE_PROJECT_DIR || input?.cwd || cwd);
   const absolute = path.resolve(root, file);
   if (!within(root, absolute)) return { relevant: false };
   const relative = path.relative(root, absolute).split(path.sep).join('/');
+  if (!relative.startsWith('.youdede/phases/')) return { relevant: false };
   const match = EVIDENCE_PATTERN.exec(relative);
-  if (!match) return { relevant: false };
+  // Every other name in the reserved directory (notes.md, spec2.json, sub/design.json) is unknown.
+  if (!match) return { relevant: true, phase: relative.slice('.youdede/phases/'.length) };
   const context = { relevant: true, phase: match[1], relative, inspectionError: null, proposed: '', complete: true, predecessorRaw: null, predecessorError: null };
   try {
     const canonicalRoot = realpathSync(root);
@@ -115,7 +117,7 @@ async function readStdin() {
   return Buffer.concat(chunks).toString('utf8');
 }
 
-if (process.argv[1] && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
   try {
     const raw = await readStdin();
     const input = raw.trim() ? JSON.parse(raw) : {};

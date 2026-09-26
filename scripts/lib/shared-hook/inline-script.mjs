@@ -1,19 +1,19 @@
 // Shell commands written inside an interpreter one-liner (shared block `inline-script`), such as
-// `python3 -c "os.system('npm publish')"` or `pwsh -c 'Restart-Service x'`. scripts/generate-shared-hooks.mjs
+// `python3 -c "os.system('npm publish')"` or `cmd /c "sc stop x"`. scripts/generate-shared-hooks.mjs
 // drops the import below and requires the `shell` block in the same hook. Edit it here and run
 // `npm run shared-hooks`. Nothing is executed. A program that builds its command at run time, or passes
 // it as an argument list, is not seen.
 import { executableName, parseShellCommands } from './shell.mjs';
 
-// Interpreter -> option that takes the inline program. PowerShell and cmd programs are shell-like, so
-// the whole program is read as a command too; for the others only quoted string literals are.
+// Interpreter -> option that takes the inline program. cmd programs are shell-like, so the whole program
+// is read as a command too; for the others only quoted string literals are. PowerShell is unwrapped by
+// the `shell` block itself.
 const INLINE_PROGRAM_OPTIONS = [
   [/^python(?:\d+(?:\.\d+)*)?(?:\.exe)?$/, /^-[A-Za-z]*c$/, false],
   [/^(?:node|nodejs|bun)(?:\.exe)?$/, /^(?:-e|--eval|-p|--print)$/, false],
   [/^deno(?:\.exe)?$/, /^eval$/, false],
   [/^(?:ruby|perl)(?:\.exe)?$/, /^-[A-Za-z]*[eE]$/, false],
   [/^php(?:\.exe)?$/, /^-r$/, false],
-  [/^(?:pwsh|powershell)(?:\.exe)?$/, /^-(?:c|command|co|com|comm|comma|comman|encodedcommand)$/i, true],
   [/^cmd(?:\.exe)?$/, /^\/[cCkK]$/, true]
 ];
 const INLINE_MAX_LITERALS = 256;
