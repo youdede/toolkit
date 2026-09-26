@@ -11,6 +11,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 
 ### Changed
 
+- Gemini CLI subagent adapters are now `stable`: the official subagents page (read 2026-09-26) says subagents are enabled by default and no longer calls them preview. Every Gemini CLI adapter, and `docs/targets.md`, now states that Google stopped serving Gemini CLI on 2026-06-18 for free use and for Google AI Pro and Ultra, and that Antigravity CLI, which replaces it for those users, is not a target.
 - The npm package no longer contains the `skills/` and `plugins/` marketplace copies, the marketplace manifests, or the README images; native marketplaces read them from the repository. The packed size drops from about 4.8 MB to about 1.4 MB, and the CLI commands behave identically on the extracted package.
 - Repository validation rejects a subagent whose body differs between targets, apart from the Copilot turn-budget line.
 - Behavioral evaluation coverage now includes every skill, subagent, command, and context. Release benchmark inputs, package verification, readiness counts, catalog documentation, and naming/authoring guidance use the same six-kind model.

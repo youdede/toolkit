@@ -23,11 +23,13 @@ surface for each toolkit context. Numeric filename prefixes preserve the toolkit
 precedence order; where a runtime does not define cross-file precedence, install-set validation
 rejects known context/hook contradictions instead of claiming the runtime resolves them.
 
+Gemini CLI availability changed on 2026-06-18: Google stopped serving it for free use and for Google AI Pro and Ultra, and moved those users to Antigravity CLI. Gemini CLI remains available through Gemini Code Assist Standard or Enterprise licenses and paid API keys. Every Gemini CLI adapter states this limitation. Antigravity CLI is not a target; whether it loads `.gemini` skills, agents, or hooks is not verified.
+
 Every published skill adapter uses the runtime's native `skills/<slug>/SKILL.md` location and carries its scripts or references through the same installation. Only Codex receives `agents/openai.yaml`. `resume-session-work` is withheld from Codex because its hash-chained ledger and lifecycle hooks are not available there; installing only its prompt would fail the skill's own deterministic precondition.
 
 ## Specialist profiles
 
-Gemini profiles convert the Claude tool allowlist to `read_file`, `grep_search`, and `glob`, preserve `maxTurns` as `max_turns`, and are marked preview because Gemini documents subagents as preview. GitHub Copilot profiles use `.agent.md`, map the read-only tools to `read` and `search`, and carry the turn budget as an explicit instruction because the profile format does not enforce it.
+Gemini profiles convert the Claude tool allowlist to `read_file`, `grep_search`, and `glob`, and preserve `maxTurns` as `max_turns`. Gemini CLI enables subagents by default; users can disable them with `experimental.enableAgents`. GitHub Copilot profiles use `.agent.md`, map the read-only tools to `read` and `search`, and carry the turn budget as an explicit instruction because the profile format does not enforce it.
 
 OpenCode receives 50 profiles with a deny-all permission baseline plus explicit `read`, `grep`, and `glob` grants. Twelve profiles that request a model reasoning-effort setting are withheld because OpenCode cannot preserve that setting while inheriting an arbitrary model. Cursor profiles are withheld because `readonly` cannot reproduce the existing per-tool allowlist and would silently expose the parent's broader read, network, browser, or MCP surface.
 
