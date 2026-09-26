@@ -18,6 +18,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 
 ### Fixed
 
+- The Claude Code profile of `rag-evaluation-reviewer` no longer lists `NotebookRead`, which is not a Claude Code tool; `Read` already returns notebook cells. Repository validation now rejects any Claude Code subagent tool outside `Read`, `Grep`, and `Glob`.
 - The `repository-git-readonly` MCP tools no longer run programs chosen by repository configuration or rewrite `.git/index`: every call passes `--no-optional-locks`, `-c core.fsmonitor=false`, and `-c diff.autoRefreshIndex=false`, and `git_log` passes `--no-show-signature`. Before, `git_status` and `git_diff` ran `core.fsmonitor` and refreshed the index, and `git_log` ran `gpg.program` when `log.showSignature` was set. Filter drivers still run; the threat note names this residual risk.
 - `commit-guard` now scans the working tree when the same command stages content or the commit takes content from the working tree (`-a`, pathspecs, `--include`, `--only`). Before, `git add .env && git commit` and `git commit -am` were allowed because the index was inspected before the staging ran.
 - `protected-branch-guard` resolves a bare `git push` through Git's own `@{push}` and blocks only a protected destination; it expands Git aliases once, treats refspecs on remotes with a `remote.<name>.push` mapping as uninspectable, and blocks `send-pack` and command runners (`xargs`, `find -exec`) that start a relevant Git subcommand. Before, an alias or a push mapping could force-push to `main`.
