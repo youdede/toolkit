@@ -39,7 +39,7 @@
     "rules": [
       { "id": "use-red-green-refactor", "effect": "require", "action": "use-red-green-refactor", "sourceArtifactId": "skill/development/testing/deliver-test-first", "sourceField": "summary" },
       { "id": "verify-with-fresh-evidence", "effect": "require", "action": "verify-with-fresh-evidence", "sourceArtifactId": "skill/development/testing/verify-completion-evidence", "sourceField": "summary" },
-      { "id": "do-not-weaken-test-integrity", "effect": "forbid", "action": "weaken-test-integrity", "sourceArtifactId": "hook/development/testing/test-integrity-guard", "sourceField": "refuses", "sourceIndex": 0 },
+      { "id": "do-not-weaken-test-integrity", "effect": "forbid", "action": "weaken-test-integrity", "sourceArtifactId": "hook/development/testing/test-integrity-guard", "sourceField": "refuses", "sourceIndex": 0, "text": "Do not weaken, skip, suppress, or delete tests or assertions to obtain a passing result." },
       { "id": "isolate-evaluation-cases", "effect": "require", "action": "isolate-evaluation-cases", "sourceArtifactId": "skill/development/testing/design-agent-evaluation-harness", "sourceField": "summary" }
     ]
   },

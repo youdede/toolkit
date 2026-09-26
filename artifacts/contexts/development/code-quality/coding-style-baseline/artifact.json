@@ -38,7 +38,7 @@
     "rules": [
       { "id": "preserve-observable-behavior", "effect": "require", "action": "preserve-observable-behavior", "sourceArtifactId": "skill/development/code-quality/simplify-code-with-invariants", "sourceField": "summary" },
       { "id": "respect-module-entrypoints", "effect": "require", "action": "respect-module-entrypoints", "sourceArtifactId": "skill/development/architecture/enforce-typescript-module-boundaries", "sourceField": "summary" },
-      { "id": "do-not-edit-generated-files", "effect": "forbid", "action": "edit-generated-files", "sourceArtifactId": "hook/development/code-quality/generated-file-guard", "sourceField": "refuses", "sourceIndex": 0 }
+      { "id": "do-not-edit-generated-files", "effect": "forbid", "action": "edit-generated-files", "sourceArtifactId": "hook/development/code-quality/generated-file-guard", "sourceField": "refuses", "sourceIndex": 0, "text": "Do not edit generated files directly; change the generator or its source template and regenerate." }
     ]
   },
   "relationships": { "composesWith": [], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": [] },
