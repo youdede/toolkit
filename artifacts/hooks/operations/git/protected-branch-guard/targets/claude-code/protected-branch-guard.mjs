@@ -340,15 +340,25 @@ function inspectPush(args, context) {
   if (dryRun) return null;
   if (context.inspectionError) return block('protected-branch-unverified', 'repository branch state cannot be inspected safely');
   if (fanout) return block('protected-branch-direct-push', 'a fan-out push can update a protected branch');
+  const remote = remoteFromOption ? null : (operands[0] ?? null);
   const refspecs = remoteFromOption ? operands : operands.slice(1);
   if (refspecs.length === 0) {
+    if (context.pushBranch && (remote === null || remote === context.pushRemote)) {
+      return isProtected(context.pushBranch, context)
+        ? block('protected-branch-direct-push', 'the configured push destination is a protected branch')
+        : null;
+    }
     const rule = context.currentBranch && protectedBranches(context).has(context.currentBranch)
       ? 'protected-branch-direct-push' : 'protected-git-command-uninspectable';
     return block(rule, 'the configured upstream push destination cannot be verified statically');
   }
+  const mapped = remote === null ? (context.pushConfiguredRemotes?.size ?? 0) > 0 : Boolean(context.pushConfiguredRemotes?.has(remote));
   for (const refspec of refspecs) {
     if (/[*?[]/.test(refspec)) return block('protected-git-command-uninspectable', 'a wildcard refspec can include a protected branch');
     const separator = refspec.lastIndexOf(':');
+    if (separator < 0 && mapped) {
+      return block('protected-git-command-uninspectable', 'the remote has a configured push mapping that can redirect this refspec');
+    }
     const destination = separator >= 0 ? refspec.slice(separator + 1) : refspec;
     if (!destination) return block('protected-git-command-uninspectable', 'a push destination is empty or ambiguous');
     if (isProtected(destination, context)) {
@@ -359,9 +369,28 @@ function inspectPush(args, context) {
   }
   return null;
 }
+const RELEVANT_SUBCOMMANDS = new Set(['push', 'send-pack', 'http-push', 'branch', 'update-ref', 'checkout', 'switch', 'symbolic-ref', 'remote', ...HISTORY_MUTATIONS]);
+const COMMAND_RUNNERS = new Set(['xargs', 'find', 'parallel', 'watch']);
+
+// Git runs an alias only when no built-in command has that name, so a configured alias is
+// expanded once and re-inspected. Shell aliases (`!…`) and aliases of aliases are not expanded.
+function expandAlias(parsed, context, depth = 0) {
+  const alias = context.aliases?.get(parsed.subcommand);
+  if (alias === undefined) return parsed;
+  if (depth > 0 || alias.trimStart().startsWith('!')) return { ambiguous: true };
+  const normalized = normalizeShell(`git ${alias}`);
+  if (normalized.error || normalized.invocations.length !== 1) return { ambiguous: true };
+  const expanded = parseGitInvocation([...normalized.invocations[0], ...parsed.args]);
+  if (!expanded || expanded.ambiguous) return { ambiguous: true };
+  return expandAlias(expanded, context, depth + 1);
+}
+
 function inspectGit(parsed, context) {
   if (!parsed || !parsed.subcommand) return null;
   if (parsed.ambiguous) return block('protected-git-command-uninspectable', 'the Git invocation cannot be normalized safely');
+  if (parsed.subcommand === 'send-pack' || parsed.subcommand === 'http-push') {
+    return block('protected-git-command-uninspectable', 'a low-level push command can update a protected branch');
+  }
   if (parsed.subcommand === 'push') return inspectPush(parsed.args, context);
   if (parsed.subcommand === 'branch') return inspectBranchMutation(parsed.args, context);
   if (parsed.subcommand === 'update-ref') return inspectUpdateRef(parsed.args, context);
@@ -401,13 +430,24 @@ export function evaluate(input, context = {}) {
   for (const invocation of normalized.invocations) {
     const name = executable(invocation[0]);
     if (['cd', 'pushd', 'popd'].includes(name)) { scopeChanged = true; continue; }
+    if (COMMAND_RUNNERS.has(name)) {
+      const gitIndex = invocation.findIndex((token) => executable(token) === 'git');
+      if (gitIndex >= 0) {
+        const next = invocation.slice(gitIndex + 1).find((token) => !token.value.startsWith('-'));
+        if (!next || next.dynamic || RELEVANT_SUBCOMMANDS.has(next.value.toLowerCase())) {
+          return block('protected-command-uninspectable', 'a command runner can start a Git mutation with arguments the guard cannot see');
+        }
+      }
+      continue;
+    }
     if (invocation.some((token) => token.dynamic && /\bgit\s+(?:push|branch|update-ref|checkout|switch|symbolic-ref|remote|commit|merge|rebase|reset|cherry-pick|revert|am)\b/i.test(token.value))) {
       return block('protected-command-uninspectable', 'a command substitution can hide a protected Git mutation');
     }
-    const parsed = parseGitInvocation(invocation);
-    if (!parsed) continue;
+    const raw = parseGitInvocation(invocation);
+    if (!raw) continue;
+    const parsed = raw.ambiguous ? raw : expandAlias(raw, context);
     if (parsed.ambiguous) return block('protected-git-command-uninspectable', 'the Git invocation changes or obscures repository scope');
-    const relevant = ['push', 'branch', 'update-ref', 'checkout', 'switch', 'symbolic-ref', 'remote'].includes(parsed.subcommand) || HISTORY_MUTATIONS.has(parsed.subcommand);
+    const relevant = RELEVANT_SUBCOMMANDS.has(parsed.subcommand);
     if (scopeChanged && relevant) return block('protected-git-scope-uninspectable', 'a shell directory change prevents reliable repository inspection');
     const decision = inspectGit(parsed, context);
     if (decision) return decision;
@@ -464,7 +504,34 @@ export function collectContext(input, options = {}) {
   if (remoteHead.status === 0 && remoteHead.stdout.startsWith('origin/')) defaultBranch = remoteHead.stdout.slice('origin/'.length);
   else if (![1, 128].includes(remoteHead.status)) return { repo: true, inspectionError: true };
 
-  return { repo: true, inspectionError: false, currentBranch, defaultBranch, detached };
+  const config = git(['config', '--get-regexp', '^(alias\\..*|remote\\..*\\.push)$']);
+  if (config.error || ![0, 1].includes(config.status)) return { repo: true, inspectionError: true };
+  const aliases = new Map();
+  const pushConfiguredRemotes = new Set();
+  for (const line of config.status === 0 ? config.stdout.split('\n') : []) {
+    const separator = line.indexOf(' ');
+    const key = separator < 0 ? line : line.slice(0, separator);
+    const value = separator < 0 ? '' : line.slice(separator + 1);
+    if (key.startsWith('alias.')) aliases.set(key.slice('alias.'.length).toLowerCase(), value);
+    else if (/^remote\..+\.push$/.test(key)) pushConfiguredRemotes.add(key.slice('remote.'.length, -'.push'.length));
+  }
+
+  // `@{push}` is Git's own answer to "where would a bare `git push` write"; it honours push.default,
+  // upstream, and remote.<name>.push, and fails when the answer is not a single destination.
+  let pushRemote = null;
+  let pushBranch = null;
+  if (currentBranch) {
+    const remoteName = git(['for-each-ref', '--format=%(push:remotename)', `refs/heads/${currentBranch}`]);
+    const destination = git(['rev-parse', '--symbolic-full-name', '@{push}']);
+    if (remoteName.error || destination.error) return { repo: true, inspectionError: true };
+    const prefix = `refs/remotes/${remoteName.stdout}/`;
+    if (remoteName.status === 0 && remoteName.stdout && destination.status === 0 && destination.stdout.startsWith(prefix)) {
+      pushRemote = remoteName.stdout;
+      pushBranch = destination.stdout.slice(prefix.length);
+    }
+  }
+
+  return { repo: true, inspectionError: false, currentBranch, defaultBranch, detached, aliases, pushConfiguredRemotes, pushRemote, pushBranch };
 }
 async function readInput() {
   const chunks = [];

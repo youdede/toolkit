@@ -348,3 +348,45 @@ test('new hook wrappers use stable process exits for valid, blocked, malformed, 
   );
   assert.equal(oversizedCommand.ruleId, 'protected-command-too-large');
 });
+
+test('protected branch resolves push destinations, aliases, push mappings, and command runners', (context) => {
+  const parent = temporary(context, 'youdede-branch-config-');
+  const remote = path.join(parent, 'remote.git');
+  const root = path.join(parent, 'work');
+  mkdirSync(root);
+  git(parent, ['init', '-q', '--bare', remote]);
+  initRepository(root, 'main');
+  git(root, ['remote', 'add', 'origin', remote]);
+  git(root, ['push', '-q', '-u', 'origin', 'main']);
+  git(root, ['switch', '-qc', 'feature/config']);
+  git(root, ['push', '-q', '-u', 'origin', 'feature/config']);
+  const decide = (command) => branchDecision({ tool_name: 'Bash', cwd: root, tool_input: { command } }, root);
+
+  assert.equal(decide('git push').exitCode, 0);
+  assert.equal(decide('git push origin').exitCode, 0);
+  assert.equal(decide('git push --force').exitCode, 0);
+
+  git(root, ['branch', '-q', '-u', 'origin/main']);
+  git(root, ['config', 'push.default', 'upstream']);
+  assert.equal(decide('git push').ruleId, 'protected-branch-direct-push');
+  git(root, ['config', '--unset', 'push.default']);
+  git(root, ['branch', '-q', '-u', 'origin/feature/config']);
+
+  git(root, ['config', 'alias.ship', 'push --force origin feature/config:main']);
+  assert.equal(decide('git ship').ruleId, 'protected-branch-direct-push');
+  git(root, ['config', 'alias.st', 'status']);
+  assert.equal(decide('git st').exitCode, 0);
+  git(root, ['config', 'alias.run', '!git push origin feature/config:main']);
+  assert.equal(decide('git run').ruleId, 'protected-git-command-uninspectable');
+
+  git(root, ['config', 'remote.origin.push', 'refs/heads/feature/config:refs/heads/main']);
+  assert.equal(decide('git push origin feature/config').ruleId, 'protected-git-command-uninspectable');
+  assert.equal(decide('git push').ruleId, 'protected-branch-direct-push');
+  assert.equal(decide('git push origin feature/config:feature/config').exitCode, 0);
+  git(root, ['config', '--unset', 'remote.origin.push']);
+
+  assert.equal(decide(`git send-pack ${remote} feature/config:main`).ruleId, 'protected-git-command-uninspectable');
+  assert.equal(decide('echo main | xargs git push origin').ruleId, 'protected-command-uninspectable');
+  assert.equal(decide('find . -maxdepth 0 -exec git push origin feature/config:main \;').ruleId, 'protected-command-uninspectable');
+  assert.equal(decide('find . -name "*.md" -exec git status \;').exitCode, 0);
+});
