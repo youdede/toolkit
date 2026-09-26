@@ -1,5 +1,5 @@
 {
-  "sourceHash": "f400f8712923edd15a640da25c5c1104f80eb37acf93cf3acd0001b2ce77d9cf",
+  "sourceHash": "74339ca3cd137648bd6bd11c90458d22d82357c8dd9d99c58b3cc6632611ac31",
   "narratives": {
     "abuse-resistance-analyst": {
       "summary": "Analyseert één handeling op kostenversterking die een aanvaller kan sturen, fan-out en het omzeilen van quota.",
@@ -605,7 +605,7 @@
     },
     "commit-signature-intent-guard": {
       "summary": "Vereist een expliciet of geconfigureerd voornemen om Git-commits cryptografisch te ondertekenen.",
-      "description": "Een deterministische Claude Code PreToolUse-controle voor Bash die rechtstreekse Git-commitcommando’s herkent. Deze blokkeert expliciete omzeiling van ondertekening en dynamische commandovormen, en blokkeert ook commits zonder -S als commit.gpgSign niet is ingeschakeld.",
+      "description": "Een deterministische Claude Code PreToolUse-controle voor Bash die Git-commando’s herkent die commits maken (commit, ook via aliassen, merge --no-ff, cherry-pick, revert, am). Deze blokkeert expliciete omzeiling van ondertekening en dynamische commandovormen, en blokkeert ook deze commando’s zonder -S als commit.gpgSign niet is ingeschakeld.",
       "purposes": [
         "Verifieert het statisch waarneembare voornemen om een Git-commit te ondertekenen voordat het commitcommando mag worden uitgevoerd."
       ],
@@ -1820,14 +1820,14 @@
     },
     "large-diff-review-guard": {
       "summary": "Vereist een kleinere wijziging in de Git-index wanneer een commit de afgebakende grenzen voor beoordeelbaarheid overschrijdt.",
-      "description": "Een deterministische Claude Code PreToolUse-controle voor git commit die het aantal bestanden in de Git-index, teksttoevoegingen en -verwijderingen en de binaire omvang meet en vervolgens wijzigingen boven expliciete, vaste grenzen voor beoordeelbaarheid blokkeert.",
+      "description": "Een deterministische Claude Code PreToolUse-controle voor git commit die het aantal bestanden, de teksttoevoegingen en -verwijderingen en de binaire omvang meet die de commit zal opnemen (de momentopname in de Git-index, of een bovengrens ten opzichte van HEAD wanneer de opdracht inhoud uit de werkmap aan de index toevoegt of commit), en vervolgens wijzigingen boven expliciete, vaste grenzen voor beoordeelbaarheid blokkeert.",
       "purposes": [
         "Meet de Git-wijziging die voor commit klaarstaat en weigert commits die deterministische budgetten voor beoordeelbaarheid overschrijden."
       ],
       "refuses": [
         "Splitst of bewerkt de wijziging niet, voegt deze niet toe aan de Git-index, haalt deze er niet uit, commit deze niet, vat deze niet samen, beoordeelt deze niet en keurt deze niet goed.",
         "Beweert niet dat een kleine diff correct is of dat een grote diff noodzakelijkerwijs onveilig is.",
-        "Inspecteert geen werk buiten de Git-index en telt geen gegenereerde impact buiten de momentopname die voor commit klaarstaat.",
+        "Telt geen werk buiten de Git-index dat de commit niet zal opnemen, en geen gegenereerde impact buiten de commit.",
         "Accepteert geen repositoryconfiguratie, commitvlaggen of prompttekst als omzeiling."
       ]
     },

@@ -1,5 +1,5 @@
 {
-  "sourceHash": "f400f8712923edd15a640da25c5c1104f80eb37acf93cf3acd0001b2ce77d9cf",
+  "sourceHash": "74339ca3cd137648bd6bd11c90458d22d82357c8dd9d99c58b3cc6632611ac31",
   "narratives": {
     "abuse-resistance-analyst": {
       "summary": "Analizza una singola operazione per individuare costi moltiplicati da input controllati da un attaccante, richieste a cascata ed elusione delle quote.",
@@ -605,7 +605,7 @@
     },
     "commit-signature-intent-guard": {
       "summary": "Richiede un'intenzione esplicita o configurata di firma crittografica per i commit Git.",
-      "description": "Un controllo Claude Code PreToolUse deterministico per Bash che riconosce i comandi Git di commit diretti e blocca l'elusione esplicita della firma, le forme di comando dinamiche o i commit senza -S quando commit.gpgSign non è abilitato.",
+      "description": "Un controllo Claude Code PreToolUse deterministico per Bash che riconosce i comandi Git che creano commit (commit, anche tramite alias, merge --no-ff, cherry-pick, revert, am) e blocca l'elusione esplicita della firma, le forme di comando dinamiche o questi comandi senza -S quando commit.gpgSign non è abilitato.",
       "purposes": [
         "Verifica l'intenzione di firma Git osservabile staticamente prima di consentire l'esecuzione del comando di commit."
       ],
@@ -1820,14 +1820,14 @@
     },
     "large-diff-review-guard": {
       "summary": "Richiede una modifica staged più piccola quando un commit supera le soglie di revisionabilità con limiti definiti.",
-      "description": "Un controllo Claude Code PreToolUse deterministico per git commit che misura il numero di file staged, aggiunte e cancellazioni di testo e dimensione binaria, quindi blocca le modifiche superiori a limiti espliciti e fissi di revisionabilità.",
+      "description": "Un controllo Claude Code PreToolUse deterministico per git commit che misura il numero di file, le aggiunte e cancellazioni di testo e la dimensione binaria che il commit prenderà (lo snapshot in staging, oppure un limite superiore rispetto a HEAD quando il comando mette in staging o committa contenuto del working tree), quindi blocca le modifiche oltre limiti espliciti e fissi di revisionabilità.",
       "purposes": [
         "Misura la modifica staged Git e rifiuta i commit che superano i budget di revisionabilità deterministici."
       ],
       "refuses": [
         "Non divide, modifica, stagea, unstaged, committa, riassume, revisiona o approva la modifica.",
         "Non afferma che una diff piccola sia corretta o che una diff grande sia necessariamente non sicura.",
-        "Non ispeziona il lavoro non staged né conta l'impatto generato al di fuori dello snapshot staged.",
+        "Non conta il lavoro non in staging che il commit non prenderà, né l'impatto generato al di fuori del commit.",
         "Non accetta configurazione del repository, flag di commit o testo di prompt come bypass."
       ]
     },

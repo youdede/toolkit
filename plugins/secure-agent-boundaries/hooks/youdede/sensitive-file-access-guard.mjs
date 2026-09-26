@@ -34,7 +34,8 @@ const WRAPPER_OPTIONS = {
     alone: /^(?:-[AbEHKnS]+|--(?:askpass|background|preserve-env|edit|set-home|remove-timestamp|reset-timestamp|non-interactive|stdin|validate)|--(?:user|group|host|prompt|close-from|command-timeout|role|type)=.+)$/,
     refuse: /^(?:-D|--chdir|-R|--chroot)(?:=|$)/
   },
-  doas: { next: /^-[uC]$/, alone: /^-[Lns]+$/ },
+  // `doas -C` only checks the configuration, `-s` and `-L` run no given command.
+  doas: { next: /^-u$/, alone: /^-n$/, refuse: /^-[CsL]/ },
   setsid: { alone: /^(?:-[cfw]+|--(?:ctty|fork|wait))$/ },
   time: { next: /^(?:-f|-o|--format|--output)$/, alone: /^(?:-a|-p|-v|--append|--portability|--verbose|--quiet|--format=.+|--output=.+)$/ },
   exec: { next: /^-a$/, alone: /^(?:-c|-l)$/ },

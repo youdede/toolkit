@@ -298,10 +298,9 @@ test('Git gates normalize wrappers and reject commit-time auto-staging', (contex
 
   const autoStageRoot = repository(context, 'youdede-git-autostage-');
   writeFileSync(path.join(autoStageRoot, 'README.md'), 'unstaged change\n');
-  for (const name of ['largeDiff']) {
-    for (const command of ['git commit -am update', 'env MODE=safe /usr/bin/git commit -am update', "bash -lc 'git commit -am update'"]) {
-      assert.equal(invoke(name, { cwd: autoStageRoot, tool_input: { command } }, { cwd: autoStageRoot }).status, 2, `${name}: ${command}`);
-    }
+  // largeDiff measures what -a can take against HEAD; one changed line is within the limits.
+  for (const command of ['git commit -am update', 'env MODE=safe /usr/bin/git commit -am update', "bash -lc 'git commit -am update'"]) {
+    assert.equal(invoke('largeDiff', { cwd: autoStageRoot, tool_input: { command } }, { cwd: autoStageRoot }).status, 0, `largeDiff: ${command}`);
   }
   // The lockfile and executable-permission guards inspect what -a will commit instead of refusing it.
   for (const name of ['lockfile', 'executable']) {

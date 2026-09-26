@@ -4791,7 +4791,7 @@
       "version": "1.0.0",
       "kind": "hook",
       "summary": "Require a smaller staged change when a commit exceeds bounded reviewability thresholds.",
-      "description": "A deterministic Claude Code PreToolUse gate for git commit that measures staged file count, text additions and deletions, and binary size, then blocks changes above explicit fixed reviewability limits.",
+      "description": "A deterministic Claude Code PreToolUse gate for git commit that measures the file count, text additions and deletions, and binary size the commit will take (the staged snapshot, or an upper bound against HEAD when the command stages or commits working-tree content), then blocks changes above explicit fixed reviewability limits.",
       "domain": "operations",
       "category": "reviewability",
       "capabilities": [
@@ -4850,7 +4850,7 @@
       "refuses": [
         "It does not split, edit, stage, unstage, commit, summarize, review, or approve the change.",
         "It does not claim that a small diff is correct or that a large diff is necessarily unsafe.",
-        "It does not inspect unstaged work or count generated impact outside the staged snapshot.",
+        "It does not count unstaged work that the commit will not take, or generated impact outside the commit.",
         "It does not accept repository configuration, commit flags, or prompt text as a bypass."
       ],
       "targets": [
@@ -5339,7 +5339,7 @@
       "version": "1.0.0",
       "kind": "hook",
       "summary": "Require an explicit or configured cryptographic-signing intent for Git commits.",
-      "description": "A deterministic Claude Code PreToolUse gate for Bash that recognizes direct Git commit commands and blocks explicit signature bypass, dynamic command shapes, or commits without -S when commit.gpgSign is not enabled.",
+      "description": "A deterministic Claude Code PreToolUse gate for Bash that recognizes Git commands that create commits (commit, also through aliases, merge --no-ff, cherry-pick, revert, am) and blocks explicit signature bypass, dynamic command shapes, or such commands without -S when commit.gpgSign is not enabled.",
       "domain": "operations",
       "category": "signed-history",
       "capabilities": [

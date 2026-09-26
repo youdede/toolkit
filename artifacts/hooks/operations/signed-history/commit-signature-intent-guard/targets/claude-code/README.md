@@ -1,6 +1,6 @@
 # Commit signature intent guard for Claude Code
 
-This hook checks signing intent before a direct Git commit. Intent is satisfied by an explicit signing flag or by the effective read-only Git commit.gpgSign configuration.
+This hook checks signing intent before a Git command that creates a commit: `git commit` (also through a configured alias or one defined earlier in the same command), `git merge --no-ff`, `git cherry-pick`, `git revert`, and `git am`, unless `-n`/`--no-commit` or a recovery flag is given. Commands are read through the shared shell analysis (sequences, `sudo`, `eval`, `bash -c`). A plain `git merge` or `git pull` may fast-forward and `git rebase` replays commits, so they are not judged; a commit after `cd` or `git -C` without `-S` is refused because another repository's configuration cannot be read. Intent is satisfied by an explicit signing flag or by the effective read-only Git commit.gpgSign configuration.
 
 Read-only Git commands, non-commit commands, explicitly signed commits, and commits under enabled commit.gpgSign configuration remain allowed.
 

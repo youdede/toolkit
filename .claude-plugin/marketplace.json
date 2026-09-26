@@ -201,8 +201,8 @@
     {
       "name": "mobile-release-readiness",
       "source": "./plugins/mobile-release-readiness",
-      "description": "Review mobile release evidence, accessibility, and reliability. Release guards stop npm, pnpm, yarn, cargo, twine, and gh release publication, not fastlane, EAS, altool, or Gradle.",
-      "version": "1.0.1",
+      "description": "Review mobile release evidence, accessibility, and reliability. Guards stop fastlane-action, EAS, Xcode, and Gradle uploads from a dirty tree or bad versions; custom lanes pass.",
+      "version": "1.0.2",
       "author": {
         "name": "Youdede",
         "url": "https://github.com/udede/toolkit"
