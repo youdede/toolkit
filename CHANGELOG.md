@@ -46,6 +46,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 - Two design skills stated domain figures that disagree with their sources: `establish-color-system` set the WCAG large-text threshold at 19px bold, while WCAG defines 14pt bold (about 18.5px, W3C Understanding SC 1.4.3); `design-for-localization` planned 40 to 60 percent growth for 51 to 70 character strings, while the IBM table published by W3C gives 51 to 70 percent. Both now follow the source.
 - The `write-release-notes-from-evidence` collector failed with `ENOBUFS` on a range whose file list exceeded 1 MiB, before its 200-file truncation applied. It now reads up to 32 MiB and limits the diff stat to 200 files.
 - Three skills showed mechanically capitalized product names (`Codex Cli`, `Macos`) in their title, catalog name, and Codex display name; they now read `Codex CLI` and `macOS`. `keep-macos-awake` now names the `caffeinate` assertion flags, `pmset -g assertions` for verification, and `launchctl bootstrap`/`bootout`, which `man launchctl` lists as the replacements for the legacy `load`/`unload`.
+- The catalog listed Python as a language of `extract-youtube-captions`, whose only helper is a Node script; it now lists JavaScript and shell.
 
 ## 0.3.0 (2026-09-21)
 
