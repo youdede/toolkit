@@ -30463,7 +30463,7 @@
       },
       "refuses": [
         "It does not edit interface code, styles, tests, design tokens, or accessibility configuration.",
-        "It does not certify WCAG, legal compliance, or assistive-technology behavior without appropriate scoped evidence.",
+        "It does not certify WCAG, legal compliance, or assistive-technology behavior from a bounded review.",
         "It does not claim color contrast, keyboard behavior, or screen-reader output that static evidence cannot establish."
       ],
       "targets": [
@@ -32576,7 +32576,7 @@
       "version": "1.4.0",
       "kind": "subagent",
       "summary": "Find meaningful unproved behaviors in a bounded change without writing or running tests.",
-      "description": "A read-only Claude Code specialist that maps intended behavior to tests and reports high-confidence regression, boundary, error, integration, and durability gaps.",
+      "description": "A read-only specialist subagent that maps intended behavior to tests and reports high-confidence regression, boundary, error, integration, and durability gaps.",
       "domain": "development",
       "category": "testing",
       "capabilities": [
@@ -35067,7 +35067,7 @@
       "version": "1.4.0",
       "kind": "subagent",
       "summary": "Review dependency deltas for supply-chain and compatibility risk without mutating the repo.",
-      "description": "A narrow read-only Claude Code specialist for manifest, lockfile, provenance, install-script, runtime, and integration risks after dependency changes.",
+      "description": "A narrow read-only specialist subagent for manifest, lockfile, provenance, install-script, runtime, and integration risks after dependency changes.",
       "domain": "security",
       "category": "dependencies",
       "capabilities": [

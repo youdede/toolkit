@@ -34,6 +34,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 - The `playwright-local-isolated` threat notes match upstream `@playwright/mcp` 0.0.82: `--allowed-hosts` restricts the hosts the HTTP transport serves from, not browser navigation, and the exposed `browser_file_upload` tool can upload files under the workspace root, so callers must not call it. Before, the notes said both flags restricted browsing to `127.0.0.1` and that no upload path existed.
 - `verify-claims-against-output` defines when a claim is flaky without asking for a rerun, and `audit-release-evidence` prints its JSON report in the reply. Before, the first reported "both hashes" of a command it forbade rerunning, and the second printed the path of a file it had no tool to write.
 - Twelve subagents name their actual map or matrix heading in the no-finding instruction instead of an "evidence map" section none of them declares. `numerical-correctness-analyst` and `incident-timeline-analyst` no longer carry an ungrammatical severity threshold ("outside no stated tolerance", a doubled "only when").
+- `test-gap-reviewer` and `dependency-risk-reviewer` no longer describe themselves as Claude Code specialists; both ship for four runtimes. `accessibility-conformance-reviewer` no longer implies it can certify WCAG given enough evidence; like its brief, it refuses certification from a bounded review.
 
 ## 0.3.0 (2026-09-21)
 
