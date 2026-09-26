@@ -3,7 +3,7 @@ name: delegate-to-codex-cli
 description: "Delegate an independent coding or review task to Codex CLI with a narrow brief, isolated worktree, bounded permissions, and parent-agent verification. Use when the CLI is available and parallel delegation adds value."
 ---
 
-# Delegate To Codex Cli
+# Delegate To Codex CLI
 
 ## Contract
 
