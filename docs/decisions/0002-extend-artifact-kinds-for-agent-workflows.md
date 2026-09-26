@@ -1,7 +1,8 @@
 # 0002: Extend artifact kinds for agent workflows
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-09-21
+- Accepted by the maintainer on 2026-09-26 during the repository audit.
 
 ## Context
 
