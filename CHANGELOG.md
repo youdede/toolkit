@@ -42,6 +42,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 - The catalog entry for `design-llm-evaluation` omitted the skill's main operational limit; its description now matches the installed skill: it does not tune prompts, certify a model, or run model calls without separate execution authority.
 - `verify-production-release` pushes an exact revision and can start a rollback, but the catalog listed only the `verify` capability; it now also lists `operate`.
 - `resume-session-work` built its ledger commands from `CLAUDE_PROJECT_DIR`, which Claude Code documents for hooks, MCP servers, and LSP but not for the Bash tool; where it is unset the command failed. The commands now fall back to the Git top-level directory.
+- `prepare-eaa-conformance-evidence` now names the Official Journal of the European Union as the place where a standard's citation is checked (its catalog refusal and evaluation already did), and no longer states that every EN 301 549 version has a different WCAG baseline.
 
 ## 0.3.0 (2026-09-21)
 
