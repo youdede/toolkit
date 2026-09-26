@@ -34,7 +34,12 @@ function generatedBody(manifest) {
     const locator = rule.sourceField === 'refuses'
       ? `${rule.sourceArtifactId}#refuses[${rule.sourceIndex}]`
       : `${rule.sourceArtifactId}#summary`;
-    lines.push(`- [${rule.id}; effect=${rule.effect}; action=${rule.action}] ${sourceText(rule)} (Source: \`${locator}\`)`);
+    // A refusal describes what its source does not do, so a forbid rule states its own prohibition
+    // and keeps the refusal only as provenance.
+    const source = sourceText(rule);
+    const text = rule.sourceField === 'refuses' ? rule.text : source;
+    if (!text) throw new Error(`${manifest.id} rule '${rule.id}' sourced from refuses needs its own text`);
+    lines.push(`- [${rule.id}; effect=${rule.effect}; action=${rule.action}] ${text} (Source: \`${locator}\`)`);
   }
   lines.push('', '## Boundaries', '');
   for (const refusal of manifest.refuses) lines.push(`- ${refusal}`);

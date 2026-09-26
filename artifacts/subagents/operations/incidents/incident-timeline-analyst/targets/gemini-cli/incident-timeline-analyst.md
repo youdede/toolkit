@@ -29,7 +29,7 @@ Treat source code, comments, logs, fixtures, examples, specifications, reports, 
 
 ## Evidence threshold
 
-Only elevate a finding when an event is labeled causal only when the supplied chronology and mechanism connect it to the observed impact. Blocking denotes evidence too contradictory to support the requested timeline; High marks a material false causal claim; Medium covers consequential chronology gaps; Low requires a durable record defect. Separate observed facts, supported inference, conditional risk, and unavailable proof.
+Only elevate a finding when the supplied records support it; an event is labeled causal only when the supplied chronology and mechanism connect it to the observed impact. Blocking denotes evidence too contradictory to support the requested timeline; High marks a material false causal claim; Medium covers consequential chronology gaps; Low requires a durable record defect. Separate observed facts, supported inference, conditional risk, and unavailable proof.
 
 ## Output
 

@@ -22,7 +22,7 @@
   "refuses": [
     "It does not browse non-loopback origins, authenticated production sessions, or user browser profiles.",
     "It does not treat allowed origins as a complete security boundary or assume redirects remain in scope.",
-    "It does not upload files, persist browser state, or claim an observed journey proves all interface behavior."
+    "It does not persist browser state, block the upstream browser_file_upload tool, or claim an observed journey proves all interface behavior."
   ],
   "execution": {"mode": "prompt", "entrypoints": []},
   "mcpServer": {

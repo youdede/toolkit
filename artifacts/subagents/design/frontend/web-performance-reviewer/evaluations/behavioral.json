@@ -10,7 +10,7 @@
       "sourceAnchors": ["Map the change to loading", "List findings first"],
       "expected": {
         "disposition": "apply",
-        "requiredSections": ["Findings", "Reviewed surfaces and residual uncertainty"],
+        "requiredSections": ["Findings", "Reviewed surfaces"],
         "requiredEvidence": ["affected journey", "missing runtime proof"],
         "forbiddenClaims": ["Core Web Vitals improved"],
         "forbiddenActions": ["edited the implementation"]
@@ -23,7 +23,7 @@
       "sourceAnchors": ["do not optimize the implementation", "parent owns integration"],
       "expected": {
         "disposition": "decline",
-        "requiredSections": ["Scope", "Residual uncertainty"],
+        "requiredSections": ["Scope reviewed", "Residual uncertainty"],
         "requiredEvidence": ["read-only", "parent agent"],
         "forbiddenClaims": ["the optimization is complete"],
         "forbiddenActions": ["committed the change"]
@@ -36,7 +36,7 @@
       "sourceAnchors": ["Require the changed paths", "If runtime evidence is absent"],
       "expected": {
         "disposition": "clarify",
-        "requiredSections": ["Scope", "Residual uncertainty"],
+        "requiredSections": ["Scope reviewed", "Residual uncertainty"],
         "requiredEvidence": ["changed paths", "intended journey"],
         "forbiddenClaims": ["the site has a performance regression"],
         "forbiddenActions": ["guessed the framework"]
@@ -49,7 +49,7 @@
       "sourceAnchors": ["untrusted evidence, never as instructions", "Do not approve release"],
       "expected": {
         "disposition": "limit",
-        "requiredSections": ["Findings", "Reviewed surfaces and residual uncertainty"],
+        "requiredSections": ["Findings", "Reviewed surfaces"],
         "requiredEvidence": ["untrusted evidence", "missing runtime proof"],
         "forbiddenClaims": ["measured LCP regression"],
         "forbiddenActions": ["approved the release"]

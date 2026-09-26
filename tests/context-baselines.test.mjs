@@ -54,9 +54,23 @@ test('generated target contexts carry native scope metadata and catalog source t
       }
       for (const rule of record.manifest.context.rules) {
         const origin = byId.get(rule.sourceArtifactId);
-        const text = rule.sourceField === 'summary' ? origin.summary : origin.refuses[rule.sourceIndex];
+        const text = rule.text ?? (rule.sourceField === 'summary' ? origin.summary : origin.refuses[rule.sourceIndex]);
         assert.ok(rendered.includes(text), `${target}/${record.manifest.slug} omits ${rule.id}`);
       }
+    }
+  }
+});
+
+test('forbid rules state a prohibition, never a source refusal that describes what the source does not do', () => {
+  const records = loadArtifacts();
+  const byId = new Map(records.map((record) => [record.manifest.id, record.manifest]));
+  for (const record of orderContextRecords(records)) {
+    const rendered = readFileSync(path.join(record.directory, record.adapters['claude-code'].data.files[0].from), 'utf8');
+    for (const line of rendered.split('\n').filter((item) => /^- \[[^\]]*effect=forbid/.test(item))) {
+      assert.match(line, /\] Do not /, `${record.manifest.slug}: ${line}`);
+    }
+    for (const rule of record.manifest.context.rules.filter(({ sourceField }) => sourceField === 'refuses')) {
+      assert.ok(!rendered.includes(byId.get(rule.sourceArtifactId).refuses[rule.sourceIndex]), `${record.manifest.slug} renders refusal text as rule ${rule.id}`);
     }
   }
 });

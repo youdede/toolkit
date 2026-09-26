@@ -594,6 +594,9 @@ function validateKindContract(manifest, errors) {
         if (rule.sourceField === 'summary' && rule.effect !== 'require') errors.push(`${prefix} sourced from summary must require its action`);
         if (rule.sourceField === 'refuses' && (!Number.isInteger(rule.sourceIndex) || rule.sourceIndex < 0)) errors.push(`${prefix}.sourceIndex must select a refusal`);
         if (rule.sourceField === 'refuses' && rule.effect !== 'forbid') errors.push(`${prefix} sourced from refuses must forbid its action`);
+        // A refusal says what its source does not do; read as a rule it forbids the wrong thing.
+        if (rule.sourceField === 'refuses' && !/^Do not \S/.test(rule.text ?? '')) errors.push(`${prefix} sourced from refuses must state its prohibition in text starting with "Do not"`);
+        if (rule.text !== undefined && rule.sourceField !== 'refuses') errors.push(`${prefix}.text is only valid for rules sourced from refuses`);
       }
     }
     if (execution && (execution.mode !== 'prompt' || execution.entrypoints.length !== 0)) errors.push('contexts are pure content and must declare prompt execution without entrypoints');

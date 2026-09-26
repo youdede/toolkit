@@ -22,7 +22,7 @@ Build a JSON object with only these fields:
 - `goal`: one sentence — what the work is trying to achieve.
 - `pendingClaims`: claims made but not yet verified, as short strings.
 - `decisions`: decisions taken this session that a future session must not silently revisit.
-- `touchedFiles`: repository-relative paths only; the bridge drops absolute or escaping paths.
+- `touchedFiles`: repository-relative paths only; the bridge rejects the whole entry (`touched-file-unsafe`) if any path is absolute or escapes the repository.
 
 Never include secrets, tokens, file contents, or user data beyond these fields. The bridge redacts secret shapes, but you must not rely on redaction as permission.
 

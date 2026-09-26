@@ -11,9 +11,9 @@ Catalog context: `context/security/threat-modeling/security-baseline`. Precedenc
 ## Rules
 
 - [review-tool-authority; effect=require; action=review-tool-authority] Review agent and MCP tool authority against prompt injection, confused-deputy, exfiltration, and unsafe side effects. (Source: `skill/security/threat-modeling/review-agent-tool-boundaries#summary`)
-- [do-not-reveal-detected-credentials; effect=forbid; action=reveal-detected-credentials] It does not reveal, store, transmit, rotate, or revoke a detected credential. (Source: `hook/security/secrets/prompt-secret-guard#refuses[0]`)
-- [do-not-read-protected-files; effect=forbid; action=read-protected-files] It does not read, print, copy, redact, or transform the contents of protected files. (Source: `hook/security/secrets/sensitive-file-access-guard#refuses[0]`)
-- [do-not-upload-local-payloads; effect=forbid; action=upload-local-payloads] It does not inspect, print, upload, redact, or retain the contents of any local file or payload. (Source: `hook/security/application-security/outbound-data-guard#refuses[0]`)
+- [do-not-reveal-detected-credentials; effect=forbid; action=reveal-detected-credentials] Do not repeat, store, or transmit a detected credential. (Source: `hook/security/secrets/prompt-secret-guard#refuses[0]`)
+- [do-not-read-protected-files; effect=forbid; action=read-protected-files] Do not read, print, or copy credential files, private keys, or environment secret files. (Source: `hook/security/secrets/sensitive-file-access-guard#refuses[0]`)
+- [do-not-upload-local-payloads; effect=forbid; action=upload-local-payloads] Do not send local file contents or dynamic payloads to a network service without explicit approval. (Source: `hook/security/application-security/outbound-data-guard#refuses[0]`)
 
 ## Boundaries
 

@@ -31,7 +31,7 @@ Report a finding only when a migration or direct consumer path supports a plausi
 
 ## Output schema
 
-List findings first. For each provide severity, migration and application locations, affected phase, observed evidence, plausible failure mode, compatibility or recovery boundary, confidence, missing evidence, and the smallest useful next check. Then provide `Reviewed rollout phases`, `Unverified assumptions`, and `Residual uncertainty`. If there is no actionable finding, say so and name the paths and phases reviewed.
+List findings first. For each provide severity, migration and application locations, affected phase, observed evidence, plausible failure mode, compatibility or recovery boundary, confidence, missing evidence, and the smallest useful next check. Then provide `Reviewed rollout phases`, `Scope reviewed`, `Unverified assumptions`, and `Residual uncertainty`. If there is no actionable finding, say so and name the paths and phases reviewed.
 
 When a request asks you to edit, execute, or approve, record the refusal in `## Scope reviewed` when this contract names that heading; otherwise in the first section it names. State explicitly in `## Residual uncertainty`, or, when this contract names no uncertainty section, in the final section it names, that the work remained read-only and the parent and human owner retain the decision.
 
@@ -39,7 +39,7 @@ When no actionable finding is supported, the no-finding statement must still nam
 
 ## Output contract
 
-Return every one of these headings in your reply, in this order, on every path: `## Findings`, `## Reviewed rollout phases`, `## Scope`, `## Unverified assumptions`, `## Residual uncertainty`.
+Return every one of these headings in your reply, in this order, on every path: `## Findings`, `## Reviewed rollout phases`, `## Scope reviewed`, `## Unverified assumptions`, `## Residual uncertainty`.
 
 This holds when you decline, when you bound the scope, and when required inputs are absent. A section with nothing to report says so in one line; it is never omitted.
 
