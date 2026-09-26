@@ -124,3 +124,12 @@ test('schema helper rejects non-schema roots and excessive traversal depth', () 
   for (let index = 0; index < 66; index += 1) deep = { items: deep };
   assert.throws(() => compareJsonSchemas(deep, deep), /maximum depth/);
 });
+
+test('schema helper reports keywords outside its dedicated rules instead of staying silent', () => {
+  const before = { $schema: 'https://json-schema.org/draft/2020-12/schema', type: 'object', unevaluatedProperties: true, dependencies: { a: ['b'] }, additionalItems: true, description: 'old' };
+  const after = { $schema: 'http://json-schema.org/draft-04/schema#', type: 'object', unevaluatedProperties: false, additionalItems: false, description: 'new' };
+  const result = compareJsonSchemas(before, after);
+  const changed = result.signals.filter((s) => s.ruleId === 'SCHEMA_KEYWORD_CHANGED').map((s) => s.keyword).sort();
+  assert.deepEqual(changed, ['$schema', 'additionalItems', 'dependencies', 'unevaluatedProperties']);
+  assert.ok(result.limitations.some((line) => /annotation/i.test(line)));
+});
