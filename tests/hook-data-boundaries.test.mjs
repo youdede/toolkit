@@ -264,3 +264,39 @@ test('glob translation covers the exclusion forms the guard honours', () => {
   assert.equal(globToRegExp('file?.md').test('file1.md'), true);
   assert.equal(globToRegExp('{unbalanced'), null);
 });
+
+test('sensitive file guard honours gitignore for the Grep tool and ripgrep but not for grep -r', (context) => {
+  const build = (ignore) => {
+    const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-sensitive-gitignore-'));
+    context.after(() => rmSync(directory, { recursive: true, force: true }));
+    assert.equal(spawnSync('git', ['init', '-q'], { cwd: directory }).status, 0);
+    if (ignore) writeFileSync(path.join(directory, '.gitignore'), '.env\nnode_modules/\n');
+    writeFileSync(path.join(directory, '.env'), 'IGNORED_SECRET=never-print-this\n');
+    mkdirSync(path.join(directory, 'src'));
+    writeFileSync(path.join(directory, 'src', 'a.js'), 'export {};\n');
+    mkdirSync(path.join(directory, 'node_modules'));
+    for (let index = 0; index < 20001; index += 1) writeFileSync(path.join(directory, 'node_modules', `f${index}.js`), '');
+    return directory;
+  };
+  const decide = (directory, toolName, toolInput) => {
+    const input = { cwd: directory, tool_name: toolName, tool_input: toolInput };
+    return evaluateSensitive(input, collectRuntimeContext(input));
+  };
+
+  const ignored = build(true);
+  assert.equal(decide(ignored, 'Grep', { pattern: 'KEY' }).exitCode, 0);
+  assert.equal(decide(ignored, 'Bash', { command: 'rg --hidden KEY' }).exitCode, 0);
+  assert.equal(decide(ignored, 'Bash', { command: 'rg KEY .' }).exitCode, 0);
+  for (const command of ['rg -uu KEY .', 'rg -u --hidden KEY .', 'rg --hidden --no-ignore-vcs KEY .']) {
+    assert.equal(decide(ignored, 'Bash', { command }).ruleId, 'sensitive-path-recursive', command);
+  }
+  assert.equal(decide(ignored, 'Bash', { command: 'grep -r KEY .' }).ruleId, 'sensitive-path-recursive');
+  // A nested repository is opaque to git ls-files, so its tree is walked without gitignore rules.
+  mkdirSync(path.join(ignored, 'vendor'));
+  assert.equal(spawnSync('git', ['init', '-q'], { cwd: path.join(ignored, 'vendor') }).status, 0);
+  writeFileSync(path.join(ignored, 'vendor', '.env'), 'NESTED_SECRET=never-print-this\n');
+  assert.equal(decide(ignored, 'Grep', { pattern: 'KEY' }).ruleId, 'sensitive-path-recursive');
+
+  const unignored = build(false);
+  assert.equal(decide(unignored, 'Grep', { pattern: 'KEY' }).ruleId, 'sensitive-path-recursive');
+});

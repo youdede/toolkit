@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { lstatSync, readdirSync, realpathSync, statSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -35,6 +36,7 @@ const OPTION_PATHS = new Map([
 ]);
 
 export const MAX_RECURSIVE_ENTRIES = 20000;
+export const MAX_GITIGNORE_ENTRIES = 200000;
 // Options whose value is the next token; without this the value would be read as a path operand.
 const VALUE_OPTIONS = new Map([
   ['grep', new Set(['--exclude', '--exclude-dir', '--include', '-d', '--directories', '-m', '--max-count', '-A', '-B', '-C', '--context'])],
@@ -83,6 +85,7 @@ function recursiveReadMode(executable, tokens) {
     if (!recursive) return null;
     return {
       hidden: true,
+      respectsGitignore: false,
       excludes: compileGlobs(optionValues(tokens, new Set(['--exclude']))),
       excludeDirs: compileGlobs(optionValues(tokens, new Set(['--exclude-dir']))),
       includes: compileGlobs(optionValues(tokens, new Set(['--include'])))
@@ -92,21 +95,22 @@ function recursiveReadMode(executable, tokens) {
     const globs = optionValues(tokens, new Set(['-g', '--glob']));
     return {
       hidden: values.some((value) => value === '--hidden' || value === '-.' || /^-u{2,}$/.test(value)),
+      respectsGitignore: !values.some((value) => /^-u+$/.test(value) || value === '--no-ignore' || value === '--no-ignore-vcs'),
       excludes: compileGlobs(globs.filter((glob) => glob.startsWith('!')).map((glob) => glob.slice(1))),
       excludeDirs: [],
       includes: compileGlobs(globs.filter((glob) => !glob.startsWith('!')))
     };
   }
   if (executable === 'tar') {
-    return { hidden: true, excludes: compileGlobs(optionValues(tokens, new Set(['--exclude']))), excludeDirs: [], includes: [] };
+    return { hidden: true, respectsGitignore: false, excludes: compileGlobs(optionValues(tokens, new Set(['--exclude']))), excludeDirs: [], includes: [] };
   }
   if (executable === 'cp') {
     const recursive = values.some((value) => /^-[A-Za-z]*[rRa][A-Za-z]*$/.test(value) || ['--recursive', '--archive'].includes(value));
-    return recursive ? { hidden: true, excludes: [], excludeDirs: [], includes: [] } : null;
+    return recursive ? { hidden: true, respectsGitignore: false, excludes: [], excludeDirs: [], includes: [] } : null;
   }
   if (executable === 'zip') {
     const recursive = values.some((value) => /^-[A-Za-z]*[rR][A-Za-z]*$/.test(value) || value === '--recurse-paths');
-    return recursive ? { hidden: true, excludes: [], excludeDirs: [], includes: [] } : null;
+    return recursive ? { hidden: true, respectsGitignore: false, excludes: [], excludeDirs: [], includes: [] } : null;
   }
   return null;
 }
@@ -135,6 +139,44 @@ export function directoryHoldsSensitive(root, options) {
       if (options.includes.length && !options.includes.some((pattern) => pattern.test(entry.name))) continue;
       if (isSensitivePath(absolute)) return { sensitive: true };
     }
+  }
+  return { sensitive: false };
+}
+
+function cleanGitEnvironment(environment = process.env) {
+  return Object.fromEntries(Object.entries(environment).filter(([name]) => !/^GIT_/i.test(name)));
+}
+
+// Lists what a gitignore-aware search would visit. Returns null when git cannot answer, so the
+// caller falls back to the gitignore-unaware walk and sees more files, never fewer.
+export function gitVisibleHoldsSensitive(root, options) {
+  const result = spawnSync('git', ['-c', 'core.fsmonitor=false', '-C', root, 'ls-files', '-z', '-s', '--cached', '--others', '--exclude-standard'], {
+    encoding: 'utf8', env: cleanGitEnvironment(), maxBuffer: MAX_GITIGNORE_ENTRIES * 256, shell: false, timeout: 3000, windowsHide: true
+  });
+  if (result.error?.code === 'ENOBUFS') return { error: true };
+  if (result.error || result.status !== 0) return null;
+  const entries = result.stdout.split('\0').filter(Boolean);
+  if (entries.length > MAX_GITIGNORE_ENTRIES) return { error: true };
+  for (const entry of entries) {
+    // `-s` prefixes tracked entries with mode, object, and stage; untracked entries are bare paths.
+    const staged = /^(\d{6}) [0-9a-f]+ \d\t(.*)$/s.exec(entry);
+    const file = staged ? staged[2] : entry;
+    const parts = file.split('/').filter(Boolean);
+    if (!options.hidden && parts.some((part) => part.startsWith('.'))) continue;
+    if (parts.slice(0, -1).some((part) => options.excludeDirs.some((pattern) => pattern.test(part)))) continue;
+    const absolute = path.join(root, file);
+    // Submodules (mode 160000) and untracked nested repositories (trailing slash) are opaque to
+    // this listing, so they are walked without gitignore rules.
+    if (staged?.[1] === '160000' || file.endsWith('/')) {
+      if (options.excludeDirs.some((pattern) => pattern.test(parts.at(-1)))) continue;
+      const nested = directoryHoldsSensitive(absolute, options);
+      if (nested.sensitive || nested.error) return nested;
+      continue;
+    }
+    const name = parts.at(-1);
+    if (options.excludes.some((pattern) => pattern.test(name))) continue;
+    if (options.includes.length && !options.includes.some((pattern) => pattern.test(name))) continue;
+    if (isSensitivePath(absolute)) return { sensitive: true };
   }
   return { sensitive: false };
 }
@@ -402,7 +444,7 @@ export function collectCandidates(input) {
     if (name === 'grep') {
       const grepTargets = direct.values.length ? direct.values : [{ value: '.', dynamic: false }];
       const include = typeof data?.glob === 'string' ? compileGlobs([data.glob]) : [];
-      candidates = grepTargets.map((candidate) => ({ ...candidate, recursive: { hidden: true, excludes: [], excludeDirs: [], includes: include } }));
+      candidates = grepTargets.map((candidate) => ({ ...candidate, recursive: { hidden: true, respectsGitignore: true, excludes: [], excludeDirs: [], includes: include } }));
     }
     return {
       invalid: direct.invalid || missing,
@@ -518,7 +560,8 @@ export function collectRuntimeContext(input) {
       let metadata;
       try { metadata = statSync(fact.resolvedPath); } catch { return { error: true }; }
       if (!metadata.isDirectory()) return fact;
-      return { ...fact, recursive: directoryHoldsSensitive(fact.resolvedPath, candidate.recursive) };
+      const visible = candidate.recursive.respectsGitignore ? gitVisibleHoldsSensitive(fact.resolvedPath, candidate.recursive) : null;
+      return { ...fact, recursive: visible ?? directoryHoldsSensitive(fact.resolvedPath, candidate.recursive) };
     })
   };
 }
