@@ -12,6 +12,11 @@ const MAX_MESSAGE_BYTES = 1024 * 1024;
 const MAX_PROFILE_BYTES = 64 * 1024;
 const MAX_RESULT_BYTES = 256 * 1024;
 const MAX_WALK_ENTRIES = 2000;
+// Newest first. Only versions whose initialize, tools/list, and tools/call shapes this server
+// implements unchanged; the source and date are in the pull request. 2026-07-28 is excluded because
+// it removes initialize. Not full support: 2025-03-26 requires receiving JSON-RPC batches, which
+// this server rejects as an invalid request.
+export const SUPPORTED_PROTOCOL_VERSIONS = Object.freeze(['2025-11-25', '2025-06-18', '2025-03-26', '2024-11-05']);
 const PRIVATE_DIRECTORIES = new Set(['.git', '.youdede', '.youdede-toolkit']);
 const isPrivateDirectory = (name) => PRIVATE_DIRECTORIES.has(name.toLowerCase());
 const SAFE_ENV_SUFFIXES = ['.example', '.sample', '.template', '.dist'];
@@ -223,7 +228,9 @@ export async function handleMessage(state, message) {
   if (message.method === 'notifications/initialized') return;
   if (message.method === 'initialize') {
     return response(message.id, {
-      protocolVersion: typeof message.params?.protocolVersion === 'string' ? message.params.protocolVersion : '2025-03-26',
+      protocolVersion: SUPPORTED_PROTOCOL_VERSIONS.includes(message.params?.protocolVersion)
+        ? message.params.protocolVersion
+        : SUPPORTED_PROTOCOL_VERSIONS[0],
       capabilities: { tools: { listChanged: false } },
       serverInfo: { name: state.profile.serverName, version: '1.0.0' }
     });
@@ -248,8 +255,10 @@ async function main() {
   for await (const line of input) {
     if (!line.trim()) continue;
     if (Buffer.byteLength(line) > MAX_MESSAGE_BYTES) { errorResponse(null, -32600, 'Request exceeds the message budget'); continue; }
-    try { await handleMessage(state, JSON.parse(line)); }
-    catch { errorResponse(null, -32600, 'Invalid request'); }
+    let message;
+    try { message = JSON.parse(line); } catch { errorResponse(null, -32700, 'Parse error'); continue; }
+    try { await handleMessage(state, message); }
+    catch { errorResponse(message?.id ?? null, -32600, 'Invalid request'); }
   }
 }
 
