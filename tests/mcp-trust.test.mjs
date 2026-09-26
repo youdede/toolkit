@@ -7,6 +7,7 @@ import path from 'node:path';
 import { loadArtifacts } from '../scripts/lib/catalog.mjs';
 import { doctor, installArtifact, planArtifactInstall, removeArtifact } from '../scripts/lib/install.mjs';
 import { compareObservedTools, verifyMcpRecord } from '../scripts/verify-mcp.mjs';
+import { SUPPORTED_PROTOCOL_VERSIONS } from '../scripts/runtime/readonly-mcp-server.mjs';
 import { evaluate as evaluateGuard } from '../artifacts/hooks/security/network-control/mcp-capability-drift-guard/targets/claude-code/mcp-capability-drift-guard.mjs';
 import { buildProposal } from '../artifacts/commands/development/agent-tooling/re-pin-mcp-tools/scripts/propose-repin.mjs';
 
@@ -131,7 +132,7 @@ test('local MCP runtime lists pinned tools and confines file reads', (context) =
 
   const malformed = spawnSync(process.execPath, [runtime, '--profile', '.youdede/mcp/workspace-files-readonly/server.json'], { cwd: directory, input: '{malformed\n', encoding: 'utf8' });
   assert.equal(malformed.status, 0);
-  assert.match(malformed.stdout, /Invalid request/);
+  assert.match(malformed.stdout, /"code":-32700/);
 });
 
 test('capability guard and re-pin proposal expose exact drift without raw descriptions', () => {
@@ -183,4 +184,20 @@ test('re-pin command entrypoints and proposal boundaries are exercised', () => {
   assert.notDeepEqual(proposal.previousTools, proposal.proposedTools); // negative: drift stays visible
   assert.throws(() => buildProposal(registry, 'unknown', observation)); // malformed: unknown servers refuse
   assert.throws(() => buildProposal(registry, 'youdede-workspace-files-readonly', { tools: [] })); // boundary: empty inventories refuse
+});
+
+test('MCP runtime negotiates a supported protocol version and reports parse errors', (context) => {
+  const workspace = mkdtempSync(path.join(os.tmpdir(), 'youdede-mcp-protocol-'));
+  context.after(() => rmSync(workspace, { recursive: true, force: true }));
+  writeFileSync(path.join(workspace, 'profile.json'), readFileSync('artifacts/mcp-servers/development/agent-tooling/workspace-files-readonly/server.json'));
+  const input = [
+    JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '1999-01-01' } }),
+    JSON.stringify({ jsonrpc: '2.0', id: 2, method: 'initialize', params: { protocolVersion: SUPPORTED_PROTOCOL_VERSIONS.at(-1) } }),
+    'not json'
+  ].join('\n');
+  const run = spawnSync(process.execPath, [path.resolve('scripts/runtime/readonly-mcp-server.mjs'), '--profile', 'profile.json'], { cwd: workspace, input: `${input}\n`, encoding: 'utf8' });
+  const [first, second, third] = run.stdout.trim().split('\n').map((line) => JSON.parse(line));
+  assert.equal(first.result.protocolVersion, SUPPORTED_PROTOCOL_VERSIONS[0]);
+  assert.equal(second.result.protocolVersion, SUPPORTED_PROTOCOL_VERSIONS.at(-1));
+  assert.equal(third.error.code, -32700);
 });
