@@ -135,6 +135,20 @@ confirm
   assert.equal(clean.status, 0, clean.stdout + clean.stderr);
 });
 
+test('work graph validator does not report a cycle for a missing blocker or a self-block', () => {
+  const directory = scratch();
+  const file = path.join(directory, 'graph.json');
+  writeFileSync(file, JSON.stringify({ tickets: [
+    { id: 'a', title: 'Alpha', blockedBy: ['missing'] },
+    { id: 'b', title: 'Beta', blockedBy: ['b'] },
+    { id: 'c', title: 'Gamma', blockedBy: ['d'] },
+    { id: 'd', title: 'Delta', blockedBy: ['c'] }
+  ] }));
+  const result = run('artifacts/skills/operations/reviewability/decompose-dependent-work-slices/scripts/validate-work-graph.mjs', [file]);
+  assert.equal(result.status, 1);
+  assert.deepEqual(JSON.parse(result.stdout).errors, ['a references missing blocker missing', 'b blocks itself', 'dependency cycle includes: c, d']);
+});
+
 test('TypeScript boundary inspector distinguishes entry points from deep imports', () => {
   const directory = scratch();
   const packages = path.join(directory, 'packages');

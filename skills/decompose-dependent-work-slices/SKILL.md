@@ -15,7 +15,7 @@ Each work item must deliver an observable outcome through every required layer, 
 2. Draft the thinnest end-to-end slice that proves the riskiest path. Continue with independently demoable slices; place preparatory work only where no outcome can remain green without it.
 3. For broad mechanical migrations, use expand, bounded migration batches, and contract removal rather than pretending each layer is an end-to-end feature.
 4. Give every item a stable id, outcome, non-goals, inputs, acceptance evidence, rollback or recovery note, and explicit blockers. Put implementation hints below the contract and label them non-binding.
-5. Save the draft graph as JSON and run `node scripts/validate-work-graph.mjs <graph.json>` from this installed skill. Review its topological order and ready frontier before seeking approval or publishing.
+5. Save the draft graph as JSON in the form `{ "tickets": [{ "id": "lower-hyphen-id", "title": "At least three characters", "blockedBy": ["other-id"] }] }`; the other item fields may be added to each ticket and are ignored by the check. Resolve `<skill-root>` to the directory containing this loaded `SKILL.md` and run `node "<skill-root>/scripts/validate-work-graph.mjs" <graph.json>`. Review its topological order and ready frontier before seeking approval or publishing.
 
 ## Output contract
 
