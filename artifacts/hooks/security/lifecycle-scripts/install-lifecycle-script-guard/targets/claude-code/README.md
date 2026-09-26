@@ -1,10 +1,10 @@
 # Install lifecycle script guard for Claude Code
 
-This hook protects the automatic execution boundary of package installation. It compares lifecycle script keys structurally and blocks only net-new executable entries.
+This hook protects the automatic execution boundary of package installation. It compares lifecycle script keys structurally and blocks net-new lifecycle entries and changes to the command of an existing lifecycle entry.
 
 Ordinary test, build, lint, and development scripts are outside this boundary. Removing or preserving an existing lifecycle entry is allowed.
 
-Version one scans JSON package manifests. It has no project-writable allowlist, environment bypass, or inline suppression.
+It scans JSON package manifests written with Write, Edit, or MultiEdit, and Bash commands `npm pkg set scripts.<lifecycle>=…` (also `scripts[<lifecycle>]` and a JSON `scripts=` value) and `npm set-script <lifecycle>`, read through the shared shell analysis. Other shell edits of package.json (`jq`, redirection, editors) are not inspected. It has no project-writable allowlist, environment bypass, or inline suppression.
 
 ## Refusals
 

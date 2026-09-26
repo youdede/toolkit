@@ -16,7 +16,7 @@ function sourceType(specifier) {
   const value = specifier.trim();
   if (/^(?:git(?:\+[^:]+)?|github|gitlab|bitbucket):/i.test(value) || /^git@[^:]+:/i.test(value)) return 'git-source';
   if (/^(?:https?|ftp):/i.test(value)) return 'remote-archive';
-  if (/^(?:file|link|workspace|portal|patch):/i.test(value) || /^(?:\.{1,2}[\\/]|[/\\])/.test(value)) return 'local-or-virtual-source';
+  if (/^(?:file|link|workspace|portal|patch):/i.test(value) || /^(?:\.{1,2}[\\/]|~[\\/]|[/\\])/.test(value)) return 'local-or-virtual-source';
   if (/^npm:/i.test(value)) return 'registry-alias';
   if (/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+(?:#.*)?$/.test(value)) return 'repository-shorthand';
   if (/[\0\r\n]/.test(value) || value.includes('${')) return 'dynamic-source';
@@ -37,7 +37,8 @@ export function scanDependencySources(content) {
       const specifier = dependencies[name];
       if (typeof specifier !== 'string') throw new Error('dependency specifier must be text');
       const type = sourceType(specifier);
-      if (type) findings.push({ ruleId: 'dependency-source-bypass', identity: `${field}:${name}:${type}` });
+      // The specifier is part of the identity: moving an existing source elsewhere is a new source.
+      if (type) findings.push({ ruleId: 'dependency-source-bypass', identity: `${field}:${name}:${type}:${specifier.trim()}` });
     }
   }
   const visitOverride = (value, location, depth = 0) => {
@@ -78,10 +79,14 @@ export function collectContext(input, options = {}) {
   const requested = payload.file_path || payload.file;
   if (!isPackageManifest(requested)) return { relevant: false };
   try {
-    const root = realpathSync(path.resolve(options.cwd || process.env.CLAUDE_PROJECT_DIR || input?.cwd || process.cwd()));
-    const target = path.resolve(root, requested);
-    const relative = path.relative(root, target);
-    if (relative === '..' || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative)) throw new Error('manifest leaves project');
+    // An absolute path may name the project through a symlink (/var and /private/var on macOS), so
+    // it is compared with the project path as given and with its real path.
+    const lexical = path.resolve(options.cwd || process.env.CLAUDE_PROJECT_DIR || input?.cwd || process.cwd());
+    const root = realpathSync(lexical);
+    const relative = [lexical, root].map((base) => path.relative(base, path.resolve(base, requested)))
+      .find((candidate) => candidate !== '..' && !candidate.startsWith(`..${path.sep}`) && !path.isAbsolute(candidate));
+    if (relative === undefined) throw new Error('manifest leaves project');
+    const target = path.join(root, relative);
     let cursor = root;
     for (const part of relative.split(path.sep).filter(Boolean)) {
       cursor = path.join(cursor, part);
@@ -134,4 +139,4 @@ async function run() {
   }
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) run();
+if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) run();

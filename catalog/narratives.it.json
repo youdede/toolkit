@@ -1,5 +1,5 @@
 {
-  "sourceHash": "b68adfb80366dcaf7fa8d34911336b8a5b343925ce6ae0aafbb4244316c08354",
+  "sourceHash": "5552fe97bf472e73b28359bd2bfaa40d108a3f4e423079e6790c7f1a2ed88e25",
   "narratives": {
     "abuse-resistance-analyst": {
       "summary": "Analizza una singola operazione per individuare costi moltiplicati da input controllati da un attaccante, richieste a cascata ed elusione delle quote.",
@@ -1929,14 +1929,14 @@
       ]
     },
     "mcp-capability-drift-guard": {
-      "summary": "Blocca le chiamate allo strumento MCP del toolkit quando il server, il nome dello strumento o la descrizione osservata non sono fissati.",
+      "summary": "Blocca le chiamate MCP del toolkit il cui server o strumento non è fissato nel registro dei pin, o la cui descrizione fornita differisce dal pin.",
       "description": "Un controllo pre-tool fail-closed deterministico che accetta solo identità curate del server e dello strumento MCP di Youdede da un registro di pin generato e rifiuta capacità sconosciute o con deriva della descrizione.",
       "purposes": [
         "Confronta una chiamata allo strumento MCP del toolkit con qualsiasi inventario osservato con il registro di pin generato."
       ],
       "refuses": [
         "Non si fida delle annotazioni MCP, dei nomi del server o delle descrizioni degli strumenti che non sono presenti nel registro di pin generato.",
-        "Non accetta silenziosamente strumenti aggiunti, rimossi, rinominati o con deriva della descrizione da server curati.",
+        "Non accetta silenziosamente strumenti aggiunti, rimossi o rinominati da server curati, né strumenti con una descrizione cambiata quando il client fornisce la descrizione.",
         "Non allarga l'autorità di uscita, segreto, filesystem, sottoprocesso o modifica per un server MCP."
       ]
     },

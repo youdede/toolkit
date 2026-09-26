@@ -7,9 +7,15 @@ import { fileURLToPath } from 'node:url';
 export const MAX_STDIN_BYTES = 1024 * 1024;
 export const MAX_FILE_BYTES = 512 * 1024;
 
-function workflowPath(value) {
-  if (typeof value !== 'string' || value.includes('\0')) return false;
-  return /^\.github\/workflows\/[^/]+\.ya?ml$/i.test(value.replaceAll('\\', '/').replace(/^\.\//, ''));
+// Claude Code passes absolute file paths, and its cwd follows `cd`, so the workflow is recognized
+// from the resolved path: <root>/.github/workflows/<name>.yml, whatever the current directory.
+const WORKFLOW_PATH = /^(.*?)[\\/]\.github[\\/]workflows[\\/][^\\/]+\.ya?ml$/i;
+
+function workflowTarget(value, base) {
+  if (typeof value !== 'string' || !value || value.includes('\0')) return null;
+  const target = path.resolve(base, value);
+  const match = WORKFLOW_PATH.exec(target);
+  return match ? { target, root: match[1] || path.parse(target).root } : null;
 }
 
 function stripComment(line) {
@@ -24,13 +30,45 @@ function stripComment(line) {
   return line;
 }
 
+function immutableImage(reference) {
+  return /@sha256:[a-f0-9]{64}$/i.test(reference);
+}
+
+// A finding's identity is its rule and normalized reference, so replacing one mutable reference
+// with another is a new finding.
 export function scanReferences(content) {
   if (typeof content !== 'string' || Buffer.byteLength(content) > MAX_FILE_BYTES) {
     throw new Error('workflow content is invalid or oversized');
   }
   const findings = [];
+  const keys = [];
+  const add = (ruleId, reference, offset) => findings.push({ ruleId, reference, line: offset + 1 });
+  const checkImage = (reference, offset) => {
+    if (!reference || reference.startsWith('{') || reference.startsWith('|') || reference.startsWith('>')) return;
+    if (reference.includes('${{')) add('ci-reference-dynamic', reference, offset);
+    else if (!immutableImage(reference)) add('ci-container-reference-mutable', reference, offset);
+  };
   for (const [offset, raw] of content.split(/\r?\n/).entries()) {
     const line = stripComment(raw);
+    // Mapping keys by indentation: jobs.<id>.container and jobs.<id>.services.<id>.image.
+    const key = /^(\s*)(?:-\s+)?([A-Za-z0-9_.-]+)\s*:\s*(.*?)\s*$/.exec(line);
+    if (key) {
+      const indent = key[1].length;
+      while (keys.length && keys.at(-1).indent >= indent) keys.pop();
+      keys.push({ name: key[2], indent });
+      const names = keys.map((entry) => entry.name);
+      const value = key[3].replace(/^(['"])(.*)\1$/, '$2').trim();
+      const underJob = names[0] === 'jobs' && names.length >= 3;
+      if (underJob && names.length === 3 && key[2] === 'container') {
+        const flow = /(?:^\{|,)\s*image\s*:\s*([^,}]+)/.exec(value);
+        checkImage(flow ? flow[1].replace(/^(['"])(.*)\1$/, '$2').trim() : value, offset);
+      }
+      if (underJob && key[2] === 'image' && ((names.length === 4 && names[2] === 'container') || (names.length === 5 && names[2] === 'services'))) checkImage(value, offset);
+      if (underJob && names.length === 4 && names[2] === 'services') {
+        const flow = /(?:^\{|,)\s*image\s*:\s*([^,}]+)/.exec(value);
+        if (flow) checkImage(flow[1].replace(/^(['"])(.*)\1$/, '$2').trim(), offset);
+      }
+    }
     const ordinary = /^\s*(?:-\s*)?uses\s*:\s*(.*?)\s*$/i.exec(line);
     const flow = /(?:^|[{,])\s*uses\s*:\s*([^,}]+)(?=\s*[,}])/i.exec(line);
     const match = ordinary || flow;
@@ -38,27 +76,28 @@ export function scanReferences(content) {
     const reference = match[1].replace(/^(['"])(.*)\1$/, '$2').trim();
     if (reference.startsWith('./')) continue;
     if (reference.includes('${{')) {
-      findings.push({ ruleId: 'ci-reference-dynamic', line: offset + 1 });
+      add('ci-reference-dynamic', reference, offset);
       continue;
     }
     if (reference.toLowerCase().startsWith('docker://')) {
-      if (!/@sha256:[a-f0-9]{64}$/i.test(reference)) findings.push({ ruleId: 'ci-container-reference-mutable', line: offset + 1 });
+      if (!immutableImage(reference)) add('ci-container-reference-mutable', reference, offset);
       continue;
     }
     const delimiter = reference.lastIndexOf('@');
     const revision = delimiter < 0 ? '' : reference.slice(delimiter + 1);
-    if (!/^[a-f0-9]{40}$/i.test(revision)) findings.push({ ruleId: 'ci-reference-mutable', line: offset + 1 });
+    if (!/^[a-f0-9]{40}$/i.test(revision)) add('ci-reference-mutable', reference, offset);
   }
   return findings;
 }
 
 function subtract(before, after) {
+  const identity = (finding) => `${finding.ruleId}\0${finding.reference}`;
   const counts = new Map();
-  for (const finding of before) counts.set(finding.ruleId, (counts.get(finding.ruleId) || 0) + 1);
+  for (const finding of before) counts.set(identity(finding), (counts.get(identity(finding)) || 0) + 1);
   return after.filter((finding) => {
-    const count = counts.get(finding.ruleId) || 0;
+    const count = counts.get(identity(finding)) || 0;
     if (count === 0) return true;
-    counts.set(finding.ruleId, count - 1);
+    counts.set(identity(finding), count - 1);
     return false;
   });
 }
@@ -89,14 +128,12 @@ function applyEdit(existing, edit) {
 export function collectContext(input, cwd = process.cwd()) {
   const toolInput = input?.tool_input || input?.toolInput || {};
   const rawPath = toolInput.file_path || toolInput.file;
-  if (!workflowPath(rawPath)) return { relevant: false };
+  const workflow = workflowTarget(rawPath, path.resolve(process.env.CLAUDE_PROJECT_DIR || input?.cwd || cwd));
+  if (!workflow) return { relevant: false };
   try {
-    const root = realpathSync(path.resolve(process.env.CLAUDE_PROJECT_DIR || input?.cwd || cwd));
-    const target = path.resolve(root, rawPath);
-    const relative = path.relative(root, target);
-    if (relative === '..' || relative.startsWith('..' + path.sep) || path.isAbsolute(relative)) throw new Error('path escape');
+    const { root, target } = workflow;
     let cursor = root;
-    for (const part of relative.split(path.sep).filter(Boolean)) {
+    for (const part of path.relative(root, target).split(path.sep).filter(Boolean)) {
       cursor = path.join(cursor, part);
       if (!existsSync(cursor)) break;
       if (lstatSync(cursor).isSymbolicLink()) throw new Error('workflow path traverses a symlink');
@@ -127,21 +164,6 @@ export function evaluate(_input, context = {}) {
   }
 }
 
-function readInput() {
-  const chunks = [];
-  let size = 0;
-  for (;;) {
-    const buffer = Buffer.alloc(64 * 1024);
-    const count = process.stdin.read(buffer.length);
-    if (count === null) break;
-    const chunk = Buffer.isBuffer(count) ? count : Buffer.from(count);
-    size += chunk.length;
-    if (size > MAX_STDIN_BYTES) throw new Error('input exceeds the bounded limit');
-    chunks.push(chunk);
-  }
-  return Buffer.concat(chunks).toString('utf8');
-}
-
 async function main() {
   try {
     const raw = await new Promise((resolve, reject) => {
@@ -164,4 +186,4 @@ async function main() {
   }
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
+if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) main();
