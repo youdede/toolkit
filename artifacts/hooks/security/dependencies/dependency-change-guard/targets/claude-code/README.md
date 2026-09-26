@@ -4,7 +4,7 @@ The hook protects three narrow boundaries:
 
 1. Write/Edit cannot directly modify a recognized lockfile; use the owning package manager so the result is regenerated.
 2. Bash cannot use selected flags that explicitly bypass lockfile generation, dependency resolution, platform requirements, or secure package transport.
-3. Before `git commit`, a changed dependency manifest is paired with the nearest existing compatible lockfile. When dependency-relevant content changed, that lockfile must also be staged.
+3. Before `git commit`, a changed dependency manifest is paired with the nearest existing compatible lockfile. When dependency-relevant content changed, that lockfile must also be committed. When the commit takes working-tree content (`-a`, a pathspec, or `git add` earlier in the same command), changed working-tree manifests are compared too, and a lockfile changed in the working tree counts as committed. Lockfile edits are recognized by file name even outside the current directory.
 
 Commit consistency supports `package.json`, `composer.json`, `Cargo.toml`, `pyproject.toml`, `Gemfile`, and `go.mod`. JSON manifests are structurally compared. Python manifests use bounded dependency-section fingerprints. Cargo supports ordinary, development, build, target-specific, and `[workspace.dependencies]` forms by conservatively requiring the nearest existing `Cargo.lock` for any staged `Cargo.toml` change. This is a consistency check, not a vulnerability audit or complete package-manager model.
 
