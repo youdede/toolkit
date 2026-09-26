@@ -14,6 +14,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 - The npm package no longer contains the `skills/` and `plugins/` marketplace copies, the marketplace manifests, or the README images; native marketplaces read them from the repository. The packed size drops from about 4.8 MB to about 1.4 MB, and the CLI commands behave identically on the extracted package.
 - Repository validation rejects a subagent whose body differs between targets, apart from the Copilot turn-budget line.
 - Behavioral evaluation coverage now includes every skill, subagent, command, and context. Release benchmark inputs, package verification, readiness counts, catalog documentation, and naming/authoring guidance use the same six-kind model.
+- `resume-session-work` is published only for Claude Code. Its Gemini CLI, GitHub Copilot, Cursor, and OpenCode adapters are withdrawn, as the Codex one already was, because the session ledger and its hooks install only for Claude Code; on those runtimes the skill had nothing to read.
 - Command documentation now states the actual enforcement boundary: deterministic preconditions are a mandatory first prompt action, not a pre-invocation parser supplied by the native slash-command runtime.
 
 ### Fixed

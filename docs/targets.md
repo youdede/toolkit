@@ -9,10 +9,10 @@ Support is declared per artifact. A missing adapter is an intentional refusal, n
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- |
 | Claude Code | 167 | 63 | 62 | 10 | 8 | 5 | `.claude` | `~/.claude` |
 | Codex | 166 | 22 | 0 | 0 | 0 | 0 | skills: `.agents`; hooks/agents: `.codex` | skills: `~/.agents`; hooks/agents: `~/.codex` |
-| Gemini CLI | 167 | 22 | 62 | 0 | 0 | 0 | `.gemini` | `~/.gemini` |
-| GitHub Copilot | 167 | 0 | 62 | 0 | 8 | 0 | `.github` | `$COPILOT_HOME` or `~/.copilot` |
-| Cursor | 167 | 23 | 0 | 0 | 8 | 5 | `.cursor` | `~/.cursor` |
-| OpenCode | 167 | 22 | 50 | 0 | 0 | 0 | `.opencode` | `~/.config/opencode` |
+| Gemini CLI | 166 | 22 | 62 | 0 | 0 | 0 | `.gemini` | `~/.gemini` |
+| GitHub Copilot | 166 | 0 | 62 | 0 | 8 | 0 | `.github` | `$COPILOT_HOME` or `~/.copilot` |
+| Cursor | 166 | 23 | 0 | 0 | 8 | 5 | `.cursor` | `~/.cursor` |
+| OpenCode | 166 | 22 | 50 | 0 | 0 | 0 | `.opencode` | `~/.config/opencode` |
 <!-- /stat-table -->
 
 Context adapters are intentionally project-scoped. Claude Code receives `.claude/rules/youdede/*.md`,
@@ -23,7 +23,7 @@ surface for each toolkit context. Numeric filename prefixes preserve the toolkit
 precedence order; where a runtime does not define cross-file precedence, install-set validation
 rejects known context/hook contradictions instead of claiming the runtime resolves them.
 
-Every published skill adapter uses the runtime's native `skills/<slug>/SKILL.md` location and carries its scripts or references through the same installation. Only Codex receives `agents/openai.yaml`. `resume-session-work` is withheld from Codex because its hash-chained ledger and lifecycle hooks are not available there; installing only its prompt would fail the skill's own deterministic precondition.
+Every published skill adapter uses the runtime's native `skills/<slug>/SKILL.md` location and carries its scripts or references through the same installation. Only Codex receives `agents/openai.yaml`. `resume-session-work` is published only for Claude Code: its hash-chained ledger library and lifecycle hooks install only there, so on Codex, Gemini CLI, GitHub Copilot, Cursor, and OpenCode its prompt alone would fail the skill's own deterministic precondition.
 
 ## Specialist profiles
 

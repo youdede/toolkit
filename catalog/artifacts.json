@@ -25766,34 +25766,10 @@
         "It does not rewrite, repair, or compact the append-only ledger; corruption is reported, never fixed."
       ],
       "targets": [
-        "claude-code",
-        "cursor",
-        "gemini-cli",
-        "github-copilot",
-        "opencode"
+        "claude-code"
       ],
       "targetCompatibility": {
         "claude-code": {
-          "stability": "stable",
-          "limitations": [],
-          "bindings": []
-        },
-        "cursor": {
-          "stability": "stable",
-          "limitations": [],
-          "bindings": []
-        },
-        "gemini-cli": {
-          "stability": "stable",
-          "limitations": [],
-          "bindings": []
-        },
-        "github-copilot": {
-          "stability": "stable",
-          "limitations": [],
-          "bindings": []
-        },
-        "opencode": {
           "stability": "stable",
           "limitations": [],
           "bindings": []
@@ -25803,22 +25779,6 @@
         {
           "target": "claude-code",
           "command": "npx @youdede/toolkit add resume-session-work --target claude-code --scope project"
-        },
-        {
-          "target": "cursor",
-          "command": "npx @youdede/toolkit add resume-session-work --target cursor --scope project"
-        },
-        {
-          "target": "gemini-cli",
-          "command": "npx @youdede/toolkit add resume-session-work --target gemini-cli --scope project"
-        },
-        {
-          "target": "github-copilot",
-          "command": "npx @youdede/toolkit add resume-session-work --target github-copilot --scope project"
-        },
-        {
-          "target": "opencode",
-          "command": "npx @youdede/toolkit add resume-session-work --target opencode --scope project"
         }
       ]
     },
