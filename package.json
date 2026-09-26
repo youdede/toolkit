@@ -28,15 +28,12 @@
     "CITATION.cff",
     "LICENSE",
     "NOTICE",
-    ".agents",
-    ".claude-plugin",
-    ".codex-plugin",
     "artifacts",
     "bin",
     "catalog",
     "docs",
+    "!docs/assets",
     "packs",
-    "plugins",
     "quality",
     "schema",
     "scripts/build-release-benchmark.mjs",
@@ -57,8 +54,7 @@
     "scripts/validate-evaluations.mjs",
     "scripts/validate-output-contracts.mjs",
     "scripts/validate-release-readiness.mjs",
-    "scripts/lib",
-    "skills"
+    "scripts/lib"
   ],
   "scripts": {
     "setup:repo": "node scripts/setup-repository.mjs",
