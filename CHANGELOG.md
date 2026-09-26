@@ -40,6 +40,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 - `design-interface-feedback` classified a specification built on estimated budgets both as applying and as reduced scope; applying now requires every budget to rest on named duration evidence.
 - Three skills (`interview-to-build-brief`, `audit-knowledge-state-freshness`, `review-plan-execution-divergence`) had a second output instruction that disagreed with their output contract; the extra items are now contract headings or are placed under a named heading. `compress-response-with-context` required five headings on every compressed answer, which defeated its purpose; it now requires `## Result` and `## Next action`.
 - The catalog entry for `design-llm-evaluation` omitted the skill's main operational limit; its description now matches the installed skill: it does not tune prompts, certify a model, or run model calls without separate execution authority.
+- `verify-production-release` pushes an exact revision and can start a rollback, but the catalog listed only the `verify` capability; it now also lists `operate`.
 
 ## 0.3.0 (2026-09-21)
 
