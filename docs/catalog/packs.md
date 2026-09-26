@@ -14,7 +14,7 @@ A pack composes artifacts of different kinds into one outcome, so a single comma
 | `data-change-safety` | 1.0.0 | Review schema and migration changes with deterministic safety checks and independent risk analysis. | 4 | Versioned, ledger-linked |
 | `infrastructure-change-readiness` | 1.0.0 | Plan a staged infrastructure change and independently review lifecycle, blast-radius, and recovery evidence. | 3 | Versioned, ledger-linked |
 | `mcp-baseline` | 1.0.0 | Install a guarded read-only MCP baseline with declared authority and independent trust-boundary review. | 7 | Versioned, ledger-linked |
-| `mobile-release-readiness` | 1.0.0 | Review mobile release evidence, accessibility, reliability, repository state, and version consistency. | 4 | Versioned, ledger-linked |
+| `mobile-release-readiness` | 1.0.1 | Review mobile release evidence, accessibility, and reliability. Release guards stop npm, pnpm, yarn, cargo, twine, and gh release publication, not fastlane, EAS, altool, or Gradle. | 4 | Versioned, ledger-linked |
 | `plan-and-verify-loop` | 1.1.0 | Gate implementation behind evidenced planning phases and independently verify completion claims. | 7 | Versioned, ledger-linked |
 | `release-readiness` | 1.1.0 | Build an evidence-backed release decision and stop publication from unsafe repository state. | 7 | Versioned, ledger-linked |
 | `remote-review-evidence` | 1.0.0 | Collect bounded GitHub evidence in read-only mode and turn failing CI evidence into a traceable diagnosis. | 4 | Versioned, ledger-linked |

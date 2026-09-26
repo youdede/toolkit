@@ -15,6 +15,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 - Repository validation rejects a subagent whose body differs between targets, apart from the Copilot turn-budget line.
 - Behavioral evaluation coverage now includes every skill, subagent, command, and context. Release benchmark inputs, package verification, readiness counts, catalog documentation, and naming/authoring guidance use the same six-kind model.
 - `resume-session-work` is published only for Claude Code. Its Gemini CLI, GitHub Copilot, Cursor, and OpenCode adapters are withdrawn, as the Codex one already was, because the session ledger and its hooks install only for Claude Code; on those runtimes the skill had nothing to read.
+- The `mobile-release-readiness` pack summary (1.0.1) states what its release guards stop today: npm, pnpm, yarn, cargo, twine, and `gh release` publication. `fastlane`, `eas submit`, `xcrun altool`, and Gradle publish tasks are not intercepted, and version consistency covers `package.json` and its lockfile, not mobile build numbers.
 - Command documentation now states the actual enforcement boundary: deterministic preconditions are a mandatory first prompt action, not a pre-invocation parser supplied by the native slash-command runtime.
 
 ### Fixed
