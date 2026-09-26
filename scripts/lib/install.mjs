@@ -151,7 +151,11 @@ function withStateLock(configRoot, operation) {
       descriptor = openSync(file, constants.O_CREAT | constants.O_EXCL | constants.O_WRONLY | constants.O_NOFOLLOW, STATE_MODE);
       break;
     } catch (error) {
-      if (error.code === 'ENOENT') { mkdirSync(path.dirname(file), { recursive: true }); continue; }
+      if (error.code === 'ENOENT') {
+        if (Date.now() > deadline) throw new Error(`cannot create ${file}; its directory keeps disappearing`);
+        mkdirSync(path.dirname(file), { recursive: true });
+        continue;
+      }
       if (error.code !== 'EEXIST') throw error;
       let age = 0;
       try { age = Date.now() - statSync(file).mtimeMs; } catch { continue; }
