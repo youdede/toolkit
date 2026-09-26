@@ -8198,8 +8198,8 @@
       "operational": {
         "behavior": "enforcing",
         "failurePolicy": "fail-closed",
-        "latencyClass": "immediate",
-        "latency_reason": "The entrypoint handles one intercepted event to block deterministic access to credential files, private keys, and environment secret files without deferred work.",
+        "latencyClass": "bounded",
+        "latency_reason": "To block access to credential files, the entrypoint may list repository files with a bounded local git subprocess before returning.",
         "dataRetention": "none"
       },
       "refuses": [

@@ -314,7 +314,7 @@
     },
     "sensitive-file-access-guard": {
       "risk": "Deze automatische controle blokkeert deterministische toegang tot referentiebestanden, privésleutels en geheime omgevingsbestanden; een onterechte blokkering kan het legitieme werk onderbreken, maar voert de geblokkeerde actie niet uit.",
-      "latency": "Het toegangspunt verwerkt één onderschepte gebeurtenis om deterministische toegang tot referentiebestanden, privésleutels en omgevingsgeheime bestanden te blokkeren zonder uitgestelde verwerking."
+      "latency": "Om toegang tot referentiebestanden te blokkeren, kan het toegangspunt de bestanden van de repository opvragen met een begrensd lokaal git-subproces voordat het antwoord geeft."
     },
     "ci-trust-boundary-guard": {
       "risk": "Deze automatische controle blokkeert nieuw geïntroduceerde, zeer betrouwbare CI-referenties en uitbreidingen van uitvoeringsrechten; een onterechte blokkering kan het legitieme werk onderbreken, maar voert de geblokkeerde actie niet uit.",
@@ -1261,5 +1261,5 @@
       "latency": "De specialist voert op statische wijze een procedure uit voor vereisten, status, waarneembare resultaten, nieuwe pogingen en herstelvertakkingen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     }
   },
-  "sourceHash": "e5ba317c2cafb0c0a2a1916d61b402e388661cd9d2e17f66033b7faad9abbf81"
+  "sourceHash": "7b6f7b61f5fe2a07513b6875ba7d8ee9dea6045d18810fe1e4c814e2e681a972"
 }
