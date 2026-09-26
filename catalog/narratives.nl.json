@@ -1,5 +1,5 @@
 {
-  "sourceHash": "8b3604dd82633bbf1129a7999288a38c696a3eafe49440118a6a26b6bedf9484",
+  "sourceHash": "437d6e56aebdd355361a2f2054b0a26a0ab0b15f239df4ec61f778a6e9c64703",
   "narratives": {
     "abuse-resistance-analyst": {
       "summary": "Analyseert één handeling op kostenversterking die een aanvaller kan sturen, fan-out en het omzeilen van quota.",
@@ -1930,14 +1930,14 @@
       ]
     },
     "mcp-capability-drift-guard": {
-      "summary": "Blokkeert aanroepen van MCP-tools van de toolkit als de server, toolnaam of waargenomen beschrijving niet is vastgezet in het pinregister.",
+      "summary": "Blokkeert MCP-aanroepen van de toolkit waarvan server of toolnaam niet is vastgezet, of waarvan de meegestuurde beschrijving afwijkt van de pin.",
       "description": "Een deterministische controle vóór toolgebruik die bij twijfel blokkeert (fail-closed). Deze accepteert uitsluitend zorgvuldig geselecteerde identiteiten van Youdede MCP-servers en -tools uit een gegenereerd pinregister en weigert onbekende mogelijkheden of mogelijkheden waarvan de beschrijving is gewijzigd.",
       "purposes": [
         "Vergelijkt een MCP-toolaanroep van de toolkit en een eventueel waargenomen toolinventaris met het gegenereerde register van vastgezette mogelijkheden."
       ],
       "refuses": [
         "Het vertrouwt geen MCP-annotaties, servernamen of toolbeschrijvingen die ontbreken in het gegenereerde pinregister.",
-        "Het accepteert niet stilzwijgend toegevoegde, verwijderde of hernoemde tools of tools met gewijzigde beschrijvingen van zorgvuldig geselecteerde servers.",
+        "Het accepteert niet stilzwijgend toegevoegde, verwijderde of hernoemde tools van zorgvuldig geselecteerde servers, en evenmin tools met een gewijzigde beschrijving wanneer de client die beschrijving meestuurt.",
         "Het verruimt voor een MCP-server geen bevoegdheden voor uitgaand verkeer, geheimen, het bestandssysteem, subprocessen of wijzigingen."
       ]
     },
