@@ -29,7 +29,7 @@ Every published skill adapter uses the runtime's native `skills/<slug>/SKILL.md`
 
 ## Specialist profiles
 
-Gemini profiles convert the Claude tool allowlist to `read_file`, `grep_search`, and `glob`, and preserve `maxTurns` as `max_turns`. Gemini CLI enables subagents by default; users can disable them with `experimental.enableAgents`. GitHub Copilot profiles use `.agent.md`, map the read-only tools to `read` and `search`, and carry the turn budget as an explicit instruction because the profile format does not enforce it.
+Gemini profiles convert the Claude tool allowlist to `read_file`, `grep_search`, and `glob`, and preserve `maxTurns` as `max_turns`. Gemini CLI enables subagents by default; users can disable them with `experimental.enableAgents`. GitHub Copilot profiles use `.agent.md`, map the read-only tools to `read` and `search`, and carry the turn budget as an explicit instruction because the profile format does not enforce it. GitHub documents custom agents as public preview in JetBrains IDEs, Eclipse, and Xcode, so these profiles stay preview; Copilot skill adapters are stable because GitHub documents Agent Skills for its cloud agent, code review, CLI, app, and agent mode in Visual Studio Code and JetBrains IDEs without a preview label.
 
 OpenCode receives 50 profiles with a deny-all permission baseline plus explicit `read`, `grep`, and `glob` grants. Twelve profiles that request a model reasoning-effort setting are withheld because OpenCode cannot preserve that setting while inheriting an arbitrary model. Cursor profiles are withheld because `readonly` cannot reproduce the existing per-tool allowlist and would silently expose the parent's broader read, network, browser, or MCP surface.
 
