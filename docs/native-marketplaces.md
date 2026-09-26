@@ -19,8 +19,8 @@ declared refusal count, and evidence badges. Generated hooks and MCP server path
 `${CLAUDE_PLUGIN_ROOT}`, so cached installs stay self-contained.
 
 `plan-and-verify-loop` is intentionally absent from this marketplace. It requires the
-`testing-baseline` context artifact, while the Claude plugin contract does not load project context
-files. The npm installer remains the complete installation path for that pack. Publishing a partial
+`coding-style-baseline` and `testing-baseline` context artifacts, while the Claude plugin contract
+does not load project context files. The npm installer remains the complete installation path for that pack. Publishing a partial
 plugin under the same name would overstate the composition.
 
 ## Codex

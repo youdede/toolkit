@@ -209,7 +209,8 @@ test('public catalog is sorted and exposes individual install commands', () => {
     if (artifact.execution.mode === 'prompt') assert.deepEqual(artifact.execution.entrypoints, []);
     else assert.ok(artifact.execution.entrypoints.length > 0);
     if (artifact.kind === 'skill' && artifact.id !== 'skill/operations/session/resume-session-work') assert.ok(artifact.targets.includes('codex'));
-    if (artifact.id === 'skill/operations/session/resume-session-work') assert.equal(artifact.targets.includes('codex'), false);
+    // The ledger library and its lifecycle hooks install only for Claude Code.
+    if (artifact.id === 'skill/operations/session/resume-session-work') assert.deepEqual(artifact.targets, ['claude-code']);
   }
 });
 

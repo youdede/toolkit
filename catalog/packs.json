@@ -149,8 +149,8 @@
       "id": "pack/browser-verification",
       "slug": "browser-verification",
       "name": "Browser verification",
-      "version": "1.0.0",
-      "summary": "Exercise an unauthenticated local interface in an isolated browser and preserve journey-level verification evidence.",
+      "version": "1.0.1",
+      "summary": "Exercise an unauthenticated local interface in an isolated browser, preserve journey-level evidence, and review the change for web performance risks.",
       "outcomes": [
         "local-browser-verification"
       ],
@@ -176,7 +176,7 @@
         },
         {
           "artifactId": "subagent/design/frontend/web-performance-reviewer",
-          "role": "verifier",
+          "role": "specialist",
           "required": true
         },
         {
@@ -219,8 +219,8 @@
         "roleCounts": {
           "procedure": 1,
           "collector": 0,
-          "specialist": 0,
-          "verifier": 1,
+          "specialist": 1,
+          "verifier": 0,
           "enforcement": 0,
           "observer": 0,
           "entrypoint": 0,
@@ -754,8 +754,8 @@
       "id": "pack/mobile-release-readiness",
       "slug": "mobile-release-readiness",
       "name": "Mobile release readiness",
-      "version": "1.0.0",
-      "summary": "Review mobile release evidence, accessibility, reliability, repository state, and version consistency.",
+      "version": "1.0.1",
+      "summary": "Review mobile release evidence, accessibility, and reliability. Release guards stop npm, pnpm, yarn, cargo, twine, and gh release publication, not fastlane, EAS, altool, or Gradle.",
       "outcomes": [
         "mobile-release-evidence",
         "safe-publication"
@@ -884,7 +884,7 @@
       "id": "pack/plan-and-verify-loop",
       "slug": "plan-and-verify-loop",
       "name": "Plan and verify loop",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "summary": "Gate implementation behind evidenced planning phases and independently verify completion claims.",
       "outcomes": [
         "evidenced-plan",
@@ -898,6 +898,7 @@
             "outcome": "evidenced-plan",
             "memberArtifactIds": [
               "command/development/workflow/draft-evidenced-plan",
+              "context/development/code-quality/coding-style-baseline",
               "context/development/testing/testing-baseline",
               "hook/development/workflow/phase-gate-guard",
               "skill/operations/agent-orchestration/execute-verifiable-plan"
@@ -921,6 +922,11 @@
         {
           "artifactId": "command/development/workflow/verify-claims-against-output",
           "role": "entrypoint",
+          "required": true
+        },
+        {
+          "artifactId": "context/development/code-quality/coding-style-baseline",
+          "role": "baseline",
           "required": true
         },
         {
@@ -985,7 +991,7 @@
           "enforcement": 1,
           "observer": 0,
           "entrypoint": 2,
-          "baseline": 1,
+          "baseline": 2,
           "integration": 0
         }
       },
@@ -1507,7 +1513,7 @@
       "id": "pack/session-continuity",
       "slug": "session-continuity",
       "name": "Session continuity",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "summary": "Persist bounded hash-chained checkpoints, restore cited context, and verify continuity across sessions.",
       "outcomes": [
         "resumable-work",
@@ -1524,14 +1530,14 @@
               "hook/operations/session/compact-readiness-guard",
               "hook/operations/session/session-checkpoint-guard",
               "hook/operations/session/session-restore-guard",
-              "skill/operations/session/resume-session-work"
+              "skill/operations/session/resume-session-work",
+              "subagent/writing/decision-support/decision-record-reviewer"
             ]
           },
           {
             "outcome": "verified-session-history",
             "memberArtifactIds": [
-              "command/operations/session/verify-session-ledger",
-              "subagent/writing/decision-support/decision-record-reviewer"
+              "command/operations/session/verify-session-ledger"
             ]
           }
         ]
@@ -1569,7 +1575,7 @@
         },
         {
           "artifactId": "subagent/writing/decision-support/decision-record-reviewer",
-          "role": "verifier",
+          "role": "specialist",
           "required": true
         }
       ],
@@ -1608,8 +1614,8 @@
         "roleCounts": {
           "procedure": 1,
           "collector": 0,
-          "specialist": 0,
-          "verifier": 1,
+          "specialist": 1,
+          "verifier": 0,
           "enforcement": 0,
           "observer": 3,
           "entrypoint": 2,

@@ -16,6 +16,9 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 - The npm package no longer contains the `skills/` and `plugins/` marketplace copies, the marketplace manifests, or the README images; native marketplaces read them from the repository. The packed size drops from about 4.8 MB to about 1.4 MB, and the CLI commands behave identically on the extracted package.
 - Repository validation rejects a subagent whose body differs between targets, apart from the Copilot turn-budget line.
 - Behavioral evaluation coverage now includes every skill, subagent, command, and context. Release benchmark inputs, package verification, readiness counts, catalog documentation, and naming/authoring guidance use the same six-kind model.
+- `resume-session-work` is published only for Claude Code. Its Gemini CLI, GitHub Copilot, Cursor, and OpenCode adapters are withdrawn, as the Codex one already was, because the session ledger and its hooks install only for Claude Code; on those runtimes the skill had nothing to read.
+- The `mobile-release-readiness` pack summary (1.0.1) states what its release guards stop today: npm, pnpm, yarn, cargo, twine, and `gh release` publication. `fastlane`, `eas submit`, `xcrun altool`, and Gradle publish tasks are not intercepted, and version consistency covers `package.json` and its lockfile, not mobile build numbers.
+- Two packs no longer call a subagent that does not verify their outcome a verifier. In `browser-verification` 1.0.1, `web-performance-reviewer` is a specialist and the summary says the change is reviewed for web performance risks, not that the journey is independently re-verified. In `session-continuity` 1.1.0, `decision-record-reviewer` is a specialist mapped to `resumable-work`; `verified-session-history` rests on `verify-session-ledger`, which checks the hash chain.
 - Command documentation now states the actual enforcement boundary: deterministic preconditions are a mandatory first prompt action, not a pre-invocation parser supplied by the native slash-command runtime.
 
 ### Fixed
@@ -31,6 +34,8 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 - The release workflow publishes the exact commit the `verify` job inspected rather than re-resolving the tag.
 - Documentation claims now match verified behavior: hooks are described as mostly blocking with a few observers; the eval, authoring, context-expiry, pack-evidence, plugin-count, CLI-syntax, branch-policy, and tag-immutability statements were corrected; and a duplicated row was removed from the 2026-09-23 risk and latency audit.
 - `add --dry-run` now lists `.youdede-toolkit/NOTICE.md`, which the real install writes; the JSON plan gains a `notice` entry. Before, the dry-run omitted that file.
+- The API, migration, CI, and dependency contexts install for Cursor in `.cursor/rules/` and for GitHub Copilot in `.github/instructions/`. Before, they landed in `.cursor/.cursor/rules/` and `.github/.github/instructions/`, where neither runtime reads them.
+- `plan-and-verify-loop` 1.1.0 includes `coding-style-baseline`, which `draft-evidenced-plan` requires as its precondition. Before, the command refused to run right after `add-pack plan-and-verify-loop`. Evidence reports for the `evidenced-plan` outcome now cite that member too.
 
 ## 0.3.0 (2026-09-21)
 
