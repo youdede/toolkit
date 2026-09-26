@@ -41,6 +41,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 - Three skills (`interview-to-build-brief`, `audit-knowledge-state-freshness`, `review-plan-execution-divergence`) had a second output instruction that disagreed with their output contract; the extra items are now contract headings or are placed under a named heading. `compress-response-with-context` required five headings on every compressed answer, which defeated its purpose; it now requires `## Result` and `## Next action`.
 - The catalog entry for `design-llm-evaluation` omitted the skill's main operational limit; its description now matches the installed skill: it does not tune prompts, certify a model, or run model calls without separate execution authority.
 - `verify-production-release` pushes an exact revision and can start a rollback, but the catalog listed only the `verify` capability; it now also lists `operate`.
+- `resume-session-work` built its ledger commands from `CLAUDE_PROJECT_DIR`, which Claude Code documents for hooks, MCP servers, and LSP but not for the Bash tool; where it is unset the command failed. The commands now fall back to the Git top-level directory.
 
 ## 0.3.0 (2026-09-21)
 

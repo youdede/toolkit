@@ -12,7 +12,7 @@ Rebuild trustable working context from `.youdede/session-ledger.jsonl` — never
 Run the ledger verification:
 
 ```bash
-node "${CLAUDE_PROJECT_DIR}/.claude/hooks/youdede/lib/session-ledger.mjs" verify --workspace "${CLAUDE_PROJECT_DIR}"
+node "${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel)}/.claude/hooks/youdede/lib/session-ledger.mjs" verify --workspace "${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel)}"
 ```
 
 (If the command artifacts are installed, `/verify-session-ledger` does the same with explanation.)
@@ -23,7 +23,7 @@ node "${CLAUDE_PROJECT_DIR}/.claude/hooks/youdede/lib/session-ledger.mjs" verify
 ## Step 2 — Read the tail
 
 ```bash
-node "${CLAUDE_PROJECT_DIR}/.claude/hooks/youdede/lib/session-ledger.mjs" tail --workspace "${CLAUDE_PROJECT_DIR}" --n 5
+node "${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel)}/.claude/hooks/youdede/lib/session-ledger.mjs" tail --workspace "${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel)}" --n 5
 ```
 
 ## Step 3 — Reconstruct with citations
