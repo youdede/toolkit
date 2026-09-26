@@ -612,3 +612,13 @@ test('installed artifact remains removable after it leaves the current catalog',
   assert.equal(existsSync(installed), false);
   assert.equal(doctor({ cwd: directory }).installs, 0);
 });
+
+test('removing the last artifact leaves no installer state behind', (context) => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-install-cleanup-'));
+  context.after(() => rmSync(directory, { recursive: true, force: true }));
+  installArtifact('commit-guard', { cwd: directory });
+  removeArtifact('commit-guard', { cwd: directory });
+  assert.equal(existsSync(path.join(directory, '.claude', '.youdede-toolkit')), false);
+  installArtifact('commit-guard', { cwd: directory });
+  assert.equal(doctor({ cwd: directory }).findings.length, 0);
+});

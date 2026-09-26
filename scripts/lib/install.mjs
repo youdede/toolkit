@@ -151,9 +151,17 @@ function withStateLock(configRoot, operation) {
       descriptor = openSync(file, constants.O_CREAT | constants.O_EXCL | constants.O_WRONLY | constants.O_NOFOLLOW, STATE_MODE);
       break;
     } catch (error) {
+      if (error.code === 'ENOENT') {
+        if (Date.now() > deadline) throw new Error(`cannot create ${file}; its directory keeps disappearing`);
+        mkdirSync(path.dirname(file), { recursive: true });
+        continue;
+      }
       if (error.code !== 'EEXIST') throw error;
       let age = 0;
       try { age = Date.now() - statSync(file).mtimeMs; } catch { continue; }
+      // ponytail: stale reclaim removes by name, so two processes that both saw the same stale
+      // lock can both proceed. It needs a lock older than 120 s; replace with an OS advisory
+      // lock if concurrent installs ever become routine.
       if (age > STATE_LOCK_STALE_MS) {
         // The holder died without releasing. Reclaim rather than block a user forever.
         try { rmSync(file, { force: true }); } catch {}
@@ -173,6 +181,8 @@ function withStateLock(configRoot, operation) {
   } finally {
     if (descriptor !== null) closeSync(descriptor);
     try { rmSync(file, { force: true }); } catch {}
+    // Drop the directory once nothing is left in it; a concurrent installer recreates it.
+    try { rmdirSync(path.dirname(file)); } catch {}
   }
 }
 
@@ -998,7 +1008,8 @@ function removeArtifactLocked(query, options = {}) {
       else atomicWrite(mcpFile, mcpAfter);
     }
     delete state.installs[key];
-    writeState(configRoot, state);
+    if (Object.keys(state.installs).length === 0) rmSync(statePath(configRoot), { force: true });
+    else writeState(configRoot, state);
 
     // Keep the generated notice in step with what is still installed, and drop it once the
     // last artifact leaves so uninstall does not litter the project.
