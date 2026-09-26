@@ -8,7 +8,8 @@ import {
   MAX_COMMAND_BYTES as MAX_SENSITIVE_COMMAND,
   MAX_STDIN_BYTES as MAX_SENSITIVE_STDIN,
   collectRuntimeContext,
-  evaluate as evaluateSensitive
+  evaluate as evaluateSensitive,
+  globToRegExp
 } from '../artifacts/hooks/security/secrets/sensitive-file-access-guard/targets/claude-code/sensitive-file-access-guard.mjs';
 import {
   MAX_COMMAND_BYTES as MAX_OUTBOUND_COMMAND,
@@ -199,4 +200,67 @@ test('both hook processes use blocking exit codes and content-safe diagnostics',
   });
   assert.equal(outboundAllowed.status, 0);
   assert.equal(outboundAllowed.stderr, '');
+});
+
+test('sensitive file guard blocks recursive reads whose tree contains a credential file', (context) => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-sensitive-recursive-'));
+  context.after(() => rmSync(directory, { recursive: true, force: true }));
+  mkdirSync(path.join(directory, 'src'));
+  writeFileSync(path.join(directory, 'src', 'app.js'), 'export {};\n');
+  writeFileSync(path.join(directory, '.env'), 'RECURSIVE_SECRET=never-print-this\n');
+  const decide = (command) => {
+    const input = { cwd: directory, tool_name: 'Bash', tool_input: { command } };
+    return evaluateSensitive(input, collectRuntimeContext(input));
+  };
+
+  for (const command of [
+    'grep -r KEY .',
+    'grep -R KEY',
+    'grep -rn KEY .',
+    'grep --recursive KEY .',
+    'grep -d recurse KEY .',
+    'rg --hidden KEY',
+    'rg -uu KEY .',
+    'tar -cf /tmp/youdede-unused.tar .',
+    'cp -r . /tmp/youdede-unused-copy',
+    'zip -r /tmp/youdede-unused.zip .'
+  ]) {
+    const result = decide(command);
+    assert.equal(result.ruleId, 'sensitive-path-recursive', command);
+    assert.doesNotMatch(result.message, /\.env|RECURSIVE_SECRET|never-print-this/, command);
+  }
+
+  for (const command of [
+    'grep -r KEY src',
+    "grep -r --exclude='.env*' KEY .",
+    'grep -r --exclude=.env KEY .',
+    'rg KEY',
+    'rg KEY .',
+    "rg --hidden -g '!.env' KEY",
+    'grep KEY src/app.js',
+    'cp src/app.js /tmp/youdede-unused-file'
+  ]) {
+    assert.equal(decide(command).exitCode, 0, command);
+  }
+  const grepTool = { cwd: directory, tool_name: 'Grep', tool_input: { pattern: 'KEY' } };
+  assert.equal(evaluateSensitive(grepTool, collectRuntimeContext(grepTool)).ruleId, 'sensitive-path-recursive');
+  const grepTyped = { cwd: directory, tool_name: 'Grep', tool_input: { pattern: 'KEY', glob: '*.js' } };
+  assert.equal(evaluateSensitive(grepTyped, collectRuntimeContext(grepTyped)).exitCode, 0);
+});
+
+test('sensitive file guard fails closed when a recursive tree exceeds the analysis bound', (context) => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-sensitive-bound-'));
+  context.after(() => rmSync(directory, { recursive: true, force: true }));
+  for (let index = 0; index < 20001; index += 1) writeFileSync(path.join(directory, `f${index}.txt`), '');
+  const input = { cwd: directory, tool_name: 'Bash', tool_input: { command: 'grep -r KEY .' } };
+  assert.equal(evaluateSensitive(input, collectRuntimeContext(input)).ruleId, 'sensitive-path-uninspectable');
+});
+
+test('glob translation covers the exclusion forms the guard honours', () => {
+  assert.equal(globToRegExp('.env*').test('.env'), true);
+  assert.equal(globToRegExp('.env*').test('.env.local'), true);
+  assert.equal(globToRegExp('*.{ts,tsx}').test('a.tsx'), true);
+  assert.equal(globToRegExp('*.{ts,tsx}').test('a.js'), false);
+  assert.equal(globToRegExp('file?.md').test('file1.md'), true);
+  assert.equal(globToRegExp('{unbalanced'), null);
 });

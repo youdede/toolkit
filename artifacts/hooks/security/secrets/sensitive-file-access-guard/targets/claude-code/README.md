@@ -6,6 +6,8 @@ Protected paths include environment files such as `.env` and `.env.production`, 
 
 Malformed or oversized hook input fails closed. A known file-access command with a dynamic operand also fails closed because the protected path cannot be determined before execution. Irrelevant events and commands outside the documented file-access boundary are allowed.
 
+Recursive reads (`grep -r`/`-R`/`--recursive`/`-d recurse`, `rg --hidden` or `-uu`, `tar`, `cp -r`/`-a`, `zip -r`) are blocked when the searched directory contains a protected file. `--exclude`, `--exclude-dir`, `--include` (grep), `--exclude` (tar), and `-g`/`--glob` (rg) are honoured for file and directory names. Plain `rg` skips hidden files and is checked the same way. `.git` is not walked. A tree larger than 20000 entries is blocked as uninspectable; narrow the path or exclude large directories.
+
 ## Refusals and limits
 
 - The hook refuses to read, print, copy, redact, or transform protected file contents.

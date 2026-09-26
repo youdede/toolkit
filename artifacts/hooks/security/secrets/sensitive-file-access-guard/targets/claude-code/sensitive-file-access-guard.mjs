@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { lstatSync, realpathSync } from 'node:fs';
+import { lstatSync, readdirSync, realpathSync, statSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -20,7 +20,7 @@ const SIMPLE_FILE_COMMANDS = new Set([
   '.', 'base64', 'cat', 'chmod', 'chown', 'code', 'copy-item', 'cp', 'cut', 'get-content',
   'curl', 'dd', 'gc', 'head', 'install', 'less', 'ln', 'more', 'move-item', 'mv', 'nano', 'nl', 'od',
   'out-file', 'remove-item', 'rm', 'set-content', 'sort', 'source', 'strings',
-  'tac', 'tail', 'tar', 'tee', 'uniq', 'vim', 'vi', 'wc', 'xxd'
+  'tac', 'tail', 'tar', 'tee', 'uniq', 'vim', 'vi', 'wc', 'xxd', 'zip'
 ]);
 const SEARCH_COMMANDS = new Set(['grep', 'rg']);
 const SCRIPT_COMMANDS = new Set(['awk', 'sed']);
@@ -33,6 +33,111 @@ const OPTION_PATHS = new Map([
   ['curl', new Set(['-K', '--config', '--netrc-file', '--key', '--cert', '-H', '--header', '-T', '--upload-file'])],
   ['dd', new Set(['if', 'of'])]
 ]);
+
+export const MAX_RECURSIVE_ENTRIES = 20000;
+// Options whose value is the next token; without this the value would be read as a path operand.
+const VALUE_OPTIONS = new Map([
+  ['grep', new Set(['--exclude', '--exclude-dir', '--include', '-d', '--directories', '-m', '--max-count', '-A', '-B', '-C', '--context'])],
+  ['rg', new Set(['-g', '--glob', '-t', '--type', '-T', '--type-not', '-m', '--max-count', '-A', '-B', '-C', '-j', '--threads'])]
+]);
+
+export function globToRegExp(glob) {
+  let source = '';
+  let braces = 0;
+  for (const character of glob) {
+    if (character === '*') source += '[^/]*';
+    else if (character === '?') source += '[^/]';
+    else if (character === '{') { braces += 1; source += '(?:'; }
+    else if (character === '}' && braces > 0) { braces -= 1; source += ')'; }
+    else if (character === ',' && braces > 0) source += '|';
+    else source += character.replace(/[.+^$()|[\]\\]/g, '\\$&');
+  }
+  return braces === 0 ? new RegExp(`^${source}$`) : null;
+}
+
+// A glob that cannot be translated is dropped, so nothing is excluded by it: the walk then sees
+// more files, never fewer.
+function compileGlobs(values) {
+  return values.map((value) => globToRegExp(value.split('/').at(-1))).filter(Boolean);
+}
+
+function optionValues(tokens, names) {
+  const values = [];
+  for (let index = 1; index < tokens.length; index += 1) {
+    const value = tokens[index].value;
+    const equals = value.indexOf('=');
+    const name = equals < 0 ? value : value.slice(0, equals);
+    if (!names.has(name)) continue;
+    if (equals >= 0) values.push(value.slice(equals + 1));
+    else if (tokens[index + 1]) values.push(tokens[index + 1].value);
+  }
+  return values;
+}
+
+function recursiveReadMode(executable, tokens) {
+  const values = tokens.slice(1).map((token) => token.value);
+  if (executable === 'grep') {
+    const recursive = values.some((value) => /^-[A-Za-z]*[rR][A-Za-z]*$/.test(value)
+      || ['--recursive', '--dereference-recursive', '--directories=recurse'].includes(value))
+      || values.some((value, index) => value === '-d' && values[index + 1] === 'recurse');
+    if (!recursive) return null;
+    return {
+      hidden: true,
+      excludes: compileGlobs(optionValues(tokens, new Set(['--exclude']))),
+      excludeDirs: compileGlobs(optionValues(tokens, new Set(['--exclude-dir']))),
+      includes: compileGlobs(optionValues(tokens, new Set(['--include'])))
+    };
+  }
+  if (executable === 'rg') {
+    const globs = optionValues(tokens, new Set(['-g', '--glob']));
+    return {
+      hidden: values.some((value) => value === '--hidden' || value === '-.' || /^-u{2,}$/.test(value)),
+      excludes: compileGlobs(globs.filter((glob) => glob.startsWith('!')).map((glob) => glob.slice(1))),
+      excludeDirs: [],
+      includes: compileGlobs(globs.filter((glob) => !glob.startsWith('!')))
+    };
+  }
+  if (executable === 'tar') {
+    return { hidden: true, excludes: compileGlobs(optionValues(tokens, new Set(['--exclude']))), excludeDirs: [], includes: [] };
+  }
+  if (executable === 'cp') {
+    const recursive = values.some((value) => /^-[A-Za-z]*[rRa][A-Za-z]*$/.test(value) || ['--recursive', '--archive'].includes(value));
+    return recursive ? { hidden: true, excludes: [], excludeDirs: [], includes: [] } : null;
+  }
+  if (executable === 'zip') {
+    const recursive = values.some((value) => /^-[A-Za-z]*[rR][A-Za-z]*$/.test(value) || value === '--recurse-paths');
+    return recursive ? { hidden: true, excludes: [], excludeDirs: [], includes: [] } : null;
+  }
+  return null;
+}
+
+export function directoryHoldsSensitive(root, options) {
+  const pending = [root];
+  let visited = 0;
+  while (pending.length) {
+    const directory = pending.pop();
+    let entries;
+    try { entries = readdirSync(directory, { withFileTypes: true }); } catch { return { error: true }; }
+    for (const entry of entries) {
+      visited += 1;
+      if (visited > MAX_RECURSIVE_ENTRIES) return { error: true };
+      if (!options.hidden && entry.name.startsWith('.')) continue;
+      const absolute = path.join(directory, entry.name);
+      if (entry.isDirectory()) {
+        // ponytail: .git is skipped for speed; its config can hold a credential URL, which this
+        // guard never listed as a protected path. Add it here if that list grows.
+        if (entry.name === '.git' || options.excludeDirs.some((pattern) => pattern.test(entry.name))) continue;
+        if (isSensitivePath(absolute)) return { sensitive: true };
+        pending.push(absolute);
+        continue;
+      }
+      if (options.excludes.some((pattern) => pattern.test(entry.name))) continue;
+      if (options.includes.length && !options.includes.some((pattern) => pattern.test(entry.name))) continue;
+      if (isSensitivePath(absolute)) return { sensitive: true };
+    }
+  }
+  return { sensitive: false };
+}
 
 const SAFE_ENV_SUFFIXES = ['.example', '.sample', '.template', '.dist'];
 const SENSITIVE_DIRECTORY_SUFFIXES = ['/.aws', '/.azure', '/.config/gcloud', '/.kube', '/.ssh'];
@@ -251,6 +356,7 @@ function pathOperands(tokens) {
       if (!token.value.includes('=')) index += 1;
       continue;
     }
+    if (VALUE_OPTIONS.get(executable)?.has(token.value)) { index += 1; continue; }
     if (token.value === '--') {
       positionals.push(...tokens.slice(index + 1).filter((entry) => !entry.redirection));
       break;
@@ -259,9 +365,12 @@ function pathOperands(tokens) {
     positionals.push(token);
   }
 
-  if (SEARCH_COMMANDS.has(executable) || SCRIPT_COMMANDS.has(executable)) {
-    candidates.push(...positionals.slice(explicitPattern ? 0 : 1));
-  } else if (SIMPLE_FILE_COMMANDS.has(executable)) candidates.push(...positionals);
+  let operands = [];
+  if (SEARCH_COMMANDS.has(executable) || SCRIPT_COMMANDS.has(executable)) operands = positionals.slice(explicitPattern ? 0 : 1);
+  else if (SIMPLE_FILE_COMMANDS.has(executable)) operands = positionals;
+  const recursive = recursiveReadMode(executable, tokens);
+  if (recursive && operands.length === 0 && SEARCH_COMMANDS.has(executable)) operands = [{ value: '.', dynamic: false }];
+  candidates.push(...(recursive ? operands.map((token) => ({ ...token, recursive })) : operands));
   return { candidates, ambiguous: false };
 }
 
@@ -289,11 +398,17 @@ export function collectCandidates(input) {
   if (DIRECT_TOOLS.has(name)) {
     const direct = directCandidates(data);
     const missing = DIRECT_TARGET_REQUIRED.has(name) && direct.values.length === 0;
+    let candidates = direct.values;
+    if (name === 'grep') {
+      const grepTargets = direct.values.length ? direct.values : [{ value: '.', dynamic: false }];
+      const include = typeof data?.glob === 'string' ? compileGlobs([data.glob]) : [];
+      candidates = grepTargets.map((candidate) => ({ ...candidate, recursive: { hidden: true, excludes: [], excludeDirs: [], includes: include } }));
+    }
     return {
       invalid: direct.invalid || missing,
       relevant: true,
-      candidates: direct.values.slice(0, MAX_PATHS),
-      tooMany: direct.values.length > MAX_PATHS
+      candidates: candidates.slice(0, MAX_PATHS),
+      tooMany: candidates.length > MAX_PATHS
     };
   }
   if (!SHELL_TOOLS.has(name) && !hasCommand) return { invalid: false, relevant: false, candidates: [] };
@@ -318,7 +433,7 @@ export function collectCandidates(input) {
   const unique = [];
   const seen = new Set();
   for (const candidate of candidates) {
-    const key = `${candidate.dynamic ? '1' : '0'}:${candidate.value}`;
+    const key = `${candidate.dynamic ? '1' : '0'}:${candidate.recursive ? 'r' : ''}:${candidate.value}`;
     if (!seen.has(key)) { seen.add(key); unique.push(candidate); }
   }
   return { invalid: false, relevant: true, candidates: unique.slice(0, MAX_PATHS), tooMany: unique.length > MAX_PATHS, ambiguous };
@@ -396,7 +511,15 @@ export function collectRuntimeContext(input) {
   const analysis = collectCandidates(input);
   const cwd = typeof input?.cwd === 'string' && input.cwd ? input.cwd : process.cwd();
   return {
-    pathFacts: analysis.candidates.map((candidate) => candidate.dynamic ? null : inspectPath(candidate.value, cwd))
+    pathFacts: analysis.candidates.map((candidate) => {
+      if (candidate.dynamic) return null;
+      const fact = inspectPath(candidate.value, cwd);
+      if (!candidate.recursive || fact.error || !fact.exists) return fact;
+      let metadata;
+      try { metadata = statSync(fact.resolvedPath); } catch { return { error: true }; }
+      if (!metadata.isDirectory()) return fact;
+      return { ...fact, recursive: directoryHoldsSensitive(fact.resolvedPath, candidate.recursive) };
+    })
   };
 }
 
@@ -419,6 +542,10 @@ export function evaluate(input, context = {}) {
     if (fact?.error) return blocked('sensitive-path-uninspectable', 'filesystem alias metadata cannot be inspected safely');
     if (fact?.resolvedPath && isSensitivePath(fact.resolvedPath)) {
       return blocked('sensitive-path-alias', 'a filesystem alias resolves to a high-confidence credential or secret file');
+    }
+    if (fact?.recursive?.error) return blocked('sensitive-path-uninspectable', 'a recursive file operation covers more entries than the bounded analyzer can verify');
+    if (fact?.recursive?.sensitive) {
+      return blocked('sensitive-path-recursive', 'a recursive file operation would include a high-confidence credential or secret file; exclude it or narrow the path');
     }
   }
   return allowed();
