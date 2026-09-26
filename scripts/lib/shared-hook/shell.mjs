@@ -7,7 +7,7 @@ export const SHELL_MAX_COMMAND_BYTES = 256 * 1024;
 const SHELL_MAX_DEPTH = 3;
 const SHELL_MAX_WRAPPERS = 16;
 const SHELL_NAMES = new Set(['sh', 'bash', 'zsh', 'dash', 'ksh']);
-const SHELL_WRAPPERS = new Set(['exec', 'time', 'noglob', 'command', 'env', 'sudo', 'nohup', 'nice', 'timeout', 'xargs']);
+const SHELL_WRAPPERS = new Set(['exec', 'time', 'noglob', 'command', 'env', 'sudo', 'doas', 'setsid', 'nohup', 'nice', 'timeout', 'xargs']);
 const SHELL_DIRECTORY_CHANGERS = new Set(['cd', 'pushd', 'popd']);
 const SHELL_SENSITIVE_ASSIGNMENT = /^(?:PATH|SHELL|GIT_DIR|GIT_WORK_TREE|GIT_CONFIG[^=]*)=/;
 const SHELL_ASSIGNMENT = /^[A-Za-z_][A-Za-z0-9_]*=/;
@@ -25,6 +25,8 @@ const WRAPPER_OPTIONS = {
     alone: /^(?:-[AbEHKnS]+|--(?:askpass|background|preserve-env|edit|set-home|remove-timestamp|reset-timestamp|non-interactive|stdin|validate)|--(?:user|group|host|prompt|close-from|command-timeout|role|type)=.+)$/,
     refuse: /^(?:-D|--chdir|-R|--chroot)(?:=|$)/
   },
+  doas: { next: /^-[uC]$/, alone: /^-[Lns]+$/ },
+  setsid: { alone: /^(?:-[cfw]+|--(?:ctty|fork|wait))$/ },
   time: { next: /^(?:-f|-o|--format|--output)$/, alone: /^(?:-a|-p|-v|--append|--portability|--verbose|--quiet|--format=.+|--output=.+)$/ },
   exec: { next: /^-a$/, alone: /^(?:-c|-l)$/ },
   command: { alone: /^-p$/ },
@@ -40,6 +42,10 @@ const WRAPPER_OPTIONS = {
     alone: /^(?:-[0rtpxo]+|-[ILnPdEsaJRS].+|-[ie].*|-l\d*|--(?:null|no-run-if-empty|verbose|interactive|exit|open-tty|show-limits|replace)|--(?:arg-file|delimiter|max-lines|max-args|max-procs|max-chars|process-slot-var|replace|eof)=.*)$/
   }
 };
+
+// PowerShell hosts take case-insensitive options and their unambiguous prefixes.
+const POWERSHELL_VALUE_OPTIONS = /^-(?:ex|ep|executionpolicy|inp|if|inputformat|o|of|outputformat|w|windowstyle|wd|workingdirectory|config|configurationname|v|version|settings|settingsfile|custompipename)$/;
+const POWERSHELL_FLAGS = /^-(?:nop|noprofile|nol|nologo|noni|noninteractive|noe|noexit|sta|mta|l|login|i|interactive)$/;
 
 // A value supplied at run time by xargs or find (`{}`), not by the shell: it is neither static
 // nor a shell expansion.
@@ -79,11 +85,15 @@ function expansionEnd(source, start) {
 }
 
 // Splits source into segments of tokens. Quotes and escapes are removed; expansions stay as text and
-// mark the token dynamic. `operator` is the one that ends the segment: `&&`, `||`, `;`, `|`, `&`,
-// `\n`, `(`, `)`, or '' at the end.
-function lexShell(source) {
+// mark the token dynamic, and an unquoted `*`, `?`, or `[` marks it `glob`. `operator` is the one that
+// ends the segment: `&&`, `||`, `;`, `|`, `&`, `\n`, `(`, `)`, or '' at the end. With
+// `options.redirections`, redirections leave the tokens and go to `redirections` as { operator, target }:
+// `2>&1` is { operator: '2>&', target: '1' }, `x>out` is the token x and { operator: '>', target: 'out' }.
+function lexShell(source, options = {}) {
   const segments = [];
   let tokens = [];
+  let redirections = [];
+  let redirect = null;
   let token = null;
   let quote = null;
   const begin = () => { if (!token) token = { value: '', dynamic: false }; };
@@ -92,10 +102,18 @@ function lexShell(source) {
     // Only `{a,b}` and `{x..y}` expand; `{}` and `stash@{0}` are literal.
     if (token.braces && /\{[^{}]*(?:,|\.\.)[^{}]*\}/.test(token.value)) token.dynamic = true;
     delete token.braces;
-    tokens.push(token);
+    delete token.quoted;
+    if (redirect) { redirections.push({ operator: redirect, target: token }); redirect = null; } else tokens.push(token);
     token = null;
   };
-  const pushSegment = (operator) => { pushToken(); if (tokens.length) segments.push({ tokens, operator }); tokens = []; };
+  const pushSegment = (operator) => {
+    pushToken();
+    if (redirect) return false;
+    if (tokens.length || redirections.length) segments.push(options.redirections ? { tokens, operator, redirections } : { tokens, operator });
+    tokens = [];
+    redirections = [];
+    return true;
+  };
   for (let index = 0; index < source.length; index += 1) {
     const character = source[index];
     if (quote === "'") { if (character === "'") quote = null; else token.value += character; continue; }
@@ -109,25 +127,48 @@ function lexShell(source) {
       } else token.value += character;
       continue;
     }
-    if (/\s/.test(character)) { pushToken(); if (character === '\n') pushSegment('\n'); }
-    else if (character === "'" || character === '"') { begin(); quote = character; }
+    if (/\s/.test(character)) { pushToken(); if (character === '\n' && !pushSegment('\n')) return { error: 'redirection without target' }; }
+    else if (character === "'" || character === '"') { begin(); token.quoted = true; quote = character; }
     else if (character === '\\') { begin(); if (++index >= source.length) return { error: 'trailing escape' }; token.value += source[index]; }
     else if (character === '$' || character === '`' || ((character === '<' || character === '>') && source[index + 1] === '(')) {
       begin();
       const end = expansionEnd(source, index);
       if (end < 0) return { error: 'unterminated expansion' };
       token.value += source.slice(index, end); token.dynamic = true; index = end - 1;
+    } else if (options.redirections && (character === '<' || character === '>' || (character === '&' && source[index + 1] === '>'))) {
+      // A file descriptor number written right before the operator belongs to it.
+      let operator = '';
+      if (character !== '&' && token && !token.quoted && !token.dynamic && /^\d+$/.test(token.value)) { operator = token.value; token = null; }
+      pushToken();
+      if (redirect) return { error: 'redirection without target' };
+      if (character === '&') {
+        operator += '&>'; index += 1;
+        if (source[index + 1] === '>') { operator += '>'; index += 1; }
+      } else {
+        operator += character;
+        const next = source[index + 1];
+        if (next === character) {
+          operator += next; index += 1;
+          if (character === '<' && (source[index + 1] === '<' || source[index + 1] === '-')) { operator += source[index + 1]; index += 1; }
+        } else if (next === '&' || next === '|' || (character === '<' && next === '>')) { operator += next; index += 1; }
+      }
+      redirect = operator;
     } else if (character === '&' && (/[<>]$/.test(token?.value ?? '') || source[index + 1] === '>')) {
       // `2>&1`, `>&2`, `&>file`: a redirection, not a command separator.
       begin(); token.value += character;
     } else if (';&|()'.includes(character)) {
       let operator = character;
       if ((character === '&' || character === '|') && source[index + 1] === character) { operator += character; index += 1; }
-      pushSegment(operator);
-    } else { begin(); token.value += character; if (character === '{' || character === '}') token.braces = true; }
+      if (!pushSegment(operator)) return { error: 'redirection without target' };
+    } else {
+      begin();
+      token.value += character;
+      if (character === '{' || character === '}') token.braces = true;
+      if (character === '*' || character === '?' || character === '[') token.glob = true;
+    }
   }
   if (quote) return { error: 'unterminated quote' };
-  pushSegment('');
+  if (!pushSegment('')) return { error: 'redirection without target' };
   return { segments };
 }
 
@@ -136,7 +177,7 @@ export function executableName(token) {
 }
 
 // Commands that find runs through -exec/-execdir/-ok/-okdir, with `{}` as a placeholder.
-function findActions(tokens, depth, wrappers) {
+function findActions(tokens, depth, wrappers, parseOptions) {
   const entries = [];
   let index = 1;
   while (index < tokens.length) {
@@ -147,13 +188,35 @@ function findActions(tokens, depth, wrappers) {
     // Without a terminator find refuses to run, so nothing is executed.
     if (end >= tokens.length) break;
     const inner = tokens.slice(start, end).map((entry) => (entry.value.includes('{}') ? placeholderToken(entry.value) : entry));
-    if (inner.length) entries.push(...unwrapCommand(inner, depth, [...wrappers, 'find']));
+    if (inner.length) entries.push(...unwrapCommand(inner, depth, [...wrappers, 'find'], parseOptions));
     index = end + 1;
   }
   return entries;
 }
 
-function unwrapCommand(original, depth, inherited = []) {
+// `pwsh`/`powershell`: -Command (or, for Windows PowerShell, the first word) runs the rest of the line;
+// -File, or a first word for pwsh, runs a script. The payload is read with this POSIX lexer, an
+// approximation of PowerShell syntax; -EncodedCommand and unknown options are ambiguous.
+function powershellCommands(tokens, index, depth, wrappers, name, parseOptions) {
+  const layer = [...wrappers, name];
+  for (let cursor = index + 1; cursor < tokens.length; cursor += 1) {
+    const option = tokens[cursor];
+    if (option.dynamic || option.placeholder) return [{ ambiguous: true, wrappers: layer }];
+    const value = option.value.toLowerCase();
+    if (POWERSHELL_VALUE_OPTIONS.test(value)) { cursor += 1; continue; }
+    if (POWERSHELL_FLAGS.test(value)) continue;
+    if (/^-f(?:i(?:le?)?)?$/.test(value) || (name === 'pwsh' && !value.startsWith('-'))) return [{ tokens: tokens.slice(index), wrappers }];
+    let payload = cursor;
+    if (/^-c(?:o(?:m(?:m(?:a(?:nd?)?)?)?)?)?$/.test(value)) payload = cursor + 1;
+    else if (value.startsWith('-')) return [{ ambiguous: true, wrappers: layer }];
+    if (payload >= tokens.length || depth >= SHELL_MAX_DEPTH) return [{ ambiguous: true, wrappers: layer }];
+    const nested = parseShellCommands(tokens.slice(payload).map((entry) => entry.value).join(' '), depth + 1, layer, parseOptions);
+    return nested.error ? [{ ambiguous: true, wrappers: layer }] : nested.commands;
+  }
+  return [{ tokens: tokens.slice(index), wrappers }];
+}
+
+function unwrapCommand(original, depth, inherited = [], parseOptions = {}) {
   let tokens = original;
   let index = 0;
   const wrappers = [...inherited];
@@ -173,6 +236,7 @@ function unwrapCommand(original, depth, inherited = []) {
     const executable = tokens[index];
     if (executable.dynamic || executable.placeholder || /[*?]|\[[^\]]*\]/.test(executable.value)) return ambiguous();
     const name = executableName(executable);
+    if (/^(?:pwsh|powershell)(?:\.exe)?$/.test(name)) return powershellCommands(tokens, index, depth, wrappers, name.replace(/\.exe$/, ''), parseOptions);
     if (SHELL_NAMES.has(name) || name === 'eval') {
       let payload = name === 'eval' ? index + 1 : -1;
       if (name !== 'eval') {
@@ -188,11 +252,11 @@ function unwrapCommand(original, depth, inherited = []) {
       }
       if (!tokens[payload] || depth >= SHELL_MAX_DEPTH) return [{ ambiguous: true, wrappers: [...wrappers, name] }];
       const inner = name === 'eval' ? tokens.slice(payload).map((entry) => entry.value).join(' ') : tokens[payload].value;
-      const nested = parseShellCommands(inner, depth + 1, [...wrappers, name]);
+      const nested = parseShellCommands(inner, depth + 1, [...wrappers, name], parseOptions);
       if (nested.error) return [{ ambiguous: true, wrappers: [...wrappers, name] }];
       return nested.commands;
     }
-    if (name === 'find') return [{ tokens: tokens.slice(index), wrappers }, ...findActions(tokens.slice(index), depth, wrappers)];
+    if (name === 'find') return [{ tokens: tokens.slice(index), wrappers }, ...findActions(tokens.slice(index), depth, wrappers, parseOptions)];
     if (!SHELL_WRAPPERS.has(name)) return [{ tokens: tokens.slice(index), wrappers }];
     wrappers.push(name);
     index += 1;
@@ -253,19 +317,25 @@ function unwrapCommand(original, depth, inherited = []) {
 
 // Returns { commands } where each command is { tokens, wrappers, operator, changedDirectory } or
 // { ambiguous: true }, or { error } when the text cannot be lexed. `operator` follows the command, so
-// `a && b` runs b only if a succeeded while `a; b` runs b anyway. Wrappers (sudo, env, nice,
-// timeout, xargs, exec, time, noglob, command, nohup) and static `sh -c`/`bash -c`/`eval` layers
-// are removed; `find -exec` adds the command it runs. `changedDirectory` is true after cd, pushd,
-// or popd in the same command. An ambiguous entry carries `segment`, the tokens of the innermost
+// `a && b` runs b only if a succeeded while `a; b` runs b anyway. Wrappers (sudo, doas, setsid, env,
+// nice, timeout, xargs, exec, time, noglob, command, nohup) and static `sh -c`/`bash -c`/`eval`/
+// `pwsh -Command` layers are removed; `find -exec` adds the command it runs. `changedDirectory` is
+// true after cd, pushd, or popd in the same command. With `options.redirections`, each command also
+// carries the `redirections` of its segment, and a segment made only of redirections (`> file`)
+// yields a command with no tokens. An ambiguous entry carries `segment`, the tokens of the innermost
 // segment it came from, so a hook can still judge that segment's text.
-export function parseShellCommands(command, depth = 0, wrappers = []) {
+export function parseShellCommands(command, depth = 0, wrappers = [], options = {}) {
   if (typeof command !== 'string') return { commands: [] };
   if (Buffer.byteLength(command, 'utf8') > SHELL_MAX_COMMAND_BYTES) return { error: 'command exceeds analysis limit', commands: [] };
-  const lexed = lexShell(command);
+  const lexed = lexShell(command, options);
   if (lexed.error) return { error: lexed.error, commands: [] };
   const commands = [];
   for (const segment of lexed.segments) {
-    const entries = unwrapCommand(segment.tokens, depth, wrappers);
+    let entries = unwrapCommand(segment.tokens, depth, wrappers, options);
+    if (segment.redirections?.length) {
+      if (!entries.length) entries = [{ tokens: [], wrappers: [...wrappers] }];
+      for (const entry of entries) entry.redirections = [...(entry.redirections ?? []), ...segment.redirections];
+    }
     // Nested entries keep their inner operator; the last one, and a find action, take the segment's.
     if (entries.length) entries.at(-1).operator = segment.operator;
     for (const entry of entries) {

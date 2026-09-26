@@ -9,14 +9,38 @@ export const MAX_CONTENT_BYTES = 512 * 1024;
 const ALLOW = { exitCode: 0 };
 const BLOCK = (ruleId, reason) => ({ exitCode: 2, ruleId, message: `BLOCKED by transport-security-regression-guard [${ruleId}]: ${reason}` });
 
+function inside(root, target) {
+  const relative = path.relative(root, target);
+  return !(relative.startsWith(`..${path.sep}`) || relative === '..' || path.isAbsolute(relative));
+}
+
+// The nearest existing ancestor with its symbolic links resolved, plus the missing remainder.
+function canonicalPath(target) {
+  let cursor = target;
+  const missing = [];
+  while (!existsSync(cursor)) {
+    const parent = path.dirname(cursor);
+    if (parent === cursor) break;
+    missing.unshift(path.basename(cursor));
+    cursor = parent;
+  }
+  return path.join(realpathSync(cursor), ...missing);
+}
+
+// Inside the project no path component may be a symbolic link. A file outside the project (another
+// package when the project root is a subdirectory, /tmp) is not project configuration, but its
+// proposed content is still checked; readBounded refuses a symbolic link there.
 function safePath(filePath, cwd) {
   if (typeof filePath !== 'string' || filePath.length === 0 || filePath.includes('\0')) throw new Error('invalid path');
   const root = realpathSync(cwd);
-  const target = path.resolve(root, filePath);
-  const relative = path.relative(root, target);
-  if (relative.startsWith(`..${path.sep}`) || relative === '..' || path.isAbsolute(relative)) throw new Error('outside project');
+  let target = path.resolve(root, filePath);
+  if (!inside(root, target)) {
+    const canonical = canonicalPath(target);
+    if (!inside(root, canonical)) return target;
+    target = canonical;
+  }
   let cursor = root;
-  for (const part of relative.split(path.sep).filter(Boolean)) {
+  for (const part of path.relative(root, target).split(path.sep).filter(Boolean)) {
     cursor = path.join(cursor, part);
     if (!existsSync(cursor)) break;
     if (lstatSync(cursor).isSymbolicLink()) throw new Error('symlink path');
@@ -88,9 +112,16 @@ export function scanTransport(filePath, source) {
   ];
   for (const [ruleId, pattern] of rules) if (pattern.test(code)) findings.push(ruleId);
   const uncommented = source.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*(?:\/\/|#).*$/gm, '');
-  for (const match of uncommented.matchAll(/(?:^|[,{;]\s*)(?:(?:const|let|var)\s+)?(?:process\.env\.)?\b(NODE_TLS_REJECT_UNAUTHORIZED|registry|registryUrl|packageRegistry)\s*[:=]\s*(["'])(.*?)\2/gim)) {
-    if (match[1].toLowerCase() === 'node_tls_reject_unauthorized' && match[3] === '0') findings.push('tls-node-verification-disabled');
-    if (match[1].toLowerCase() !== 'node_tls_reject_unauthorized' && /^http:\/\/(?!localhost\b|127\.0\.0\.1\b|\[::1\])/i.test(match[3])) findings.push('insecure-registry-endpoint');
+  // A quoted key (JSON, `{ "rejectUnauthorized": false }`) is masked with the strings above.
+  if (/(["'])rejectUnauthorized\1\s*:\s*false\b/i.test(uncommented)) findings.push('tls-node-verification-disabled');
+  // npm and Yarn settings: .npmrc `strict-ssl=false`, .yarnrc.yml `enableStrictSsl: false`.
+  if (/^[ \t]*(?:strict-ssl|strictSsl|enableStrictSsl)[ \t]*[:=][ \t]*["']?false\b/im.test(uncommented)) findings.push('tls-registry-verification-disabled');
+  // Assignments in code, .env files, shell scripts (`export`), Dockerfiles (`ENV`), YAML lists, and
+  // .npmrc, with a quoted or a bare value.
+  for (const match of uncommented.matchAll(/(?:^[ \t]*(?:-[ \t]*)?|[,{;][ \t]*)(?:(?:export|ENV|set)[ \t]+)?(?:(?:const|let|var)\s+)?(?:process\.env\.)?\b(NODE_TLS_REJECT_UNAUTHORIZED|registry|registryUrl|packageRegistry)\s*[:=]\s*(?:(["'])(.*?)\2|([^\s"'#;,}]+))/gim)) {
+    const value = match[3] ?? match[4];
+    if (match[1].toLowerCase() === 'node_tls_reject_unauthorized' && value === '0') findings.push('tls-node-verification-disabled');
+    if (match[1].toLowerCase() !== 'node_tls_reject_unauthorized' && /^http:\/\/(?!localhost\b|127\.0\.0\.1\b|\[::1\])/i.test(value)) findings.push('insecure-registry-endpoint');
   }
   return findings;
 }
@@ -117,7 +148,7 @@ export function evaluate(input, context) {
 }
 
 async function readInput() { const chunks = []; let size = 0; for await (const chunk of process.stdin) { size += chunk.length; if (size > MAX_STDIN_BYTES) throw new Error('oversized'); chunks.push(chunk); } return JSON.parse(Buffer.concat(chunks).toString('utf8')); }
-if (process.argv[1] && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  try { const input = await readInput(); const cwd = input.cwd || process.env.CLAUDE_PROJECT_DIR || process.cwd(); const result = evaluate(input, reconstructChange(input, cwd)); if (result.exitCode) process.stderr.write(`${result.message}\n`); process.exitCode = result.exitCode; }
+if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
+  try { const input = await readInput(); const cwd = process.env.CLAUDE_PROJECT_DIR || input.cwd || process.cwd(); const result = evaluate(input, reconstructChange(input, cwd)); if (result.exitCode) process.stderr.write(`${result.message}\n`); process.exitCode = result.exitCode; }
   catch { process.stderr.write('BLOCKED by transport-security-regression-guard [transport-input-invalid]: hook input is invalid or oversized.\n'); process.exitCode = 2; }
 }
