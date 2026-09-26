@@ -157,6 +157,29 @@ function runGit(workspace, args) {
   return boundedText(result.stdout);
 }
 
+// status and diff run the clean/process command of any filter driver named in .gitattributes. Only
+// the commands written by `git lfs install` (with or without --skip-smudge) are trusted.
+const GIT_LFS_FILTER_COMMANDS = {
+  'filter.lfs.clean': ['git-lfs clean -- %f'],
+  'filter.lfs.smudge': ['git-lfs smudge -- %f', 'git-lfs smudge --skip -- %f'],
+  'filter.lfs.process': ['git-lfs filter-process', 'git-lfs filter-process --skip']
+};
+
+function refuseUntrustedFilters(workspace) {
+  // Reading configuration runs no configured program; exit 1 means no key matched.
+  const result = spawnSync('git', [...READ_ONLY_GIT, 'config', '--null', '--get-regexp', '^filter\\..*\\.(clean|smudge|process)$'], {
+    cwd: workspace,
+    env: cleanGitEnvironment(),
+    encoding: 'utf8',
+    maxBuffer: MAX_RESULT_BYTES
+  });
+  if (result.error || (result.status !== 0 && result.status !== 1)) throw new Error('git filter configuration could not be read');
+  for (const entry of result.stdout.split('\0').filter(Boolean)) {
+    const [key, value = ''] = entry.split(/\n(.*)/s);
+    if (!GIT_LFS_FILTER_COMMANDS[key]?.includes(value)) throw new Error(`git filter driver ${key} is not the standard Git LFS command; status and diff would run it`);
+  }
+}
+
 async function fetchAllowlisted(profile, input) {
   if (typeof input.url !== 'string' || input.url.length > 2048) throw new Error('url must be a bounded string');
   const url = new URL(input.url);
@@ -201,6 +224,7 @@ async function callTool(profile, workspace, name, input) {
     const { resolved } = existingWorkspacePath(workspace, input.path || '.', { directory: true });
     return walk(resolved, workspace).filter((file) => file.includes(input.query)).slice(0, 200).join('\n');
   }
+  if (name === 'git_status' || name === 'git_diff') refuseUntrustedFilters(workspace);
   if (name === 'git_status') return runGit(workspace, ['status', '--short', '--branch', '--untracked-files=normal']);
   if (name === 'git_diff') {
     const args = ['diff', '--no-ext-diff', '--no-textconv'];

@@ -8662,13 +8662,16 @@
       "targetCompatibility": {
         "claude-code": {
           "stability": "stable",
-          "limitations": [],
+          "limitations": [
+            "git_status and git_diff refuse to run when the effective Git configuration defines a filter driver command other than the standard Git LFS ones."
+          ],
           "bindings": []
         },
         "cursor": {
           "stability": "stable",
           "limitations": [
-            "The server requires a local Git repository and Node.js 20 or newer."
+            "The server requires a local Git repository and Node.js 20 or newer.",
+            "git_status and git_diff refuse to run when the effective Git configuration defines a filter driver command other than the standard Git LFS ones."
           ],
           "bindings": []
         }
