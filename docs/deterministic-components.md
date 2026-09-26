@@ -64,7 +64,7 @@ Claude Code, Codex, Gemini CLI, and Cursor adapters use target-native event name
 
 The snapshot records current behavior, including behavior known to be wrong. Such entries carry `expectation`, for example `should-block per A-hooks-security-1 shell-command-guard.mjs:325`, naming the finding that describes the correct verdict.
 
-`npm run check:hook-verdicts` (and `tests/hook-verdicts.test.mjs`) recompute every verdict and fail on any difference. A verdict may change only on purpose, in the same change that fixes the hook:
+`tests/hook-verdicts.test.mjs` (run by `npm test`) recomputes every verdict and fails on any difference; `npm run check:hook-verdicts` runs the same comparison on its own. A verdict may change only on purpose, in the same change that fixes the hook:
 
 1. Add to the affected entry `"change": { "reason": "...", "finding": "<finding or fact id>" }`. Leave `exit`, `ruleId`, and `output` as they are: they stay the baseline.
 2. Run `npm run hook-verdicts`. It writes the new verdict into `change` and refuses any other difference, so an unintended regression cannot be recorded by accident.
