@@ -15,7 +15,7 @@ export const SHELL_MAX_COMMAND_BYTES = 256 * 1024;
 const SHELL_MAX_DEPTH = 3;
 const SHELL_MAX_WRAPPERS = 16;
 const SHELL_NAMES = new Set(['sh', 'bash', 'zsh', 'dash', 'ksh']);
-const SHELL_WRAPPERS = new Set(['exec', 'time', 'noglob', 'command', 'env', 'sudo', 'nohup', 'nice', 'timeout', 'xargs']);
+const SHELL_WRAPPERS = new Set(['exec', 'time', 'noglob', 'command', 'env', 'sudo', 'doas', 'setsid', 'nohup', 'nice', 'timeout', 'xargs']);
 const SHELL_DIRECTORY_CHANGERS = new Set(['cd', 'pushd', 'popd']);
 const SHELL_SENSITIVE_ASSIGNMENT = /^(?:PATH|SHELL|GIT_DIR|GIT_WORK_TREE|GIT_CONFIG[^=]*)=/;
 const SHELL_ASSIGNMENT = /^[A-Za-z_][A-Za-z0-9_]*=/;
@@ -33,6 +33,9 @@ const WRAPPER_OPTIONS = {
     alone: /^(?:-[AbEHKnS]+|--(?:askpass|background|preserve-env|edit|set-home|remove-timestamp|reset-timestamp|non-interactive|stdin|validate)|--(?:user|group|host|prompt|close-from|command-timeout|role|type)=.+)$/,
     refuse: /^(?:-D|--chdir|-R|--chroot)(?:=|$)/
   },
+  // `doas -C` only checks the configuration, `-s` and `-L` run no given command.
+  doas: { next: /^-u$/, alone: /^-n$/, refuse: /^-[CsL]/ },
+  setsid: { alone: /^(?:-[cfw]+|--(?:ctty|fork|wait))$/ },
   time: { next: /^(?:-f|-o|--format|--output)$/, alone: /^(?:-a|-p|-v|--append|--portability|--verbose|--quiet|--format=.+|--output=.+)$/ },
   exec: { next: /^-a$/, alone: /^(?:-c|-l)$/ },
   command: { alone: /^-p$/ },
@@ -261,7 +264,7 @@ function unwrapCommand(original, depth, inherited = []) {
 
 // Returns { commands } where each command is { tokens, wrappers, operator, changedDirectory } or
 // { ambiguous: true }, or { error } when the text cannot be lexed. `operator` follows the command, so
-// `a && b` runs b only if a succeeded while `a; b` runs b anyway. Wrappers (sudo, env, nice,
+// `a && b` runs b only if a succeeded while `a; b` runs b anyway. Wrappers (sudo, doas, setsid, env, nice,
 // timeout, xargs, exec, time, noglob, command, nohup) and static `sh -c`/`bash -c`/`eval` layers
 // are removed; `find -exec` adds the command it runs. `changedDirectory` is true after cd, pushd,
 // or popd in the same command.
