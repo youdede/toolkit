@@ -12,6 +12,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 
 ### Changed
 
+- The Cursor adapters of `allowlisted-fetch-readonly`, `repository-git-readonly`, and `workspace-files-readonly` are back to `preview`. ADR 0002 requires an MCP egress guard before an MCP server is stable, and the egress guard's Cursor adapter is not yet verified in a live Cursor client.
 - Repository validation accepts a Cursor guard adapter on `beforeMCPExecution` without a matcher, besides `preToolUse`, because Cursor documents no matcher value for that event.
 - GitHub Copilot skill adapters are now `stable` and name the surfaces GitHub documents for Agent Skills; GitHub's page (read 2026-09-26) has no preview label. Copilot subagent adapters stay `preview` and now name the surfaces where GitHub marks custom agents as public preview: JetBrains IDEs, Eclipse, and Xcode.
 - Gemini CLI subagent adapters are now `stable`: the official subagents page (read 2026-09-26) says subagents are enabled by default and no longer calls them preview. Every Gemini CLI adapter, and `docs/targets.md`, now states that Google stopped serving Gemini CLI on 2026-06-18 for free use and for Google AI Pro and Ultra, and that Antigravity CLI, which replaces it for those users, is not a target.
