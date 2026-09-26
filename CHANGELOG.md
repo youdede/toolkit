@@ -27,6 +27,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 - Removing the last artifact from an install root now deletes the empty installer state, and the state lock retry is bounded by the lock timeout.
 - The release workflow publishes the exact commit the `verify` job inspected rather than re-resolving the tag.
 - The API, migration, CI, and dependency contexts install for Cursor in `.cursor/rules/` and for GitHub Copilot in `.github/instructions/`. Before, they landed in `.cursor/.cursor/rules/` and `.github/.github/instructions/`, where neither runtime reads them.
+- `plan-and-verify-loop` 1.1.0 includes `coding-style-baseline`, which `draft-evidenced-plan` requires as its precondition. Before, the command refused to run right after `add-pack plan-and-verify-loop`. Evidence reports for the `evidenced-plan` outcome now cite that member too.
 
 ## 0.3.0 (2026-09-21)
 

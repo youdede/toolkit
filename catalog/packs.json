@@ -884,7 +884,7 @@
       "id": "pack/plan-and-verify-loop",
       "slug": "plan-and-verify-loop",
       "name": "Plan and verify loop",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "summary": "Gate implementation behind evidenced planning phases and independently verify completion claims.",
       "outcomes": [
         "evidenced-plan",
@@ -898,6 +898,7 @@
             "outcome": "evidenced-plan",
             "memberArtifactIds": [
               "command/development/workflow/draft-evidenced-plan",
+              "context/development/code-quality/coding-style-baseline",
               "context/development/testing/testing-baseline",
               "hook/development/workflow/phase-gate-guard",
               "skill/operations/agent-orchestration/execute-verifiable-plan"
@@ -921,6 +922,11 @@
         {
           "artifactId": "command/development/workflow/verify-claims-against-output",
           "role": "entrypoint",
+          "required": true
+        },
+        {
+          "artifactId": "context/development/code-quality/coding-style-baseline",
+          "role": "baseline",
           "required": true
         },
         {
@@ -985,7 +991,7 @@
           "enforcement": 1,
           "observer": 0,
           "entrypoint": 2,
-          "baseline": 1,
+          "baseline": 2,
           "integration": 0
         }
       },

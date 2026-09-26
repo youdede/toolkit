@@ -10,29 +10,28 @@
     "counts": {
       "artifactNodes": 315,
       "directedEdges": {
-        "composesWith": 368,
+        "composesWith": 370,
         "conflictsWith": 0,
         "supersedes": 0,
         "prerequisites": 6,
-        "packIds": 72
+        "packIds": 73
       },
-      "compositionEdges": 184,
+      "compositionEdges": 185,
       "conflictEdges": 0,
-      "crossKindCompositionEdges": 105,
-      "orphanArtifacts": 180
+      "crossKindCompositionEdges": 106,
+      "orphanArtifacts": 179
     },
     "orphanCountsByKind": {
       "skill": 91,
       "hook": 40,
       "subagent": 42,
       "command": 0,
-      "context": 7,
+      "context": 6,
       "mcp-server": 0
     },
     "orphanArtifactIds": [
       "context/data/migrations/database-migration-baseline",
       "context/development/api/api-contract-baseline",
-      "context/development/code-quality/coding-style-baseline",
       "context/operations/ci-cd/ci-workflow-baseline",
       "context/operations/git/git-workflow-baseline",
       "context/security/dependencies/dependency-change-baseline",
@@ -668,6 +667,7 @@
       },
       "relationships": {
         "composesWith": [
+          "context/development/code-quality/coding-style-baseline",
           "hook/development/workflow/phase-gate-guard",
           "skill/operations/agent-orchestration/execute-verifiable-plan"
         ],
@@ -1261,11 +1261,15 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "command/development/workflow/draft-evidenced-plan"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
-        "packIds": []
+        "packIds": [
+          "pack/plan-and-verify-loop"
+        ]
       },
       "operational": {
         "behavior": "advisory",

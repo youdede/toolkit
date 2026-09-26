@@ -41,7 +41,7 @@
       { "id": "do-not-edit-generated-files", "effect": "forbid", "action": "edit-generated-files", "sourceArtifactId": "hook/development/code-quality/generated-file-guard", "sourceField": "refuses", "sourceIndex": 0 }
     ]
   },
-  "relationships": { "composesWith": [], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": [] },
+  "relationships": { "composesWith": ["command/development/workflow/draft-evidenced-plan"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": ["pack/plan-and-verify-loop"] },
   "operational": { "behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "immediate", "latency_reason": "The runtime loads static guidance to apply behavior-preserving code-quality and module-boundary guidance to implementation files in the matching file scope.", "dataRetention": "none" },
   "adapters": {
     "claude-code": "adapters/claude-code.json",
