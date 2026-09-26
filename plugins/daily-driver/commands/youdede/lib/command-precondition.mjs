@@ -37,15 +37,17 @@ function safeRelative(candidate) {
 
 function withinWorkspace(workspace, candidate) {
   const resolved = path.resolve(workspace, candidate);
-  let real = resolved;
-  try {
-    real = realpathSync(resolved);
-  } catch {
-    // Missing paths are a legitimate negative result for *-exists checks; resolve the parent.
+  // Missing paths are a legitimate negative result for *-exists checks: resolve the nearest
+  // existing ancestor, so a symlinked ancestor is still followed, and re-append the missing tail.
+  let existing = resolved;
+  let real = null;
+  while (real === null) {
     try {
-      real = path.join(realpathSync(path.dirname(resolved)), path.basename(resolved));
+      real = path.join(realpathSync(existing), path.relative(existing, resolved));
     } catch {
-      return null;
+      const parent = path.dirname(existing);
+      if (parent === existing) return null;
+      existing = parent;
     }
   }
   const base = realpathSync(workspace);
