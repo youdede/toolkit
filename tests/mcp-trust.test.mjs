@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync, mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, mkdirSync, readFileSync, rmSync, statSync, utimesSync, writeFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import os from 'node:os';
 import path from 'node:path';
@@ -266,4 +266,50 @@ test('MCP runtime negotiates a supported protocol version and reports parse erro
   assert.equal(first.result.protocolVersion, SUPPORTED_PROTOCOL_VERSIONS[0]);
   assert.equal(second.result.protocolVersion, SUPPORTED_PROTOCOL_VERSIONS.at(-1));
   assert.equal(third.error.code, -32700);
+});
+
+test('repository MCP git tools run no configured programs and never write the index', (context) => {
+  const workspace = temporary(context, 'youdede-mcp-readonly-git-');
+  const git = (args, input) => {
+    const run = spawnSync('git', args, { cwd: workspace, env: cleanGitEnvironment(), input, encoding: 'utf8' });
+    assert.equal(run.status, 0, args.join(' '));
+    return run.stdout.trim();
+  };
+  git(['init', '-q']);
+  git(['config', 'user.email', 'tests@youdede.invalid']);
+  git(['config', 'user.name', 'youdede tests']);
+  writeFileSync(path.join(workspace, 'app.txt'), 'one\n');
+  git(['add', '.']);
+  git(['commit', '-qm', 'baseline']);
+  // A signature header is enough for log.showSignature to hand the commit to gpg.program.
+  const signed = git(['hash-object', '-t', 'commit', '-w', '--stdin'], [
+    `tree ${git(['rev-parse', 'HEAD^{tree}'])}`, `parent ${git(['rev-parse', 'HEAD'])}`,
+    'author t <t@youdede.invalid> 1700000000 +0000', 'committer t <t@youdede.invalid> 1700000000 +0000',
+    'gpgsig -----BEGIN PGP SIGNATURE-----', ' ', ' x', ' -----END PGP SIGNATURE-----', '', 'signed', ''
+  ].join('\n'));
+  git(['update-ref', 'HEAD', signed]);
+  const marker = path.join(path.dirname(workspace), `${path.basename(workspace)}-ran`);
+  context.after(() => rmSync(marker, { force: true }));
+  const program = path.join(workspace, 'program.sh');
+  writeFileSync(program, `#!/bin/sh\necho "$0 $*" >> '${marker}'\n`, { mode: 0o755 });
+  git(['config', 'core.fsmonitor', program]);
+  git(['config', 'core.untrackedCache', 'true']);
+  git(['config', 'log.showSignature', 'true']);
+  git(['config', 'gpg.program', program]);
+  writeFileSync(path.join(workspace, 'profile.json'), readFileSync('artifacts/mcp-servers/development/agent-tooling/repository-git-readonly/server.json'));
+  const index = path.join(workspace, '.git', 'index');
+  const past = new Date('2020-01-01T00:00:00Z');
+  utimesSync(index, past, past);
+  // A different mtime with identical content is what makes git refresh and rewrite the index.
+  const stale = new Date('2019-01-01T00:00:00Z');
+  utimesSync(path.join(workspace, 'app.txt'), stale, stale);
+  const before = readFileSync(index);
+  for (const name of ['git_status', 'git_diff', 'git_log']) {
+    const request = { jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name, arguments: {} } };
+    const run = spawnSync(process.execPath, [path.resolve('scripts/runtime/readonly-mcp-server.mjs'), '--profile', 'profile.json'], { cwd: workspace, input: `${JSON.stringify(request)}\n`, encoding: 'utf8' });
+    assert.ok(JSON.parse(run.stdout.trim()).result, `${name}: ${run.stdout}`);
+    assert.equal(existsSync(marker), false, `${name} ran a configured program`);
+    assert.equal(statSync(index).mtimeMs, past.getTime(), `${name} rewrote the index`);
+    assert.deepEqual(readFileSync(index), before, `${name} changed the index`);
+  }
 });

@@ -342,6 +342,14 @@ export function subagentBodyDrift(rawByTarget) {
     .map(([target]) => target);
 }
 
+// The specialist contract is a closed read-only allowlist; any other name is either broader
+// authority or a tool Claude Code does not document (https://code.claude.com/docs/en/tools-reference).
+const CLAUDE_CODE_SUBAGENT_TOOLS = new Set(['Read', 'Grep', 'Glob']);
+
+export function unknownClaudeCodeSubagentTools(tools) {
+  return String(tools || '').split(',').map((tool) => tool.trim()).filter((tool) => tool && !CLAUDE_CODE_SUBAGENT_TOOLS.has(tool));
+}
+
 function parseQuotedYamlScalar(line, key) {
   const prefix = `  ${key}: `;
   if (!line.startsWith(prefix)) return null;
@@ -850,6 +858,7 @@ export function validateArtifact(record, taxonomy, artifactsRoot = ARTIFACTS_ROO
       } else {
         if (fields.name !== manifest.slug) errors.push(`${target}: subagent frontmatter name must match the slug`);
         if (!fields.tools) errors.push(`${target}: subagent must declare a bounded tools list`);
+        if (target === 'claude-code') for (const tool of unknownClaudeCodeSubagentTools(fields.tools)) errors.push(`${target}: subagent tool ${tool} is outside the read-only allowlist`);
       }
       if (!raw.includes('## Refusals')) errors.push(`${target}: subagent must document Refusals`);
       if (refusalBulletCount(raw) < 3) errors.push(`${target}: subagent must document at least three concrete refusals`);

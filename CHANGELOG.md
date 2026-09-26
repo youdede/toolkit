@@ -11,6 +11,8 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 
 ### Changed
 
+- GitHub Copilot skill adapters are now `stable` and name the surfaces GitHub documents for Agent Skills; GitHub's page (read 2026-09-26) has no preview label. Copilot subagent adapters stay `preview` and now name the surfaces where GitHub marks custom agents as public preview: JetBrains IDEs, Eclipse, and Xcode.
+- Gemini CLI subagent adapters are now `stable`: the official subagents page (read 2026-09-26) says subagents are enabled by default and no longer calls them preview. Every Gemini CLI adapter, and `docs/targets.md`, now states that Google stopped serving Gemini CLI on 2026-06-18 for free use and for Google AI Pro and Ultra, and that Antigravity CLI, which replaces it for those users, is not a target.
 - The npm package no longer contains the `skills/` and `plugins/` marketplace copies, the marketplace manifests, or the README images; native marketplaces read them from the repository. The packed size drops from about 4.8 MB to about 1.4 MB, and the CLI commands behave identically on the extracted package.
 - Repository validation rejects a subagent whose body differs between targets, apart from the Copilot turn-budget line.
 - Behavioral evaluation coverage now includes every skill, subagent, command, and context. Release benchmark inputs, package verification, readiness counts, catalog documentation, and naming/authoring guidance use the same six-kind model.
@@ -18,6 +20,8 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 
 ### Fixed
 
+- The Claude Code profile of `rag-evaluation-reviewer` no longer lists `NotebookRead`, which is not a Claude Code tool; `Read` already returns notebook cells. Repository validation now rejects any Claude Code subagent tool outside `Read`, `Grep`, and `Glob`.
+- The `repository-git-readonly` MCP tools no longer run programs chosen by repository configuration or rewrite `.git/index`: every call passes `--no-optional-locks`, `-c core.fsmonitor=false`, and `-c diff.autoRefreshIndex=false`, and `git_log` passes `--no-show-signature`. Before, `git_status` and `git_diff` ran `core.fsmonitor` and refreshed the index, and `git_log` ran `gpg.program` when `log.showSignature` was set. Filter drivers still run; the threat note names this residual risk.
 - `commit-guard` now scans the working tree when the same command stages content or the commit takes content from the working tree (`-a`, pathspecs, `--include`, `--only`). Before, `git add .env && git commit` and `git commit -am` were allowed because the index was inspected before the staging ran.
 - `protected-branch-guard` resolves a bare `git push` through Git's own `@{push}` and blocks only a protected destination; it expands Git aliases once, treats refspecs on remotes with a `remote.<name>.push` mapping as uninspectable, and blocks `send-pack` and command runners (`xargs`, `find -exec`) that start a relevant Git subcommand. Before, an alias or a push mapping could force-push to `main`.
 - The read-only MCP runtime refuses credential files (`.env`, private keys, cloud credentials) that its profiles declare no access to. Before, `read_file` returned `.env` content.

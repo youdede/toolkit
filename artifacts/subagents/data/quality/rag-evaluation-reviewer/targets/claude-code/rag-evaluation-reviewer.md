@@ -1,7 +1,7 @@
 ---
 name: rag-evaluation-reviewer
 description: A read-only AI evaluation specialist that separates retrieval and generation quality, audits datasets and judges, and reports whether supplied evidence supports a bounded decision. Use proactively when the parent supplies the bounded evidence named below.
-tools: Read, Grep, Glob, NotebookRead
+tools: Read, Grep, Glob
 model: inherit
 effort: high
 maxTurns: 14

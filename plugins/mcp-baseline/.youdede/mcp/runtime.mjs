@@ -140,8 +140,13 @@ function walk(directory, workspace, output = []) {
   return output;
 }
 
+// Repository config is writable by the agent, so it must not choose programs or index writes:
+// core.fsmonitor runs a program, status refreshes .git/index unless optional locks are off, and diff
+// refreshes it regardless of that flag unless diff.autoRefreshIndex is false.
+const READ_ONLY_GIT = ['--no-optional-locks', '-c', 'core.fsmonitor=false', '-c', 'diff.autoRefreshIndex=false'];
+
 function runGit(workspace, args) {
-  const result = spawnSync('git', args, {
+  const result = spawnSync('git', [...READ_ONLY_GIT, ...args], {
     cwd: workspace,
     env: cleanGitEnvironment(),
     encoding: 'buffer',
@@ -209,7 +214,7 @@ async function callTool(profile, workspace, name, input) {
   if (name === 'git_log') {
     const limit = input.limit === undefined ? 20 : input.limit;
     if (!Number.isInteger(limit) || limit < 1 || limit > 100) throw new Error('limit must be an integer from 1 through 100');
-    return runGit(workspace, ['log', `--max-count=${limit}`, '--format=%H%x09%aI%x09%s']);
+    return runGit(workspace, ['log', '--no-show-signature', `--max-count=${limit}`, '--format=%H%x09%aI%x09%s']);
   }
   if (name === 'fetch_url') return fetchAllowlisted(profile, input);
   throw new Error('unknown tool');
