@@ -302,6 +302,10 @@ test('protected branch fails closed when Git inspection itself fails', () => {
   });
   assert.equal(context.inspectionError, true);
   assert.equal(evaluateBranch(input, context).ruleId, 'protected-branch-unverified');
+  // Without the alias table an unknown subcommand may be an alias for a protected push.
+  const bash = (command) => evaluateBranch({ tool_name: 'Bash', tool_input: { command } }, context);
+  assert.equal(bash('git ship').ruleId, 'protected-branch-unverified');
+  assert.equal(bash('git status && git log -1').exitCode, 0);
 });
 
 test('new hook wrappers use stable process exits for valid, blocked, malformed, and oversized input', (context) => {

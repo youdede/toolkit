@@ -709,6 +709,9 @@ const RUNNER_SUBCOMMANDS = new Set([...RELEVANT_SUBCOMMANDS, 'pull', 'fetch']);
 const COMMAND_RUNNERS = new Set(['find', 'parallel', 'watch']);
 const RUNNER_WRAPPERS = new Set(['xargs', 'find']);
 const SEQUENCE_REASON = 'an earlier command in the same shell command changes the branch, HEAD, or Git configuration this command depends on';
+// Read-only built-ins still allowed when repository state (and so the alias table) cannot be read.
+// Git never runs an alias named like a built-in, so these names cannot hide one.
+const READ_ONLY_SUBCOMMANDS = new Set(['status', 'log', 'diff', 'show', 'blame', 'grep', 'ls-files', 'ls-tree', 'rev-parse', 'rev-list', 'describe', 'shortlog', 'cat-file', 'help', 'version']);
 
 // Git runs an alias only when no built-in command has that name, so a configured alias is
 // expanded once and re-inspected. Shell aliases (`!…`) and aliases of aliases are not expanded.
@@ -824,6 +827,10 @@ export function evaluate(input, context = {}) {
       return block('protected-command-uninspectable', 'a command runner can start a Git mutation with arguments the guard cannot see');
     }
     if (configUnknown && raw.subcommand) return block('protected-git-sequence-uninspectable', SEQUENCE_REASON);
+    // Without the alias table any other name may be an alias for a protected push.
+    if (context.inspectionError && raw.subcommand && !READ_ONLY_SUBCOMMANDS.has(raw.subcommand)) {
+      return block('protected-branch-unverified', 'repository branch state cannot be inspected safely');
+    }
     const local = { ...context, aliases, pushConfiguredRemotes };
     const parsed = raw.ambiguous ? raw : expandAlias(raw, local);
     if (parsed.ambiguous) return block('protected-git-command-uninspectable', 'the Git invocation changes or obscures repository scope');
