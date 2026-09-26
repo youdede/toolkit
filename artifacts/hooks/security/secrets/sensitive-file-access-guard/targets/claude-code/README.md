@@ -6,6 +6,10 @@ Protected paths include environment files such as `.env` and `.env.production`, 
 
 Malformed or oversized hook input fails closed. A known file-access command with a dynamic operand also fails closed because the protected path cannot be determined before execution. Irrelevant events and commands outside the documented file-access boundary are allowed.
 
+Recursive reads (`grep -r`/`-R`/`--recursive`/`-d recurse`, `rg --hidden` or `-uu`, `tar`, `cp -r`/`-a`, `zip -r`) are blocked when the searched directory contains a protected file. `--exclude`, `--exclude-dir`, `--include` (grep), `--exclude` (tar), and `-g`/`--glob` (rg) are honoured for file and directory names. Plain `rg` skips hidden files and is checked the same way. `.git` is not walked. A tree larger than 20000 entries is blocked as uninspectable; narrow the path or exclude large directories.
+
+The `Grep` tool is checked as a recursive read of its `path` (default: the working directory) and honours its `glob`; it reads hidden files (observed with Claude Code 2.1.282 on 2026-09-26). The `Grep` tool and `rg` (unless `-u`, `-uu`, `-uuu`, `--no-ignore`, or `--no-ignore-vcs` is given) skip files ignored by git, so inside a Git repository the hook asks `git ls-files` for the files they would visit, up to 200000; a gitignored `.env` is then not a reason to block. Submodules and nested repositories are walked without gitignore rules. Outside a Git repository, or when Git fails, the hook walks the directory as above. System `grep -r` reads gitignored files and is always checked with the walk.
+
 ## Refusals and limits
 
 - The hook refuses to read, print, copy, redact, or transform protected file contents.

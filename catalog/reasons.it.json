@@ -314,7 +314,7 @@
     },
     "sensitive-file-access-guard": {
       "risk": "Questo controllo automatico blocca l'accesso deterministico ai file delle credenziali, alle chiavi private e ai file segreti dell'ambiente; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
-      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare l'accesso deterministico a file di credenziali, chiavi private e file segreti dell'ambiente senza attività differite."
+      "latency": "Per bloccare l'accesso ai file delle credenziali, il punto di ingresso può elencare i file del repository con un sottoprocesso git locale di durata limitata prima di rispondere."
     },
     "ci-trust-boundary-guard": {
       "risk": "Questo controllo automatico blocca le nuove credenziali CI ad alta confidenza introdotte e le espansioni dei privilegi di esecuzione; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
@@ -1261,5 +1261,5 @@
       "latency": "Lo specialista segue staticamente una procedura per prerequisiti, stato, risultati osservabili, nuovi tentativi e rami di ripristino, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     }
   },
-  "sourceHash": "e5ba317c2cafb0c0a2a1916d61b402e388661cd9d2e17f66033b7faad9abbf81"
+  "sourceHash": "7b6f7b61f5fe2a07513b6875ba7d8ee9dea6045d18810fe1e4c814e2e681a972"
 }
