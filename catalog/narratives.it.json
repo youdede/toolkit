@@ -1057,7 +1057,7 @@
     },
     "design-for-localization": {
       "summary": "Trasforma il cambio di locale in vincoli espliciti di layout e contenuti per l'espansione del testo, la direzione, i formati e il significato.",
-      "description": "Specifica come un'interfaccia regge il cambio di locale attraverso margini di espansione del testo per fasce di lunghezza, vincoli di struttura delle stringhe, regole di mirroring bidirezionale con gestione della direzione mista, formati di data, numero, nome e indirizzo determinati dal locale e revisione del significato di icone e colori tra culture diverse, ciascuno indicato come vincolo di layout o contenuto. Da usare quando un prodotto viene distribuito in più locale o si sta preparando a farlo.",
+      "description": "Specifica come un'interfaccia regge il cambio di locale attraverso margini di espansione del testo per fasce di lunghezza, vincoli di struttura delle stringhe, regole di mirroring bidirezionale con gestione della direzione mista, formati di data, numero, nome e indirizzo determinati dal locale e revisione del significato di icone e colori tra culture diverse, ciascuno indicato come vincolo di layout o contenuto. Da usare quando un prodotto viene distribuito in più di un locale o si sta preparando a farlo.",
       "purposes": [],
       "refuses": [
         "Non dimensiona alcun contenitore sul testo nella lingua di origine né promette che le traduzioni vi entreranno.",
@@ -1657,7 +1657,7 @@
       ]
     },
     "github-readonly": {
-      "summary": "Consulta repository, issue, pull request e Actions su GitHub tramite il server ufficiale in modalità di sola lettura.",
+      "summary": "Consulta evidenze delimitate su repository, issue, pull request e Actions di GitHub tramite il server ufficiale in modalità di sola lettura.",
       "description": "Avvia il server MCP ufficiale di GitHub da un'immagine container fissata tramite digest, con modalità di sola lettura e strumenti selezionati per esaminare le prove del repository.",
       "purposes": [],
       "refuses": [
