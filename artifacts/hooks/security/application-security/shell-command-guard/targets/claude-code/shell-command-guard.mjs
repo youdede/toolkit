@@ -446,22 +446,21 @@ function gitCommand(entry) {
   return invocation.ambiguous || !invocation.name ? null : invocation;
 }
 
-// 'force' and 'delete' markers of `git push` arguments. Nothing after --force-with-lease counts as a
-// force, as before; short option groups such as -uf count, and -o takes the rest of its group.
+// 'force' and 'delete' markers of `git push` arguments. -f, --force, or a +refspec forces the push even
+// with --force-with-lease or --force-if-includes (verified with Git 2.54), so only a lease alone passes.
+// Short option groups such as -uf count; -o takes the rest of its group.
 function pushArguments(entry) {
   const git = gitCommand(entry);
   if (git?.name !== 'push') return [];
   const markers = [];
-  let lease = false;
   for (const token of git.args) {
     const value = token.value;
-    if (value.startsWith('--force-with-lease')) lease = true;
     if (value === '--delete' || /^:[A-Za-z0-9._/-]/.test(value)) markers.push('delete');
-    if (!lease && (/^--force(?:=\S*)?$/.test(value) || /^\+[A-Za-z0-9._/-]/.test(value))) markers.push('force');
+    if (/^--force(?:=\S*)?$/.test(value) || /^\+[A-Za-z0-9._/-]/.test(value)) markers.push('force');
     if (/^-[A-Za-z]+$/.test(value)) {
       const group = value.slice(1).split('o')[0];
       if (group.includes('d')) markers.push('delete');
-      if (!lease && group.includes('f')) markers.push('force');
+      if (group.includes('f')) markers.push('force');
     }
   }
   return markers;
