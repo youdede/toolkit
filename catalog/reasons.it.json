@@ -5,7 +5,7 @@
       "latency": "Il comando segue un controllo delle precondizioni e più passaggi del flusso di lavoro mentre controlla i file di istruzioni del repository e delle cartelle per individuare eventuali deviazioni, conflitti di precedenza e limiti operativi mancanti."
     },
     "preflight-change-environment": {
-      "risk": "Questo comando raccoglie uno snapshot deterministico dell'ambiente, con i dati sensibili oscurati, prima che inizi una modifica al repository; non rivendica la parità con CI o la produzione da uno snapshot locale.",
+      "risk": "Questo comando raccoglie uno snapshot deterministico dell'ambiente, con i dati sensibili oscurati, prima che inizi una modifica al repository; non rivendica la parità con CI o la produzione sulla base di uno snapshot locale.",
       "latency": "Il comando segue un controllo delle precondizioni e più passaggi del flusso di lavoro mentre raccoglie uno snapshot deterministico dell'ambiente, con i dati sensibili oscurati, prima che inizi una modifica del repository."
     },
     "re-pin-mcp-tools": {
@@ -21,7 +21,7 @@
       "latency": "Il comando segue un controllo delle precondizioni e più passaggi del flusso di lavoro mentre controlla la catena delle prove di rilascio per la versione corrente ed emette un rapporto di verdetto leggibile dalla macchina."
     },
     "draft-evidenced-plan": {
-      "risk": "Questo comando redige un piano di implementazione ordinato in cui ogni passaggio cita il codice che tocca e le prove che ne dimostrano il completamento; non modifica, crea o elimina alcun file durante la pianificazione; si limita a leggere.",
+      "risk": "Questo comando redige un piano di implementazione ordinato in cui ogni passaggio cita il codice che tocca e le prove che ne dimostrano il completamento; non modifica, crea né elimina alcun file durante la pianificazione; si limita a leggere.",
       "latency": "Il comando segue un controllo delle precondizioni e più passaggi del flusso di lavoro mentre elabora un piano di implementazione ordinato in cui ogni passaggio cita il codice che tocca e le prove che dimostrano il completamento."
     },
     "verify-claims-against-output": {
@@ -37,12 +37,12 @@
       "latency": "Il comando segue un controllo delle precondizioni e più passaggi del flusso di lavoro mentre aggiunge un checkpoint di lavoro oscurato e concatenato tramite hash al registro della sessione con un ancoraggio git verificato."
     },
     "verify-session-ledger": {
-      "risk": "Questo comando verifica il registro della sessione concatenata con hash e segnala esattamente quali voci, se presenti, non mantengono l'integrità; non trasmette il contenuto del registro; il verdetto porta solo conteggi e hash.",
-      "latency": "Il comando segue un controllo delle precondizioni e più passaggi del flusso di lavoro mentre verifica il registro della sessione concatenata tramite hash e segnala esattamente quali voci, se presenti, non mantengono l'integrità."
+      "risk": "Questo comando verifica il registro della sessione concatenato con hash e segnala esattamente quali voci, se presenti, non mantengono l'integrità; non trasmette il contenuto del registro; il verdetto contiene solo conteggi e hash.",
+      "latency": "Il comando segue un controllo delle precondizioni e più passaggi del flusso di lavoro mentre verifica il registro della sessione concatenato tramite hash e segnala esattamente quali voci, se presenti, non mantengono l'integrità."
     },
     "database-migration-baseline": {
-      "risk": "Questo contesto applica una linea di base di migrazione del database supportata dalla provenienza ai file del repository in cui tale superficie decisionale è attiva; fornisce una guida senza strumenti o autorità di approvazione.",
-      "latency": "Il runtime carica indicazioni statiche per applicare una linea di base di migrazione del database supportata dalla provenienza ai file del repository in cui tale superficie decisionale è attiva nell'ambito del file corrispondente."
+      "risk": "Questo contesto applica una linea di base di migrazione del database supportata dalla provenienza ai file del repository in cui tale superficie decisionale è attiva; fornisce una guida senza autorità su strumenti o approvazioni.",
+      "latency": "Il runtime carica indicazioni statiche per applicare una linea di base di migrazione del database supportata dalla provenienza ai file del repository in cui tale superficie decisionale è attiva, nell'ambito di file corrispondente."
     },
     "api-contract-baseline": {
       "risk": "Questo contesto applica una baseline del contratto API supportata dalla provenienza ai file del repository in cui è attiva la superficie decisionale; fornisce indicazioni senza alcuna autorità su strumenti o approvazioni.",
@@ -50,7 +50,7 @@
     },
     "coding-style-baseline": {
       "risk": "Questo contesto applica ai file di implementazione indicazioni sulla qualità del codice e sui limiti dei moduli che preservano il comportamento; fornisce indicazioni senza alcuna autorità su strumenti o approvazioni.",
-      "latency": "Il runtime carica indicazioni statiche per applicare indicazioni sulla qualità del codice e sui limiti del modulo che preservano il comportamento ai file di implementazione nell'ambito del file corrispondente."
+      "latency": "Il runtime carica indicazioni statiche per applicare ai file di implementazione indicazioni sulla qualità del codice e sui confini dei moduli che preservano il comportamento, nell'ambito di file corrispondente."
     },
     "testing-baseline": {
       "risk": "Questo contesto applica indicazioni test-first, supportate da evidenze e che preservano l'integrità quando si lavora con file di test; fornisce indicazioni senza autorità sugli strumenti né sulle approvazioni.",
@@ -61,16 +61,16 @@
       "latency": "Il runtime carica indicazioni statiche per applicare una baseline di workflow CI supportata da provenance ai file del repository in cui quella superficie decisionale è attiva, nell'ambito di file corrispondente."
     },
     "git-workflow-baseline": {
-      "risk": "Questo contesto rende l'integrazione dei branch recuperabile, esplicita e basata su evidenze aggiornate del repository; offre indicazioni senza poter usare strumenti né approvare operazioni.",
-      "latency": "Il runtime carica indicazioni statiche per mantenere l'integrazione dei rami recuperabile, esplicita e supportata da nuove prove del repository nell'ambito del file corrispondente."
+      "risk": "Questo contesto rende l'integrazione dei branch reversibile, esplicita e basata su evidenze aggiornate del repository; offre indicazioni senza poter usare strumenti né approvare operazioni.",
+      "latency": "Il runtime carica indicazioni statiche per mantenere l'integrazione dei rami reversibile, esplicita e supportata da prove aggiornate del repository nell'ambito del file corrispondente."
     },
     "dependency-change-baseline": {
       "risk": "Questo contesto applica una linea di base di modifica delle dipendenze supportata dalla provenienza ai file del repository in cui la superficie decisionale è attiva; fornisce indicazioni senza autorità sugli strumenti né sulle approvazioni.",
       "latency": "Il runtime carica indicazioni statiche per applicare una linea di base di modifica delle dipendenze supportata dalla provenienza ai file del repository in cui tale superficie decisionale è attiva nell'ambito del file corrispondente."
     },
     "security-baseline": {
-      "risk": "Fornisce una guida con autorità minima senza concedere l'accesso allo strumento o modificare le credenziali.",
-      "latency": "Il runtime carica indicazioni statiche per applicare indicazioni di autorità minima per strumenti dell'agente, credenziali, file sensibili e dati in uscita nell'ambito del file corrispondente."
+      "risk": "Fornisce indicazioni sul principio del minimo privilegio senza concedere l'accesso agli strumenti né modificare le credenziali.",
+      "latency": "Il runtime carica indicazioni statiche per applicare il principio del minimo privilegio a strumenti dell'agente, credenziali, file sensibili e dati in uscita nell'ambito del file corrispondente."
     },
     "schema-compatibility-guard": {
       "risk": "Questo controllo automatico blocca le modifiche al contratto JSON Schema, Avro e Protobuf dimostrabilmente incompatibili; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
@@ -81,12 +81,12 @@
       "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare l'SQL che modifica i dati inviato direttamente a strumenti di comando e connettori di database, senza attività differite."
     },
     "migration-safety-guard": {
-      "risk": "Questo controllo automatico richiede l'approvazione esplicita per le azioni di migrazione distruttive del database ad alta confidenza; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
-      "latency": "Il punto di ingresso gestisce un evento intercettato per richiedere l'approvazione esplicita per azioni di migrazione del database distruttive ad alta confidenza senza attività differite."
+      "risk": "Questo controllo automatico richiede l'approvazione esplicita per le azioni di migrazione del database riconosciute con alta confidenza come distruttive; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
+      "latency": "Il punto di ingresso gestisce un evento intercettato per richiedere l'approvazione esplicita per azioni di migrazione del database riconosciute con alta confidenza come distruttive, senza attività differite."
     },
     "authentication-accessibility-guard": {
       "risk": "Questo controllo automatico blocca le modifiche che impediscono a un gestore di password di compilare un campo di autenticazione o all'utente di incollarvi contenuti; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
-      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare le modifiche che impediscono a un gestore di password di compilare un campo di autenticazione o all'utente di incollarvi contenuti senza attività differite."
+      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare le modifiche che impediscono a un gestore di password di compilare un campo di autenticazione o all'utente di incollarvi contenuti, senza attività differite."
     },
     "focus-style-regression-guard": {
       "risk": "Questo controllo automatico blocca gli stati di focus CSS resi invisibili dalla modifica che non hanno alcuna sostituzione visibile; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
@@ -98,7 +98,7 @@
     },
     "test-assertion-removal-guard": {
       "risk": "Questo controllo automatico blocca la rimozione dell'ultima asserzione riconoscibile da un file di test esistente; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
-      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare la rimozione dell'ultima asserzione riconoscibile da un file di test esistente senza attività differite."
+      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare la rimozione dell'ultima asserzione riconoscibile da un file di test esistente, senza attività differite."
     },
     "binary-mutation-guard": {
       "risk": "Questo controllo automatico blocca le modifiche dell'editor di testo su file binari esistenti o con firma binaria; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
@@ -106,11 +106,11 @@
     },
     "generated-file-guard": {
       "risk": "Questo controllo automatico impedisce all'agente di modificare direttamente file identificati con certezza come generati. Un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
-      "latency": "Il componente controlla un singolo evento prima di consentire o bloccare la modifica, senza attività differite."
+      "latency": "Il punto di ingresso gestisce un evento intercettato per impedire modifiche dirette da parte dell'agente a file che sono inequivocabilmente artefatti generati, senza attività differite."
     },
     "policy-file-guard": {
-      "risk": "Questo controllo automatico impedisce a un agente di indebolire silenziosamente i file di criteri di qualità e proprietà esistenti; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
-      "latency": "Il punto di ingresso gestisce un evento intercettato per impedire a un agente di indebolire silenziosamente i file di criteri di qualità e proprietà esistenti senza attività differite."
+      "risk": "Questo controllo automatico impedisce a un agente di indebolire silenziosamente i file di policy di qualità e proprietà esistenti; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
+      "latency": "Il punto di ingresso gestisce, senza attività differite, un singolo evento intercettato per impedire a un agente di indebolire silenziosamente i file di policy di qualità e proprietà esistenti."
     },
     "api-contract-compatibility-guard": {
       "risk": "Questo controllo automatico blocca le rimozioni ad alta confidenza dalle modifiche limitate del contratto OpenAPI; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
@@ -121,12 +121,12 @@
       "latency": "Per bloccare i commit contenenti istruzioni del debugger ad alta confidenza o test mirati, il punto di ingresso può eseguire un sottoprocesso locale limitato prima di rispondere."
     },
     "lint-suppression-guard": {
-      "risk": "Questo controllo automatico blocca le nuove soppressioni diagnostiche generali consentendo al tempo stesso eccezioni alle regole con ambito; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
-      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare le nuove soppressioni diagnostiche generali consentendo al tempo stesso eccezioni alle regole con ambito senza attività differite."
+      "risk": "Questo controllo automatico blocca le nuove soppressioni diagnostiche generali consentendo al tempo stesso eccezioni circoscritte a una regola specifica; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
+      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare le nuove soppressioni diagnostiche generali consentendo al tempo stesso eccezioni circoscritte a una regola specifica senza attività differite."
     },
     "exception-swallowing-guard": {
       "risk": "Questo controllo automatico blocca i gestori di eccezioni vuoti appena aggiunti e i rigetti di promesse ignorati; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
-      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare i gestori di eccezioni vuoti appena aggiunti e i rifiuti di promesse ignorati senza attività differite."
+      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare i gestori di eccezioni vuoti appena aggiunti e i rigetti di promesse ignorati senza attività differite."
     },
     "tool-output-budget-guard": {
       "risk": "Questo osservatore avvisa quando una chiamata allo strumento shell restituisce un output oltre il budget di byte dichiarato, con indicazioni sulla paginazione; non può bloccare l'evento o modificare lo stato ispezionato.",
@@ -134,7 +134,7 @@
     },
     "test-integrity-guard": {
       "risk": "Questo controllo automatico blocca le soppressioni dei test appena introdotte e la rimozione esplicita tramite shell delle sorgenti dei test; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
-      "latency": "Il componente controlla un singolo evento per bloccare nuove esclusioni dei test e comandi shell che eliminano i file sorgente dei test, senza attività differite."
+      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare le soppressioni dei test appena introdotte e la rimozione esplicita tramite shell delle sorgenti dei test, senza attività differite."
     },
     "phase-gate-guard": {
       "risk": "Questo controllo automatico blocca le scritture delle prove di fase a meno che la fase precedente nella catena spec-design-tasks-implementation esista e sia valida; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
@@ -153,8 +153,8 @@
       "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare le operazioni dirette di eliminazione, terminazione e purge tramite CLI cloud ad alta confidenza, senza attività differite."
     },
     "instruction-config-integrity-guard": {
-      "risk": "Questo controllo automatico protegge la configurazione del progetto da bypass espliciti di applicazione e osserva la deriva del percorso delle istruzioni; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
-      "latency": "Per proteggere la configurazione del progetto da bypass espliciti di applicazione e osservare la deriva del percorso delle istruzioni, il punto di ingresso ispeziona uno stato limitato di sessione, tool o repository."
+      "risk": "Questo controllo automatico protegge la configurazione del progetto da bypass espliciti dei controlli e osserva la deriva del percorso delle istruzioni; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
+      "latency": "Per proteggere la configurazione del progetto da bypass espliciti dei controlli e osservare la deriva del percorso delle istruzioni, il punto di ingresso ispeziona uno stato limitato di sessione, tool o repository."
     },
     "subagent-fanout-guard": {
       "risk": "Questo controllo automatico limita per sessione la delega ai subagent tramite un conteggio con limiti definiti sulla trascrizione; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
@@ -162,7 +162,7 @@
     },
     "protected-branch-guard": {
       "risk": "Questo controllo automatico blocca le modifiche native e le mutazioni dirette di Git che prendono di mira un branch protetto; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
-      "latency": "Per bloccare modifiche native e operazioni Git dirette verso un branch protetto, il componente può avviare un sottoprocesso locale con durata limitata."
+      "latency": "Per bloccare modifiche native e operazioni Git dirette verso un branch protetto, il punto di ingresso può eseguire un sottoprocesso locale con limiti definiti prima di restituire il risultato."
     },
     "worktree-removal-evidence-guard": {
       "risk": "Questo osservatore rileva lo stato Git con modifiche non committate subito prima che Claude Code rimuova un worktree isolato; non può bloccare l'evento né modificare lo stato esaminato.",
@@ -185,24 +185,24 @@
       "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare la pubblicazione reale di pacchetti nell'ecosistema, consentendo al contempo il confezionamento locale e le prove a secco, senza attività differite."
     },
     "path-portability-guard": {
-      "risk": "Questo controllo automatico blocca i nuovi percorsi del repository che non sono validi o soggetti a collisioni tra i file system comuni; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
-      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare nuovi percorsi di repository non validi o soggetti a collisioni tra file system comuni senza attività differite."
+      "risk": "Questo controllo automatico blocca i nuovi percorsi del repository che non sono validi o soggetti a collisioni sui file system comuni; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
+      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare nuovi percorsi di repository non validi o soggetti a collisioni sui file system comuni, senza attività differite."
     },
     "foreground-process-guard": {
       "risk": "Questo controllo automatico blocca processi di sviluppo indefiniti e riconoscibili lanciati in primo piano; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
-      "latency": "L'entrypoint gestisce un evento intercettato per bloccare processi di sviluppo indefiniti riconoscibili lanciati in primo piano senza lavoro differito."
+      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare processi di sviluppo indefiniti riconoscibili lanciati in primo piano senza attività differite."
     },
     "release-clean-state-guard": {
-      "risk": "Questo controllo automatico richiede un worktree Git pulito e collegato prima di un comando riconosciuto di pubblicazione di pacchetto o release; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
-      "latency": "Per richiedere un worktree Git pulito e collegato prima di un comando riconosciuto di pubblicazione di pacchetto o release, il punto di ingresso può eseguire un sottoprocesso locale limitato prima di rispondere."
+      "risk": "Questo controllo automatico richiede un worktree Git pulito e con HEAD non in stato detached prima di un comando riconosciuto di pubblicazione di pacchetto o release; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
+      "latency": "Per richiedere un worktree Git pulito e con HEAD non in stato detached prima di un comando riconosciuto di pubblicazione di pacchetto o release, il punto di ingresso può eseguire un sottoprocesso locale limitato prima di rispondere."
     },
     "large-diff-review-guard": {
       "risk": "Questo controllo automatico richiede una modifica in staging più piccola quando un commit supera le soglie di revisione limitate; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
       "latency": "Per richiedere una modifica in staging più piccola quando un commit supera le soglie di revisione limitate, il punto di ingresso può eseguire un sottoprocesso locale limitato prima di rispondere."
     },
     "scheduled-task-mutation-guard": {
-      "risk": "Questo controllo automatico blocca la creazione diretta, la mutazione, l'esecuzione e la rimozione delle attività pianificate del sistema operativo; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
-      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare la creazione diretta, la mutazione, l'esecuzione e la rimozione delle attività pianificate del sistema operativo senza attività differite."
+      "risk": "Questo controllo automatico blocca la creazione diretta, la modifica, l'esecuzione e la rimozione delle attività pianificate del sistema operativo; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
+      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare la creazione diretta, la modifica, l'esecuzione e la rimozione delle attività pianificate del sistema operativo senza attività differite."
     },
     "compact-readiness-guard": {
       "risk": "Questo osservatore avvisa prima della compattazione quando modifiche non committate o attestazioni del ledger in sospeso perderebbero silenziosamente il contesto; non può bloccare l'evento né modificare lo stato ispezionato.",
@@ -226,7 +226,7 @@
     },
     "release-version-consistency-guard": {
       "risk": "Questo controllo automatico richiede che le versioni del pacchetto e del lockfile concordino prima di un comando di pubblicazione riconosciuto; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
-      "latency": "Il punto di ingresso gestisce un evento intercettato per richiedere che le versioni del pacchetto e del lockfile concordino prima di un comando di pubblicazione riconosciuto senza attività differite."
+      "latency": "Il punto di ingresso gestisce, senza attività differite, un singolo evento intercettato per richiedere che le versioni del pacchetto e del lockfile concordino prima di un comando di pubblicazione riconosciuto."
     },
     "outbound-data-guard": {
       "risk": "Questo controllo automatico blocca i caricamenti espliciti di file locali e i payload dinamici inviati dai comandi di rete comuni; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
@@ -238,19 +238,19 @@
     },
     "workspace-boundary-guard": {
       "risk": "Questo controllo automatico blocca le modifiche native ai file la cui destinazione risolta esce dallo spazio di lavoro del progetto attivo; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
-      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare le modifiche native ai file la cui destinazione risolta esce dallo spazio di lavoro del progetto attivo senza attività differite."
+      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare le modifiche native ai file la cui destinazione risolta esce dallo spazio di lavoro del progetto attivo, senza attività differite."
     },
     "archive-extraction-guard": {
       "risk": "Questo controllo automatico blocca l'estrazione dell'archivio guidata dall'agente quando il contenimento della voce non può essere dimostrato prima dell'esecuzione; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
-      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare l'estrazione dell'archivio guidata dall'agente quando non è possibile dimostrare il contenimento della voce prima dell'esecuzione senza attività differite."
+      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare l'estrazione dell'archivio guidata dall'agente quando non è possibile dimostrare il contenimento della voce prima dell'esecuzione, senza attività differite."
     },
     "ci-reference-pinning-guard": {
       "risk": "Questo controllo automatico richiede riferimenti di commit o digest immutabili quando i flussi di lavoro CI acquisiscono l'esecuzione esterna; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
-      "latency": "Il componente controlla un singolo evento per richiedere riferimenti immutabili a commit o digest nei workflow CI che avviano codice esterno, senza attività differite."
+      "latency": "Il punto di ingresso gestisce un singolo evento intercettato per richiedere riferimenti di commit o digest immutabili quando i flussi di lavoro CI acquisiscono un'esecuzione esterna, senza attività differite."
     },
     "dynamic-code-execution-guard": {
       "risk": "Questo controllo automatico blocca le nuove primitive di esecuzione diretta del codice dinamico nei file sorgente supportati; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
-      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare nuove primitive di esecuzione diretta del codice dinamico nei file di origine supportati senza attività differite."
+      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare nuove primitive di esecuzione diretta del codice dinamico nei file sorgente supportati senza attività differite."
     },
     "container-privilege-guard": {
       "risk": "Questo controllo automatico blocca l'espansione esplicita dei privilegi del contenitore nei comandi e nella configurazione di distribuzione riconosciuta; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
@@ -277,12 +277,12 @@
       "latency": "Il punto di ingresso gestisce un evento intercettato per rifiutare i sottomoduli Git appena introdotti con destinazioni relative, mutabili, locali o non sicure senza attività differite."
     },
     "system-path-mutation-guard": {
-      "risk": "Questo controllo automatico blocca i comandi espliciti di mutazione dei file destinati ai percorsi protetti del sistema operativo; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
-      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare i comandi espliciti di mutazione dei file destinati ai percorsi protetti del sistema operativo senza attività differite."
+      "risk": "Questo controllo automatico blocca i comandi espliciti di modifica dei file destinati ai percorsi protetti del sistema operativo; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
+      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare i comandi espliciti di modifica dei file destinati ai percorsi protetti del sistema operativo senza attività differite."
     },
     "user-account-mutation-guard": {
-      "risk": "Questo controllo automatico blocca le mutazioni dirette di utenti locali, gruppi, password e assegnazioni di privilegi; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
-      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare le mutazioni dirette di utenti locali, gruppi, password e assegnazioni di privilegi senza attività differite."
+      "risk": "Questo controllo automatico blocca le modifiche dirette locali a utenti, gruppi, password e assegnazioni di privilegi; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
+      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare le modifiche dirette locali a utenti, gruppi, password e assegnazioni di privilegi, senza attività differite."
     },
     "install-lifecycle-script-guard": {
       "risk": "Questo controllo automatico blocca i comandi del ciclo di vita del pacchetto appena introdotti che vengono eseguiti durante l'installazione delle dipendenze; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
@@ -305,8 +305,8 @@
       "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare le chiamate agli strumenti MCP del toolkit che indicano un host di egress non dichiarato, senza attività differite."
     },
     "symlink-publication-guard": {
-      "risk": "Questo controllo automatico impedisce ai commit di pubblicare collegamenti simbolici che sfuggono o attraversano in modo ambiguo il repository; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
-      "latency": "Per impedire ai commit di pubblicare collegamenti simbolici che sfuggono o attraversano in modo ambiguo il repository, il punto di ingresso può eseguire un sottoprocesso locale limitato prima di rispondere."
+      "risk": "Questo controllo automatico impedisce ai commit di pubblicare collegamenti simbolici che escono dal repository o lo attraversano in modo ambiguo; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
+      "latency": "Per impedire ai commit di pubblicare collegamenti simbolici che escono dal repository o lo attraversano in modo ambiguo, il punto di ingresso può eseguire un sottoprocesso locale limitato prima di rispondere."
     },
     "commit-guard": {
       "risk": "Questo controllo automatico blocca i commit che contengono segreti riconosciuti con elevata certezza, file sensibili o aggiramenti pericolosi. Un blocco errato può interrompere il lavoro legittimo, ma il controllo non esegue l'azione bloccata.",
@@ -314,7 +314,7 @@
     },
     "prompt-secret-guard": {
       "risk": "Questo controllo automatico blocca i prompt contenenti formati di credenziali ad alta confidenza prima dell'elaborazione del modello; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
-      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare i prompt contenenti formati di credenziali ad alta confidenza prima dell'elaborazione del modello senza attività differite."
+      "latency": "Il punto di ingresso gestisce, senza attività differite, un singolo evento intercettato per bloccare i prompt contenenti formati di credenziali ad alta confidenza prima dell'elaborazione del modello."
     },
     "sensitive-file-access-guard": {
       "risk": "Questo controllo automatico blocca in modo deterministico l'accesso ai file delle credenziali, alle chiavi private e ai file di segreti dell'ambiente; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
@@ -325,8 +325,8 @@
       "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare le nuove espansioni ad alta confidenza di credenziali e privilegi di esecuzione CI, senza attività differite."
     },
     "transport-security-regression-guard": {
-      "risk": "Questo controllo automatico blocca le modifiche ad alta confidenza al codice sorgente e alla configurazione che disabilitano la verifica del trasporto; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
-      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare le modifiche ad alta confidenza al codice sorgente e alla configurazione che disabilitano la verifica del trasporto, senza attività differite."
+      "risk": "Questo controllo automatico blocca le modifiche al codice sorgente e alla configurazione che, con alta confidenza, disabilitano la verifica del trasporto; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
+      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare le modifiche al codice sorgente e alla configurazione che, con alta confidenza, disabilitano la verifica del trasporto, senza attività differite."
     },
     "allowlisted-fetch-readonly": {
       "risk": "Questo profilo MCP recupera documentazione HTTPS con limiti definiti da tre host espliciti tramite un server MCP con versione fissata; non recupera contenuti da host esterni all'esatta lista consentita di documentazione HTTPS dichiarata.",
@@ -349,8 +349,8 @@
       "latency": "Un percorso nel browser richiede l'avvio del server con versione fissata e l'attesa delle azioni e dei risultati della pagina."
     },
     "design-data-quality-controls": {
-      "risk": "Questa skill progetta contratti, controlli, proprietà e comportamento degli incidenti sulla qualità dei dati attorno a decisioni reali; non considera il superamento dei controlli di schema come garanzia di un significato analitico affidabile.",
-      "latency": "La skill progetta contratti, controlli, proprietà e comportamento degli incidenti sulla qualità dei dati sulla base di decisioni reali, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questa skill progetta contratti, controlli, responsabilità e comportamento in caso di incidenti sulla qualità dei dati attorno a decisioni reali; non considera il superamento dei controlli di schema come garanzia di un significato analitico affidabile.",
+      "latency": "La skill progetta contratti, controlli, responsabilità e comportamento in caso di incidenti sulla qualità dei dati sulla base di decisioni reali, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "provision-postgres-readonly-role": {
       "risk": "Può applicare concessioni di ruoli di produzione dopo un'autorizzazione esplicita, modificando l'accesso al database in produzione.",
@@ -361,7 +361,7 @@
       "latency": "La skill risponde a una domanda delimitata a partire dai dati di produzione senza modificarli né esportarli, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "design-private-data-lifecycle": {
-      "risk": "Questa skill definisce un ciclo di vita dei dati privati con classificazione, scopo, accesso, conservazione, cancellazione ed evidenze di verifica; non rivendica la conformità legale, l'anonimizzazione, la cancellazione o il consenso sulla sola base dell'intento progettuale.",
+      "risk": "Questa skill definisce un ciclo di vita dei dati privati con classificazione, scopo, accesso, conservazione, cancellazione ed evidenze di verifica; non dichiara la conformità legale, l'anonimizzazione, la cancellazione o il consenso sulla sola base dell'intento progettuale.",
       "latency": "La skill definisce un ciclo di vita dei dati privati con classificazione, scopo, accesso, conservazione, eliminazione e prove di verifica, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "review-database-migration-plan": {
@@ -369,7 +369,7 @@
       "latency": "La skill esamina un piano di migrazione del database per i rischi SQL espliciti e un piano di rilascio, rollback, blocco e backfill supportato da evidenze, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "design-data-pipeline-change": {
-      "risk": "Questa skill progetta una transizione della pipeline di dati con contratti espliciti, sicurezza del replay, controlli sui backfill e riconciliazione; non esegue query di produzione, job, migrazioni, backfill o cutover senza un'autorizzazione esplicita e con ambito definito.",
+      "risk": "Questa skill progetta una transizione della pipeline di dati con contratti espliciti, sicurezza del replay, controlli sui backfill e riconciliazione; non esegue query di produzione, job, migrazioni, backfill o cutover senza un'autorizzazione esplicita e circoscritta.",
       "latency": "La skill progetta una transizione della pipeline di dati con contratti espliciti, sicurezza del replay, controlli sui backfill e riconciliazione, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "review-schema-evolution": {
@@ -381,12 +381,12 @@
       "latency": "La skill pianifica le prove di accessibilità attraverso i percorsi degli utenti, l'automazione, la tastiera, la tecnologia assistiva e la revisione umana, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "prepare-eaa-conformance-evidence": {
-      "risk": "Questa skill associa i risultati di accessibilità al set di requisiti e alla versione dichiarati da un proprietario, tenendo separati i risultati verificati, asseriti, obsoleti e assenti; non dichiara la conformità, non finalizza una dichiarazione, né segnala un obbligo come adempiuto.",
-      "latency": "La skill associa i risultati dell'accessibilità al set di requisiti e alla versione dichiarata da un proprietario, mantenendo separati verificati, asseriti, obsoleti e assenti, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questa skill associa i risultati di accessibilità al set di requisiti e alla versione dichiarati da un responsabile, tenendo separati i risultati verificati, asseriti, obsoleti e assenti; non dichiara la conformità, non finalizza una dichiarazione, né segnala un obbligo come adempiuto.",
+      "latency": "La skill associa i risultati dell'accessibilità al set di requisiti e alla versione dichiarati da un responsabile, mantenendo separati verificati, asseriti, obsoleti e assenti, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "test-screen-reader-journey": {
       "risk": "Questa skill mette alla prova un percorso utente delimitato con un vero lettore di schermo ed evidenze legate agli esiti dell'interazione; non espone contenuti vocali privati né modifica dati di produzione senza autorizzazione.",
-      "latency": "La skill testa un percorso utente limitato con un vero screen reader e prove legate ai risultati dell'interazione, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "latency": "La skill verifica un percorso utente limitato con un vero lettore di schermo ed evidenze legate agli esiti dell'interazione, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "verify-cognitive-access-barriers": {
       "risk": "Questa skill verifica aiuto coerente, inserimento ridondante e autenticazione accessibile rispetto all'analisi di un processo osservato; non accetta come soddisfatta un'eccezione essenziale, di sicurezza o non più valida solo perché il proprietario l'ha dichiarata tale.",
@@ -414,18 +414,18 @@
     },
     "specify-engineering-handoff": {
       "risk": "Questa skill impacchetta un progetto in una specifica basata su token e completa di tutti gli stati, e verifica la build rispetto a essa; non certifica la conformità all'accessibilità e indirizza tali controlli alle skill di accessibilità.",
-      "latency": "La skill confeziona un progetto in una specifica con stato completo e riferimento al token e verifica la build rispetto ad essa, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "latency": "La skill impacchetta un progetto in una specifica basata su token e completa di tutti gli stati e verifica la build rispetto a essa, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "design-form-experience": {
       "risk": "Questa skill definisce struttura, convalida e recupero del modulo in modo che le persone completino l'immissione dei dati con sicurezza; non specifica un comportamento che scarti silenziosamente l'input di una persona in caso di errore, timeout o navigazione.",
       "latency": "La skill definisce struttura, convalida e recupero del modulo in modo che le persone completino l'immissione dei dati con sicurezza, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "design-interface-feedback": {
-      "risk": "Questa skill definisce budget di tempistica, stati di attesa e feedback in caso di errore in modo che ogni azione ottenga un riconoscimento onesto; non presenta durate inventate come misurazioni: le attese non misurate rimangono etichettate come stime.",
-      "latency": "La skill definisce budget di tempistica, stati di attesa e feedback in caso di errore in modo che ogni azione ottenga un riconoscimento onesto, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questa skill definisce budget di tempistica, stati di attesa e feedback in caso di errore in modo che ogni azione ottenga un riscontro onesto; non presenta durate inventate come misurazioni: le attese non misurate rimangono etichettate come stime.",
+      "latency": "La skill definisce budget di tempistica, stati di attesa e feedback in caso di errore in modo che ogni azione ottenga un riscontro onesto, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "design-navigation-and-search": {
-      "risk": "Questa skill specifica i modelli di navigazione, l'ordinamento dei menu, lo stato di orientamento e il comportamento di ricerca in base a prove relative a struttura, piattaforma e attività; non rivendica la conformità all'accessibilità per gli stati di navigazione o di ricerca al posto di un controllo di accessibilità.",
+      "risk": "Questa skill specifica i modelli di navigazione, l'ordinamento dei menu, lo stato di orientamento e il comportamento di ricerca in base a prove relative a struttura, piattaforma e attività; non dichiara la conformità all'accessibilità per gli stati di navigazione o di ricerca al posto di un controllo di accessibilità.",
       "latency": "La skill specifica i modelli di navigazione, l'ordinamento dei menu, lo stato di orientamento e il comportamento di ricerca da prove su struttura, piattaforma e attività, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "design-onboarding-journey": {
@@ -445,7 +445,7 @@
       "latency": "La skill pianifica la ricerca progettuale guidata dalle decisioni con reclutamento etico, prove tracciabili e limiti espliciti su ogni affermazione, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "synthesize-user-research-evidence": {
-      "risk": "Questa skill trasforma le sessioni di ricerca grezze in risultati raggruppati e tracciabili che preservano il disaccordo e separano l'osservazione dall'interpretazione; non fabbrica partecipanti, citazioni, contenuti delle sessioni o conteggi di prove per riempire materiale scarno.",
+      "risk": "Questa skill trasforma le sessioni di ricerca grezze in risultati raggruppati e tracciabili che preservano il disaccordo e separano l'osservazione dall'interpretazione; non inventa partecipanti, citazioni, contenuti delle sessioni o conteggi di prove per riempire materiale scarno.",
       "latency": "La skill trasforma le sessioni di ricerca grezze in risultati raggruppati e tracciabili che preservano il disaccordo e separano l'osservazione dall'interpretazione, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "design-responsive-behavior": {
@@ -469,8 +469,8 @@
       "latency": "La skill analizza una schermata renderizzata rispetto a criteri visivi espliciti e restituisce un elenco di correzioni con priorità e supportato da prove, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "establish-color-system": {
-      "risk": "Questa skill definisce scale di colore percettive, ruoli semantici, colori di stato, derivazione di schemi scuri e vincoli tematici con contrasto calcolato; non codifica lo stato o il significato interattivo solo attraverso la tonalità.",
-      "latency": "La skill definisce scale di colore percettive, ruoli semantici, colori di stato, derivazione di schemi scuri e vincoli tematici con contrasto calcolato, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questa skill definisce scale di colore percettive, ruoli semantici, colori di stato, derivazione di schemi scuri e vincoli del tema con contrasto calcolato; non codifica lo stato o il significato interattivo solo attraverso la tonalità.",
+      "latency": "La skill definisce scale di colore percettive, ruoli semantici, colori di stato, derivazione di schemi scuri e vincoli del tema con contrasto calcolato, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "establish-typography-system": {
       "risk": "Questa skill definisce una scala tipografica con rapporti per intervallo, assegnazioni di ruolo, regole di comfort di lettura e comportamento tipografico fluido e reattivo; non ottimizza le schermate una alla volta, ma fornisce regole che le schermate ereditano.",
@@ -485,8 +485,8 @@
       "latency": "La skill crea un hook per agenti deterministico e mirato, con semantica nativa di evento e di errore testata, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "author-effective-agent-skill": {
-      "risk": "Questa skill crea una skill per agenti mirata con routing affidabile, divulgazione progressiva e test; non crea una skill monolitica che raggruppa flussi di lavoro non correlati.",
-      "latency": "La skill crea una skill per agenti mirata con routing affidabile, divulgazione progressiva e test, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questa skill crea una skill per agenti mirata con routing affidabile, rivelazione progressiva e test; non crea una skill monolitica che raggruppa flussi di lavoro non correlati.",
+      "latency": "La skill crea una skill per agenti mirata con routing affidabile, rivelazione progressiva e test, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "author-mcp-server-contract": {
       "risk": "Questa skill progetta un server MCP con strumenti ristretti, schemi sicuri, limiti di autorità e prove di protocollo; non inserisce segreti nei prompt, nei risultati degli strumenti, nel codice sorgente o negli errori visibili al client.",
@@ -494,7 +494,7 @@
     },
     "evaluate-agent-guidance-value": {
       "risk": "Questa skill misura se la guida dell'agente sempre caricata modifica i risultati prima di sfoltirla o promuoverla; non elimina né riscrive la guida sulla base di una singola esecuzione pulita.",
-      "latency": "La skill misura se la guida dell'agente sempre caricata modifica i risultati prima di eliminarla o promuoverla, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "latency": "La skill misura se la guida dell'agente sempre caricata modifica i risultati prima di sfoltirla o promuoverla, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "publish-agent-skill": {
       "risk": "Effettua il commit e il push di una skill per agente in un repository di destinazione dopo l'autorizzazione, apportando modifiche di rilascio visibili all'esterno.",
@@ -505,12 +505,12 @@
       "latency": "La skill sincronizza una skill tra le radici degli agenti configurate senza presupporre percorsi personali, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "write-folder-agent-guidance": {
-      "risk": "Questa skill scrive file guida dell'agente con ambito che ereditano in modo pulito ed evitano contraddizioni; non duplica la guida root in ogni cartella.",
-      "latency": "La skill scrive file guida dell'agente con ambito che ereditano in modo pulito ed evitano contraddizioni, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questa skill scrive file di istruzioni per agenti validi per una cartella, che ereditano in modo pulito ed evitano contraddizioni; non duplica la guida della radice in ogni cartella.",
+      "latency": "La skill scrive file di istruzioni per agenti validi per una cartella, che ereditano in modo pulito ed evitano contraddizioni, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "write-project-agent-guidance": {
-      "risk": "Questa skill scrive una guida per l'agente root snella da comandi di progetto verificati, limiti e contesto canonico; non sovrascrive la guida dell'agente esistente né sceglie un nuovo nome file di runtime senza revisione.",
-      "latency": "La skill scrive una guida snella per l'agente root da comandi di progetto verificati, confini e contesto canonico, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questa skill scrive una guida snella per agenti a livello radice a partire da comandi di progetto verificati, confini e contesto canonico; non sovrascrive la guida per agenti esistente né sceglie un nuovo nome file di runtime senza revisione.",
+      "latency": "La skill scrive una guida snella per agenti a livello radice a partire da comandi di progetto verificati, confini e contesto canonico, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "build-openapi-contract": {
       "risk": "Questa skill crea un contratto OpenAPI da comportamento verificato, schemi riutilizzabili, errori e controlli eseguibili; non inventa endpoint, campi, esempi, codici di stato o ambiti di sicurezza.",
@@ -518,7 +518,7 @@
     },
     "design-stable-api-contract": {
       "risk": "Questa skill progetta un contratto di interfaccia attorno a consumatori, invarianti, compatibilità e semantica dei fallimenti; non considera sicura una modifica incompatibile solo perché i test attuali passano.",
-      "latency": "La skill progetta un contratto di interfaccia attorno a consumatori, invarianti, compatibilità e semantica dei guasti, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "latency": "La skill progetta un contratto di interfaccia attorno a consumatori, invarianti, compatibilità e semantica dei fallimenti, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "build-disposable-prototype": {
       "risk": "Questa skill costruisce un prototipo usa e getta limitato che risponde a una domanda sul comportamento o sulla progettazione dell'interfaccia; non dichiara usabilità, fattibilità o correttezza basandosi solo sulla prova guidata dell'autore stesso.",
@@ -557,8 +557,8 @@
       "latency": "La skill valuta il feedback di revisione rispetto al codice, al contratto e alle prove prima di applicare una correzione limitata, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "optimize-with-performance-profile": {
-      "risk": "Questa skill ottimizza un collo di bottiglia misurato con carichi di lavoro rappresentativi, guardrail e prove di regressione; non nasconde regressioni in termini di correttezza, leggibilità, costi, energia o accessibilità.",
-      "latency": "La skill ottimizza un collo di bottiglia misurato con carichi di lavoro rappresentativi, barriere e prove di regressione, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questa skill ottimizza un collo di bottiglia misurato con carichi di lavoro rappresentativi, guardrail e prove di non regressione; non nasconde regressioni in termini di correttezza, leggibilità, costi, energia o accessibilità.",
+      "latency": "La skill ottimizza un collo di bottiglia misurato con carichi di lavoro rappresentativi, barriere e prove di non regressione, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "request-independent-code-review": {
       "risk": "Invia una diff limitata a un altro revisore, quindi la divulgazione del codice resta possibile nonostante la regola che impone di fermarsi a tutela della riservatezza.",
@@ -581,7 +581,7 @@
       "latency": "La skill realizza cambiamenti di comportamento attraverso un ciclo red-green-refactor verificato, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "design-agent-evaluation-harness": {
-      "risk": "Questa skill progetta un sistema di valutazione dell'agente riproducibile con casi isolati, tracce, giudici e controlli di regressione; non considera un'esecuzione stocastica riuscita come un comportamento affidabile.",
+      "risk": "Questa skill progetta un sistema di valutazione dell'agente riproducibile con casi isolati, tracce, giudici e controlli di regressione; non considera una singola esecuzione stocastica riuscita come un comportamento affidabile.",
       "latency": "La skill progetta un sistema di valutazione dell'agente riproducibile con casi isolati, tracce, giudici e controlli di regressione, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "design-llm-evaluation": {
@@ -589,12 +589,12 @@
       "latency": "La skill progetta una valutazione LLM attorno a compiti reali, giudici controllati, tassonomia dei fallimenti e soglie decisionali, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "design-property-and-fuzz-tests": {
-      "risk": "Questa skill traduce invarianti stabili e limiti di minaccia in test fuzz e basati su proprietà riproducibili; non esegue campagne fuzz illimitate né mira alla produzione e ai servizi condivisi.",
-      "latency": "La skill traduce invarianti stabili e limiti di minaccia in test fuzz e basati su proprietà riproducibili, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questa skill traduce invarianti stabili e confini di minaccia in test fuzz e basati su proprietà riproducibili; non esegue campagne fuzz illimitate né mira alla produzione e ai servizi condivisi.",
+      "latency": "La skill traduce invarianti stabili e confini di minaccia in test fuzz e basati su proprietà riproducibili, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "evaluate-retrieval-system": {
-      "risk": "Questa skill valuta il recupero e la generazione radicata separatamente in base a pertinenza, attribuzione, astensione, costo e latenza; non utilizza documenti privati senza autorizzazione né fa trapelare passaggi riservati attraverso gli output dei test.",
-      "latency": "La skill valuta il recupero e la generazione radicata separatamente in base a pertinenza, attribuzione, astensione, costo e latenza, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questa skill valuta il recupero e la generazione basata sul contesto separatamente in base a pertinenza, attribuzione, astensione, costo e latenza; non utilizza documenti privati senza autorizzazione né fa trapelare passaggi riservati attraverso gli output dei test.",
+      "latency": "La skill valuta il recupero e la generazione basata sul contesto separatamente in base a pertinenza, attribuzione, astensione, costo e latenza, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "plan-load-test": {
       "risk": "Questa skill progetta un esperimento di capacità con un carico di lavoro rappresentativo, margini di sicurezza, osservabilità e regole di arresto; non crea traffico illimitato, costi incontrollati, dati di test distruttivi o una condizione di denial-of-service.",
@@ -605,8 +605,8 @@
       "latency": "La skill esegue un percorso limitato nel browser con evidenze di stato, rete, console, accessibilità e visive, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "verify-completion-evidence": {
-      "risk": "Questa skill verifica le affermazioni di completamento con nuovi comandi, artefatti ispezionabili ed esplicita incertezza rimanente; non omette i controlli falliti o non eseguiti per presentare un risultato più pulito.",
-      "latency": "La skill verifica le dichiarazioni di completamento con nuovi comandi, artefatti ispezionabili ed esplicita incertezza rimanente, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questa skill verifica le affermazioni di completamento con comandi appena eseguiti, artefatti ispezionabili ed esplicita incertezza rimanente; non omette i controlli falliti o non eseguiti per presentare un risultato più pulito.",
+      "latency": "La skill verifica le dichiarazioni di completamento con comandi appena eseguiti, artefatti ispezionabili ed esplicita incertezza rimanente, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "design-controlled-experiment": {
       "risk": "Questa skill trasforma una decisione in un esperimento misurabile con guardrail e una regola di arresto esplicita; non sbircia ripetutamente e non dichiara un vincitore senza un metodo sequenziale approvato.",
@@ -617,8 +617,8 @@
       "latency": "La skill traduce le decisioni di marketing in un piano governato di eventi, proprietà, qualità e reporting, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "reconcile-marketing-attribution": {
-      "risk": "Questa skill riconcilia l'attribuzione dei canali in conflitto preservando l'incertezza e i limiti causali; non espone i percorsi individuali né aggira il consenso per colmare i gap di identità.",
-      "latency": "La skill riconcilia l'attribuzione dei canali in conflitto preservando l'incertezza e i limiti causali, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questa skill riconcilia attribuzioni contrastanti tra i canali preservando l'incertezza e i limiti causali; non espone i percorsi individuali né aggira il consenso per colmare i gap di identità.",
+      "latency": "La skill riconcilia attribuzioni contrastanti tra i canali preservando l'incertezza e i limiti causali, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "capture-content-idea": {
       "risk": "Questa skill aggiunge un'idea di contenuto a un backlog approvato con provenienza e senza riformulazione; non conserva come provenienza una conversazione privata non correlata.",
@@ -641,16 +641,16 @@
       "latency": "La skill costruisce un portafoglio di contenuti attorno alle decisioni del pubblico, alla distribuzione, alle prove e alla capacità operativa, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "write-conversion-copy": {
-      "risk": "Questa skill scrive testi persuasivi per pagine partendo dalle evidenze sul pubblico, dalla verità del prodotto, dalle obiezioni e da un'azione primaria; non rivendica un risultato di conversione senza prove di misurazione.",
-      "latency": "La skill scrive testi persuasivi per pagine partendo dalle evidenze sul pubblico, dalla verità del prodotto, dalle obiezioni e da un'azione primaria, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questa skill scrive testi persuasivi per pagine partendo dalle evidenze sul pubblico, dalla verità del prodotto, dalle obiezioni e da un'unica azione primaria; non rivendica un risultato di conversione senza prove di misurazione.",
+      "latency": "La skill scrive testi persuasivi per pagine partendo dalle evidenze sul pubblico, dalla verità del prodotto, dalle obiezioni e da un'unica azione primaria, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "audit-app-store-listing": {
       "risk": "Questa skill esamina la scheda di un'app per rilevabilità, persuasione veritiera, sequenza visiva e lacune verificabili; non promette posizionamento o installazioni a seguito di modifiche ai metadati.",
       "latency": "La skill esamina la scheda di un'app per rilevabilità, persuasione veritiera, sequenza visiva e lacune verificabili, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "audit-ethical-persuasion": {
-      "risk": "Questa skill verifica la progettazione persuasiva per la scelta informata, l'evidenza, l'accessibilità e la manipolazione evitabile; non fornisce l'approvazione legale né afferma che l'incremento delle conversioni giustifichi un danno per l'utente.",
-      "latency": "La skill verifica la progettazione persuasiva per la scelta informata, l'evidenza, l'accessibilità e la manipolazione evitabile, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questa skill verifica la progettazione persuasiva sotto il profilo della scelta informata, dell'evidenza, dell'accessibilità e della manipolazione evitabile; non fornisce l'approvazione legale né afferma che l'incremento delle conversioni giustifichi un danno per l'utente.",
+      "latency": "La skill verifica la progettazione persuasiva sotto il profilo della scelta informata, dell'evidenza, dell'accessibilità e della manipolazione evitabile, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "design-respectful-conversion-overlay": {
       "risk": "Questa skill progetta un overlay contestuale che sia accessibile, chiudibile, limitato in frequenza e misurabile; non sacrifica l'accessibilità né il completamento delle attività principali in cambio del tasso di adesione.",
@@ -673,11 +673,11 @@
       "latency": "La skill progetta un sistema di community basato sul valore per i membri con governance, cicli operativi e indicatori di salute della community, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "design-measurable-growth-loop": {
-      "risk": "Questa skill progetta un ciclo di acquisizione o coinvolgimento che si autoalimenta, con attori, stati e vincoli espliciti; non produce condivisioni, contatti, contenuti, recensioni o inviti.",
+      "risk": "Questa skill progetta un ciclo di acquisizione o coinvolgimento che si autoalimenta, con attori, stati e vincoli espliciti; non fabbrica artificialmente condivisioni, contatti, contenuti, recensioni o inviti.",
       "latency": "La skill progetta un ciclo di acquisizione o coinvolgimento che si autoalimenta, con attori, stati e vincoli espliciti, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "design-qualified-lead-magnet": {
-      "risk": "Questa skill progetta una risorsa opzionale che offre valore autonomo e segnala un reale adattamento al cliente; non richiede dati personali non necessari né preseleziona il consenso promozionale.",
+      "risk": "Questa skill progetta una risorsa opzionale che offre valore autonomo e segnala una reale compatibilità del cliente; non richiede dati personali non necessari né preseleziona il consenso promozionale.",
       "latency": "La skill progetta una risorsa opzionale che offre valore autonomo e segnala l'effettiva idoneità del cliente, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "design-referral-program": {
@@ -689,15 +689,15 @@
       "latency": "La skill valuta se un'utilità gratuita può creare un reale valore per l'utente e un ciclo di acquisizione misurabile, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "plan-product-launch": {
-      "risk": "Questa skill pianifica il lancio graduale di un prodotto con controlli di prontezza, sequenziamento del pubblico, proprietà e recupero; non nasconde difetti noti, limiti di disponibilità, termini di prezzo o rischi operativi.",
-      "latency": "La skill pianifica il lancio di un prodotto in fasi con controlli di prontezza, sequenziamento del pubblico, proprietà e ripristino, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questa skill pianifica il lancio graduale di un prodotto con controlli di prontezza, sequenziamento del pubblico, responsabilità e recupero; non nasconde difetti noti, limiti di disponibilità, termini di prezzo o rischi operativi.",
+      "latency": "La skill pianifica il lancio di un prodotto in fasi con controlli di prontezza, sequenziamento del pubblico, responsabilità e ripristino, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "design-churn-interventions": {
-      "risk": "Questa skill diagnostica l'abbandono volontario e dei pagamenti, quindi progetta interventi rispettosi con i guardrail; non contatta gli utenti senza un valido consenso né prosegue dopo una rinuncia.",
-      "latency": "La skill diagnostica l'abbandono volontario e dei pagamenti, quindi progetta interventi rispettosi con i guardrail, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questa skill diagnostica l'abbandono volontario e quello dovuto ai pagamenti, quindi progetta interventi rispettosi con i guardrail; non contatta gli utenti senza un valido consenso né prosegue dopo una rinuncia.",
+      "latency": "La skill diagnostica l'abbandono volontario e quello dovuto ai pagamenti, quindi progetta interventi rispettosi con i guardrail, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "design-lifecycle-email-sequence": {
-      "risk": "Questa skill progetta sequenze di email del ciclo di vita attente al consenso e legate allo stato dell'utente, al valore e alle regole di uscita; non inventa personalizzazione, attività del cliente, scarsità o familiarità del mittente.",
+      "risk": "Questa skill progetta sequenze di email del ciclo di vita attente al consenso e legate allo stato dell'utente, al valore e alle regole di uscita; non inventa personalizzazione, attività del cliente, scarsità o familiarità con il mittente.",
       "latency": "La skill progetta sequenze di e-mail del ciclo di vita consapevoli del consenso legate allo stato dell'utente, al valore e alle regole di uscita, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "improve-product-activation": {
@@ -709,11 +709,11 @@
       "latency": "La skill valuta un partner di marketing congiunto e definisce un accordo di campagna equilibrato e misurabile, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "qualify-influencer-partnership": {
-      "risk": "Questa skill qualifica le partnership con i creatori utilizzando prove del pubblico, sicurezza del marchio, diritti, divulgazione ed aspetti economici; non raccoglie dati privati del pubblico né prende di mira tratti protetti o sensibili.",
-      "latency": "La skill qualifica le partnership con i creatori utilizzando prove del pubblico, sicurezza del marchio, diritti, divulgazione ed aspetti economici, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questa skill qualifica le partnership con i creatori utilizzando evidenze sul pubblico, sicurezza del marchio, diritti, trasparenza sulla natura pubblicitaria ed aspetti economici; non raccoglie dati privati del pubblico né prende di mira tratti protetti o sensibili.",
+      "latency": "La skill qualifica le partnership con i creatori utilizzando evidenze sul pubblico, sicurezza del marchio, diritti, trasparenza sulla natura pubblicitaria ed aspetti economici, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "plan-paid-acquisition": {
-      "risk": "Questa skill progetta un piano di acquisizione a pagamento limitato con aspetti economici, controlli e ottimizzazione basata sull'evidenza; non presenta l'attribuzione della piattaforma o i parametri di riferimento del settore come economia aziendale garantita.",
+      "risk": "Questa skill progetta un piano di acquisizione a pagamento limitato con aspetti economici, controlli e ottimizzazione basata sull'evidenza; non presenta l'attribuzione della piattaforma o i parametri di riferimento del settore come risultati economici garantiti per l'azienda.",
       "latency": "La skill progetta un piano di acquisizione a pagamento limitato con aspetti economici, controlli e ottimizzazione basata sull'evidenza, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "produce-testable-ad-creative": {
@@ -725,12 +725,12 @@
       "latency": "La skill costruisce un profilo del concorrente, con data di riferimento, che separa fatti osservati, affermazioni, inferenze e incognite, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "design-evidence-backed-offer": {
-      "risk": "Questa skill progetta un'offerta il cui valore, portata, prova, allocazione del rischio e termini possano resistere alla revisione; non raccomanda un'offerta che l'organizzazione non può soddisfare in modo coerente.",
+      "risk": "Questa skill progetta un'offerta il cui valore, portata, prova, allocazione del rischio e termini possano resistere alla revisione; non raccomanda un'offerta che l'organizzazione non è in grado di erogare con continuità.",
       "latency": "La skill progetta un'offerta il cui valore, ambito, prova, allocazione del rischio e termini possono resistere alla revisione, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "design-pricing-and-packaging": {
-      "risk": "Questa skill progetta prezzi e pacchetti in base al valore del cliente, agli aspetti economici, alla segmentazione e alle prove operative; non garantisce la disponibilità a pagare, l’aumento delle entrate o il prezzo ottimale ricavato da un benchmark.",
-      "latency": "La skill progetta prezzi e pacchetti in base al valore del cliente, agli aspetti economici, alla segmentazione e alle prove operative, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questa skill progetta prezzi e pacchetti in base al valore per il cliente, agli aspetti economici, alla segmentazione e alle prove operative; non garantisce la disponibilità a pagare, l’aumento delle entrate o il prezzo ottimale sulla base di un benchmark.",
+      "latency": "La skill progetta prezzi e pacchetti in base al valore per il cliente, agli aspetti economici, alla segmentazione e alle prove operative, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "document-product-positioning": {
       "risk": "Questa skill crea un record di posizionamento riutilizzabile con prove, decisioni, confini e domande irrisolte; non trasforma ipotesi incerte in affermazioni universali del marchio.",
@@ -757,7 +757,7 @@
       "latency": "La skill definisce fasi dei ricavi, responsabilità, contratti dei dati, passaggi di consegne e riconciliazione tra i team, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "write-compliant-cold-email": {
-      "risk": "Questa skill scrive una comunicazione B2B concisa fondata su pertinenza, affermazioni verificabili e follow-up rispettoso; non aggira le opzioni di rinuncia, i controlli antispam, le regole della piattaforma o la revisione legale.",
+      "risk": "Questa skill scrive una comunicazione B2B concisa fondata su pertinenza, affermazioni verificabili e follow-up rispettoso; non aggira gli opt-out, i controlli antispam, le regole della piattaforma o la revisione legale.",
       "latency": "La skill scrive una comunicazione B2B concisa fondata su pertinenza, affermazioni verificabili e follow-up rispettoso, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "audit-ai-search-visibility": {
@@ -777,16 +777,16 @@
       "latency": "La skill implementa JSON-LD supportato da prove che corrisponde ai contenuti visibili e ai requisiti attuali del validatore, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "build-marketing-operating-plan": {
-      "risk": "Questa skill costruisce un piano operativo di marketing vincolato che lega scelte, proprietari, prove e cadenza di revisione; non assegna lavoro o spesa oltre l'autorità e la capacità documentate.",
-      "latency": "La skill costruisce un piano operativo di marketing vincolato che lega scelte, proprietari, prove e cadenza di revisione, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questa skill costruisce un piano operativo di marketing vincolato che lega scelte, responsabili, prove e cadenza di revisione; non assegna lavoro o spesa oltre l'autorità e la capacità documentate.",
+      "latency": "La skill costruisce un piano operativo di marketing vincolato che lega scelte, responsabili, prove e cadenza di revisione, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "generate-marketing-experiments": {
       "risk": "Questa skill genera un portafoglio limitato di esperimenti di marketing a partire da vincoli, prove e colli di bottiglia; non assegna un impatto o un livello di confidenza precisi senza prove.",
       "latency": "La skill genera un portafoglio limitato di esperimenti di marketing da vincoli, prove e colli di bottiglia, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "map-conversion-site-architecture": {
-      "risk": "Questa skill mappa un sito Web in base alle decisioni degli utenti, alla proprietà dei contenuti, alla navigazione e alle relazioni scansionabili; non crea pagine esclusivamente per occupare parole chiave o rispecchiare l'organigramma aziendale.",
-      "latency": "La skill mappa un sito Web in base alle decisioni degli utenti, alla proprietà dei contenuti, alla navigazione e alle relazioni scansionabili, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questa skill mappa un sito Web in base alle decisioni degli utenti, alla responsabilità dei contenuti, alla navigazione e alle relazioni scansionabili; non crea pagine esclusivamente per occupare parole chiave o rispecchiare l'organigramma aziendale.",
+      "latency": "La skill mappa un sito Web in base alle decisioni degli utenti, alla responsabilità dei contenuti, alla navigazione e alle relazioni scansionabili, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "synthesize-customer-language": {
       "risk": "Questa skill trasforma le prove autorizzate del cliente in temi, tensioni, linguaggio e domande aperte tracciabili; non inventa personas, citazioni, prevalenza o motivazioni.",
@@ -797,12 +797,12 @@
       "latency": "La skill rileva miglioramenti durevoli del flusso di lavoro dell'agente da un'esecuzione non riuscita o da una finestra di cronologia limitata, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "delegate-bounded-subtasks": {
-      "risk": "Questa skill divide il lavoro indipendente in brief per subagent non sovrapposti, ciascuno con output assegnati; non delega un intero progetto ambiguo come un singolo subtask.",
-      "latency": "La skill divide il lavoro indipendente in brief per subagent non sovrapposti, ciascuno con output assegnati, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questa skill divide il lavoro indipendente in brief non sovrapposti per subagent, ciascuno con output assegnati; non delega un intero progetto ambiguo come un singolo subtask.",
+      "latency": "La skill divide il lavoro indipendente in brief non sovrapposti per subagent, ciascuno con output assegnati, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "delegate-to-codex-cli": {
       "risk": "Questa skill delega un compito circoscritto a Codex CLI in uno spazio di lavoro isolato e verificabile; non considera le affermazioni del delegato come prova senza la verifica dell'agente principale.",
-      "latency": "La skill delega un'attività delimitata a Codex CLI in uno spazio di lavoro isolato e rivedibile, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "latency": "La skill delega un'attività delimitata a Codex CLI in uno spazio di lavoro isolato e verificabile, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "design-delegable-workflow": {
       "risk": "Questa skill progetta un flusso di lavoro ripetibile con trigger espliciti, passaggi deterministici, autorità, punti di controllo e prove; non aggiunge un agente, una pianificazione o un checkpoint umano quando il flusso di lavoro non ne richiede uno.",
@@ -838,15 +838,15 @@
     },
     "prepare-branch-integration": {
       "risk": "Dopo l'autorizzazione può inviare, unire o eliminare branch e worktree, con effetti sulla cronologia condivisa e sulla possibilità di recuperare il lavoro.",
-      "latency": "La skill prepara un ramo di sviluppo per l'integrazione con evidenze chiare, opzioni esplicite e azioni reversibili, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "latency": "La skill prepara un branch di sviluppo per l'integrazione con evidenze chiare, opzioni esplicite e azioni reversibili, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "resolve-merge-conflicts-by-intent": {
-      "risk": "Questa skill risolve i conflitti Git ricostruendo entrambe le modifiche, preservando l'intento e verificando il comportamento unito; non esegue automaticamente abort, continue, commit o push, né forza l'aggiornamento della cronologia.",
-      "latency": "La skill risolve i conflitti Git ricostruendo entrambe le modifiche, preservando l'intento e verificando il comportamento unito, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questa skill risolve i conflitti Git ricostruendo entrambe le modifiche, preservando l'intento e verificando il comportamento risultante dal merge; non esegue automaticamente abort, continue, commit o push, né forza l'aggiornamento della cronologia.",
+      "latency": "La skill risolve i conflitti Git ricostruendo entrambe le modifiche, preservando l'intento e verificando il comportamento risultante dal merge, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "plan-infrastructure-change": {
-      "risk": "Questa skill pianifica un cambiamento dell'infrastruttura dallo stato attuale attraverso una transizione, una verifica e un ripristino graduali; non esegue apply, destroy, import, modifiche allo stato, scritture kubectl o modifiche cloud senza un'autorizzazione con ambito esplicito.",
-      "latency": "La skill pianifica un cambiamento dell'infrastruttura dallo stato attuale attraverso una transizione, una verifica e un ripristino graduali, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questa skill pianifica un cambiamento dell'infrastruttura dallo stato attuale attraverso una transizione graduale, la verifica e il ripristino; non esegue apply, destroy, import, modifiche allo stato, scritture kubectl o modifiche cloud senza un'autorizzazione con ambito esplicito.",
+      "latency": "La skill pianifica un cambiamento dell'infrastruttura dallo stato attuale attraverso una transizione graduale, la verifica e il ripristino, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "build-macos-metrics-collector": {
       "risk": "Questa skill crea un collettore di metriche macOS locale a basso overhead con archiviazione privata per impostazione predefinita; non richiede API private per il funzionamento principale.",
@@ -857,7 +857,7 @@
       "latency": "La skill progetta registri, metriche, tracce e avvisi relativi a decisioni, modalità di errore, costi e privacy, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "design-service-level-objectives": {
-      "risk": "Questa skill progetta obiettivi di servizio in base ai percorsi degli utenti, agli indicatori misurabili, ai budget di errore e alla policy di risposta; non crea avvisi di paging né blocchi di rilascio senza l'approvazione del proprietario.",
+      "risk": "Questa skill progetta obiettivi di servizio in base ai percorsi degli utenti, agli indicatori misurabili, ai budget di errore e alla policy di risposta; non crea avvisi di paging né blocchi di rilascio senza l'approvazione del responsabile.",
       "latency": "La skill progetta obiettivi di servizio in base ai percorsi degli utenti, agli indicatori misurabili, ai budget di errore e alla politica di risposta, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "write-incident-runbook": {
@@ -870,7 +870,7 @@
     },
     "verify-production-release": {
       "risk": "Esegue il push di una revisione esatta e osserva un deployment di produzione, quindi un errore può influire sul servizio attivo.",
-      "latency": "La skill rilascia una revisione esatta tramite CI e dimostra l'integrità della distribuzione prima del completamento, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "latency": "La skill rilascia una revisione esatta tramite CI e dimostra lo stato di salute del deployment prima del completamento, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "decompose-dependent-work-slices": {
       "risk": "Questa skill scompone il lavoro approvato in slice verticali verificabili in modo indipendente con un grafo delle dipendenze aciclico; non maschera un piano ciclico omettendo o indebolendo i reali archi di blocco.",
@@ -889,7 +889,7 @@
       "latency": "La skill smista una issue o una pull request in arrivo verso uno stato successivo supportato da evidenze, senza agire di nascosto, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "resume-session-work": {
-      "risk": "Questa skill ricostruisce il contesto di lavoro dal registro della sessione concatenato tramite hash, con affermazioni citate tramite hash e una sezione esplicita non verificata; non riporta un'affermazione senza citare l'hash della sua voce nel registro.",
+      "risk": "Questa skill ricostruisce il contesto di lavoro dal registro della sessione concatenato tramite hash, con affermazioni citate tramite hash e una sezione esplicita per ciò che non è verificato; non riporta un'affermazione senza citare l'hash della sua voce nel registro.",
       "latency": "Verifica gli hash del registro e ricostruisce da più voci il contesto della sessione, con le relative citazioni."
     },
     "author-guided-setup-wizard": {
@@ -921,8 +921,8 @@
       "latency": "La skill estrae i sottotitoli YouTube disponibili in testo pulito senza scaricare contenuti multimediali, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "conduct-source-backed-research": {
-      "risk": "Questa skill ricerca una decisione con fonti primarie, citazioni a livello di affermazione e un controllo finale delle lacune; non presenta inferenze, previsioni o aneddoti del forum come fatti confermati.",
-      "latency": "La skill ricerca una decisione con fonti primarie, citazioni a livello di affermazione e un controllo finale delle lacune, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questa skill svolge ricerche a supporto di una decisione con fonti primarie, citazioni a livello di affermazione e un controllo finale delle lacune; non presenta inferenze, previsioni o aneddoti di forum come fatti confermati.",
+      "latency": "La skill svolge ricerche a supporto di una decisione con fonti primarie, citazioni a livello di affermazione e un controllo finale delle lacune, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "audit-safe-browsing-readiness": {
       "risk": "Questa skill verifica che un sito pubblico sia pronto sotto il profilo di sicurezza, trasparenza e reputazione; non nasconde comportamenti dannosi unicamente per superare un controllo di reputazione.",
@@ -933,7 +933,7 @@
       "latency": "La skill esamina i confini dell'autenticazione e dell'autorizzazione attraverso identità concrete, risorse e percorsi negati, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "plan-dependency-upgrade": {
-      "risk": "Questa skill pianifica e applica un aggiornamento delle dipendenze a partire dalle evidenze delle release, dalla superficie di compatibilità, dai passaggi di migrazione e dal rollback; non aggiorna pacchetti non correlati per ottenere uno stato pulito all'ultima versione.",
+      "risk": "Questa skill pianifica e applica un aggiornamento delle dipendenze a partire dalle evidenze delle release, dalla superficie di compatibilità, dai passaggi di migrazione e dal rollback; non aggiorna pacchetti non correlati solo per portare tutto in modo pulito all'ultima versione.",
       "latency": "La skill pianifica e applica un aggiornamento delle dipendenze a partire dalle evidenze delle release, dalla superficie di compatibilità, dai passaggi di migrazione e dal rollback, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "review-supply-chain-change": {
@@ -949,19 +949,19 @@
       "latency": "La skill espone le scelte incerte fatte durante il lavoro e confronta alternative credibili, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "design-stakeholder-questionnaire": {
-      "risk": "Questa skill progetta un questionario asincrono conciso sulle decisioni a cui solo uno specifico stakeholder può rispondere; non seppellisce le domande di maggiore impatto dietro uno sfondo opzionale e dettagli di basso valore.",
+      "risk": "Questa skill progetta un questionario asincrono conciso sulle decisioni a cui solo uno specifico stakeholder può rispondere; non seppellisce le domande di maggiore impatto dietro informazioni di contesto opzionali e dettagli di basso valore.",
       "latency": "La skill progetta un questionario asincrono conciso sulle decisioni a cui solo uno specifico stakeholder può rispondere, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "interview-for-priorities": {
-      "risk": "Questa skill utilizza un colloquio mirato per esporre priorità, lavoro evitato e vincoli nascosti; non crea urgenza artificiale né colpevolizza l'utente per il lavoro evitato.",
-      "latency": "La skill utilizza un colloquio mirato per esporre priorità, lavoro evitato e vincoli nascosti, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questa skill utilizza un colloquio mirato per far emergere priorità, lavoro evitato e vincoli nascosti; non crea urgenza artificiale né colpevolizza l'utente per il lavoro evitato.",
+      "latency": "La skill utilizza un colloquio mirato per far emergere priorità, lavoro evitato e vincoli nascosti, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "interview-to-build-brief": {
       "risk": "Questa skill conduce un'intervista per definire un intento di prodotto supportato da evidenze prima di trasformare le decisioni in un brief di build; non converte un'assunzione in un requisito approvato dall'utente.",
       "latency": "La skill conduce un'intervista per definire un intento di prodotto supportato da evidenze prima di trasformare le decisioni in un brief di build, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "make-practical-decision": {
-      "risk": "Questa skill conclude l'analisi di basso valore con una raccomandazione reversibile e un'azione successiva concreta; non aggiunge bloccanti speculativi né riapre dettagli definiti.",
+      "risk": "Questa skill conclude l'analisi di basso valore con una raccomandazione reversibile e un'azione successiva concreta; non aggiunge bloccanti speculativi né riapre dettagli già stabiliti.",
       "latency": "La skill conclude l'analisi di basso valore con una raccomandazione reversibile e un'azione successiva concreta, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "resolve-next-decision": {
@@ -1005,7 +1005,7 @@
       "latency": "La skill insegna in funzione di una missione reale usando brevi lezioni, richiamo attivo, feedback e registri, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "write-release-notes-from-evidence": {
-      "risk": "Questa skill scrive note di rilascio da prove Git limitate separando le modifiche verificate, l'impatto sull'utente e le affermazioni irrisolte; non pubblica, tagga, invia o modifica la cronologia Git.",
+      "risk": "Questa skill scrive note di rilascio da prove Git limitate separando le modifiche verificate, l'impatto sull'utente e le affermazioni irrisolte; non pubblica, non crea tag, non esegue push né modifica la cronologia Git.",
       "latency": "La skill scrive note di rilascio da prove Git limitate separando al contempo modifiche verificate, impatto sull'utente e affermazioni irrisolte, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "compress-response-with-context": {
@@ -1013,16 +1013,16 @@
       "latency": "La skill comprime una risposta precedente preservando il contesto minimo necessario per agire, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "write-article-from-source-material": {
-      "risk": "Questa skill sviluppa un articolo da materiale di origine limitato preservando le affermazioni, le basi del lettore e il controllo dell'autore; non pubblica, non invia e non ottimizza per una piattaforma senza un'autorizzazione separata.",
-      "latency": "La skill sviluppa un articolo da materiale di origine limitato preservando le affermazioni, la base del lettore e il controllo dell'autore, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questa skill sviluppa un articolo da materiale di origine limitato preservando le affermazioni, il contesto necessario al lettore e il controllo dell'autore; non pubblica, non invia e non ottimizza per una piattaforma senza un'autorizzazione separata.",
+      "latency": "La skill sviluppa un articolo da materiale di origine limitato preservando le affermazioni, il contesto necessario al lettore e il controllo dell'autore, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "metric-contract-reviewer": {
       "risk": "Questo specialista di sola lettura esamina un'implementazione metrica per granularità, coorte, finestra, fuso orario, deduplicazione e deriva del denominatore; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
       "latency": "Lo specialista esamina un'implementazione della metrica per granularità, coorte, finestra, fuso orario, deduplicazione e deriva del denominatore, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "query-plan-analyst": {
-      "risk": "Questo specialista di sola lettura analizza un piano di database fornito per rischi documentati di cardinalità, percorso di accesso, join e ordinamento; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
-      "latency": "Lo specialista analizza un piano di database fornito per rischi documentati di cardinalità, percorso di accesso, join e ordinamento, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questo specialista di sola lettura analizza un piano di database fornito per rischi comprovati di cardinalità, percorso di accesso, join e ordinamento; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
+      "latency": "Lo specialista analizza un piano di database fornito per rischi comprovati di cardinalità, percorso di accesso, join e ordinamento, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "experiment-validity-reviewer": {
       "risk": "Questo specialista di sola lettura esamina un esperimento limitato per randomizzazione, esposizione, contaminazione, arresto e validità dell'analisi; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
@@ -1037,16 +1037,16 @@
       "latency": "Lo specialista esamina una migrazione di schema o di dati con limiti definiti per verificarne i rischi di compatibilità, integrità, blocco e ripristino, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "data-quality-diagnostician": {
-      "risk": "Questo specialista di sola lettura diagnostica un'anomalia limitata dei dati con cause classificate e controlli delle prove discriminanti; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
-      "latency": "Lo specialista diagnostica un'anomalia limitata dei dati con cause classificate e controlli di prove discriminanti, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questo specialista di sola lettura diagnostica un'anomalia limitata dei dati con cause classificate e controlli discriminanti sulle evidenze; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
+      "latency": "Lo specialista diagnostica un'anomalia limitata dei dati con cause classificate e controlli discriminanti sulle evidenze, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "rag-evaluation-reviewer": {
       "risk": "Questo specialista di sola lettura esamina le prove di valutazione della generazione aumentata dal recupero per perdite, copertura, calibrazione e idoneità decisionale; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
       "latency": "Lo specialista esamina le prove di valutazione della generazione aumentata dal recupero per perdite, copertura, calibrazione e idoneità decisionale, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "accessibility-conformance-reviewer": {
-      "risk": "Questo specialista di sola lettura esamina una modifica limitata dell'interfaccia per i rischi di conformità all'accessibilità guidati dall'evidenza e le barriere per l'utente; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
-      "latency": "Lo specialista esamina una modifica limitata dell'interfaccia per i rischi di conformità all'accessibilità guidati dall'evidenza e le barriere per l'utente, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questo specialista di sola lettura esamina una modifica limitata dell'interfaccia alla ricerca di rischi di conformità all'accessibilità basati su evidenze e di barriere per l'utente; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
+      "latency": "Lo specialista esamina una modifica limitata dell'interfaccia alla ricerca di rischi di conformità all'accessibilità basati su evidenze e di barriere per l'utente, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "accessibility-journey-tester": {
       "risk": "Questo specialista di sola lettura verifica un percorso utente delimitato a partire dalle evidenze fornite (browser, tastiera, tecnologia assistiva ed evidenze statiche); i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
@@ -1061,8 +1061,8 @@
       "latency": "Lo specialista esamina una modifica Web delimitata per i rischi di caricamento, rendering, reattività e regressione comprovati, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "interaction-state-reviewer": {
-      "risk": "Questo specialista di sola lettura esamina il percorso di un utente per transizioni di stato di interazione complete, coerenti e recuperabili; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
-      "latency": "Lo specialista esamina il percorso di un utente per verificare transizioni di stato-interazione complete, coerenti e recuperabili, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questo specialista di sola lettura esamina un singolo percorso utente per transizioni di stato di interazione complete, coerenti e recuperabili; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
+      "latency": "Lo specialista esamina un singolo percorso utente per verificare transizioni dello stato di interazione complete, coerenti e recuperabili, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "localization-readiness-reviewer": {
       "risk": "Questo specialista di sola lettura esamina il codice sensibile alle impostazioni locali per difetti di messaggio, plurale, formato, fuso orario, fallback e bidirezionali; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
@@ -1085,12 +1085,12 @@
       "latency": "Lo specialista produce una mappa di componenti e dipendenze collegata alle evidenze per una superficie di repository delimitata, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "cli-contract-reviewer": {
-      "risk": "Questo specialista di sola lettura esamina le modifiche di una CLI che potrebbero interrompere l'automazione: sintassi, stream, codici di uscita e output. I risultati possono influenzare una decisione, ma non può modificare né approvare cambiamenti.",
+      "risk": "Questo specialista di sola lettura esamina le modifiche di una CLI che potrebbero interrompere l'automazione: sintassi, stream, codici di uscita e output. I risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
       "latency": "Lo specialista esamina un delta CLI per rilevare modifiche di grammatica, flusso, codice di uscita e output che compromettono l'automazione, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "refactor-equivalence-reviewer": {
-      "risk": "Questo specialista di sola lettura confronta un refactoring prima e dopo limitato per cambiamenti di comportamento osservabili non intenzionali; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
-      "latency": "Lo specialista confronta un refactoring prima e dopo delimitato per cambiamenti di comportamento osservabili non intenzionali, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questo specialista di sola lettura confronta il prima e il dopo di un refactoring delimitato per individuare cambiamenti di comportamento osservabili non intenzionali; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
+      "latency": "Lo specialista confronta il prima e il dopo di un refactoring delimitato per individuare cambiamenti di comportamento osservabili non intenzionali, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "concurrency-hazard-analyst": {
       "risk": "Questo specialista di sola lettura analizza un percorso concorrente con limiti definiti alla ricerca di una race condition concreta, un deadlock, un aggiornamento perso o un errore di ordinamento; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
@@ -1122,11 +1122,11 @@
     },
     "mobile-reliability-accessibility-reviewer": {
       "risk": "Questo specialista di sola lettura esamina un percorso mobile delimitato per individuare lacune nelle prove relative a ciclo di vita, offline, ripristino, autorizzazione e accessibilità; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
-      "latency": "Lo specialista esamina un percorso mobile delimitato per individuare lacune nelle prove del ciclo di vita, offline, di ripristino, di autorizzazione e di accessibilità, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "latency": "Lo specialista esamina un percorso mobile delimitato per individuare lacune nelle evidenze relative a ciclo di vita, offline, ripristino, autorizzazioni e accessibilità, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "performance-benchmark-analyst": {
       "risk": "Questo specialista di sola lettura giudica se i risultati dei benchmark forniti dimostrano una regressione significativa in condizioni comparabili; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
-      "latency": "Lo specialista valuta se i risultati dei benchmark forniti dimostrano una regressione significativa in condizioni comparabili, utilizzando prove sequenziali e fasi di verifica."
+      "latency": "Lo specialista valuta se i risultati dei benchmark forniti dimostrano una regressione significativa in condizioni comparabili, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "test-gap-reviewer": {
       "risk": "Questo specialista di sola lettura trova comportamenti significativi non dimostrati in una modifica limitata senza scrivere o eseguire test; non può modificare o approvare modifiche.",
@@ -1153,8 +1153,8 @@
       "latency": "Lo specialista analizza un singolo fallimento CI con limiti definiti per individuarne la causa supportata da evidenze, i controlli discriminanti e i passaggi successivi sicuri, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "cloud-cost-finops-analyst": {
-      "risk": "Questo specialista di sola lettura riconcilia una questione limitata sui costi del cloud con l'utilizzo, l'allocazione, i prezzi, gli impegni e le prove di incertezza; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
-      "latency": "Lo specialista riconcilia una questione relativa ai costi del cloud con l'utilizzo, l'allocazione, i prezzi, gli impegni e le prove di incertezza, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questo specialista di sola lettura riconcilia una questione delimitata sui costi cloud con le evidenze di utilizzo, allocazione, prezzi, impegni e incertezza; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
+      "latency": "Lo specialista riconcilia una questione delimitata sui costi cloud con le evidenze di utilizzo, allocazione, prezzi, impegni e incertezza, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "configuration-drift-analyst": {
       "risk": "Questo specialista di sola lettura confronta lo stato desiderato con le istantanee dell'ambiente con timestamp e classifica la deviazione significativa della configurazione; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
@@ -1165,8 +1165,8 @@
       "latency": "Lo specialista ricostruisce una cronologia delimitata di un incidente separando osservazioni, contraddizioni e ipotesi causali, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "cloud-iac-policy-reviewer": {
-      "risk": "Questo specialista di sola lettura esamina un piano infrastrutturale delimitato per il ciclo di vita, l'identità, la rete, i dati, le policy e il rischio di rollback; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
-      "latency": "Lo specialista esamina un piano infrastrutturale delimitato per il ciclo di vita, l'identità, la rete, i dati, le policy e il rischio di rollback, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questo specialista di sola lettura esamina un piano infrastrutturale delimitato per individuare rischi relativi a ciclo di vita, identità, rete, dati, policy e rollback; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
+      "latency": "Lo specialista esamina un piano infrastrutturale delimitato per individuare rischi relativi a ciclo di vita, identità, rete, dati, policy e rollback, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "infrastructure-change-reviewer": {
       "risk": "Questo specialista di sola lettura esamina un delta dell'infrastruttura come codice limitato per rischi di sostituzione, eliminazione, dipendenza e raggio di impatto; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
@@ -1193,15 +1193,15 @@
       "latency": "Lo specialista controlla gli obiettivi di ripristino rispetto alle evidenze di backup, ripristino, failover, dipendenze ed esercitazioni, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "runbook-readiness-reviewer": {
-      "risk": "Questo specialista di sola lettura esamina un runbook operativo per prerequisiti eseguibili, controlli, rami con errori, proprietà e ripristino; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
-      "latency": "Lo specialista esamina un runbook operativo per prerequisiti eseguibili, controlli, rami con errori, proprietà e ripristino, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questo specialista di sola lettura esamina un runbook operativo per prerequisiti eseguibili, controlli, rami di errore, proprietà e ripristino; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
+      "latency": "Lo specialista esamina un runbook operativo per prerequisiti eseguibili, controlli, rami di errore, proprietà e ripristino, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "evidence-synthesis-analyst": {
-      "risk": "Questo specialista di sola lettura sintetizza un pacchetto sorgente limitato preservando le differenze di popolazione, metodo, contesto e contraddizione; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
-      "latency": "Lo specialista sintetizza un pacchetto sorgente delimitato preservando le differenze di popolazione, metodo, contesto e contraddizione, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questo specialista di sola lettura sintetizza un pacchetto di fonti limitato preservando le differenze di popolazione, metodo, contesto e contraddizione; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
+      "latency": "Lo specialista sintetizza un pacchetto di fonti delimitato preservando le differenze di popolazione, metodo, contesto e contraddizione, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "research-gap-mapper": {
-      "risk": "Questo specialista di sola lettura mappa le domande senza risposta in base alla sensibilità decisionale, al costo delle prove e alle condizioni di interruzione esplicite; non può modificare o approvare modifiche.",
+      "risk": "Questo specialista di sola lettura mappa le domande senza risposta in base alla sensibilità decisionale, al costo delle prove e alle condizioni di interruzione esplicite; non può modificare né approvare modifiche.",
       "latency": "Lo specialista mappa le domande senza risposta in base alla sensibilità decisionale, al costo delle prove e alle condizioni di interruzione esplicite, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "source-credibility-auditor": {
@@ -1210,7 +1210,7 @@
     },
     "abuse-resistance-analyst": {
       "risk": "Questo specialista di sola lettura analizza una singola operazione per capire come un aggressore potrebbe moltiplicare costi e lavoro, generare richieste a cascata o aggirare le quote. I risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
-      "latency": "Analizza una sola operazione attraverso passaggi successivi di raccolta delle evidenze e verifica su costi, lavoro generato e quote."
+      "latency": "Lo specialista analizza una singola operazione alla ricerca di costi moltiplicati da input controllati da un attaccante, richieste a cascata ed elusione delle quote, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "application-security-reviewer": {
       "risk": "Questo specialista di sola lettura fornisce una revisione di sicurezza applicativa di ripiego, trasversale a più confini, quando nessuno specialista di sicurezza più specifico è adatto; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
@@ -1233,7 +1233,7 @@
       "latency": "Lo specialista traccia l'identità di un tenant attraverso i limiti di archiviazione, cache, job e query per errori di isolamento, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "build-provenance-reviewer": {
-      "risk": "Questo specialista di sola lettura esamina un oggetto di build denominato per individuare lacune nella catena di identità di provenienza supportate da prove; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
+      "risk": "Questo specialista di sola lettura esamina un soggetto di build denominato per individuare lacune nella catena di identità di provenienza supportate da prove; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
       "latency": "Lo specialista esamina un soggetto di build denominato per individuare lacune nella catena di identità di provenienza supportate da prove, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "privacy-data-handling-auditor": {
@@ -1257,8 +1257,8 @@
       "latency": "Lo specialista esamina un record decisionale con limiti definiti per evidenze, alternative, compromessi, conseguenze e trigger di riesame, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "api-documentation-verifier": {
-      "risk": "Questo specialista di sola lettura verifica la documentazione e gli esempi API limitati rispetto all'implementazione esatta o alla versione delle specifiche; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
-      "latency": "Lo specialista verifica la documentazione e gli esempi API limitati rispetto all'implementazione esatta o alla versione delle specifiche, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questo specialista di sola lettura verifica la documentazione e gli esempi API limitati rispetto alla versione esatta dell'implementazione o della specifica; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
+      "latency": "Lo specialista verifica la documentazione e gli esempi API limitati rispetto alla versione esatta dell'implementazione o della specifica, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "procedural-documentation-tester": {
       "risk": "Questo specialista di sola lettura segue staticamente una procedura per prerequisiti, stato, risultati osservabili, nuovi tentativi e rami di ripristino; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
