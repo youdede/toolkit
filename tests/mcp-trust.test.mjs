@@ -249,6 +249,9 @@ test('repository MCP diff omits tracked credential files', (context) => {
   const text = JSON.parse(run.stdout.trim()).result.content[0].text;
   assert.match(text, /\+two/);
   assert.doesNotMatch(text, /never-return-this/);
+});
+
+
 test('MCP runtime negotiates a supported protocol version and reports parse errors', (context) => {
   const workspace = mkdtempSync(path.join(os.tmpdir(), 'youdede-mcp-protocol-'));
   context.after(() => rmSync(workspace, { recursive: true, force: true }));
