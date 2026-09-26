@@ -12,3 +12,4 @@ The first scanner covers npm package-lock JSON. Unsupported lockfile formats are
 - It does not send package origins, credentials, integrity values, or repository content anywhere.
 - It does not claim that an accepted lockfile is reproducible, authentic, or vulnerability-free.
 - It does not allow command flags or repository files to disable a detected origin violation.
+- It reads the lockfiles the commit takes before the Bash command runs, not after. Another command earlier in the same command line is not executed by the hook, so its effect is not seen: `npm install left-pad && git commit -am deps` rewrites the lockfile after the check. Run the change and the commit as separate tool calls so the commit is checked against the changed state.

@@ -16,3 +16,4 @@ Hard links, generated archives, package registries, and links introduced after t
 - It does not claim that a contained symbolic-link target exists or is safe to consume.
 - It does not inspect unstaged links or links produced outside the intercepted Git commit path.
 - It does not expose a repository-controlled exception list or command-line bypass.
+- It reads the links the commit takes before the Bash command runs, not after. Another command earlier in the same command line is not executed by the hook, so its effect is not seen: `ln -sf /etc/passwd a.sh && git commit -am x` replaces the file with an escaping link after the check. Run the change and the commit as separate tool calls so the commit is checked against the changed state.

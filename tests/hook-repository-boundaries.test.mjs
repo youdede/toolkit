@@ -275,8 +275,11 @@ test('protected branch parser handles wrappers and refuses dynamic or shifted Gi
     ['nice git push origin main', 'protected-branch-direct-push'],
     ['timeout 30 git push origin main', 'protected-branch-direct-push'],
     ["bash -lc 'git branch -D main'", 'protected-branch-delete'],
-    ['echo $(git push origin main)', 'protected-command-uninspectable'],
-    ['echo `git push origin main`', 'protected-command-uninspectable'],
+    // Substitutions are read, so the push inside is judged itself (W3-REVIEW-2).
+    ['echo $(git push origin main)', 'protected-branch-direct-push'],
+    ['echo `git push origin main`', 'protected-branch-direct-push'],
+    ['git status && echo "$(git switch main && git push)"', 'protected-branch-direct-push'],
+    ['echo $(echo $(echo $(echo $(git push origin main))))', 'protected-command-uninspectable'],
     ["bash -c '$SCRIPT'", 'protected-command-uninspectable'],
     ['env -C ../other git commit -m x', 'protected-command-uninspectable'],
     ['GIT_WORK_TREE=$TREE git commit -m x', 'protected-command-uninspectable'],

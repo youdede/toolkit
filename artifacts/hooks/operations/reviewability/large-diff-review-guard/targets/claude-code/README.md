@@ -12,3 +12,4 @@ Rename similarity and semantic complexity are not estimated. The hook does not a
 - It does not claim that a small diff is correct or that a large diff is necessarily unsafe.
 - It does not count unstaged work that the commit will not take, or generated impact outside the commit.
 - It does not accept repository configuration, commit flags, or prompt text as a bypass.
+- It reads the diff the commit takes before the Bash command runs, not after. Another command earlier in the same command line is not executed by the hook, so its effect is not seen: `node generate.js > data.json && git commit -am x` produces the large file after the check. Run the change and the commit as separate tool calls so the commit is checked against the changed state.

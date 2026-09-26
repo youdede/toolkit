@@ -12,3 +12,4 @@ Actual key availability, signature creation, cryptographic validity, and server-
 - It does not sign, commit, attest, push, or claim that a future signature will verify.
 - It does not infer intent from branch names, commit messages, environment variables, aliases, or prompt text.
 - It does not expose a project-controlled bypass or accept --no-gpg-sign.
+- It reads the signing configuration before the Bash command runs, not after. Another command earlier in the same command line is not executed by the hook, so its effect is not seen: `git config commit.gpgSign false && git commit -m x` turns signing off after the check, so the commit is created unsigned. Run the change and the commit as separate tool calls so the commit is checked against the changed state.

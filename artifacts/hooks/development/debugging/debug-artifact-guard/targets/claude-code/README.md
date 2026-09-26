@@ -21,3 +21,4 @@ The installed guard exposes no project-writable allowlist, inline suppression, e
 - It does not scan repository history or binary files, or working-tree content that the commit does not take; language-specific debugger rules remain limited to supported source formats.
 - It does not accept inline suppression comments or expose an agent-writable exception policy.
 - It does not claim that absence of these bounded patterns proves production readiness.
+- It reads the files the commit takes before the Bash command runs, not after. Another command earlier in the same command line is not executed by the hook, so its effect is not seen: `echo 'debugger;' >> app.js && git commit -am x` adds the debugger statement after the check. Run the change and the commit as separate tool calls so the commit is checked against the changed state.

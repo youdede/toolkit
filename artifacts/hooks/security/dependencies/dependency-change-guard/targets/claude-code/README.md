@@ -19,3 +19,4 @@ The installed hook deliberately has no project-writable allowlist, command diges
 - It does not model every workspace layout or package manager; exceptional layouts must be handled by a human outside the guarded session.
 - It does not echo a blocked install command or transmit repository content.
 - It does not expose a project file or command-controlled mechanism that lets the agent author its own bypass.
+- It reads the manifests and lockfiles the commit takes before the Bash command runs, not after. Another command earlier in the same command line is not executed by the hook, so its effect is not seen: `npm install left-pad && git commit -am deps` changes the manifest and lockfile after the check. Run the change and the commit as separate tool calls so the commit is checked against the changed state.

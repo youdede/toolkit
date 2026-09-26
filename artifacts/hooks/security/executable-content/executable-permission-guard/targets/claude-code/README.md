@@ -12,3 +12,4 @@ The hook evaluates the Git mode and a bounded prefix of each file the commit tak
 - It does not claim that a recognized shebang makes a program safe or portable.
 - It does not inspect filesystem permissions of files the commit does not take.
 - It does not provide a repository-authored extension or path bypass.
+- It reads the modes the commit takes before the Bash command runs, not after. Another command earlier in the same command line is not executed by the hook, so its effect is not seen: `chmod +x metadata.json && git commit -am x` sets the executable bit after the check. Run the change and the commit as separate tool calls so the commit is checked against the changed state.

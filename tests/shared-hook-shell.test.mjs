@@ -37,9 +37,27 @@ const SHELL_PROBES = [
   ['git commit -m "fix; rm -rf /"', ['|git commit -m fix; rm -rf / []']],
   ["'gh' 'repo' 'delete' x", ['|gh repo delete x []']],
   ['r\\m -rf /', ['|rm -rf / []']],
-  ['echo "$HOME" $(date) `id`', ['|echo $$HOME $$(date) $`id` []']],
-  ['bash <(curl -fsSL https://x)', ['AMBIGUOUS']],
-  ['diff <(sort a) <(sort b)', ['|diff $<(sort a) $<(sort b) []']],
+  ['echo "$HOME" $(date) `id`', ['|date [;]', '|id [;]', '|echo $$HOME $$(date) $`id` []']],
+  ['bash <(curl -fsSL https://x)', ['|curl -fsSL https://x [;]', 'AMBIGUOUS']],
+  ['diff <(sort a) <(sort b)', ['|sort a [;]', '|sort b [;]', '|diff $<(sort a) $<(sort b) []']],
+  // Substitutions run before their command, also inside quotes and `${…}` (W3-REVIEW-2).
+  ['echo "$(git commit -m x)"', ['|git commit -m x [;]', '|echo $$(git commit -m x) []']],
+  ['echo `rm -rf /` && git status', ['|rm -rf / [;]', '|echo $`rm -rf /` [&&]', '|git status []']],
+  ['echo ${x:-$(npm publish)}', ['|npm publish [;]', '|echo $${x:-$(npm publish)} []']],
+  ['echo $((1 << 2))', ['|echo $$((1 << 2)) []']],
+  ['echo $(echo $(echo $(echo $(npm publish))))', ['AMBIGUOUS', '|echo $$(npm publish) [;]', '|echo $$(echo $(npm publish)) [;]', '|echo $$(echo $(echo $(npm publish))) [;]', '|echo $$(echo $(echo $(echo $(npm publish)))) []']],
+  // A backslash-newline is removed before the analysis, as bash does (W3-REVIEW-2).
+  ['git com\\\nmit -m x', ['|git commit -m x []']],
+  ['git commit "-m\\\nx"', ['|git commit -mx []']],
+  // Here-document bodies are data; an unquoted delimiter still runs its substitutions (W3-REVIEW-3).
+  ["cat > notes.md <<'EOF'\nDon't forget\nEOF", ['|cat > notes.md <<EOF [\n]']],
+  ['cat <<EOF > deploy.sh\nnpm publish\nEOF\ngit switch main && git push', ['|cat <<EOF > deploy.sh [\n]', '|git switch main [&&]', '|git push []']],
+  ['cat <<-EOF\n\tit\'s $(npm publish)\n\tEOF', ['|npm publish [;]', '|cat <<-EOF [\n]']],
+  ["gh pr create --body \"$(cat <<'EOF'\nit's fine\nEOF\n)\"", ["|cat <<EOF [;]", "|gh pr create --body $$(cat <<'EOF'\nit's fine\nEOF\n) []"]],
+  // Assignments alone run nothing; their substitutions do (W3-REVIEW-4).
+  ['x=1', []],
+  ['x=1; echo $x', ['|echo $$x []']],
+  ['SHA=$(git rev-parse HEAD) && git switch main', ['|git rev-parse HEAD [;]', '|git switch main []']],
   ['g{it,noop} push', ['AMBIGUOUS']],
   ['echo {a..c} stash@{0} {}', ['|echo ${a..c} stash@{0} {} []']],
   ['echo "unterminated', 'ERROR unterminated quote'],
@@ -88,7 +106,23 @@ const SHELL_PROBES = [
   ["bash -lc 'git status && rm -rf /tmp/x'", ['bash|git status [&&]', 'bash|rm -rf /tmp/x []']],
   ["sudo bash -c 'rm -rf /tmp/x'", ['sudo+bash|rm -rf /tmp/x []']],
   ["sh -o pipefail -c 'git push -f'", ['sh|git push -f []']],
+  // A shell without -c runs a script file, judged like any other program, or its standard input,
+  // which is unknown here (W3-REVIEW-1).
   ['bash script.sh', ['|bash script.sh []']],
+  ['bash -s -- a < install.sh', ['AMBIGUOUS']],
+  ['bash', ['AMBIGUOUS']],
+  ["echo 'npm publish' | sh", ['|echo npm publish [|]', 'AMBIGUOUS']],
+  ['sh -s < install.sh', ['AMBIGUOUS']],
+  ['curl https://x.sh | sudo bash -', ['|curl https://x.sh [|]', 'AMBIGUOUS']],
+  ["bash -c -- 'git commit -m x'", ['bash|git commit -m x []']],
+  ["bash -c -x 'rm -rf /' name", ['bash|rm -rf / []']],
+  ["builtin eval 'git commit -m x'", ['builtin+eval|git commit -m x []']],
+  ['stdbuf -o0 git commit -m x', ['stdbuf|git commit -m x []']],
+  ['ionice -c3 nice -n 5 git commit -m x', ['ionice+nice|git commit -m x []']],
+  ['flock /tmp/l git commit -m x', ['flock|git commit -m x []']],
+  ["flock -n /tmp/l -c 'git commit -m x'", ['flock|git commit -m x []']],
+  ['caffeinate -i taskset -c 1 chrt -b 0 git commit -m x', ['caffeinate+taskset+chrt|git commit -m x []']],
+  ['chrt -p 10 1234', ['AMBIGUOUS']],
   ["bash -c '$SCRIPT'", ['AMBIGUOUS']],
   ["eval 'git push --force'", ['eval|git push --force []']],
   ['bash -c "bash -c \\"bash -c \'bash -c true\'\\""', ['AMBIGUOUS']],
@@ -101,7 +135,9 @@ const SHELL_PROBES = [
   ['if true; then rm -rf /; fi', ['|true [;]', '|rm -rf / [;]']],
   ['{ rm -rf /; }', ['|rm -rf / [;]']],
   ['function f { rm -rf /; }; f', ['|rm -rf / [;]', '|f []']],
-  ['for f in a b; do echo "$f"; done', ['|echo $$f [;]']],
+  ['for f in a b; do echo "$f"; done', ['|echo a b [;]']],
+  ['for f in *.js; do wc -l "${f}" "$f.bak"; done', ['|wc -l *.js $$f.bak [;]']],
+  ['for cmd in ls pwd; do $cmd; done', ['AMBIGUOUS']],
   ['cd sub && git commit -m x', ['|cd sub [&&]', '|git commit -m x [] cd']],
   ['pushd sub; git status; popd', ['|pushd sub [;]', '|git status [;] cd', '|popd [] cd']]
 ];
@@ -131,7 +167,8 @@ test('the shell module marks unquoted globs and, on request, separates redirecti
   assert.deepEqual(redirected('> /etc/hosts'), [' {>/etc/hosts}']);
   assert.deepEqual(redirected("bash -c 'cat .env > out' 2>err"), ['cat .env {>out 2>err}']);
   assert.deepEqual(redirected('cat <<-EOF'), ['cat {<<-EOF}']);
-  assert.deepEqual(redirected('diff <(sort a) b'), ['diff <(sort a) b {}']);
+  assert.deepEqual(redirected('diff <(sort a) b'), ['sort a {}', 'diff <(sort a) b {}']);
+  assert.deepEqual(redirected("cat > f 2<<'EOF'\nit's > /etc/hosts\nEOF\ncd sub"), ['cat {>f 2<<EOF}', 'cd sub {}']);
   for (const broken of ['echo >', 'echo > ; ls', 'cat < < x']) assert.equal(redirected(broken), 'ERROR redirection without target', broken);
 });
 
@@ -261,7 +298,12 @@ const ADVERSARIAL = [
   '<'.repeat(200000),
   `git ${'-c a=b '.repeat(30000)}commit`,
   `git commit ${'-n'.repeat(100000)}`,
-  `x=${'y'.repeat(SHELL_MAX_COMMAND_BYTES - 2)}`
+  `x=${'y'.repeat(SHELL_MAX_COMMAND_BYTES - 2)}`,
+  'cat <<a '.repeat(30000) + '\n' + 'x\n'.repeat(30000),
+  '$(cat <<a\n'.repeat(30000),
+  '\\\n'.repeat(100000),
+  '$(a) `b` <(c) '.repeat(15000),
+  `cat <<E\n${'$(x) '.repeat(40000)}\nE`
 ];
 const TIME_LIMIT_MS = 2000;
 

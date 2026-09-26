@@ -18,3 +18,4 @@ The installed hook has no project-writable allowlist, rule ignore list, size ove
 - It does not provide an agent-controlled runtime exception for a secret or sensitive path.
 - It does not detect staging performed by a script or interpreter that the same command runs, or content that `git checkout <branch> -- <path>` brings from another commit.
 - It does not know what `xargs` appends: those words are treated as pathspecs, so an appended `-n` is not seen.
+- It reads the files the commit takes before the Bash command runs, not after. Another command earlier in the same command line is not executed by the hook, so its effect is not seen: `echo "$KEY" > config.js && git commit -am x` writes the key after the check. Run the change and the commit as separate tool calls so the commit is checked against the changed state.

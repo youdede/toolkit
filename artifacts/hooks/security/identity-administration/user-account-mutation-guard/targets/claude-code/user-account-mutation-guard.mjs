@@ -14,7 +14,12 @@ export const SHELL_MAX_COMMAND_BYTES = 256 * 1024;
 const SHELL_MAX_DEPTH = 3;
 const SHELL_MAX_WRAPPERS = 16;
 const SHELL_NAMES = new Set(['sh', 'bash', 'zsh', 'dash', 'ksh']);
-const SHELL_WRAPPERS = new Set(['exec', 'time', 'noglob', 'command', 'env', 'sudo', 'doas', 'setsid', 'nohup', 'nice', 'timeout', 'xargs']);
+const SHELL_WRAPPERS = new Set([
+  'exec', 'time', 'noglob', 'command', 'builtin', 'env', 'sudo', 'doas', 'setsid', 'nohup', 'nice', 'timeout', 'xargs',
+  'stdbuf', 'ionice', 'chrt', 'taskset', 'flock', 'caffeinate', 'unbuffer', 'chronic'
+]);
+// Wrappers whose first word after the options is not the command: a duration, priority, CPU mask, or lock file.
+const WRAPPER_POSITIONAL = new Set(['timeout', 'chrt', 'taskset', 'flock']);
 const SHELL_DIRECTORY_CHANGERS = new Set(['cd', 'pushd', 'popd']);
 const SHELL_SENSITIVE_ASSIGNMENT = /^(?:PATH|SHELL|GIT_DIR|GIT_WORK_TREE|GIT_CONFIG[^=]*)=/;
 const SHELL_ASSIGNMENT = /^[A-Za-z_][A-Za-z0-9_]*=/;
@@ -38,8 +43,18 @@ const WRAPPER_OPTIONS = {
   time: { next: /^(?:-f|-o|--format|--output)$/, alone: /^(?:-a|-p|-v|--append|--portability|--verbose|--quiet|--format=.+|--output=.+)$/ },
   exec: { next: /^-a$/, alone: /^(?:-c|-l)$/ },
   command: { alone: /^-p$/ },
+  builtin: {},
   noglob: {},
   nohup: {},
+  unbuffer: {},
+  chronic: { alone: /^-[ev]+$/ },
+  stdbuf: { next: /^-[ioe]$/, alone: /^(?:-[ioe].+|--(?:input|output|error)=.+)$/ },
+  ionice: { next: /^(?:-c|-n|--class|--classdata)$/, alone: /^(?:-c.+|-n.+|-t|--ignore|--(?:class|classdata)=.+)$/ },
+  // `chrt -p` and `taskset -p` change a running process; flock -c takes a shell string.
+  chrt: { next: /^(?:-T|-P|-D|--sched-runtime|--sched-period|--sched-deadline)$/, alone: /^(?:-[bfiordaRmv]+|--(?:batch|fifo|idle|other|rr|deadline|all-tasks|reset-on-fork|verbose))$/ },
+  taskset: { alone: /^(?:-[ac]+|--(?:all-tasks|cpu-list))$/ },
+  flock: { next: /^(?:-w|-E|--timeout|--wait|--conflict-exit-code)$/, alone: /^(?:-[sxenuoF]+|-[wE].+|--(?:shared|exclusive|nonblock|nb|unlock|close|no-fork|verbose)|--(?:timeout|wait|conflict-exit-code)=.+)$/ },
+  caffeinate: { next: /^-[tw]$/, alone: /^-[dimsu]+$/ },
   nice: { next: /^(?:-n|--adjustment)$/, alone: /^(?:-n.+|--adjustment=.+|-[-+]?\d+)$/ },
   timeout: {
     next: /^(?:-s|-k|--signal|--kill-after)$/,
@@ -79,6 +94,8 @@ function expansionEnd(source, start) {
   }
   const open = next;
   const close = open === '(' ? ')' : '}';
+  // A here-document inside a command substitution: its body is data, so quotes in it do not count.
+  const heredocs = open === '(' && source[start + 2] !== '(' ? [] : null;
   let depth = 1;
   let quote = null;
   for (let index = start + 2; index < source.length; index += 1) {
@@ -86,14 +103,91 @@ function expansionEnd(source, start) {
     if (character === '\\') { index += 1; continue; }
     if (quote) { if (character === quote) quote = null; continue; }
     if (character === "'" || character === '"') { quote = character; continue; }
-    if (character === open) depth += 1;
+    if (heredocs && isHeredocStart(source, index)) {
+      const heredoc = readHeredoc(source, index);
+      if (!heredoc) return -1;
+      heredocs.push(heredoc);
+      index = heredoc.end - 1;
+    } else if (heredocs?.length && character === '\n') {
+      index = skipHeredocBodies(source, index + 1, heredocs.splice(0)) - 1;
+    } else if (character === open) depth += 1;
     else if (character === close && --depth === 0) return index + 1;
   }
   return -1;
 }
 
-// Splits source into segments of tokens. Quotes and escapes are removed; expansions stay as text and
-// mark the token dynamic, and an unquoted `*`, `?`, or `[` marks it `glob`. `operator` is the one that
+// `<<` or `<<-` (not the here-string `<<<`) at `index`.
+function isHeredocStart(source, index) {
+  return source[index] === '<' && source[index + 1] === '<' && source[index + 2] !== '<';
+}
+
+// Operator and delimiter word of the here-document starting at `index`, or null without a word.
+// A quoted or escaped delimiter keeps the body literal; otherwise the body is expanded.
+function readHeredoc(source, index) {
+  let cursor = index + 2;
+  const stripTabs = source[cursor] === '-';
+  if (stripTabs) cursor += 1;
+  while (source[cursor] === ' ' || source[cursor] === '\t') cursor += 1;
+  let delimiter = '';
+  let quoted = false;
+  let quote = null;
+  for (; cursor < source.length; cursor += 1) {
+    const character = source[cursor];
+    if (quote) { if (character === quote) quote = null; else delimiter += character; continue; }
+    if (character === "'" || character === '"') { quote = character; quoted = true; continue; }
+    if (character === '\\') { quoted = true; cursor += 1; delimiter += source[cursor] ?? ''; continue; }
+    if (/\s/.test(character) || ';&|()<>'.includes(character)) break;
+    delimiter += character;
+  }
+  if (quote || !delimiter) return null;
+  return { operator: stripTabs ? '<<-' : '<<', delimiter, quoted, stripTabs, end: cursor, body: '' };
+}
+
+// Skips the bodies of `heredocs`, in order, from the line starting at `position`; each body is stored
+// on its entry. Returns the index after the last delimiter line, or the end of the source: like
+// bash, a body without its delimiter line runs to the end.
+function skipHeredocBodies(source, position, heredocs) {
+  for (const heredoc of heredocs) {
+    while (position < source.length) {
+      let lineEnd = source.indexOf('\n', position);
+      if (lineEnd < 0) lineEnd = source.length;
+      const line = source.slice(position, lineEnd);
+      position = lineEnd + 1;
+      if ((heredoc.stripTabs ? line.replace(/^\t+/, '') : line) === heredoc.delimiter) break;
+      heredoc.body += `${line}\n`;
+    }
+  }
+  return Math.min(position, source.length);
+}
+
+// Adds to `found` the command text of each substitution the expansion `text` runs: `$(…)`, a backtick
+// block, `<(…)`/`>(…)`, and those nested in `${…}` or `$((…))`. Returns false when one is unterminated.
+function collectSubstitutions(text, found) {
+  if (text.startsWith('`')) { found.push(text.slice(1, -1).replace(/\\([\\`$])/g, '$1')); return true; }
+  if (text.startsWith('$((')) return scanSubstitutions(text.slice(3, -2), found);
+  if (/^(?:\$|<|>)\(/.test(text)) { found.push(text.slice(2, -1)); return true; }
+  if (text.startsWith('${')) return scanSubstitutions(text.slice(2, -1), found);
+  return true;
+}
+
+// Substitutions in free text such as an expanded here-document body.
+function scanSubstitutions(text, found) {
+  for (let index = 0; index < text.length; index += 1) {
+    if (text[index] === '\\') { index += 1; continue; }
+    if (text[index] !== '$' && text[index] !== '`') continue;
+    const end = expansionEnd(text, index);
+    if (end < 0) return false;
+    if (!collectSubstitutions(text.slice(index, end), found)) return false;
+    index = end - 1;
+  }
+  return true;
+}
+
+// Splits source into segments of tokens. Quotes and escapes are removed, and a backslash-newline is
+// dropped as bash does; expansions stay as text and mark the token dynamic, and an unquoted `*`, `?`, or
+// `[` marks it `glob`. Each segment lists in `substitutions` the command text of the `$(…)`, backtick,
+// and `<(…)`/`>(…)` substitutions it runs. A here-document body is data: it is skipped, and only the
+// substitutions of an unquoted-delimiter body are listed. `operator` is the one that
 // ends the segment: `&&`, `||`, `;`, `|`, `&`, `\n`, `(`, `)`, or '' at the end. With
 // `options.redirections`, redirections leave the tokens and go to `redirections` as { operator, target }:
 // `2>&1` is { operator: '2>&', target: '1' }, `x>out` is the token x and { operator: '>', target: 'out' }.
@@ -104,7 +198,15 @@ function lexShell(source, options = {}) {
   let redirect = null;
   let token = null;
   let quote = null;
+  let substitutions = [];
+  let heredocs = [];
   const begin = () => { if (!token) token = { value: '', dynamic: false }; };
+  const expansion = (index) => {
+    const end = expansionEnd(source, index);
+    if (end < 0 || !collectSubstitutions(source.slice(index, end), substitutions)) return -1;
+    token.value += source.slice(index, end); token.dynamic = true;
+    return end;
+  };
   const pushToken = () => {
     if (!token) return;
     // Only `{a,b}` and `{x..y}` expand; `{}` and `stash@{0}` are literal.
@@ -117,9 +219,10 @@ function lexShell(source, options = {}) {
   const pushSegment = (operator) => {
     pushToken();
     if (redirect) return false;
-    if (tokens.length || redirections.length) segments.push(options.redirections ? { tokens, operator, redirections } : { tokens, operator });
+    if (tokens.length || redirections.length) segments.push(options.redirections ? { tokens, operator, redirections, substitutions } : { tokens, operator, substitutions });
     tokens = [];
     redirections = [];
+    substitutions = [];
     return true;
   };
   for (let index = 0; index < source.length; index += 1) {
@@ -127,22 +230,48 @@ function lexShell(source, options = {}) {
     if (quote === "'") { if (character === "'") quote = null; else token.value += character; continue; }
     if (quote === '"') {
       if (character === '"') quote = null;
-      else if (character === '\\') { if (++index >= source.length) return { error: 'trailing escape' }; token.value += source[index]; }
-      else if (character === '$' || character === '`') {
-        const end = expansionEnd(source, index);
+      else if (character === '\\') {
+        if (++index >= source.length) return { error: 'trailing escape' };
+        if (source[index] !== '\n') token.value += source[index];
+      } else if (character === '$' || character === '`') {
+        const end = expansion(index);
         if (end < 0) return { error: 'unterminated expansion' };
-        token.value += source.slice(index, end); token.dynamic = true; index = end - 1;
+        index = end - 1;
       } else token.value += character;
       continue;
     }
-    if (/\s/.test(character)) { pushToken(); if (character === '\n' && !pushSegment('\n')) return { error: 'redirection without target' }; }
-    else if (character === "'" || character === '"') { begin(); token.quoted = true; quote = character; }
+    if (character === '\\' && source[index + 1] === '\n') { index += 1; continue; }
+    if (/\s/.test(character)) {
+      pushToken();
+      if (character !== '\n') continue;
+      if (!pushSegment('\n')) return { error: 'redirection without target' };
+      if (heredocs.length) {
+        const pending = heredocs.splice(0);
+        index = skipHeredocBodies(source, index + 1, pending) - 1;
+        for (const heredoc of pending) {
+          if (!heredoc.quoted && !scanSubstitutions(heredoc.body, heredoc.owner)) return { error: 'unterminated expansion' };
+        }
+      }
+    } else if (character === "'" || character === '"') { begin(); token.quoted = true; quote = character; }
     else if (character === '\\') { begin(); if (++index >= source.length) return { error: 'trailing escape' }; token.value += source[index]; }
     else if (character === '$' || character === '`' || ((character === '<' || character === '>') && source[index + 1] === '(')) {
       begin();
-      const end = expansionEnd(source, index);
+      const end = expansion(index);
       if (end < 0) return { error: 'unterminated expansion' };
-      token.value += source.slice(index, end); token.dynamic = true; index = end - 1;
+      index = end - 1;
+    } else if (isHeredocStart(source, index)) {
+      const heredoc = readHeredoc(source, index);
+      if (!heredoc) return { error: 'redirection without target' };
+      let operator = heredoc.operator;
+      if (options.redirections && token && !token.quoted && !token.dynamic && /^\d+$/.test(token.value)) { operator = token.value + operator; token = null; }
+      pushToken();
+      if (redirect) return { error: 'redirection without target' };
+      if (options.redirections) redirections.push({ operator, target: { value: heredoc.delimiter, dynamic: false } });
+      else tokens.push({ value: operator + heredoc.delimiter, dynamic: false });
+      // The body of an unquoted delimiter is attached to this segment when it is read.
+      heredoc.owner = substitutions;
+      heredocs.push(heredoc);
+      index = heredoc.end - 1;
     } else if (options.redirections && (character === '<' || character === '>' || (character === '&' && source[index + 1] === '>'))) {
       // A file descriptor number written right before the operator belongs to it.
       let operator = '';
@@ -240,6 +369,8 @@ function unwrapCommand(original, depth, inherited = [], parseOptions = {}) {
     if (SHELL_SENSITIVE_ASSIGNMENT.test(tokens[index].value)) return ambiguous();
     index += 1;
   }
+  // Only assignments: nothing runs here. Their substitutions are listed with the segment.
+  if (index >= tokens.length) return [];
   for (let count = 0; count < SHELL_MAX_WRAPPERS && index < tokens.length; count += 1) {
     const executable = tokens[index];
     if (executable.dynamic || executable.placeholder || /[*?]|\[[^\]]*\]/.test(executable.value)) return ambiguous();
@@ -248,15 +379,27 @@ function unwrapCommand(original, depth, inherited = [], parseOptions = {}) {
     if (SHELL_NAMES.has(name) || name === 'eval') {
       let payload = name === 'eval' ? index + 1 : -1;
       if (name !== 'eval') {
-        for (let cursor = index + 1; cursor < tokens.length; cursor += 1) {
+        // With -c the command string is the first operand, after every option and `--`. Without it the
+        // shell runs its standard input (`… | sh`, `sh -s`, `bash < file`), whose text the command itself
+        // supplies and the hook cannot see, or a script file, which is judged like any other program
+        // (`./script.sh` and `make` are not read either).
+        let command = false;
+        let stdin = false;
+        let cursor = index + 1;
+        for (; cursor < tokens.length; cursor += 1) {
           const option = tokens[cursor];
           if (option.dynamic || option.placeholder) return [{ ambiguous: true, wrappers: [...wrappers, name] }];
-          if (option.value === '-c' || option.value === '--command' || /^-[^-]*c[^-]*$/.test(option.value)) { payload = cursor + 1; break; }
-          // `-o option`, `+O shopt`: the next token is the option name, not a script.
-          if (/^[-+][oO]$/.test(option.value)) { cursor += 1; continue; }
-          if (!/^[-+]./.test(option.value)) break;
+          if (option.value === '-') { stdin = true; cursor += 1; break; }
+          if (option.value === '--') { cursor += 1; break; }
+          if (/^-[^-]*[si]/.test(option.value)) stdin = true;
+          // `-o option`, `+O shopt`, `--rcfile file`: the next token is a value, not a script.
+          if (/^(?:[-+][oO]|--(?:rcfile|init-file))$/.test(option.value)) { cursor += 1; continue; }
+          if (option.value === '--command' || /^-[^-]*c/.test(option.value)) command = true;
+          else if (!/^[-+]./.test(option.value)) break;
         }
-        if (payload < 0) return [{ tokens: tokens.slice(index), wrappers }];
+        if (!command && (stdin || !tokens[cursor])) return [{ ambiguous: true, wrappers: [...wrappers, name] }];
+        if (!command) return [{ tokens: tokens.slice(index), wrappers }];
+        payload = cursor;
       }
       if (!tokens[payload] || depth >= SHELL_MAX_DEPTH) return [{ ambiguous: true, wrappers: [...wrappers, name] }];
       const inner = name === 'eval' ? tokens.slice(payload).map((entry) => entry.value).join(' ') : tokens[payload].value;
@@ -304,10 +447,15 @@ function unwrapCommand(original, depth, inherited = [], parseOptions = {}) {
       if (options.alone?.test(value)) { index += 1; continue; }
       return ambiguous();
     }
-    if (name === 'timeout') {
-      // The duration comes first; `timeout` without one runs nothing.
+    if (WRAPPER_POSITIONAL.has(name)) {
+      // The duration, priority, mask, or lock file comes first; without it nothing runs.
       if (!tokens[index] || tokens[index].dynamic) return ambiguous();
       index += 1;
+      if (name === 'flock' && /^(?:-c|--command)$/.test(tokens[index]?.value ?? '')) {
+        if (!tokens[index + 1] || depth >= SHELL_MAX_DEPTH) return ambiguous();
+        const nested = parseShellCommands(tokens[index + 1].value, depth + 1, wrappers, parseOptions);
+        return nested.error ? ambiguous() : nested.commands;
+      }
     }
     if (name === 'xargs') {
       // xargs runs `echo` without a command and appends input words, or substitutes them for the
@@ -326,8 +474,13 @@ function unwrapCommand(original, depth, inherited = [], parseOptions = {}) {
 // Returns { commands } where each command is { tokens, wrappers, operator, changedDirectory } or
 // { ambiguous: true }, or { error } when the text cannot be lexed. `operator` follows the command, so
 // `a && b` runs b only if a succeeded while `a; b` runs b anyway. Wrappers (sudo, doas, setsid, env,
-// nice, timeout, xargs, exec, time, noglob, command, nohup) and static `sh -c`/`bash -c`/`eval`/
-// `pwsh -Command` layers are removed; `find -exec` adds the command it runs. `changedDirectory` is
+// nice, timeout, xargs, exec, time, noglob, command, builtin, nohup, stdbuf, ionice, chrt, taskset,
+// flock, caffeinate, unbuffer, chronic) and static `sh -c`/`bash -c`/`eval`/`pwsh -Command` layers are
+// removed; a shell without -c (a script file or standard input) is ambiguous. `find -exec` adds the
+// command it runs, and the commands of `$(…)`, backtick, and `<(…)` substitutions come before the
+// command of their segment, with the operator `;`. A segment made only of assignments runs no
+// command. After `for name in words`, an argument that is exactly `$name` or `${name}` stands for those
+// words. `changedDirectory` is
 // true after cd, pushd, or popd in the same command. With `options.redirections`, each command also
 // carries the `redirections` of its segment, and a segment made only of redirections (`> file`)
 // yields a command with no tokens. An ambiguous entry carries `segment`, the tokens of the innermost
@@ -338,7 +491,25 @@ export function parseShellCommands(command, depth = 0, wrappers = [], options = 
   const lexed = lexShell(command, options);
   if (lexed.error) return { error: lexed.error, commands: [] };
   const commands = [];
+  const loops = new Map();
   for (const segment of lexed.segments) {
+    const start = segment.tokens.findIndex((token) => token.dynamic || !SHELL_PREFIX_KEYWORDS.has(token.value));
+    const [keyword, variable, word] = start < 0 ? [] : segment.tokens.slice(start);
+    if (keyword?.value === 'for' && !keyword.dynamic && word?.value === 'in' && /^[A-Za-z_]\w*$/.test(variable?.value ?? '')) {
+      loops.set(variable.value, segment.tokens.slice(start + 3));
+    }
+    if (loops.size) {
+      segment.tokens = segment.tokens.flatMap((token, position) => {
+        const name = position > start && token.dynamic ? /^\$(?:\{(\w+)\}|(\w+))$/.exec(token.value) : null;
+        return name && loops.has(name[1] ?? name[2]) ? loops.get(name[1] ?? name[2]) : [token];
+      });
+    }
+    for (const text of segment.substitutions) {
+      const nested = depth >= SHELL_MAX_DEPTH ? { error: 'too deep' } : parseShellCommands(text, depth + 1, wrappers, options);
+      const inner = nested.error ? [{ ambiguous: true, wrappers: [...wrappers], segment: segment.tokens }] : nested.commands;
+      if (inner.length) inner.at(-1).operator = ';';
+      commands.push(...inner);
+    }
     let entries = unwrapCommand(segment.tokens, depth, wrappers, options);
     if (segment.redirections?.length) {
       if (!entries.length) entries = [{ tokens: [], wrappers: [...wrappers] }];
