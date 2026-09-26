@@ -298,11 +298,21 @@ test('Git gates normalize wrappers and reject commit-time auto-staging', (contex
 
   const autoStageRoot = repository(context, 'youdede-git-autostage-');
   writeFileSync(path.join(autoStageRoot, 'README.md'), 'unstaged change\n');
-  for (const name of ['lockfile', 'symlink', 'executable', 'largeDiff']) {
+  for (const name of ['lockfile', 'executable', 'largeDiff']) {
     for (const command of ['git commit -am update', 'env MODE=safe /usr/bin/git commit -am update', "bash -lc 'git commit -am update'"]) {
       assert.equal(invoke(name, { cwd: autoStageRoot, tool_input: { command } }, { cwd: autoStageRoot }).status, 2, `${name}: ${command}`);
     }
   }
+  // symlink-publication-guard reads the working-tree links that git commit -a would publish.
+  for (const command of ['git commit -am update', 'env MODE=safe /usr/bin/git commit -am update', "bash -lc 'git commit -am update'"]) {
+    assert.equal(invoke('symlink', { cwd: autoStageRoot, tool_input: { command } }, { cwd: autoStageRoot }).status, 0, `symlink: ${command}`);
+  }
+  symlinkSync('README.md', path.join(autoStageRoot, 'escape'));
+  git(autoStageRoot, ['add', 'escape']);
+  git(autoStageRoot, ['commit', '-qm', 'link', '--no-verify']);
+  rmSync(path.join(autoStageRoot, 'escape'));
+  symlinkSync('../outside', path.join(autoStageRoot, 'escape'));
+  assert.equal(invoke('symlink', { cwd: autoStageRoot, tool_input: { command: 'git commit -am update' } }, { cwd: autoStageRoot }).status, 2);
 });
 
 test('path portability checks every path component', (context) => {

@@ -1,5 +1,5 @@
 {
-  "sourceHash": "b68adfb80366dcaf7fa8d34911336b8a5b343925ce6ae0aafbb4244316c08354",
+  "sourceHash": "b8d592844b819e205f9972dd64b1a1abece53b20e4cca8d49169f3c84817f312",
   "narratives": {
     "abuse-resistance-analyst": {
       "summary": "Analizza una singola operazione per individuare costi moltiplicati da input controllati da un attaccante, richieste a cascata ed elusione delle quote.",
@@ -2976,7 +2976,7 @@
       "refuses": [
         "Non crea, riscrive, risolve, segue, approva o rimuove un collegamento simbolico.",
         "Non afferma che un target di collegamento simbolico contenuto esista o sia sicuro da consumare.",
-        "Non ispeziona collegamenti non staged o collegamenti prodotti al di fuori del percorso di commit git intercettato.",
+        "Non ispeziona collegamenti che il commit Git intercettato non può pubblicare, né collegamenti prodotti al di fuori del percorso del commit Git intercettato.",
         "Non espone una lista di eccezioni controllata dal repository o un bypass da riga di comando."
       ]
     },

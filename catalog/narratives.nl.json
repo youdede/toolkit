@@ -1,5 +1,5 @@
 {
-  "sourceHash": "b68adfb80366dcaf7fa8d34911336b8a5b343925ce6ae0aafbb4244316c08354",
+  "sourceHash": "b8d592844b819e205f9972dd64b1a1abece53b20e4cca8d49169f3c84817f312",
   "narratives": {
     "abuse-resistance-analyst": {
       "summary": "Analyseert één handeling op kostenversterking die een aanvaller kan sturen, fan-out en het omzeilen van quota.",
@@ -2976,7 +2976,7 @@
       "refuses": [
         "Het creëert geen symbolische link, herschrijft deze niet, lost deze niet op, volgt deze niet, keurt deze niet goed of verwijdert deze niet.",
         "Het beweert niet dat het doel van een symbolische link bestaat of veilig te gebruiken is alleen omdat het binnen de repository ligt.",
-        "Het inspecteert geen links die niet in de Git-index zijn klaargezet, noch links die buiten het onderschepte Git-committraject worden aangemaakt.",
+        "Het inspecteert geen links die de onderschepte Git-commit niet kan publiceren, noch links die buiten het onderschepte Git-committraject worden aangemaakt.",
         "Het biedt geen vanuit de repository beheerde uitzonderingslijst of omzeilingsmogelijkheid via de commandoregel."
       ]
     },
