@@ -9,6 +9,9 @@ import { doctor, installArtifact, planArtifactInstall, removeArtifact } from '..
 import { compareObservedTools, verifyMcpRecord } from '../scripts/verify-mcp.mjs';
 import { evaluate as evaluateGuard } from '../artifacts/hooks/security/network-control/mcp-capability-drift-guard/targets/claude-code/mcp-capability-drift-guard.mjs';
 import { buildProposal } from '../artifacts/commands/development/agent-tooling/re-pin-mcp-tools/scripts/propose-repin.mjs';
+import { isSensitiveWorkspacePath } from '../scripts/runtime/readonly-mcp-server.mjs';
+import { isSensitivePath as guardIsSensitive } from '../artifacts/hooks/security/secrets/sensitive-file-access-guard/targets/claude-code/sensitive-file-access-guard.mjs';
+import { cleanGitEnvironment } from './git-env.mjs';
 
 function temporary(context, prefix) {
   const directory = mkdtempSync(path.join(os.tmpdir(), prefix));
@@ -183,4 +186,66 @@ test('re-pin command entrypoints and proposal boundaries are exercised', () => {
   assert.notDeepEqual(proposal.previousTools, proposal.proposedTools); // negative: drift stays visible
   assert.throws(() => buildProposal(registry, 'unknown', observation)); // malformed: unknown servers refuse
   assert.throws(() => buildProposal(registry, 'youdede-workspace-files-readonly', { tools: [] })); // boundary: empty inventories refuse
+});
+
+test('workspace MCP runtime refuses credential files it declares no access to', (context) => {
+  const workspace = mkdtempSync(path.join(os.tmpdir(), 'youdede-mcp-secret-'));
+  context.after(() => rmSync(workspace, { recursive: true, force: true }));
+  writeFileSync(path.join(workspace, 'profile.json'), readFileSync('artifacts/mcp-servers/development/agent-tooling/workspace-files-readonly/server.json'));
+  writeFileSync(path.join(workspace, '.env'), 'API_KEY=never-return-this\n');
+  writeFileSync(path.join(workspace, '.env.example'), 'API_KEY=\n');
+  mkdirSync(path.join(workspace, 'config'));
+  writeFileSync(path.join(workspace, 'config', 'id_ed25519'), 'PRIVATE-KEY-BODY\n');
+  writeFileSync(path.join(workspace, 'notes.txt'), 'public\n');
+  const call = (id, name, args) => ({ jsonrpc: '2.0', id, method: 'tools/call', params: { name, arguments: args } });
+  const requests = [
+    call(1, 'read_file', { path: '.env' }),
+    call(2, 'read_file', { path: 'config/id_ed25519' }),
+    call(3, 'read_file', { path: '.env.example' }),
+    call(4, 'read_file', { path: 'notes.txt' }),
+    call(5, 'search_files', { query: 'env' }),
+    call(6, 'list_directory', { path: '.' })
+  ];
+  const run = spawnSync(process.execPath, [path.resolve('scripts/runtime/readonly-mcp-server.mjs'), '--profile', 'profile.json'], {
+    cwd: workspace,
+    input: `${requests.map((request) => JSON.stringify(request)).join('\n')}\n`,
+    encoding: 'utf8'
+  });
+  assert.equal(run.status, 0, run.stderr);
+  const results = new Map(run.stdout.trim().split('\n').map((line) => JSON.parse(line)).map((message) => [message.id, message.result]));
+  assert.doesNotMatch(run.stdout, /never-return-this|PRIVATE-KEY-BODY/);
+  assert.equal(results.get(1).isError, true);
+  assert.equal(results.get(2).isError, true);
+  assert.equal(results.get(3).content[0].text, 'API_KEY=\n');
+  assert.equal(results.get(4).content[0].text, 'public\n');
+  assert.doesNotMatch(results.get(5).content[0].text, /(^|\n)\.env(\n|$)/);
+  assert.match(results.get(5).content[0].text, /\.env\.example/);
+  assert.doesNotMatch(results.get(6).content[0].text, /\t\.env(\n|$)/);
+});
+
+test('workspace MCP credential rules match the sensitive file guard', () => {
+  for (const relative of ['.env', '.env.local', '.env.example', 'app/.env.production.sample', 'id_rsa', 'keys/id_ed25519', '.ssh/config', '.ssh/deploy', '.aws/credentials', '.aws', '.kube/config', '.npmrc', '.netrc', '.pypirc', '.docker/config.json', '.config/gh/hosts.yml', 'src/app.js', 'README.md']) {
+    assert.equal(isSensitiveWorkspacePath(relative), guardIsSensitive(`/${relative}`), relative);
+  }
+});
+
+test('repository MCP diff omits tracked credential files', (context) => {
+  const workspace = mkdtempSync(path.join(os.tmpdir(), 'youdede-mcp-diff-'));
+  context.after(() => rmSync(workspace, { recursive: true, force: true }));
+  const git = (args) => assert.equal(spawnSync('git', args, { cwd: workspace, env: cleanGitEnvironment() }).status, 0, args.join(' '));
+  git(['init', '-q']);
+  git(['config', 'user.email', 'tests@youdede.invalid']);
+  git(['config', 'user.name', 'youdede tests']);
+  writeFileSync(path.join(workspace, '.env'), 'A=1\n');
+  writeFileSync(path.join(workspace, 'app.txt'), 'one\n');
+  git(['add', '.']);
+  git(['commit', '-qm', 'baseline']);
+  writeFileSync(path.join(workspace, '.env'), 'A=never-return-this\n');
+  writeFileSync(path.join(workspace, 'app.txt'), 'two\n');
+  writeFileSync(path.join(workspace, 'profile.json'), readFileSync('artifacts/mcp-servers/development/agent-tooling/repository-git-readonly/server.json'));
+  const request = { jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name: 'git_diff', arguments: {} } };
+  const run = spawnSync(process.execPath, [path.resolve('scripts/runtime/readonly-mcp-server.mjs'), '--profile', 'profile.json'], { cwd: workspace, input: `${JSON.stringify(request)}\n`, encoding: 'utf8' });
+  const text = JSON.parse(run.stdout.trim()).result.content[0].text;
+  assert.match(text, /\+two/);
+  assert.doesNotMatch(text, /never-return-this/);
 });

@@ -14,6 +14,10 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 - Behavioral evaluation coverage now includes every skill, subagent, command, and context. Release benchmark inputs, package verification, readiness counts, catalog documentation, and naming/authoring guidance use the same six-kind model.
 - Command documentation now states the actual enforcement boundary: deterministic preconditions are a mandatory first prompt action, not a pre-invocation parser supplied by the native slash-command runtime.
 
+### Fixed
+
+- The read-only MCP runtime refuses credential files (`.env`, private keys, cloud credentials) that its profiles declare no access to. Before, `read_file` returned `.env` content.
+
 ## 0.3.0 (2026-09-21)
 
 ### Added
