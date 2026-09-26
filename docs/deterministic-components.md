@@ -42,6 +42,8 @@ Deterministic helpers do not add a second setup step. The artifact adapter maps 
 
 For example:
 
+> The package is not on npm yet. Until the first publication, run the same command from a checkout with `node bin/youdede-toolkit.mjs` in place of `npx @youdede/toolkit`.
+
 ```bash
 npx @youdede/toolkit add extract-youtube-captions --target claude-code --scope project
 ```

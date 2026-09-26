@@ -13,10 +13,12 @@ produce provenance for that source state.
 
 Both are one-line decisions with a wide blast radius: the holder string `Youdede` appears in over
 300 tracked files, including the `authors` field of all <!-- stat:artifact-count -->315<!-- /stat --> `artifact.json` manifests, and the
-namespace in the five files listed under step 2. [`scripts/set-publisher-identity.mjs`](../scripts/set-publisher-identity.mjs) applies either or
+namespace in every tracked `github.com/udede/toolkit` link, well beyond the five files listed under step 2. [`scripts/set-publisher-identity.mjs`](../scripts/set-publisher-identity.mjs) applies either or
 both in one pass, over tracked files only, and refuses to run without an explicit value. Its
 `--holder` pass still targets the retired `youdede contributors` placeholder, so update its
-`PLACEHOLDER_HOLDER` constant to `Youdede` in the same change before renaming the holder.
+`PLACEHOLDER_HOLDER` constant to `Youdede` in the same change before renaming the holder. Its
+`--owner` pass rewrites `github.com/udede/toolkit` and `@udede` owners only; bare `udede/toolkit`
+references, such as the marketplace commands in `docs/native-marketplaces.md`, need a manual edit.
 
 ```bash
 node scripts/set-publisher-identity.mjs --dry-run --holder "<exact legal name>" --owner "<github org>"

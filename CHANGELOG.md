@@ -25,6 +25,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 - The read-only MCP runtime negotiates `protocolVersion` against the versions it implements (`2025-11-25`, `2025-06-18`, `2025-03-26`, `2024-11-05`) instead of echoing any value, and answers unparsable JSON with `-32700`. JSON-RPC batches, required by `2025-03-26`, are still refused.
 - Removing the last artifact from an install root now deletes the empty installer state, and the state lock retry is bounded by the lock timeout.
 - The release workflow publishes the exact commit the `verify` job inspected rather than re-resolving the tag.
+- Documentation claims now match verified behavior: hooks are described as mostly blocking with a few observers; the eval, authoring, context-expiry, pack-evidence, plugin-count, CLI-syntax, branch-policy, and tag-immutability statements were corrected; and a duplicated row was removed from the 2026-09-23 risk and latency audit.
 - `add --dry-run` now lists `.youdede-toolkit/NOTICE.md`, which the real install writes; the JSON plan gains a `notice` entry. Before, the dry-run omitted that file.
 
 ## 0.3.0 (2026-09-21)
@@ -86,7 +87,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 
 ### Added
 
-- Repository governance, deterministic commit and branch policy, versioned Git hooks, pinned cross-platform CI, contribution templates, and reproducible protection settings.
+- Repository governance, deterministic commit and branch policy, versioned Git hooks, SHA-pinned Linux CI, contribution templates, and reproducible protection settings.
 - Public artifact-integrity attestations and semantic release-readiness evidence controls for the planned `0.1.0` release.
 - `npm run check:contracts` fails the build when a prompt payload's output contract disagrees with the payload's own text or with its behavioral cases, covering heading membership, ordering, unresolvable section references, and duplicates.
 - `npm run benchmark:release:build -- --full` evaluates every candidate behavioral case instead of the stratified sample. The release gate rebuilds using the policy recorded in the benchmark and refuses a policy that would sample less than the release minimum.

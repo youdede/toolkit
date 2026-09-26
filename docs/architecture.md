@@ -29,7 +29,7 @@ The Claude Code adapter maps:
 | Kind | Project destination | User destination |
 | --- | --- | --- |
 | Skill | `.claude/skills/<slug>/` | `~/.claude/skills/<slug>/` |
-| Hook | `.claude/hooks/youdede/<slug>/` plus settings merge | deliberately unsupported |
+| Hook | `.claude/hooks/youdede/<slug>.mjs` (a few hooks add shared files under `.claude/hooks/youdede/`) plus settings merge | deliberately unsupported |
 | Subagent | `.claude/agents/<slug>.md` | `~/.claude/agents/<slug>.md` |
 
 Codex uses component-specific native roots:
@@ -46,7 +46,7 @@ Gemini CLI, GitHub Copilot, Cursor, and OpenCode use their native component root
 
 ## Composition packs
 
-`packs/<slug>/pack.json` composes independently installable artifacts into one outcome. Members declare their role as procedure, collector, specialist, verifier, enforcement, or observer. Validation rejects missing members, repeated ids, invalid kind-role mappings, packs with no common target, and more than three hook processes on the same event/matcher boundary. The generated pack catalog exposes this fan-out explicitly.
+`packs/<slug>/pack.json` composes independently installable artifacts into one outcome. Members declare their role as procedure, collector, specialist, verifier, enforcement, observer, entrypoint, baseline, or integration. Validation rejects missing members, repeated ids, invalid kind-role mappings, packs with no common target, and more than three hook processes on the same event/matcher boundary. The generated pack catalog exposes this fan-out explicitly.
 
 `add-pack` plans every required member and rejects cross-member path collisions before writing, then records an ownership reference for the pack. Directly installed artifacts retain a separate owner, so removing a pack does not delete an artifact the user also installed individually. Install and removal snapshot every affected payload, settings, and state file; a failed operation restores the exact pre-operation bytes and modes. Removal follows recorded ownership rather than only the current pack manifest, so members and whole packs remain uninstallable after catalog evolution.
 
