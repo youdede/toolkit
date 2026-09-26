@@ -189,6 +189,21 @@ test('re-pin command entrypoints and proposal boundaries are exercised', () => {
   assert.throws(() => buildProposal(registry, 'youdede-workspace-files-readonly', { tools: [] })); // boundary: empty inventories refuse
 });
 
+test('installed re-pin proposal reads the repository registry, not an install-time copy', (context) => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-repin-'));
+  context.after(() => rmSync(directory, { recursive: true, force: true }));
+  installArtifact('re-pin-mcp-tools', { cwd: directory });
+  const registry = JSON.parse(readFileSync('catalog/mcp-pins.json', 'utf8'));
+  registry.servers['youdede-workspace-files-readonly'].tools = { read_file: 'f'.repeat(64) };
+  mkdirSync(path.join(directory, 'catalog'));
+  writeFileSync(path.join(directory, 'catalog', 'mcp-pins.json'), JSON.stringify(registry));
+  writeFileSync(path.join(directory, 'observed.json'), JSON.stringify({ tools: [{ name: 'read_file', description: 'A bounded read-only tool description proposed for explicit review.' }] }));
+  const script = path.join(directory, '.claude/commands/youdede/re-pin-mcp-tools/propose-repin.mjs');
+  const run = spawnSync(process.execPath, [script, '--server', 'youdede-workspace-files-readonly', '--observed', 'observed.json'], { cwd: directory, encoding: 'utf8' });
+  assert.equal(run.status, 0, run.stderr);
+  assert.deepEqual(JSON.parse(run.stdout).previousTools, { read_file: 'f'.repeat(64) });
+});
+
 test('workspace MCP runtime refuses credential files it declares no access to', (context) => {
   const workspace = mkdtempSync(path.join(os.tmpdir(), 'youdede-mcp-secret-'));
   context.after(() => rmSync(workspace, { recursive: true, force: true }));

@@ -26,6 +26,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 - Removing the last artifact from an install root now deletes the empty installer state, and the state lock retry is bounded by the lock timeout.
 - The release workflow publishes the exact commit the `verify` job inspected rather than re-resolving the tag.
 - The command precondition bridge reports a required file under a missing directory as `missing`. Before, `file-exists` called it `path escapes the workspace`, so `draft-evidenced-plan` gave a false security diagnosis when its baseline context was not installed.
+- `re-pin-mcp-tools` builds its proposal from the repository's current `catalog/mcp-pins.json` and no longer installs a copy of it. Before, the installed copy went stale after the first re-pin, so `previousTools` and the confirmation digest were computed against old pins.
 
 ## 0.3.0 (2026-09-21)
 
