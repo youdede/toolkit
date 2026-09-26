@@ -34,6 +34,26 @@ test('SQL risk helper masks inert text, handles comment gaps, EOF statements, an
   ]);
 });
 
+test('SQL risk helper follows PostgreSQL standard_conforming_strings for backslashes', () => {
+  const ids = (sql) => classifySqlRisks(sql).findings.map(({ ruleId, line }) => `${ruleId}@${line}`);
+  // Backslash is literal in '...', so the string ends at the second quote and DROP TABLE is visible.
+  assert.deepEqual(ids("INSERT INTO paths VALUES ('C:\\');\nDROP TABLE users;\nINSERT INTO paths VALUES ('x');"), ['MIG_SQL_DROP_TABLE@2']);
+  // In an E'...' escape string \' does not close the string.
+  assert.deepEqual(ids("SELECT E'it\\'s DROP TABLE x';\nSELECT 1;"), []);
+  assert.deepEqual(ids('SELECT "C:\\";\nDROP TABLE users;'), ['MIG_SQL_DROP_TABLE@2']);
+});
+
+test('SQL risk helper checks UPDATE and DELETE for a WHERE at their own level', () => {
+  const ids = (sql) => classifySqlRisks(sql).findings.map(({ ruleId, line }) => `${ruleId}@${line}`);
+  assert.deepEqual(ids('ALTER TABLE o ADD CONSTRAINT fk FOREIGN KEY (c) REFERENCES c(id) ON UPDATE SET NULL;'), []);
+  assert.deepEqual(ids('SELECT * FROM t FOR NO KEY UPDATE;'), []);
+  assert.deepEqual(ids('UPDATE t SET a = (SELECT b FROM u WHERE u.id = 1);'), ['MIG_SQL_UPDATE_WITHOUT_WHERE@1']);
+  assert.deepEqual(ids('DELETE FROM t USING (SELECT id FROM u WHERE u.x) s;'), ['MIG_SQL_DELETE_WITHOUT_WHERE@1']);
+  assert.deepEqual(ids('UPDATE accounts SET flag = true WHERE id IN (SELECT id FROM x WHERE y);'), []);
+  assert.deepEqual(ids('WITH moved AS (UPDATE t SET a = 1 WHERE b RETURNING id) SELECT * FROM moved;'), []);
+  assert.deepEqual(ids('WITH moved AS (UPDATE t SET a = 1 RETURNING id) SELECT * FROM moved WHERE id > 0;'), ['MIG_SQL_UPDATE_WITHOUT_WHERE@1']);
+});
+
 test('workflow collector reports literal lines without YAML execution or semantic parsing', () => {
   const result = collectWorkflowSignals('on: pull_request\npermissions:\n  contents: write\nsteps:\n  - uses: actions/checkout@v4\n  - run: npm test\n  - run: echo ${{ secrets.TOKEN }}');
   assert.equal(result.parser, 'line-signal-collector');

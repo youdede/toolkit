@@ -27,6 +27,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 - The release workflow publishes the exact commit the `verify` job inspected rather than re-resolving the tag.
 - Sixteen skills asked for their own instruction sections (`## Contract`, `## Validation`, `## Stop conditions`, `## Refusals`) as reply headings, so no heading held the deliverable. Their output contracts now name the work product (for example `## Questionnaire`, `## Work graph`, `## Disposition`), and `check:contracts` rejects a contract that names the payload's `## Contract`, `## Workflow`, or `## Refusals` section.
 - The `enforce-typescript-module-boundaries` skill told agents to pass one package root to `--root`; the helper expects the directory that contains the packages, so it reported imports between a package's own folders as cross-package violations. The skill now says so, and the helper also flags a two-segment deep import such as `../b/src` (only `<pkg>` and `<pkg>/index` count as the entry point).
+- The `review-database-migration-plan` SQL helper treated a backslash as an escape in every string, so `'C:\'` hid a following `DROP TABLE`. It now follows PostgreSQL's default `standard_conforming_strings` (backslash escapes only in `E'...'`), no longer reports `ON UPDATE SET NULL` as an UPDATE without WHERE, and reports an UPDATE or DELETE whose only WHERE is inside a subquery.
 
 ## 0.3.0 (2026-09-21)
 
