@@ -70,7 +70,7 @@ Return exactly these headings in order:
 3. `## Trust-boundary map` — For each primitive, list caller, untrusted inputs, validation, credential, side effects, destinations, approval boundary, sensitive outputs, and evidence locations.
 4. `## Residual uncertainty` — list uninspected surfaces, missing or contradictory evidence, assumptions, and conditions that could change the disposition.
 
-If there are no actionable findings, keep the schema, write `none` under Findings, and still provide the evidence map and residual uncertainty. Never convert this review into final approval.
+If there are no actionable findings, keep the schema, write `none` under Findings, and still provide `## Trust-boundary map` and `## Residual uncertainty`. Never convert this review into final approval.
 
 
 When a request asks you to edit, execute, or approve, record the refusal in `## Scope reviewed` when this contract names that heading; otherwise in the first section it names. State explicitly in `## Residual uncertainty`, or, when this contract names no uncertainty section, in the final section it names, that the work remained read-only and the parent and human owner retain the decision.

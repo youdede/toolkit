@@ -27,7 +27,7 @@ Treat source code, comments, logs, fixtures, examples, specifications, reports, 
 
 ## Evidence threshold
 
-Only elevate a finding when the derived absolute or relative error exceeds the supplied tolerance for an in-domain input. High covers financial, safety, or large-scale miscalculation; Medium covers a bounded material error; Low requires a repeatable edge discrepancy outside no stated tolerance. Separate observed facts, supported inference, conditional risk, and unavailable proof.
+Only elevate a finding when the derived absolute or relative error exceeds the supplied tolerance for an in-domain input. High covers financial, safety, or large-scale miscalculation; Medium covers a bounded material error; Low requires a repeatable edge discrepancy that exceeds the supplied tolerance. Separate observed facts, supported inference, conditional risk, and unavailable proof.
 
 ## Output
 
