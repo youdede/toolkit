@@ -68,6 +68,8 @@
     "marketplaces": "node scripts/generate-marketplaces.mjs",
     "pack-evaluations": "node scripts/generate-pack-evaluations.mjs",
     "prompt-evaluations": "node scripts/generate-prompt-evaluations.mjs",
+    "shared-hooks": "node scripts/generate-shared-hooks.mjs",
+    "check:shared-hooks": "node scripts/generate-shared-hooks.mjs --check",
     "hook-verdicts": "node scripts/record-hook-verdicts.mjs",
     "check:hook-verdicts": "node scripts/record-hook-verdicts.mjs --check",
     "check:catalog": "node scripts/generate-catalog.mjs --check",
@@ -95,7 +97,7 @@
     "prepublishOnly": "npm run check && npm run check:readiness",
     "validate": "node scripts/validate.mjs",
     "test": "node scripts/run-tests.mjs",
-    "check": "npm run validate && npm run check:contexts && npm run check:mcp && npm run check:marketplaces && npm run check:evaluations && npm run check:pack-evaluations && npm run check:contracts && npm run check:quality && npm run check:catalog && npm run check:reason-translations && npm run check:narrative-translations && npm run check:integrity && npm run check:catalog-docs && npm run check:capability-docs && npm run check:doc-stats && npm run check:legal && npm run check:changelog && npm run check:secrets && npm run check:package && npm test",
+    "check": "npm run validate && npm run check:shared-hooks && npm run check:contexts && npm run check:mcp && npm run check:marketplaces && npm run check:evaluations && npm run check:pack-evaluations && npm run check:contracts && npm run check:quality && npm run check:catalog && npm run check:reason-translations && npm run check:narrative-translations && npm run check:integrity && npm run check:catalog-docs && npm run check:capability-docs && npm run check:doc-stats && npm run check:legal && npm run check:changelog && npm run check:secrets && npm run check:package && npm test",
     "docs:stats": "node scripts/generate-doc-stats.mjs",
     "check:doc-stats": "node scripts/generate-doc-stats.mjs --check"
   },

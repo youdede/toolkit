@@ -3,15 +3,58 @@
 import { realpathSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
-export const MAX_STDIN_BYTES = 1024 * 1024;
-export const MAX_COMMAND_BYTES = 256 * 1024;
+// <youdede:shared shell>
+// Shared shell analysis for Youdede Bash hooks (shared block `shell`). Hooks stay single-file:
+// scripts/generate-shared-hooks.mjs copies this file into each hook between the block markers. Edit it
+// here and run `npm run shared-hooks`; tests/shared-hook-shell.test.mjs holds the probes every hook shares.
+// Nothing is executed. Every loop advances its index or is capped, and nested shells stop at depth 3.
 
-const SHELL_EXECUTABLES = new Set(['sh', 'bash', 'zsh', 'dash', 'ksh']);
-const DYNAMIC_SENSITIVE_EXECUTABLES = new Set([
-  'rm', 'dd', 'mkfs', 'diskutil', 'chmod', 'chown', 'gh', 'op', 'pass', 'bw', 'bws', 'lpass',
-  'keepassxc-cli', 'rbw', 'nordpass', 'security', 'gpg', 'docker', 'podman', 'crontab'
-]);
+export const SHELL_MAX_COMMAND_BYTES = 256 * 1024;
+const SHELL_MAX_DEPTH = 3;
+const SHELL_MAX_WRAPPERS = 16;
+const SHELL_NAMES = new Set(['sh', 'bash', 'zsh', 'dash', 'ksh']);
+const SHELL_WRAPPERS = new Set(['exec', 'time', 'noglob', 'command', 'env', 'sudo', 'nohup', 'nice', 'timeout', 'xargs']);
+const SHELL_DIRECTORY_CHANGERS = new Set(['cd', 'pushd', 'popd']);
+const SHELL_SENSITIVE_ASSIGNMENT = /^(?:PATH|SHELL|GIT_DIR|GIT_WORK_TREE|GIT_CONFIG[^=]*)=/;
+const SHELL_ASSIGNMENT = /^[A-Za-z_][A-Za-z0-9_]*=/;
+// Reserved words that precede a command, and those that end a compound command or start a header
+// (`for x in …`, `case … in`) whose words are not a command. `if true; then rm -rf /; fi` runs rm.
+const SHELL_PREFIX_KEYWORDS = new Set(['!', '{', 'if', 'then', 'else', 'elif', 'do', 'while', 'until']);
+const SHELL_SKIPPED_KEYWORDS = new Set(['}', 'fi', 'done', 'esac', 'for', 'select', 'case']);
+const FIND_EXEC_ACTIONS = new Set(['-exec', '-execdir', '-ok', '-okdir']);
 
+// Options of each wrapper: `next` takes the following token as its value, `alone` stands alone or
+// carries its value. Anything else is ambiguous, because it could hide the wrapped command.
+const WRAPPER_OPTIONS = {
+  sudo: {
+    next: /^(?:-u|-g|-h|-p|-C|-T|-r|-t)$/,
+    alone: /^(?:-[AbEHKnS]+|--(?:askpass|background|preserve-env|edit|set-home|remove-timestamp|reset-timestamp|non-interactive|stdin|validate)|--(?:user|group|host|prompt|close-from|command-timeout|role|type)=.+)$/,
+    refuse: /^(?:-D|--chdir|-R|--chroot)(?:=|$)/
+  },
+  time: { next: /^(?:-f|-o|--format|--output)$/, alone: /^(?:-a|-p|-v|--append|--portability|--verbose|--quiet|--format=.+|--output=.+)$/ },
+  exec: { next: /^-a$/, alone: /^(?:-c|-l)$/ },
+  command: { alone: /^-p$/ },
+  noglob: {},
+  nohup: {},
+  nice: { next: /^(?:-n|--adjustment)$/, alone: /^(?:-n.+|--adjustment=.+|-[-+]?\d+)$/ },
+  timeout: {
+    next: /^(?:-s|-k|--signal|--kill-after)$/,
+    alone: /^(?:-s.+|-k.+|--signal=.+|--kill-after=.+|-v|--verbose|-f|--foreground|-p|--preserve-status)$/
+  },
+  xargs: {
+    next: /^(?:-[ILnPdEsaJRS]|--(?:arg-file|delimiter|max-lines|max-args|max-procs|max-chars|process-slot-var))$/,
+    alone: /^(?:-[0rtpxo]+|-[ILnPdEsaJRS].+|-[ie].*|-l\d*|--(?:null|no-run-if-empty|verbose|interactive|exit|open-tty|show-limits|replace)|--(?:arg-file|delimiter|max-lines|max-args|max-procs|max-chars|process-slot-var|replace|eof)=.*)$/
+  }
+};
+
+// A value supplied at run time by xargs or find (`{}`), not by the shell: it is neither static
+// nor a shell expansion.
+function placeholderToken(value = '') {
+  return { value, dynamic: false, placeholder: true };
+}
+
+// End index (exclusive) of the expansion starting at `start`: `$name`, `${…}`, `$(…)`, a backtick
+// block, or a process substitution `<(…)`/`>(…)`. -1 when unterminated.
 function expansionEnd(source, start) {
   if (source[start] === '`') {
     for (let index = start + 1; index < source.length; index += 1) {
@@ -22,8 +65,9 @@ function expansionEnd(source, start) {
   }
   const next = source[start + 1];
   if (next !== '(' && next !== '{') {
-    const match = /^\$[A-Za-z_][A-Za-z0-9_]*|^\$[0-9@*#?$!_-]/.exec(source.slice(start));
-    return match ? start + match[0].length : start + 1;
+    const pattern = /\$(?:[A-Za-z_][A-Za-z0-9_]*|[0-9@*#?$!_-])/y;
+    pattern.lastIndex = start;
+    return pattern.test(source) ? pattern.lastIndex : start + 1;
   }
   const open = next;
   const close = open === '(' ? ')' : '}';
@@ -40,14 +84,24 @@ function expansionEnd(source, start) {
   return -1;
 }
 
+// Splits source into segments of tokens. Quotes and escapes are removed; expansions stay as text and
+// mark the token dynamic. `operator` is the one that ends the segment: `&&`, `||`, `;`, `|`, `&`,
+// `\n`, `(`, `)`, or '' at the end.
 function lexShell(source) {
-  const commands = [];
+  const segments = [];
   let tokens = [];
   let token = null;
   let quote = null;
   const begin = () => { if (!token) token = { value: '', dynamic: false }; };
-  const pushToken = () => { if (token) tokens.push(token); token = null; };
-  const pushCommand = () => { pushToken(); if (tokens.length) commands.push(tokens); tokens = []; };
+  const pushToken = () => {
+    if (!token) return;
+    // Only `{a,b}` and `{x..y}` expand; `{}` and `stash@{0}` are literal.
+    if (token.braces && /\{[^{}]*(?:,|\.\.)[^{}]*\}/.test(token.value)) token.dynamic = true;
+    delete token.braces;
+    tokens.push(token);
+    token = null;
+  };
+  const pushSegment = (operator) => { pushToken(); if (tokens.length) segments.push({ tokens, operator }); tokens = []; };
   for (let index = 0; index < source.length; index += 1) {
     const character = source[index];
     if (quote === "'") { if (character === "'") quote = null; else token.value += character; continue; }
@@ -55,124 +109,262 @@ function lexShell(source) {
       if (character === '"') quote = null;
       else if (character === '\\') { if (++index >= source.length) return { error: 'trailing escape' }; token.value += source[index]; }
       else if (character === '$' || character === '`') {
-        const end = expansionEnd(source, index); if (end < 0) return { error: 'unterminated expansion' };
+        const end = expansionEnd(source, index);
+        if (end < 0) return { error: 'unterminated expansion' };
         token.value += source.slice(index, end); token.dynamic = true; index = end - 1;
       } else token.value += character;
       continue;
     }
-    if (/\s/.test(character)) { pushToken(); if (character === '\n') pushCommand(); }
+    if (/\s/.test(character)) { pushToken(); if (character === '\n') pushSegment('\n'); }
     else if (character === "'" || character === '"') { begin(); quote = character; }
     else if (character === '\\') { begin(); if (++index >= source.length) return { error: 'trailing escape' }; token.value += source[index]; }
-    else if (character === '$' || character === '`') {
-      begin(); const end = expansionEnd(source, index); if (end < 0) return { error: 'unterminated expansion' };
+    else if (character === '$' || character === '`' || ((character === '<' || character === '>') && source[index + 1] === '(')) {
+      begin();
+      const end = expansionEnd(source, index);
+      if (end < 0) return { error: 'unterminated expansion' };
       token.value += source.slice(index, end); token.dynamic = true; index = end - 1;
-    } else if (';&|()'.includes(character)) { pushCommand(); if ((character === '&' || character === '|') && source[index + 1] === character) index += 1; }
-    else { begin(); token.value += character; if (character === '{' || character === '}') token.dynamic = true; }
+    } else if (character === '&' && (/[<>]$/.test(token?.value ?? '') || source[index + 1] === '>')) {
+      // `2>&1`, `>&2`, `&>file`: a redirection, not a command separator.
+      begin(); token.value += character;
+    } else if (';&|()'.includes(character)) {
+      let operator = character;
+      if ((character === '&' || character === '|') && source[index + 1] === character) { operator += character; index += 1; }
+      pushSegment(operator);
+    } else { begin(); token.value += character; if (character === '{' || character === '}') token.braces = true; }
   }
   if (quote) return { error: 'unterminated quote' };
-  pushCommand();
-  return { commands };
+  pushSegment('');
+  return { segments };
 }
 
-function executableName(token) {
+export function executableName(token) {
   return token.value.replaceAll('\\', '/').split('/').at(-1).toLowerCase();
 }
 
-function unwrapCommand(tokens, depth) {
+// Commands that find runs through -exec/-execdir/-ok/-okdir, with `{}` as a placeholder.
+function findActions(tokens, depth, wrappers) {
+  const entries = [];
+  let index = 1;
+  while (index < tokens.length) {
+    if (!FIND_EXEC_ACTIONS.has(tokens[index].value)) { index += 1; continue; }
+    const start = index + 1;
+    let end = start;
+    while (end < tokens.length && tokens[end].value !== ';' && tokens[end].value !== '+') end += 1;
+    // Without a terminator find refuses to run, so nothing is executed.
+    if (end >= tokens.length) break;
+    const inner = tokens.slice(start, end).map((entry) => (entry.value.includes('{}') ? placeholderToken(entry.value) : entry));
+    if (inner.length) entries.push(...unwrapCommand(inner, depth, [...wrappers, 'find']));
+    index = end + 1;
+  }
+  return entries;
+}
+
+function unwrapCommand(original, depth, inherited = []) {
+  let tokens = original;
   let index = 0;
-  const wrappers = [];
-  while (index < tokens.length && /^[A-Za-z_][A-Za-z0-9_]*=/.test(tokens[index].value)) {
-    if (/^(?:PATH|SHELL|GIT_DIR|GIT_WORK_TREE|GIT_CONFIG[^=]*)=/.test(tokens[index].value)) return [{ ambiguous: true, wrappers }];
+  const wrappers = [...inherited];
+  const ambiguous = () => [{ ambiguous: true, wrappers }];
+  while (index < tokens.length && !tokens[index].dynamic) {
+    // `function name { …`: the body starts after the name.
+    if (tokens[index].value === 'function') index += 2;
+    else if (SHELL_PREFIX_KEYWORDS.has(tokens[index].value)) index += 1;
+    else break;
+  }
+  if (index >= tokens.length || (!tokens[index].dynamic && SHELL_SKIPPED_KEYWORDS.has(tokens[index].value))) return [];
+  while (index < tokens.length && SHELL_ASSIGNMENT.test(tokens[index].value)) {
+    if (SHELL_SENSITIVE_ASSIGNMENT.test(tokens[index].value)) return ambiguous();
     index += 1;
   }
-  for (let count = 0; count < 16 && index < tokens.length; count += 1) {
+  for (let count = 0; count < SHELL_MAX_WRAPPERS && index < tokens.length; count += 1) {
     const executable = tokens[index];
-    if (executable.dynamic || /[*?[]/.test(executable.value)) return [{ ambiguous: true, wrappers }];
+    if (executable.dynamic || executable.placeholder || /[*?]|\[[^\]]*\]/.test(executable.value)) return ambiguous();
     const name = executableName(executable);
-    if (SHELL_EXECUTABLES.has(name) || name === 'eval') {
+    if (SHELL_NAMES.has(name) || name === 'eval') {
       let payload = name === 'eval' ? index + 1 : -1;
       if (name !== 'eval') {
         for (let cursor = index + 1; cursor < tokens.length; cursor += 1) {
-          if (tokens[cursor].dynamic) return [{ ambiguous: true, wrappers: [...wrappers, name] }];
-          if (tokens[cursor].value === '-c' || tokens[cursor].value === '--command' || /^-[^-]*c[^-]*$/.test(tokens[cursor].value)) { payload = cursor + 1; break; }
-          if (!tokens[cursor].value.startsWith('-')) break;
+          const option = tokens[cursor];
+          if (option.dynamic || option.placeholder) return [{ ambiguous: true, wrappers: [...wrappers, name] }];
+          if (option.value === '-c' || option.value === '--command' || /^-[^-]*c[^-]*$/.test(option.value)) { payload = cursor + 1; break; }
+          // `-o option`, `+O shopt`: the next token is the option name, not a script.
+          if (/^[-+][oO]$/.test(option.value)) { cursor += 1; continue; }
+          if (!/^[-+]./.test(option.value)) break;
         }
         if (payload < 0) return [{ tokens: tokens.slice(index), wrappers }];
       }
-      if (!tokens[payload] || depth >= 3) return [{ ambiguous: true, wrappers: [...wrappers, name] }];
+      if (!tokens[payload] || depth >= SHELL_MAX_DEPTH) return [{ ambiguous: true, wrappers: [...wrappers, name] }];
       const inner = name === 'eval' ? tokens.slice(payload).map((entry) => entry.value).join(' ') : tokens[payload].value;
-      const nested = normalizeShellCommands(inner, depth + 1);
-      return nested.error ? [{ ambiguous: true, wrappers: [...wrappers, name] }] : nested.commands;
+      const nested = parseShellCommands(inner, depth + 1, [...wrappers, name]);
+      if (nested.error) return [{ ambiguous: true, wrappers: [...wrappers, name] }];
+      return nested.commands;
     }
-    if (!['exec', 'time', 'noglob', 'command', 'env', 'sudo', 'nohup'].includes(name)) return [{ tokens: tokens.slice(index), wrappers }];
+    if (name === 'find') return [{ tokens: tokens.slice(index), wrappers }, ...findActions(tokens.slice(index), depth, wrappers)];
+    if (!SHELL_WRAPPERS.has(name)) return [{ tokens: tokens.slice(index), wrappers }];
     wrappers.push(name);
     index += 1;
     if (name === 'command' && ['-v', '-V'].includes(tokens[index]?.value)) return [{ tokens: tokens.slice(index - 1), wrappers: wrappers.slice(0, -1) }];
+    const options = WRAPPER_OPTIONS[name] || {};
+    let replace = null;
     while (index < tokens.length) {
       const option = tokens[index];
-      if (option.dynamic) return [{ ambiguous: true, wrappers }];
-      if (option.value === '--') { index += 1; break; }
-      if (name === 'env' && /^[A-Za-z_][A-Za-z0-9_]*=/.test(option.value)) {
-        if (/^(?:PATH|SHELL|GIT_DIR|GIT_WORK_TREE|GIT_CONFIG[^=]*)=/.test(option.value)) return [{ ambiguous: true, wrappers }];
-        index += 1; continue;
+      if (option.dynamic || option.placeholder) return ambiguous();
+      const value = option.value;
+      if (value === '--') { index += 1; break; }
+      if (name === 'env' && SHELL_ASSIGNMENT.test(value)) {
+        if (SHELL_SENSITIVE_ASSIGNMENT.test(value)) return ambiguous();
+        index += 1;
+        continue;
       }
-      if (!option.value.startsWith('-')) break;
+      if (!value.startsWith('-')) break;
       if (name === 'env') {
-        if (/^(?:-S|--split-string|-C|--chdir|-a|--argv0)(?:=|$)/.test(option.value)) return [{ ambiguous: true, wrappers }];
-        if (/^(?:-u|--unset)$/.test(option.value)) { index += 2; continue; }
-        if (/^(?:-u.+|--unset=.+|-i|--ignore-environment|-0|--null|-v|--debug)$/.test(option.value)) { index += 1; continue; }
-        return [{ ambiguous: true, wrappers }];
+        if (/^(?:-S|--split-string|-C|--chdir|-a|--argv0)(?:=|$)/.test(value)) return ambiguous();
+        if (/^(?:-u|--unset)$/.test(value)) { index += 2; continue; }
+        if (/^(?:-u.+|--unset=.+|-i|--ignore-environment|-0|--null|-v|--debug)$/.test(value)) { index += 1; continue; }
+        return ambiguous();
       }
-      if (name === 'sudo' && /^(?:-D|--chdir|-R|--chroot)(?:=|$)/.test(option.value)) return [{ ambiguous: true, wrappers }];
-      const takesValue = (name === 'sudo' && /^(?:-u|-g|-h|-p|-C|-T|-r|-t)$/.test(option.value))
-        || (name === 'time' && /^(?:-f|-o|--format|--output)$/.test(option.value))
-        || (name === 'exec' && option.value === '-a');
-      const safeNoValue = (name === 'sudo' && /^(?:-[AbEHKnS]+|--(?:askpass|background|preserve-env|edit|set-home|remove-timestamp|reset-timestamp|non-interactive|stdin|validate))$/.test(option.value))
-        || (name === 'sudo' && /^--(?:user|group|host|prompt|close-from|command-timeout|role|type)=.+/.test(option.value))
-        || (name === 'time' && /^(?:-a|-p|-v|--append|--portability|--verbose|--quiet|--format=.+|--output=.+)$/.test(option.value))
-        || (name === 'exec' && /^(?:-c|-l)$/.test(option.value))
-        || (name === 'command' && option.value === '-p');
-      if (takesValue) { index += 2; continue; }
-      if (safeNoValue) { index += 1; continue; }
-      return [{ ambiguous: true, wrappers }];
+      if (options.refuse?.test(value)) return ambiguous();
+      if (name === 'xargs') {
+        if (value === '-I' || value === '--replace') replace = value === '-I' ? tokens[index + 1]?.value : '{}';
+        else if (/^-I.+/.test(value)) replace = value.slice(2);
+        else if (/^--replace=/.test(value)) replace = value.slice('--replace='.length) || '{}';
+        else if (/^-i/.test(value)) replace = value.slice(2) || '{}';
+        if (value === '--replace') { index += 1; continue; }
+      }
+      if (options.next?.test(value)) {
+        if (!tokens[index + 1] || tokens[index + 1].dynamic) return ambiguous();
+        index += 2;
+        continue;
+      }
+      if (options.alone?.test(value)) { index += 1; continue; }
+      return ambiguous();
+    }
+    if (name === 'timeout') {
+      // The duration comes first; `timeout` without one runs nothing.
+      if (!tokens[index] || tokens[index].dynamic) return ambiguous();
+      index += 1;
+    }
+    if (name === 'xargs') {
+      // xargs runs `echo` without a command and appends input words, or substitutes them for the
+      // replacement string. Either way the extra arguments are unknown here.
+      const rest = index < tokens.length ? tokens.slice(index) : [{ value: 'echo', dynamic: false }];
+      tokens = replace
+        ? rest.map((entry, position) => (position > 0 && entry.value.includes(replace) ? placeholderToken(entry.value) : entry))
+        : [...rest, placeholderToken()];
+      index = 0;
     }
   }
-  if (index < tokens.length && ['exec', 'time', 'noglob', 'command', 'env', 'sudo', 'nohup'].includes(executableName(tokens[index]))) {
-    return [{ ambiguous: true, wrappers }];
-  }
-  return index < tokens.length ? [{ tokens: tokens.slice(index), wrappers }] : [{ ambiguous: true, wrappers }];
+  if (index < tokens.length && SHELL_WRAPPERS.has(executableName(tokens[index]))) return ambiguous();
+  return index < tokens.length ? [{ tokens: tokens.slice(index), wrappers }] : ambiguous();
 }
 
-export function normalizeShellCommands(command, depth = 0) {
+// Returns { commands } where each command is { tokens, wrappers, operator, changedDirectory } or
+// { ambiguous: true }, or { error } when the text cannot be lexed. `operator` follows the command, so
+// `a && b` runs b only if a succeeded while `a; b` runs b anyway. Wrappers (sudo, env, nice,
+// timeout, xargs, exec, time, noglob, command, nohup) and static `sh -c`/`bash -c`/`eval` layers
+// are removed; `find -exec` adds the command it runs. `changedDirectory` is true after cd, pushd,
+// or popd in the same command.
+export function parseShellCommands(command, depth = 0, wrappers = []) {
   if (typeof command !== 'string') return { commands: [] };
-  if (Buffer.byteLength(command, 'utf8') > MAX_COMMAND_BYTES) return { error: 'command exceeds analysis limit', commands: [] };
+  if (Buffer.byteLength(command, 'utf8') > SHELL_MAX_COMMAND_BYTES) return { error: 'command exceeds analysis limit', commands: [] };
   const lexed = lexShell(command);
   if (lexed.error) return { error: lexed.error, commands: [] };
-  return { commands: lexed.commands.flatMap((tokens) => unwrapCommand(tokens, depth)) };
+  const commands = [];
+  for (const segment of lexed.segments) {
+    const entries = unwrapCommand(segment.tokens, depth, wrappers);
+    // Nested entries keep their inner operator; the last one, and a find action, take the segment's.
+    if (entries.length) entries.at(-1).operator = segment.operator;
+    for (const entry of entries) entry.operator ??= segment.operator;
+    commands.push(...entries);
+  }
+  if (depth === 0) {
+    let changed = false;
+    for (const entry of commands) {
+      entry.changedDirectory = changed;
+      if (entry.tokens?.length && SHELL_DIRECTORY_CHANGERS.has(executableName(entry.tokens[0]))) changed = true;
+    }
+  }
+  return { commands };
 }
 
-const COMMAND_START = String.raw`(?:^|[;&|(\n]\s*)`;
+const GIT_VALUE_OPTIONS = new Set(['-C', '-c', '--git-dir', '--work-tree', '--namespace', '--config-env', '--exec-path', '--super-prefix', '--attr-source', '--list-cmds']);
 
+// Parses `git [global options] <subcommand> [args]` from the tokens of one command. `scoped` is true
+// when -C, --git-dir, or --work-tree points Git at another repository or directory; `config` lists
+// the -c and --config-env settings. Dynamic global options are ambiguous.
+export function gitInvocation(tokens) {
+  const globals = { directories: [], gitDir: null, workTree: null, config: [] };
+  const record = (option, value) => {
+    if (option === '-C') globals.directories.push(value);
+    else if (option === '--git-dir') globals.gitDir = value;
+    else if (option === '--work-tree') globals.workTree = value;
+    else if (option === '-c') {
+      const separator = value.indexOf('=');
+      globals.config.push(separator < 0 ? { key: value.toLowerCase(), value: 'true' } : { key: value.slice(0, separator).toLowerCase(), value: value.slice(separator + 1) });
+    } else if (option === '--config-env') {
+      const separator = value.indexOf('=');
+      globals.config.push({ key: (separator < 0 ? value : value.slice(0, separator)).toLowerCase(), value: null });
+    }
+  };
+  let index = 1;
+  while (index < tokens.length) {
+    const token = tokens[index];
+    if (token.dynamic || token.placeholder) return { ambiguous: true };
+    const value = token.value;
+    if (value === '--') { index += 1; break; }
+    if (!value.startsWith('-')) break;
+    if (GIT_VALUE_OPTIONS.has(value)) {
+      const next = tokens[index + 1];
+      if (!next || next.dynamic || next.placeholder) return { ambiguous: true };
+      record(value, next.value);
+      index += 2;
+      continue;
+    }
+    const equals = value.indexOf('=');
+    if (value.startsWith('--') && equals > 0) record(value.slice(0, equals), value.slice(equals + 1));
+    index += 1;
+  }
+  const subcommand = tokens[index];
+  const scoped = globals.directories.length > 0 || globals.gitDir !== null || globals.workTree !== null;
+  if (!subcommand) return { globals, scoped, args: [] };
+  if (subcommand.dynamic || subcommand.placeholder) return { ambiguous: true };
+  return { name: subcommand.value.toLowerCase(), index, args: tokens.slice(index + 1), globals, scoped };
+}
+// </youdede:shared>
+
+export const MAX_STDIN_BYTES = 1024 * 1024;
+export const MAX_COMMAND_BYTES = SHELL_MAX_COMMAND_BYTES;
+
+const DYNAMIC_SENSITIVE_EXECUTABLES = new Set([
+  'rm', 'dd', 'mkfs', 'diskutil', 'chmod', 'chown', 'gh', 'op', 'pass', 'bw', 'bws', 'lpass',
+  'keepassxc-cli', 'rbw', 'nordpass', 'security', 'gpg', 'docker', 'podman', 'crontab'
+]);
+const BROAD_DELETE_TARGET = /^(?:\/\*?|~\/?\*?|\$HOME\/?\*?|\$\{HOME\}\/?\*?|\/Users\/?\*?)$/;
+
+// Patterns match one normalized command: the executable's base name followed by its arguments.
+// Rules with `test` inspect the tokens instead; `next` is the command after it.
 export const RULES = [
   {
     id: 'broad-filesystem-delete',
     reason: 'recursive deletion targets a system, home, or all-users root',
-    pattern: new RegExp(String.raw`${COMMAND_START}(?:sudo\s+)?rm\s+(?:(?:-[A-Za-z]+|--[a-z-]+)\s+)*(?:--\s+)?["']?(?:\/\*?|~\/?(?:\*?)|\$HOME\/?(?:\*?)|\$\{HOME\}\/?(?:\*?)|\/Users\/?(?:\*?))["']?(?=\s*(?:$|[;&|]))`, 'm')
+    pattern: /$a/,
+    // rm accepts options after operands, so every operand is checked.
+    test: (entry) => executableName(entry.tokens[0]) === 'rm' && operands(entry.tokens.slice(1)).some((token) => BROAD_DELETE_TARGET.test(token.value))
   },
   {
     id: 'sudo-rm',
     reason: 'rm is being given administrator authority',
-    pattern: new RegExp(String.raw`${COMMAND_START}sudo\s+(?:-[A-Za-z]+\s+)*rm(?:\s|$)`, 'm')
+    pattern: /$a/,
+    test: (entry) => executableName(entry.tokens[0]) === 'rm' && entry.wrappers.includes('sudo')
   },
   {
     id: 'raw-disk-write',
     reason: 'the command writes to or formats a raw disk device',
-    pattern: new RegExp(String.raw`${COMMAND_START}(?:sudo\s+)?(?:dd\s+[^;&|\n]*\bof=["']?\/dev\/(?:r?disk|sd[a-z]|nvme)|mkfs(?:\.[A-Za-z0-9]+)?(?:\s|$)|diskutil\s+(?:erase\w*|partitionDisk|zeroDisk|secureErase|apfs\s+(?:delete|erase)\w*))`, 'mi')
+    pattern: /^(?:dd\s+[^;&|\n]*\bof=["']?\/dev\/(?:r?disk|sd[a-z]|nvme)|mkfs(?:\.[A-Za-z0-9]+)?(?:\s|$)|diskutil\s+(?:erase\w*|partitionDisk|zeroDisk|secureErase|apfs\s+(?:delete|erase)\w*))/i
   },
   {
     id: 'raw-device-redirection',
     reason: 'output redirection targets a raw disk device',
-    pattern: />\s*\/dev\/(?:r?disk\d*|sd[a-z]\d*|nvme\w*)/m
+    pattern: />\s*\/dev\/(?:r?disk\d*|sd[a-z]\d*|nvme\w*)/
   },
   {
     id: 'fork-bomb',
@@ -182,37 +374,48 @@ export const RULES = [
   {
     id: 'internet-to-shell',
     reason: 'remote content is piped directly into a shell',
-    pattern: new RegExp(String.raw`${COMMAND_START}(?:curl|wget)\s+[^;&|\n]*\|\s*(?:sudo\s+)?(?:ba|z|da)?sh(?:\s|$)`, 'm')
+    pattern: /$a/,
+    test: (entry, next) => ['curl', 'wget'].includes(executableName(entry.tokens[0])) && Boolean(next)
+      && (Boolean(next.tokens?.length && SHELL_NAMES.has(executableName(next.tokens[0])))
+        || (entry.operator === '|' && next.wrappers?.some((wrapper) => SHELL_NAMES.has(wrapper))))
   },
   {
     id: 'forced-remote-history',
     reason: 'git push would rewrite remote history without force-with-lease',
-    pattern: new RegExp(String.raw`${COMMAND_START}git\s+push(?:(?!--force-with-lease)[^;&|\n])*?(?:\s-f(?:\s|$)|\s--force(?:=\S+)?(?:\s|$)|\s\+[A-Za-z0-9._/-]+)`, 'm')
+    pattern: /$a/,
+    test: (entry) => pushArguments(entry).some((value) => value === 'force')
   },
   {
     id: 'remote-ref-delete',
     reason: 'git push would delete a remote branch or tag',
-    pattern: new RegExp(String.raw`${COMMAND_START}git\s+push[^;&|\n]*(?:\s(?:--delete|-d)(?:\s|$)|\s:[A-Za-z0-9._/-]+)`, 'm')
+    pattern: /$a/,
+    test: (entry) => pushArguments(entry).some((value) => value === 'delete')
   },
   {
     id: 'system-permission-destruction',
     reason: 'recursive ownership or world-writable permissions target the system root',
-    pattern: new RegExp(String.raw`${COMMAND_START}(?:chmod\s+[^;&|\n]*\b777\s+["']?\/["']?(?=\s*(?:$|[;&|]))|chown\s+-R[^;&|\n]*\s+["']?\/["']?(?=\s*(?:$|[;&|])))`, 'm')
+    pattern: /^(?:chmod\s+[^;&|\n]*\b777\s+["']?\/["']?(?=\s*(?:$|[;&|]))|chown\s+-R[^;&|\n]*\s+["']?\/["']?(?=\s*(?:$|[;&|])))/
   },
   {
     id: 'recovery-history-destruction',
     reason: 'Git recovery history would be made immediately unrecoverable',
-    pattern: new RegExp(String.raw`${COMMAND_START}git\s+(?:reflog\s+expire[^;&|\n]*--expire(?:-unreachable)?(?:=|\s+)now|gc[^;&|\n]*--prune(?:=|\s+)(?:now|all))`, 'm')
+    pattern: /$a/,
+    test: (entry) => {
+      const git = gitCommand(entry);
+      const rest = git?.args.map((token) => token.value).join(' ') ?? '';
+      return (git?.name === 'reflog' && git.args[0]?.value === 'expire' && /--expire(?:-unreachable)?(?:=|\s+)now/.test(rest))
+        || (git?.name === 'gc' && /--prune(?:=|\s+)(?:now|all)/.test(rest));
+    }
   },
   {
     id: 'destructive-github-operation',
     reason: 'the GitHub command performs an irreversible or account-sensitive action',
-    pattern: new RegExp(String.raw`${COMMAND_START}gh\s+(?:repo\s+delete(?:\s|$)|release\s+delete(?:\s|$)|(?:secret|ssh-key|gpg-key)\s+delete(?:\s|$)|api\s+[^;&|\n]*(?:-X|--method)(?:=|\s+)(?:DELETE|delete)|repo\s+edit[^;&|\n]*--visibility(?:=|\s+)public|auth\s+token(?:\s|$))`, 'm')
+    pattern: /^gh\s+(?:repo\s+delete(?:\s|$)|release\s+delete(?:\s|$)|(?:secret|ssh-key|gpg-key)\s+delete(?:\s|$)|api\s+[^;&|\n]*(?:-X|--method)(?:=|\s+)(?:DELETE|delete)|repo\s+edit[^;&|\n]*--visibility(?:=|\s+)public|auth\s+token(?:\s|$))/
   },
   {
     id: 'credential-store-access',
     reason: 'the command reads or exports secrets from a password manager, keychain, or secret key store',
-    pattern: new RegExp(String.raw`${COMMAND_START}(?:(?:bw|bws|lpass|keepassxc-cli|rbw|nordpass)(?:\s|$)|pass\s+(?!--(?:help|version)(?:\s|$))\S+|op\s+(?:read|run|inject|item|document|vault|connect|service-account|events-api|signin)(?:\s|$)|security\s+(?:(?:-[A-Za-z]+|--[a-z-]+)\s+)*(?:find-generic-password|find-internet-password|dump-keychain)(?:\s|$)|gpg\s+[^;&|\n]*--export-secret-(?:keys?|subkeys)(?:\s|=|$)|[^;&|\n]*(?:~|\$HOME|\$\{HOME\}|\/Users\/[^/\s"']+)\/\.password-store(?:\/|\s|$))`, 'm')
+    pattern: /^(?:(?:bw|bws|lpass|keepassxc-cli|rbw|nordpass)(?:\s|$)|pass\s+(?!--(?:help|version)(?:\s|$))\S+|op\s+(?:read|run|inject|item|document|vault|connect|service-account|events-api|signin)(?:\s|$)|security\s+(?:(?:-[A-Za-z]+|--[a-z-]+)\s+)*(?:find-generic-password|find-internet-password|dump-keychain)(?:\s|$)|gpg\s+[^;&|\n]*--export-secret-(?:keys?|subkeys)(?:\s|=|$)|[^;&|\n]*(?:~|\$HOME|\$\{HOME\}|\/Users\/[^/\s"']+)\/\.password-store(?:\/|\s|$))/
   },
   {
     id: 'local-worktree-destruction',
@@ -231,6 +434,42 @@ export const RULES = [
   }
 ];
 
+function operands(args) {
+  const separator = args.findIndex((token) => token.value === '--');
+  const before = separator < 0 ? args : args.slice(0, separator);
+  return [...before.filter((token) => !token.value.startsWith('-')), ...(separator < 0 ? [] : args.slice(separator + 1))];
+}
+
+function gitCommand(entry) {
+  if (executableName(entry.tokens[0]) !== 'git') return null;
+  const invocation = gitInvocation(entry.tokens);
+  return invocation.ambiguous || !invocation.name ? null : invocation;
+}
+
+// 'force' and 'delete' markers of `git push` arguments. -f, --force, or a +refspec forces the push even
+// with --force-with-lease or --force-if-includes (verified with Git 2.54), so only a lease alone passes.
+// Short option groups such as -uf count; -o takes the rest of its group.
+function pushArguments(entry) {
+  const git = gitCommand(entry);
+  if (git?.name !== 'push') return [];
+  const markers = [];
+  for (const token of git.args) {
+    const value = token.value;
+    if (value === '--delete' || /^:[A-Za-z0-9._/-]/.test(value)) markers.push('delete');
+    if (/^--force(?:=\S*)?$/.test(value) || /^\+[A-Za-z0-9._/-]/.test(value)) markers.push('force');
+    if (/^-[A-Za-z]+$/.test(value)) {
+      const group = value.slice(1).split('o')[0];
+      if (group.includes('d')) markers.push('delete');
+      if (group.includes('f')) markers.push('force');
+    }
+  }
+  return markers;
+}
+
+function candidate(entry) {
+  return [executableName(entry.tokens[0]), ...entry.tokens.slice(1).map((token) => token.value)].join(' ');
+}
+
 function optionPresent(args, longName, shortName) {
   return args.some((token) => {
     if (token.dynamic) return false;
@@ -239,23 +478,6 @@ function optionPresent(args, longName, shortName) {
     if (folded === longName || folded.startsWith(`${longName}=`)) return true;
     return shortName && /^-[^-]+$/.test(value) && value.slice(1).includes(shortName);
   });
-}
-
-function gitInvocation(tokens) {
-  let index = 1;
-  while (index < tokens.length) {
-    const token = tokens[index];
-    if (token.dynamic) return { ambiguous: true };
-    const value = token.value;
-    if (value === '--') { index += 1; break; }
-    if (!value.startsWith('-')) break;
-    const consumesNext = ['-C', '-c', '--git-dir', '--work-tree', '--namespace', '--config-env', '--exec-path'].includes(value);
-    if (consumesNext && (!tokens[index + 1] || tokens[index + 1].dynamic)) return { ambiguous: true };
-    index += consumesNext ? 2 : 1;
-  }
-  const subcommand = tokens[index];
-  if (!subcommand || subcommand.dynamic) return { ambiguous: Boolean(subcommand?.dynamic) };
-  return { name: subcommand.value.toLowerCase(), args: tokens.slice(index + 1) };
 }
 
 function deterministicCommandRule(entry) {
@@ -275,7 +497,11 @@ function deterministicCommandRule(entry) {
     if (name === 'checkout') {
       const separator = args.findIndex((token) => token.value === '--');
       if ((separator >= 0 && separator < args.length - 1)
-        || args.some((token) => ['.', ':/'].includes(token.value))) return 'local-worktree-destruction';
+        || args.some((token) => ['.', ':/'].includes(token.value))
+        || optionPresent(args, '--force', 'f')) return 'local-worktree-destruction';
+    }
+    if (name === 'switch' && (optionPresent(args, '--force', 'f') || optionPresent(args, '--discard-changes', null))) {
+      return 'local-worktree-destruction';
     }
     if (name === 'restore'
       && (!optionPresent(args, '--staged', 'S') || optionPresent(args, '--worktree', 'W'))) {
@@ -314,7 +540,7 @@ export function evaluate(input) {
       message: `BLOCKED by shell-command-guard [${lexicalRule.id}]: ${lexicalRule.reason}. Do not retry or work around this guard; explain the blocked action to the user.`
     };
   }
-  const normalized = normalizeShellCommands(command);
+  const normalized = parseShellCommands(command);
   if (normalized.error || normalized.commands.some((entry) => entry.ambiguous)) {
     return {
       exitCode: 2,
@@ -322,24 +548,13 @@ export function evaluate(input) {
       message: 'BLOCKED by shell-command-guard [shell-command-uninspectable]: the command cannot be normalized safely. Expand dynamic command construction before retrying.'
     };
   }
-  const candidates = [command, ...normalized.commands.map((entry) => entry.tokens?.map((token) => token.value).join(' ') || '')];
-  let matchedRule = RULES.find((rule) => candidates.some((candidate) => rule.pattern.test(candidate)));
+  // Rules see each normalized command on its own, so text quoted inside an argument never matches.
+  const commands = normalized.commands.filter((entry) => entry.tokens?.length);
+  let matchedRule = RULES.find((rule) => commands.some((entry, index) => (rule.test
+    ? rule.test(entry, commands[index + 1])
+    : rule.pattern.test(candidate(entry)))));
   if (!matchedRule) {
-    const sudoRm = normalized.commands.some((entry) => entry.tokens?.length
-      && entry.wrappers?.includes('sudo') && executableName(entry.tokens[0]) === 'rm');
-    if (sudoRm) matchedRule = RULES.find((rule) => rule.id === 'sudo-rm');
-  }
-  if (!matchedRule) {
-    const internetToShell = normalized.commands.some((entry, index) => {
-      const next = normalized.commands[index + 1];
-      return entry.tokens?.length && next?.tokens?.length
-        && ['curl', 'wget'].includes(executableName(entry.tokens[0]))
-        && SHELL_EXECUTABLES.has(executableName(next.tokens[0]));
-    });
-    if (internetToShell) matchedRule = RULES.find((rule) => rule.id === 'internet-to-shell');
-  }
-  if (!matchedRule) {
-    const deterministicRule = normalized.commands.map(deterministicCommandRule).find(Boolean);
+    const deterministicRule = commands.map(deterministicCommandRule).find(Boolean);
     if (deterministicRule === 'shell-command-uninspectable') {
       return {
         exitCode: 2,
@@ -350,8 +565,8 @@ export function evaluate(input) {
     if (deterministicRule) matchedRule = RULES.find((rule) => rule.id === deterministicRule);
   }
   if (!matchedRule) {
-    const dynamicSensitive = normalized.commands.some((entry) => {
-      if (!entry.tokens?.length || !entry.tokens.slice(1).some((token) => token.dynamic)) return false;
+    const dynamicSensitive = commands.some((entry) => {
+      if (!entry.tokens.slice(1).some((token) => token.dynamic)) return false;
       const executable = executableName(entry.tokens[0]);
       if (DYNAMIC_SENSITIVE_EXECUTABLES.has(executable)) return true;
       if (executable === 'git') {
