@@ -6,7 +6,7 @@ The hook runs before Write or Edit. It blocks a target only when at least one hi
 - a narrow filename convention such as `*.generated.ts`, `*.gen.go`, `*.g.dart`, `*_pb2.py`, or `*.designer.cs`;
 - a framework-owned output directory such as `.next`, `.nuxt`, or `.svelte-kit`;
 
-Broad names such as `build`, `dist`, and `generated` are deliberately not classified on their own. The hook reads at most the first 64 KiB of an existing regular file. It never follows a symlink while looking for a marker and blocks direct Write/Edit against an existing symlink so the link cannot bypass inspection or redirect a write outside the project.
+Broad names such as `build`, `dist`, and `generated` are deliberately not classified on their own. The hook reads at most the first 64 KiB of an existing regular file. It never follows a symlink while looking for a marker and blocks direct Write/Edit against an existing symlink so the link cannot bypass inspection or redirect a write outside the project. A path whose nearest existing parent directory resolves outside the project, through a symlinked directory, is blocked with `generated-inspection-failed` and nothing behind it is read.
 
 The installed hook has no runtime allowlist or project-writable policy file: an agent able to invoke Bash could otherwise author its own exception. A person who intentionally needs to edit a generated output must disable or remove the exact hook entry outside the guarded agent session, perform the reviewed operation, and restore the guard.
 

@@ -7,7 +7,7 @@
   "version": "1.0.0",
   "kind": "hook",
   "summary": "Block edits that stop a password manager filling an authentication field or stop the user pasting into it.",
-  "description": "Parses bounded markup and rejects changes that newly block paste on a credential field, disable its autofill, drop its autocomplete token, or add a password-manager opt-out attribute, each a documented WCAG 2.2 SC 3.3.8 failure condition.",
+  "description": "Parses bounded markup and rejects changes that newly block paste on a credential field, disable its autofill, or add a password-manager opt-out attribute, the failures WCAG 2.2 SC 3.3.8 documents, and, as a precaution, changes that drop its autocomplete token.",
   "domain": "design",
   "category": "authentication-access",
   "problems": [

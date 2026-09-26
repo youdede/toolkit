@@ -35,7 +35,8 @@
   "refuses": [
     "It does not decide that a policy change is legitimate on the agent's behalf.",
     "It does not modify protected configuration or expose agent-writable exceptions.",
-    "It does not inspect or block files outside the active project root."
+    "It does not inspect or block files outside the active project root.",
+    "It does not intercept shell commands that modify a policy file."
   ],
   "execution": {
     "mode": "deterministic",

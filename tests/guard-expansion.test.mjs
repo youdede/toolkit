@@ -28,6 +28,10 @@ import {
   scanContent
 } from '../artifacts/hooks/development/debugging/debug-artifact-guard/targets/claude-code/debug-artifact-guard.mjs';
 
+// The guards prefer CLAUDE_PROJECT_DIR over the payload cwd; clear an inherited value so the
+// fixtures stay hermetic when the suite runs inside a Claude Code session.
+delete process.env.CLAUDE_PROJECT_DIR;
+
 const ROOT = path.resolve(import.meta.dirname, '..');
 
 const SCRIPTS = {

@@ -26,7 +26,7 @@ function rebuildRevision(input, before) {
 export function collectContext(input, cwd = process.cwd()) {
   const file = input?.tool_input?.file_path || input?.tool_input?.file || '';
   if (typeof file !== 'string' || !file) return { file: '', complete: false };
-  const root = path.resolve(input?.cwd || cwd); const absolute = path.resolve(root, file);
+  const root = path.resolve(process.env.CLAUDE_PROJECT_DIR || input?.cwd || cwd); const absolute = path.resolve(root, file);
   if (!within(root, absolute)) return { file, complete: false, inspectionError: 'path-escape' };
   try {
     const canonicalRoot = realpathSync(root); const boundary = realpathSync(nearestExistingParent(absolute));
@@ -63,8 +63,8 @@ function yamlModel(text) {
   for (const raw of lines) {
     const line = raw.replace(/\s+#.*$/, ''); if (!line.trim()) continue;
     const indent = /^\s*/.exec(line)[0].replace(/\t/g, '  ').length; const content = line.trim();
-    const routeMatch = /^(\/[^:]+):\s*$/.exec(content);
-    if (routeMatch) { finishParameter(); route = routeMatch[1]; routeIndent = indent; operation = null; section = ''; continue; }
+    const routeMatch = /^(['"]?)(\/[^:'"]+)\1:\s*$/.exec(content);
+    if (routeMatch) { finishParameter(); route = routeMatch[2]; routeIndent = indent; operation = null; section = ''; continue; }
     if (route && indent <= routeIndent) { finishParameter(); route = ''; operation = null; section = ''; }
     const methodMatch = /^([A-Za-z]+):\s*$/.exec(content);
     if (route && methodMatch && METHODS.test(methodMatch[1]) && indent > routeIndent) {

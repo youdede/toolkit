@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { closeSync, lstatSync, openSync, readSync, realpathSync } from 'node:fs';
+import { closeSync, existsSync, lstatSync, openSync, readSync, realpathSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -53,7 +53,7 @@ function proposedContent(input) {
 export function collectContext(input, cwd = process.cwd()) {
   const rawPath = input?.tool_input?.file_path || input?.tool_input?.file;
   if (typeof rawPath !== 'string' || !rawPath) return { relevant: false };
-  const projectRoot = path.resolve(input?.cwd || cwd);
+  const projectRoot = path.resolve(process.env.CLAUDE_PROJECT_DIR || input?.cwd || cwd);
   const absolute = path.resolve(projectRoot, rawPath);
   const relative = normalizeRelative(path.relative(projectRoot, absolute));
   if (relative === '..' || relative.startsWith('../') || path.isAbsolute(relative)) return { relevant: false };
@@ -61,6 +61,14 @@ export function collectContext(input, cwd = process.cwd()) {
   let existingHeader = '';
   let existingKind = 'absent';
   try {
+    // lstat follows symlinked parent directories, so the nearest existing parent must resolve
+    // inside the project before anything behind it is read or written.
+    let parent = path.dirname(absolute);
+    while (!existsSync(parent) && path.dirname(parent) !== parent) parent = path.dirname(parent);
+    const escape = path.relative(realpathSync(projectRoot), realpathSync(parent));
+    if (escape === '..' || escape.startsWith(`..${path.sep}`) || path.isAbsolute(escape)) {
+      return { relevant: true, relative, inspectionError: 'the path resolves outside the project' };
+    }
     const stat = lstatSync(absolute);
     if (stat.isSymbolicLink()) existingKind = 'symlink';
     else if (stat.isFile()) {

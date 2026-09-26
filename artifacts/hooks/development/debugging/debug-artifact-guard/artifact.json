@@ -7,7 +7,7 @@
   "version": "1.0.0",
   "kind": "hook",
   "summary": "Block commits containing high-confidence debugger statements or focused tests.",
-  "description": "A deterministic Claude Code PreToolUse commit gate that reads bounded staged blobs and rejects unresolved merge markers, standalone debugger breakpoints, and focused JavaScript, TypeScript, or Ruby tests without duplicating secret scanning.",
+  "description": "A deterministic Claude Code PreToolUse commit gate that reads bounded staged blobs, and the working-tree files a commit would take, and rejects unresolved merge markers, standalone debugger breakpoints, and focused JavaScript, TypeScript, or Ruby tests without duplicating secret scanning.",
   "domain": "development",
   "category": "debugging",
   "problems": [
@@ -47,7 +47,7 @@
       {
         "path": "targets/claude-code/debug-artifact-guard.mjs",
         "runtime": "node",
-        "purpose": "Read bounded staged blobs and deterministically reject high-confidence debugging residue.",
+        "purpose": "Read bounded staged blobs and the working-tree files a commit would take, and deterministically reject high-confidence debugging residue.",
         "sideEffects": "read-only"
       }
     ]

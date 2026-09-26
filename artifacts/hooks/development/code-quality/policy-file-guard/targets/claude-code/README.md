@@ -9,5 +9,6 @@ The hook has no project-writable allowlist or configuration extension. Because t
 - The hook does not edit, replace, or repair a protected policy file.
 - It does not decide whether a requested policy change is legitimate or grant an exception implicitly.
 - It does not protect arbitrary files outside the project root.
+- It does not intercept shell commands (Bash) that modify a policy file.
 - It does not expose a project file, inline suppression, or environment variable that bypasses protection.
 - It does not claim that the protected-basename list covers every repository policy.

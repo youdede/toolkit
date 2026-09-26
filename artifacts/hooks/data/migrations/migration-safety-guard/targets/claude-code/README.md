@@ -2,9 +2,11 @@
 
 The hook runs before Bash, Write, or Edit. It blocks narrow, high-confidence destructive operations:
 
-- direct database-drop utilities;
-- known ORM or framework reset, drop, purge, and flush commands;
+- direct database-drop utilities (`dropdb`, `mysqladmin drop`);
+- known ORM or framework reset, drop, purge, truncate, and flush commands, after any path prefix (`./bin/rails`) and package runner (`npx --yes`, `pnpm`, `yarn`, `bun`);
 - static `DROP DATABASE`, `DROP SCHEMA ... CASCADE`, `DROP TABLE`, `TRUNCATE`, `ALTER TABLE ... DROP COLUMN`, and unqualified `DELETE FROM` statements proposed in `.sql` files under a migration directory.
+
+Commands are found wherever the shell would run them: inside `sh -c`, `eval`, `sudo`, `env`, `timeout`, `xargs`, `find -exec`, and the body of a Git shell alias defined in the same command. `TRUNCATE(x, d)`, the numeric function, is not a `TRUNCATE` statement. A migration file is inspected wherever it is, including outside the directory Claude has moved to; the project root is `CLAUDE_PROJECT_DIR` when it is set.
 
 The SQL check is intentionally a bounded lexical policy, not a SQL parser. It masks comments and quoted string literals and does not claim coverage of dynamic SQL, stored procedures, dialect extensions, or application-language migration APIs. For Edit, it reads at most 512 KiB from an existing regular file and reconstructs the complete proposed file only when `old_string` has one unambiguous match. An incomplete, oversized, missing, or symlinked edit target is blocked rather than partially inspected.
 

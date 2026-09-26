@@ -35,7 +35,7 @@
   "refuses": [
     "It does not block, delay, or alter the observed event; it records or reports only.",
     "It does not execute submitted content, call an LLM, or transmit any data off the machine.",
-    "It does not treat unreadable, symlinked, or oversized state as valid evidence."
+    "It does not measure the output of tools other than shell commands."
   ],
   "execution": {
     "mode": "deterministic",

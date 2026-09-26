@@ -85,8 +85,8 @@
       "latency": "Het toegangspunt verwerkt één onderschepte gebeurtenis waarvoor expliciete goedkeuring vereist is voor destructieve databasemigratieacties met hoge betrouwbaarheid zonder uitgestelde verwerking."
     },
     "authentication-accessibility-guard": {
-      "risk": "Deze automatische controle blokkeert bewerkingen die voorkomen dat een wachtwoordbeheerder een authenticatieveld invult of dat de gebruiker erin stopt; een onterechte blokkering kan het legitieme werk onderbreken, maar voert de geblokkeerde actie niet uit.",
-      "latency": "Het toegangspunt verwerkt één onderschepte gebeurtenis om bewerkingen te blokkeren die voorkomen dat een wachtwoordbeheerder een authenticatieveld invult of dat de gebruiker erin stopt zonder uitstel van werk."
+      "risk": "Deze automatische controle blokkeert bewerkingen die voorkomen dat een wachtwoordbeheerder een authenticatieveld invult of dat de gebruiker erin plakt; een onterechte blokkering kan het legitieme werk onderbreken, maar voert de geblokkeerde actie niet uit.",
+      "latency": "Het toegangspunt verwerkt één onderschepte gebeurtenis om bewerkingen te blokkeren die voorkomen dat een wachtwoordbeheerder een authenticatieveld invult of dat de gebruiker erin plakt zonder uitstel van werk."
     },
     "focus-style-regression-guard": {
       "risk": "Deze automatische controle blokkeert nieuwe onzichtbare CSS-focusstatussen die geen zichtbare vervanging hebben; een onterechte blokkering kan het legitieme werk onderbreken, maar voert de geblokkeerde actie niet uit.",
@@ -125,7 +125,7 @@
       "latency": "Het toegangspunt verwerkt één onderschepte gebeurtenis om netto nieuwe brede diagnostische onderdrukkingen te blokkeren, terwijl regeluitzonderingen met een bereik worden toegestaan zonder uitgestelde verwerking."
     },
     "exception-swallowing-guard": {
-      "risk": "Deze automatische controle blokkeert nieuw toegevoegde lege uitzonderingshandlers en negeert afwijzingen van beloften; een onterechte blokkering kan het legitieme werk onderbreken, maar voert de geblokkeerde actie niet uit.",
+      "risk": "Deze automatische controle blokkeert nieuw toegevoegde lege uitzonderingshandlers en genegeerde afwijzingen van beloften; een onterechte blokkering kan het legitieme werk onderbreken, maar voert de geblokkeerde actie niet uit.",
       "latency": "Het toegangspunt verwerkt één onderschepte gebeurtenis om nieuw toegevoegde lege uitzonderingshandlers en genegeerde afwijzingen van beloften te blokkeren zonder uitgestelde verwerking."
     },
     "tool-output-budget-guard": {

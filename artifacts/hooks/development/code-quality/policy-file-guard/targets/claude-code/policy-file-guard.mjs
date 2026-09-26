@@ -19,11 +19,22 @@ const DEFAULT_PROTECTED_BASENAMES = new Set([
   'eslint.config.ts',
   '.prettierrc',
   '.prettierrc.json',
+  '.prettierrc.json5',
   '.prettierrc.yml',
   '.prettierrc.yaml',
+  '.prettierrc.toml',
+  '.prettierrc.js',
+  '.prettierrc.mjs',
+  '.prettierrc.cjs',
+  '.prettierrc.ts',
+  '.prettierrc.mts',
+  '.prettierrc.cts',
   'prettier.config.js',
   'prettier.config.mjs',
   'prettier.config.cjs',
+  'prettier.config.ts',
+  'prettier.config.mts',
+  'prettier.config.cts',
   'biome.json',
   'biome.jsonc',
   'ruff.toml',
@@ -50,7 +61,7 @@ export function evaluate(input, cwd = process.cwd()) {
   const rawPath = input?.tool_input?.file_path || input?.tool_input?.file;
   if (!rawPath || typeof rawPath !== 'string') return { exitCode: 0, message: '' };
 
-  const projectRoot = path.resolve(input?.cwd || cwd);
+  const projectRoot = path.resolve(process.env.CLAUDE_PROJECT_DIR || input?.cwd || cwd);
   const target = path.resolve(projectRoot, rawPath);
   const relative = normalizeRelative(path.relative(projectRoot, target));
   if (relative === '..' || relative.startsWith('../') || path.isAbsolute(relative)) {

@@ -17,6 +17,10 @@ import {
 } from '../artifacts/hooks/development/code-quality/policy-file-guard/targets/claude-code/policy-file-guard.mjs';
 import { evaluate as evaluateShell } from '../artifacts/hooks/security/application-security/shell-command-guard/targets/claude-code/shell-command-guard.mjs';
 
+// The guards prefer CLAUDE_PROJECT_DIR over the payload cwd; clear an inherited value so the
+// fixtures stay hermetic when the suite runs inside a Claude Code session.
+delete process.env.CLAUDE_PROJECT_DIR;
+
 function git(cwd, args) {
   const result = spawnSync('git', args, { cwd, encoding: 'utf8', env: cleanGitEnvironment() });
   assert.equal(result.status, 0, result.stderr);
