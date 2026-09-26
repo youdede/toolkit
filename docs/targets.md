@@ -53,6 +53,27 @@ Three further kinds extend the catalog beyond procedures, gates, and specialists
 
 The coverage table above reports each kind per runtime; a zero is an intentional refusal until target-native fixtures prove equivalence, per the same contract that governs hooks and subagents.
 
+## Operating systems
+
+Linux runs the full check in CI on Node 20, 22, and 24; macOS runs it locally on the same three versions. Windows has no CI and has not been run, so everything below about Windows is read from runtime documentation (checked 2026-09-26) and is not verified.
+
+How each runtime starts an installed hook on Windows, and what happens when the hook itself fails to start:
+
+| Target | How the hook is started | A hook that fails to start |
+| --- | --- | --- |
+| Claude Code | Its shell runs the command: Git Bash by default, PowerShell when Git Bash is absent ([hooks](https://code.claude.com/docs/en/hooks)). Project hooks are addressed through `${CLAUDE_PROJECT_DIR}`, which PowerShell reads as its own variable rather than the environment one; whether Claude Code substitutes it first is not documented. | Only exit code 2 blocks; any other failure lets the action proceed. |
+| Codex | The documentation does not name the shell; a `commandWindows` override exists and the toolkit does not set it ([hooks](https://learn.chatgpt.com/docs/hooks)). | The run is marked failed and the action proceeds. |
+| Gemini CLI | Not documented ([hooks](https://geminicli.com/docs/hooks/)). Project hooks use `${GEMINI_PROJECT_DIR}`. | Codes other than 2 warn and the action proceeds. |
+| Cursor | Not documented ([hooks](https://cursor.com/docs/agent/hooks)). | The toolkit sets `failClosed: true`, so a failure blocks. |
+| OpenCode | The toolkit's plugin starts `node` directly, without a shell. | The plugin blocks on any non-zero result, including a failed start. |
+
+So on Windows a Claude Code, Codex, or Gemini CLI hook that cannot be found or started does not block anything, and nothing reports it. Until a Windows run proves otherwise, check that a guard blocks one known command after installing it there.
+
+Tests skipped on Windows, and the protection they would prove:
+
+- Symbolic links, which Windows creates only with developer mode or elevation: the installer refuses destinations through a link and `doctor` reports an ancestor link without reading through it (`tests/install.test.mjs`); the session ledger never writes or reads through a linked ledger or state directory (`tests/session-ledger.test.mjs`); `file-exists` preconditions and the phase gate never follow a link out of the workspace (`tests/command-precondition.test.mjs`, `tests/phase-gate-guard.test.mjs`); validation against an alternate repository root and the release-readiness structural proof (`tests/behavioral-evaluations.test.mjs`, `tests/release-readiness.test.mjs`).
+- POSIX file modes: installation state is owner-only, a settings merge keeps a restrictive existing mode, and a failed multi-file install rolls back (the test forces the failure with `chmod`) (`tests/install.test.mjs`).
+
 ## Official format references
 
 - [Codex skills](https://developers.openai.com/codex/skills), [hooks](https://developers.openai.com/codex/hooks), and [custom agents](https://developers.openai.com/codex/subagents)

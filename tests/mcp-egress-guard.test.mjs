@@ -55,7 +55,9 @@ test('lookalike, userinfo, IP, IDN, and scheme bypasses are blocked', () => {
   ]) {
     const result = fetchUrl(url);
     assert.equal(result.exitCode, 2, url);
-    assert.equal(result.ruleId, 'mcp-egress-undeclared-host', url);
+    // Node 20 and 22 reject this punycode label as an invalid URL; Node 24 parses it as another host.
+    const ruleIds = url === 'https://xn--nodejs-9ra.org/' ? ['mcp-egress-undeclared-host', 'mcp-egress-url-invalid'] : ['mcp-egress-undeclared-host'];
+    assert.ok(ruleIds.includes(result.ruleId), `${url}: ${result.ruleId}`);
   }
   assert.equal(fetchUrl('javascript:fetch(1)').ruleId, 'mcp-egress-url-invalid');
   assert.equal(fetchUrl('data:text/html,<script>1</script>').ruleId, 'mcp-egress-url-invalid');
