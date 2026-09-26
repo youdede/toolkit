@@ -570,7 +570,7 @@
     },
     "debug-systematically": {
       "risk": "Questa skill riconduce i guasti a una causa principale provata prima di effettuare una riparazione circoscritta; non dichiara risolto il problema senza una nuova verifica di regressione.",
-      "latency": "La skill rintraccia i guasti fino a una causa principale evidenziata prima di effettuare una riparazione limitata, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "latency": "La skill riconduce i guasti a una causa radice comprovata prima di effettuare una riparazione limitata, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "assess-mutation-test-value": {
       "risk": "Questa skill usa il mutation testing con limiti definiti per esporre asserzioni deboli separando al contempo mutanti equivalenti e irrilevanti; non dichiara efficaci i test in base alla sola copertura delle righe, al conteggio dei mutanti uccisi o a una singola esecuzione di uno strumento.",
@@ -653,7 +653,7 @@
       "latency": "La skill verifica la progettazione persuasiva per la scelta informata, l'evidenza, l'accessibilità e la manipolazione evitabile, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "design-respectful-conversion-overlay": {
-      "risk": "Questa skill progetta un overlay contestuale che sia accessibile, chiudibile, limitato in frequenza e misurabile; non scambia l'accessibilità o il completamento delle attività principali con il tasso di adesione.",
+      "risk": "Questa skill progetta un overlay contestuale che sia accessibile, chiudibile, limitato in frequenza e misurabile; non sacrifica l'accessibilità né il completamento delle attività principali in cambio del tasso di adesione.",
       "latency": "La skill progetta un overlay contestuale che sia accessibile, chiudibile, limitato in frequenza e misurabile, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "reduce-signup-friction": {
@@ -838,7 +838,7 @@
     },
     "prepare-branch-integration": {
       "risk": "Dopo l'autorizzazione può inviare, unire o eliminare branch e worktree, con effetti sulla cronologia condivisa e sulla possibilità di recuperare il lavoro.",
-      "latency": "La skill prepara un ramo di sviluppo per l'integrazione con evidenze chiare, opzioni esplicite e azioni recuperabili, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "latency": "La skill prepara un ramo di sviluppo per l'integrazione con evidenze chiare, opzioni esplicite e azioni reversibili, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "resolve-merge-conflicts-by-intent": {
       "risk": "Questa skill risolve i conflitti Git ricostruendo entrambe le modifiche, preservando l'intento e verificando il comportamento unito; non esegue automaticamente abort, continue, commit o push, né forza l'aggiornamento della cronologia.",
@@ -1057,8 +1057,8 @@
       "latency": "Lo specialista esamina un delta dell'interfaccia delimitato per verificarne la coerenza di componente, token, variante ed eccezione, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "web-performance-reviewer": {
-      "risk": "Questo specialista di sola lettura esamina una modifica Web limitata per i rischi di caricamento, rendering, reattività e regressione evidenziati; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
-      "latency": "Lo specialista esamina una modifica Web delimitata per i rischi di caricamento, rendering, reattività e regressione evidenziati, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questo specialista di sola lettura esamina una modifica Web limitata per i rischi di caricamento, rendering, reattività e regressione comprovati; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
+      "latency": "Lo specialista esamina una modifica Web delimitata per i rischi di caricamento, rendering, reattività e regressione comprovati, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "interaction-state-reviewer": {
       "risk": "Questo specialista di sola lettura esamina il percorso di un utente per transizioni di stato di interazione complete, coerenti e recuperabili; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",

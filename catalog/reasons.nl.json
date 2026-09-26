@@ -13,7 +13,7 @@
       "latency": "De opdracht volgt een controle op de voorafgaande voorwaarden en meerdere workflowstappen, terwijl een geobserveerde MCP-toolinventaris wordt beoordeeld en bronpinnen alleen worden bijgewerkt na exacte menselijke bevestiging."
     },
     "assemble-review-brief": {
-      "risk": "Deze opdracht stelt op basis van de daadwerkelijke diff een beoordelingsdocument samen met de reikwijdte, risico-aantekeningen en testbewijs dat een beoordelaar regel voor regel kan controleren; het laat geen onderdelen weg die het niet kon verifiëren, maar vermeldt ze als niet-geverifieerd.",
+      "risk": "Deze opdracht stelt op basis van de daadwerkelijke diff een beoordelingsdocument samen met de reikwijdte, risico-aantekeningen en testbewijs dat een beoordelaar regel voor regel kan controleren; hij laat geen onderdelen weg die het niet kon verifiëren, maar vermeldt ze als niet-geverifieerd.",
       "latency": "De opdracht voert een controle op de randvoorwaarden en meerdere workflowstappen uit terwijl deze op basis van de daadwerkelijke diff een beoordelingsdocument samenstelt met de reikwijdte, risico-aantekeningen en testbewijs dat een beoordelaar regel voor regel kan controleren."
     },
     "audit-release-evidence": {
@@ -21,7 +21,7 @@
       "latency": "Het commando doorloopt een controle van de voorwaarden en meerdere workflowstappen terwijl het de bewijsketen voor de release van de huidige versie controleert en een machineleesbaar rapport met een oordeel levert."
     },
     "draft-evidenced-plan": {
-      "risk": "Deze opdracht stelt een geordend implementatieplan op, waarbij bij elke stap de code wordt vermeld die ermee verband houdt en het bewijs dat voltooiing bewijst; er worden tijdens de planning geen bestanden bewerkt, gemaakt of verwijderd; het leest alleen.",
+      "risk": "Deze opdracht stelt een geordend implementatieplan op, waarbij bij elke stap de code wordt vermeld die ermee verband houdt en het bewijs dat voltooiing bewijst; er worden tijdens de planning geen bestanden bewerkt, gemaakt of verwijderd; hij leest alleen.",
       "latency": "De opdracht volgt een controle op de randvoorwaarden en meerdere workflowstappen, terwijl het een geordend implementatieplan opstelt, waarbij elke stap de code vermeldt die ermee wordt aangeraakt en het bewijs dat de voltooiing bewijst."
     },
     "verify-claims-against-output": {
@@ -45,19 +45,19 @@
       "latency": "De runtime laadt statische richtlijnen om een op herkomst gebaseerde databasemigratiebasislijn toe te passen op de repositorybestanden waar dat beslissingsoppervlak actief is in het overeenkomende bestandsbereik."
     },
     "api-contract-baseline": {
-      "risk": "Deze context past een door herkomst ondersteunde API-contractbasislijn toe op de repositorybestanden waar dat beslissingsoppervlak actief is; het biedt richtlijnen zonder bevoegdheid over tools of goedkeuringen.",
+      "risk": "Deze context past een door herkomst ondersteunde API-contractbasislijn toe op de repositorybestanden waar dat beslissingsoppervlak actief is; hij biedt richtlijnen zonder bevoegdheid over tools of goedkeuringen.",
       "latency": "De runtime laadt statische richtlijnen om een door herkomst ondersteunde API-contractbasislijn toe te passen op de repositorybestanden waar dat beslissingsoppervlak actief is in het overeenkomende bestandsbereik."
     },
     "coding-style-baseline": {
-      "risk": "Deze context past richtlijnen voor codekwaliteit en modulegrenzen toe op implementatiebestanden, met behoud van gedrag; het biedt richtlijnen zonder bevoegdheid over tools of goedkeuringen.",
+      "risk": "Deze context past richtlijnen voor codekwaliteit en modulegrenzen toe op implementatiebestanden, met behoud van gedrag; hij biedt richtlijnen zonder bevoegdheid over tools of goedkeuringen.",
       "latency": "De runtime laadt statische richtlijnen om gedragsbehoudende codekwaliteit en modulegrensrichtlijnen toe te passen op implementatiebestanden in het overeenkomende bestandsbereik."
     },
     "testing-baseline": {
-      "risk": "Deze context past bij werk aan testbestanden op bewijs gebaseerde richtlijnen toe voor eerst testen en behoud van integriteit; het biedt richtlijnen zonder bevoegdheid over tools of goedkeuringen.",
+      "risk": "Deze context past bij werk aan testbestanden op bewijs gebaseerde richtlijnen toe voor eerst testen en behoud van integriteit; hij biedt richtlijnen zonder bevoegdheid over tools of goedkeuringen.",
       "latency": "De runtime laadt statische richtlijnen om bij werk aan testbestanden in het overeenkomende bestandsbereik op bewijs gebaseerde richtlijnen toe te passen voor eerst testen en behoud van integriteit."
     },
     "ci-workflow-baseline": {
-      "risk": "Deze context past een op herkomst gebaseerde CI-workflowbasislijn toe op de repositorybestanden waar dat beslissingsoppervlak actief is; het biedt richtlijnen zonder bevoegdheid over tools of goedkeuringen.",
+      "risk": "Deze context past een op herkomst gebaseerde CI-workflowbasislijn toe op de repositorybestanden waar dat beslissingsoppervlak actief is; hij biedt richtlijnen zonder bevoegdheid over tools of goedkeuringen.",
       "latency": "De runtime laadt statische richtlijnen om op de juiste repositorybestanden een CI-basisconfiguratie met controleerbare herkomst toe te passen."
     },
     "git-workflow-baseline": {
@@ -65,7 +65,7 @@
       "latency": "De runtime laadt binnen het overeenkomende bestandsbereik statische richtlijnen om branch-integratie herstelbaar, expliciet en ondersteund door actueel repositorybewijs te houden."
     },
     "dependency-change-baseline": {
-      "risk": "Deze context past een op herkomstgegevens gebaseerde richtlijn voor afhankelijkheidswijzigingen toe op de repositorybestanden waar dat beslissingsoppervlak actief is; het biedt richtlijnen zonder bevoegdheid over tools of goedkeuringen.",
+      "risk": "Deze context past een op herkomstgegevens gebaseerde richtlijn voor afhankelijkheidswijzigingen toe op de repositorybestanden waar dat beslissingsoppervlak actief is; hij biedt richtlijnen zonder bevoegdheid over tools of goedkeuringen.",
       "latency": "De runtime laadt statische richtlijnen om een door de herkomst ondersteunde basislijn voor afhankelijkheidswijziging toe te passen op de repositorybestanden waar dat beslissingsoppervlak actief is in het overeenkomende bestandsbereik."
     },
     "security-baseline": {
@@ -141,7 +141,7 @@
       "latency": "Het entrypoint verwerkt zonder uitgestelde verwerking één onderschepte gebeurtenis om het schrijven van fasebewijs te blokkeren tenzij de vorige fase in de keten spec-design-tasks-implementation bestaat en geldig is."
     },
     "compaction-handoff-guard": {
-      "risk": "Deze waarnemer registreert begrensde, inhoudsloze ontvangstbewijzen voor en na de conversatieverdichting; het schrijft alleen begrensde lokale ontvangstbewijzen en kan de gebeurtenis niet blokkeren.",
+      "risk": "Deze waarnemer registreert begrensde, inhoudsloze ontvangstbewijzen voor en na de conversatieverdichting; hij schrijft alleen begrensde lokale ontvangstbewijzen en kan de gebeurtenis niet blokkeren.",
       "latency": "Om begrensde, inhoudsvrije ontvangstbewijzen op te nemen voor en na het comprimeren van gesprekken, leest of schrijft het entrypoint de begrensde lokale status voordat het antwoord geeft."
     },
     "completion-evidence-guard": {
@@ -209,11 +209,11 @@
       "latency": "Om vóór compactie te waarschuwen wanneer niet-vastgelegde wijzigingen of openstaande claims in het sessielogboek anders ongemerkt context zouden verliezen, kan het entrypoint een begrensd lokaal subproces uitvoeren voordat het antwoord geeft."
     },
     "session-checkpoint-guard": {
-      "risk": "Deze waarnemer voegt een deterministisch, met hashes gekoppeld bewijsrecord voor het sessie-einde toe aan het lokale sessielogboek; het schrijft alleen afgebakende lokale bewijsrecords en kan de gebeurtenis niet blokkeren.",
+      "risk": "Deze waarnemer voegt een deterministisch, met hashes gekoppeld bewijsrecord voor het sessie-einde toe aan het lokale sessielogboek; hij schrijft alleen afgebakende lokale bewijsrecords en kan de gebeurtenis niet blokkeren.",
       "latency": "Om een deterministisch, met hashes gekoppeld bewijsrecord voor het sessie-einde aan het lokale sessielogboek toe te voegen, kan het entrypoint een afgebakend lokaal subproces uitvoeren voordat het antwoord geeft."
     },
     "session-restore-guard": {
-      "risk": "Deze waarnemer injecteert bij het begin van een sessie een afgebakende samenvatting van de laatste controlepunten uit het sessielogboek, voorzien van een integriteitsmarkering; het kan de gebeurtenis niet blokkeren of de geïnspecteerde toestand muteren.",
+      "risk": "Deze waarnemer injecteert bij het begin van een sessie een afgebakende samenvatting van de laatste controlepunten uit het sessielogboek, voorzien van een integriteitsmarkering; hij kan de gebeurtenis niet blokkeren of de geïnspecteerde toestand muteren.",
       "latency": "Om bij het begin van een sessie een afgebakende samenvatting van de laatste controlepunten uit het sessielogboek met een integriteitsmarkering te injecteren, kan het entrypoint een begrensd lokaal subproces uitvoeren voordat het antwoord geeft."
     },
     "commit-signature-intent-guard": {
@@ -349,7 +349,7 @@
       "latency": "Een browsertraject vereist het starten van de vastgezette server en het wachten op pagina-acties en resultaten."
     },
     "design-data-quality-controls": {
-      "risk": "Deze skill ontwerpt datakwaliteitscontracten, controles, eigenaarschap en de aanpak bij incidenten rond echte beslissingen; het stelt geslaagde schemacontroles niet gelijk aan een betrouwbare analytische betekenis.",
+      "risk": "Deze skill ontwerpt datakwaliteitscontracten, controles, eigenaarschap en de aanpak bij incidenten rond echte beslissingen; hij stelt geslaagde schemacontroles niet gelijk aan een betrouwbare analytische betekenis.",
       "latency": "De skill ontwerpt datakwaliteitscontracten, controles, eigendom en incidentgedrag rond echte beslissingen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "provision-postgres-readonly-role": {
@@ -361,79 +361,79 @@
       "latency": "De skill beantwoordt een begrensde vraag uit productiegegevens zonder deze te muteren of te exporteren, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-private-data-lifecycle": {
-      "risk": "Deze skill definieert een levenscyclus van privégegevens met classificatie, doel, toegang, retentie, verwijdering en verificatiebewijs; het claimt geen wettelijke naleving, anonimisering, verwijdering of toestemming alleen vanuit de ontwerpintentie.",
+      "risk": "Deze skill definieert een levenscyclus van privégegevens met classificatie, doel, toegang, retentie, verwijdering en verificatiebewijs; hij claimt geen wettelijke naleving, anonimisering, verwijdering of toestemming alleen vanuit de ontwerpintentie.",
       "latency": "De skill definieert een levenscyclus van privégegevens met classificatie, doel, toegang, retentie, verwijdering en verificatiebewijs, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "review-database-migration-plan": {
-      "risk": "Deze skill beoordeelt een databasemigratieplan op expliciete SQL-risico's en een met bewijs onderbouwd plan voor uitrol, rollback, vergrendelingen en historische aanvulling; het voert geen SQL uit, past geen migratie toe en keurt geen productiewijziging goed.",
+      "risk": "Deze skill beoordeelt een databasemigratieplan op expliciete SQL-risico's en een met bewijs onderbouwd plan voor uitrol, rollback, vergrendelingen en historische aanvulling; hij voert geen SQL uit, past geen migratie toe en keurt geen productiewijziging goed.",
       "latency": "De skill beoordeelt een databasemigratieplan op expliciete SQL-risico's en een met bewijs onderbouwd plan voor uitrol, rollback, vergrendelingen en historische aanvulling, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-data-pipeline-change": {
-      "risk": "Deze skill ontwerpt een wijziging in een datapijplijn met expliciete contracten, veilige herverwerking, controles op historische aanvulling en afstemming van resultaten; het voert zonder expliciete, afgebakende toestemming geen productiequery's, taken, migraties, historische aanvullingen of omschakelingen uit.",
+      "risk": "Deze skill ontwerpt een wijziging in een datapijplijn met expliciete contracten, veilige herverwerking, controles op historische aanvulling en afstemming van resultaten; hij voert zonder expliciete, afgebakende toestemming geen productiequery's, taken, migraties, historische aanvullingen of omschakelingen uit.",
       "latency": "De skill ontwerpt een wijziging in een datapijplijn met expliciete contracten, veilige herverwerking, controles op historische aanvulling en afstemming van resultaten, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "review-schema-evolution": {
-      "risk": "Deze skill beoordeelt schema-evolutie in samenhang met daadwerkelijke lezers, schrijvers, opgeslagen records, uitrolvolgorde, compatibiliteitsbeleid en herstel; het verklaart geen compatibiliteit, veiligheid of rollback-succes op basis van alleen structurele vergelijking of validatie.",
+      "risk": "Deze skill beoordeelt schema-evolutie in samenhang met daadwerkelijke lezers, schrijvers, opgeslagen records, uitrolvolgorde, compatibiliteitsbeleid en herstel; hij verklaart geen compatibiliteit, veiligheid of rollback-succes op basis van alleen structurele vergelijking of validatie.",
       "latency": "De skill beoordeelt schema-evolutie in samenhang met daadwerkelijke lezers, schrijvers, opgeslagen records, uitrolvolgorde, compatibiliteitsbeleid en herstel, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "plan-accessibility-conformance-evidence": {
-      "risk": "Deze skill plant toegankelijkheidsbewijs voor gebruikerstrajecten, automatisering, toetsenbord, ondersteunende technologie en menselijke beoordeling; het markeert ontbrekende apparaten, browsers, statussen, inhoud, authenticatie of menselijke tests niet als geslaagd.",
+      "risk": "Deze skill plant toegankelijkheidsbewijs voor gebruikerstrajecten, automatisering, toetsenbord, ondersteunende technologie en menselijke beoordeling; hij markeert ontbrekende apparaten, browsers, statussen, inhoud, authenticatie of menselijke tests niet als geslaagd.",
       "latency": "De skill plant toegankelijkheidsbewijs voor gebruikerstrajecten, automatisering, toetsenbord, ondersteunende technologie en menselijke beoordeling, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "prepare-eaa-conformance-evidence": {
-      "risk": "Deze skill koppelt toegankelijkheidsresultaten aan de door een verantwoordelijke opgegeven eisenset en versie en houdt geverifieerd, beweerd, verouderd en ontbrekend bewijs uit elkaar; het verklaart geen conformiteit, maakt geen verklaring definitief en meldt niet dat aan een verplichting is voldaan.",
+      "risk": "Deze skill koppelt toegankelijkheidsresultaten aan de door een verantwoordelijke opgegeven eisenset en versie en houdt geverifieerd, beweerd, verouderd en ontbrekend bewijs uit elkaar; hij verklaart geen conformiteit, maakt geen verklaring definitief en meldt niet dat aan een verplichting is voldaan.",
       "latency": "De skill koppelt de toegankelijkheidsresultaten aan de vereistenset en de versie die een eigenaar heeft aangegeven, waarbij geverifieerd, beweerd, verouderd en afwezig uit elkaar wordt gehouden, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "test-screen-reader-journey": {
-      "risk": "Deze skill test een begrensd gebruikerstraject met een echte schermlezer en bewijsmateriaal gekoppeld aan interactieresultaten; het maakt geen gesproken privé-inhoud openbaar en muteert geen productiegegevens zonder toestemming.",
+      "risk": "Deze skill test een begrensd gebruikerstraject met een echte schermlezer en bewijsmateriaal gekoppeld aan interactieresultaten; hij maakt geen gesproken privé-inhoud openbaar en muteert geen productiegegevens zonder toestemming.",
       "latency": "De skill test een begrensd gebruikerstraject met een echte schermlezer en bewijsmateriaal dat is gekoppeld aan interactieresultaten, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "verify-cognitive-access-barriers": {
-      "risk": "Deze skill verifieert consistente hulp, redundante invoer en toegankelijke authenticatie aan de hand van een geobserveerde procesdoorloop; het accepteert niet dat aan een uitzondering wegens noodzaak, beveiliging of niet langer geldige informatie is voldaan alleen omdat de verantwoordelijke dat beweert.",
+      "risk": "Deze skill verifieert consistente hulp, redundante invoer en toegankelijke authenticatie aan de hand van een geobserveerde procesdoorloop; hij accepteert niet dat aan een uitzondering wegens noodzaak, beveiliging of niet langer geldige informatie is voldaan alleen omdat de verantwoordelijke dat beweert.",
       "latency": "De skill verifieert consistente hulp, redundante invoer en toegankelijke authenticatie aan de hand van een geobserveerde procesdoorloop, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "audit-design-system-consistency": {
-      "risk": "Deze skill controleert of gerenderde oppervlakken een samenhangend designsysteemcontract gebruiken zonder een tokeninventaris te verwarren met gebruikerservaring; het verklaart niet dat een designsysteem consistent is op basis van alleen tokennamen of broncode.",
+      "risk": "Deze skill controleert of gerenderde oppervlakken een samenhangend designsysteemcontract gebruiken zonder een tokeninventaris te verwarren met gebruikerservaring; hij verklaart niet dat een designsysteem consistent is op basis van alleen tokennamen of broncode.",
       "latency": "De skill controleert of gerenderde oppervlakken een samenhangend designsysteemcontract gebruiken zonder een tokeninventaris te verwarren met gebruikerservaring, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "establish-design-tokens": {
-      "risk": "Deze skill definieert een gelaagde designtokenlaag met ondersteuning voor thema's, naamgevingsregels en een migratiepad weg van hardgecodeerde waarden; het verbergt geen hiaten in een thema door stilzwijgend waarden uit een ander thema te hergebruiken.",
+      "risk": "Deze skill definieert een gelaagde designtokenlaag met ondersteuning voor thema's, naamgevingsregels en een migratiepad weg van hardgecodeerde waarden; hij verbergt geen hiaten in een thema door stilzwijgend waarden uit een ander thema te hergebruiken.",
       "latency": "De skill definieert een gelaagde designtokenlaag met ondersteuning voor thema's, naamgevingsregels en een migratiepad weg van hardgecodeerde waarden, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "govern-design-system-evolution": {
-      "risk": "Deze skill plant het beheer van het designsysteem, met eigenaarschap, bijdragen, versiebeheer, uitfasering en het volgen van adoptie; het schrapt geen beoordelingsstappen om een in het verzoek genoemde deadline te halen.",
+      "risk": "Deze skill plant het beheer van het designsysteem, met eigenaarschap, bijdragen, versiebeheer, uitfasering en het volgen van adoptie; hij schrapt geen beoordelingsstappen om een in het verzoek genoemde deadline te halen.",
       "latency": "De skill plant het beheer van het designsysteem, met eigenaarschap, bijdragen, versiebeheer, uitfasering en het volgen van adoptie, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "specify-component-contracts": {
-      "risk": "Deze skill specificeert componenten met alle toestanden, varianten en gebruiksregels, zodat ontwikkelaars ze zonder eigen interpretatie kunnen bouwen; het wijzigt tijdens het specificeren geen uitgeleverde componenten, code of ontwerpbestanden.",
+      "risk": "Deze skill specificeert componenten met alle toestanden, varianten en gebruiksregels, zodat ontwikkelaars ze zonder eigen interpretatie kunnen bouwen; hij wijzigt tijdens het specificeren geen uitgeleverde componenten, code of ontwerpbestanden.",
       "latency": "De skill specificeert componenten met alle toestanden, varianten en gebruiksregels, zodat ontwikkelaars ze zonder eigen interpretatie kunnen bouwen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "review-frontend-quality": {
-      "risk": "Deze skill controleert webinterfaces op gedrag, toegankelijkheid, responsiviteit en prestaties; het verandert persoonlijke visuele voorkeur niet in een blokkerende reviewbevinding.",
+      "risk": "Deze skill controleert webinterfaces op gedrag, toegankelijkheid, responsiviteit en prestaties; hij verandert persoonlijke visuele voorkeur niet in een blokkerende reviewbevinding.",
       "latency": "De skill controleert webinterfaces op gedrag, toegankelijkheid, responsiviteit en prestaties, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "specify-engineering-handoff": {
-      "risk": "Deze skill werkt een ontwerp uit tot een specificatie met tokenverwijzingen en volledige dekking van toestanden en verifieert de build daaraan; het certificeert geen toegankelijkheidsconformiteit; het verwijst die audits door naar de toegankelijkheidsskills.",
+      "risk": "Deze skill werkt een ontwerp uit tot een specificatie met tokenverwijzingen en volledige dekking van toestanden en verifieert de build daaraan; hij certificeert geen toegankelijkheidsconformiteit; hij verwijst die audits door naar de toegankelijkheidsskills.",
       "latency": "De skill werkt een ontwerp uit tot een specificatie met tokenverwijzingen en volledige dekking van toestanden en verifieert de build daaraan, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-form-experience": {
-      "risk": "Deze skill ontwerpt formulierstructuur, validatie en herstel, zodat mensen hun gegevensinvoer met vertrouwen afronden; het specificeert geen gedrag dat de invoer van een gebruiker stilzwijgend weggooit bij een fout, time-out of navigatie.",
+      "risk": "Deze skill ontwerpt formulierstructuur, validatie en herstel, zodat mensen hun gegevensinvoer met vertrouwen afronden; hij specificeert geen gedrag dat de invoer van een gebruiker stilzwijgend weggooit bij een fout, time-out of navigatie.",
       "latency": "De skill ontwerpt formulierstructuur, validatie en herstel, zodat mensen hun gegevensinvoer met vertrouwen afronden, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-interface-feedback": {
-      "risk": "Deze skill definieert tijdsbudgetten, wachttoestanden en feedback bij fouten, zodat elke actie een eerlijke terugkoppeling krijgt; het presenteert geen verzonnen tijdsduren als metingen; niet-gemeten wachttijden blijven als schattingen aangeduid.",
+      "risk": "Deze skill definieert tijdsbudgetten, wachttoestanden en feedback bij fouten, zodat elke actie een eerlijke terugkoppeling krijgt; hij presenteert geen verzonnen tijdsduren als metingen; niet-gemeten wachttijden blijven als schattingen aangeduid.",
       "latency": "De skill definieert tijdsbudgetten, wachttoestanden en feedback bij fouten, zodat elke actie een eerlijke terugkoppeling krijgt, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-navigation-and-search": {
-      "risk": "Deze skill specificeert navigatiepatronen, menuvolgorde, bewegwijzeringsstatus en zoekgedrag op basis van bewijsmateriaal over structuur, platform en taken; het claimt geen toegankelijkheidsconformiteit voor navigatie- of zoekstatussen in plaats van een toegankelijkheidsaudit.",
+      "risk": "Deze skill specificeert navigatiepatronen, menuvolgorde, bewegwijzeringsstatus en zoekgedrag op basis van bewijsmateriaal over structuur, platform en taken; hij claimt geen toegankelijkheidsconformiteit voor navigatie- of zoekstatussen in plaats van een toegankelijkheidsaudit.",
       "latency": "De skill specificeert navigatiepatronen, menuvolgorde, bewegwijzeringsstatus en zoekgedrag op basis van bewijsmateriaal over structuur, platform en taken, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-onboarding-journey": {
-      "risk": "Deze skill ontwerpt een eerste gebruiksroute die snel tot het activeringsmoment leidt, met weinig voorbereiding, eerlijke voortgang en meetbare resultaten; het verzint geen activeringspercentages, funnelcijfers, benchmarkvergelijkingen of gebruikersreacties.",
+      "risk": "Deze skill ontwerpt een eerste gebruiksroute die snel tot het activeringsmoment leidt, met weinig voorbereiding, eerlijke voortgang en meetbare resultaten; hij verzint geen activeringspercentages, funnelcijfers, benchmarkvergelijkingen of gebruikersreacties.",
       "latency": "De skill ontwerpt een first-run-traject dat het activeringsmoment snel bereikt, met minimale voorbereiding, eerlijke voortgang en meetbare resultaten, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-for-localization": {
-      "risk": "Deze skill zet een wijziging van taal en regio om in expliciete lay-out- en inhoudsbeperkingen voor groei, richting, formaten en betekenis; het noemt geen toegestane tekstgroei zonder de lengteklasse waarop die is gebaseerd.",
+      "risk": "Deze skill zet een wijziging van taal en regio om in expliciete lay-out- en inhoudsbeperkingen voor groei, richting, formaten en betekenis; hij noemt geen toegestane tekstgroei zonder de lengteklasse waarop die is gebaseerd.",
       "latency": "De skill zet een wijziging van taal en regio om in expliciete lay-out- en inhoudsbeperkingen voor groei, richting, formaten en betekenis, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "map-experience-journeys": {
@@ -441,39 +441,39 @@
       "latency": "De skill maakt klantreiskaarten, ervaringskaarten, serviceblauwdrukken of gebruikersstromen op basis van bewijs en markeert niet-onderbouwde fasen als aannames, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "plan-evidence-based-design-research": {
-      "risk": "Deze skill plant beslissingsgestuurd ontwerponderzoek met ethische rekrutering, traceerbaar bewijs en expliciete beperkingen voor elke claim; het verzint geen deelnemers, observaties, citaten, steekproefresultaten of bewijsverzadiging.",
-      "latency": "De skill plant besluitgestuurd ontwerponderzoek met ethische rekrutering, traceerbaar bewijs en expliciete beperkingen voor elke claim, met behulp van opeenvolgend bewijs en verificatiestappen."
+      "risk": "Deze skill plant beslissingsgestuurd ontwerponderzoek met ethische rekrutering, traceerbaar bewijs en expliciete beperkingen voor elke claim; hij verzint geen deelnemers, observaties, citaten, steekproefresultaten of bewijsverzadiging.",
+      "latency": "De skill plant besluitgestuurd ontwerponderzoek met ethische rekrutering, traceerbaar bewijs en expliciete beperkingen voor elke claim, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "synthesize-user-research-evidence": {
-      "risk": "Deze skill zet ruwe onderzoekssessies om in geclusterde, traceerbare bevindingen die meningsverschillen behouden en observatie van interpretatie scheiden; het verzint geen deelnemers, citaten, sessie-inhoud of bewijsaantallen om dun materiaal op te vullen.",
-      "latency": "De skill verandert ruwe onderzoekssessies in geclusterde, traceerbare bevindingen die onenigheid behouden en observatie van interpretatie scheiden, met behulp van opeenvolgend bewijs en verificatiestappen."
+      "risk": "Deze skill zet ruwe onderzoekssessies om in geclusterde, traceerbare bevindingen die meningsverschillen behouden en observatie van interpretatie scheiden; hij verzint geen deelnemers, citaten, sessie-inhoud of bewijsaantallen om dun materiaal op te vullen.",
+      "latency": "De skill verandert ruwe onderzoekssessies in geclusterde, traceerbare bevindingen die onenigheid behouden en observatie van interpretatie scheiden, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-responsive-behavior": {
-      "risk": "Deze skill specificeert inhoudsgestuurde breakpoints, herschikking en aanpassing aan invoermethoden als testbaar gedrag per viewportbereik; het specificeert geen interactiedoelen onder het platformminimum en geen uitsluitend via hover bruikbare interacties in bereiken voor aanraakbediening.",
+      "risk": "Deze skill specificeert inhoudsgestuurde breakpoints, herschikking en aanpassing aan invoermethoden als testbaar gedrag per viewportbereik; hij specificeert geen interactiedoelen onder het platformminimum en geen uitsluitend via hover bruikbare interacties in bereiken voor aanraakbediening.",
       "latency": "De skill specificeert inhoudgestuurde breekpunten, reflow en invoeraanpassing als testbaar gedrag per viewportbereik, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "frame-design-direction": {
-      "risk": "Deze skill kadert een ontwerpopgave met een onderbouwd probleem, geprioriteerde principes, een gekozen kans en meetpunten met duidelijke eigenaren; het legt geen budgetten, personeel, data of roadmap-posities vast in plaats van de verantwoordelijke eigenaar.",
+      "risk": "Deze skill kadert een ontwerpopgave met een onderbouwd probleem, geprioriteerde principes, een gekozen kans en meetpunten met duidelijke eigenaren; hij legt geen budgetten, personeel, data of roadmap-posities vast in plaats van de verantwoordelijke eigenaar.",
       "latency": "De skill kadert een ontwerpopgave met een onderbouwd probleem, geprioriteerde principes, een gekozen kans en meetpunten met duidelijke eigenaren, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "structure-information-architecture": {
-      "risk": "Deze skill organiseert inhoud in een vindbare structuur met onderbouwde groeperingen, geteste labels en stapsgewijze taakcontroles; het rapporteert een stapsgewijze controle niet als probleemloos zonder voor elke taak de zwakste tak te benoemen.",
+      "risk": "Deze skill organiseert inhoud in een vindbare structuur met onderbouwde groeperingen, geteste labels en stapsgewijze taakcontroles; hij rapporteert een stapsgewijze controle niet als probleemloos zonder voor elke taak de zwakste tak te benoemen.",
       "latency": "De skill organiseert inhoud in een vindbare structuur met onderbouwde groeperingen, geteste labels en stapsgewijze taakcontroles, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "compose-visual-layout": {
-      "risk": "Deze skill stelt dichtheid, raster, afstand, uitlijning, groepering, nadruk en diepte voor een scherm samen, waarbij elke keuze wordt gerechtvaardigd door de prioriteit van de inhoud; het introduceert geen afstands- of maatwaarden buiten de aangegeven schaal om de inhoud te laten passen.",
+      "risk": "Deze skill stelt dichtheid, raster, afstand, uitlijning, groepering, nadruk en diepte voor een scherm samen, waarbij elke keuze wordt gerechtvaardigd door de prioriteit van de inhoud; hij introduceert geen afstands- of maatwaarden buiten de aangegeven schaal om de inhoud te laten passen.",
       "latency": "De skill stelt dichtheid, raster, afstand, uitlijning, groepering, nadruk en diepte voor een scherm samen, waarbij elke keuze wordt gerechtvaardigd door de prioriteit van de inhoud, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "critique-ui-surface": {
-      "risk": "Deze skill bekritiseert een weergegeven scherm aan de hand van expliciete visuele criteria en retourneert een geprioriteerde, door bewijsmateriaal ondersteunde lijst met verbeteringen; het rapporteert geen bevindingen over schermen, toestanden of breakpoints die niet zijn geleverd.",
+      "risk": "Deze skill bekritiseert een weergegeven scherm aan de hand van expliciete visuele criteria en retourneert een geprioriteerde, door bewijsmateriaal ondersteunde lijst met verbeteringen; hij rapporteert geen bevindingen over schermen, toestanden of breakpoints die niet zijn geleverd.",
       "latency": "De skill bekritiseert een weergegeven scherm aan de hand van expliciete visuele criteria en retourneert een geprioriteerde, door bewijsmateriaal ondersteunde oplossingslijst, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "establish-color-system": {
-      "risk": "Deze skill definieert perceptuele kleurschalen, semantische rollen, statuskleuren, afleiding van donkere schema's en themabeperkingen met berekend contrast; het codeert status of interactieve betekenis niet alleen via tint.",
+      "risk": "Deze skill definieert perceptuele kleurschalen, semantische rollen, statuskleuren, afleiding van donkere schema's en themabeperkingen met berekend contrast; hij codeert status of interactieve betekenis niet alleen via tint.",
       "latency": "De skill definieert perceptuele kleurschalen, semantische rollen, statuskleuren, afleiding van donkere schema's en themabeperkingen met berekend contrast, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "establish-typography-system": {
-      "risk": "Deze skill definieert een typografische schaal met verhoudingen per bereik, roltoewijzingen, regels voor leescomfort en vloeiend responsief typografisch gedrag; het stemt afzonderlijke schermen niet één voor één af, maar levert regels op die de schermen overnemen.",
+      "risk": "Deze skill definieert een typografische schaal met verhoudingen per bereik, roltoewijzingen, regels voor leescomfort en vloeiend responsief typografisch gedrag; hij stemt afzonderlijke schermen niet één voor één af, maar levert regels op die de schermen overnemen.",
       "latency": "De skill definieert een typografische schaal met verhoudingen per bereik, roltoewijzingen, regels voor leescomfort en vloeiend responsief typografisch gedrag, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "audit-agent-guidance-drift": {
@@ -481,11 +481,11 @@
       "latency": "De skill toetst agentinstructies aan wijzigingen in de repository en stelt alleen minimale, met bewijs onderbouwde correcties voor, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "author-deterministic-agent-hook": {
-      "risk": "Deze skill ontwikkelt een gerichte deterministische agenthook waarvan de runtime-eigen gebeurtenis- en foutsemantiek wordt getest; het voert geen ingediende commando's uit, vertrouwt geen door het project opgestelde vrijstellingen en gebruikt geen eval om invoer te inspecteren.",
+      "risk": "Deze skill ontwikkelt een gerichte deterministische agenthook waarvan de runtime-eigen gebeurtenis- en foutsemantiek wordt getest; hij voert geen ingediende commando's uit, vertrouwt geen door het project opgestelde vrijstellingen en gebruikt geen eval om invoer te inspecteren.",
       "latency": "De skill ontwikkelt een gerichte deterministische agenthook waarvan de runtime-eigen gebeurtenis- en foutsemantiek wordt getest, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "author-effective-agent-skill": {
-      "risk": "Deze skill schrijft een gerichte agentskill met betrouwbare routing, stapsgewijze onthulling van informatie en tests; het maakt geen monolithische skill die niet-gerelateerde workflows bundelt.",
+      "risk": "Deze skill schrijft een gerichte agentskill met betrouwbare routing, stapsgewijze onthulling van informatie en tests; hij maakt geen monolithische skill die niet-gerelateerde workflows bundelt.",
       "latency": "De skill schrijft een gerichte agentskill met betrouwbare routing, stapsgewijze onthulling van informatie en tests, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "author-mcp-server-contract": {
@@ -493,7 +493,7 @@
       "latency": "De skill ontwerpt een MCP-server met beperkte tools, veilige schema's, autoriteitsgrenzen en protocolbewijs, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "evaluate-agent-guidance-value": {
-      "risk": "Deze skill meet of altijd geladen agentinstructies de resultaten veranderen voordat ze worden ingekort of een prominentere plaats krijgen; het verwijdert of herschrijft geen instructies op basis van één probleemloze uitvoering.",
+      "risk": "Deze skill meet of altijd geladen agentinstructies de resultaten veranderen voordat ze worden ingekort of een prominentere plaats krijgen; hij verwijdert of herschrijft geen instructies op basis van één probleemloze uitvoering.",
       "latency": "De skill meet of altijd geladen agentinstructies de resultaten veranderen voordat ze worden ingekort of een prominentere plaats krijgen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "publish-agent-skill": {
@@ -501,27 +501,27 @@
       "latency": "De skill publiceert een gevalideerde agentskill met herkomstgegevens, versiebeheer en bewijs voor de uitgave, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "sync-skills-across-agents": {
-      "risk": "Deze skill synchroniseert een skill tussen geconfigureerde agentmappen zonder persoonlijke paden te veronderstellen; het overschrijft geen afwijkende of onbeheerde kopieën zonder goedkeuring.",
+      "risk": "Deze skill synchroniseert een skill tussen geconfigureerde agentmappen zonder persoonlijke paden te veronderstellen; hij overschrijft geen afwijkende of onbeheerde kopieën zonder goedkeuring.",
       "latency": "De skill synchroniseert een skill tussen geconfigureerde agentmappen zonder persoonlijke paden te veronderstellen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "write-folder-agent-guidance": {
-      "risk": "Deze skill schrijft mapgebonden agentinstructies die overgeërfde instructies correct aanvullen en tegenstrijdigheden vermijden; het kopieert de instructies uit de hoofdmap niet naar elke map.",
+      "risk": "Deze skill schrijft mapgebonden agentinstructies die overgeërfde instructies correct aanvullen en tegenstrijdigheden vermijden; hij kopieert de instructies uit de hoofdmap niet naar elke map.",
       "latency": "De skill schrijft mapgebonden agentinstructies die overgeërfde instructies correct aanvullen en tegenstrijdigheden vermijden, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "write-project-agent-guidance": {
-      "risk": "Deze skill schrijft beknopte agentinstructies voor de hoofdmap op basis van geverifieerde projectcommando's, grenzen en gezaghebbende context; het overschrijft geen bestaande agentinstructies en kiest geen nieuwe runtimebestandsnaam zonder beoordeling.",
+      "risk": "Deze skill schrijft beknopte agentinstructies voor de hoofdmap op basis van geverifieerde projectcommando's, grenzen en gezaghebbende context; hij overschrijft geen bestaande agentinstructies en kiest geen nieuwe runtimebestandsnaam zonder beoordeling.",
       "latency": "De skill schrijft beknopte agentinstructies voor de hoofdmap op basis van geverifieerde projectcommando's, grenzen en gezaghebbende context, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "build-openapi-contract": {
-      "risk": "Deze skill bouwt een OpenAPI-contract op basis van geverifieerd gedrag, herbruikbare schema's, foutgevallen en uitvoerbare controles; het verzint geen endpoints, velden, voorbeelden, statuscodes of beveiligingsscopes.",
-      "latency": "De skill bouwt een OpenAPI-contract op op basis van geverifieerd gedrag, herbruikbare schema's, fouten en uitvoerbare controles, met behulp van opeenvolgend bewijs en verificatiestappen."
+      "risk": "Deze skill bouwt een OpenAPI-contract op basis van geverifieerd gedrag, herbruikbare schema's, foutgevallen en uitvoerbare controles; hij verzint geen endpoints, velden, voorbeelden, statuscodes of beveiligingsscopes.",
+      "latency": "De skill bouwt een OpenAPI-contract op op basis van geverifieerd gedrag, herbruikbare schema's, fouten en uitvoerbare controles, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-stable-api-contract": {
-      "risk": "Deze skill ontwerpt een interfacecontract rond afnemers, invarianten, compatibiliteit en foutsemantiek; het bestempelt een breaking change niet als veilig op grond van het slagen van de huidige tests.",
+      "risk": "Deze skill ontwerpt een interfacecontract rond afnemers, invarianten, compatibiliteit en foutsemantiek; hij bestempelt een breaking change niet als veilig op grond van het slagen van de huidige tests.",
       "latency": "De skill ontwerpt een interfacecontract rond afnemers, invarianten, compatibiliteit en foutsemantiek, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "build-disposable-prototype": {
-      "risk": "Deze skill bouwt een afgebakend wegwerpprototype dat één vraag over gedrag of interfaceontwerp beantwoordt; het claimt geen bruikbaarheid, haalbaarheid of correctheid uitsluitend op basis van een doorloop door de auteur zelf.",
+      "risk": "Deze skill bouwt een afgebakend wegwerpprototype dat één vraag over gedrag of interfaceontwerp beantwoordt; hij claimt geen bruikbaarheid, haalbaarheid of correctheid uitsluitend op basis van een doorloop door de auteur zelf.",
       "latency": "De skill bouwt een begrensd wegwerpprototype op dat één vraag over gedrag of interfaceontwerp beantwoordt, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "define-domain-language": {
@@ -537,27 +537,27 @@
       "latency": "De skill detecteert en handhaaft TypeScript-pakketingangspuntgrenzen zonder uit te gaan van één repository-indeling, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "plan-compatible-deprecation": {
-      "risk": "Deze skill plant een omkeerbare uitfasering met inventarisatie van afnemers, migratiebewijs, telemetrie en voorwaarden voor verwijdering; het dwingt afnemers niet om de migratie pas te ontdekken doordat iets niet meer werkt.",
+      "risk": "Deze skill plant een omkeerbare uitfasering met inventarisatie van afnemers, migratiebewijs, telemetrie en voorwaarden voor verwijdering; hij dwingt afnemers niet om de migratie pas te ontdekken doordat iets niet meer werkt.",
       "latency": "De skill plant een omkeerbare uitfasering met inventarisatie van afnemers, migratiebewijs, telemetrie en voorwaarden voor verwijdering, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "write-implementation-plan": {
-      "risk": "Deze skill schrijft een op de repository gebaseerd implementatieplan met begrensde stappen, bewijs, afhankelijkheden en beslissingen; het verbergt ontwerpbeslissingen niet binnen implementatiestappen.",
+      "risk": "Deze skill schrijft een op de repository gebaseerd implementatieplan met begrensde stappen, bewijs, afhankelijkheden en beslissingen; hij verbergt ontwerpbeslissingen niet binnen implementatiestappen.",
       "latency": "De skill schrijft een op een repository gebaseerd implementatieplan met begrensde stappen, bewijs, afhankelijkheden en beslissingen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "write-verifiable-specification": {
-      "risk": "Deze skill schrijft een implementatieklare specificatie met beslissingen, invarianten, grenzen en acceptatiebewijs; het begint niet met implementeren en presenteert een onopgeloste reikwijdte niet als goedgekeurd.",
-      "latency": "De skill schrijft een implementatieklare specificatie met beslissingen, invarianten, grenzen en acceptatiebewijs, met behulp van opeenvolgend bewijs en verificatiestappen."
+      "risk": "Deze skill schrijft een implementatieklare specificatie met beslissingen, invarianten, grenzen en acceptatiebewijs; hij begint niet met implementeren en presenteert een onopgeloste reikwijdte niet als goedgekeurd.",
+      "latency": "De skill schrijft een implementatieklare specificatie met beslissingen, invarianten, grenzen en acceptatiebewijs, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "deliver-incremental-change": {
-      "risk": "Deze skill levert een verandering op in onafhankelijk verifieerbare segmenten die een werkend systeem behouden; het verbergt geen nieuwe reikwijdte binnen een implementatiecontrolepunt.",
+      "risk": "Deze skill levert een verandering op in onafhankelijk verifieerbare segmenten die een werkend systeem behouden; hij verbergt geen nieuwe reikwijdte binnen een implementatiecontrolepunt.",
       "latency": "De skill levert een verandering op in onafhankelijk verifieerbare segmenten die een werkend systeem behouden, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "evaluate-code-review-feedback": {
-      "risk": "Deze skill evalueert beoordelingsfeedback aan de hand van de code, het contract en het bewijsmateriaal voordat een begrensde correctie wordt toegepast; het verbreedt een opmerking niet naar niet-gerelateerde opruimings- of architectuurwerkzaamheden.",
-      "latency": "De skill evalueert beoordelingsfeedback aan de hand van de code, het contract en het bewijs voordat een begrensde correctie wordt toegepast, via opeenvolgende stappen voor bewijsgaring en verificatie."
+      "risk": "Deze skill evalueert beoordelingsfeedback aan de hand van de code, hij contract en het bewijsmateriaal voordat een begrensde correctie wordt toegepast; hij verbreedt een opmerking niet naar niet-gerelateerde opruimings- of architectuurwerkzaamheden.",
+      "latency": "De skill evalueert beoordelingsfeedback aan de hand van de code, hij contract en het bewijs voordat een begrensde correctie wordt toegepast, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "optimize-with-performance-profile": {
-      "risk": "Deze skill optimaliseert een gemeten knelpunt met representatieve werklasten, vangrails en bewijs dat er geen regressie is; het verbergt geen regressies op het gebied van juistheid, leesbaarheid, kosten, energie of toegankelijkheid.",
+      "risk": "Deze skill optimaliseert een gemeten knelpunt met representatieve werklasten, vangrails en bewijs dat er geen regressie is; hij verbergt geen regressies op het gebied van juistheid, leesbaarheid, kosten, energie of toegankelijkheid.",
       "latency": "De skill optimaliseert een gemeten knelpunt met representatieve werklasten, vangrails en bewijs dat er geen regressie is, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "request-independent-code-review": {
@@ -565,51 +565,51 @@
       "latency": "De skill krijgt een neutrale tweede beoordeling en vergelijkt deze met de daadwerkelijke verandering, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "simplify-code-with-invariants": {
-      "risk": "Deze skill vereenvoudigt een afgebakend codepad met behoud van waarneembaar gedrag en repositoryconventies; het beweert niet dat code eenvoudiger is uitsluitend omdat die minder regels telt.",
+      "risk": "Deze skill vereenvoudigt een afgebakend codepad met behoud van waarneembaar gedrag en repositoryconventies; hij beweert niet dat code eenvoudiger is uitsluitend omdat die minder regels telt.",
       "latency": "De skill vereenvoudigt een begrensd codepad met behoud van waarneembaar gedrag en repositoryconventies, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "debug-systematically": {
-      "risk": "Deze skill herleidt fouten tot een onderbouwde hoofdoorzaak voordat een gerichte reparatie wordt uitgevoerd; het claimt geen oplossing zonder nieuwe regressieverificatie.",
+      "risk": "Deze skill herleidt fouten tot een onderbouwde hoofdoorzaak voordat een gerichte reparatie wordt uitgevoerd; hij claimt geen oplossing zonder nieuwe regressieverificatie.",
       "latency": "De skill herleidt fouten tot een onderbouwde hoofdoorzaak voordat een gerichte reparatie wordt uitgevoerd, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "assess-mutation-test-value": {
-      "risk": "Deze skill gebruikt afgebakende mutatietests om zwakke asserties bloot te leggen en onderscheidt daarbij equivalente en irrelevante mutanten; het leidt de doeltreffendheid van tests niet uitsluitend af uit regeldekking, het aantal gedode mutanten of één uitvoering van een tool.",
+      "risk": "Deze skill gebruikt afgebakende mutatietests om zwakke asserties bloot te leggen en onderscheidt daarbij equivalente en irrelevante mutanten; hij leidt de doeltreffendheid van tests niet uitsluitend af uit regeldekking, hij aantal gedode mutanten of één uitvoering van een tool.",
       "latency": "De skill gebruikt afgebakende mutatietests om zwakke asserties bloot te leggen en onderscheidt daarbij equivalente en irrelevante mutanten, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "deliver-test-first": {
-      "risk": "Deze skill levert gedragswijzigingen via een geverifieerde rood-groen-refactorcyclus; het verzwakt geen asserties of configuratie om kunstmatig een geslaagd resultaat te verkrijgen.",
+      "risk": "Deze skill levert gedragswijzigingen via een geverifieerde rood-groen-refactorcyclus; hij verzwakt geen asserties of configuratie om kunstmatig een geslaagd resultaat te verkrijgen.",
       "latency": "De skill levert gedragswijzigingen via een geverifieerde rood-groen-refactorcyclus, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-agent-evaluation-harness": {
-      "risk": "Deze skill ontwerpt een reproduceerbare testopzet voor agents met geïsoleerde gevallen, uitvoeringssporen, beoordelaars en regressiecontroles; het beschouwt één geslaagde stochastische uitvoering niet als betrouwbaar gedrag.",
+      "risk": "Deze skill ontwerpt een reproduceerbare testopzet voor agents met geïsoleerde gevallen, uitvoeringssporen, beoordelaars en regressiecontroles; hij beschouwt één geslaagde stochastische uitvoering niet als betrouwbaar gedrag.",
       "latency": "De skill ontwerpt een reproduceerbare testopzet voor agents met geïsoleerde gevallen, uitvoeringssporen, beoordelaars en regressiecontroles, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-llm-evaluation": {
-      "risk": "Deze skill ontwerpt een LLM-evaluatie rond echte taken, gecontroleerde beoordelaars, een indeling van fouten en beslisgrenzen; het roept op basis van een beperkte benchmark niet één model uit tot universeel beter.",
+      "risk": "Deze skill ontwerpt een LLM-evaluatie rond echte taken, gecontroleerde beoordelaars, een indeling van fouten en beslisgrenzen; hij roept op basis van een beperkte benchmark niet één model uit tot universeel beter.",
       "latency": "De skill ontwerpt een LLM-evaluatie rond echte taken, gecontroleerde beoordelaars, een indeling van fouten en beslisgrenzen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-property-and-fuzz-tests": {
-      "risk": "Deze skill vertaalt stabiele invarianten en dreigingsgrenzen in reproduceerbare, op eigenschappen gebaseerde en fuzz-tests; het voert geen grenzeloze fuzz-campagnes uit en richt zich ook niet op productie en gedeelde diensten.",
+      "risk": "Deze skill vertaalt stabiele invarianten en dreigingsgrenzen in reproduceerbare, op eigenschappen gebaseerde en fuzz-tests; hij voert geen grenzeloze fuzz-campagnes uit en richt zich ook niet op productie en gedeelde diensten.",
       "latency": "De skill vertaalt stabiele invarianten en dreigingsgrenzen in reproduceerbare, op eigenschappen gebaseerde en fuzz-tests, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "evaluate-retrieval-system": {
-      "risk": "Deze skill beoordeelt informatieophaling en brongebonden generatie afzonderlijk op relevantie, bronvermelding, verantwoord niet antwoorden, kosten en latentie; het gebruikt geen privédocumenten zonder toestemming en lekt geen vertrouwelijke tekstfragmenten via testuitvoer.",
+      "risk": "Deze skill beoordeelt informatieophaling en brongebonden generatie afzonderlijk op relevantie, bronvermelding, verantwoord niet antwoorden, kosten en latentie; hij gebruikt geen privédocumenten zonder toestemming en lekt geen vertrouwelijke tekstfragmenten via testuitvoer.",
       "latency": "De skill beoordeelt informatieophaling en brongebonden generatie afzonderlijk op relevantie, bronvermelding, verantwoord niet antwoorden, kosten en latentie, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "plan-load-test": {
-      "risk": "Deze skill ontwerpt een capaciteitsexperiment met een representatieve werklast, veiligheidsenvelop, waarneembaarheid en stopregels; het creëert geen onbeperkt verkeer, ongecontroleerde kosten, destructieve testgegevens of een denial-of-service-situatie.",
+      "risk": "Deze skill ontwerpt een capaciteitsexperiment met een representatieve werklast, veiligheidsenvelop, waarneembaarheid en stopregels; hij creëert geen onbeperkt verkeer, ongecontroleerde kosten, destructieve testgegevens of een denial-of-service-situatie.",
       "latency": "De skill ontwerpt een capaciteitsexperiment met een representatieve werklast, veiligheidsenvelop, waarneembaarheid en stopregels, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "test-interface-in-browser": {
-      "risk": "Deze skill doorloopt een afgebakend browsertraject met bewijs over status, netwerk, console, toegankelijkheid en weergave; het omzeilt geen authenticatie, botbescherming, toegangscontroles of toestemming.",
+      "risk": "Deze skill doorloopt een afgebakend browsertraject met bewijs over status, netwerk, console, toegankelijkheid en weergave; hij omzeilt geen authenticatie, botbescherming, toegangscontroles of toestemming.",
       "latency": "De skill doorloopt een afgebakend browsertraject met bewijs over status, netwerk, console, toegankelijkheid en weergave, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "verify-completion-evidence": {
-      "risk": "Deze skill verifieert voltooiingsclaims met opnieuw uitgevoerde commando's, inspecteerbare artefacten en expliciet benoemde resterende onzekerheid; het laat mislukte of niet-uitgevoerde controles niet weg om een schoner resultaat te presenteren.",
+      "risk": "Deze skill verifieert voltooiingsclaims met opnieuw uitgevoerde commando's, inspecteerbare artefacten en expliciet benoemde resterende onzekerheid; hij laat mislukte of niet-uitgevoerde controles niet weg om een schoner resultaat te presenteren.",
       "latency": "De skill verifieert voltooiingsclaims met opnieuw uitgevoerde commando's, inspecteerbare artefacten en expliciet benoemde resterende onzekerheid, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-controlled-experiment": {
-      "risk": "Deze skill maakt van een beslissing een meetbaar experiment met vangrails en een expliciete stopregel; het kijkt niet herhaaldelijk tussentijds naar de resultaten en roept geen winnaar uit zonder goedgekeurde sequentiële methode.",
+      "risk": "Deze skill maakt van een beslissing een meetbaar experiment met vangrails en een expliciete stopregel; hij kijkt niet herhaaldelijk tussentijds naar de resultaten en roept geen winnaar uit zonder goedgekeurde sequentiële methode.",
       "latency": "De skill maakt van een beslissing een meetbaar experiment met vangrails en een expliciete stopregel, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-marketing-measurement": {
@@ -621,11 +621,11 @@
       "latency": "De skill brengt tegenstrijdige toeschrijvingen aan marketingkanalen met elkaar in overeenstemming en houdt onzekerheid en grenzen aan causale conclusies zichtbaar, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "capture-content-idea": {
-      "risk": "Deze skill voegt een contentidee toe aan een goedgekeurde backlog, met herkomst en zonder herformulering; het slaat geen niet-gerelateerde privégesprekken op als herkomstinformatie.",
+      "risk": "Deze skill voegt een contentidee toe aan een goedgekeurde backlog, met herkomst en zonder herformulering; hij slaat geen niet-gerelateerde privégesprekken op als herkomstinformatie.",
       "latency": "De skill voegt een contentidee toe aan een goedgekeurde backlog, met herkomst en zonder herformulering, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "document-brand-voice": {
-      "risk": "Deze skill documenteert een bruikbare merkstem op basis van echte voorbeelden, doelgroepcontext, grenzen en beoordelingstests; het verzint geen stem op basis van bijvoeglijke naamwoorden, trends of één geïsoleerd voorbeeld.",
+      "risk": "Deze skill documenteert een bruikbare merkstem op basis van echte voorbeelden, doelgroepcontext, grenzen en beoordelingstests; hij verzint geen stem op basis van bijvoeglijke naamwoorden, trends of één geïsoleerd voorbeeld.",
       "latency": "De skill documenteert een bruikbare merkstem op basis van echte voorbeelden, doelgroepcontext, grenzen en beoordelingstests, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "edit-marketing-copy": {
@@ -633,27 +633,27 @@
       "latency": "De skill bewerkt bestaande marketingtekst in afgebakende stappen terwijl de waarheid, stem en intentie behouden blijven, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "plan-channel-native-social-content": {
-      "risk": "Deze skill plant socialemediacontent die bij het platform past, op basis van waarde voor de doelgroep, bewijs, merkstem en duurzaam uitvoerbare processen; het belooft geen viraliteit, groei van volgers of inkomsten uit de frequentie van posten.",
+      "risk": "Deze skill plant socialemediacontent die bij het platform past, op basis van waarde voor de doelgroep, bewijs, merkstem en duurzaam uitvoerbare processen; hij belooft geen viraliteit, groei van volgers of inkomsten uit de frequentie van posten.",
       "latency": "De skill plant socialemediacontent die bij het platform past, op basis van waarde voor de doelgroep, bewijs, merkstem en duurzaam uitvoerbare processen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "plan-evidence-led-content": {
-      "risk": "Deze skill bouwt een contentportfolio op rond publieksbeslissingen, distributie, bewijs en operationele capaciteit; het stelt geen publicatiekalender met een hoog volume samen op basis van alleen zoekwoordtools.",
+      "risk": "Deze skill bouwt een contentportfolio op rond publieksbeslissingen, distributie, bewijs en operationele capaciteit; hij stelt geen publicatiekalender met een hoog volume samen op basis van alleen zoekwoordtools.",
       "latency": "De skill bouwt een inhoudsportfolio op rond publieksbeslissingen, distributie, bewijsmateriaal en operationele capaciteit, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "write-conversion-copy": {
-      "risk": "Deze skill schrijft overtuigende paginatekst op basis van publieksbewijs, productwaarheid, bezwaren en één primaire actie; het claimt geen conversieresultaat zonder meetbaar bewijs.",
+      "risk": "Deze skill schrijft overtuigende paginatekst op basis van publieksbewijs, productwaarheid, bezwaren en één primaire actie; hij claimt geen conversieresultaat zonder meetbaar bewijs.",
       "latency": "De skill schrijft overtuigende paginatekst op basis van publieksbewijs, productwaarheid, bezwaren en één primaire actie, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "audit-app-store-listing": {
-      "risk": "Deze skill beoordeelt een app-vermelding op vindbaarheid, waarheidsgetrouwe overtuigingskracht, visuele volgorde en testbare hiaten; het belooft geen rangorde of installaties als gevolg van wijzigingen in de metadata.",
+      "risk": "Deze skill beoordeelt een app-vermelding op vindbaarheid, waarheidsgetrouwe overtuigingskracht, visuele volgorde en testbare hiaten; hij belooft geen rangorde of installaties als gevolg van wijzigingen in de metadata.",
       "latency": "De skill beoordeelt een app-vermelding op vindbaarheid, waarheidsgetrouwe overtuigingskracht, visuele volgorde en testbare hiaten, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "audit-ethical-persuasion": {
-      "risk": "Deze skill controleert overtuigend ontwerp op geïnformeerde keuze, bewijs, toegankelijkheid en vermijdbare manipulatie; het geeft geen juridische goedkeuring en beweert niet dat een hogere conversie schade aan gebruikers rechtvaardigt.",
+      "risk": "Deze skill controleert overtuigend ontwerp op geïnformeerde keuze, bewijs, toegankelijkheid en vermijdbare manipulatie; hij geeft geen juridische goedkeuring en beweert niet dat een hogere conversie schade aan gebruikers rechtvaardigt.",
       "latency": "De skill controleert het overtuigende ontwerp op geïnformeerde keuze, bewijs, toegankelijkheid en vermijdbare manipulatie, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-respectful-conversion-overlay": {
-      "risk": "Deze skill ontwerpt een contextuele overlay die toegankelijk en sluitbaar is, een begrensde vertoningsfrequentie heeft en meetbaar is; het ruilt toegankelijkheid of het voltooien van kerntaken niet in voor een hoger opt-inpercentage.",
+      "risk": "Deze skill ontwerpt een contextuele overlay die toegankelijk en sluitbaar is, een begrensde vertoningsfrequentie heeft en meetbaar is; hij ruilt toegankelijkheid of het voltooien van kerntaken niet in voor een hoger opt-inpercentage.",
       "latency": "De skill ontwerpt een contextuele overlay die toegankelijk en sluitbaar is, een begrensde vertoningsfrequentie heeft en meetbaar is, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "reduce-signup-friction": {
@@ -661,19 +661,19 @@
       "latency": "De skill vermindert de wrijving bij het maken van accounts, terwijl de veiligheid, toestemming, toegankelijkheid en herstel behouden blijven, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "review-conversion-friction": {
-      "risk": "Deze skill beoordeelt een conversietraject op door bewijsmateriaal ondersteunde duidelijkheid, vertrouwen, inspanning en meetlacunes; het ontwerpt de pagina niet opnieuw en start geen experimenten, tenzij hiervoor afzonderlijk toestemming is verleend.",
+      "risk": "Deze skill beoordeelt een conversietraject op door bewijsmateriaal ondersteunde duidelijkheid, vertrouwen, inspanning en meetlacunes; hij ontwerpt de pagina niet opnieuw en start geen experimenten, tenzij hiervoor afzonderlijk toestemming is verleend.",
       "latency": "De skill beoordeelt een conversietraject op door bewijsmateriaal ondersteunde duidelijkheid, vertrouwen, inspanning en meetlacunes, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "review-upgrade-moment": {
-      "risk": "Deze skill beoordeelt een upgradeverzoek in het product op timing, waardebewijs, voorwaarden, herstel en autonomie; het selecteert geen dure optie vooraf en geeft besparingen en referentieprijzen niet onjuist weer.",
+      "risk": "Deze skill beoordeelt een upgradeverzoek in het product op timing, waardebewijs, voorwaarden, herstel en autonomie; hij selecteert geen dure optie vooraf en geeft besparingen en referentieprijzen niet onjuist weer.",
       "latency": "De skill beoordeelt een upgradeverzoek in het product op timing, waardebewijs, voorwaarden, herstel en autonomie, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-community-growth-system": {
-      "risk": "Deze skill ontwerpt een communitysysteem rond waarde voor leden, met afspraken over beheer, terugkerende processen en indicatoren voor de gezondheid van de community; het verandert discussies van leden niet in marketingmateriaal of leadlijsten zonder uitdrukkelijke toestemming.",
+      "risk": "Deze skill ontwerpt een communitysysteem rond waarde voor leden, met afspraken over beheer, terugkerende processen en indicatoren voor de gezondheid van de community; hij verandert discussies van leden niet in marketingmateriaal of leadlijsten zonder uitdrukkelijke toestemming.",
       "latency": "De skill ontwerpt een communitysysteem rond waarde voor leden, met afspraken over beheer, terugkerende processen en indicatoren voor de gezondheid van de community, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-measurable-growth-loop": {
-      "risk": "Deze skill ontwerpt een zichzelf versterkende acquisitie- of betrokkenheidslus met expliciete actoren, toestanden en beperkingen; het creëert geen kunstmatige deelacties, contacten, content, reviews of uitnodigingen.",
+      "risk": "Deze skill ontwerpt een zichzelf versterkende acquisitie- of betrokkenheidslus met expliciete actoren, toestanden en beperkingen; hij creëert geen kunstmatige deelacties, contacten, content, reviews of uitnodigingen.",
       "latency": "De skill ontwerpt een zichzelf versterkende acquisitie- of betrokkenheidslus met expliciete actoren, toestanden en beperkingen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-qualified-lead-magnet": {
@@ -681,7 +681,7 @@
       "latency": "De skill ontwerpt een optioneel hulpmiddel dat op zichzelf waarde biedt en laat zien of iemand werkelijk een passende klant is, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-referral-program": {
-      "risk": "Deze skill ontwerpt een verwijzingssysteem met productgeschiktheid, evenwichtige prikkels, fraudecontroles en duurzame economie; het koopt geen geheime aanbevelingen, recensies of getuigenissen.",
+      "risk": "Deze skill ontwerpt een verwijzingssysteem met productgeschiktheid, evenwichtige prikkels, fraudecontroles en duurzame economie; hij koopt geen geheime aanbevelingen, recensies of getuigenissen.",
       "latency": "De skill ontwerpt een verwijzingssysteem met productgeschiktheid, evenwichtige prikkels, fraudecontroles en duurzame economie, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "evaluate-free-tool-growth": {
@@ -689,115 +689,115 @@
       "latency": "De skill evalueert of een gratis hulpmiddel echte gebruikerswaarde en een meetbare acquisitielus kan creëren, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "plan-product-launch": {
-      "risk": "Deze skill plant een gefaseerde productlancering met gereedheidspoorten, doelgroepvolgorde, eigendom en herstel; het verbergt geen bekende defecten, beschikbaarheidslimieten, prijsvoorwaarden of operationeel risico.",
+      "risk": "Deze skill plant een gefaseerde productlancering met gereedheidspoorten, doelgroepvolgorde, eigendom en herstel; hij verbergt geen bekende defecten, beschikbaarheidslimieten, prijsvoorwaarden of operationeel risico.",
       "latency": "De skill plant een gefaseerde productlancering met gereedheidspoorten, doelgroepvolgorde, eigendom en herstel, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-churn-interventions": {
-      "risk": "Deze skill onderzoekt vrijwillig klantverlies en uitval door betalingsproblemen en ontwerpt vervolgens respectvolle interventies met vangrails; het neemt geen contact op met gebruikers zonder geldige toestemming en gaat niet door na een opt-out.",
+      "risk": "Deze skill onderzoekt vrijwillig klantverlies en uitval door betalingsproblemen en ontwerpt vervolgens respectvolle interventies met vangrails; hij neemt geen contact op met gebruikers zonder geldige toestemming en gaat niet door na een opt-out.",
       "latency": "De skill onderzoekt vrijwillig klantverlies en uitval door betalingsproblemen en ontwerpt vervolgens respectvolle interventies met vangrails, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-lifecycle-email-sequence": {
-      "risk": "Deze skill ontwerpt toestemmingsbewuste e-mailreeksen over de levenscyclus die zijn gekoppeld aan gebruikersstatus, waarde en afsluitregels; het verzint geen personalisatie, klantactiviteit, schaarste of bekendheid van de afzender.",
+      "risk": "Deze skill ontwerpt toestemmingsbewuste e-mailreeksen over de levenscyclus die zijn gekoppeld aan gebruikersstatus, waarde en afsluitregels; hij verzint geen personalisatie, klantactiviteit, schaarste of vertrouwdheid met de afzender.",
       "latency": "De skill ontwerpt toestemmingsbewuste e-mailreeksen over de levenscyclus die zijn gekoppeld aan de gebruikersstatus, waarde en afsluitregels, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "improve-product-activation": {
-      "risk": "Deze skill verbetert de activering bij het eerste gebruik door barrières voor een geverifieerde gebruikerswaardegebeurtenis weg te nemen; het verbergt de vereiste instellingen, gegevensgebruik of onomkeerbare acties niet.",
+      "risk": "Deze skill verbetert de activering bij het eerste gebruik door barrières voor een geverifieerde gebruikerswaardegebeurtenis weg te nemen; hij verbergt de vereiste instellingen, gegevensgebruik of onomkeerbare acties niet.",
       "latency": "De skill verbetert de activering bij het eerste gebruik door barrières voor een geverifieerde gebruikerswaardegebeurtenis weg te nemen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "qualify-co-marketing-partner": {
-      "risk": "Deze skill evalueert een gezamenlijke marketingpartner en definieert een evenwichtige, meetbare campagneovereenkomst; het beveelt een partner niet uitsluitend aan vanwege het aantal volgers of het merkprestige.",
+      "risk": "Deze skill evalueert een gezamenlijke marketingpartner en definieert een evenwichtige, meetbare campagneovereenkomst; hij beveelt een partner niet uitsluitend aan vanwege het aantal volgers of het merkprestige.",
       "latency": "De skill evalueert een gezamenlijke marketingpartner en definieert een evenwichtige, meetbare campagneovereenkomst, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "qualify-influencer-partnership": {
-      "risk": "Deze skill kwalificeert partnerschappen met makers met behulp van publieksbewijs, merkveiligheid, rechten, openbaarmaking en economie; het schraapt geen privépublieksgegevens en richt zich niet op beschermde of gevoelige eigenschappen.",
+      "risk": "Deze skill kwalificeert partnerschappen met makers met behulp van publieksbewijs, merkveiligheid, rechten, openbaarmaking en economie; hij schraapt geen privépublieksgegevens en richt zich niet op beschermde of gevoelige eigenschappen.",
       "latency": "De skill kwalificeert partnerschappen met makers door gebruik te maken van publieksbewijs, merkveiligheid, rechten, openbaarmaking en economie, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "plan-paid-acquisition": {
-      "risk": "Deze skill ontwerpt een afgebakend plan voor betaalde acquisitie, met financiële afwegingen, controles en optimalisatie op basis van bewijs; het presenteert geen platformattributie of branchebenchmarks als gegarandeerde bedrijfseconomie.",
+      "risk": "Deze skill ontwerpt een afgebakend plan voor betaalde acquisitie, met financiële afwegingen, controles en optimalisatie op basis van bewijs; hij presenteert geen platformattributie of branchebenchmarks als gegarandeerde bedrijfseconomie.",
       "latency": "De skill ontwerpt een afgebakend plan voor betaalde acquisitie, met financiële afwegingen, controles en optimalisatie op basis van bewijs, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "produce-testable-ad-creative": {
-      "risk": "Deze skill creëert platform-fit advertentievarianten waarvan de hypothesen en claims kunnen worden beoordeeld en gemeten; het genereert geen grote batches waarvan de verschillen geen interpreteerbaar leren kunnen opleveren.",
+      "risk": "Deze skill creëert platform-fit advertentievarianten waarvan de hypothesen en claims kunnen worden beoordeeld en gemeten; hij genereert geen grote batches waarvan de verschillen geen interpreteerbaar leren kunnen opleveren.",
       "latency": "De skill creëert platform-fit advertentievarianten waarvan de hypothesen en claims kunnen worden beoordeeld en gemeten, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "build-competitor-evidence-profile": {
-      "risk": "Deze skill bouwt een gedateerd concurrentieprofiel op dat waargenomen feiten, claims, gevolgtrekkingen en onbekende zaken scheidt; het maakt gevolgtrekkingen of anoniem commentaar niet tot een vaststaand feit.",
+      "risk": "Deze skill bouwt een gedateerd concurrentieprofiel op dat waargenomen feiten, claims, gevolgtrekkingen en onbekende zaken scheidt; hij maakt gevolgtrekkingen of anoniem commentaar niet tot een vaststaand feit.",
       "latency": "De skill bouwt een gedateerd concurrentieprofiel op dat waargenomen feiten, claims, gevolgtrekkingen en onbekenden van elkaar scheidt, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-evidence-backed-offer": {
-      "risk": "Deze skill ontwerpt een aanbod waarvan de waarde, reikwijdte, bewijs, risicotoewijzing en voorwaarden beoordeling kunnen doorstaan; het beveelt geen aanbod aan dat de organisatie niet consequent kan vervullen.",
+      "risk": "Deze skill ontwerpt een aanbod waarvan de waarde, reikwijdte, bewijs, risicotoewijzing en voorwaarden beoordeling kunnen doorstaan; hij beveelt geen aanbod aan dat de organisatie niet consequent kan vervullen.",
       "latency": "De skill ontwerpt een aanbod waarvan de waarde, reikwijdte, bewijs, risicotoewijzing en voorwaarden beoordeling kunnen doorstaan, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-pricing-and-packaging": {
-      "risk": "Deze skill ontwerpt prijzen en pakketindeling op basis van klantwaarde, financiële afwegingen, segmentatie en operationeel bewijs; het garandeert geen bereidheid om te betalen, omzetstijging of optimale prijs op basis van een benchmark.",
+      "risk": "Deze skill ontwerpt prijzen en pakketindeling op basis van klantwaarde, financiële afwegingen, segmentatie en operationeel bewijs; hij garandeert geen bereidheid om te betalen, omzetstijging of optimale prijs op basis van een benchmark.",
       "latency": "De skill ontwerpt prijzen en pakketindeling op basis van klantwaarde, financiële afwegingen, segmentatie en operationeel bewijs, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "document-product-positioning": {
-      "risk": "Deze skill creëert een herbruikbaar positioneringsrecord met bewijsmateriaal, beslissingen, grenzen en onopgeloste vragen; het zet onzekere aannames niet om in universele merkclaims.",
+      "risk": "Deze skill creëert een herbruikbaar positioneringsrecord met bewijsmateriaal, beslissingen, grenzen en onopgeloste vragen; hij zet onzekere aannames niet om in universele merkclaims.",
       "latency": "De skill creëert een herbruikbaar positioneringsrecord met bewijsmateriaal, beslissingen, grenzen en onopgeloste vragen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "write-honest-comparison-page": {
-      "risk": "Deze skill schrijft een nuttige vergelijkingspagina op basis van met bronnen onderbouwde verschillen, geschiktheidscriteria en erkende afwegingen; het doet zich niet voor als een onafhankelijke recensie en verbergt het commerciële belang van de uitgever niet.",
+      "risk": "Deze skill schrijft een nuttige vergelijkingspagina op basis van met bronnen onderbouwde verschillen, geschiktheidscriteria en erkende afwegingen; hij doet zich niet voor als een onafhankelijke recensie en verbergt het commerciële belang van de uitgever niet.",
       "latency": "De skill schrijft een nuttige vergelijkingspagina op basis van met bronnen onderbouwde verschillen, geschiktheidscriteria en erkende afwegingen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "plan-earned-media-outreach": {
-      "risk": "Deze skill plant op bewijs gebaseerde persbenadering voor redactionele aandacht (earned media) rond echte nieuwswaarde en met respect voor de relevantie voor journalisten; het belooft geen berichtgeving en zet geen druk op de redactionele onafhankelijkheid.",
+      "risk": "Deze skill plant op bewijs gebaseerde persbenadering voor redactionele aandacht (earned media) rond echte nieuwswaarde en met respect voor de relevantie voor journalisten; hij belooft geen berichtgeving en zet geen druk op de redactionele onafhankelijkheid.",
       "latency": "De skill plant op bewijs gebaseerde persbenadering voor redactionele aandacht (earned media) rond echte nieuwswaarde en met respect voor de relevantie voor journalisten, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "build-compliant-prospect-list": {
-      "risk": "Deze skill stelt een afgebakende B2B-prospectlijst samen uit rechtmatige bronnen, expliciete geschiktheidsregels en traceerbaar bewijs; het presenteert een geschiktheidsscore niet als toestemming, intentie of machtiging om outreach te versturen.",
+      "risk": "Deze skill stelt een afgebakende B2B-prospectlijst samen uit rechtmatige bronnen, expliciete geschiktheidsregels en traceerbaar bewijs; hij presenteert een geschiktheidsscore niet als toestemming, intentie of machtiging om outreach te versturen.",
       "latency": "De skill bouwt een begrensde B2B-prospectlijst op op basis van wettige bronnen, expliciete geschiktheidsregels en traceerbaar bewijsmateriaal, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "build-sales-enablement-asset": {
-      "risk": "Deze skill bouwt verkoopklaar materiaal op basis van een specifieke kopersbeslissing, bewijsset en gebruikscontext; het trekt geen gepersonaliseerde financiële conclusies uit niet-onderbouwde aannames.",
+      "risk": "Deze skill bouwt verkoopklaar materiaal op basis van een specifieke kopersbeslissing, bewijsset en gebruikscontext; hij trekt geen gepersonaliseerde financiële conclusies uit niet-onderbouwde aannames.",
       "latency": "De skill bouwt een verkoopklaar asset op op basis van een specifieke kopersbeslissing, bewijsset en gebruikscontext, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "define-revenue-lifecycle": {
-      "risk": "Deze skill definieert omzetfasen, eigendom, datacontracten, overdrachten en afstemming tussen teams; het dwingt niet tot overeenstemming van incompatibele inkomsten- en pijplijndefinities.",
+      "risk": "Deze skill definieert omzetfasen, eigendom, datacontracten, overdrachten en afstemming tussen teams; hij dwingt niet tot overeenstemming van incompatibele inkomsten- en pijplijndefinities.",
       "latency": "De skill definieert omzetfasen, eigenaarschap, gegevensafspraken, overdrachten en afstemming tussen teams, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "write-compliant-cold-email": {
-      "risk": "Deze skill schrijft beknopte B2B-outreach, gebaseerd op relevantie, verifieerbare claims en respectvolle follow-up; het omzeilt geen opt-outs, spamcontroles, platformregels of juridische toetsing.",
+      "risk": "Deze skill schrijft beknopte B2B-outreach, gebaseerd op relevantie, verifieerbare claims en respectvolle follow-up; hij omzeilt geen opt-outs, spamcontroles, platformregels of juridische toetsing.",
       "latency": "De skill schrijft beknopte B2B-outreach, gebaseerd op relevantie, verifieerbare claims en respectvolle follow-up, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "audit-ai-search-visibility": {
-      "risk": "Deze skill beoordeelt of verifieerbare site-inhoud kan worden ontdekt, begrepen en geciteerd door antwoordsystemen; het garandeert geen citatie, plaatsing, verkeer of modelgedrag.",
+      "risk": "Deze skill beoordeelt of verifieerbare site-inhoud kan worden ontdekt, begrepen en geciteerd door antwoordsystemen; hij garandeert geen citatie, plaatsing, verkeer of modelgedrag.",
       "latency": "De skill beoordeelt of verifieerbare site-inhoud kan worden ontdekt, begrepen en geciteerd door antwoordsystemen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "audit-technical-seo": {
-      "risk": "Deze skill beoordeelt de vindbaarheid aan de hand van crawl- en indexsignalen, sjablonen, prestaties en inhoudelijk bewijs; het garandeert geen ranking, herstel, crawlfrequentie, indexatie of verkeer.",
+      "risk": "Deze skill beoordeelt de vindbaarheid aan de hand van crawl- en indexsignalen, sjablonen, prestaties en inhoudelijk bewijs; hij garandeert geen ranking, herstel, crawlfrequentie, indexatie of verkeer.",
       "latency": "De skill beoordeelt de vindbaarheid aan de hand van crawl- en indexsignalen, sjablonen, prestaties en inhoudelijk bewijs, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-safe-programmatic-seo": {
-      "risk": "Deze skill ontwerpt datagedreven sjabloonpagina's met unieke meerwaarde per pagina, kwaliteitscontroles en gecontroleerde indexering; het belooft geen rankings of indexatie op basis van het paginavolume.",
+      "risk": "Deze skill ontwerpt datagedreven sjabloonpagina's met unieke meerwaarde per pagina, kwaliteitscontroles en gecontroleerde indexering; hij belooft geen rankings of indexatie op basis van het paginavolume.",
       "latency": "De skill ontwerpt datagedreven sjabloonpagina's met unieke meerwaarde per pagina, kwaliteitscontroles en gecontroleerde indexering, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "implement-valid-structured-data": {
-      "risk": "Deze skill implementeert op bewijs gebaseerde JSON-LD die overeenkomt met zichtbare inhoud en huidige validatorvereisten; het garandeert geen rijke resultaten, ranking, indexering of veranderingen in het kennispaneel.",
+      "risk": "Deze skill implementeert op bewijs gebaseerde JSON-LD die overeenkomt met zichtbare inhoud en huidige validatorvereisten; hij garandeert geen rijke resultaten, ranking, indexering of veranderingen in het kennispaneel.",
       "latency": "De skill implementeert door bewijsmateriaal ondersteunde JSON-LD die overeenkomt met zichtbare inhoud en huidige validatorvereisten, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "build-marketing-operating-plan": {
-      "risk": "Deze skill maakt een afgebakend operationeel marketingplan dat keuzes, verantwoordelijken, bewijs en een vast ritme voor beoordeling verbindt; het wijst geen werk toe en doet geen uitgaven buiten de vastgelegde bevoegdheden en capaciteit.",
+      "risk": "Deze skill maakt een afgebakend operationeel marketingplan dat keuzes, verantwoordelijken, bewijs en een vast ritme voor beoordeling verbindt; hij wijst geen werk toe en doet geen uitgaven buiten de vastgelegde bevoegdheden en capaciteit.",
       "latency": "De skill maakt een afgebakend operationeel marketingplan dat keuzes, verantwoordelijken, bewijs en een vast ritme voor beoordeling verbindt, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "generate-marketing-experiments": {
-      "risk": "Deze skill genereert een afgebakend portfolio van marketingexperimenten op basis van beperkingen, bewijs en knelpunten; het kent zonder bewijs geen precieze impact of zekerheid toe.",
+      "risk": "Deze skill genereert een afgebakend portfolio van marketingexperimenten op basis van beperkingen, bewijs en knelpunten; hij kent zonder bewijs geen precieze impact of zekerheid toe.",
       "latency": "De skill genereert een begrensd portfolio van marketingexperimenten op basis van beperkingen, bewijsmateriaal en knelpunten, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "map-conversion-site-architecture": {
-      "risk": "Deze skill brengt een website in kaart rond gebruikersbeslissingen, contenteigenaarschap, navigatie en crawlbare relaties; het maakt geen pagina's alleen om zoekwoorden te bezetten of het organigram van het bedrijf te spiegelen.",
+      "risk": "Deze skill brengt een website in kaart rond gebruikersbeslissingen, contenteigenaarschap, navigatie en crawlbare relaties; hij maakt geen pagina's alleen om zoekwoorden te bezetten of het organigram van het bedrijf te spiegelen.",
       "latency": "De skill brengt een website in kaart rond gebruikersbeslissingen, contenteigenaarschap, navigatie en crawlbare relaties, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "synthesize-customer-language": {
-      "risk": "Deze skill zet geautoriseerd klantbewijs om in herleidbare thema's, spanningen, taalgebruik en open vragen; het verzint geen persona’s, citaten, prevalentie of motivaties.",
+      "risk": "Deze skill zet geautoriseerd klantbewijs om in herleidbare thema's, spanningen, taalgebruik en open vragen; hij verzint geen persona’s, citaten, prevalentie of motivaties.",
       "latency": "De skill zet geautoriseerd klantbewijs om in traceerbare thema's, spanningen, taalgebruik en open vragen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "audit-agent-workflow-opportunities": {
-      "risk": "Deze skill vindt blijvende verbeteringen in agentwerkwijzen op basis van één mislukte uitvoering of een afgebakende periode uit de geschiedenis; het verwerkt geen onbegrensd corpus van transcripties en bewaart geen onbewerkte gevoelige geschiedenis.",
+      "risk": "Deze skill vindt blijvende verbeteringen in agentwerkwijzen op basis van één mislukte uitvoering of een afgebakende periode uit de geschiedenis; hij verwerkt geen onbegrensd corpus van transcripties en bewaart geen onbewerkte gevoelige geschiedenis.",
       "latency": "De skill vindt blijvende verbeteringen in agentwerkwijzen op basis van één mislukte uitvoering of een afgebakende periode uit de geschiedenis, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "delegate-bounded-subtasks": {
-      "risk": "Deze skill splitst onafhankelijk werk op in niet-overlappende subagentopdrachten met eigen resultaten; het delegeert niet een heel dubbelzinnig project als één subtaak.",
+      "risk": "Deze skill splitst onafhankelijk werk op in niet-overlappende subagentopdrachten met eigen resultaten; hij delegeert niet een heel dubbelzinnig project als één subtaak.",
       "latency": "De skill splitst onafhankelijk werk op in niet-overlappende opdrachten voor subagents met eigen resultaten, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "delegate-to-codex-cli": {
@@ -809,11 +809,11 @@
       "latency": "De skill ontwerpt een herhaalbare workflow met expliciete triggers, deterministische stappen, autoriteit, controlepunten en bewijsmateriaal, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "execute-verifiable-plan": {
-      "risk": "Deze skill voert een goedgekeurd plan uit in beperkte batches met controlepunten, bewijsmateriaal en gecontroleerde afwijkingen; het behandelt een oud plan niet als autoriteit over actueel bewijsmateriaal.",
+      "risk": "Deze skill voert een goedgekeurd plan uit in beperkte batches met controlepunten, bewijsmateriaal en gecontroleerde afwijkingen; hij behandelt een oud plan niet als autoriteit over actueel bewijsmateriaal.",
       "latency": "De skill voert een goedgekeurd plan uit in begrensde batches met controlepunten, bewijsmateriaal en gecontroleerde afwijkingen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "map-multi-session-decisions": {
-      "risk": "Deze skill brengt een grote, onzekere opgave in kaart als afgebakende beslissingen, afhankelijkheden, eerstvolgend uitvoerbaar werk en expliciet benoemde onzekerheid; het snijdt onbekend gebied niet vooraf in verzonnen taken om de kaart compleet te laten lijken.",
+      "risk": "Deze skill brengt een grote, onzekere opgave in kaart als afgebakende beslissingen, afhankelijkheden, eerstvolgend uitvoerbaar werk en expliciet benoemde onzekerheid; hij snijdt onbekend gebied niet vooraf in verzonnen taken om de kaart compleet te laten lijken.",
       "latency": "De skill brengt een grote, onzekere opgave in kaart als afgebakende beslissingen, afhankelijkheden, eerstvolgend uitvoerbaar werk en expliciet benoemde onzekerheid, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "schedule-agent-runs": {
@@ -821,7 +821,7 @@
       "latency": "De skill ontwerpt en verifieert terugkerend agentwerk zonder status, autoriteit of falen te verbergen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "write-verifiable-goal-loop": {
-      "risk": "Deze skill verandert een doelstelling met een open einde in een begrensde lus met bewijs- en stopregels; het loopt niet voor onbepaalde tijd door en verbergt geen herhaalde mislukkingen.",
+      "risk": "Deze skill verandert een doelstelling met een open einde in een begrensde lus met bewijs- en stopregels; hij loopt niet voor onbepaalde tijd door en verbergt geen herhaalde mislukkingen.",
       "latency": "De skill verandert een doel met een open einde in een begrensde lus met bewijs- en stopregels, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "debug-ci-failure": {
@@ -829,19 +829,19 @@
       "latency": "De skill herleidt een falende CI-taak tot de eerste afwijking waarop kan worden gehandeld en een minimale controle die mogelijke oorzaken onderscheidt, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "review-ci-workflow-change": {
-      "risk": "Deze skill beoordeelt een wijziging in een CI-workflow op waarneembaar bewijs over triggers, machtigingen, commando's, artifacts en terugdraaien; het parseert YAML niet als een volledig semantisch model en beweert niet dat weggelaten signalen afwezig zijn.",
+      "risk": "Deze skill beoordeelt een wijziging in een CI-workflow op waarneembaar bewijs over triggers, machtigingen, commando's, artifacts en terugdraaien; hij parseert YAML niet als een volledig semantisch model en beweert niet dat weggelaten signalen afwezig zijn.",
       "latency": "De skill beoordeelt een wijziging in een CI-workflow op waarneembaar bewijs over triggers, machtigingen, commando's, artifacts en terugdraaien, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "isolate-work-with-worktrees": {
       "risk": "Deze skill isoleert gelijktijdig Git-werk en integreert alleen beoordeelde en geverifieerde wijzigingen; hij hergebruikt geen branch die al in een andere worktree is uitgecheckt.",
-      "latency": "De skill isoleert gelijktijdig Git-werk en integreert alleen beoordeelde, geverifieerde wijzigingen, met behulp van opeenvolgend bewijs en verificatiestappen."
+      "latency": "De skill isoleert gelijktijdig Git-werk en integreert alleen beoordeelde, geverifieerde wijzigingen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "prepare-branch-integration": {
       "risk": "Na toestemming kan deze skill branches en worktrees pushen, samenvoegen of verwijderen, met gevolgen voor de gedeelde geschiedenis en herstelbaarheid.",
       "latency": "De skill bereidt een ontwikkelbranch voor op integratie met helder bewijs, expliciete opties en herstelbare acties, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "resolve-merge-conflicts-by-intent": {
-      "risk": "Deze skill lost Git-conflicten op door beide wijzigingen te reconstrueren, de intentie te behouden en het samengevoegde gedrag te verifiëren; het breekt niet automatisch af, gaat niet automatisch door, commit of pusht niet automatisch en werkt de geschiedenis niet geforceerd bij.",
+      "risk": "Deze skill lost Git-conflicten op door beide wijzigingen te reconstrueren, de intentie te behouden en het samengevoegde gedrag te verifiëren; hij breekt niet automatisch af, gaat niet automatisch door, commit of pusht niet automatisch en werkt de geschiedenis niet geforceerd bij.",
       "latency": "De skill lost Git-conflicten op door beide wijzigingen te reconstrueren, de intentie te behouden en het samengevoegde gedrag te verifiëren, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "plan-infrastructure-change": {
@@ -849,19 +849,19 @@
       "latency": "De skill plant een infrastructuurwijziging van de huidige status via een gefaseerde overgang, verificatie en herstel, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "build-macos-metrics-collector": {
-      "risk": "Deze skill bouwt een lokale macOS-metricscollector met lage overhead en opslag die standaard privé is; het vereist geen private API's voor de kernwerking.",
+      "risk": "Deze skill bouwt een lokale macOS-metricscollector met lage overhead en opslag die standaard privé is; hij vereist geen private API's voor de kernwerking.",
       "latency": "De skill bouwt een lokale macOS-metricscollector met lage overhead en opslag die standaard privé is, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-observability-signals": {
-      "risk": "Deze skill ontwerpt logs, metrics, traces en alerts rond beslissingen, faalmodi, kosten en privacy; het logt geen geheimen, ruwe klantpayloads of onnodige identificatoren.",
+      "risk": "Deze skill ontwerpt logs, metrics, traces en alerts rond beslissingen, faalmodi, kosten en privacy; hij logt geen geheimen, ruwe klantpayloads of onnodige identificatoren.",
       "latency": "De skill ontwerpt logs, metrics, traces en alerts rond beslissingen, faalmodi, kosten en privacy, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-service-level-objectives": {
-      "risk": "Deze skill ontwerpt servicedoelstellingen op basis van gebruikerstrajecten, meetbare indicatoren, foutbudgetten en responsbeleid; het maakt geen paging-alerts of releaseblokkades aan zonder goedkeuring van de eigenaar.",
+      "risk": "Deze skill ontwerpt servicedoelstellingen op basis van gebruikerstrajecten, meetbare indicatoren, foutbudgetten en responsbeleid; hij maakt geen paging-alerts of releaseblokkades aan zonder goedkeuring van de eigenaar.",
       "latency": "De skill ontwerpt servicedoelstellingen op basis van gebruikerstrajecten, meetbare indicatoren, foutbudgetten en responsbeleid, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "write-incident-runbook": {
-      "risk": "Deze skill schrijft een uitvoerbaar incidentrunbook met detectie, autoriteit, diagnose, containment en herstel; het beweert niet op basis van alleen een documentbeoordeling dat een runbook getest is.",
+      "risk": "Deze skill schrijft een uitvoerbaar incidentrunbook met detectie, autoriteit, diagnose, containment en herstel; hij beweert niet op basis van alleen een documentbeoordeling dat een runbook getest is.",
       "latency": "De skill schrijft een uitvoerbaar incidentrunbook met detectie, autoriteit, diagnose, containment en herstel, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "verify-mobile-release-readiness": {
@@ -873,7 +873,7 @@
       "latency": "De skill geeft een exacte revisie vrij via CI en bewijst de gezondheid van de implementatie vóór voltooiing, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "decompose-dependent-work-slices": {
-      "risk": "Deze skill ontleedt goedgekeurd werk in onafhankelijk verifieerbare verticale segmenten met een acyclische afhankelijkheidsgraaf; het verhult een cyclisch plan niet door echte blokkerende afhankelijkheden weg te laten of te verzwakken.",
+      "risk": "Deze skill ontleedt goedgekeurd werk in onafhankelijk verifieerbare verticale segmenten met een acyclische afhankelijkheidsgraaf; hij verhult een cyclisch plan niet door echte blokkerende afhankelijkheden weg te laten of te verzwakken.",
       "latency": "De skill ontleedt goedgekeurd werk in onafhankelijk verifieerbare verticale segmenten met een acyclische afhankelijkheidsgraaf, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "prepare-reviewable-pull-request": {
@@ -881,59 +881,59 @@
       "latency": "De skill bereidt een gerichte beschrijving van een pull request voor, met claims die te herleiden zijn tot de diff, tests, risico's en beoordelingsvolgorde, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "review-plan-execution-divergence": {
-      "risk": "Deze skill verzoent een goedgekeurd plan met daadwerkelijke veranderingen en zet terugkerende verschillen om in procesverbeteringen; het beoordeelt de naleving van het plan niet als maatstaf voor de kwaliteit van de implementatie.",
+      "risk": "Deze skill verzoent een goedgekeurd plan met daadwerkelijke veranderingen en zet terugkerende verschillen om in procesverbeteringen; hij beoordeelt de naleving van het plan niet als maatstaf voor de kwaliteit van de implementatie.",
       "latency": "De skill verzoent een goedgekeurd plan met daadwerkelijke veranderingen en zet terugkerende verschillen om in procesverbeteringen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "triage-engineering-request": {
-      "risk": "Deze skill beoordeelt een binnenkomend issue of pull request en kiest een onderbouwde volgende status, zonder ongemerkt actie te ondernemen; het sluit geen items, wijzigt geen labels, wijst niets toe, plaatst geen reacties en voert geen merges uit zonder expliciete goedkeuring.",
+      "risk": "Deze skill beoordeelt een binnenkomend issue of pull request en kiest een onderbouwde volgende status, zonder ongemerkt actie te ondernemen; hij sluit geen items, wijzigt geen labels, wijst niets toe, plaatst geen reacties en voert geen merges uit zonder expliciete goedkeuring.",
       "latency": "De skill beoordeelt een binnenkomend issue of pull request en kiest een onderbouwde volgende status, zonder ongemerkt actie te ondernemen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "resume-session-work": {
-      "risk": "Deze skill reconstrueert de werkcontext uit het via hashes gekoppelde sessielogboek, met beweringen die naar hashes verwijzen en een expliciet gedeelte voor ongeverifieerde informatie; het neemt geen bewering over zonder de hash van de bijbehorende logboekvermelding te citeren.",
+      "risk": "Deze skill reconstrueert de werkcontext uit het via hashes gekoppelde sessielogboek, met beweringen die naar hashes verwijzen en een expliciet gedeelte voor ongeverifieerde informatie; hij neemt geen bewering over zonder de hash van de bijbehorende logboekvermelding te citeren.",
       "latency": "Het verifieert de hashes van het logboek en reconstrueert de geciteerde sessiecontext uit meerdere vermeldingen."
     },
     "author-guided-setup-wizard": {
-      "risk": "Deze skill schrijft een hervatbaar installatiescript met menselijke begeleiding, veilige omgang met geheimen en geverifieerde controlepunten; het vraagt gebruikers niet om geheimen in chat, logs, argumenten of zichtbare terminalinvoer te plakken.",
+      "risk": "Deze skill schrijft een hervatbaar installatiescript met menselijke begeleiding, veilige omgang met geheimen en geverifieerde controlepunten; hij vraagt gebruikers niet om geheimen in chat, logs, argumenten of zichtbare terminalinvoer te plakken.",
       "latency": "De skill schrijft een hervatbaar installatiescript met menselijke begeleiding, veilige omgang met geheimen en geverifieerde controlepunten, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "build-repository-quality-gates": {
-      "risk": "Deze skill bouwt evenredige lokale en CI-kwaliteitscontroles op basis van de werkelijke risico's en commando's van de repository; het plaatst geen trage, netwerkafhankelijke, geprivilegieerde of instabiele (flaky) taken in een blokkerende commit-hook.",
+      "risk": "Deze skill bouwt evenredige lokale en CI-kwaliteitscontroles op basis van de werkelijke risico's en commando's van de repository; hij plaatst geen trage, netwerkafhankelijke, geprivilegieerde of instabiele (flaky) taken in een blokkerende commit-hook.",
       "latency": "De skill bouwt proportionele lokale en CI-kwaliteitspoorten op op basis van de werkelijke risico's en opdrachten van de repository, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "guide-stepwise-setup": {
-      "risk": "Deze skill begeleidt een onbekende installatie met telkens één geverifieerde actie en behoudt daarbij de volledige checklist; het dumpt geen lange installatiehandleiding zonder prioriteiten op de gebruiker.",
+      "risk": "Deze skill begeleidt een onbekende installatie met telkens één geverifieerde actie en behoudt daarbij de volledige checklist; hij dumpt geen lange installatiehandleiding zonder prioriteiten op de gebruiker.",
       "latency": "De skill begeleidt een onbekende installatie met telkens één geverifieerde actie en behoudt daarbij de volledige checklist, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "keep-macos-awake": {
-      "risk": "Deze skill houdt macOS wakker voor goedgekeurd werk met omkeerbare en waarneembare controles; het claimt geen succes zonder de actieve power assertion te inspecteren.",
+      "risk": "Deze skill houdt macOS wakker voor goedgekeurd werk met omkeerbare en waarneembare controles; hij claimt geen succes zonder de actieve power assertion te inspecteren.",
       "latency": "De skill houdt macOS wakker voor goedgekeurd werk met omkeerbare en waarneembare controles, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "research-online-purchase": {
-      "risk": "Deze skill vergelijkt een eerlijke prijs, gerenommeerde verkopers en de geschiktheid van de aankoop zonder een bestelling te plaatsen; het beveelt geen onbekende verkoper aan enkel omdat deze de goedkoopste is.",
+      "risk": "Deze skill vergelijkt een eerlijke prijs, gerenommeerde verkopers en de geschiktheid van de aankoop zonder een bestelling te plaatsen; hij beveelt geen onbekende verkoper aan enkel omdat deze de goedkoopste is.",
       "latency": "De skill vergelijkt een eerlijke prijs, gerenommeerde verkopers en de geschiktheid van de aankoop zonder een bestelling te plaatsen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "write-source-backed-research-brief": {
-      "risk": "Deze skill verandert een vage onderzoeksbehoefte in een op zichzelf staande, op bewijs gerichte opdracht; het combineert geen ongerelateerde onderzoeksmissies in één opdracht.",
+      "risk": "Deze skill verandert een vage onderzoeksbehoefte in een op zichzelf staande, op bewijs gerichte opdracht; hij combineert geen ongerelateerde onderzoeksmissies in één opdracht.",
       "latency": "De skill verandert een vage onderzoeksbehoefte in een op zichzelf staande, op bewijs gerichte opdracht, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "extract-youtube-captions": {
       "risk": "Het haalt ondertitels op van YouTube en schrijft lokale uitvoer, en is daardoor blootgesteld aan het netwerk en aan gedownloade inhoud.",
-      "latency": "De skill extraheert beschikbare YouTube-ondertitels in schone tekst zonder media te downloaden, met behulp van opeenvolgend bewijs en verificatiestappen."
+      "latency": "De skill extraheert beschikbare YouTube-ondertitels in schone tekst zonder media te downloaden, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "conduct-source-backed-research": {
       "risk": "Deze skill onderzoekt een beslissing met primaire bronnen, bronverwijzingen per bewering en een controle op ontbrekend bewijs; hij presenteert geen gevolgtrekkingen, voorspellingen of forumanekdotes als bevestigde feiten.",
       "latency": "De skill onderzoekt een beslissing met primaire bronnen, bronverwijzingen per bewering en een controle op ontbrekend bewijs, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "audit-safe-browsing-readiness": {
-      "risk": "Deze skill controleert een openbare site op veiligheid, transparantie en reputatiegereedheid; het verbergt geen schadelijk gedrag alleen om een reputatiecheck te doorstaan.",
+      "risk": "Deze skill controleert een openbare site op veiligheid, transparantie en reputatiegereedheid; hij verbergt geen schadelijk gedrag alleen om een reputatiecheck te doorstaan.",
       "latency": "De skill controleert een openbare site op veiligheid, transparantie en reputatiegereedheid, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "review-auth-boundary": {
-      "risk": "Deze skill beoordeelt authenticatie- en autorisatiegrenzen via concrete identiteiten, resources en geweigerde paden; het verleent geen beveiligingsgoedkeuring die verder gaat dan het exact beoordeelde bewijs.",
+      "risk": "Deze skill beoordeelt authenticatie- en autorisatiegrenzen via concrete identiteiten, resources en geweigerde paden; hij verleent geen beveiligingsgoedkeuring die verder gaat dan het exact beoordeelde bewijs.",
       "latency": "De skill beoordeelt authenticatie- en autorisatiegrenzen via concrete identiteiten, resources en geweigerde paden, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "plan-dependency-upgrade": {
-      "risk": "Deze skill plant een upgrade van een afhankelijkheid en voert die door op basis van release-informatie, compatibiliteitsaspecten, migratiestappen en rollback; het upgradet geen niet-gerelateerde pakketten om alles naar de nieuwste versie te brengen.",
+      "risk": "Deze skill plant een upgrade van een afhankelijkheid en voert die door op basis van release-informatie, compatibiliteitsaspecten, migratiestappen en rollback; hij upgradet geen niet-gerelateerde pakketten om alles naar de nieuwste versie te brengen.",
       "latency": "De skill plant een upgrade van een afhankelijkheid en voert die door op basis van release-informatie, compatibiliteitsaspecten, migratiestappen en rollback, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "review-supply-chain-change": {
@@ -941,31 +941,31 @@
       "latency": "De skill beoordeelt gewijzigde pakket- en buildinvoer op basis van afgebakend, offline repositorybewijs, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "review-agent-tool-boundaries": {
-      "risk": "Deze skill beoordeelt de bevoegdheden van agents en MCP-tools op promptinjectie, misbruik via gedelegeerde bevoegdheid, gegevenslekken en onveilige neveneffecten; het vertrouwt niet uitsluitend op de formulering van prompts om geheimen, schrijfbewerkingen, tenants of externe systemen te beschermen.",
+      "risk": "Deze skill beoordeelt de bevoegdheden van agents en MCP-tools op promptinjectie, misbruik via gedelegeerde bevoegdheid, gegevenslekken en onveilige neveneffecten; hij vertrouwt niet uitsluitend op de formulering van prompts om geheimen, schrijfbewerkingen, tenants of externe systemen te beschermen.",
       "latency": "De skill beoordeelt de bevoegdheden van agents en MCP-tools op promptinjectie, misbruik via gedelegeerde bevoegdheid, gegevenslekken en onveilige neveneffecten, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "audit-implicit-decisions": {
-      "risk": "Deze skill maakt onzekere keuzes tijdens het werk zichtbaar en vergelijkt geloofwaardige alternatieven; het veinst geen onzekerheid alleen om discussie op gang te brengen.",
-      "latency": "De skill legt onzekere keuzes bloot die tijdens het werk zijn gemaakt en vergelijkt geloofwaardige alternatieven, met behulp van opeenvolgend bewijsmateriaal en verificatiestappen."
+      "risk": "Deze skill maakt onzekere keuzes tijdens het werk zichtbaar en vergelijkt geloofwaardige alternatieven; hij veinst geen onzekerheid alleen om discussie op gang te brengen.",
+      "latency": "De skill legt onzekere keuzes bloot die tijdens het werk zijn gemaakt en vergelijkt geloofwaardige alternatieven, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-stakeholder-questionnaire": {
-      "risk": "Deze skill ontwerpt een beknopte asynchrone vragenlijst rond beslissingen die alleen een specifieke stakeholder kan beantwoorden; het verstopt de vragen met de grootste impact niet achter optionele achtergrondinformatie en details van lage waarde.",
-      "latency": "De skill ontwerpt een beknopte asynchrone vragenlijst rond beslissingen die alleen een specifieke stakeholder kan beantwoorden, met behulp van opeenvolgend bewijs en verificatiestappen."
+      "risk": "Deze skill ontwerpt een beknopte asynchrone vragenlijst rond beslissingen die alleen een specifieke stakeholder kan beantwoorden; hij verstopt de vragen met de grootste impact niet achter optionele achtergrondinformatie en details van lage waarde.",
+      "latency": "De skill ontwerpt een beknopte asynchrone vragenlijst rond beslissingen die alleen een specifieke stakeholder kan beantwoorden, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "interview-for-priorities": {
-      "risk": "Deze skill gebruikt een gericht interview om prioriteiten, vermeden werk en verborgen beperkingen bloot te leggen; het creëert geen kunstmatige urgentie en beschaamt de gebruiker niet vanwege vermeden werk.",
+      "risk": "Deze skill gebruikt een gericht interview om prioriteiten, vermeden werk en verborgen beperkingen bloot te leggen; hij creëert geen kunstmatige urgentie en beschaamt de gebruiker niet vanwege vermeden werk.",
       "latency": "De skill maakt gebruik van een gericht interview om prioriteiten, vermeden werk en verborgen beperkingen bloot te leggen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "interview-to-build-brief": {
-      "risk": "Deze skill brengt via interviews een onderbouwde productintentie in kaart voordat beslissingen in een build brief worden omgezet; het zet een aanname niet om in een door de gebruiker goedgekeurde vereiste.",
+      "risk": "Deze skill brengt via interviews een onderbouwde productintentie in kaart voordat beslissingen in een build brief worden omgezet; hij zet een aanname niet om in een door de gebruiker goedgekeurde vereiste.",
       "latency": "De skill brengt via interviews een onderbouwde productintentie in kaart voordat beslissingen in een build brief worden omgezet, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "make-practical-decision": {
-      "risk": "Deze skill beëindigt analyses van lage waarde met een omkeerbare aanbeveling en concrete volgende actie; het voegt geen speculatieve blokkers toe en heropent geen afgewikkelde details.",
-      "latency": "De skill beëindigt een analyse van lage waarde met een omkeerbare aanbeveling en een concrete volgende actie, waarbij gebruik wordt gemaakt van opeenvolgend bewijs en verificatiestappen."
+      "risk": "Deze skill beëindigt analyses van lage waarde met een omkeerbare aanbeveling en concrete volgende actie; hij voegt geen speculatieve blokkers toe en heropent geen afgewikkelde details.",
+      "latency": "De skill beëindigt een analyse van lage waarde met een omkeerbare aanbeveling en een concrete volgende actie, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "resolve-next-decision": {
-      "risk": "Deze skill lost de openstaande beslissing met de grootste impact op, met telkens één onderbouwde keuze; het vraagt niet om meerdere beslissingen in één interactie.",
+      "risk": "Deze skill lost de openstaande beslissing met de grootste impact op, met telkens één onderbouwde keuze; hij vraagt niet om meerdere beslissingen in één interactie.",
       "latency": "De skill lost de open beslissing met de grootste impact op met één op bewijsmateriaal gebaseerde keuze tegelijk, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "surface-build-decisions": {
@@ -973,27 +973,27 @@
       "latency": "De skill maakt ontwerpkeuzes en standaardinstellingen met belangrijke gevolgen zichtbaar voordat de implementatie begint, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "audit-knowledge-state-freshness": {
-      "risk": "Deze skill toetst beweringen over de huidige toestand in notities of agentgeheugen aan recenter bewijs zonder de geschiedenis te herschrijven; het herstructureert notities niet in bulk en herschrijft geen geschiedenis waaraan alleen mag worden toegevoegd.",
+      "risk": "Deze skill toetst beweringen over de huidige toestand in notities of agentgeheugen aan recenter bewijs zonder de geschiedenis te herschrijven; hij herstructureert notities niet in bulk en herschrijft geen geschiedenis waaraan alleen mag worden toegevoegd.",
       "latency": "De skill toetst beweringen over de huidige toestand in notities of agentgeheugen aan recenter bewijs zonder de geschiedenis te herschrijven, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "document-project-vision": {
-      "risk": "Deze skill verandert een interview met de oprichter of beheerder in duurzame visie- en beslissingsdocumenten; het bedenkt geen strategie, grondgedachte, geschiedenis of goedkeuring van de eigenaar.",
+      "risk": "Deze skill verandert een interview met de oprichter of beheerder in duurzame visie- en beslissingsdocumenten; hij bedenkt geen strategie, grondgedachte, geschiedenis of goedkeuring van de eigenaar.",
       "latency": "De skill verandert een interview met de oprichter of beheerder in duurzame visie- en beslissingsdocumenten, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "load-architecture-decisions": {
-      "risk": "Deze skill laadt elke toepasselijke architectuurbeslissing en rapporteert conflicten of ontbrekende context; het bemonstert geen subset terwijl het beweert elke ADR te hebben gelezen.",
+      "risk": "Deze skill laadt elke toepasselijke architectuurbeslissing en rapporteert conflicten of ontbrekende context; hij bemonstert geen subset terwijl het beweert elke ADR te hebben gelezen.",
       "latency": "De skill laadt elke toepasselijke architectuurbeslissing en rapporteert conflicten of ontbrekende context, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "write-learning-postmortem": {
-      "risk": "Deze skill schrijft een incidentverslag zonder schuldtoewijzing dat impact, tijdlijn, bijdragende omstandigheden en acties aan bewijs koppelt; het verzint geen eenduidige hoofdoorzaak, exacte impact of intentie van deelnemers.",
+      "risk": "Deze skill schrijft een incidentverslag zonder schuldtoewijzing dat impact, tijdlijn, bijdragende omstandigheden en acties aan bewijs koppelt; hij verzint geen eenduidige hoofdoorzaak, exacte impact of intentie van deelnemers.",
       "latency": "De skill schrijft een incidentverslag zonder schuldtoewijzing dat impact, tijdlijn, bijdragende omstandigheden en acties aan bewijs koppelt, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "write-session-handoff": {
-      "risk": "Deze skill legt de geverifieerde stand van het werk vast, zodat een andere agent zonder reconstructie kan verdergaan; het verzint geen voltooid werk, geslaagde controles of beslissingen.",
+      "risk": "Deze skill legt de geverifieerde stand van het werk vast, zodat een andere agent zonder reconstructie kan verdergaan; hij verzint geen voltooid werk, geslaagde controles of beslissingen.",
       "latency": "De skill legt de geverifieerde stand van het werk vast, zodat een andere agent zonder reconstructie kan verdergaan, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "assess-learning-gaps": {
-      "risk": "Deze skill voert een adaptieve beoordeling uit en zet onderbouwde leemtes om in een leerplan; het vleit en beschaamt niet en gebruikt geen verborgen beoordelingscriteria.",
+      "risk": "Deze skill voert een adaptieve beoordeling uit en zet onderbouwde leemtes om in een leerplan; hij vleit en beschaamt niet en gebruikt geen verborgen beoordelingscriteria.",
       "latency": "De skill voert een adaptieve beoordeling uit en zet bewezen lacunes om in een leerplan, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "build-progressive-learning-exercises": {
@@ -1001,7 +1001,7 @@
       "latency": "De skill bouwt opeenvolgende leeroefeningen op met expliciete doelstellingen, vereisten, varianten en validatie, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "teach-with-retrieval-practice": {
-      "risk": "Deze skill geeft les met een concrete missie als doel, via korte lessen, actief ophalen uit het geheugen, feedback en voortgangsregistratie; het slaat geen persoonlijke leergegevens blijvend op zonder expliciete toestemming.",
+      "risk": "Deze skill geeft les met een concrete missie als doel, via korte lessen, actief ophalen uit het geheugen, feedback en voortgangsregistratie; hij slaat geen persoonlijke leergegevens blijvend op zonder expliciete toestemming.",
       "latency": "De skill geeft les met een concrete missie als doel, via korte lessen, actief ophalen uit het geheugen, feedback en voortgangsregistratie, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "write-release-notes-from-evidence": {
@@ -1009,12 +1009,12 @@
       "latency": "De skill stelt releasenotities op uit afgebakend Git-bewijs en houdt geverifieerde wijzigingen, gebruikersimpact en onopgeloste claims gescheiden, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "compress-response-with-context": {
-      "risk": "Deze skill comprimeert een eerdere reactie terwijl de minimale context die nodig is om te handelen behouden blijft; het verwijdert geen veiligheids-, onzekerheids-, autorisatie- of terugdraai-informatie.",
+      "risk": "Deze skill comprimeert een eerdere reactie terwijl de minimale context die nodig is om te handelen behouden blijft; hij verwijdert geen veiligheids-, onzekerheids-, autorisatie- of terugdraai-informatie.",
       "latency": "De skill comprimeert een eerdere reactie met behoud van de minimale context die nodig is om te handelen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "write-article-from-source-material": {
-      "risk": "Deze skill ontwikkelt een artikel op basis van afgebakend bronmateriaal, terwijl claims, lezersbegrip en de controle van de auteur behouden blijven; het publiceert, post of optimaliseert niet voor een platform zonder afzonderlijke toestemming.",
-      "latency": "De skill ontwikkelt een artikel op basis van begrensd bronmateriaal, terwijl claims, lezersbasis en auteurscontrole behouden blijven, met behulp van opeenvolgend bewijs en verificatiestappen."
+      "risk": "Deze skill ontwikkelt een artikel op basis van afgebakend bronmateriaal, terwijl claims, lezersbegrip en de controle van de auteur behouden blijven; hij publiceert, post of optimaliseert niet voor een platform zonder afzonderlijke toestemming.",
+      "latency": "De skill ontwikkelt een artikel op basis van begrensd bronmateriaal, terwijl claims, lezersbasis en auteurscontrole behouden blijven, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "metric-contract-reviewer": {
       "risk": "Deze alleen-lezen specialist beoordeelt de implementatie van een meetwaarde op detailniveau, cohort, tijdvenster, tijdzone, ontdubbeling en verschuiving van de noemer; de bevindingen kunnen een beslissing beïnvloeden, maar de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
@@ -1134,7 +1134,7 @@
     },
     "campaign-attribution-integrity-reviewer": {
       "risk": "Deze alleen-lezen specialist beoordeelt campagne-ID en gebeurtenispropagatie op attributieverlies, duplicatie en vensterbias; de bevindingen kunnen een beslissing beïnvloeden, maar de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
-      "latency": "De specialist beoordeelt de campagne-ID en de voortplanting van gebeurtenissen op attributieverlies, duplicatie en vensterbias, met behulp van opeenvolgend bewijs en verificatiestappen."
+      "latency": "De specialist beoordeelt de campagne-ID en de voortplanting van gebeurtenissen op attributieverlies, duplicatie en vensterbias, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "launch-message-consistency-reviewer": {
       "risk": "Deze specialist met alleen-lezen toegang beoordeelt een afgebakende verzameling lanceringsmaterialen op tegenstrijdigheden met één versiebeheerde, gezaghebbende briefing over de boodschap; de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
@@ -1154,7 +1154,7 @@
     },
     "cloud-cost-finops-analyst": {
       "risk": "Deze alleen-lezen specialist toetst een afgebakende vraag over cloudkosten aan bewijs over gebruik, toewijzing, prijzen, afnameverplichtingen en onzekerheid; de bevindingen kunnen een beslissing beïnvloeden, maar de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
-      "latency": "De specialist brengt een begrensd vraagstuk over cloudkosten in overeenstemming met gebruik, toewijzing, prijzen, verplichtingen en onzekerheidsbewijs, met behulp van opeenvolgend bewijs en verificatiestappen."
+      "latency": "De specialist brengt een begrensd vraagstuk over cloudkosten in overeenstemming met gebruik, toewijzing, prijzen, verplichtingen en onzekerheidsbewijs, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "configuration-drift-analyst": {
       "risk": "Deze specialist met alleen-lezen toegang vergelijkt de gewenste toestand met omgevingssnapshots met tijdstempels en classificeert relevante configuratieafwijkingen; de bevindingen kunnen een beslissing beïnvloeden, maar de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
@@ -1194,14 +1194,14 @@
     },
     "runbook-readiness-reviewer": {
       "risk": "Deze alleen-lezen specialist beoordeelt één operationeel runbook op uitvoerbare vereisten, controles, foutvertakkingen, eigendom en herstel; de bevindingen kunnen een beslissing beïnvloeden, maar de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
-      "latency": "De specialist beoordeelt één operationeel runbook op uitvoerbare vereisten, controles, foutvertakkingen, eigendom en herstel, met behulp van opeenvolgend bewijsmateriaal en verificatiestappen."
+      "latency": "De specialist beoordeelt één operationeel runbook op uitvoerbare vereisten, controles, foutvertakkingen, eigendom en herstel, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "evidence-synthesis-analyst": {
       "risk": "Deze alleen-lezen specialist synthetiseert een begrensd bronpakket met behoud van populatie-, methode-, context- en tegenstrijdigheidsverschillen; de bevindingen kunnen een beslissing beïnvloeden, maar de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
       "latency": "De specialist synthetiseert een begrensd bronpakket met behoud van populatie-, methode-, context- en tegenstrijdigheidsverschillen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "research-gap-mapper": {
-      "risk": "Deze alleen-lezen specialist brengt onbeantwoorde vragen in kaart op basis van beslissingsgevoeligheid, bewijskosten en expliciete stopvoorwaarden; het kan geen wijzigingen bewerken of goedkeuren.",
+      "risk": "Deze alleen-lezen specialist brengt onbeantwoorde vragen in kaart op basis van beslissingsgevoeligheid, bewijskosten en expliciete stopvoorwaarden; hij kan geen wijzigingen bewerken of goedkeuren.",
       "latency": "De specialist brengt onbeantwoorde vragen in kaart op basis van beslissingsgevoeligheid, bewijskosten en expliciete stopvoorwaarden, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "source-credibility-auditor": {
