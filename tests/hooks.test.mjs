@@ -7,6 +7,7 @@ import { spawnSync } from 'node:child_process';
 import { cleanGitEnvironment } from './git-env.mjs';
 import {
   MAX_STDIN_BYTES as COMMIT_MAX_STDIN_BYTES,
+  commitReadsWorkingTree,
   detectCommitIntent,
   evaluate as evaluateCommit
 } from '../artifacts/hooks/security/secrets/commit-guard/targets/claude-code/commit-guard.mjs';
@@ -232,4 +233,55 @@ test('a guard inspects its own working directory even when GIT_DIR points elsewh
   const verdict = evaluateCommit({ cwd: target, tool_input: { command: 'git commit -m "unsafe"' } });
   assert.equal(verdict.exitCode, 2, 'the guard must read the staged secret in its own working directory');
   assert.match(verdict.message, /potential GitHub token/);
+});
+
+test('commit guard inspects content that the same command stages or commits from the working tree', (context) => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-commit-worktree-'));
+  context.after(() => rmSync(directory, { recursive: true, force: true }));
+  git(directory, ['init', '-q']);
+  git(directory, ['config', 'user.email', 'tests@youdede.invalid']);
+  git(directory, ['config', 'user.name', 'youdede tests']);
+  writeFileSync(path.join(directory, 'app.js'), 'export const value = 1;\n');
+  git(directory, ['add', 'app.js']);
+  git(directory, ['commit', '-qm', 'baseline']);
+
+  const fixtureKey = ['AKIA', 'ABCDEFGHIJKLMNOP'].join('');
+  writeFileSync(path.join(directory, 'app.js'), `export const key = "${fixtureKey}";\n`);
+  for (const command of [
+    'git commit -am x',
+    'git commit -a -m x',
+    'git commit --all -m x',
+    'git commit -m x app.js',
+    'git commit -m x -- app.js',
+    'git commit -i -m x app.js',
+    'git add app.js && git commit -m x',
+    'git add -A; git commit -m x',
+    'git stage . && git commit -m x'
+  ]) {
+    const verdict = evaluateCommit({ cwd: directory, tool_input: { command } });
+    assert.equal(verdict.exitCode, 2, command);
+    assert.match(verdict.message, /AWS access key id/, command);
+    assert.doesNotMatch(verdict.message, /AKIA/, command);
+  }
+
+  writeFileSync(path.join(directory, 'app.js'), 'export const value = 2;\n');
+  writeFileSync(path.join(directory, '.env'), `KEY=${fixtureKey}\n`);
+  const env = evaluateCommit({ cwd: directory, tool_input: { command: 'git add .env && git commit -m x' } });
+  assert.equal(env.exitCode, 2);
+  assert.match(env.message, /\.env: sensitive file type/);
+
+  // Unchanged: without a staging step or a working-tree commit form, only the index is inspected.
+  assert.equal(evaluateCommit({ cwd: directory, tool_input: { command: 'git commit -m x' } }).exitCode, 0);
+  assert.equal(evaluateCommit({ cwd: directory, tool_input: { command: 'npm test && git commit -m x' } }).exitCode, 0);
+  assert.equal(evaluateCommit({ cwd: directory, tool_input: { command: 'git commit -S -m x' } }).exitCode, 0);
+});
+
+test('commit working-tree detection follows commit option syntax', () => {
+  const tokens = (text) => text.split(' ').map((value) => ({ value, dynamic: false }));
+  for (const args of ['-am x', '-a -m x', '--all -m x', '-m x app.js', '-m x -- app.js', '--only -m x', '--include -m x', '-p', '--interactive', '--pathspec-from-file=list.txt']) {
+    assert.equal(commitReadsWorkingTree(tokens(args)), true, args);
+  }
+  for (const args of ['-m x', '-F msg.txt', '--amend --no-edit', '-S -m x', '-Sdeadbeef -m x', '-C HEAD', '--author=me -m x', '-s -m x', '-uno -m x']) {
+    assert.equal(commitReadsWorkingTree(tokens(args)), false, args);
+  }
 });

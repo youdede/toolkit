@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { realpathSync } from 'node:fs';
+import { lstatSync, readFileSync, realpathSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -12,6 +12,48 @@ function cleanGitEnvironment(environment = process.env) {
 export const MAX_STDIN_BYTES = 1024 * 1024;
 export const DEFAULT_MAX_FILE_BYTES = 5 * 1024 * 1024;
 export const MAX_COMMAND_BYTES = 256 * 1024;
+export const MAX_WORKTREE_FILES = 5000;
+
+// Git subcommands that can change what the index holds before a later `git commit` in the same
+// command runs. The hook sees the index before any of them execute.
+const STAGING_SUBCOMMANDS = new Set([
+  'add', 'stage', 'rm', 'mv', 'apply', 'update-index', 'restore', 'checkout', 'switch', 'reset',
+  'read-tree', 'stash', 'merge', 'pull', 'cherry-pick', 'revert', 'am'
+]);
+const COMMIT_VALUE_OPTIONS = new Set([
+  '-m', '--message', '-F', '--file', '-C', '--reuse-message', '-c', '--reedit-message', '--author',
+  '--date', '--fixup', '--squash', '-t', '--template', '--cleanup', '--trailer'
+]);
+const COMMIT_WORKTREE_OPTION = /^--(?:all|include|only|interactive|patch|pathspec-from-file(?:=.*)?)$/;
+const SHORT_WORKTREE_FLAGS = new Set(['a', 'i', 'o', 'p']);
+const SHORT_VALUE_NEXT = new Set(['m', 'F', 'C', 'c', 't']);
+const SHORT_VALUE_ATTACHED = new Set(['S', 'u']);
+
+// True when the commit takes content from the working tree rather than only from the index:
+// -a/--all, --include, --only, --interactive, --patch, --pathspec-from-file, or a pathspec.
+export function commitReadsWorkingTree(tokens) {
+  for (let index = 0; index < tokens.length; index += 1) {
+    const value = tokens[index].value;
+    if (value === '--') return index + 1 < tokens.length;
+    if (COMMIT_VALUE_OPTIONS.has(value)) { index += 1; continue; }
+    if (COMMIT_WORKTREE_OPTION.test(value)) return true;
+    if (value.startsWith('--')) continue;
+    if (/^-[A-Za-z]/.test(value)) {
+      for (let cursor = 1; cursor < value.length; cursor += 1) {
+        const flag = value[cursor];
+        if (SHORT_WORKTREE_FLAGS.has(flag)) return true;
+        if (SHORT_VALUE_ATTACHED.has(flag)) break;
+        if (SHORT_VALUE_NEXT.has(flag)) {
+          if (cursor === value.length - 1) index += 1;
+          break;
+        }
+      }
+      continue;
+    }
+    return true;
+  }
+  return false;
+}
 
 const SHELL_EXECUTABLES = new Set(['sh', 'bash', 'zsh', 'dash', 'ksh']);
 
@@ -204,6 +246,7 @@ function analyzeCommit(command) {
   const normalized = normalizeShellCommands(command);
   if (normalized.error || normalized.commands.some((entry) => entry.ambiguous)) return { ambiguous: true };
   let changedDirectory = false;
+  let stagedEarlier = false;
   for (const entry of normalized.commands) {
     if (!entry.tokens?.length) continue;
     const executable = executableName(entry.tokens[0]);
@@ -223,7 +266,11 @@ function analyzeCommit(command) {
     }
     const subcommand = entry.tokens[index];
     if (subcommand?.dynamic) return { ambiguous: true };
-    if (subcommand?.value === 'commit') return { found: true, unsupportedScope, tokens: entry.tokens.slice(index + 1) };
+    if (subcommand?.value === 'commit') {
+      const tokens = entry.tokens.slice(index + 1);
+      return { found: true, unsupportedScope, tokens, worktree: stagedEarlier || commitReadsWorkingTree(tokens) };
+    }
+    if (STAGING_SUBCOMMANDS.has(subcommand?.value)) stagedEarlier = true;
   }
   return { found: false };
 }
@@ -317,6 +364,38 @@ export function inspectStaged(cwd) {
   return { files, findings };
 }
 
+// A superset of what the commit can contain: tracked files with unstaged changes plus untracked,
+// non-ignored files. Deleted files cannot add content and are skipped.
+export function inspectWorkingTree(cwd) {
+  const raw = git(['ls-files', '-z', '--modified', '--others', '--exclude-standard'], cwd);
+  const files = [...new Set(raw.split('\0').filter(Boolean).map(normalizeRelative))];
+  if (files.length > MAX_WORKTREE_FILES) {
+    return { files, findings: [`working tree has ${files.length} candidate files; limit is ${MAX_WORKTREE_FILES}. Stage explicitly in a separate command or ignore generated files`] };
+  }
+  const findings = [];
+  for (const file of files) {
+    if (isSensitivePath(file)) findings.push(`${file}: sensitive file type is present in the working tree`);
+    let data;
+    try {
+      const absolute = path.join(cwd, file);
+      const metadata = lstatSync(absolute);
+      if (!metadata.isFile()) continue;
+      if (metadata.size > DEFAULT_MAX_FILE_BYTES) {
+        findings.push(`${file}: working-tree file is ${metadata.size} bytes; limit is ${DEFAULT_MAX_FILE_BYTES}`);
+        continue;
+      }
+      data = readFileSync(absolute);
+    } catch (error) {
+      if (error?.code === 'ENOENT') continue;
+      findings.push(`${file}: working-tree file could not be inspected (${error?.code || 'unknown error'})`);
+      continue;
+    }
+    if (data.includes(0)) continue;
+    findings.push(...scanText(file, data.toString('utf8')));
+  }
+  return { files, findings };
+}
+
 export function evaluate(input, cwd = process.cwd()) {
   const command = input?.tool_input?.command;
   const intent = analyzeCommit(command);
@@ -332,10 +411,13 @@ export function evaluate(input, cwd = process.cwd()) {
   }
 
   try {
-    const result = inspectStaged(input?.cwd || cwd);
-    if (result.findings.length === 0) return { exitCode: 0, message: '' };
-    const visible = result.findings.slice(0, 20).map((finding) => `- ${finding}`).join('\n');
-    const remainder = result.findings.length > 20 ? `\n- …and ${result.findings.length - 20} more` : '';
+    const root = input?.cwd || cwd;
+    const staged = inspectStaged(root);
+    const worktree = intent.worktree ? inspectWorkingTree(root) : { findings: [] };
+    const findings = [...new Set([...staged.findings, ...worktree.findings])];
+    if (findings.length === 0) return { exitCode: 0, message: '' };
+    const visible = findings.slice(0, 20).map((finding) => `- ${finding}`).join('\n');
+    const remainder = findings.length > 20 ? `\n- …and ${findings.length - 20} more` : '';
     return {
       exitCode: 2,
       message: `BLOCKED by commit-guard:\n${visible}${remainder}\nReview the staged content; the hook never rewrites it.`
