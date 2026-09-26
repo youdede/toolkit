@@ -32,6 +32,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 - `decision-record-reviewer` no longer tells the reviewer to "say only" that a record is reconstructable when nothing is found; it names the records inspected, as the no-finding rule later in the same brief requires.
 - The `testing`, `git-workflow`, `security`, and `coding-style` baselines state their forbid rules as prohibitions (for example "Do not edit generated files directly; change the generator or its source template and regenerate."). Before, the generator copied a hook refusal that describes what the hook does not do, so the rules forbade running or repairing tests, any branch or commit, reading any local file, and editing the source template. A context rule sourced from a refusal now needs its own `text`.
 - The `playwright-local-isolated` threat notes match upstream `@playwright/mcp` 0.0.82: `--allowed-hosts` restricts the hosts the HTTP transport serves from, not browser navigation, and the exposed `browser_file_upload` tool can upload files under the workspace root, so callers must not call it. Before, the notes said both flags restricted browsing to `127.0.0.1` and that no upload path existed.
+- `verify-claims-against-output` defines when a claim is flaky without asking for a rerun, and `audit-release-evidence` prints its JSON report in the reply. Before, the first reported "both hashes" of a command it forbade rerunning, and the second printed the path of a file it had no tool to write.
 
 ## 0.3.0 (2026-09-21)
 

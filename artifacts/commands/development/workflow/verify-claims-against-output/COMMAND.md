@@ -26,7 +26,7 @@ node "${CLAUDE_PROJECT_DIR}/.claude/commands/youdede/verify-claims-against-outpu
 
 1. Run each verification command exactly as declared. No added flags, no changed environment.
 2. Record exit code, duration, and a sha256 of combined stdout+stderr for each run.
-3. Never rerun to "get a pass": flaky output is reported as flaky, with both hashes.
+3. Never rerun to "get a pass". A claim is **flaky** only when the same declared command already ran more than once in this verification (for example for two claims) with different results; report every hash.
 
 ## Step 3 — Emit the verification report
 

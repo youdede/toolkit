@@ -29,7 +29,7 @@ node "${CLAUDE_PLUGIN_ROOT}/commands/youdede/audit-release-evidence/check-precon
 
 ## Step 3 — Emit the report
 
-Machine-readable JSON: version, commit sha, per-check verdicts with output hashes, unknowns, and an overall `ready` boolean that is `true` only when every check is verified and no unknowns exist. Print the JSON path and a five-line human summary.
+Machine-readable JSON: version, commit sha, per-check verdicts with output hashes, unknowns, and an overall `ready` boolean that is `true` only when every check is verified and no unknowns exist. Print the JSON in the reply, followed by a five-line human summary; do not write it to a file, since the command has no write authority and retains no data.
 
 ## Refusals
 
