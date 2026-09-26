@@ -47,9 +47,8 @@
           "Next action"
         ],
         "requiredEvidence": [
-          "runtime precedence",
-          "exact diff",
-          "validation results"
+          "outside this skill",
+          "no guidance change"
         ],
         "forbiddenClaims": [
           "guessed conventions are verified project policy"
@@ -75,9 +74,8 @@
           "Next action"
         ],
         "requiredEvidence": [
-          "runtime precedence",
-          "exact diff",
-          "validation results"
+          "missing inputs",
+          "next question"
         ],
         "forbiddenClaims": [
           "guessed conventions are verified project policy"
@@ -96,7 +94,7 @@
         "Show the proposed structure and exact diff"
       ],
       "expected": {
-        "disposition": "limit",
+        "disposition": "decline",
         "requiredSections": [
           "Evidence",
           "Decision",

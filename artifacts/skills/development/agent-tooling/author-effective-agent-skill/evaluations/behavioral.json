@@ -15,7 +15,9 @@
         "disposition": "apply",
         "requiredSections": [
           "Skill design",
-          "Validation results"
+          "Validation results",
+          "Evidence gaps",
+          "Next action"
         ],
         "requiredEvidence": [
           "near-miss prompts",
@@ -40,8 +42,10 @@
       "expected": {
         "disposition": "decline",
         "requiredSections": [
-          "Next action",
-          "Evidence gaps"
+          "Skill design",
+          "Validation results",
+          "Evidence gaps",
+          "Next action"
         ],
         "requiredEvidence": [
           "Agent Skill",
@@ -67,7 +71,9 @@
         "disposition": "clarify",
         "requiredSections": [
           "Skill design",
-          "Evidence gaps"
+          "Validation results",
+          "Evidence gaps",
+          "Next action"
         ],
         "requiredEvidence": [
           "authority boundaries",
@@ -90,10 +96,12 @@
         "does not claim portability"
       ],
       "expected": {
-        "disposition": "limit",
+        "disposition": "decline",
         "requiredSections": [
           "Skill design",
-          "Validation results"
+          "Validation results",
+          "Evidence gaps",
+          "Next action"
         ],
         "requiredEvidence": [
           "network access",

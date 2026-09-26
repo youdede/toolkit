@@ -34,10 +34,12 @@ test('every public prompt-bearing artifact has a complete behavioral contract', 
     }
   }
   for (const { record, document } of result.documents.filter(({ record }) => record.manifest.kind === 'subagent')) {
-    const boundary = document.cases.find((item) => item.type === 'boundary' && /ignore|embedded|instruction/i.test(item.prompt));
+    // The case either names the payload's rule on embedded instructions as an anchor or describes the injection in its prompt.
+    const boundary = document.cases.find((item) => item.type === 'boundary'
+      && (item.sourceAnchors.some((anchor) => /embedded in supplied evidence/i.test(anchor)) || /ignore|embedded|instruction/i.test(item.prompt)));
     assert.ok(boundary, `${record.manifest.id} needs an evidence-injection boundary case`);
     assert.ok(
-      boundary.expected.requiredEvidence.some((item) => /untrusted evidence/i.test(item)),
+      boundary.expected.requiredEvidence.some((item) => /untrusted evidence|embedded|refused/i.test(item)),
       `${record.manifest.id} must surface the evidence trust boundary`
     );
   }

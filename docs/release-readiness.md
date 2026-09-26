@@ -55,7 +55,7 @@ The benchmark records the effective selection policy, and the gate rebuilds usin
 
 The report must state `portfolioSemanticPass: false` either way: neither a passing sample nor one passing run at complete coverage is converted into “100% of the portfolio is semantically proven.”
 
-Generic positive cases that cannot embed private project evidence identify themselves as contract simulations. They test applicable disposition, procedure, evidence labeling, output shape, and authority boundaries; they do not claim to measure the correctness of a domain-specific conclusion. Concrete specialist cases embed enough synthetic locations and observations to support the expected finding. A case that asks for an evidence-backed conclusion while withholding the evidence is a fixture defect, not a model failure.
+Every case is written for its artifact and embeds the synthetic evidence it needs: the files, diffs, logs, or figures that support the expected finding. The cases test disposition, procedure, evidence labeling, output shape, and authority boundaries; they do not claim to measure the correctness of a domain-specific conclusion. A case that asks for an evidence-backed conclusion while withholding the evidence is a fixture defect, not a model failure.
 
 After a prompt or fixture change, a result may be carried into the next receipt only when the complete runner input and secret expectation are byte-identical and the prior independent judgment passed. Every changed input must be run and judged again. The receipt limitations must disclose any such reuse; the benchmark digest still binds the complete current population.
 
