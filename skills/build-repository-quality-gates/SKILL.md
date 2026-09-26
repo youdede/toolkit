@@ -19,7 +19,7 @@ Use the repository's current package managers, task runners, policies, and CI as
 
 ## Output contract
 
-Return every one of these headings in your reply, in this order, on every path: `## Contract`, `## Validation`, `## Stop conditions`, `## Refusals`.
+Return every one of these headings in your reply, in this order, on every path: `## Check inventory`, `## Gate design`, `## Control results`, `## Evidence gaps`, `## Next action`.
 
 This holds when you decline, when you bound the scope, and when required inputs are absent. A section with nothing to report says so in one line; it is never omitted.
 

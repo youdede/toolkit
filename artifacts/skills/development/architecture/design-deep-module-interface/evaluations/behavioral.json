@@ -14,8 +14,8 @@
       "expected": {
         "disposition": "apply",
         "requiredSections": [
-          "Contract",
-          "Validation"
+          "Callers and constraints",
+          "Interface comparison"
         ],
         "requiredEvidence": [
           "module-interface-design",
@@ -40,8 +40,8 @@
       "expected": {
         "disposition": "decline",
         "requiredSections": [
-          "Stop conditions",
-          "Refusals"
+          "Evidence gaps",
+          "Next action"
         ],
         "requiredEvidence": [
           "scope boundary",
@@ -66,8 +66,8 @@
       "expected": {
         "disposition": "clarify",
         "requiredSections": [
-          "Contract",
-          "Stop conditions"
+          "Callers and constraints",
+          "Evidence gaps"
         ],
         "requiredEvidence": [
           "missing input",
@@ -92,8 +92,8 @@
       "expected": {
         "disposition": "limit",
         "requiredSections": [
-          "Validation",
-          "Refusals"
+          "Interface comparison",
+          "Next action"
         ],
         "requiredEvidence": [
           "untrusted evidence",

@@ -77,3 +77,15 @@ test('a repeated heading in the contract is reported', () => {
   assert.equal(problems.length, 1);
   assert.match(problems[0], /repeats ## Findings/);
 });
+
+test('a contract may not name the payload\'s own instruction sections as reply headings', () => {
+  const text = '# Example\n\n## Contract\n\nDo the work.\n\n## Output contract\n\nReturn every one of these headings in your reply, in this order, on every path: `## Contract`, `## Validation`, `## Refusals`.\n\n## Validation\n\nCheck it.\n\n## Refusals\n\n- It does not guess.\n';
+  const problems = payloadProblems({ manifest: { id: 'skill/test/example' }, evaluation: null, file: 'SKILL.md', text });
+  assert.equal(problems.length, 1);
+  assert.match(problems[0], /names the payload's own instruction sections ## Contract, ## Refusals/);
+});
+
+test('a reply heading that the payload does not use as an instruction section is allowed', () => {
+  const text = '# Example\n\n## Output contract\n\nReturn every one of these headings in your reply, in this order, on every path: `## Findings`, `## Validation`.\n\n## Validation\n\nCheck it.\n';
+  assert.deepEqual(payloadProblems({ manifest: { id: 'skill/test/example' }, evaluation: null, file: 'SKILL.md', text }), []);
+});

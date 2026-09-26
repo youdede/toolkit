@@ -18,7 +18,7 @@ One skill should add one capability or discipline. Its description routes activa
 
 ## Output contract
 
-Return every one of these headings in your reply, in this order, on every path: `## Contract`, `## Validation`, `## Scope`, `## Stop conditions`.
+Return every one of these headings in your reply, in this order, on every path: `## Skill design`, `## Validation results`, `## Evidence gaps`, `## Next action`.
 
 This holds when you decline, when you bound the scope, and when required inputs are absent. A section with nothing to report says so in one line; it is never omitted.
 

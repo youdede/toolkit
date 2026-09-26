@@ -18,6 +18,9 @@ const PROSE_LIST = /Then provide ((?:`[^`]+`(?:, | and |, and )?)+)\./;
 // A mention that offers a fallback for an undeclared heading is conditional, not a contradiction.
 const CONDITIONAL = /when this contract names that heading|when this contract names no uncertainty section|when it names none, in the first section it names/;
 
+// ponytail: fixed list; `## Validation` and `## Scope` stay allowed because some deliverables use them.
+const INSTRUCTION_SECTIONS = new Set(['## Contract', '## Workflow', '## Refusals', '## Output contract']);
+
 const clean = (heading) => heading.replace(/\s+/g, ' ').trim();
 const bare = (heading) => clean(heading).replace(/^##\s+/, '');
 
@@ -103,7 +106,15 @@ export function payloadProblems({ manifest, evaluation, file, text }) {
     found.push(`${id} (${file}): an instruction names a findings section that the contract does not declare`);
   }
 
-  // 5. Every section a behavioral case requires must be a heading the contract names.
+  // 5. Reply headings must describe the deliverable. Naming the payload's own instruction sections
+  // makes every reply restate the procedure instead of presenting the work.
+  const own = new Set([...text.matchAll(/^(##\s+.+?)\s*$/gm)].map((m) => clean(m[1])));
+  const internal = contract.filter((h) => INSTRUCTION_SECTIONS.has(h) && own.has(h));
+  if (internal.length > 0) {
+    found.push(`${id} (${file}): the output contract names the payload's own instruction sections ${internal.join(', ')}`);
+  }
+
+  // 6. Every section a behavioral case requires must be a heading the contract names.
   for (const item of evaluation?.cases ?? []) {
     for (const section of item.expected?.requiredSections ?? []) {
       if (!contract.includes(`## ${clean(section)}`)) {

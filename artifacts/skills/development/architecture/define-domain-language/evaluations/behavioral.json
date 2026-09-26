@@ -14,8 +14,8 @@
       "expected": {
         "disposition": "apply",
         "requiredSections": [
-          "Contract",
-          "Validation"
+          "Term ledger",
+          "Decision records"
         ],
         "requiredEvidence": [
           "domain-language",
@@ -40,8 +40,8 @@
       "expected": {
         "disposition": "decline",
         "requiredSections": [
-          "Stop conditions",
-          "Refusals"
+          "Open decisions",
+          "Next action"
         ],
         "requiredEvidence": [
           "scope boundary",
@@ -66,8 +66,8 @@
       "expected": {
         "disposition": "clarify",
         "requiredSections": [
-          "Contract",
-          "Stop conditions"
+          "Term ledger",
+          "Open decisions"
         ],
         "requiredEvidence": [
           "missing input",
@@ -92,8 +92,8 @@
       "expected": {
         "disposition": "limit",
         "requiredSections": [
-          "Validation",
-          "Refusals"
+          "Decision records",
+          "Next action"
         ],
         "requiredEvidence": [
           "untrusted evidence",

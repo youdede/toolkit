@@ -19,7 +19,7 @@ Each work item must deliver an observable outcome through every required layer, 
 
 ## Output contract
 
-Return every one of these headings in your reply, in this order, on every path: `## Contract`, `## Validation`, `## Stop conditions`, `## Refusals`.
+Return every one of these headings in your reply, in this order, on every path: `## Work graph`, `## Graph validation`, `## Open decisions`, `## Next action`.
 
 This holds when you decline, when you bound the scope, and when required inputs are absent. A section with nothing to report says so in one line; it is never omitted.
 
