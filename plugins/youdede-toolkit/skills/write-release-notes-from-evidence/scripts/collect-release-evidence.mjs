@@ -8,7 +8,9 @@ function cleanGitEnvironment(environment = process.env) {
   return Object.fromEntries(Object.entries(environment).filter(([name]) => !/^GIT_/i.test(name)));
 }
 
-const MAX_BUFFER = 1024 * 1024;
+// ponytail: git has no count limit for --name-status, so the list is read whole; 32 MiB holds
+// well over 100k long paths. Stream the output if a range ever exceeds it.
+const MAX_BUFFER = 32 * 1024 * 1024;
 const MAX_COMMITS = 50;
 const MAX_FILES = 200;
 function git(cwd, args) {
@@ -25,7 +27,7 @@ export function collectReleaseEvidence({ cwd, from, to }) {
   const range = `${start}..${end}`;
   const commits = git(root, ['log', `--max-count=${MAX_COMMITS + 1}`, '--format=%H%x09%s', range]).split('\n').filter(Boolean);
   const files = git(root, ['diff', '--name-status', range]).split('\n').filter(Boolean);
-  return { schemaVersion: 1, root, from: start, to: end, commits: commits.slice(0, MAX_COMMITS), commitsTruncated: commits.length > MAX_COMMITS, changedFiles: files.slice(0, MAX_FILES), changedFilesTruncated: files.length > MAX_FILES, diffStat: git(root, ['diff', '--stat', range]) };
+  return { schemaVersion: 1, root, from: start, to: end, commits: commits.slice(0, MAX_COMMITS), commitsTruncated: commits.length > MAX_COMMITS, changedFiles: files.slice(0, MAX_FILES), changedFilesTruncated: files.length > MAX_FILES, diffStat: git(root, ['diff', `--stat-count=${MAX_FILES}`, range]) };
 }
 function main(argv) {
   if (argv.length !== 6 || argv[0] !== '--cwd' || argv[2] !== '--from' || argv[4] !== '--to') throw new Error('usage: collect-release-evidence.mjs --cwd <repository> --from <revision> --to <revision>');

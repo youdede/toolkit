@@ -115,3 +115,20 @@ test('release collector reads an explicit bounded Git range without mutation', (
     assert.throws(() => collectReleaseEvidence({ cwd: directory, from: 'missing', to: 'HEAD' }), /fatal|ambiguous|unknown/i);
   } finally { rmSync(directory, { recursive: true, force: true }); }
 });
+
+test('release collector truncates a range whose file list exceeds 1 MiB instead of failing', () => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'release-evidence-large-'));
+  try {
+    git(directory, ['init']);
+    git(directory, ['config', 'user.email', 'test@example.invalid']);
+    git(directory, ['config', 'user.name', 'Test']);
+    git(directory, ['commit', '--allow-empty', '-m', 'base']);
+    const from = git(directory, ['rev-parse', 'HEAD']);
+    for (let index = 0; index < 6000; index += 1) writeFileSync(path.join(directory, `f${String(index).padStart(5, '0')}${'x'.repeat(190)}.txt`), 'x\n');
+    git(directory, ['add', '.']); git(directory, ['commit', '-q', '-m', 'many files']);
+    const result = collectReleaseEvidence({ cwd: directory, from, to: 'HEAD' });
+    assert.equal(result.changedFiles.length, 200);
+    assert.equal(result.changedFilesTruncated, true);
+    assert.ok(result.diffStat.split('\n').length <= 202);
+  } finally { rmSync(directory, { recursive: true, force: true }); }
+});
