@@ -31,6 +31,14 @@ const CONSTRAINT_KEYS = [
 
 const ANNOTATION_KEYS = ['default', 'deprecated', 'readOnly', 'writeOnly'];
 const COMPOSITION_KEYS = ['allOf', 'anyOf', 'oneOf', 'prefixItems'];
+const SUBSCHEMA_KEYS = ['items', 'contains', 'propertyNames', 'if', 'then', 'else', 'not'];
+// Keywords with a dedicated rule above; any other differing keyword gets a generic signal.
+const HANDLED_KEYS = new Set([
+  'type', 'required', 'properties', 'patternProperties', '$defs', 'definitions', 'dependentSchemas', 'enum', 'const',
+  'additionalProperties', '$ref', '$dynamicRef', ...CONSTRAINT_KEYS, ...ANNOTATION_KEYS, ...COMPOSITION_KEYS, ...SUBSCHEMA_KEYS
+]);
+// Pure documentation keywords never change which instances validate.
+const DOCUMENTATION_KEYS = new Set(['title', 'description', 'examples', '$comment']);
 
 function isObject(value) {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -217,7 +225,15 @@ export function compareJsonSchemas(before, after) {
       }
     }
 
-    for (const keyword of ['items', 'contains', 'propertyNames', 'if', 'then', 'else', 'not']) {
+    const otherKeys = new Set([...Object.keys(beforeNode), ...Object.keys(afterNode)]);
+    for (const keyword of [...otherKeys].sort()) {
+      if (HANDLED_KEYS.has(keyword) || DOCUMENTATION_KEYS.has(keyword)) continue;
+      if (!sameValue(beforeNode[keyword], afterNode[keyword])) {
+        pushSignal(signals, 'SCHEMA_KEYWORD_CHANGED', joinPointer(pointer, keyword), { keyword });
+      }
+    }
+
+    for (const keyword of SUBSCHEMA_KEYS) {
       if (Object.hasOwn(beforeNode, keyword) && Object.hasOwn(afterNode, keyword)) {
         compare(beforeNode[keyword], afterNode[keyword], joinPointer(pointer, keyword), depth + 1);
       } else if (!sameValue(beforeNode[keyword], afterNode[keyword])) {
@@ -247,7 +263,8 @@ export function compareJsonSchemas(before, after) {
     limitations: [
       'Structural signals are not a compatibility or safety verdict.',
       'References are reported but never resolved.',
-      'Registry, codec, application, and producer-consumer semantics are not executed.'
+      'Registry, codec, application, and producer-consumer semantics are not executed.',
+      'Keywords without a dedicated rule are reported only as SCHEMA_KEYWORD_CHANGED at their own pointer, without descending into them; title, description, examples, and $comment annotation changes are ignored.'
     ],
     summary: {
       signalCount: signals.length,

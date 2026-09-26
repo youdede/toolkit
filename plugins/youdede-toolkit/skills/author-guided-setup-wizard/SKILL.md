@@ -15,11 +15,11 @@ Use a wizard only for actions the agent cannot safely perform. Define stages, ca
 2. Present the ordered stage contract. For each stage record the exact user action, expected evidence, produced value, secret status, persistence destination, idempotency, and recovery path; obtain approval before authoring.
 3. Write one self-contained Bash script with strict mode, numbered stages, visible progress, resumable non-secret state, cross-platform URL hints, hidden secret input, quoted variables, and atomic configuration updates. Require typed confirmation immediately before every irreversible or billable action.
 4. Keep secrets in process memory only as long as needed. Never echo them, pass them on command lines where process listings expose them, store them in resume state, or send them anywhere not named in the approved contract.
-5. Run `node scripts/validate-setup-wizard.mjs <wizard.sh>` from this installed skill, then run shellcheck when available. Trace every stage statically; do not execute the full wizard on the user's behalf.
+5. Resolve `<skill-root>` to the directory containing this loaded `SKILL.md` and run `node "<skill-root>/scripts/validate-setup-wizard.mjs" <wizard.sh>`, then run shellcheck when available. The validator is lexical: it recognizes secret-like variables by name (for example `API_TOKEN`), flags them when read without `-s` or expanded on a command line, and checks that a confirmation prompt exists, not that it guards each irreversible action. Trace every stage statically; do not execute the full wizard on the user's behalf.
 
 ## Output contract
 
-Return every one of these headings in your reply, in this order, on every path: `## Contract`, `## Validation`, `## Stop conditions`, `## Refusals`.
+Return every one of these headings in your reply, in this order, on every path: `## Stage contract`, `## Wizard`, `## Static validation`, `## Evidence gaps`, `## Next action`.
 
 This holds when you decline, when you bound the scope, and when required inputs are absent. A section with nothing to report says so in one line; it is never omitted.
 

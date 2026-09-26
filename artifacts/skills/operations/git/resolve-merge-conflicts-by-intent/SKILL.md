@@ -19,7 +19,7 @@ Resolve only the active Git operation and the user's named scope. A conflict hun
 
 ## Output contract
 
-Return every one of these headings in your reply, in this order, on every path: `## Contract`, `## Validation`, `## Stop conditions`, `## Refusals`.
+Return every one of these headings in your reply, in this order, on every path: `## Operation state`, `## Intent records`, `## Verification`, `## Unresolved trade-offs`, `## Next action`.
 
 This holds when you decline, when you bound the scope, and when required inputs are absent. A section with nothing to report says so in one line; it is never omitted.
 

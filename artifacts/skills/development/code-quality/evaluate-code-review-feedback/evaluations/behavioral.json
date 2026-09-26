@@ -14,8 +14,8 @@
       "expected": {
         "disposition": "apply",
         "requiredSections": [
-          "Verify the review claim",
-          "Validation"
+          "Disposition",
+          "Change and verification"
         ],
         "requiredEvidence": [
           "disposition",
@@ -40,8 +40,8 @@
       "expected": {
         "disposition": "decline",
         "requiredSections": [
-          "Validation",
-          "Refusals"
+          "Evidence",
+          "Disposition"
         ],
         "requiredEvidence": [
           "evidence",
@@ -66,8 +66,8 @@
       "expected": {
         "disposition": "clarify",
         "requiredSections": [
-          "Stop conditions",
-          "Validation"
+          "Claim",
+          "Reply"
         ],
         "requiredEvidence": [
           "comment",
@@ -92,8 +92,8 @@
       "expected": {
         "disposition": "limit",
         "requiredSections": [
-          "Verify the review claim",
-          "Refusals"
+          "Evidence",
+          "Disposition"
         ],
         "requiredEvidence": [
           "repository evidence",

@@ -14851,7 +14851,7 @@
           {
             "path": "scripts/inspect-module-boundaries.mjs",
             "runtime": "node",
-            "purpose": "Scan static TypeScript import forms for cross-package deep imports under a caller-supplied package root.",
+            "purpose": "Scan static TypeScript import forms for cross-package deep imports under a caller-supplied directory whose immediate children are packages.",
             "sideEffects": "read-only"
           }
         ]
@@ -16476,7 +16476,7 @@
       "version": "1.5.0",
       "kind": "skill",
       "summary": "Design an LLM evaluation around real tasks, controlled judges, failure taxonomy, and decision thresholds.",
-      "description": "Design or audit an evaluation for an LLM feature, agent, retrieval flow, or prompt using representative tasks, reference evidence, deterministic checks, calibrated judges, uncertainty, and release decisions. Use before comparing models or claiming quality improvement.",
+      "description": "Design or audit an evaluation for an LLM feature, agent, retrieval flow, or prompt using representative tasks, reference evidence, deterministic checks, calibrated judges, uncertainty, and release decisions. Do not use it to tune prompts or certify a model, and do not run model calls without separate execution authority. Use before comparing models or claiming quality improvement.",
       "domain": "development",
       "category": "testing",
       "capabilities": [
@@ -23188,7 +23188,7 @@
     {
       "id": "skill/operations/agent-orchestration/delegate-to-codex-cli",
       "slug": "delegate-to-codex-cli",
-      "name": "Delegate To Codex Cli",
+      "name": "Delegate To Codex CLI",
       "version": "1.3.0",
       "kind": "skill",
       "summary": "Delegate a bounded task to Codex CLI in an isolated, reviewable workspace.",
@@ -24716,7 +24716,7 @@
     {
       "id": "skill/operations/observability/build-macos-metrics-collector",
       "slug": "build-macos-metrics-collector",
-      "name": "Build Macos Metrics Collector",
+      "name": "Build macOS Metrics Collector",
       "version": "1.3.0",
       "kind": "skill",
       "summary": "Build a low-overhead local macOS metrics collector with private-by-default storage.",
@@ -25354,6 +25354,7 @@
       "domain": "operations",
       "category": "release",
       "capabilities": [
+        "operate",
         "verify"
       ],
       "problems": [
@@ -26114,7 +26115,7 @@
           {
             "path": "scripts/validate-setup-wizard.mjs",
             "runtime": "node",
-            "purpose": "Statically validate Bash syntax, secret-handling hazards, confirmation gates, and the declared wizard stage count.",
+            "purpose": "Statically validate Bash syntax, a few lexical secret-exposure patterns, the presence of a confirmation prompt, and the declared wizard stage count.",
             "sideEffects": "read-only"
           }
         ]
@@ -26467,7 +26468,7 @@
     {
       "id": "skill/operations/setup/keep-macos-awake",
       "slug": "keep-macos-awake",
-      "name": "Keep Macos Awake",
+      "name": "Keep macOS Awake",
       "version": "1.3.0",
       "kind": "skill",
       "summary": "Keep macOS awake for approved work with reversible and observable controls.",
@@ -26851,7 +26852,7 @@
         "agnostic"
       ],
       "languages": [
-        "python",
+        "javascript",
         "shell"
       ],
       "lifecycle": [
@@ -27340,11 +27341,12 @@
       "name": "Plan Dependency Upgrade",
       "version": "1.4.0",
       "kind": "skill",
-      "summary": "Plan a dependency upgrade from release evidence, compatibility surface, migration steps, and rollback.",
-      "description": "Plan or review an application dependency upgrade using installed versions, release and migration documentation, affected usage, transitive changes, compatibility tests, rollout, and rollback. Use when an upgrade is material, breaking, security-driven, or framework-wide.",
+      "summary": "Plan and apply a dependency upgrade from release evidence, compatibility surface, migration steps, and rollback.",
+      "description": "Plan, apply, or review an application dependency upgrade using installed versions, release and migration documentation, affected usage, transitive changes, compatibility tests, rollout, and rollback. Use when an upgrade is material, breaking, security-driven, or framework-wide.",
       "domain": "security",
       "category": "dependencies",
       "capabilities": [
+        "operate",
         "plan"
       ],
       "problems": [
@@ -27362,7 +27364,7 @@
         "maintenance"
       ],
       "risk": "medium",
-      "risk_reason": "This skill plans a dependency upgrade from release evidence, compatibility surface, migration steps, and rollback; it does not upgrade unrelated packages to achieve a clean latest state.",
+      "risk_reason": "This skill plans and applies a dependency upgrade from release evidence, compatibility surface, migration steps, and rollback; it does not upgrade unrelated packages to achieve a clean latest state.",
       "license": "MIT",
       "execution": {
         "mode": "prompt",
@@ -27379,7 +27381,7 @@
         "behavior": "advisory",
         "failurePolicy": "stop-and-report",
         "latencyClass": "bounded",
-        "latency_reason": "The skill plans a dependency upgrade from release evidence, compatibility surface, migration steps, and rollback, using sequential evidence and verification steps.",
+        "latency_reason": "The skill plans and applies a dependency upgrade from release evidence, compatibility surface, migration steps, and rollback, using sequential evidence and verification steps.",
         "dataRetention": "runtime-managed"
       },
       "refuses": [

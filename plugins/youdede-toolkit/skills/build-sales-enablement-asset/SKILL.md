@@ -9,7 +9,7 @@ description: "Build or review a sales deck, one-pager, battle card, talk track, 
 
 The asset must support a specific conversation and remain true under seller use. Build from approved product facts, customer evidence, commercial terms, and observed objections.
 
-At minimum, obtain approved product facts, customer evidence, commercial terms, and observed objections. Without those, stop and request the missing one.
+At minimum, obtain the asset type, buyer role, deal stage, approved product facts, customer evidence, commercial terms, and observed objections. Without those, stop and request the missing one.
 
 ## Design for the sales moment
 

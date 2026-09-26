@@ -14,8 +14,8 @@
       "expected": {
         "disposition": "apply",
         "requiredSections": [
-          "Contract",
-          "Validation"
+          "Gate design",
+          "Control results"
         ],
         "requiredEvidence": [
           "repository-quality-gates",
@@ -40,8 +40,8 @@
       "expected": {
         "disposition": "decline",
         "requiredSections": [
-          "Stop conditions",
-          "Refusals"
+          "Evidence gaps",
+          "Next action"
         ],
         "requiredEvidence": [
           "scope boundary",
@@ -66,8 +66,8 @@
       "expected": {
         "disposition": "clarify",
         "requiredSections": [
-          "Contract",
-          "Stop conditions"
+          "Gate design",
+          "Evidence gaps"
         ],
         "requiredEvidence": [
           "missing input",
@@ -92,8 +92,8 @@
       "expected": {
         "disposition": "limit",
         "requiredSections": [
-          "Validation",
-          "Refusals"
+          "Control results",
+          "Next action"
         ],
         "requiredEvidence": [
           "untrusted evidence",

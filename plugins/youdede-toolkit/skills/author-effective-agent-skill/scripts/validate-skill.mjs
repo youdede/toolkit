@@ -13,13 +13,20 @@ function scalar(value) {
   return trimmed;
 }
 
+// Top-level fields only; nested maps such as `metadata` are recorded without their children.
 function frontmatter(raw) {
   const match = /^---\n([\s\S]*?)\n---\n/.exec(raw);
   if (!match) return null;
   const fields = {};
-  for (const line of match[1].split('\n')) {
-    const field = /^([A-Za-z][A-Za-z0-9-]*):\s*(.*)$/.exec(line);
-    if (field) fields[field[1]] = scalar(field[2]);
+  const lines = match[1].split('\n');
+  for (let index = 0; index < lines.length; index += 1) {
+    const field = /^([A-Za-z][A-Za-z0-9-]*):\s*(.*)$/.exec(lines[index]);
+    if (!field) continue;
+    const block = /^([|>])[-+0-9]*$/.exec(field[2].trim());
+    if (!block) { fields[field[1]] = scalar(field[2]); continue; }
+    const parts = [];
+    while (index + 1 < lines.length && (/^\s/.test(lines[index + 1]) || lines[index + 1] === '')) parts.push(lines[++index].trim());
+    fields[field[1]] = parts.join(block[1] === '>' ? ' ' : '\n').trim();
   }
   return fields;
 }
@@ -35,7 +42,7 @@ export function validateSkill(directory) {
   const file = path.join(root, 'SKILL.md');
   const errors = [];
   if (!existsSync(file)) return { valid: false, errors: ['SKILL.md is missing'] };
-  const raw = readFileSync(file, 'utf8');
+  const raw = readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
   const fields = frontmatter(raw);
   if (!fields) errors.push('SKILL.md requires YAML frontmatter');
   else {
@@ -43,7 +50,9 @@ export function validateSkill(directory) {
     if (fields.name !== expected) errors.push(`frontmatter name must match folder '${expected}'`);
     if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(fields.name || '') || String(fields.name || '').length > 64) errors.push('name must be lowercase hyphen-case with at most 64 characters');
     if (typeof fields.description !== 'string' || fields.description.length < 40 || fields.description.length > 1024) errors.push('description must contain 40-1024 characters');
-    const unsupported = Object.keys(fields).filter((key) => !['name', 'description'].includes(key));
+    // The frontmatter fields of the Agent Skills specification (agentskills.io/specification).
+    const unsupported = Object.keys(fields).filter((key) => !['name', 'description', 'license', 'compatibility', 'metadata', 'allowed-tools'].includes(key));
+    if (typeof fields.compatibility === 'string' && fields.compatibility.length > 500) errors.push('compatibility must contain at most 500 characters');
     if (unsupported.length) errors.push(`unsupported frontmatter fields: ${unsupported.join(', ')}`);
   }
   if (!raw.includes('## Validation')) errors.push('SKILL.md must document Validation');

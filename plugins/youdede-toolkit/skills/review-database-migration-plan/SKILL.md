@@ -39,7 +39,7 @@ Record that refusal in the section this contract names for findings, or, when it
 
 ## Validation
 
-Run `node "<skill-root>/scripts/classify-sql-risks.mjs" --file <sql-file>` only on a local SQL file. Do not assume the project working directory contains the helper. Its JSON findings are conservative syntax signals, not a parser or safety verdict. Preserve rule IDs and line numbers; do not edit or execute SQL.
+Run `node "<skill-root>/scripts/classify-sql-risks.mjs" --file <sql-file>` only on a local SQL file. Do not assume the project working directory contains the helper. Its JSON findings are conservative syntax signals, not a parser or safety verdict. It reads string literals with PostgreSQL's default rules (a backslash escapes only inside `E'...'`); for SQL written for backslash-escaping dialects, confirm any finding near a backslash by reading the file. Preserve rule IDs and line numbers; do not edit or execute SQL.
 
 Inspect the supplied plan for application compatibility before destructive DDL, transaction boundaries, lock-sensitive operations, batch size and progress for backfills, observability, rollback or forward-repair plan, and a named decision owner.
 

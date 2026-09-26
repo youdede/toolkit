@@ -9,12 +9,12 @@ description: "Write or review a bounded B2B cold-email sequence using lawful tar
 
 The user must own the lawful basis, sender identity, list provenance, and sending authority. Personalization must connect a public business signal to a plausible problem without pretending familiarity.
 
-At minimum, obtain lawful basis, sender identity, list provenance, and sending authority. Without those, stop and request the missing one.
+At minimum, obtain lawful basis, sender identity, list provenance, sending authority, and the evidence behind personalization and claims. Without those, stop and request the missing one.
 
 ## Construct the outreach sequence
 
 1. Confirm recipient role, relevant business signal, problem hypothesis, offer, proof, sender identity, jurisdictional constraints, sequence cap, and suppression process.
-2. Write a plain-language first message with a truthful subject, specific relevance, one supported value claim, one low-friction question, sender identification, and required opt-out.
+2. Write a plain-language first message with a truthful subject, specific relevance, one supported value claim, one low-friction question, sender identification, and required opt-out. When US recipients are in scope, include the sender's valid physical postal address (street address, registered USPS post office box, or registered private mailbox): CAN-SPAM requires it in every commercial email and makes no exception for business-to-business email (FTC, CAN-SPAM Act: A Compliance Guide for Business, August 2023, edited January 2024).
 3. Create a short follow-up sequence where each message adds distinct evidence or context. Stop after the declared cap and suppress replies, opt-outs, and invalid addresses immediately.
 4. Review every sentence for unverifiable familiarity, hidden tracking assumptions, manipulative urgency, sensitive inference, deliverability risk, and mismatch between promise and destination.
 
@@ -42,6 +42,7 @@ Record that refusal in the section this contract names for findings, or, when it
 
 - Each message can trace relevance and claims to approved evidence.
 - The sequence specifies cadence, maximum touches, suppression events, and ownership.
+- Every message carries the opt-out and, where US law applies, the sender's valid physical postal address.
 - A negative review checks deception, protected data, excessive pressure, and reply-path handling.
 
 ## Stop conditions

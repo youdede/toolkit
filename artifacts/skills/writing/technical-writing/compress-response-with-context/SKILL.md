@@ -18,7 +18,7 @@ Reduce length, not truth. Preserve the outcome, material caveats, commitments, p
 
 ## Output contract
 
-Return every one of these headings in your reply, in this order, on every path: `## Evidence`, `## Result`, `## Next action`, `## Boundary`, `## Missing inputs`.
+Return every one of these headings in your reply, in this order, on every path: `## Result`, `## Next action`. Keep them short: state the evidence you relied on, any boundary, and any missing input in one line each under Result.
 
 This holds when you decline, when you bound the scope, and when required inputs are absent. A section with nothing to report says so in one line; it is never omitted.
 
