@@ -43,7 +43,7 @@ The framework does not generate responses. To check an output produced elsewhere
     {
       "caseId": "positive-checkout-image-regression",
       "disposition": "apply",
-      "text": "## Findings\n...\n\n## Reviewed surfaces and residual uncertainty\n..."
+      "text": "## Findings\n...\n\n## Reviewed surfaces\n..."
     }
   ]
 }

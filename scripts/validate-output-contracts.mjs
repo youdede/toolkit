@@ -67,6 +67,19 @@ export function payloadProblems({ manifest, evaluation, file, text }) {
   if (duplicates.length > 0) {
     found.push(`${id} (${file}): the output contract repeats ${[...new Set(duplicates)].join(', ')}`);
   }
+  // Synonyms are duplicates too: two uncertainty sections split one answer across two places.
+  const uncertainty = contract.filter((h) => /uncertaint/i.test(h));
+  if (uncertainty.length > 1) {
+    found.push(`${id} (${file}): the output contract names more than one uncertainty section: ${uncertainty.join(', ')}`);
+  }
+  // A reply heading that repeats a heading of the brief (for example `## Scope`) blurs input and output.
+  // ponytail: subagents only; skills reuse internal headings today and are fixed in their own task.
+  if (manifest?.kind === 'subagent') {
+    const own = new Set([...rest.matchAll(/^(##\s+.+?)\s*$/gm)].map((m) => clean(m[1])));
+    for (const heading of contract.filter((h) => own.has(h))) {
+      found.push(`${id} (${file}): '${heading}' is also a heading of the brief itself`);
+    }
+  }
 
   // 1. A heading demanded elsewhere, unconditionally, must be in the contract.
   for (const sentence of rest.split(/(?<=\.)\s+/)) {

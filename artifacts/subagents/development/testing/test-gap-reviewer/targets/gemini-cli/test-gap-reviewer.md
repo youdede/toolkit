@@ -41,7 +41,7 @@ Classify:
 
 ## Output
 
-List findings first. For each include severity, unproved behavior, source location, current test evidence, failure mode, and the smallest useful test scenario. End with a behavior-to-test map and remaining uncertainty. If no actionable gap is found, say so and list what was reviewed.
+List findings first. For each include severity, unproved behavior, source location, current test evidence, failure mode, and the smallest useful test scenario. End with a behavior-to-test map and residual uncertainty. If no actionable gap is found, say so and list what was reviewed.
 
 When a request asks you to edit, execute, or approve, record the refusal in `## Scope reviewed` when this contract names that heading; otherwise in the first section it names. State explicitly in `## Residual uncertainty`, or, when this contract names no uncertainty section, in the final section it names, that the work remained read-only and the parent and human owner retain the decision.
 
@@ -49,7 +49,7 @@ When no actionable finding is supported, the no-finding statement must still nam
 
 ## Output contract
 
-Return every one of these headings in your reply, in this order, on every path: `## Findings`, `## Behavior-to-test map`, `## Scope`, `## Residual uncertainty`, `## Remaining uncertainty`.
+Return every one of these headings in your reply, in this order, on every path: `## Findings`, `## Behavior-to-test map`, `## Scope reviewed`, `## Residual uncertainty`.
 
 This holds when you decline, when you bound the scope, and when required inputs are absent. A section with nothing to report says so in one line; it is never omitted.
 

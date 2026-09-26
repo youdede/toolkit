@@ -44,7 +44,7 @@ When no actionable finding is supported, the no-finding statement must still nam
 
 ## Output contract
 
-Return every one of these headings in your reply, in this order, on every path: `## Findings`, `## Scope`, `## Residual uncertainty`, `## Reviewed boundaries and residual uncertainty`.
+Return every one of these headings in your reply, in this order, on every path: `## Findings`, `## Scope reviewed`, `## Reviewed boundaries`, `## Residual uncertainty`.
 
 This holds when you decline, when you bound the scope, and when required inputs are absent. A section with nothing to report says so in one line; it is never omitted.
 

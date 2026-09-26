@@ -28,6 +28,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 - The command precondition bridge reports a required file under a missing directory as `missing`. Before, `file-exists` called it `path escapes the workspace`, so `draft-evidenced-plan` gave a false security diagnosis when its baseline context was not installed.
 - `re-pin-mcp-tools` builds its proposal from the repository's current `catalog/mcp-pins.json` and no longer installs a copy of it. Before, the installed copy went stale after the first re-pin, so `previousTools` and the confirmation digest were computed against old pins.
 - `record-work-checkpoint` now says the ledger bridge rejects the whole checkpoint when a touched path is absolute or escapes the repository. Before, it said such paths were dropped.
+- Six review subagents (`web-performance-reviewer`, `test-gap-reviewer`, `application-security-reviewer`, `migration-risk-reviewer`, `accessibility-conformance-reviewer`, `release-risk-reviewer`) ask for one uncertainty section and name their scope section `## Scope reviewed`. Before, some contracts required two uncertainty sections, and all six required `## Scope`, the name of the brief's own input section, so refusals had no declared place. The output-contract validator now rejects both patterns in subagents.
 
 ## 0.3.0 (2026-09-21)
 

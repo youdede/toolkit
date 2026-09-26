@@ -77,3 +77,17 @@ test('a repeated heading in the contract is reported', () => {
   assert.equal(problems.length, 1);
   assert.match(problems[0], /repeats ## Findings/);
 });
+
+test('a contract naming two uncertainty sections is reported', () => {
+  const text = '# Example\n\n## Output contract\n\nReturn every one of these headings in your reply, in this order, on every path: `## Findings`, `## Residual uncertainty`, `## Remaining uncertainty`.\n';
+  const problems = payloadProblems({ manifest: { id: 'subagent/test/example' }, evaluation: null, file: 'a.md', text });
+  assert.equal(problems.length, 1);
+  assert.match(problems[0], /names more than one uncertainty section/);
+});
+
+test('a subagent contract may not reuse a heading of its own brief', () => {
+  const text = '# Example\n\n## Scope\n\nRequire changed paths.\n\n## Output contract\n\nReturn every one of these headings in your reply, in this order, on every path: `## Findings`, `## Scope`.\n';
+  const problems = payloadProblems({ manifest: { id: 'subagent/test/example', kind: 'subagent' }, evaluation: null, file: 'a.md', text });
+  assert.equal(problems.length, 1);
+  assert.match(problems[0], /'## Scope' is also a heading of the brief itself/);
+});
