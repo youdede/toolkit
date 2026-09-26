@@ -1,11 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import path from 'node:path';
 import {
   analyzeRelationshipGraph,
   loadPacks,
   publicCatalog,
   publicPackCatalog,
+  ROOT,
   subagentBodyDrift,
   validateArtifact,
   validatePack,
@@ -290,4 +292,21 @@ test('subagent bodies must match across targets apart from the Copilot turn budg
   const copilot = body.replace('You review.\n', 'Complete the brief within 10 turns. Stop and return partial evidence instead of expanding the scope when that budget is exhausted.\n\nYou review.\n');
   assert.deepEqual(subagentBodyDrift({ 'claude-code': body, 'github-copilot': copilot }), []);
   assert.deepEqual(subagentBodyDrift({ 'claude-code': body, opencode: body.replace('You review.', 'You approve.') }), ['opencode']);
+});
+
+test('every relative $schema reference in artifacts and packs resolves to a file', () => {
+  const broken = [];
+  const walk = (directory) => {
+    for (const entry of readdirSync(directory, { withFileTypes: true })) {
+      const full = path.join(directory, entry.name);
+      if (entry.isDirectory()) walk(full);
+      else if (entry.name.endsWith('.json')) {
+        const reference = JSON.parse(readFileSync(full, 'utf8')).$schema;
+        if (typeof reference === 'string' && !/^https?:/.test(reference) && !existsSync(path.resolve(path.dirname(full), reference))) broken.push(full);
+      }
+    }
+  };
+  walk(path.join(ROOT, 'artifacts'));
+  walk(path.join(ROOT, 'packs'));
+  assert.deepEqual(broken, []);
 });
