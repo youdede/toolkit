@@ -1,6 +1,6 @@
 # Release version consistency guard for Claude Code
 
-This hook verifies the local metadata identity used for a Node package release. It compares package.json with package-lock.json or npm-shrinkwrap.json before publication.
+This hook verifies the local metadata identity used for a Node package release. It compares package.json with package-lock.json or npm-shrinkwrap.json before `npm publish`. For `pnpm publish`, `yarn publish`, and `yarn npm publish` it validates package.json only, because pnpm and Yarn lockfiles do not record the root version. Commands are read through the shared shell analysis (sequences, `sudo`, `env`, `bash -c`); after a static `cd`, the package in that directory is inspected. Values of publish options such as `--tag` and `--access` are not package specs; publishing a tarball, a folder, or a workspace is refused as uninspectable.
 
 Matching valid versions on a publishable package, explicit package-manager dry runs, and unrelated commands remain allowed.
 
