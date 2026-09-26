@@ -14,7 +14,7 @@ export const OUTPUT_BUDGET_BYTES = 64 * 1024;
 export function evaluate(context) {
   if (!context || typeof context.outputBytes !== 'number' || context.outputBytes < 0) return { exitCode: 0, guidance: null };
   if (context.outputBytes <= context.budget) return { exitCode: 0, guidance: null };
-  const ratio = Math.round(context.outputBytes / context.budget);
+  const ratio = (context.outputBytes / context.budget).toFixed(1);
   return {
     exitCode: 0,
     guidance: `Tool output used ~${Math.round(context.outputBytes / 1024)} KiB (${ratio}x the ${Math.round(context.budget / 1024)} KiB budget). Re-run with pagination, filtering, or output redirected to a file you then read in slices.`
@@ -32,20 +32,20 @@ async function readStdin() {
   let bytes = 0;
   for await (const chunk of process.stdin) {
     bytes += chunk.length;
-    if (bytes > MAX_STDIN_BYTES) return null; // oversized observation input: degrade silently
+    if (bytes > MAX_STDIN_BYTES) return null;
     chunks.push(chunk);
   }
   return Buffer.concat(chunks).toString('utf8');
 }
 
-if (process.argv[1] && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
   let guidance = null;
   try {
     const raw = await readStdin();
-    if (raw !== null) {
-      const input = raw.trim() ? JSON.parse(raw) : {};
-      guidance = evaluate(collectContext(input)).guidance;
-    }
+    // Input above the read limit is the largest output of all: it is reported without parsing.
+    guidance = raw === null
+      ? `Tool output exceeded the ${MAX_STDIN_BYTES / 1024 / 1024} MiB inspection limit (more than ${Math.round(MAX_STDIN_BYTES / OUTPUT_BUDGET_BYTES)}x the ${OUTPUT_BUDGET_BYTES / 1024} KiB budget). Re-run with pagination, filtering, or output redirected to a file you then read in slices.`
+      : evaluate(collectContext(raw.trim() ? JSON.parse(raw) : {})).guidance;
   } catch {
     guidance = null;
   }

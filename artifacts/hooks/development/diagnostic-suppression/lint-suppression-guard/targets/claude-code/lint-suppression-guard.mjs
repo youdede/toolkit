@@ -28,7 +28,7 @@ function rebuildRevision(input, before) {
 export function collectContext(input, cwd = process.cwd()) {
   const file = input?.tool_input?.file_path || input?.tool_input?.file || '';
   if (typeof file !== 'string' || !file) return { file: '', complete: false };
-  const root = path.resolve(input?.cwd || cwd); const absolute = path.resolve(root, file);
+  const root = path.resolve(process.env.CLAUDE_PROJECT_DIR || input?.cwd || cwd); const absolute = path.resolve(root, file);
   if (!within(root, absolute)) return { file, complete: false, inspectionError: 'path-escape' };
   try {
     const canonicalRoot = realpathSync(root); const boundary = realpathSync(nearestExistingParent(absolute));
@@ -57,9 +57,37 @@ const BROAD_DIRECTIVES = [
   ['rust-all-warnings', /#!\s*\[\s*allow\s*\(\s*warnings\s*\)\s*\]/g],
   ['jvm-all-warning-suppression', /@SuppressWarnings\s*\(\s*["'](?:all|ALL)["']\s*\)/g]
 ];
-export function suppressionInventory(text) {
+// Directives live in comments, so string literal contents are blanked first: "@ts-ignore" in a
+// string is text, not a suppression. Comments are kept as they are, so a quote inside a comment
+// cannot hide a directive. '…' and "…" end at a newline; `…` may span lines.
+function blankStrings(text, file = '') {
+  const hash = /\.(?:py|rb|php)$/i.test(file);
+  const slash = !/\.(?:py|rb)$/i.test(file);
+  let output = '';
+  let state = null;
+  for (let index = 0; index < text.length; index += 1) {
+    const character = text[index];
+    const two = text.slice(index, index + 2);
+    if (state === 'line') { output += character; if (character === '\n') state = null; continue; }
+    if (state === 'block') { output += character; if (two === '*/') { output += '/'; index += 1; state = null; } continue; }
+    if (state) {
+      if (character === '\n') { output += '\n'; if (state !== '`') state = null; continue; }
+      if (character === '\\' && text[index + 1] !== '\n' && index + 1 < text.length) { output += '  '; index += 1; continue; }
+      if (character === state) { output += character; state = null; } else output += ' ';
+      continue;
+    }
+    if (slash && two === '//') { output += character; state = 'line'; continue; }
+    if (slash && two === '/*') { output += two; index += 1; state = 'block'; continue; }
+    if (hash && character === '#') { output += character; state = 'line'; continue; }
+    if (character === '"' || character === "'" || character === '`') { output += character; state = character; continue; }
+    output += character;
+  }
+  return output;
+}
+export function suppressionInventory(text, file = '') {
   const inventory = [];
-  for (const [dialect, expression] of BROAD_DIRECTIVES) for (const match of text.matchAll(expression)) inventory.push({ dialect, offset: match.index });
+  const code = blankStrings(text, file);
+  for (const [dialect, expression] of BROAD_DIRECTIVES) for (const match of code.matchAll(expression)) inventory.push({ dialect, offset: match.index });
   return inventory;
 }
 export function evaluate(input, context = {}) {
@@ -69,8 +97,8 @@ export function evaluate(input, context = {}) {
   if (!sourceFile(context.file || input.tool_input.file_path || input.tool_input.file || '')) return allow();
   if (!context.complete) return block('lint-suppression-unverified', 'the diagnostic edit could not be reconstructed');
   const before = new Map(); const after = new Map();
-  for (const item of suppressionInventory(context.before || '')) before.set(item.dialect, (before.get(item.dialect) || 0) + 1);
-  for (const item of suppressionInventory(context.proposed || '')) after.set(item.dialect, (after.get(item.dialect) || 0) + 1);
+  for (const item of suppressionInventory(context.before || '', context.file)) before.set(item.dialect, (before.get(item.dialect) || 0) + 1);
+  for (const item of suppressionInventory(context.proposed || '', context.file)) after.set(item.dialect, (after.get(item.dialect) || 0) + 1);
   for (const [dialect, count] of after) if (count > (before.get(dialect) || 0)) return block('broad-lint-suppression-added', 'the change adds a broad diagnostic suppression without a rule identifier');
   return allow();
 }

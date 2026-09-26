@@ -138,7 +138,7 @@
     },
     "phase-gate-guard": {
       "risk": "Questo controllo automatico blocca le scritture delle prove di fase a meno che la fase precedente nella catena spec-design-tasks-implementation esista ed sia valida; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
-      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare le scritture delle prove della fase a meno che la fase precedente nella catena specifica-attività-attività-implementazione esista e sia valida senza lavoro differito."
+      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare le scritture delle prove della fase a meno che la fase precedente nella catena spec-design-tasks-implementation esista e sia valida senza lavoro differito."
     },
     "compaction-handoff-guard": {
       "risk": "Questo osservatore registra le ricevute delimitate e prive di contenuto prima e dopo la compattazione della conversazione; scrive solo ricevute locali delimitate e non può bloccare l'evento.",

@@ -1,5 +1,5 @@
 {
-  "sourceHash": "b68adfb80366dcaf7fa8d34911336b8a5b343925ce6ae0aafbb4244316c08354",
+  "sourceHash": "8b3604dd82633bbf1129a7999288a38c696a3eafe49440118a6a26b6bedf9484",
   "narratives": {
     "abuse-resistance-analyst": {
       "summary": "Analyseert één handeling op kostenversterking die een aanvaller kan sturen, fan-out en het omzeilen van quota.",
@@ -290,7 +290,7 @@
     },
     "authentication-accessibility-guard": {
       "summary": "Blokkeert bewerkingen die voorkomen dat een wachtwoordmanager een authenticatieveld invult of dat de gebruiker erin plakt.",
-      "description": "Parseert afgebakende markup en verwerpt wijzigingen die het plakken in een inlogveld voortaan blokkeren, het automatisch invullen ervan uitschakelen, het autocomplete-token verwijderen of een attribuut toevoegen dat wachtwoordmanagers uitsluit. Elk daarvan is een gedocumenteerde situatie die niet voldoet aan WCAG 2.2 SC 3.3.8.",
+      "description": "Parseert afgebakende markup en verwerpt wijzigingen die het plakken in een inlogveld voortaan blokkeren, het automatisch invullen ervan uitschakelen of een attribuut toevoegen dat wachtwoordmanagers uitsluit, de fouten die WCAG 2.2 SC 3.3.8 documenteert, en uit voorzorg ook wijzigingen die het autocomplete-token verwijderen.",
       "purposes": [
         "Blokkeert bewerkingen die voorkomen dat een wachtwoordmanager een authenticatieveld invult of dat de gebruiker erin plakt."
       ],
@@ -802,14 +802,15 @@
       "refuses": [
         "Inspecteert geen migratiebestanden of wijzigingen in databaseschema’s.",
         "Maakt geen verbinding met een database en voert EXPLAIN niet uit.",
-        "Beschouwt opgeslagen procedures niet als alleen-lezen zonder een expliciet statisch contract."
+        "Beschouwt opgeslagen procedures niet als alleen-lezen zonder een expliciet statisch contract.",
+        "Inspecteert geen SQL die vanuit interpreters, scripts of applicatiecode wordt verzonden."
       ]
     },
     "debug-artifact-guard": {
       "summary": "Blokkeert commits met debuggerinstructies of tests die exclusief worden uitgevoerd, wanneer deze met hoge zekerheid worden herkend.",
-      "description": "Een deterministische Claude Code PreToolUse-controle voor commits die afgebakende blobs uit de Git-index leest en onopgeloste mergemarkeringen, op zichzelf staande debuggerbreakpoints en exclusief uit te voeren JavaScript-, TypeScript- of Ruby-tests weigert, zonder het scannen op geheimen te dupliceren.",
+      "description": "Een deterministische Claude Code PreToolUse-controle voor commits die afgebakende blobs uit de Git-index, en de bestanden uit de werkmap die een commit zou meenemen, leest en onopgeloste mergemarkeringen, op zichzelf staande debuggerbreakpoints en exclusief uit te voeren JavaScript-, TypeScript- of Ruby-tests weigert, zonder het scannen op geheimen te dupliceren.",
       "purposes": [
-        "Leest afgebakende blobs uit de Git-index en weigert deterministisch met hoge zekerheid herkende debugresten."
+        "Leest afgebakende blobs uit de Git-index en de bestanden uit de werkmap die een commit zou meenemen, en weigert deterministisch met hoge zekerheid herkende debugresten."
       ],
       "refuses": [
         "Scant niet op inloggegevens, risico’s van afhankelijkheden, lintfouten, gewone logging of onvolledige TODO-opmerkingen.",
@@ -1587,7 +1588,7 @@
     },
     "focus-style-regression-guard": {
       "summary": "Blokkeert CSS-focustoestanden die door een wijziging onzichtbaar worden en geen zichtbaar alternatief hebben.",
-      "description": "Parseert afgebakende CSS-regelblokken en verwerpt netto nieuwe focusselectoren die outlines uitschakelen zonder een zichtbare vervanging in de vorm van een outline, schaduw, rand of tekstdecoratie.",
+      "description": "Parseert afgebakende CSS-regelblokken en verwerpt netto nieuwe focusselectoren die outlines uitschakelen zonder een zichtbare vervanging in de vorm van een outline, schaduw, rand, tekstdecoratie, achtergrond of filter.",
       "purposes": [
         "Blokkeert CSS-focustoestanden die door een wijziging onzichtbaar worden en geen zichtbaar alternatief hebben."
       ],
@@ -1635,7 +1636,7 @@
     },
     "generated-file-guard": {
       "summary": "Voorkomt rechtstreekse bewerkingen door agents aan bestanden waarvan vaststaat dat het gegenereerde artefacten zijn.",
-      "description": "Een deterministische Claude Code PreToolUse-controle voor Write en Edit die expliciete headers voor gegenereerde bestanden, specifieke naamgevingsconventies voor gegenereerde bestanden en exacte paden uit het projectbeleid herkent, zonder brede buildmappen standaard als gegenereerd te beschouwen.",
+      "description": "Een deterministische Claude Code PreToolUse-controle voor Write en Edit die expliciete headers voor gegenereerde bestanden, specifieke naamgevingsconventies voor gegenereerde bestanden en uitvoermappen die door frameworks worden beheerd (.next, .nuxt, .svelte-kit) herkent, zonder brede buildmappen standaard als gegenereerd te beschouwen.",
       "purposes": [
         "Verzamelt een afgebakende bestandsheader en beschermt deterministisch uitvoer waarvan is bevestigd dat die gegenereerd is."
       ],
@@ -1842,7 +1843,7 @@
     },
     "lint-suppression-guard": {
       "summary": "Blokkeert netto nieuwe, brede onderdrukkingen van diagnostische meldingen, terwijl afgebakende uitzonderingen voor specifieke regels zijn toegestaan.",
-      "description": "Vergelijkt afgebakende broncoderevisies en verwerpt nieuwe onderdrukkingen van diagnostische meldingen voor ESLint, TypeScript, Python, Go en IDE’s die voor een heel bestand gelden of geen specifieke diagnosecode vermelden, terwijl gerichte onderdrukkingen met specifieke identificatoren zijn toegestaan.",
+      "description": "Vergelijkt afgebakende broncoderevisies en verwerpt nieuwe onderdrukkingen voor ESLint, Python, Go en IDE’s die geen regel noemen en nieuwe TypeScript-richtlijnen @ts-ignore of @ts-nocheck, terwijl richtlijnen die een regel noemen zijn toegestaan.",
       "purposes": [
         "Blokkeert netto nieuwe, brede onderdrukkingen van diagnostische meldingen, terwijl afgebakende uitzonderingen voor specifieke regels zijn toegestaan."
       ],
@@ -2229,7 +2230,8 @@
       "refuses": [
         "Beslist niet namens de agent dat een beleidswijziging legitiem is.",
         "Wijzigt geen beschermde configuratie en biedt geen uitzonderingen die de agent kan aanpassen.",
-        "Inspecteert of blokkeert geen bestanden buiten de actieve projectroot."
+        "Inspecteert of blokkeert geen bestanden buiten de actieve projectroot.",
+        "Onderschept geen shellopdrachten die een beleidsbestand wijzigen."
       ]
     },
     "positioning-evidence-analyst": {
@@ -3059,7 +3061,7 @@
     },
     "test-assertion-removal-guard": {
       "summary": "Blokkeert het verwijderen van de laatste herkenbare assertie uit een bestaand testbestand.",
-      "description": "Vergelijkt afgebakende revisies van testbestanden en stopt een wijziging wanneer herkenbare tests behouden blijven, maar alle asserties of basisinstructies om een test te laten falen verdwijnen uit een bestand dat eerder zulke controles bevatte.",
+      "description": "Vergelijkt afgebakende revisies van testbestanden en stopt een wijziging wanneer een test die in het bestand blijft elke herkenbare assertie of basisinstructie om een test te laten falen verliest.",
       "purposes": [
         "Blokkeert het verwijderen van de laatste herkenbare assertie uit een bestaand testbestand."
       ],
@@ -3141,7 +3143,7 @@
       "refuses": [
         "Blokkeert, vertraagt of wijzigt de waargenomen gebeurtenis niet; het registreert of rapporteert alleen.",
         "Voert geen ingediende inhoud uit, roept geen LLM aan en verzendt geen gegevens buiten de machine.",
-        "Beschouwt onleesbare, via symlinks gekoppelde of te grote toestand niet als geldig bewijs."
+        "Meet de uitvoer van andere tools dan shellopdrachten niet."
       ]
     },
     "transport-security-regression-guard": {

@@ -18,6 +18,10 @@ import * as h10 from '../artifacts/hooks/operations/delegation-budget/subagent-f
 import * as h11 from '../artifacts/hooks/operations/process-lifecycle/foreground-process-guard/targets/claude-code/foreground-process-guard.mjs';
 import * as h12 from '../artifacts/hooks/design/authentication-access/authentication-accessibility-guard/targets/claude-code/authentication-accessibility-guard.mjs';
 
+// The guards prefer CLAUDE_PROJECT_DIR over the payload cwd; clear an inherited value so the
+// fixtures stay hermetic when the suite runs inside a Claude Code session.
+delete process.env.CLAUDE_PROJECT_DIR;
+
 const scripts = {
   'schema-compatibility-guard': path.resolve('artifacts/hooks/data/compatibility/schema-compatibility-guard/targets/claude-code/schema-compatibility-guard.mjs'),
   'api-contract-compatibility-guard': path.resolve('artifacts/hooks/development/contract-compatibility/api-contract-compatibility-guard/targets/claude-code/api-contract-compatibility-guard.mjs'),
