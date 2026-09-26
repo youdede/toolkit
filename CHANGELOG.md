@@ -11,6 +11,8 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 
 ### Changed
 
+- The npm package no longer contains the `skills/` and `plugins/` marketplace copies, the marketplace manifests, or the README images; native marketplaces read them from the repository. The packed size drops from 4.76 MB to 1.40 MB with identical CLI behavior.
+- Repository validation rejects a subagent whose body differs between targets, apart from the Copilot turn-budget line.
 - Behavioral evaluation coverage now includes every skill, subagent, command, and context. Release benchmark inputs, package verification, readiness counts, catalog documentation, and naming/authoring guidance use the same six-kind model.
 - Command documentation now states the actual enforcement boundary: deterministic preconditions are a mandatory first prompt action, not a pre-invocation parser supplied by the native slash-command runtime.
 
@@ -19,7 +21,10 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 - `commit-guard` now scans the working tree when the same command stages content or the commit takes content from the working tree (`-a`, pathspecs, `--include`, `--only`). Before, `git add .env && git commit` and `git commit -am` were allowed because the index was inspected before the staging ran.
 - `protected-branch-guard` resolves a bare `git push` through Git's own `@{push}` and blocks only a protected destination; it expands Git aliases once, treats refspecs on remotes with a `remote.<name>.push` mapping as uninspectable, and blocks `send-pack` and command runners (`xargs`, `find -exec`) that start a relevant Git subcommand. Before, an alias or a push mapping could force-push to `main`.
 - The read-only MCP runtime refuses credential files (`.env`, private keys, cloud credentials) that its profiles declare no access to. Before, `read_file` returned `.env` content.
-- `sensitive-file-access-guard` blocks recursive searches, archives, and copies whose directory contains a protected file. Before, `grep -r KEY .` printed `.env`.
+- `sensitive-file-access-guard` blocks recursive searches, archives, and copies whose directory contains a protected file. Before, `grep -r KEY .` printed `.env`. The Claude Code Grep tool and `rg` honour `.gitignore` (unless `-u`, `-uu`, `--no-ignore`, or `--no-ignore-vcs` is given), so the guard asks Git for the non-ignored files in those cases; an ignored `.env` no longer blocks them. The guard now runs a bounded `git` subprocess, so its latency class is `bounded`.
+- The read-only MCP runtime negotiates `protocolVersion` against the versions it implements (`2025-11-25`, `2025-06-18`, `2025-03-26`, `2024-11-05`) instead of echoing any value, and answers unparsable JSON with `-32700`. JSON-RPC batches, required by `2025-03-26`, are still refused.
+- Removing the last artifact from an install root now deletes the empty installer state, and the state lock retry is bounded by the lock timeout.
+- The release workflow publishes the exact commit the `verify` job inspected rather than re-resolving the tag.
 
 ## 0.3.0 (2026-09-21)
 

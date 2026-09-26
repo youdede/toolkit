@@ -25,6 +25,8 @@ Use `--dry-run` before installation to resolve the adapter, validate collisions,
 
 Project scope resolves from `--cwd` or the current directory. Roots are selected by target, scope, and artifact kind rather than by target alone; [targets.md](targets.md) lists the per-target project and user roots. `doctor` aggregates every active component root, while install and removal mutate only the root owned by the selected artifact. The CLI rejects a target or scope not declared by the artifact adapter.
 
+Codex project-scope hooks are written to `.codex/hooks.json` with the absolute path of the project on the installing machine. Do not commit that file for other machines; reinstall on each machine instead.
+
 ## Existing files
 
 The default is conservative. A destination that already exists and is not owned by the same artifact stops installation. A managed payload or managed hook entry whose current content differs from its recorded installation state also stops reinstall or upgrade. `--force` is required to replace either kind of user modification, and it does not delete unrelated siblings. When it replaces an unmanaged regular payload file, the installer records a bounded owner-only backup and restores that exact file on uninstall. Unmanaged files larger than 1 MiB are refused instead of being copied into installation state. A toolkit-created hook settings file is removed when the last owning hook is removed; user-added settings keep the file in place.

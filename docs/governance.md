@@ -24,7 +24,7 @@ short-lived branch
 | Local commit | Versioned `commit-msg` hook | Conventional header or a stable rejection code |
 | Local push | Versioned `pre-push` hook | Complete `npm run check` result |
 | Pull request | Template plus policy job | Scope, risks, tests, release impact, commit and branch validation |
-| Cross-platform behavior | Pinned GitHub Actions matrix | Linux, macOS, and Windows check runs on supported Node versions |
+| Cross-platform behavior | Pinned GitHub Actions matrix | Linux (ubuntu-latest) check runs on Node 20, 22, and 24; macOS and Windows are not run in CI |
 | Protected history | GitHub ruleset | PR-only, required status, signatures, linear history, no force push/delete |
 | Artifact integrity | Deterministic public manifest | `catalog/integrity.json` root digest |
 | Release authorization | Manual dispatch, exact package-and-tag confirmation, signed tag, and environment controls available on the active plan | Workflow record and npm OIDC provenance |
