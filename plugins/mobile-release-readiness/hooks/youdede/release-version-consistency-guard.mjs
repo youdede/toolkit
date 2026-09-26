@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { lstatSync, readFileSync, realpathSync, statSync } from 'node:fs';
+import { lstatSync, readdirSync, readFileSync, realpathSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -338,7 +338,7 @@ export function gitInvocation(tokens) {
 export const MAX_STDIN_BYTES = 1024 * 1024;
 export const MAX_METADATA_BYTES = 2 * 1024 * 1024;
 const SEMVER = /^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
-const PUBLISH_TEXT = /\b(?:npm|pnpm|yarn)\b[^\n]*\bpublish\b/;
+const PUBLISH_TEXT = /\b(?:npm|pnpm|yarn)\b[^\n]*\bpublish\b|\b(?:fastlane|deliver|pilot|supply|eas|eas-cli|altool|itmstransporter|gradlew|gradle)\b|upload_to_(?:app_store|testflight|play_store)/i;
 // Publish options that take the next word as their value, so it is not a package spec.
 const PUBLISH_VALUE_OPTIONS = new Set(['--tag', '--access', '--otp', '--registry', '--userconfig', '--cache', '--publish-branch', '--report-summary-file', '--new-version', '--message', '-m']);
 
@@ -362,6 +362,48 @@ function publishKind(entry) {
   return { manager, intent: 'publish' };
 }
 
+// Mobile store uploads, as release-clean-state-guard recognizes them: the platforms whose version
+// sources apply, or null. User-defined fastlane lanes are not recognized by name.
+const IOS_ACTIONS = new Set(['deliver', 'appstore', 'upload_to_app_store', 'upload_to_testflight', 'testflight']);
+const ANDROID_ACTIONS = new Set(['supply', 'upload_to_play_store']);
+const FASTLANE_LOCAL = new Set(['init', 'download_metadata', 'download_screenshots', 'generate_summary', 'help', 'list', 'builds', 'find', 'export', 'import', 'add', 'remove']);
+
+function mobilePlatforms(entry) {
+  let executable = executableName(entry.tokens[0]);
+  let args = entry.tokens.slice(1);
+  if (executable === 'bundle' && args[0]?.value === 'exec') { executable = executableName(args[1] ?? { value: '' }); args = args.slice(2); }
+  if (['npx', 'bunx'].includes(executable)) {
+    const start = args.findIndex((token) => !token.value.startsWith('-'));
+    if (start >= 0) { executable = executableName(args[start]); args = args.slice(start + 1); }
+  }
+  const values = args.map((token) => token.value);
+  const words = values.filter((value) => !value.startsWith('-'));
+  if (['fastlane', 'deliver', 'pilot', 'supply'].includes(executable)) {
+    let rest = executable === 'fastlane' ? words : [executable, ...words];
+    if (['ios', 'android', 'mac'].includes(rest[0])) rest = rest.slice(1);
+    if (rest[0] === 'run') rest = rest.slice(1);
+    const [action, subcommand] = rest;
+    if (action === 'pilot') return ['upload', 'distribute'].includes(subcommand) ? ['ios'] : null;
+    if (FASTLANE_LOCAL.has(subcommand)) return null;
+    if (IOS_ACTIONS.has(action)) return ['ios'];
+    if (ANDROID_ACTIONS.has(action)) return ['android'];
+    return null;
+  }
+  if (['eas', 'eas-cli'].includes(executable)) {
+    const submits = words[0] === 'submit' || (words[0] === 'build' && values.some((value) => /^--auto-submit(?:-with-profile)?(?:=|$)/.test(value)));
+    if (!submits) return null;
+    const flag = values.findIndex((value) => value === '--platform' || value === '-p');
+    const platform = flag >= 0 ? values[flag + 1] : values.find((value) => value.startsWith('--platform='))?.slice('--platform='.length);
+    return platform === 'ios' || platform === 'android' ? [platform] : ['ios', 'android'];
+  }
+  const xcrunTool = executable === 'xcrun' ? executableName(args[0] ?? { value: '' }) : executable;
+  if (xcrunTool === 'altool' && values.some((value) => value === '--upload-app' || value === '--upload-package')) return ['ios'];
+  if (xcrunTool === 'itmstransporter' && values.some((value, index) => value === '-m' && values[index + 1] === 'upload')) return ['ios'];
+  if (['gradlew', 'gradlew.bat', 'gradle', 'gradle.bat'].includes(executable)
+    && words.some((task) => /^publish/.test(task.split(':').at(-1)) && !/MavenLocal$/.test(task))) return ['android'];
+  return null;
+}
+
 // { intent, manager, directories }: the first publication in the command and the static cd/pushd
 // targets before it. The shell keeps its directory when a cd fails.
 export function publishPlan(command) {
@@ -380,7 +422,8 @@ export function publishPlan(command) {
       else directories.push(target.value);
       continue;
     }
-    const kind = publishKind(entry);
+    const platforms = mobilePlatforms(entry);
+    const kind = platforms ? { manager: 'mobile', platforms, intent: 'publish' } : publishKind(entry);
     if (!kind) continue;
     if (movedUnknown) return { intent: 'invalid', manager: kind.manager, directories: [] };
     return { ...kind, directories };
@@ -413,6 +456,88 @@ export function inspectVersionState(state) {
   return null;
 }
 
+const MOBILE_VERSION = /^\d+(?:\.\d+){0,2}$/;
+const MAX_VERSION_CODE = 2100000000;
+
+function boundedText(file) {
+  const status = lstatSync(file);
+  if (!status.isFile() || status.isSymbolicLink() || status.size > MAX_METADATA_BYTES) throw new Error('unsafe version metadata');
+  return readFileSync(file, 'utf8');
+}
+
+function optionalText(file) {
+  try { return boundedText(file); } catch (error) { if (error?.code === 'ENOENT' || error?.code === 'ENOTDIR') return null; throw error; }
+}
+
+function childDirectories(directory) {
+  try { return readdirSync(directory, { withFileTypes: true }).filter((entry) => entry.isDirectory()).map((entry) => entry.name).sort().slice(0, 200); }
+  catch { return []; }
+}
+
+// Literal version values of the mobile sources under `root` (and `root/ios`, `root/android`):
+// Xcode MARKETING_VERSION and CURRENT_PROJECT_VERSION outside test bundles, Info.plist
+// CFBundleShortVersionString and CFBundleVersion, Gradle versionName and versionCode of the app
+// module, and Expo app.json version, ios.buildNumber, and android.versionCode. Values built from
+// variables or code (`$(…)`, `rootProject.ext…`, app.config.js) are skipped.
+export function readMobileVersions(root, platforms) {
+  const found = { iosVersions: [], iosBuilds: [], androidNames: [], androidCodes: [], expoVersion: null, expoBuild: null, expoCode: null };
+  const literal = (value) => (typeof value === 'string' && value && !/[$@{}]/.test(value) ? value.trim() : null);
+  if (platforms.includes('ios')) {
+    for (const base of [root, path.join(root, 'ios')]) {
+      for (const name of childDirectories(base)) {
+        if (name.endsWith('.xcodeproj')) {
+          const project = optionalText(path.join(base, name, 'project.pbxproj'));
+          for (const block of project?.matchAll(/buildSettings = \{([^{}]*)\};/g) ?? []) {
+            if (/\b(?:TEST_HOST|BUNDLE_LOADER|TEST_TARGET_NAME) =/.test(block[1])) continue;
+            const marketing = literal(/\bMARKETING_VERSION = "?([^";\n]*)"?;/.exec(block[1])?.[1]);
+            const build = literal(/\bCURRENT_PROJECT_VERSION = "?([^";\n]*)"?;/.exec(block[1])?.[1]);
+            if (marketing) found.iosVersions.push(marketing);
+            if (build) found.iosBuilds.push(build);
+          }
+        } else if (!/Tests?$/.test(name)) {
+          const plist = optionalText(path.join(base, name, 'Info.plist'));
+          const marketing = literal(/<key>CFBundleShortVersionString<\/key>\s*<string>([^<]*)<\/string>/.exec(plist ?? '')?.[1]);
+          const build = literal(/<key>CFBundleVersion<\/key>\s*<string>([^<]*)<\/string>/.exec(plist ?? '')?.[1]);
+          if (marketing) found.iosVersions.push(marketing);
+          if (build) found.iosBuilds.push(build);
+        }
+      }
+    }
+  }
+  if (platforms.includes('android')) {
+    for (const file of ['android/app/build.gradle', 'android/app/build.gradle.kts', 'app/build.gradle', 'app/build.gradle.kts']) {
+      const gradle = optionalText(path.join(root, file));
+      for (const match of gradle?.matchAll(/\bversionCode\s*(?:=\s*)?([^\s;]+)/g) ?? []) if (/^\d+$/.test(match[1])) found.androidCodes.push(match[1]);
+      for (const match of gradle?.matchAll(/\bversionName\s*(?:=\s*)?(["'])([^"'\n]*)\1/g) ?? []) found.androidNames.push(match[2]);
+    }
+  }
+  const app = optionalText(path.join(root, 'app.json'));
+  if (app !== null) {
+    const parsed = JSON.parse(app);
+    const expo = parsed?.expo && typeof parsed.expo === 'object' ? parsed.expo : parsed;
+    if (expo?.version !== undefined) found.expoVersion = expo.version;
+    if (platforms.includes('ios') && expo?.ios?.buildNumber !== undefined) found.expoBuild = expo.ios.buildNumber;
+    if (platforms.includes('android') && expo?.android?.versionCode !== undefined) found.expoCode = expo.android.versionCode;
+  }
+  return found;
+}
+
+// Rules for mobile sources: every value has the store's format, and the iOS app and extension
+// targets agree on one version and one build number. Android flavors may differ, so only the format
+// of their literal values is checked. No source found: nothing to compare.
+export function inspectMobileVersions(found) {
+  const code = (value) => (typeof value === 'number' || /^\d+$/.test(String(value))) && Number(value) >= 1 && Number(value) <= MAX_VERSION_CODE;
+  const invalid = [...found.iosVersions, ...found.iosBuilds].some((value) => !MOBILE_VERSION.test(value))
+    || found.androidNames.some((value) => !value.trim())
+    || found.androidCodes.some((value) => !code(value))
+    || (found.expoVersion !== null && (typeof found.expoVersion !== 'string' || !MOBILE_VERSION.test(found.expoVersion)))
+    || (found.expoBuild !== null && (typeof found.expoBuild !== 'string' || !MOBILE_VERSION.test(found.expoBuild)))
+    || (found.expoCode !== null && !(Number.isInteger(found.expoCode) && code(found.expoCode)));
+  if (invalid) return { ruleId: 'release-version-invalid' };
+  if (new Set(found.iosVersions).size > 1 || new Set(found.iosBuilds).size > 1) return { ruleId: 'release-version-mismatch' };
+  return null;
+}
+
 function isDirectory(candidate) {
   try { return statSync(candidate).isDirectory(); } catch { return false; }
 }
@@ -428,6 +553,7 @@ export function collectContext(input, cwd = process.cwd()) {
       const next = path.resolve(root, directory);
       if (isDirectory(next)) root = next;
     }
+    if (plan.manager === 'mobile') return { relevant: true, mobile: readMobileVersions(root, plan.platforms) };
     const manifest = boundedJson(path.join(root, 'package.json'));
     const lockVersions = [];
     const lockRequired = plan.manager === 'npm';
@@ -449,6 +575,10 @@ export function collectContext(input, cwd = process.cwd()) {
 export function evaluate(_input, context = {}) {
   if (!context.relevant) return { exitCode: 0 };
   if (context.invalid) return { exitCode: 2, ruleId: 'release-version-inspection-incomplete', message: 'Release package metadata could not be inspected safely.' };
+  if (context.mobile) {
+    const mobile = inspectMobileVersions(context.mobile);
+    return mobile ? { exitCode: 2, ruleId: mobile.ruleId, message: 'Mobile version metadata is not consistent for publication.' } : { exitCode: 0 };
+  }
   const finding = inspectVersionState(context.state);
   return finding
     ? { exitCode: 2, ruleId: finding.ruleId, message: 'Package and lockfile metadata are not consistent for publication.' }
