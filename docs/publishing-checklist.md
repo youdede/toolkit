@@ -95,8 +95,9 @@ repositories, add the accountable publisher as a required reviewer, prevent self
 independent reviewer exists, and update this page in the same change. Keep the dispatch confirmation
 as an additional fail-closed control.
 
-The only `bypass_actors` entry in [`.github/rulesets/main.json`](../.github/rulesets/main.json)
-grants the repository admin role a pull-request-mode bypass. Do not add any other bypass actor.
+[`.github/rulesets/main.json`](../.github/rulesets/main.json) has no `bypass_actors`: nobody,
+including repository admins, can merge into `main` without a green `quality-gate`. Do not add a
+bypass actor.
 
 ## 5. Tag, dispatch, publish, then attest
 
