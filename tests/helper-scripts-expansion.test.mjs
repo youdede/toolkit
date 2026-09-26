@@ -111,6 +111,19 @@ test('TypeScript boundary inspector distinguishes entry points from deep imports
   assert.equal(report.findings[0].reason, 'cross-package-deep-import');
 });
 
+test('TypeScript boundary inspector flags a two-segment deep import into a sibling package', () => {
+  const directory = scratch();
+  const packages = path.join(directory, 'packages');
+  mkdirSync(path.join(packages, 'a', 'src'), { recursive: true });
+  mkdirSync(path.join(packages, 'b', 'src'), { recursive: true });
+  writeFileSync(path.join(packages, 'b', 'src', 'index.ts'), 'export const value = 1;\n');
+  writeFileSync(path.join(packages, 'a', 'src', 'uses-b.ts'), "import { value } from '../../b/src';\nexport { value };\n");
+  const script = 'artifacts/skills/development/architecture/enforce-typescript-module-boundaries/scripts/inspect-module-boundaries.mjs';
+  const result = run(script, ['--root', packages]);
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.deepEqual(JSON.parse(result.stdout).findings.map((f) => f.specifier), ['../../b/src']);
+});
+
 test('deterministic validators reject missing and malformed inputs at the usage boundary', () => {
   const directory = scratch();
   const malformedJson = path.join(directory, 'malformed.json');

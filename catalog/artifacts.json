@@ -14733,7 +14733,7 @@
           {
             "path": "scripts/inspect-module-boundaries.mjs",
             "runtime": "node",
-            "purpose": "Scan static TypeScript import forms for cross-package deep imports under a caller-supplied package root.",
+            "purpose": "Scan static TypeScript import forms for cross-package deep imports under a caller-supplied directory whose immediate children are packages.",
             "sideEffects": "read-only"
           }
         ]
