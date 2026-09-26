@@ -25,6 +25,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 - The `mobile-release-readiness` pack summary (1.0.1) states what its release guards stop today: npm, pnpm, yarn, cargo, twine, and `gh release` publication. `fastlane`, `eas submit`, `xcrun altool`, and Gradle publish tasks are not intercepted, and version consistency covers `package.json` and its lockfile, not mobile build numbers.
 - Two packs no longer call a subagent that does not verify their outcome a verifier. In `browser-verification` 1.0.1, `web-performance-reviewer` is a specialist and the summary says the change is reviewed for web performance risks, not that the journey is independently re-verified. In `session-continuity` 1.1.0, `decision-record-reviewer` is a specialist mapped to `resumable-work`; `verified-session-history` rests on `verify-session-ledger`, which checks the hash chain.
 - Command documentation now states the actual enforcement boundary: deterministic preconditions are a mandatory first prompt action, not a pre-invocation parser supplied by the native slash-command runtime.
+- An ambiguous entry of the shared shell analysis carries `segment`, the tokens of the segment it came from, so a hook can judge that segment's text.
 
 ### Fixed
 

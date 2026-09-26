@@ -98,6 +98,9 @@ const SHELL_PROBES = [
 test('the shell module normalizes segments, operators, quoting, wrappers, and compound commands', () => {
   for (const [command, expected] of SHELL_PROBES) assert.deepEqual(render(command), expected, command);
   assert.deepEqual(parseShellCommands(undefined), { commands: [] });
+  const segmentText = (command) => parseShellCommands(command).commands.map((entry) => entry.segment?.map((token) => token.value).join(' ') ?? null);
+  assert.deepEqual(segmentText('git status && sudo -D /tmp rm x; npm test'), [null, 'sudo -D /tmp rm x', null]);
+  assert.deepEqual(segmentText("bash -c 'ls; env -C / rm tests/a.py'"), [null, 'env -C / rm tests/a.py']);
   assert.equal(parseShellCommands('x'.repeat(SHELL_MAX_COMMAND_BYTES + 1)).error, 'command exceeds analysis limit');
 });
 

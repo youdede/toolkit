@@ -264,7 +264,8 @@ function unwrapCommand(original, depth, inherited = []) {
 // `a && b` runs b only if a succeeded while `a; b` runs b anyway. Wrappers (sudo, env, nice,
 // timeout, xargs, exec, time, noglob, command, nohup) and static `sh -c`/`bash -c`/`eval` layers
 // are removed; `find -exec` adds the command it runs. `changedDirectory` is true after cd, pushd,
-// or popd in the same command.
+// or popd in the same command. An ambiguous entry carries `segment`, the tokens of the innermost
+// segment it came from, so a hook can still judge that segment's text.
 export function parseShellCommands(command, depth = 0, wrappers = []) {
   if (typeof command !== 'string') return { commands: [] };
   if (Buffer.byteLength(command, 'utf8') > SHELL_MAX_COMMAND_BYTES) return { error: 'command exceeds analysis limit', commands: [] };
@@ -275,7 +276,10 @@ export function parseShellCommands(command, depth = 0, wrappers = []) {
     const entries = unwrapCommand(segment.tokens, depth, wrappers);
     // Nested entries keep their inner operator; the last one, and a find action, take the segment's.
     if (entries.length) entries.at(-1).operator = segment.operator;
-    for (const entry of entries) entry.operator ??= segment.operator;
+    for (const entry of entries) {
+      entry.operator ??= segment.operator;
+      if (entry.ambiguous) entry.segment ??= segment.tokens;
+    }
     commands.push(...entries);
   }
   if (depth === 0) {
