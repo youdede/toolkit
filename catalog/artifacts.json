@@ -6423,7 +6423,7 @@
             "path": "targets/claude-code/dynamic-code-execution-guard.mjs",
             "runtime": "node",
             "purpose": "Recognize direct dynamic execution primitives in bounded proposed source content.",
-            "sideEffects": "none"
+            "sideEffects": "read-only"
           }
         ]
       },
@@ -7685,7 +7685,7 @@
       "name": "MCP capability drift guard",
       "version": "1.0.0",
       "kind": "hook",
-      "summary": "Block toolkit MCP tool calls when the server, tool name, or observed description is not pinned.",
+      "summary": "Block toolkit MCP calls whose server or tool name is not pinned, or whose supplied description differs from the pin.",
       "description": "A deterministic fail-closed pre-tool gate that accepts only curated Youdede MCP server and tool identities from a generated pin registry and rejects unknown or description-drifted capabilities.",
       "domain": "security",
       "category": "network-control",
@@ -7708,7 +7708,7 @@
         "review"
       ],
       "risk": "medium",
-      "risk_reason": "This automatic gate blocks toolkit MCP tool calls when the server, tool name, or observed description is not pinned; a false denial can interrupt legitimate work, but it does not execute the blocked action.",
+      "risk_reason": "This automatic gate blocks toolkit MCP tool calls when the server or tool name is not pinned, or when the client supplies a description that differs from the pin; a false denial can interrupt legitimate work, but it does not execute the blocked action.",
       "license": "MIT",
       "execution": {
         "mode": "deterministic",
@@ -7741,12 +7741,12 @@
         "behavior": "enforcing",
         "failurePolicy": "fail-closed",
         "latencyClass": "immediate",
-        "latency_reason": "The entrypoint handles one intercepted event to block toolkit MCP tool calls when the server, tool name, or observed description is not pinned without deferred work.",
+        "latency_reason": "The entrypoint handles one intercepted event to block toolkit MCP tool calls when the server or tool name is not pinned, or when a supplied description differs from the pin, without deferred work.",
         "dataRetention": "none"
       },
       "refuses": [
         "It does not trust MCP annotations, server names, or tool descriptions that are absent from the generated pin registry.",
-        "It does not silently accept added, removed, renamed, or description-drifted tools from curated servers.",
+        "It does not silently accept added, removed, or renamed tools from curated servers, or description-drifted tools when the client supplies the description.",
         "It does not widen egress, secret, filesystem, subprocess, or mutation authority for an MCP server."
       ],
       "targets": [
@@ -7756,23 +7756,27 @@
       "targetCompatibility": {
         "claude-code": {
           "stability": "stable",
-          "limitations": [],
+          "limitations": [
+            "The matcher fires on every MCP tool and the script selects Youdede servers case-insensitively, including plugin-scoped names (mcp__plugin_<plugin>_<server>__<tool>); MCP servers outside the Youdede namespace pass unchecked.",
+            "The documented PreToolUse payload carries no tool description or inventory, so on Claude Code the guard checks server and tool names; description drift is checked only when a payload includes that evidence."
+          ],
           "bindings": [
             {
               "event": "PreToolUse",
-              "matcher": "^mcp__youdede-.+__.+$"
+              "matcher": "^mcp__.+__.+$"
             }
           ]
         },
         "cursor": {
           "stability": "preview",
           "limitations": [
+            "The hook binds beforeMCPExecution without a matcher because Cursor documents no matcher value for that event; the script selects Youdede servers from mcp_server_name. Cursor does not run beforeMCPExecution in cloud agents.",
             "Description drift is checked when the native hook payload includes the tool description or observed inventory; unknown tool identities are always blocked."
           ],
           "bindings": [
             {
-              "event": "preToolUse",
-              "matcher": "mcp__youdede-*"
+              "event": "beforeMCPExecution",
+              "matcher": "*"
             }
           ]
         }

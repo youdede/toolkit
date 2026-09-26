@@ -185,8 +185,9 @@ export function scanCiTrust(content, provider) {
           hasWriteAuthority = true;
         }
       }
-      if (['pull_request_target', 'workflow_run'].includes(keyValue.key)
-        || (keyValue.key === 'on' && /(?:^|[\s[,] ?)(?:pull_request_target|workflow_run)(?:[\s,\]]|$)/.test(keyValue.value))) {
+      // issue_comment runs with repository secrets on a comment anyone can post.
+      if (['pull_request_target', 'workflow_run', 'issue_comment'].includes(keyValue.key)
+        || (keyValue.key === 'on' && /(?:^|[\s[,] ?)(?:pull_request_target|workflow_run|issue_comment)(?:[\s,\]]|$)/.test(keyValue.value))) {
         hasUntrustedTrigger = true;
         untrustedTriggerLine ??= lineNumber;
       }
@@ -194,7 +195,8 @@ export function scanCiTrust(content, provider) {
         findings.push(finding('ci-broad-secret-inheritance', lineNumber, provider));
         hasSecretReference = true;
       }
-      if (keyValue.key === 'ref' && /\$\{\{\s*(?:github\.head_ref|github\.event\.(?:pull_request\.(?:head\.(?:sha|ref)|head_ref)|workflow_run\.head_(?:sha|branch)))\s*\}\}/i.test(keyValue.value)) {
+      if (keyValue.key === 'ref' && (/\$\{\{\s*(?:github\.head_ref|github\.event\.(?:pull_request\.(?:head\.(?:sha|ref)|head_ref)|workflow_run\.head_(?:sha|branch)))\s*\}\}/i.test(keyValue.value)
+        || /refs\/pull\/.*?\/(?:head|merge)\b/i.test(keyValue.value))) {
         hasContributorCheckout = true;
       }
     }
@@ -299,7 +301,11 @@ export function collectContext(input, cwd = process.cwd()) {
     if (typeof toolInput.content === 'string') proposed = toolInput.content;
     else {
       if (!exists) throw new Error('Edit target does not exist');
-      proposed = reconstructEdit(existing, toolInput);
+      if (Array.isArray(toolInput.edits)) {
+        // MultiEdit applies its edits in order, each to the result of the previous one.
+        if (toolInput.edits.length === 0) throw new Error('MultiEdit has no edits');
+        proposed = toolInput.edits.reduce(reconstructEdit, existing);
+      } else proposed = reconstructEdit(existing, toolInput);
     }
     if (Buffer.byteLength(proposed, 'utf8') > MAX_FILE_BYTES) {
       return { relevant: true, provider, relative, errorRule: 'ci-input-too-large', inspectionError: `proposed CI file exceeds ${MAX_FILE_BYTES} bytes` };

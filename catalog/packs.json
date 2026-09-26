@@ -736,7 +736,7 @@
       },
       "hookFanout": [
         {
-          "boundary": "claude-code:PreToolUse:^mcp__youdede-.+__.+$",
+          "boundary": "claude-code:PreToolUse:^mcp__.+__.+$",
           "count": 1
         }
       ],
@@ -1494,11 +1494,7 @@
       "hookFanout": [
         {
           "boundary": "claude-code:PreToolUse:^mcp__.+__.+$",
-          "count": 1
-        },
-        {
-          "boundary": "claude-code:PreToolUse:^mcp__youdede-.+__.+$",
-          "count": 1
+          "count": 2
         },
         {
           "boundary": "claude-code:PreToolUse:Bash|PowerShell",

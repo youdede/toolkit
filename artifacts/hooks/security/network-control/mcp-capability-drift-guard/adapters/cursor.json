@@ -8,8 +8,8 @@
     {"root": "package", "from": "scripts/runtime/hook-command-bridge.mjs", "to": "hooks/youdede/mcp-capability-drift-guard.mjs", "executable": true},
     {"root": "package", "from": "catalog/mcp-pins.json", "to": "hooks/youdede/mcp-pins.json"}
   ],
-  "settingsPatch": {"path": "hooks.json", "hooks": {"preToolUse": [{"type": "command", "command": "node \"{cursorRoot}/hooks/youdede/mcp-capability-drift-guard.mjs\" --target cursor --failure-policy fail-closed --marker \"[youdede:mcp-capability-drift-guard]\"", "timeout": 10, "failClosed": true, "matcher": "mcp__youdede-*"}]}},
-  "bindings": [{"event": "preToolUse", "matcher": "mcp__youdede-*"}],
+  "settingsPatch": {"path": "hooks.json", "hooks": {"beforeMCPExecution": [{"type": "command", "command": "node \"{cursorRoot}/hooks/youdede/mcp-capability-drift-guard.mjs\" --target cursor --failure-policy fail-closed --marker \"[youdede:mcp-capability-drift-guard]\"", "timeout": 10, "failClosed": true}]}},
+  "bindings": [{"event": "beforeMCPExecution", "matcher": "*"}],
   "stability": "preview",
-  "limitations": ["Description drift is checked when the native hook payload includes the tool description or observed inventory; unknown tool identities are always blocked."]
+  "limitations": ["The hook binds beforeMCPExecution without a matcher because Cursor documents no matcher value for that event; the script selects Youdede servers from mcp_server_name. Cursor does not run beforeMCPExecution in cloud agents.", "Description drift is checked when the native hook payload includes the tool description or observed inventory; unknown tool identities are always blocked."]
 }
