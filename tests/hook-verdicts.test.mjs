@@ -16,6 +16,12 @@ test('hook verdict entries declare change and expectation in the documented shap
   const { entries } = readSnapshot();
   for (const [index, entry] of entries.entries()) {
     if (entry.expectation !== undefined) assert.match(entry.expectation, /^should-[a-z-]+ per \S/, `#${index}`);
+    if (entry.nodeVariants !== undefined) {
+      for (const [major, variant] of Object.entries(entry.nodeVariants)) {
+        assert.match(major, /^\d+$/, `#${index} nodeVariants key`);
+        assert.ok(Object.keys(variant).every((key) => ['exit', 'ruleId', 'output'].includes(key)), `#${index} nodeVariants.${major}`);
+      }
+    }
     if (entry.change !== undefined) {
       assert.equal(typeof entry.change.reason, 'string', `#${index} change.reason`);
       assert.equal(typeof entry.change.finding, 'string', `#${index} change.finding`);

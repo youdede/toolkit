@@ -243,7 +243,14 @@ export async function computeVerdicts(document, { concurrency = Math.max(2, os.a
 }
 
 const sameVerdict = (a, b) => a.exit === b.exit && a.ruleId === b.ruleId && a.output === b.output;
-const verdictOf = (entry) => (entry.change && 'exit' in entry.change ? entry.change : entry);
+// A hook whose verdict depends on the Node.js release (for example WHATWG URL parsing of punycode)
+// records the other verdict under nodeVariants, keyed by Node major version.
+const NODE_MAJOR = process.versions.node.split('.')[0];
+const verdictOf = (entry) => {
+  const base = entry.change && 'exit' in entry.change ? entry.change : entry;
+  const variant = entry.nodeVariants?.[NODE_MAJOR];
+  return variant ? { exit: base.exit, ruleId: base.ruleId, output: base.output, ...variant } : base;
+};
 const describe = (entry, index) => `#${index} ${entry.hook} ${JSON.stringify(entry.raw ?? entry.input).slice(0, 160)}${entry.fixture ? ` [${entry.fixture}]` : ''}`;
 const show = (verdict) => `exit=${verdict.exit} ruleId=${verdict.ruleId} output=${verdict.output}`;
 
@@ -278,7 +285,7 @@ export function record(document, { results }) {
       if (sameVerdict(entry, actual)) return refused.push(`${describe(entry, index)}: change declared but the verdict equals the baseline`);
       return Object.assign(entry.change, verdict);
     }
-    if (!sameVerdict(entry, actual)) refused.push(`${describe(entry, index)}: recorded ${show(entry)}, now ${show(actual)}; add a change {reason, finding} to accept it`);
+    if (!sameVerdict(verdictOf(entry), actual)) refused.push(`${describe(entry, index)}: recorded ${show(entry)}, now ${show(actual)}; add a change {reason, finding} to accept it`);
   });
   return refused;
 }

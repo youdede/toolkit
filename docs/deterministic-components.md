@@ -70,6 +70,8 @@ The snapshot records current behavior, including behavior known to be wrong. Suc
 2. Run `npm run hook-verdicts`. It writes the new verdict into `change` and refuses any other difference, so an unintended regression cannot be recorded by accident.
 3. When the fix makes an `expectation` true, keep it: the entry now documents before, after, and why.
 
+The snapshot does not depend on the operating system or the Git version: it gives the same result on macOS with Git 2.54 and on Linux with Git 2.39. When a hook's verdict depends on the Node.js release, the entry records the other verdict under `nodeVariants`, keyed by Node major version, for example `"nodeVariants": {"20": {"ruleId": "mcp-egress-url-invalid"}}`: the WHATWG URL parser of Node 20 and 22 rejects an invalid punycode label that Node 24 accepts. Record the snapshot with the newest Node.js release the CI tests.
+
 To extend the corpus, append an entry without verdict fields (and a fixture if needed), then run `npm run hook-verdicts`; it fills the verdict of new entries only. Every hook must have at least one entry. A fix to a Bash hook adds at least one sequence that combines the fix with a change of branch, directory, or staging in the same command.
 
 ## Current hybrid skills
