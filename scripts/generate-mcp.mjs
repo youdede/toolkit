@@ -25,6 +25,7 @@ export function expectedMcpOutputs(root = ROOT) {
     servers[profile.serverName] = {
       artifactId: record.manifest.id,
       profileSha256: sha256(readFileSync(profileFile)),
+      egress: profile.egress,
       tools: Object.fromEntries(profile.tools.map((tool) => [tool.name, sha256(tool.description)]))
     };
   }

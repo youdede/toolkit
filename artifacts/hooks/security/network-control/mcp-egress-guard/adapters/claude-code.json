@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "claude-code",
+  "scopes": ["project"],
+  "files": [
+    {"from": "targets/claude-code/mcp-egress-guard.mjs", "to": "hooks/youdede/mcp-egress-guard.mjs", "executable": true},
+    {"root": "package", "from": "catalog/mcp-pins.json", "to": "hooks/youdede/mcp-pins.json"}
+  ],
+  "settingsPatch": {"hooks": {"PreToolUse": [{"matcher": "^mcp__.+__.+$", "description": "[youdede:mcp-egress-guard] Keep MCP arguments inside declared egress", "hooks": [{"type": "command", "command": "node \"{claudeRoot}/hooks/youdede/mcp-egress-guard.mjs\"", "timeout": 10}]}]}},
+  "bindings": [{"event": "PreToolUse", "matcher": "^mcp__.+__.+$"}],
+  "limitations": ["The matcher fires on every MCP tool and the script selects Youdede servers case-insensitively, including plugin-scoped names; MCP servers outside the Youdede namespace pass unchecked."]
+}

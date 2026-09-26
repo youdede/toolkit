@@ -5,6 +5,11 @@
     "youdede-allowlisted-fetch-readonly": {
       "artifactId": "mcp-server/development/agent-tooling/allowlisted-fetch-readonly",
       "profileSha256": "97b23f02a379e76d877b01b672f999517f5c1eba72b76f6bb8b287a2c7820f1d",
+      "egress": [
+        "developer.mozilla.org",
+        "docs.github.com",
+        "nodejs.org"
+      ],
       "tools": {
         "fetch_url": "de5454f3aa0f8cb74f932dedce38995a4f2b475007956cb410643c5329bae015"
       }
@@ -12,16 +17,27 @@
     "youdede-github-readonly": {
       "artifactId": "mcp-server/development/agent-tooling/github-readonly",
       "profileSha256": "ed7c14a6286f68b85da7970f47ec456369c9f14080d2de4cc55e36b63f15fd7f",
+      "egress": [
+        "api.github.com",
+        "ghcr.io"
+      ],
       "tools": {}
     },
     "youdede-playwright-local-isolated": {
       "artifactId": "mcp-server/development/testing/playwright-local-isolated",
       "profileSha256": "1dafc468a81433938d7f41d4121a9ffab63fea1a0c4fc2494675d6b7db61abd1",
+      "egress": [
+        "127.0.0.1",
+        "registry.npmjs.org"
+      ],
       "tools": {}
     },
     "youdede-repository-git-readonly": {
       "artifactId": "mcp-server/development/agent-tooling/repository-git-readonly",
       "profileSha256": "81acc1103294f64f9fc1f05ce409d785e0b50c11e16c8e68895b44d6725cccf7",
+      "egress": [
+        "none"
+      ],
       "tools": {
         "git_status": "58ecc9bfdf39f658fe9918563180bf64455e05e675a11539ddd3b810de7935cd",
         "git_diff": "9486df1b1cfa757f0862d6055d7137985d6b1282eae87655b53fa77d2a511929",
@@ -31,6 +47,9 @@
     "youdede-workspace-files-readonly": {
       "artifactId": "mcp-server/development/agent-tooling/workspace-files-readonly",
       "profileSha256": "ec342d902d9af9e36e86dd88ff06a9e6b133eafbeab71681337534e9a95e1e44",
+      "egress": [
+        "none"
+      ],
       "tools": {
         "read_file": "4e00e3444076eaef0d91e1f4da622023018e53d2a63db732a8d8464648063e39",
         "list_directory": "1f29f7c4dddc931c6a2e2d0ebe3f6d74eb93cc9f71aa25b46dd9ee3ae1a37356",

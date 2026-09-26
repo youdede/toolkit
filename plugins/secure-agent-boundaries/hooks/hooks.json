@@ -33,6 +33,17 @@
             "timeout": 10
           }
         ]
+      },
+      {
+        "matcher": "^mcp__.+__.+$",
+        "description": "[youdede:mcp-egress-guard] Keep MCP arguments inside declared egress",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/youdede/mcp-egress-guard.mjs\"",
+            "timeout": 10
+          }
+        ]
       }
     ]
   }

@@ -6,11 +6,13 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 
 ### Added
 
+- `mcp-egress-guard` blocks a call to a Youdede MCP server when its arguments name a host outside that server's declared egress. It reads every nested string, URL-like keys such as `url`, `host`, and `baseUrl`, and `scheme://` URLs in free text, and compares WHATWG-normalized hosts exactly, so lookalike, subdomain, userinfo, IP, and punycode forms are refused. `none` refuses every host, `file:` passes only inside the workspace, and an unknown Youdede server is blocked; other MCP servers pass. The egress list comes from each `server.json` through `catalog/mcp-pins.json`, which `npm run mcp` regenerates and `check:mcp` verifies. Claude Code binds `PreToolUse` on every MCP tool; Cursor has a preview `beforeMCPExecution` adapter. `secure-agent-boundaries` 1.2.0 adds it as enforcement for `agent-tool-security`.
 - Three bounded workflow commands cover CI diagnosis, redacted environment preflight, and repository-instruction audits; four generated contexts add API, migration, CI, and dependency baselines at precedences 300–600.
 - Preview external MCP profiles pin the official GitHub server `v1.12.2` in read-only reduced-toolset mode and Playwright MCP `0.0.82` in isolated loopback-only mode. They ship in the separate `remote-review-evidence` and `browser-verification` packs rather than widening `mcp-baseline`.
 
 ### Changed
 
+- Repository validation accepts a Cursor guard adapter on `beforeMCPExecution` without a matcher, besides `preToolUse`, because Cursor documents no matcher value for that event.
 - GitHub Copilot skill adapters are now `stable` and name the surfaces GitHub documents for Agent Skills; GitHub's page (read 2026-09-26) has no preview label. Copilot subagent adapters stay `preview` and now name the surfaces where GitHub marks custom agents as public preview: JetBrains IDEs, Eclipse, and Xcode.
 - Gemini CLI subagent adapters are now `stable`: the official subagents page (read 2026-09-26) says subagents are enabled by default and no longer calls them preview. Every Gemini CLI adapter, and `docs/targets.md`, now states that Google stopped serving Gemini CLI on 2026-06-18 for free use and for Google AI Pro and Ultra, and that Antigravity CLI, which replaces it for those users, is not a target.
 - The npm package no longer contains the `skills/` and `plugins/` marketplace copies, the marketplace manifests, or the README images; native marketplaces read them from the repository. The packed size drops from about 4.8 MB to about 1.4 MB, and the CLI commands behave identically on the extracted package.

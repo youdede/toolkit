@@ -7,11 +7,11 @@ Support is declared per artifact. A missing adapter is an intentional refusal, n
 <!-- stat-table:targets -->
 | Target | Skills | Hooks | Subagents | Commands | Contexts | MCP servers | Project root | User root |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- |
-| Claude Code | 167 | 63 | 62 | 10 | 8 | 5 | `.claude` | `~/.claude` |
+| Claude Code | 167 | 64 | 62 | 10 | 8 | 5 | `.claude` | `~/.claude` |
 | Codex | 166 | 22 | 0 | 0 | 0 | 0 | skills: `.agents`; hooks/agents: `.codex` | skills: `~/.agents`; hooks/agents: `~/.codex` |
 | Gemini CLI | 166 | 22 | 62 | 0 | 0 | 0 | `.gemini` | `~/.gemini` |
 | GitHub Copilot | 166 | 0 | 62 | 0 | 8 | 0 | `.github` | `$COPILOT_HOME` or `~/.copilot` |
-| Cursor | 166 | 23 | 0 | 0 | 8 | 5 | `.cursor` | `~/.cursor` |
+| Cursor | 166 | 24 | 0 | 0 | 8 | 5 | `.cursor` | `~/.cursor` |
 | OpenCode | 166 | 22 | 50 | 0 | 0 | 0 | `.opencode` | `~/.config/opencode` |
 <!-- /stat-table -->
 
@@ -39,7 +39,7 @@ Codex custom agents are deliberately withheld. The native TOML format supports a
 
 The first cross-runtime gate tranche contains 22 shell-only `PreToolUse` guards. Codex registers them in `.codex/hooks.json` as synchronous `PreToolUse` command hooks matched to `Bash`; an exit code of 2 blocks the call, and each handler has a bounded timeout. Gemini registers them as `BeforeTool` with millisecond timeouts and an input bridge. Cursor registers native `preToolUse` handlers with `Shell`, `failClosed: true`, and second-based timeouts. OpenCode installs one local `.js` plugin per selected guard, filters `tool.execute.before` to shell calls, normalizes the working directory, and invokes the bounded policy core with Node.js.
 
-Write/edit, prompt, transcript, compaction, configuration, worktree, failure-context, and task-completion hooks remain Claude-only until target-native fixtures prove that their preventive boundary and failure policy survive translation. The MCP capability-drift guard also has a Cursor preview adapter: unknown toolkit MCP identities always fail closed, while description drift is checked when Cursor supplies the description or observed inventory. GitHub Copilot hooks are withheld because documented hook timeouts always fail open, which conflicts with the fail-closed promise of the enforcement catalog.
+Write/edit, prompt, transcript, compaction, configuration, worktree, failure-context, and task-completion hooks remain Claude-only until target-native fixtures prove that their preventive boundary and failure policy survive translation. The MCP capability-drift guard also has a Cursor preview adapter: unknown toolkit MCP identities always fail closed, while description drift is checked when Cursor supplies the description or observed inventory. The MCP egress guard has a Cursor preview adapter bound to `beforeMCPExecution` with `failClosed: true` and no matcher, because Cursor's hooks page (read 2026-09-26) documents that event's `mcp_server_name` and string `tool_input` fields but no matcher value for it; Cursor does not run that event in cloud agents. GitHub Copilot hooks are withheld because documented hook timeouts always fail open, which conflicts with the fail-closed promise of the enforcement catalog.
 
 Installing an OpenCode guard executes local plugin code when OpenCode starts and requires a reload after changes. Codex exact command hooks require the workspace to be trusted; Gemini and Cursor project hooks are likewise subject to their runtime trust controls. Node.js 20 or later must remain available for JavaScript helpers and cross-runtime deterministic gates.
 

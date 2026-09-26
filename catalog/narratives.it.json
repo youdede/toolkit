@@ -1,5 +1,5 @@
 {
-  "sourceHash": "c1b39e8998af9de918c2973c965f2a19c20c6ea30489e3049d773d1884658c39",
+  "sourceHash": "e36ba0f9b2381fca4705bfcf1d9f29350c1d92f294b8e8d38377477061dede33",
   "narratives": {
     "abuse-resistance-analyst": {
       "summary": "Analizza una singola operazione per individuare costi moltiplicati da input controllati da un attaccante, richieste a cascata ed elusione delle quote.",
@@ -1938,6 +1938,18 @@
         "Non si fida delle annotazioni MCP, dei nomi del server o delle descrizioni degli strumenti che non sono presenti nel registro di pin generato.",
         "Non accetta silenziosamente strumenti aggiunti, rimossi, rinominati o con deriva della descrizione da server curati.",
         "Non allarga l'autorità di uscita, segreto, filesystem, sottoprocesso o modifica per un server MCP."
+      ]
+    },
+    "mcp-egress-guard": {
+      "summary": "Blocca le chiamate agli strumenti MCP del toolkit i cui argomenti indicano un host fuori dall'egress dichiarato dal server.",
+      "description": "Un controllo pre-tool deterministico e fail-closed che estrae ogni URL e host da una chiamata a uno strumento MCP di Youdede, lo normalizza con il parser URL WHATWG e blocca gli host assenti dall'elenco di egress generato dai profili curati dei server.",
+      "purposes": [
+        "Confronta ogni URL e host di una chiamata a uno strumento MCP del toolkit con l'egress del server nel registro generato."
+      ],
+      "refuses": [
+        "Non accetta un host simile, un sottodominio, credenziali nell'URL, un IP o un host punycode diverso da un host di egress dichiarato in modo esatto.",
+        "Non accetta un server MCP con nome Youdede assente dal registro generato.",
+        "Non ispeziona né limita i server MCP fuori dallo spazio dei nomi Youdede."
       ]
     },
     "mcp-trust-boundary-reviewer": {
