@@ -68,6 +68,36 @@ function git(cwd, args) {
   return result.stdout.trim();
 }
 
+test('workflow collector reports block triggers, inherited secrets, token use, read permissions, and run bodies', () => {
+  const workflow = [
+    '"on":',
+    '  pull_request_target:',
+    '    branches: [main]',
+    'permissions:',
+    '  contents: read',
+    '  id-token: write',
+    'jobs:',
+    '  call:',
+    '    uses: org/repo/.github/workflows/r.yml@v1',
+    '    secrets: inherit',
+    '  build:',
+    '    steps:',
+    '      - name: Pre-run: check',
+    '        run: |',
+    '          curl -H "Authorization: ${{ github.token }}" https://x',
+    '          make deploy',
+    '      - uses: actions/checkout@v4'
+  ].join('\n');
+  const got = collectWorkflowSignals(workflow).signals.map(({ line, type }) => `${line}:${type}`);
+  assert.deepEqual(got, [
+    '1:event-declaration', '2:event-declaration',
+    '4:permission-declaration', '5:permission-declaration', '6:permission-declaration',
+    '9:action-reference', '10:secret-reference',
+    '14:run-command', '15:secret-reference', '16:run-command',
+    '17:action-reference'
+  ]);
+});
+
 test('release collector reads an explicit bounded Git range without mutation', () => {
   const directory = mkdtempSync(path.join(os.tmpdir(), 'release-evidence-'));
   try {

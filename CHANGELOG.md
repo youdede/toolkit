@@ -30,6 +30,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 - The `review-database-migration-plan` SQL helper treated a backslash as an escape in every string, so `'C:\'` hid a following `DROP TABLE`. It now follows PostgreSQL's default `standard_conforming_strings` (backslash escapes only in `E'...'`), no longer reports `ON UPDATE SET NULL` as an UPDATE without WHERE, and reports an UPDATE or DELETE whose only WHERE is inside a subquery.
 - `write-compliant-cold-email` did not require the sender's physical postal address, which CAN-SPAM requires in every commercial email to US recipients, business-to-business included (FTC compliance guide, August 2023, edited January 2024). The skill now asks for it and checks it; its minimum inputs also include the evidence behind personalization and claims, which its stop condition already required.
 - `build-compliant-prospect-list` and `build-sales-enablement-asset` let an agent pass their minimum-input gate without the target situation (prospect list) or the buyer and deal stage (sales asset), which their own workflow and stop conditions require. Both gates now ask for them.
+- The `review-ci-workflow-change` collector missed `pull_request_target` and other events declared under a block `on:` (or a quoted `"on":`), `secrets: inherit`, `github.token`, `contents: read`, and the commands inside `run: |` blocks, and reported `- name: Pre-run: ...` as a run command. It now reports them, and the skill lists what the collector covers.
 
 ## 0.3.0 (2026-09-21)
 

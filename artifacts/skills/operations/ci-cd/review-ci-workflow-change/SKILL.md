@@ -39,7 +39,7 @@ Record that refusal in the section this contract names for findings, or, when it
 
 ## Validation
 
-Run `node "<skill-root>/scripts/collect-workflow-signals.mjs" --file <workflow-file>`. Do not assume the project working directory contains the helper. The helper is deliberately a line-signal collector, not a YAML parser: it reports only visible `on`, `permissions`, `uses`, `run`, and secret-reference lines. Treat absence as unknown, preserve line numbers, and do not execute collected commands.
+Run `node "<skill-root>/scripts/collect-workflow-signals.mjs" --file <workflow-file>`. Do not assume the project working directory contains the helper. The helper is deliberately a line-signal collector, not a YAML parser: it reports only visible `on` lines and the event keys of an `on:` block, `permissions` lines, `uses`, `run` lines and the lines of a `run: |` or `run: >` block, and secret references (`secrets.*`, `secrets: inherit`, `github.token`). Treat absence as unknown, preserve line numbers, and do not execute collected commands.
 
 Check trigger and branch scope, least privilege, pinning and provenance of actions, command inputs, secret exposure paths, concurrency/cancellation behavior, test and artifact retention, failure diagnostics, environment protection, and rollback/disable path. Compare claims with repository evidence where supplied.
 
