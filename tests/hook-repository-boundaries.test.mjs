@@ -1,4 +1,4 @@
-import test from 'node:test';
+import test, { mock } from 'node:test';
 import assert from 'node:assert/strict';
 import os from 'node:os';
 import path from 'node:path';
@@ -20,6 +20,7 @@ import {
 } from '../artifacts/hooks/security/application-security/workspace-boundary-guard/targets/claude-code/workspace-boundary-guard.mjs';
 import {
   MAX_COMMAND_BYTES,
+  GIT_BUDGET_MS,
   GIT_TIMEOUT_MS,
   MAX_STDIN_BYTES as BRANCH_MAX_STDIN,
   collectContext as collectBranch,
@@ -389,4 +390,71 @@ test('protected branch resolves push destinations, aliases, push mappings, and c
   assert.equal(decide('echo main | xargs git push origin').ruleId, 'protected-command-uninspectable');
   assert.equal(decide('find . -maxdepth 0 -exec git push origin feature/config:main \;').ruleId, 'protected-command-uninspectable');
   assert.equal(decide('find . -name "*.md" -exec git status \;').exitCode, 0);
+});
+
+test('protected branch checks later Git commands against every branch an earlier command can switch to', (context) => {
+  const parent = temporary(context, 'youdede-branch-sequence-');
+  const remote = path.join(parent, 'remote.git');
+  const root = path.join(parent, 'work');
+  mkdirSync(root);
+  git(parent, ['init', '-q', '--bare', remote]);
+  initRepository(root, 'main');
+  git(root, ['remote', 'add', 'origin', remote]);
+  git(root, ['push', '-q', '-u', 'origin', 'main']);
+  git(root, ['switch', '-qc', 'feature']);
+  git(root, ['push', '-q', '-u', 'origin', 'feature']);
+  const decide = (command) => branchDecision({ tool_name: 'Bash', cwd: root, tool_input: { command } }, root);
+
+  for (const [command, ruleId] of [
+    ['git switch main && git merge feature && git push', 'protected-branch-history-mutation'],
+    ['git checkout main; git commit --allow-empty -m x', 'protected-branch-history-mutation'],
+    ['git switch main; git push', 'protected-branch-direct-push'],
+    ['git rebase feature main', 'protected-branch-history-mutation'],
+    ['git switch other && git push', 'protected-git-sequence-uninspectable'],
+    ['git checkout - && git push origin HEAD', 'protected-git-sequence-uninspectable'],
+    ['gh pr checkout 12 && git commit -m x', 'protected-git-sequence-uninspectable'],
+    ['git config push.default upstream && git push', 'protected-git-sequence-uninspectable'],
+    ['git config alias.ship "push --force origin feature:main" && git ship', 'protected-branch-direct-push'],
+    ['git config alias.x "$V" && git x', 'protected-git-sequence-uninspectable'],
+    ['git fetch . feature:main', 'protected-branch-update'],
+    ['git switch main && git pull origin feature', 'protected-branch-history-mutation'],
+    ['cd .. && cd work && git pull origin feature', 'protected-git-scope-uninspectable'],
+    ['git worktree add -B main ../wt feature', 'protected-branch-update']
+  ]) assert.equal(decide(command).ruleId, ruleId, command);
+
+  for (const command of [
+    'git push',
+    'git switch other && git push origin feature',
+    'git switch -c feature/y && git push -u origin feature/y',
+    'git checkout src/app.js && git commit -m x',
+    'git fetch && git rebase origin/main && git push --force-with-lease',
+    'git stash && git switch main && git pull && git switch feature && git stash pop',
+    'git fetch origin main:main',
+    'git worktree add -b feature/wt ../wt'
+  ]) assert.equal(decide(command).exitCode, 0, command);
+
+  git(root, ['switch', '-q', 'main']);
+  assert.equal(decide('git pull origin feature').ruleId, 'protected-branch-history-mutation');
+  assert.equal(decide('git pull').exitCode, 0);
+  assert.equal(decide('git pull origin main').exitCode, 0);
+});
+
+test('protected branch keeps all Git subprocesses inside one budget below the adapter timeout', () => {
+  mock.timers.enable({ apis: ['Date'] });
+  try {
+    const timeouts = [];
+    const context = collectBranch({ tool_name: 'Write', tool_input: {} }, {
+      cwd: '/',
+      env: {},
+      runGit: (root, args, options) => {
+        timeouts.push(options.timeout);
+        mock.timers.tick(GIT_TIMEOUT_MS);
+        return { status: 0, stdout: args[0] === 'symbolic-ref' ? 'feature' : '.git', stderr: '' };
+      }
+    });
+    assert.equal(context.inspectionError, true);
+    assert.deepEqual(timeouts, [GIT_TIMEOUT_MS, GIT_TIMEOUT_MS, GIT_BUDGET_MS - 2 * GIT_TIMEOUT_MS]);
+  } finally {
+    mock.timers.reset();
+  }
 });
