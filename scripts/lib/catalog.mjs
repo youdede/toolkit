@@ -325,6 +325,23 @@ function refusalBulletCount(raw) {
   return (section.match(/^[-*]\s+/gm) || []).length;
 }
 
+const TURN_BUDGET_LINE = /^Complete the brief within \d+ turns\. Stop and return partial evidence instead of expanding the scope when that budget is exhausted\.$/;
+
+function subagentBody(raw) {
+  const lines = raw.split('\n');
+  const end = lines[0] === '---' ? lines.indexOf('---', 1) : -1;
+  return lines.slice(end + 1).filter((line) => line.trim() && !TURN_BUDGET_LINE.test(line.trim())).join('\n');
+}
+
+export function subagentBodyDrift(rawByTarget) {
+  const reference = rawByTarget['claude-code'];
+  if (reference === undefined) return [];
+  const expected = subagentBody(reference);
+  return Object.entries(rawByTarget)
+    .filter(([target, raw]) => target !== 'claude-code' && subagentBody(raw) !== expected)
+    .map(([target]) => target);
+}
+
 function parseQuotedYamlScalar(line, key) {
   const prefix = `  ${key}: `;
   if (!line.startsWith(prefix)) return null;
@@ -811,6 +828,7 @@ export function validateArtifact(record, taxonomy, artifactsRoot = ARTIFACTS_ROO
       .map(([target, adapter]) => [target, adapter.data.files?.[0]])
       .filter(([, mapping]) => mapping);
     if (!entries.length) errors.push('subagent payload is missing');
+    const bodies = {};
     for (const [target, mapping] of entries) {
       const agentFile = path.resolve(directory, mapping.from);
       if (!existsSync(agentFile)) {
@@ -822,6 +840,7 @@ export function validateArtifact(record, taxonomy, artifactsRoot = ARTIFACTS_ROO
         errors.push(`${target}: subagent payload needs frontmatter`);
         continue;
       }
+      bodies[target] = raw;
       if (!fields.description) errors.push(`${target}: subagent frontmatter needs a description`);
       if (target === 'opencode') {
         // OpenCode takes the agent name from the filename, so identity is checked there and
@@ -835,6 +854,7 @@ export function validateArtifact(record, taxonomy, artifactsRoot = ARTIFACTS_ROO
       if (!raw.includes('## Refusals')) errors.push(`${target}: subagent must document Refusals`);
       if (refusalBulletCount(raw) < 3) errors.push(`${target}: subagent must document at least three concrete refusals`);
     }
+    for (const target of subagentBodyDrift(bodies)) errors.push(`${target}: subagent body differs from the claude-code payload`);
   }
 
   if (manifest.kind === 'hook') {
