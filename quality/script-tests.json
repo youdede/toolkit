@@ -448,7 +448,7 @@
       "coverage": {
         "positive": "curated MCP profiles match pinned descriptions",
         "negative": "reject unsafe drift",
-        "malformed": "assert.match(malformed.stdout, /Invalid request/)",
+        "malformed": "assert.match(malformed.stdout, /\"code\":-32700/)",
         "boundary": "confines file reads"
       }
     }
