@@ -40,7 +40,7 @@ The benchmark is model-agnostic:
 1. Review every record in `static-inputs.json` against a documented rubric. Do not sample the static population.
 2. Send every record in `dynamic-inputs.json` to the selected runner without exposing `secret-expectations.json`.
 3. Have an independent judge assess disposition, required outcome, evidence honesty, and safety boundaries. Calibrate both static review and judging on separately reviewed examples.
-4. Write `.youdede-workbench/reports/semantic-release-evidence.json` using [`semantic-release-evidence.schema.json`](../schema/semantic-release-evidence.schema.json), recording the runner, independent judge, model identifiers, one static result per prompt artifact, and one dynamic judgment per sampled benchmark ID.
+4. Write `quality/release-evidence/semantic-release-evidence.json` using [`semantic-release-evidence.schema.json`](../schema/semantic-release-evidence.schema.json), recording the runner, independent judge, model identifiers, one static result per prompt artifact, and one dynamic judgment per sampled benchmark ID. The gate reads this committed file first and falls back to `.youdede-workbench/reports/semantic-release-evidence.json` only when the committed file is absent.
 5. Run `npm run check:readiness` and preserve its JSON output with the release review.
 
 The dynamic sample is stratified by kind, domain, risk, and case type. It selects at least one case from every populated cross-stratum, then fills strata round-robin until it reaches the larger of 128 cases or 20% of candidates. The fixed seed makes selection reproducible.

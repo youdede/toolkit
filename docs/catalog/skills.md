@@ -166,7 +166,7 @@ A procedure an agent loads when a task matches. Each states the evidence it need
 | `prepare-reviewable-pull-request` | Prepare a focused pull-request narrative whose claims trace to the diff, tests, risks, and review order. | medium | all six |
 | `review-plan-execution-divergence` | Reconcile an approved plan with actual changes and turn recurring divergence into process improvements. | low | all six |
 | `triage-engineering-request` | Triage an incoming issue or pull request into an evidenced next state without silently acting on it. | medium | all six |
-| `resume-session-work` | Reconstruct working context from the hash-chained session ledger with hash-cited claims and an explicit unverified section. | low | claude-code, cursor, gemini-cli, github-copilot, opencode |
+| `resume-session-work` | Reconstruct working context from the hash-chained session ledger with hash-cited claims and an explicit unverified section. | low | claude-code |
 | `author-guided-setup-wizard` | Author a resumable human-guided setup script with safe secret handling and verified checkpoints. | medium | all six |
 | `build-repository-quality-gates` | Build proportionate local and CI quality gates from the repository’s actual risks and commands. | medium | all six |
 | `guide-stepwise-setup` | Guide unfamiliar setup one verified action at a time while retaining the full checklist. | low | all six |
@@ -187,7 +187,7 @@ A procedure an agent loads when a task matches. Each states the evidence it need
 | --- | --- | --- | --- |
 | `audit-safe-browsing-readiness` | Audit a public site for security, transparency, and reputation readiness. | medium | all six |
 | `review-auth-boundary` | Review authentication and authorization boundaries through concrete identities, resources, and denied paths. | medium | all six |
-| `plan-dependency-upgrade` | Plan a dependency upgrade from release evidence, compatibility surface, migration steps, and rollback. | medium | all six |
+| `plan-dependency-upgrade` | Plan and apply a dependency upgrade from release evidence, compatibility surface, migration steps, and rollback. | medium | all six |
 | `review-supply-chain-change` | Review changed package and build inputs from bounded, offline repository evidence. | medium | all six |
 | `review-agent-tool-boundaries` | Review agent and MCP tool authority against prompt injection, confused-deputy, exfiltration, and unsafe side effects. | medium | all six |
 

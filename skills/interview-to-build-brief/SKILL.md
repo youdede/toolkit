@@ -19,7 +19,7 @@ Ask only questions whose answers change product intent, scope, risk, or acceptan
 
 ## Output contract
 
-Return every one of these headings in your reply, in this order, on every path: `## Evidence`, `## Product hypothesis`, `## Non-goals`, `## Engineering constraints`, `## Next action`, `## Boundary`, `## Missing inputs`.
+Return every one of these headings in your reply, in this order, on every path: `## Evidence`, `## Product hypothesis`, `## Non-goals`, `## Engineering constraints`, `## Acceptance checks`, `## Unresolved questions`, `## Next action`, `## Boundary`, `## Missing inputs`.
 
 This holds when you decline, when you bound the scope, and when required inputs are absent. A section with nothing to report says so in one line; it is never omitted.
 
@@ -42,10 +42,6 @@ Record that refusal in the section this contract names for findings, or, when it
 - Every question changes a consequential decision and every product claim traces to supplied or discovered evidence.
 - The hypothesis can fail, success measures describe user outcomes, and preferred implementation is not presented as the problem.
 - Product intent, engineering constraints, agent assumptions, and unresolved questions remain visibly separate.
-
-## Output
-
-Return evidence, product decisions, falsifiable hypothesis, non-goals, engineering constraints, unresolved questions, acceptance checks, and next action.
 
 ## Stop conditions
 

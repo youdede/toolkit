@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync, mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, mkdirSync, readFileSync, rmSync, statSync, utimesSync, writeFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import os from 'node:os';
 import path from 'node:path';
@@ -189,6 +189,21 @@ test('re-pin command entrypoints and proposal boundaries are exercised', () => {
   assert.throws(() => buildProposal(registry, 'youdede-workspace-files-readonly', { tools: [] })); // boundary: empty inventories refuse
 });
 
+test('installed re-pin proposal reads the repository registry, not an install-time copy', (context) => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-repin-'));
+  context.after(() => rmSync(directory, { recursive: true, force: true }));
+  installArtifact('re-pin-mcp-tools', { cwd: directory });
+  const registry = JSON.parse(readFileSync('catalog/mcp-pins.json', 'utf8'));
+  registry.servers['youdede-workspace-files-readonly'].tools = { read_file: 'f'.repeat(64) };
+  mkdirSync(path.join(directory, 'catalog'));
+  writeFileSync(path.join(directory, 'catalog', 'mcp-pins.json'), JSON.stringify(registry));
+  writeFileSync(path.join(directory, 'observed.json'), JSON.stringify({ tools: [{ name: 'read_file', description: 'A bounded read-only tool description proposed for explicit review.' }] }));
+  const script = path.join(directory, '.claude/commands/youdede/re-pin-mcp-tools/propose-repin.mjs');
+  const run = spawnSync(process.execPath, [script, '--server', 'youdede-workspace-files-readonly', '--observed', 'observed.json'], { cwd: directory, encoding: 'utf8' });
+  assert.equal(run.status, 0, run.stderr);
+  assert.deepEqual(JSON.parse(run.stdout).previousTools, { read_file: 'f'.repeat(64) });
+});
+
 test('workspace MCP runtime refuses credential files it declares no access to', (context) => {
   const workspace = mkdtempSync(path.join(os.tmpdir(), 'youdede-mcp-secret-'));
   context.after(() => rmSync(workspace, { recursive: true, force: true }));
@@ -266,4 +281,99 @@ test('MCP runtime negotiates a supported protocol version and reports parse erro
   assert.equal(first.result.protocolVersion, SUPPORTED_PROTOCOL_VERSIONS[0]);
   assert.equal(second.result.protocolVersion, SUPPORTED_PROTOCOL_VERSIONS.at(-1));
   assert.equal(third.error.code, -32700);
+});
+
+test('repository MCP git tools run no configured programs and never write the index', (context) => {
+  const workspace = temporary(context, 'youdede-mcp-readonly-git-');
+  const git = (args, input) => {
+    const run = spawnSync('git', args, { cwd: workspace, env: cleanGitEnvironment(), input, encoding: 'utf8' });
+    assert.equal(run.status, 0, args.join(' '));
+    return run.stdout.trim();
+  };
+  git(['init', '-q']);
+  git(['config', 'user.email', 'tests@youdede.invalid']);
+  git(['config', 'user.name', 'youdede tests']);
+  writeFileSync(path.join(workspace, 'app.txt'), 'one\n');
+  git(['add', '.']);
+  git(['commit', '-qm', 'baseline']);
+  // A signature header is enough for log.showSignature to hand the commit to gpg.program.
+  const signed = git(['hash-object', '-t', 'commit', '-w', '--stdin'], [
+    `tree ${git(['rev-parse', 'HEAD^{tree}'])}`, `parent ${git(['rev-parse', 'HEAD'])}`,
+    'author t <t@youdede.invalid> 1700000000 +0000', 'committer t <t@youdede.invalid> 1700000000 +0000',
+    'gpgsig -----BEGIN PGP SIGNATURE-----', ' ', ' x', ' -----END PGP SIGNATURE-----', '', 'signed', ''
+  ].join('\n'));
+  git(['update-ref', 'HEAD', signed]);
+  const marker = path.join(path.dirname(workspace), `${path.basename(workspace)}-ran`);
+  context.after(() => rmSync(marker, { force: true }));
+  const program = path.join(workspace, 'program.sh');
+  writeFileSync(program, `#!/bin/sh\necho "$0 $*" >> '${marker}'\n`, { mode: 0o755 });
+  git(['config', 'core.fsmonitor', program]);
+  git(['config', 'core.untrackedCache', 'true']);
+  git(['config', 'log.showSignature', 'true']);
+  git(['config', 'gpg.program', program]);
+  writeFileSync(path.join(workspace, 'profile.json'), readFileSync('artifacts/mcp-servers/development/agent-tooling/repository-git-readonly/server.json'));
+  const index = path.join(workspace, '.git', 'index');
+  const past = new Date('2020-01-01T00:00:00Z');
+  utimesSync(index, past, past);
+  // A different mtime with identical content is what makes git refresh and rewrite the index.
+  const stale = new Date('2019-01-01T00:00:00Z');
+  utimesSync(path.join(workspace, 'app.txt'), stale, stale);
+  const before = readFileSync(index);
+  for (const name of ['git_status', 'git_diff', 'git_log']) {
+    const request = { jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name, arguments: {} } };
+    const run = spawnSync(process.execPath, [path.resolve('scripts/runtime/readonly-mcp-server.mjs'), '--profile', 'profile.json'], { cwd: workspace, input: `${JSON.stringify(request)}\n`, encoding: 'utf8' });
+    assert.ok(JSON.parse(run.stdout.trim()).result, `${name}: ${run.stdout}`);
+    assert.equal(existsSync(marker), false, `${name} ran a configured program`);
+    assert.equal(statSync(index).mtimeMs, past.getTime(), `${name} rewrote the index`);
+    assert.deepEqual(readFileSync(index), before, `${name} changed the index`);
+  }
+});
+
+test('repository MCP git tools refuse filter drivers other than standard Git LFS', (context) => {
+  const setup = () => {
+    const workspace = temporary(context, 'youdede-mcp-git-filter-');
+    const git = (args) => assert.equal(spawnSync('git', args, { cwd: workspace, env: cleanGitEnvironment() }).status, 0, args.join(' '));
+    git(['init', '-q']);
+    git(['config', 'user.email', 'tests@youdede.invalid']);
+    git(['config', 'user.name', 'youdede tests']);
+    writeFileSync(path.join(workspace, '.gitattributes'), '*.txt filter=evil\n');
+    writeFileSync(path.join(workspace, 'app.txt'), 'one\n');
+    git(['add', '.']);
+    git(['commit', '-qm', 'baseline']);
+    writeFileSync(path.join(workspace, 'app.txt'), 'two\n');
+    writeFileSync(path.join(workspace, 'profile.json'), readFileSync('artifacts/mcp-servers/development/agent-tooling/repository-git-readonly/server.json'));
+    return { workspace, git };
+  };
+  const call = (workspace, name) => {
+    const request = { jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name, arguments: {} } };
+    const run = spawnSync(process.execPath, [path.resolve('scripts/runtime/readonly-mcp-server.mjs'), '--profile', 'profile.json'], { cwd: workspace, input: `${JSON.stringify(request)}\n`, encoding: 'utf8' });
+    return JSON.parse(run.stdout.trim()).result;
+  };
+  const lfs = [['filter.lfs.clean', 'git-lfs clean -- %f'], ['filter.lfs.smudge', 'git-lfs smudge -- %f'], ['filter.lfs.process', 'git-lfs filter-process'], ['filter.lfs.required', 'true']];
+
+  const evil = setup();
+  const sentinel = path.join(path.dirname(evil.workspace), `${path.basename(evil.workspace)}-filter-ran`);
+  context.after(() => rmSync(sentinel, { force: true }));
+  writeFileSync(path.join(evil.workspace, 'filter.sh'), `#!/bin/sh\necho ran >> '${sentinel}'\ncat\n`, { mode: 0o755 });
+  evil.git(['config', 'filter.evil.clean', path.join(evil.workspace, 'filter.sh')]);
+  for (const name of ['git_status', 'git_diff']) {
+    const result = call(evil.workspace, name);
+    assert.equal(result.isError, true, name);
+    assert.match(result.content[0].text, /filter\.evil\.clean/, name);
+    assert.equal(existsSync(sentinel), false, `${name} ran the filter`);
+  }
+
+  const standard = setup();
+  for (const [key, value] of lfs) standard.git(['config', key, value]);
+  for (const name of ['git_status', 'git_diff']) assert.notEqual(call(standard.workspace, name).isError, true, name);
+  const skipSmudge = setup();
+  for (const [key, value] of [...lfs, ['filter.lfs.smudge', 'git-lfs smudge --skip -- %f'], ['filter.lfs.process', 'git-lfs filter-process --skip']]) skipSmudge.git(['config', key, value]);
+  assert.notEqual(call(skipSmudge.workspace, 'git_status').isError, true, 'git lfs install --skip-smudge');
+
+  const altered = setup();
+  for (const [key, value] of lfs) altered.git(['config', key, value]);
+  altered.git(['config', 'filter.lfs.process', 'git-lfs filter-process; touch pwned']);
+  const refused = call(altered.workspace, 'git_status');
+  assert.equal(refused.isError, true);
+  assert.match(refused.content[0].text, /filter\.lfs\.process/);
 });

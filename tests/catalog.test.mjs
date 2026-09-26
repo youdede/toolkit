@@ -1,12 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import path from 'node:path';
 import {
   analyzeRelationshipGraph,
   loadPacks,
   publicCatalog,
   publicPackCatalog,
+  ROOT,
   subagentBodyDrift,
+  unknownClaudeCodeSubagentTools,
   validateArtifact,
   validatePack,
   validateRelationshipIntegrity,
@@ -208,7 +211,8 @@ test('public catalog is sorted and exposes individual install commands', () => {
     if (artifact.execution.mode === 'prompt') assert.deepEqual(artifact.execution.entrypoints, []);
     else assert.ok(artifact.execution.entrypoints.length > 0);
     if (artifact.kind === 'skill' && artifact.id !== 'skill/operations/session/resume-session-work') assert.ok(artifact.targets.includes('codex'));
-    if (artifact.id === 'skill/operations/session/resume-session-work') assert.equal(artifact.targets.includes('codex'), false);
+    // The ledger library and its lifecycle hooks install only for Claude Code.
+    if (artifact.id === 'skill/operations/session/resume-session-work') assert.deepEqual(artifact.targets, ['claude-code']);
   }
 });
 
@@ -290,4 +294,28 @@ test('subagent bodies must match across targets apart from the Copilot turn budg
   const copilot = body.replace('You review.\n', 'Complete the brief within 10 turns. Stop and return partial evidence instead of expanding the scope when that budget is exhausted.\n\nYou review.\n');
   assert.deepEqual(subagentBodyDrift({ 'claude-code': body, 'github-copilot': copilot }), []);
   assert.deepEqual(subagentBodyDrift({ 'claude-code': body, opencode: body.replace('You review.', 'You approve.') }), ['opencode']);
+});
+
+test('claude code subagents may only name the documented read-only tools', () => {
+  // Source: https://code.claude.com/docs/en/tools-reference (read 2026-09-26) has no NotebookRead;
+  // Read already returns .ipynb cells with outputs.
+  assert.deepEqual(unknownClaudeCodeSubagentTools('Read, Grep, Glob'), []);
+  assert.deepEqual(unknownClaudeCodeSubagentTools('Read, Grep, Glob, NotebookRead'), ['NotebookRead']);
+});
+
+test('every relative $schema reference in artifacts and packs resolves to a file', () => {
+  const broken = [];
+  const walk = (directory) => {
+    for (const entry of readdirSync(directory, { withFileTypes: true })) {
+      const full = path.join(directory, entry.name);
+      if (entry.isDirectory()) walk(full);
+      else if (entry.name.endsWith('.json')) {
+        const reference = JSON.parse(readFileSync(full, 'utf8')).$schema;
+        if (typeof reference === 'string' && !/^https?:/.test(reference) && !existsSync(path.resolve(path.dirname(full), reference))) broken.push(full);
+      }
+    }
+  };
+  walk(path.join(ROOT, 'artifacts'));
+  walk(path.join(ROOT, 'packs'));
+  assert.deepEqual(broken, []);
 });

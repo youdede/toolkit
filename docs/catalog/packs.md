@@ -9,18 +9,18 @@ A pack composes artifacts of different kinds into one outcome, so a single comma
 | Slug | Version | What it composes | Artifacts | Evidence |
 | --- | --- | --- | ---: | --- |
 | `accessibility-assurance` | 1.0.0 | Plan, enforce, and independently verify accessible interface behavior from source evidence. | 9 | Versioned, ledger-linked |
-| `browser-verification` | 1.0.0 | Exercise an unauthenticated local interface in an isolated browser and preserve journey-level verification evidence. | 3 | Versioned, ledger-linked |
+| `browser-verification` | 1.0.1 | Exercise an unauthenticated local interface in an isolated browser, preserve journey-level evidence, and review the change for web performance risks. | 3 | Versioned, ledger-linked |
 | `daily-driver` | 1.0.0 | Deliver bounded incremental changes, prepare review evidence, and prevent unreviewable diffs. | 5 | Versioned, ledger-linked |
 | `data-change-safety` | 1.0.0 | Review schema and migration changes with deterministic safety checks and independent risk analysis. | 4 | Versioned, ledger-linked |
 | `infrastructure-change-readiness` | 1.0.0 | Plan a staged infrastructure change and independently review lifecycle, blast-radius, and recovery evidence. | 3 | Versioned, ledger-linked |
 | `mcp-baseline` | 1.0.0 | Install a guarded read-only MCP baseline with declared authority and independent trust-boundary review. | 7 | Versioned, ledger-linked |
-| `mobile-release-readiness` | 1.0.0 | Review mobile release evidence, accessibility, reliability, repository state, and version consistency. | 4 | Versioned, ledger-linked |
-| `plan-and-verify-loop` | 1.0.0 | Gate implementation behind evidenced planning phases and independently verify completion claims. | 6 | Versioned, ledger-linked |
+| `mobile-release-readiness` | 1.0.1 | Review mobile release evidence, accessibility, and reliability. Release guards stop npm, pnpm, yarn, cargo, twine, and gh release publication, not fastlane, EAS, altool, or Gradle. | 4 | Versioned, ledger-linked |
+| `plan-and-verify-loop` | 1.1.0 | Gate implementation behind evidenced planning phases and independently verify completion claims. | 7 | Versioned, ledger-linked |
 | `release-readiness` | 1.1.0 | Build an evidence-backed release decision and stop publication from unsafe repository state. | 7 | Versioned, ledger-linked |
 | `remote-review-evidence` | 1.0.0 | Collect bounded GitHub evidence in read-only mode and turn failing CI evidence into a traceable diagnosis. | 4 | Versioned, ledger-linked |
 | `reviewable-change` | 1.1.0 | Prepare bounded code changes, obtain independent review, and prevent oversized unreviewable commits. | 6 | Versioned, ledger-linked |
-| `secure-agent-boundaries` | 1.1.0 | Design agent integrations, review their trust boundary, and block obvious data-exposure paths. | 7 | Versioned, ledger-linked |
-| `session-continuity` | 1.0.0 | Persist bounded hash-chained checkpoints, restore cited context, and verify continuity across sessions. | 7 | Versioned, ledger-linked |
+| `secure-agent-boundaries` | 1.2.0 | Design agent integrations, review their trust boundary, and block obvious data-exposure paths. | 8 | Versioned, ledger-linked |
+| `session-continuity` | 1.1.0 | Persist bounded hash-chained checkpoints, restore cited context, and verify continuity across sessions. | 7 | Versioned, ledger-linked |
 
 ---
 

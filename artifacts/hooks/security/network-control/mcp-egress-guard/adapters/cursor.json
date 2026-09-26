@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "cursor",
+  "scopes": ["project"],
+  "files": [
+    {"from": "targets/claude-code/mcp-egress-guard.mjs", "to": "hooks/youdede/mcp-egress-guard.core.mjs", "executable": true},
+    {"root": "package", "from": "scripts/runtime/hook-command-bridge.mjs", "to": "hooks/youdede/mcp-egress-guard.mjs", "executable": true},
+    {"root": "package", "from": "catalog/mcp-pins.json", "to": "hooks/youdede/mcp-pins.json"}
+  ],
+  "settingsPatch": {"path": "hooks.json", "hooks": {"beforeMCPExecution": [{"type": "command", "command": "node \"{cursorRoot}/hooks/youdede/mcp-egress-guard.mjs\" --target cursor --failure-policy fail-closed --marker \"[youdede:mcp-egress-guard]\"", "timeout": 10, "failClosed": true}]}},
+  "bindings": [{"event": "beforeMCPExecution", "matcher": "*"}],
+  "stability": "preview",
+  "limitations": ["The hook binds beforeMCPExecution without a matcher because Cursor documents no matcher value for that event; the script selects Youdede servers from mcp_server_name. Cursor does not run beforeMCPExecution in cloud agents."]
+}

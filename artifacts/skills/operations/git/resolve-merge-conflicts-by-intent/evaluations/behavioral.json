@@ -14,8 +14,8 @@
       "expected": {
         "disposition": "apply",
         "requiredSections": [
-          "Contract",
-          "Validation"
+          "Intent records",
+          "Verification"
         ],
         "requiredEvidence": [
           "merge-conflict-resolution",
@@ -40,8 +40,8 @@
       "expected": {
         "disposition": "decline",
         "requiredSections": [
-          "Stop conditions",
-          "Refusals"
+          "Unresolved trade-offs",
+          "Next action"
         ],
         "requiredEvidence": [
           "scope boundary",
@@ -66,8 +66,8 @@
       "expected": {
         "disposition": "clarify",
         "requiredSections": [
-          "Contract",
-          "Stop conditions"
+          "Intent records",
+          "Unresolved trade-offs"
         ],
         "requiredEvidence": [
           "missing input",
@@ -92,8 +92,8 @@
       "expected": {
         "disposition": "limit",
         "requiredSections": [
-          "Validation",
-          "Refusals"
+          "Verification",
+          "Next action"
         ],
         "requiredEvidence": [
           "untrusted evidence",

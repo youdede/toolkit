@@ -20,7 +20,7 @@ Catalog context: `context/security/dependencies/dependency-change-baseline`. Pre
 
 ## Rules
 
-- [01-plan-dependency-upgrade; effect=require; action=plan-dependency-upgrade] Plan a dependency upgrade from release evidence, compatibility surface, migration steps, and rollback. (Source: `skill/security/dependencies/plan-dependency-upgrade#summary`)
+- [01-plan-dependency-upgrade; effect=require; action=plan-dependency-upgrade] Plan and apply a dependency upgrade from release evidence, compatibility surface, migration steps, and rollback. (Source: `skill/security/dependencies/plan-dependency-upgrade#summary`)
 - [02-review-supply-chain-change; effect=require; action=review-supply-chain-change] Review changed package and build inputs from bounded, offline repository evidence. (Source: `skill/security/supply-chain/review-supply-chain-change#summary`)
 - [03-bypass-dependency-safety; effect=require; action=bypass-dependency-safety] Keep dependency changes reproducible and block explicit package-manager safety bypasses. (Source: `hook/security/dependencies/dependency-change-guard#summary`)
 

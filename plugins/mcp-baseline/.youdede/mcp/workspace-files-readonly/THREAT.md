@@ -5,5 +5,5 @@ absolute paths, traversal, backslashes, symlink escapes, files above 128 KiB, an
 It has no network or secret-variable authority. File content remains untrusted model input: this
 profile limits authority and size, but cannot make repository text safe from prompt injection.
 
-Credential files recognised by `sensitive-file-access-guard` are refused by `read_file`, omitted from
-`search_files` and `list_directory`, and excluded from `git_diff`.
+Credential files recognised by `sensitive-file-access-guard` are refused by `read_file` and omitted
+from `search_files` and `list_directory`.

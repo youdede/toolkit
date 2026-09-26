@@ -342,6 +342,14 @@ export function subagentBodyDrift(rawByTarget) {
     .map(([target]) => target);
 }
 
+// The specialist contract is a closed read-only allowlist; any other name is either broader
+// authority or a tool Claude Code does not document (https://code.claude.com/docs/en/tools-reference).
+const CLAUDE_CODE_SUBAGENT_TOOLS = new Set(['Read', 'Grep', 'Glob']);
+
+export function unknownClaudeCodeSubagentTools(tools) {
+  return String(tools || '').split(',').map((tool) => tool.trim()).filter((tool) => tool && !CLAUDE_CODE_SUBAGENT_TOOLS.has(tool));
+}
+
 function parseQuotedYamlScalar(line, key) {
   const prefix = `  ${key}: `;
   if (!line.startsWith(prefix)) return null;
@@ -483,9 +491,11 @@ function validateAdapter(record, target, adapterRecord, taxonomy, errors) {
   if (manifest.kind === 'hook' && target === 'cursor') {
     if (adapter.settingsPatch?.path !== 'hooks.json') errors.push('Cursor hooks must patch hooks.json');
     const hooks = adapter.settingsPatch?.hooks;
-    if (!hooks || Object.keys(hooks).some((event) => event !== 'preToolUse')) errors.push('Cursor guard adapters may only declare the validated preToolUse boundary');
-    for (const entry of Object.values(hooks || {}).flat()) {
-      if (entry?.type !== 'command' || !entry.matcher || entry.matcher === '*') errors.push('Cursor preToolUse hooks require a narrow command matcher');
+    // beforeMCPExecution fires only for MCP calls and Cursor documents no matcher for it, so it may omit one.
+    if (!hooks || Object.keys(hooks).some((event) => !['preToolUse', 'beforeMCPExecution'].includes(event))) errors.push('Cursor guard adapters may only declare the validated preToolUse or beforeMCPExecution boundary');
+    for (const [event, entries] of Object.entries(hooks || {})) for (const entry of [entries].flat()) {
+      if (entry?.type !== 'command') errors.push('Cursor guard hooks require a command handler');
+      if (event === 'preToolUse' && (!entry?.matcher || entry.matcher === '*')) errors.push('Cursor preToolUse hooks require a narrow command matcher');
       if (entry?.failClosed !== true) errors.push('Cursor enforcing hooks must set failClosed');
       if (!String(entry?.command || '').includes(`[youdede:${manifest.slug}]`)) errors.push('Cursor hook command needs its stable marker');
       if (!Number.isInteger(entry?.timeout) || entry.timeout < 1 || entry.timeout > 30) errors.push('Cursor hook timeout must be 1-30 seconds');
@@ -586,6 +596,9 @@ function validateKindContract(manifest, errors) {
         if (rule.sourceField === 'summary' && rule.effect !== 'require') errors.push(`${prefix} sourced from summary must require its action`);
         if (rule.sourceField === 'refuses' && (!Number.isInteger(rule.sourceIndex) || rule.sourceIndex < 0)) errors.push(`${prefix}.sourceIndex must select a refusal`);
         if (rule.sourceField === 'refuses' && rule.effect !== 'forbid') errors.push(`${prefix} sourced from refuses must forbid its action`);
+        // A refusal says what its source does not do; read as a rule it forbids the wrong thing.
+        if (rule.sourceField === 'refuses' && !/^Do not \S/.test(rule.text ?? '')) errors.push(`${prefix} sourced from refuses must state its prohibition in text starting with "Do not"`);
+        if (rule.text !== undefined && rule.sourceField !== 'refuses') errors.push(`${prefix}.text is only valid for rules sourced from refuses`);
       }
     }
     if (execution && (execution.mode !== 'prompt' || execution.entrypoints.length !== 0)) errors.push('contexts are pure content and must declare prompt execution without entrypoints');
@@ -850,6 +863,7 @@ export function validateArtifact(record, taxonomy, artifactsRoot = ARTIFACTS_ROO
       } else {
         if (fields.name !== manifest.slug) errors.push(`${target}: subagent frontmatter name must match the slug`);
         if (!fields.tools) errors.push(`${target}: subagent must declare a bounded tools list`);
+        if (target === 'claude-code') for (const tool of unknownClaudeCodeSubagentTools(fields.tools)) errors.push(`${target}: subagent tool ${tool} is outside the read-only allowlist`);
       }
       if (!raw.includes('## Refusals')) errors.push(`${target}: subagent must document Refusals`);
       if (refusalBulletCount(raw) < 3) errors.push(`${target}: subagent must document at least three concrete refusals`);

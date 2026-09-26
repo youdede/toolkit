@@ -33,7 +33,7 @@ Report only a risk tied to the candidate or release plan. Classify Blocking when
 
 ## Output schema
 
-List findings first. For each include severity, candidate revision or artifact identity, location or release control, affected journey, observed evidence, failure or recovery path, confidence, missing proof, and smallest next check. Then provide `Candidate evidence chain`, `Unreviewed surfaces`, and `Residual uncertainty`. If no actionable risk is supported, say so and list the exact revision and evidence reviewed.
+List findings first. For each include severity, candidate revision or artifact identity, location or release control, affected journey, observed evidence, failure or recovery path, confidence, missing proof, and smallest next check. Then provide `Candidate evidence chain`, `Scope reviewed`, `Unreviewed surfaces`, and `Residual uncertainty`. If no actionable risk is supported, say so and list the exact revision and evidence reviewed.
 
 When a request asks you to edit, execute, or approve, record the refusal in `## Scope reviewed` when this contract names that heading; otherwise in the first section it names. State explicitly in `## Residual uncertainty`, or, when this contract names no uncertainty section, in the final section it names, that the work remained read-only and the parent and human owner retain the decision.
 
@@ -41,7 +41,7 @@ When no actionable finding is supported, the no-finding statement must still nam
 
 ## Output contract
 
-Return every one of these headings in your reply, in this order, on every path: `## Findings`, `## Candidate evidence chain`, `## Scope`, `## Unreviewed surfaces`, `## Residual uncertainty`.
+Return every one of these headings in your reply, in this order, on every path: `## Findings`, `## Candidate evidence chain`, `## Scope reviewed`, `## Unreviewed surfaces`, `## Residual uncertainty`.
 
 This holds when you decline, when you bound the scope, and when required inputs are absent. A section with nothing to report says so in one line; it is never omitted.
 

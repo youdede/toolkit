@@ -19,6 +19,7 @@ for (const [sectionIndex, section] of sections.entries()) {
   if (!Array.isArray(section?.exercises) || section.exercises.length === 0) errors.push(`sections[${sectionIndex}].exercises must be non-empty`);
   for (const [exerciseIndex, exercise] of (section?.exercises || []).entries()) {
     const location = `sections[${sectionIndex}].exercises[${exerciseIndex}]`;
+    if (!exercise || typeof exercise !== 'object' || Array.isArray(exercise)) { errors.push(`${location} must be an object`); continue; }
     if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(exercise?.id || '')) errors.push(`${location}.id is invalid`);
     if (ids.has(exercise?.id)) errors.push(`duplicate exercise id: ${exercise.id}`);
     else ids.set(exercise?.id, ordered.length);

@@ -140,8 +140,13 @@ function walk(directory, workspace, output = []) {
   return output;
 }
 
+// Repository config is writable by the agent, so it must not choose programs or index writes:
+// core.fsmonitor runs a program, status refreshes .git/index unless optional locks are off, and diff
+// refreshes it regardless of that flag unless diff.autoRefreshIndex is false.
+const READ_ONLY_GIT = ['--no-optional-locks', '-c', 'core.fsmonitor=false', '-c', 'diff.autoRefreshIndex=false'];
+
 function runGit(workspace, args) {
-  const result = spawnSync('git', args, {
+  const result = spawnSync('git', [...READ_ONLY_GIT, ...args], {
     cwd: workspace,
     env: cleanGitEnvironment(),
     encoding: 'buffer',
@@ -150,6 +155,29 @@ function runGit(workspace, args) {
   if (result.error) throw new Error('git inspection failed');
   if (result.status !== 0) throw new Error('git inspection returned a non-zero status');
   return boundedText(result.stdout);
+}
+
+// status and diff run the clean/process command of any filter driver named in .gitattributes. Only
+// the commands written by `git lfs install` (with or without --skip-smudge) are trusted.
+const GIT_LFS_FILTER_COMMANDS = {
+  'filter.lfs.clean': ['git-lfs clean -- %f'],
+  'filter.lfs.smudge': ['git-lfs smudge -- %f', 'git-lfs smudge --skip -- %f'],
+  'filter.lfs.process': ['git-lfs filter-process', 'git-lfs filter-process --skip']
+};
+
+function refuseUntrustedFilters(workspace) {
+  // Reading configuration runs no configured program; exit 1 means no key matched.
+  const result = spawnSync('git', [...READ_ONLY_GIT, 'config', '--null', '--get-regexp', '^filter\\..*\\.(clean|smudge|process)$'], {
+    cwd: workspace,
+    env: cleanGitEnvironment(),
+    encoding: 'utf8',
+    maxBuffer: MAX_RESULT_BYTES
+  });
+  if (result.error || (result.status !== 0 && result.status !== 1)) throw new Error('git filter configuration could not be read');
+  for (const entry of result.stdout.split('\0').filter(Boolean)) {
+    const [key, value = ''] = entry.split(/\n(.*)/s);
+    if (!GIT_LFS_FILTER_COMMANDS[key]?.includes(value)) throw new Error(`git filter driver ${key} is not the standard Git LFS command; status and diff would run it`);
+  }
 }
 
 async function fetchAllowlisted(profile, input) {
@@ -196,6 +224,7 @@ async function callTool(profile, workspace, name, input) {
     const { resolved } = existingWorkspacePath(workspace, input.path || '.', { directory: true });
     return walk(resolved, workspace).filter((file) => file.includes(input.query)).slice(0, 200).join('\n');
   }
+  if (name === 'git_status' || name === 'git_diff') refuseUntrustedFilters(workspace);
   if (name === 'git_status') return runGit(workspace, ['status', '--short', '--branch', '--untracked-files=normal']);
   if (name === 'git_diff') {
     const args = ['diff', '--no-ext-diff', '--no-textconv'];
@@ -209,7 +238,7 @@ async function callTool(profile, workspace, name, input) {
   if (name === 'git_log') {
     const limit = input.limit === undefined ? 20 : input.limit;
     if (!Number.isInteger(limit) || limit < 1 || limit > 100) throw new Error('limit must be an integer from 1 through 100');
-    return runGit(workspace, ['log', `--max-count=${limit}`, '--format=%H%x09%aI%x09%s']);
+    return runGit(workspace, ['log', '--no-show-signature', `--max-count=${limit}`, '--format=%H%x09%aI%x09%s']);
   }
   if (name === 'fetch_url') return fetchAllowlisted(profile, input);
   throw new Error('unknown tool');

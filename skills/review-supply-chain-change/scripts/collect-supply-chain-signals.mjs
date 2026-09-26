@@ -6,8 +6,9 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 export const MAX_FILE_COUNT = 64;
-export const MAX_FILE_BYTES = 512 * 1024;
 export const MAX_TOTAL_BYTES = 4 * 1024 * 1024;
+// Real package-lock.json files often exceed 512 KiB, so one file may use the whole budget.
+export const MAX_FILE_BYTES = MAX_TOTAL_BYTES;
 export const MAX_SIGNALS_PER_FILE = 200;
 
 const MANIFEST_NAMES = new Set([
@@ -111,7 +112,8 @@ function collectPackageManifest(text, relativePath) {
   if (scripts !== undefined && (!scripts || typeof scripts !== 'object' || Array.isArray(scripts))) {
     signals.push({ ruleId: 'SC_SCRIPTS_NON_OBJECT' });
   } else if (scripts) {
-    for (const name of ['preinstall', 'install', 'postinstall', 'prepare']) {
+    // The scripts `npm install` runs for the project, in npm's documented order.
+    for (const name of ['preinstall', 'install', 'postinstall', 'prepublish', 'preprepare', 'prepare', 'postprepare']) {
       if (Object.hasOwn(scripts, name)) {
         signals.push({ ruleId: 'SC_INSTALL_LIFECYCLE_SCRIPT', name, valueType: typeof scripts[name] });
       }
@@ -191,10 +193,17 @@ function classifyActionReference(reference) {
 
 function collectWorkflow(text) {
   const signals = [];
-  for (const [index, line] of text.split(/\r?\n/).entries()) {
-    const match = /^\s*(?:-\s*)?uses\s*:\s*(.+?)\s*$/.exec(line);
+  const lines = text.split(/\r?\n/);
+  for (const [lineIndex, line] of lines.entries()) {
+    let index = lineIndex;
+    const match = /^\s*(?:-\s*)?uses\s*:\s*(.+?)\s*$/.exec(line) ?? /[{,]\s*uses\s*:\s*([^,}#]+?)\s*(?:[,}]|$)/.exec(line);
     if (!match) continue;
     let reference = match[1].replace(/\s+#.*$/, '').trim();
+    // A folded or literal block scalar (`uses: >-`) carries the reference on the next non-empty line.
+    if (/^[|>][-+0-9]*$/.test(reference)) {
+      do index += 1; while (index < lines.length && !lines[index].trim());
+      reference = (lines[index] ?? '').replace(/\s+#.*$/, '').trim();
+    }
     if ((reference.startsWith('"') && reference.endsWith('"')) || (reference.startsWith("'") && reference.endsWith("'"))) {
       reference = reference.slice(1, -1);
     }
@@ -224,6 +233,8 @@ function inspectEntry(entry) {
     type,
     bytes: content.length,
     sha256: createHash('sha256').update(content).digest('hex'),
+    // false: the file type is recognized but its content is not inspected, so no signals is not a clean result.
+    analyzed: type === 'npm-manifest' || type === 'npm-lockfile' || type === 'github-actions-workflow',
     signals: allSignals.slice(0, MAX_SIGNALS_PER_FILE),
     truncatedSignals: allSignals.length > MAX_SIGNALS_PER_FILE
   };

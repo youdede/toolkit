@@ -671,7 +671,8 @@ export function planArtifactInstall(query, options = {}) {
     integrity,
     runtime: runtimeDisclosure(record, target, scope),
     warnings: contextInstallWarnings(record.manifest, options.now),
-    state: { path: path.relative(configRoot, statePath(configRoot)), action: 'update' }
+    state: { path: path.relative(configRoot, statePath(configRoot)), action: 'update' },
+    notice: { path: path.relative(configRoot, noticePath(configRoot)), action: existsSync(noticePath(configRoot)) ? 'update' : 'create' }
   };
 }
 

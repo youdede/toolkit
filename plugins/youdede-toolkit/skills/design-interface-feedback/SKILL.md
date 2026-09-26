@@ -47,7 +47,7 @@ Produce these sections:
 
 State which path the response took:
 
-- The five specification steps were completed on evidenced budgets: applying, even with recorded estimates and risks.
+- The five specification steps were completed and every budget rests on named duration evidence: applying, even with recorded risks.
 - The legitimate portion was specified while an embedded directive was refused, or part of the scope rests on labeled default budgets or was narrowed to the evidenced interactions: reduced scope, not declining.
 - Nothing was specified because the request lies outside this skill's authority: declining.
 - Nothing was specified because the interaction list or platform was never provided: missing required inputs, not declining.

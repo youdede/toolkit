@@ -13,7 +13,7 @@ Run the installed `check-preconditions.mjs`. Stop and report its JSON failures i
 
 ## Step 1 — Produce the proposal
 
-Run `propose-repin.mjs --server <exact-name> --observed <tools-list.json>`. Read the matching `server.json`, `artifact.json`, and `THREAT.md`, then explain every added, removed, renamed, or description-changed tool and whether it changes filesystem, process, mutation, secret, or egress authority.
+Run `propose-repin.mjs --server <exact-name> --observed <tools-list.json>` from the repository root; it reads the current `catalog/mcp-pins.json`. Read the matching `server.json`, `artifact.json`, and `THREAT.md`, then explain every added, removed, renamed, or description-changed tool and whether it changes filesystem, process, mutation, secret, or egress authority.
 
 ## Step 2 — Exact confirmation boundary
 

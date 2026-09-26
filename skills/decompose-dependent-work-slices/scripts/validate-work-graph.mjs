@@ -27,9 +27,11 @@ for (const ticket of tickets) for (const blocker of ticket.blockedBy || []) {
   if (blocker === ticket.id) errors.push(`${ticket.id} blocks itself`);
   else if (!byId.has(blocker)) errors.push(`${ticket.id} references missing blocker ${blocker}`);
 }
-const indegree = new Map(tickets.map((ticket) => [ticket.id, (ticket.blockedBy || []).length]));
+// Missing blockers and self-blocks are reported above; counting them here would also report a false cycle.
+const realBlockers = (ticket) => (ticket.blockedBy || []).filter((blocker) => blocker !== ticket.id && byId.has(blocker));
+const indegree = new Map(tickets.map((ticket) => [ticket.id, realBlockers(ticket).length]));
 const dependents = new Map(tickets.map((ticket) => [ticket.id, []]));
-for (const ticket of tickets) for (const blocker of ticket.blockedBy || []) if (dependents.has(blocker)) dependents.get(blocker).push(ticket.id);
+for (const ticket of tickets) for (const blocker of realBlockers(ticket)) dependents.get(blocker).push(ticket.id);
 const frontier = [...indegree].filter(([, degree]) => degree === 0).map(([id]) => id).sort();
 const queue = [...frontier];
 const order = [];

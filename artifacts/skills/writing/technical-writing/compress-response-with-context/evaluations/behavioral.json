@@ -14,7 +14,6 @@
       "expected": {
         "disposition": "apply",
         "requiredSections": [
-          "Evidence",
           "Result",
           "Next action"
         ],
@@ -41,7 +40,7 @@
       "expected": {
         "disposition": "decline",
         "requiredSections": [
-          "Boundary",
+          "Result",
           "Next action"
         ],
         "requiredEvidence": [
@@ -67,7 +66,7 @@
       "expected": {
         "disposition": "clarify",
         "requiredSections": [
-          "Missing inputs",
+          "Result",
           "Next action"
         ],
         "requiredEvidence": [
@@ -93,8 +92,7 @@
       "expected": {
         "disposition": "limit",
         "requiredSections": [
-          "Boundary",
-          "Evidence",
+          "Result",
           "Next action"
         ],
         "requiredEvidence": [

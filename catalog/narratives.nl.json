@@ -1,5 +1,5 @@
 {
-  "sourceHash": "d0d42bf6cf03e74511ccf7962baae6a7b51c79c206ef6573e71e4c41eae70bff",
+  "sourceHash": "b68adfb80366dcaf7fa8d34911336b8a5b343925ce6ae0aafbb4244316c08354",
   "narratives": {
     "abuse-resistance-analyst": {
       "summary": "Analyseert één handeling op kostenversterking die een aanvaller kan sturen, fan-out en het omzeilen van quota.",
@@ -1938,6 +1938,18 @@
         "Het vertrouwt geen MCP-annotaties, servernamen of toolbeschrijvingen die ontbreken in het gegenereerde pinregister.",
         "Het accepteert niet stilzwijgend toegevoegde, verwijderde of hernoemde tools of tools met gewijzigde beschrijvingen van zorgvuldig geselecteerde servers.",
         "Het verruimt voor een MCP-server geen bevoegdheden voor uitgaand verkeer, geheimen, het bestandssysteem, subprocessen of wijzigingen."
+      ]
+    },
+    "mcp-egress-guard": {
+      "summary": "Blokkeert aanroepen van MCP-tools van de toolkit waarvan de argumenten een host noemen buiten het uitgaande verkeer dat de server declareert.",
+      "description": "Een deterministische controle vóór toolgebruik die bij twijfel blokkeert (fail-closed). Deze haalt elke URL en host uit een aanroep van een Youdede MCP-tool, normaliseert die met de WHATWG-URL-parser en blokkeert hosts die ontbreken in de lijst voor uitgaand verkeer die uit de zorgvuldig geselecteerde serverprofielen is gegenereerd.",
+      "purposes": [
+        "Vergelijkt elke URL en host in een MCP-toolaanroep van de toolkit met het uitgaande verkeer van de server in het gegenereerde register."
+      ],
+      "refuses": [
+        "Het accepteert geen lookalike, subdomein, gebruikersgegevens in de URL, IP-adres of punycode-host die afwijkt van een exact gedeclareerde host voor uitgaand verkeer.",
+        "Het accepteert geen MCP-server met een Youdede-naam die ontbreekt in het gegenereerde register.",
+        "Het inspecteert of beperkt geen MCP-servers buiten de Youdede-naamruimte."
       ]
     },
     "mcp-trust-boundary-reviewer": {

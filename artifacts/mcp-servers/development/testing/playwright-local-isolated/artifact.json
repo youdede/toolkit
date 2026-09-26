@@ -22,7 +22,7 @@
   "refuses": [
     "It does not browse non-loopback origins, authenticated production sessions, or user browser profiles.",
     "It does not treat allowed origins as a complete security boundary or assume redirects remain in scope.",
-    "It does not upload files, persist browser state, or claim an observed journey proves all interface behavior."
+    "It does not persist browser state, block the upstream browser_file_upload tool, or claim an observed journey proves all interface behavior."
   ],
   "execution": {"mode": "prompt", "entrypoints": []},
   "mcpServer": {
@@ -32,7 +32,7 @@
     "trustBoundary": "Only unauthenticated loopback browser journeys are in scope; isolated state and blocked service workers reduce persistence, while page content and redirects remain untrusted and must be checked against the explicit origin boundary.",
     "pinnedTools": []
   },
-  "relationships": {"composesWith": ["skill/development/testing/test-interface-in-browser"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": ["pack/browser-verification"]},
+  "relationships": {"composesWith": ["hook/security/network-control/mcp-egress-guard", "skill/development/testing/test-interface-in-browser"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": ["pack/browser-verification"]},
   "operational": {"behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "bounded", "latency_reason": "A browser journey requires starting the pinned server and waiting for page actions and results.", "dataRetention": "runtime-managed"},
   "adapters": {"claude-code": "adapters/claude-code.json", "cursor": "adapters/cursor.json"}
 }

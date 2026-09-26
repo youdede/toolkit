@@ -300,6 +300,10 @@
       "risk": "Deze automatische controle blokkeert toolkit MCP-tooloproepen wanneer de server, toolnaam of waargenomen beschrijving niet is vastgezet; een onterechte blokkering kan het legitieme werk onderbreken, maar voert de geblokkeerde actie niet uit.",
       "latency": "Het toegangspunt verwerkt één onderschepte gebeurtenis om toolkit MCP-tooloproepen te blokkeren wanneer de server, toolnaam of waargenomen beschrijving niet is vastgezet zonder uitgestelde verwerking."
     },
+    "mcp-egress-guard": {
+      "risk": "Deze automatische controle blokkeert toolkit MCP-tooloproepen waarvan de argumenten een host buiten het gedeclareerde uitgaande verkeer noemen; een onterechte blokkering kan het legitieme werk onderbreken, maar voert de geblokkeerde actie niet uit.",
+      "latency": "Het toegangspunt verwerkt één onderschepte gebeurtenis om toolkit MCP-tooloproepen te blokkeren die een niet-gedeclareerde host voor uitgaand verkeer noemen, zonder uitgestelde verwerking."
+    },
     "symlink-publication-guard": {
       "risk": "Deze automatische controle voorkomt dat commits symbolische links publiceren die ontsnappen of op dubbelzinnige wijze de repository doorkruisen; een onterechte blokkering kan het legitieme werk onderbreken, maar voert de geblokkeerde actie niet uit.",
       "latency": "Om te voorkomen dat commits symbolische links publiceren die ontsnappen of op dubbelzinnige wijze de repository doorkruisen, kan het entrypoint een begrensd lokaal subproces uitvoeren voordat het antwoord geeft."
@@ -1261,5 +1265,5 @@
       "latency": "De specialist voert op statische wijze een procedure uit voor vereisten, status, waarneembare resultaten, nieuwe pogingen en herstelvertakkingen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     }
   },
-  "sourceHash": "7b6f7b61f5fe2a07513b6875ba7d8ee9dea6045d18810fe1e4c814e2e681a972"
+  "sourceHash": "fc38328c243180cb292355d8987bf723b864aea9a7f22dbdb2aad19d2b71a1c7"
 }

@@ -12,11 +12,13 @@ produce provenance for that source state.
 ## Applying decisions 1 and 2
 
 Both are one-line decisions with a wide blast radius: the holder string `Youdede` appears in over
-300 tracked files, including the `authors` field of all <!-- stat:artifact-count -->315<!-- /stat --> `artifact.json` manifests, and the
-namespace in the five files listed under step 2. [`scripts/set-publisher-identity.mjs`](../scripts/set-publisher-identity.mjs) applies either or
+300 tracked files, including the `authors` field of all <!-- stat:artifact-count -->316<!-- /stat --> `artifact.json` manifests, and the
+namespace in every tracked `github.com/udede/toolkit` link, well beyond the five files listed under step 2. [`scripts/set-publisher-identity.mjs`](../scripts/set-publisher-identity.mjs) applies either or
 both in one pass, over tracked files only, and refuses to run without an explicit value. Its
 `--holder` pass still targets the retired `youdede contributors` placeholder, so update its
-`PLACEHOLDER_HOLDER` constant to `Youdede` in the same change before renaming the holder.
+`PLACEHOLDER_HOLDER` constant to `Youdede` in the same change before renaming the holder. Its
+`--owner` pass rewrites `github.com/udede/toolkit` and `@udede` owners only; bare `udede/toolkit`
+references, such as the marketplace commands in `docs/native-marketplaces.md`, need a manual edit.
 
 ```bash
 node scripts/set-publisher-identity.mjs --dry-run --holder "<exact legal name>" --owner "<github org>"
@@ -40,7 +42,7 @@ substitute an invented company name. `scripts/verify-legal.mjs` asserts the curr
 update that check in the same change.
 
 **Files to update together:** `LICENSE`, `NOTICE`, `CITATION.cff`, `scripts/verify-legal.mjs`, and
-the `authors` field of all <!-- stat:artifact-count -->315<!-- /stat --> `artifact.json` manifests.
+the `authors` field of all <!-- stat:artifact-count -->316<!-- /stat --> `artifact.json` manifests.
 
 ## 2. Migrate the namespace
 
@@ -93,8 +95,9 @@ repositories, add the accountable publisher as a required reviewer, prevent self
 independent reviewer exists, and update this page in the same change. Keep the dispatch confirmation
 as an additional fail-closed control.
 
-The only `bypass_actors` entry in [`.github/rulesets/main.json`](../.github/rulesets/main.json)
-grants the repository admin role a pull-request-mode bypass. Do not add any other bypass actor.
+[`.github/rulesets/main.json`](../.github/rulesets/main.json) has no `bypass_actors`: nobody,
+including repository admins, can merge into `main` without a green `quality-gate`. Do not add a
+bypass actor.
 
 ## 5. Tag, dispatch, publish, then attest
 

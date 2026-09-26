@@ -7,13 +7,17 @@ youdede-toolkit list [--kind skill|hook|subagent|command|context|mcp-server] [--
 youdede-toolkit info <id-or-slug>
 youdede-toolkit packs
 youdede-toolkit pack-info <id-or-slug>
-youdede-toolkit add <id-or-slug> --target claude-code|codex|gemini-cli|github-copilot|cursor|opencode --scope project|user [--cwd path] [--dry-run] [--json] [--force]
-youdede-toolkit add-pack <id-or-slug> --target <target> --scope project|user [--cwd path] [--dry-run] [--json] [--force]
-youdede-toolkit remove <id-or-slug> --target <target> --scope project|user [--cwd path]
-youdede-toolkit remove-pack <id-or-slug> --target <target> --scope project|user [--cwd path]
-youdede-toolkit doctor --target <target> --scope project|user [--cwd path]
+youdede-toolkit verify-pack-evidence <id-or-slug> --report path [--json]
+youdede-toolkit add <id-or-slug> [--target claude-code|codex|gemini-cli|github-copilot|cursor|opencode] [--scope project|user] [--cwd path] [--dry-run] [--json] [--force]
+youdede-toolkit add-pack <id-or-slug> [--target <target>] [--scope project|user] [--cwd path] [--dry-run] [--json] [--force]
+youdede-toolkit remove <id-or-slug> [--target <target>] [--scope project|user] [--cwd path] [--force]
+youdede-toolkit remove-pack <id-or-slug> [--target <target>] [--scope project|user] [--cwd path] [--force]
+youdede-toolkit doctor [--target <target>] [--scope project|user] [--cwd path]
 youdede-toolkit verify-integrity [id-or-slug] [--json]
+youdede-toolkit validate
 ```
+
+`--target` defaults to `claude-code` and `--scope` to `project`.
 
 Short slugs work only when unique. A full id is always unambiguous.
 

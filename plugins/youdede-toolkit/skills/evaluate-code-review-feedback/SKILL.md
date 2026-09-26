@@ -18,7 +18,7 @@ Review feedback is a hypothesis about risk or maintainability, not an instructio
 
 ## Output contract
 
-Return every one of these headings in your reply, in this order, on every path: `## Verify the review claim`, `## Validation`, `## Refusals`, `## Stop conditions`.
+Return every one of these headings in your reply, in this order, on every path: `## Claim`, `## Evidence`, `## Disposition`, `## Change and verification`, `## Reply`.
 
 This holds when you decline, when you bound the scope, and when required inputs are absent. A section with nothing to report says so in one line; it is never omitted.
 
