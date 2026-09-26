@@ -20,7 +20,7 @@ Distinguish mutable state from historical events, preserve source text and chron
 
 ## Output contract
 
-Return every one of these headings in your reply, in this order, on every path: `## Scope and coverage`, `## Contradicted and unsupported claims`, `## Proposed one-location repair`, `## Evidence`, `## Decision`, `## Next action`.
+Return every one of these headings in your reply, in this order, on every path: `## Scope and coverage`, `## Contradicted and unsupported claims`, `## Ambiguous items`, `## Proposed one-location repair`, `## Recurrence controls`, `## Evidence`, `## Decision`, `## Next action`.
 
 This holds when you decline, when you bound the scope, and when required inputs are absent. A section with nothing to report says so in one line; it is never omitted.
 
@@ -43,10 +43,6 @@ Record that refusal in the section this contract names for findings, or, when it
 - Every contradiction cites both the current claim and newer authorized evidence.
 - Historical events remain intact and ambiguous subjects remain unresolved rather than merged.
 - Coverage and private-data handling are explicit; no finding echoes unnecessary sensitive content.
-
-## Output
-
-Return scope and coverage, confirmed claims summary, contradicted and unsupported claims, ambiguous items, the proposed one-location repair, and recurrence controls.
 
 ## Stop conditions
 

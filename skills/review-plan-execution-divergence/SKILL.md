@@ -46,7 +46,7 @@ Record that refusal in the section this contract names for findings, or, when it
 
 ## Output
 
-Return the evidence boundary, plan-to-actual matrix, divergence analysis, unresolved claims, process-change proposals, rejected proposals, and next validation experiment. When refusing an unsupported adherence score or automatic guidance edit, still name the independent repository evidence required and the forward test that would validate any proposed permanent process change.
+Place the evidence boundary, plan-to-actual matrix, and divergence analysis under `## Evidence`; unresolved claims and the accepted and rejected process-change proposals under `## Decision`; and the next validation experiment under `## Next action`. When refusing an unsupported adherence score or automatic guidance edit, still name the independent repository evidence required and the forward test that would validate any proposed permanent process change.
 
 ## Stop conditions
 
