@@ -1376,7 +1376,7 @@
       "id": "pack/secure-agent-boundaries",
       "slug": "secure-agent-boundaries",
       "name": "Secure agent boundaries",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "summary": "Design agent integrations, review their trust boundary, and block obvious data-exposure paths.",
       "outcomes": [
         "agent-tool-security",
@@ -1390,6 +1390,7 @@
             "outcome": "agent-tool-security",
             "memberArtifactIds": [
               "hook/security/network-control/mcp-capability-drift-guard",
+              "hook/security/network-control/mcp-egress-guard",
               "skill/development/agent-tooling/author-mcp-server-contract",
               "skill/security/threat-modeling/review-agent-tool-boundaries",
               "subagent/security/application-security/application-security-reviewer",
@@ -1440,6 +1441,11 @@
           "artifactId": "hook/security/network-control/mcp-capability-drift-guard",
           "role": "enforcement",
           "required": true
+        },
+        {
+          "artifactId": "hook/security/network-control/mcp-egress-guard",
+          "role": "enforcement",
+          "required": true
         }
       ],
       "targets": [
@@ -1478,7 +1484,7 @@
           "collector": 0,
           "specialist": 2,
           "verifier": 1,
-          "enforcement": 3,
+          "enforcement": 4,
           "observer": 0,
           "entrypoint": 0,
           "baseline": 0,
@@ -1486,6 +1492,10 @@
         }
       },
       "hookFanout": [
+        {
+          "boundary": "claude-code:PreToolUse:^mcp__.+__.+$",
+          "count": 1
+        },
         {
           "boundary": "claude-code:PreToolUse:^mcp__youdede-.+__.+$",
           "count": 1

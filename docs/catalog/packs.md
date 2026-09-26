@@ -19,7 +19,7 @@ A pack composes artifacts of different kinds into one outcome, so a single comma
 | `release-readiness` | 1.1.0 | Build an evidence-backed release decision and stop publication from unsafe repository state. | 7 | Versioned, ledger-linked |
 | `remote-review-evidence` | 1.0.0 | Collect bounded GitHub evidence in read-only mode and turn failing CI evidence into a traceable diagnosis. | 4 | Versioned, ledger-linked |
 | `reviewable-change` | 1.1.0 | Prepare bounded code changes, obtain independent review, and prevent oversized unreviewable commits. | 6 | Versioned, ledger-linked |
-| `secure-agent-boundaries` | 1.1.0 | Design agent integrations, review their trust boundary, and block obvious data-exposure paths. | 7 | Versioned, ledger-linked |
+| `secure-agent-boundaries` | 1.2.0 | Design agent integrations, review their trust boundary, and block obvious data-exposure paths. | 8 | Versioned, ledger-linked |
 | `session-continuity` | 1.1.0 | Persist bounded hash-chained checkpoints, restore cited context, and verify continuity across sessions. | 7 | Versioned, ledger-linked |
 
 ---

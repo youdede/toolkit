@@ -32,7 +32,7 @@
     "trustBoundary": "Only unauthenticated loopback browser journeys are in scope; isolated state and blocked service workers reduce persistence, while page content and redirects remain untrusted and must be checked against the explicit origin boundary.",
     "pinnedTools": []
   },
-  "relationships": {"composesWith": ["skill/development/testing/test-interface-in-browser"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": ["pack/browser-verification"]},
+  "relationships": {"composesWith": ["hook/security/network-control/mcp-egress-guard", "skill/development/testing/test-interface-in-browser"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": ["pack/browser-verification"]},
   "operational": {"behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "bounded", "latency_reason": "A browser journey requires starting the pinned server and waiting for page actions and results.", "dataRetention": "runtime-managed"},
   "adapters": {"claude-code": "adapters/claude-code.json", "cursor": "adapters/cursor.json"}
 }

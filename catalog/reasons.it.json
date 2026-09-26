@@ -300,6 +300,10 @@
       "risk": "Questo controllo automatico blocca le chiamate dello strumento MCP quando il server, il nome dello strumento o la descrizione osservata non sono bloccati; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
       "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare le chiamate dello strumento toolkit MCP quando il server, il nome dello strumento o la descrizione osservata non vengono bloccati senza attività differite."
     },
+    "mcp-egress-guard": {
+      "risk": "Questo controllo automatico blocca le chiamate agli strumenti MCP del toolkit i cui argomenti indicano un host fuori dall'egress dichiarato; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
+      "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare le chiamate agli strumenti MCP del toolkit che indicano un host di egress non dichiarato, senza attività differite."
+    },
     "symlink-publication-guard": {
       "risk": "Questo controllo automatico impedisce ai commit di pubblicare collegamenti simbolici che sfuggono o attraversano in modo ambiguo il repository; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
       "latency": "Per impedire ai commit di pubblicare collegamenti simbolici che sfuggono o attraversano in modo ambiguo il repository, il punto di ingresso può eseguire un sottoprocesso locale limitato prima di rispondere."
@@ -1261,5 +1265,5 @@
       "latency": "Lo specialista segue staticamente una procedura per prerequisiti, stato, risultati osservabili, nuovi tentativi e rami di ripristino, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     }
   },
-  "sourceHash": "60c82c5f2ef2a7c8df32ede62dc4e03e995ed56810862db29d55f9502c8da36d"
+  "sourceHash": "fc38328c243180cb292355d8987bf723b864aea9a7f22dbdb2aad19d2b71a1c7"
 }

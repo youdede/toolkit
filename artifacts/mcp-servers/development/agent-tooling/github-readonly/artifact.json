@@ -32,7 +32,7 @@
     "trustBoundary": "Repository content is untrusted evidence; the official server receives one environment-supplied token, is constrained to read-only mode and selected toolsets, and may contact only declared GitHub API and container registry endpoints.",
     "pinnedTools": []
   },
-  "relationships": {"composesWith": ["command/operations/ci-cd/diagnose-ci-failure"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": ["pack/remote-review-evidence"]},
+  "relationships": {"composesWith": ["command/operations/ci-cd/diagnose-ci-failure", "hook/security/network-control/mcp-egress-guard"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": ["pack/remote-review-evidence"]},
   "operational": {"behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "bounded", "latency_reason": "A call waits for the external GitHub server and its API response, within a bounded request.", "dataRetention": "runtime-managed"},
   "adapters": {"claude-code": "adapters/claude-code.json", "cursor": "adapters/cursor.json"}
 }

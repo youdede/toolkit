@@ -491,9 +491,11 @@ function validateAdapter(record, target, adapterRecord, taxonomy, errors) {
   if (manifest.kind === 'hook' && target === 'cursor') {
     if (adapter.settingsPatch?.path !== 'hooks.json') errors.push('Cursor hooks must patch hooks.json');
     const hooks = adapter.settingsPatch?.hooks;
-    if (!hooks || Object.keys(hooks).some((event) => event !== 'preToolUse')) errors.push('Cursor guard adapters may only declare the validated preToolUse boundary');
-    for (const entry of Object.values(hooks || {}).flat()) {
-      if (entry?.type !== 'command' || !entry.matcher || entry.matcher === '*') errors.push('Cursor preToolUse hooks require a narrow command matcher');
+    // beforeMCPExecution fires only for MCP calls and Cursor documents no matcher for it, so it may omit one.
+    if (!hooks || Object.keys(hooks).some((event) => !['preToolUse', 'beforeMCPExecution'].includes(event))) errors.push('Cursor guard adapters may only declare the validated preToolUse or beforeMCPExecution boundary');
+    for (const [event, entries] of Object.entries(hooks || {})) for (const entry of [entries].flat()) {
+      if (entry?.type !== 'command') errors.push('Cursor guard hooks require a command handler');
+      if (event === 'preToolUse' && (!entry?.matcher || entry.matcher === '*')) errors.push('Cursor preToolUse hooks require a narrow command matcher');
       if (entry?.failClosed !== true) errors.push('Cursor enforcing hooks must set failClosed');
       if (!String(entry?.command || '').includes(`[youdede:${manifest.slug}]`)) errors.push('Cursor hook command needs its stable marker');
       if (!Number.isInteger(entry?.timeout) || entry.timeout < 1 || entry.timeout > 30) errors.push('Cursor hook timeout must be 1-30 seconds');
