@@ -7,6 +7,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 ### Added
 
 - Three bounded workflow commands cover CI diagnosis, redacted environment preflight, and repository-instruction audits; four generated contexts add API, migration, CI, and dependency baselines at precedences 300–600.
+- `quality/hook-verdicts.json` records the current verdict of all 63 Claude Code hooks on about 4,400 inputs: the inputs of the hook tests, the audit probes, multi-command sequences, and everyday developer commands and edits. `npm run check:hook-verdicts` (part of `npm run check`) fails on any verdict change that does not declare a `change` with its reason and finding; `npm run hook-verdicts` records new entries and declared changes. Entries whose current verdict is known to be wrong carry an `expectation` naming the finding.
 - Preview external MCP profiles pin the official GitHub server `v1.12.2` in read-only reduced-toolset mode and Playwright MCP `0.0.82` in isolated loopback-only mode. They ship in the separate `remote-review-evidence` and `browser-verification` packs rather than widening `mcp-baseline`.
 
 ### Changed

@@ -56,6 +56,20 @@ Relevant malformed, oversized, ambiguous, incomplete, or failed inspections bloc
 
 Claude Code, Codex, Gemini CLI, and Cursor adapters use target-native event names, matchers, time units, ownership markers, and blocking semantics; [targets.md](targets.md) records each runtime's registration format. OpenCode adapters are limited to the verified `tool.execute.before` shell tranche. Repository validation rejects wildcard enforcement matchers, unbounded timeouts, unsupported events, and commands that do not resolve the installed payload. Tests exercise the pure decision, native-shaped envelopes, real process or plugin blocking, malformed input, false-positive controls, and independent install/uninstall.
 
+## Hook verdict snapshot
+
+`quality/hook-verdicts.json` records, for every Claude Code hook and every input of its corpus, the verdict the hook returns today: `exit`, `ruleId` (the `[rule-id]` printed by the hook, or `text:` plus the first detail line when a block has no rule id), and `output` (the keys of the stdout JSON, with decision values). The corpus holds every input the tests feed to each hook, the probes of the repository audit, multi-command sequences (branch change, `cd`, staging, alias in the same command), and a set of everyday developer commands and edits. Each entry names a `fixture`: a list of declarative steps (`write`, `mkdir`, `rm`, `symlink`, `chmod`, `git`, `repo`, `remote`) that `scripts/record-hook-verdicts.mjs` builds in a temporary directory, with a bare remote when the entry needs one. Hooks run as real processes from a staged install layout. `via: "symlink"` runs the hook through a symlinked path. Secrets in fixtures are tokens such as `{{AWS_ACCESS_KEY}}`, assembled at run time.
+
+The snapshot records current behavior, including behavior known to be wrong. Such entries carry `expectation`, for example `should-block per A-hooks-security-1 shell-command-guard.mjs:325`, naming the finding that describes the correct verdict.
+
+`npm run check:hook-verdicts` (and `tests/hook-verdicts.test.mjs`) recompute every verdict and fail on any difference. A verdict may change only on purpose, in the same change that fixes the hook:
+
+1. Add to the affected entry `"change": { "reason": "...", "finding": "<finding or fact id>" }`. Leave `exit`, `ruleId`, and `output` as they are: they stay the baseline.
+2. Run `npm run hook-verdicts`. It writes the new verdict into `change` and refuses any other difference, so an unintended regression cannot be recorded by accident.
+3. When the fix makes an `expectation` true, keep it: the entry now documents before, after, and why.
+
+To extend the corpus, append an entry without verdict fields (and a fixture if needed), then run `npm run hook-verdicts`; it fills the verdict of new entries only. Every hook must have at least one entry. A fix to a Bash hook adds at least one sequence that combines the fix with a change of branch, directory, or staging in the same command.
+
 ## Current hybrid skills
 
 Twelve skills are hybrid today:
