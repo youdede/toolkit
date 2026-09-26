@@ -9,7 +9,7 @@ short-lived branch
   -> conventional commits and PR title
   -> local deterministic hooks
   -> pull request with evidence
-  -> pinned CI across supported platforms
+  -> SHA-pinned CI on Linux
   -> required quality-gate
   -> squash merge into signed linear main
   -> manually authorized, versioned, provenance-backed release
@@ -35,7 +35,7 @@ Local hooks improve feedback but are not an authority boundary because Git permi
 
 Branch names use a controlled prefix documented in [`CONTRIBUTING.md`](../CONTRIBUTING.md). Pull request titles follow the same Conventional Commit grammar as commits. The repository allows squash merge only so the reviewed PR title becomes the canonical `main` subject and the public history remains one cohesive commit per change.
 
-Release tags use `vMAJOR.MINOR.PATCH`, must identify the exact package version, and are signed. A tag push never starts publication; the release workflow requires a separate manual dispatch and exact confirmation. Tags and published npm versions are immutable. A failed release is corrected with a new version, not by rewriting an existing tag or package.
+Release tags use `vMAJOR.MINOR.PATCH`, must identify the exact package version, and are signed. A tag push never starts publication; the release workflow requires a separate manual dispatch and exact confirmation. Published npm versions are immutable: npm never accepts the same version number twice. Tags are not moved or deleted by policy; no tag ruleset enforces this today. A failed release is corrected with a new version, not by rewriting an existing tag or package.
 
 ## Temporary private phase
 
