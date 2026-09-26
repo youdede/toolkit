@@ -9,7 +9,7 @@ A pack composes artifacts of different kinds into one outcome, so a single comma
 | Slug | Version | What it composes | Artifacts | Evidence |
 | --- | --- | --- | ---: | --- |
 | `accessibility-assurance` | 1.0.0 | Plan, enforce, and independently verify accessible interface behavior from source evidence. | 9 | Versioned, ledger-linked |
-| `browser-verification` | 1.0.0 | Exercise an unauthenticated local interface in an isolated browser and preserve journey-level verification evidence. | 3 | Versioned, ledger-linked |
+| `browser-verification` | 1.0.1 | Exercise an unauthenticated local interface in an isolated browser, preserve journey-level evidence, and review the change for web performance risks. | 3 | Versioned, ledger-linked |
 | `daily-driver` | 1.0.0 | Deliver bounded incremental changes, prepare review evidence, and prevent unreviewable diffs. | 5 | Versioned, ledger-linked |
 | `data-change-safety` | 1.0.0 | Review schema and migration changes with deterministic safety checks and independent risk analysis. | 4 | Versioned, ledger-linked |
 | `infrastructure-change-readiness` | 1.0.0 | Plan a staged infrastructure change and independently review lifecycle, blast-radius, and recovery evidence. | 3 | Versioned, ledger-linked |
@@ -20,7 +20,7 @@ A pack composes artifacts of different kinds into one outcome, so a single comma
 | `remote-review-evidence` | 1.0.0 | Collect bounded GitHub evidence in read-only mode and turn failing CI evidence into a traceable diagnosis. | 4 | Versioned, ledger-linked |
 | `reviewable-change` | 1.1.0 | Prepare bounded code changes, obtain independent review, and prevent oversized unreviewable commits. | 6 | Versioned, ledger-linked |
 | `secure-agent-boundaries` | 1.1.0 | Design agent integrations, review their trust boundary, and block obvious data-exposure paths. | 7 | Versioned, ledger-linked |
-| `session-continuity` | 1.0.0 | Persist bounded hash-chained checkpoints, restore cited context, and verify continuity across sessions. | 7 | Versioned, ledger-linked |
+| `session-continuity` | 1.1.0 | Persist bounded hash-chained checkpoints, restore cited context, and verify continuity across sessions. | 7 | Versioned, ledger-linked |
 
 ---
 

@@ -4,15 +4,15 @@
   "id": "pack/session-continuity",
   "slug": "session-continuity",
   "name": "Session continuity",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "summary": "Persist bounded hash-chained checkpoints, restore cited context, and verify continuity across sessions.",
   "outcomes": ["resumable-work", "verified-session-history"],
   "evidence": {
     "reportSchema": "../../schema/pack-evidence.schema.json",
     "ledgerLinkRequired": true,
     "outcomeEvidence": [
-      {"outcome": "resumable-work", "memberArtifactIds": ["command/operations/session/record-work-checkpoint", "hook/operations/session/compact-readiness-guard", "hook/operations/session/session-checkpoint-guard", "hook/operations/session/session-restore-guard", "skill/operations/session/resume-session-work"]},
-      {"outcome": "verified-session-history", "memberArtifactIds": ["command/operations/session/verify-session-ledger", "subagent/writing/decision-support/decision-record-reviewer"]}
+      {"outcome": "resumable-work", "memberArtifactIds": ["command/operations/session/record-work-checkpoint", "hook/operations/session/compact-readiness-guard", "hook/operations/session/session-checkpoint-guard", "hook/operations/session/session-restore-guard", "skill/operations/session/resume-session-work", "subagent/writing/decision-support/decision-record-reviewer"]},
+      {"outcome": "verified-session-history", "memberArtifactIds": ["command/operations/session/verify-session-ledger"]}
     ]
   },
   "members": [
@@ -22,6 +22,6 @@
     {"artifactId": "hook/operations/session/session-checkpoint-guard", "role": "observer", "required": true},
     {"artifactId": "hook/operations/session/session-restore-guard", "role": "observer", "required": true},
     {"artifactId": "skill/operations/session/resume-session-work", "role": "procedure", "required": true},
-    {"artifactId": "subagent/writing/decision-support/decision-record-reviewer", "role": "verifier", "required": true}
+    {"artifactId": "subagent/writing/decision-support/decision-record-reviewer", "role": "specialist", "required": true}
   ]
 }

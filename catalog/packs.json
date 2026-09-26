@@ -149,8 +149,8 @@
       "id": "pack/browser-verification",
       "slug": "browser-verification",
       "name": "Browser verification",
-      "version": "1.0.0",
-      "summary": "Exercise an unauthenticated local interface in an isolated browser and preserve journey-level verification evidence.",
+      "version": "1.0.1",
+      "summary": "Exercise an unauthenticated local interface in an isolated browser, preserve journey-level evidence, and review the change for web performance risks.",
       "outcomes": [
         "local-browser-verification"
       ],
@@ -176,7 +176,7 @@
         },
         {
           "artifactId": "subagent/design/frontend/web-performance-reviewer",
-          "role": "verifier",
+          "role": "specialist",
           "required": true
         },
         {
@@ -219,8 +219,8 @@
         "roleCounts": {
           "procedure": 1,
           "collector": 0,
-          "specialist": 0,
-          "verifier": 1,
+          "specialist": 1,
+          "verifier": 0,
           "enforcement": 0,
           "observer": 0,
           "entrypoint": 0,
@@ -1513,7 +1513,7 @@
       "id": "pack/session-continuity",
       "slug": "session-continuity",
       "name": "Session continuity",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "summary": "Persist bounded hash-chained checkpoints, restore cited context, and verify continuity across sessions.",
       "outcomes": [
         "resumable-work",
@@ -1530,14 +1530,14 @@
               "hook/operations/session/compact-readiness-guard",
               "hook/operations/session/session-checkpoint-guard",
               "hook/operations/session/session-restore-guard",
-              "skill/operations/session/resume-session-work"
+              "skill/operations/session/resume-session-work",
+              "subagent/writing/decision-support/decision-record-reviewer"
             ]
           },
           {
             "outcome": "verified-session-history",
             "memberArtifactIds": [
-              "command/operations/session/verify-session-ledger",
-              "subagent/writing/decision-support/decision-record-reviewer"
+              "command/operations/session/verify-session-ledger"
             ]
           }
         ]
@@ -1575,7 +1575,7 @@
         },
         {
           "artifactId": "subagent/writing/decision-support/decision-record-reviewer",
-          "role": "verifier",
+          "role": "specialist",
           "required": true
         }
       ],
@@ -1614,8 +1614,8 @@
         "roleCounts": {
           "procedure": 1,
           "collector": 0,
-          "specialist": 0,
-          "verifier": 1,
+          "specialist": 1,
+          "verifier": 0,
           "enforcement": 0,
           "observer": 3,
           "entrypoint": 2,
