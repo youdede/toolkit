@@ -25858,7 +25858,7 @@
           {
             "path": "scripts/validate-setup-wizard.mjs",
             "runtime": "node",
-            "purpose": "Statically validate Bash syntax, secret-handling hazards, confirmation gates, and the declared wizard stage count.",
+            "purpose": "Statically validate Bash syntax, a few lexical secret-exposure patterns, the presence of a confirmation prompt, and the declared wizard stage count.",
             "sideEffects": "read-only"
           }
         ]

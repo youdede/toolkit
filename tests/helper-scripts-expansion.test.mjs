@@ -92,6 +92,49 @@ echo "$API_TOKEN"
   assert.match(unsafe.stdout, /secret-like variable/);
 });
 
+test('setup wizard validator catches visible secret input, secrets in argv, and comment-only gates', () => {
+  const directory = scratch();
+  const script = 'artifacts/skills/operations/setup/author-guided-setup-wizard/scripts/validate-setup-wizard.mjs';
+  const leaky = path.join(directory, 'leaky.sh');
+  writeFileSync(leaky, `#!/usr/bin/env bash
+set -euo pipefail
+# no confirmation needed here
+TOTAL_STAGES=1
+stage() { printf '%s\\n' "$1"; }
+stage "Token"
+read -r -p "Paste your API token: " API_TOKEN
+curl -H "Authorization: Bearer $API_TOKEN" https://api.example.com/setup
+`);
+  const result = run(script, [leaky]);
+  assert.equal(result.status, 1, result.stdout);
+  assert.match(result.stdout, /read without -s/);
+  assert.match(result.stdout, /command line/);
+
+  const commentOnlyGate = path.join(directory, 'comment-only-gate.sh');
+  writeFileSync(commentOnlyGate, `#!/usr/bin/env bash
+set -euo pipefail
+# confirmation happens elsewhere
+TOTAL_STAGES=1
+stage() { printf '%s\\n' "$1"; }
+stage "Delete"
+rm -rf ./build
+`);
+  assert.match(run(script, [commentOnlyGate]).stdout, /confirmation/);
+
+  const commented = path.join(directory, 'commented.sh');
+  writeFileSync(commented, `#!/usr/bin/env bash
+set -euo pipefail # never set -x here
+TOTAL_STAGES=1
+stage() { printf '%s\\n' "$1"; }
+confirm() { read -r -p "Continue? " answer; [[ "$answer" == yes ]]; }
+stage "One"
+read -rs -p "Token: " API_TOKEN
+confirm
+`);
+  const clean = run(script, [commented]);
+  assert.equal(clean.status, 0, clean.stdout + clean.stderr);
+});
+
 test('TypeScript boundary inspector distinguishes entry points from deep imports', () => {
   const directory = scratch();
   const packages = path.join(directory, 'packages');
