@@ -149,6 +149,15 @@ test('work graph validator does not report a cycle for a missing blocker or a se
   assert.deepEqual(JSON.parse(result.stdout).errors, ['a references missing blocker missing', 'b blocks itself', 'dependency cycle includes: c, d']);
 });
 
+test('exercise plan validator reports non-object exercises as JSON errors instead of crashing', () => {
+  const directory = scratch();
+  const file = path.join(directory, 'plan.json');
+  writeFileSync(file, JSON.stringify({ sections: [{ id: 's1', exercises: [null, null] }] }));
+  const result = run('artifacts/skills/writing/education/build-progressive-learning-exercises/scripts/validate-exercise-plan.mjs', [file]);
+  assert.equal(result.status, 1, result.stderr);
+  assert.ok(JSON.parse(result.stdout).errors.includes('sections[0].exercises[1] must be an object'));
+});
+
 test('TypeScript boundary inspector distinguishes entry points from deep imports', () => {
   const directory = scratch();
   const packages = path.join(directory, 'packages');

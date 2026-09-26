@@ -14,7 +14,7 @@ One skill should add one capability or discipline. Its description routes activa
 1. Collect realistic trigger prompts, near misses, intended runtimes, authority boundaries, output contract, failure modes, and representative repository constraints before drafting.
 2. Choose a verb-object lowercase slug. Write frontmatter with what the skill does, when it applies, and how it differs from adjacent skills; keep procedural detail out of the description.
 3. Put the smallest useful workflow in SKILL.md. Move deterministic repeated logic into scripts and long optional detail into directly linked references. Avoid personal paths and time-sensitive claims.
-4. Resolve this skill's installed directory and run `node scripts/validate-skill.mjs <skill-directory>` for deterministic structure and link checks. Then forward-test positive and negative prompts, validate metadata in each target runtime, inspect scripts for unsafe I/O or network behavior, and iterate until triggering and outputs are reliable.
+4. Resolve `<skill-root>` to the directory containing this loaded `SKILL.md` and run `node "<skill-root>/scripts/validate-skill.mjs" <skill-directory>` for deterministic structure and link checks. Then forward-test positive and negative prompts, validate metadata in each target runtime, inspect scripts for unsafe I/O or network behavior, and iterate until triggering and outputs are reliable.
 
 ## Output contract
 

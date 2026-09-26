@@ -12,7 +12,7 @@ Discover the repository's real package roots, entry-point declarations, aliases,
 ## Workflow
 
 1. Inspect workspace manifests, exports maps, TypeScript paths, bundler config, existing dependency rules, package layout, imports, tests, and CI. Define package identity and public entry points from evidence.
-2. Run `node scripts/inspect-module-boundaries.mjs --root <packages-dir>` from this installed skill, where `<packages-dir>` is the directory whose immediate children are the packages (for example `packages/`), not one package's root, for a read-only baseline of relative cross-package deep imports. Use `--tests-as-consumers` only if tests must obey public boundaries.
+2. Resolve `<skill-root>` to the directory containing this loaded `SKILL.md` and run `node "<skill-root>/scripts/inspect-module-boundaries.mjs" --root <packages-dir>`, where `<packages-dir>` is the directory whose immediate children are the packages (for example `packages/`), not one package's root, for a read-only baseline of relative cross-package deep imports. Use `--tests-as-consumers` only if tests must obey public boundaries.
 3. Classify findings as true violation, approved friend boundary, generated code, migration bridge, unresolved alias, or scanner limitation. Choose an existing graph tool where possible; otherwise add the smallest supported rule set.
 4. Migrate consumers to stable entry points. Avoid catch-all barrels that enlarge initialization graphs or conceal environment-specific exports; prefer explicit exports that match runtime and type resolution.
 5. Prove clean pass, temporary forbidden import failure, restored pass, cycle detection, build resolution, type checking, and representative runtime loading. Add the command to the repository's shared validation path.
