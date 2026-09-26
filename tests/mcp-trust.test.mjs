@@ -328,3 +328,52 @@ test('repository MCP git tools run no configured programs and never write the in
     assert.deepEqual(readFileSync(index), before, `${name} changed the index`);
   }
 });
+
+test('repository MCP git tools refuse filter drivers other than standard Git LFS', (context) => {
+  const setup = () => {
+    const workspace = temporary(context, 'youdede-mcp-git-filter-');
+    const git = (args) => assert.equal(spawnSync('git', args, { cwd: workspace, env: cleanGitEnvironment() }).status, 0, args.join(' '));
+    git(['init', '-q']);
+    git(['config', 'user.email', 'tests@youdede.invalid']);
+    git(['config', 'user.name', 'youdede tests']);
+    writeFileSync(path.join(workspace, '.gitattributes'), '*.txt filter=evil\n');
+    writeFileSync(path.join(workspace, 'app.txt'), 'one\n');
+    git(['add', '.']);
+    git(['commit', '-qm', 'baseline']);
+    writeFileSync(path.join(workspace, 'app.txt'), 'two\n');
+    writeFileSync(path.join(workspace, 'profile.json'), readFileSync('artifacts/mcp-servers/development/agent-tooling/repository-git-readonly/server.json'));
+    return { workspace, git };
+  };
+  const call = (workspace, name) => {
+    const request = { jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name, arguments: {} } };
+    const run = spawnSync(process.execPath, [path.resolve('scripts/runtime/readonly-mcp-server.mjs'), '--profile', 'profile.json'], { cwd: workspace, input: `${JSON.stringify(request)}\n`, encoding: 'utf8' });
+    return JSON.parse(run.stdout.trim()).result;
+  };
+  const lfs = [['filter.lfs.clean', 'git-lfs clean -- %f'], ['filter.lfs.smudge', 'git-lfs smudge -- %f'], ['filter.lfs.process', 'git-lfs filter-process'], ['filter.lfs.required', 'true']];
+
+  const evil = setup();
+  const sentinel = path.join(path.dirname(evil.workspace), `${path.basename(evil.workspace)}-filter-ran`);
+  context.after(() => rmSync(sentinel, { force: true }));
+  writeFileSync(path.join(evil.workspace, 'filter.sh'), `#!/bin/sh\necho ran >> '${sentinel}'\ncat\n`, { mode: 0o755 });
+  evil.git(['config', 'filter.evil.clean', path.join(evil.workspace, 'filter.sh')]);
+  for (const name of ['git_status', 'git_diff']) {
+    const result = call(evil.workspace, name);
+    assert.equal(result.isError, true, name);
+    assert.match(result.content[0].text, /filter\.evil\.clean/, name);
+    assert.equal(existsSync(sentinel), false, `${name} ran the filter`);
+  }
+
+  const standard = setup();
+  for (const [key, value] of lfs) standard.git(['config', key, value]);
+  for (const name of ['git_status', 'git_diff']) assert.notEqual(call(standard.workspace, name).isError, true, name);
+  const skipSmudge = setup();
+  for (const [key, value] of [...lfs, ['filter.lfs.smudge', 'git-lfs smudge --skip -- %f'], ['filter.lfs.process', 'git-lfs filter-process --skip']]) skipSmudge.git(['config', key, value]);
+  assert.notEqual(call(skipSmudge.workspace, 'git_status').isError, true, 'git lfs install --skip-smudge');
+
+  const altered = setup();
+  for (const [key, value] of lfs) altered.git(['config', key, value]);
+  altered.git(['config', 'filter.lfs.process', 'git-lfs filter-process; touch pwned']);
+  const refused = call(altered.workspace, 'git_status');
+  assert.equal(refused.isError, true);
+  assert.match(refused.content[0].text, /filter\.lfs\.process/);
+});
