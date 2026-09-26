@@ -135,3 +135,13 @@ test('package test discovery does not depend on shell glob expansion', () => {
     rmSync(directory, { recursive: true, force: true });
   }
 });
+
+test('the npm package excludes repository-only assets and marketplace copies', () => {
+  const manifest = JSON.parse(readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
+  assert.equal(manifest.files.includes('skills'), false);
+  assert.equal(manifest.files.includes('plugins'), false);
+  for (const marketplace of ['.agents', '.claude-plugin', '.codex-plugin']) {
+    assert.equal(manifest.files.includes(marketplace), false, `${marketplace} points at unpublished copies`);
+  }
+  assert.ok(manifest.files.includes('!docs/assets'));
+});
