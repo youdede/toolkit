@@ -1,5 +1,5 @@
 {
-  "sourceHash": "60828913e04208f40fad286eab47d6b2ac9231073e8bed465c1378b12eba33c9",
+  "sourceHash": "ca53bb5af4f0af04a67a3998f37c8d4b65691a2f48a748b082429602801d89aa",
   "narratives": {
     "abuse-resistance-analyst": {
       "summary": "Analizza una singola operazione per individuare costi moltiplicati da input controllati da un attaccante, richieste a cascata ed elusione delle quote.",
@@ -325,9 +325,9 @@
     },
     "author-guided-setup-wizard": {
       "summary": "Crea uno script di configurazione guidato dall'utente e riprendibile con una gestione sicura dei segreti e punti di controllo verificati.",
-      "description": "Crea un wizard shell con limiti definiti per i passaggi di configurazione manuale che richiedono l'interazione umana, le credenziali, i dashboard o una conferma irreversibile. Utilizzare quando l'automazione non può completare la procedura ma un percorso guidato ripetibile è prezioso.",
+      "description": "Crea un wizard shell con limiti definiti per i passaggi di configurazione manuale che richiedono l'interazione umana, le credenziali, i dashboard o una conferma irreversibile. Da usare quando l'automazione non può completare la procedura ma un percorso guidato ripetibile è prezioso.",
       "purposes": [
-        "Valida staticamente la sintassi Bash, i rischi di gestione dei segreti, i controlli di conferma e il numero di fase del wizard dichiarato."
+        "Valida staticamente la sintassi Bash, alcuni pattern lessicali di esposizione dei segreti, la presenza di un prompt di conferma e il numero di fasi dichiarato del wizard."
       ],
       "refuses": [
         "Non chiede agli utenti di incollare segreti in chat, log, argomenti o input visibile del terminale.",
@@ -389,12 +389,12 @@
     },
     "build-macos-metrics-collector": {
       "summary": "Costruisce un collettore di metriche macOS locale a basso overhead con archiviazione privata per impostazione predefinita.",
-      "description": "Progetta e valida un collettore di metriche macOS nativo utilizzando interfacce di sistema supportate, campionamento con limiti definiti, SQLite e launchd. Utilizza per l'osservabilità del dispositivo locale dove sono richiesti privacy e basso overhead.",
+      "description": "Progetta e valida un collettore di metriche macOS nativo utilizzando interfacce di sistema supportate, campionamento con limiti definiti, SQLite e launchd. Da usare per l'osservabilità del dispositivo locale dove sono richiesti privacy e basso overhead.",
       "purposes": [],
       "refuses": [
         "Non raccoglie contenuto dello schermo, sequenze di tasti, credenziali o dati di applicazioni non correlate.",
         "Non richiede API private per il funzionamento principale.",
-        "Non trasmette telemetria o rende i backup pubblici per impostazione predefinita."
+        "Non trasmette telemetria né rende pubblici i backup per impostazione predefinita."
       ]
     },
     "build-marketing-operating-plan": {
@@ -891,7 +891,7 @@
     },
     "delegate-to-codex-cli": {
       "summary": "Delega un task con limiti definiti a Codex CLI in un workspace isolato e verificabile.",
-      "description": "Delega un task di codifica o revisione indipendente a Codex CLI con un brief ristretto, worktree isolato, permessi con limiti definiti e verifica da parte dell'agente principale. Utilizza solo quando la CLI è disponibile e la delega parallela aggiunge valore.",
+      "description": "Delega un task di codifica o revisione indipendente a Codex CLI con un brief ristretto, worktree isolato, permessi con limiti definiti e verifica da parte dell'agente principale. Da usare solo quando la CLI è disponibile e la delega parallela aggiunge valore.",
       "purposes": [],
       "refuses": [
         "Non concede accesso più ampio al filesystem, alla rete o alle credenziali rispetto al task principale.",
@@ -1106,12 +1106,12 @@
       ]
     },
     "design-llm-evaluation": {
-      "summary": "Progetta una valutazione LLM attorno a compiti reali, giudici controllati, tassonomia dei guasti e soglie decisionali.",
-      "description": "Progetta o verifica una valutazione per una funzionalità LLM, un agente, un flusso di recupero o un prompt, utilizzando attività rappresentative, evidenze di riferimento, controlli deterministici, giudici calibrati, incertezza e decisioni di rilascio. Utilizza prima di confrontare modelli o dichiarare un miglioramento della qualità.",
+      "summary": "Progetta una valutazione LLM attorno a compiti reali, giudici controllati, tassonomia dei fallimenti e soglie decisionali.",
+      "description": "Progetta o verifica una valutazione per una funzionalità LLM, un agente, un flusso di recupero o un prompt, utilizzando attività rappresentative, evidenze di riferimento, controlli deterministici, giudici calibrati, incertezza e decisioni di rilascio. Non va usata per ottimizzare prompt o certificare un modello, né per eseguire chiamate ai modelli senza una separata autorizzazione all'esecuzione. Da usare prima di confrontare modelli o dichiarare un miglioramento della qualità.",
       "purposes": [],
       "refuses": [
-        "Non fabbrica la verità effettiva, utilizza dati privati senza autorizzazione o ottimizza sul set tenuto fuori.",
-        "Non dichiara un modello universalmente migliore da un benchmark ristretto.",
+        "Non inventa la ground truth, non usa dati privati senza autorizzazione e non ottimizza sul set di holdout.",
+        "Non dichiara un modello universalmente migliore sulla base di un benchmark ristretto.",
         "Non nasconde le regressioni di sicurezza, la discrepanza dei giudici, i costi, la latenza o i casi falliti."
       ]
     },
@@ -1382,15 +1382,15 @@
       ]
     },
     "enforce-typescript-module-boundaries": {
-      "summary": "Rileva e applica i confini dei pacchetti TypeScript senza presupporre un singolo layout di repository.",
-      "description": "Ispeziona e applica i confini dei moduli TypeScript in modo che i consumatori importino tramite punti di ingresso dichiarati mentre gli interni rimangono locali. Utilizza quando gli import profondi, i cicli di pacchetti o l'accesso ai test rendono inaffidabili i contratti e i refactoring.",
+      "summary": "Rileva e applica i confini dei punti di ingresso dei pacchetti TypeScript senza presupporre un unico layout di repository.",
+      "description": "Ispeziona e applica i confini dei moduli TypeScript in modo che i consumatori importino tramite punti di ingresso dichiarati mentre gli interni rimangono locali. Da usare quando gli import profondi, i cicli di pacchetti o l'accesso da parte dei test rendono inaffidabili i contratti e i refactoring.",
       "purposes": [
-        "Scansiona le forme statiche di import TypeScript per import profondi cross-package sotto una radice di pacchetto fornita dal chiamante."
+        "Scansiona le forme statiche di import TypeScript alla ricerca di import profondi tra pacchetti in una directory fornita dal chiamante, i cui figli diretti sono pacchetti."
       ],
       "refuses": [
         "Non installa né sovrascrive uno strumento di analisi delle dipendenze prima di ispezionare la configurazione esistente.",
         "Non tratta alias non risolti o import generati come violazioni provate.",
-        "Non crea un barrel gigante, interrompe le esportazioni specifiche dell'ambiente o dichiara qualità dell'architettura dalla profondità del percorso."
+        "Non crea un barrel gigante, non rompe gli export specifici dell'ambiente e non dichiara la qualità dell'architettura basandosi solo sulla profondità del percorso."
       ]
     },
     "error-recovery-path-reviewer": {
@@ -1539,13 +1539,13 @@
     },
     "extract-youtube-captions": {
       "summary": "Estrae i sottotitoli di YouTube disponibili in testo pulito senza scaricare i media.",
-      "description": "Recupera i sottotitoli manuali o automatici da un URL di YouTube con yt-dlp, li normalizza in un file di testo sicuro e preserva la lingua e la provenienza. Utilizzare quando l'utente richiede sottotitoli o una trascrizione, non una trascrizione audio.",
+      "description": "Recupera i sottotitoli manuali o automatici da un URL di YouTube con yt-dlp, li normalizza in un file di testo sicuro e preserva la lingua e la provenienza. Da usare quando l'utente richiede sottotitoli o una trascrizione, non una trascrizione audio.",
       "purposes": [
-        "Normalizza i sottotitoli YouTube json3 strutturati in testo semplice con decodifica di entità senza sovrapposizioni ripetute di didascalie scorrevoli."
+        "Normalizza i sottotitoli YouTube json3 strutturati in testo semplice con decodifica di entità senza sovrapposizioni ripetute di sottotitoli scorrevoli."
       ],
       "refuses": [
-        "Non aggira i controlli di accesso, le restrizioni geografiche o le sfide di autenticazione.",
-        "Non scarica video o audio quando i sottotitoli sono la richiesta.",
+        "Non aggira i controlli di accesso, le restrizioni geografiche o le verifiche di autenticazione.",
+        "Non scarica video o audio quando la richiesta riguarda i sottotitoli.",
         "Non presenta i sottotitoli automatici come un record fedele e autorevole."
       ]
     },
@@ -1809,10 +1809,10 @@
     },
     "keep-macos-awake": {
       "summary": "Mantiene macOS attivo per attività approvate con controlli reversibili e osservabili.",
-      "description": "Avvia, verifica, ispeziona e interrompe una sessione macOS caffeinate con limiti definiti o avvia un agent. Utilizzare quando un processo locale approvato deve continuare mentre il display è in sleep, con istruzioni di rimozione incluse.",
+      "description": "Avvia, verifica, ispeziona e interrompe una sessione caffeinate di macOS con limiti definiti oppure un LaunchAgent. Da usare quando un processo locale approvato deve continuare mentre il display è in sleep, con istruzioni di rimozione incluse.",
       "purposes": [],
       "refuses": [
-        "Non disabilita il sleep globalmente senza requisiti di persistenza espliciti.",
+        "Non disabilita lo sleep globalmente senza requisiti di persistenza espliciti.",
         "Non utilizza comandi di kill generici che possono terminare processi non correlati.",
         "Non dichiara il successo senza ispezionare l'asserzione di alimentazione attiva."
       ]
@@ -2117,12 +2117,12 @@
       ]
     },
     "plan-dependency-upgrade": {
-      "summary": "Pianifica un aggiornamento delle dipendenze a partire dalle evidenze delle release, dalla superficie di compatibilità, dai passaggi di migrazione e dal rollback.",
-      "description": "Pianifica o verifica un aggiornamento delle dipendenze di un'applicazione utilizzando le versioni installate, la documentazione delle release e della migrazione, l'utilizzo interessato, le modifiche transitive, i test di compatibilità, il rollout e il rollback. Utilizza quando un aggiornamento è sostanziale, breaking, guidato dalla sicurezza o a livello di framework.",
+      "summary": "Pianifica e applica un aggiornamento delle dipendenze a partire dalle evidenze delle release, dalla superficie di compatibilità, dai passaggi di migrazione e dal rollback.",
+      "description": "Pianifica, applica o verifica un aggiornamento delle dipendenze di un'applicazione utilizzando le versioni installate, la documentazione delle release e della migrazione, l'utilizzo interessato, le modifiche transitive, i test di compatibilità, il rollout e il rollback. Da usare quando un aggiornamento è sostanziale, breaking, guidato dalla sicurezza o a livello di framework.",
       "purposes": [],
       "refuses": [
-        "Non aggiorna pacchetti non correlati per ottenere uno stato pulito dell'ultima versione.",
-        "Non modifica manualmente i lockfile o sopprime avvisi relativi a peer e sicurezza senza evidenze.",
+        "Non aggiorna pacchetti non correlati solo per portare tutto in modo pulito all'ultima versione.",
+        "Non modifica manualmente i lockfile né sopprime avvisi relativi a peer e sicurezza senza evidenze.",
         "Non dichiara la compatibilità basandosi unicamente sulla compilazione o sui test unitari quando i confini di runtime sono cambiati."
       ]
     },
@@ -3222,12 +3222,12 @@
       ]
     },
     "verify-production-release": {
-      "summary": "Rilascia una revisione esatta tramite CI e prova la salute del deployment prima del completamento.",
-      "description": "Prepara e verifica un rilascio di produzione utilizzando una revisione esatta, controlli richiesti, evidenze di deployment, probe di salute e consapevolezza del rollback. Utilizza solo quando l'autorità per il rilascio di produzione è esplicita.",
+      "summary": "Rilascia una revisione esatta tramite CI e dimostra lo stato di salute del deployment prima del completamento.",
+      "description": "Prepara e verifica un rilascio di produzione utilizzando una revisione esatta, controlli richiesti, evidenze di deployment, probe di salute e consapevolezza del rollback. Da usare solo quando l'autorità per il rilascio di produzione è esplicita.",
       "purposes": [],
       "refuses": [
         "Non effettua push forzati, non aggira i controlli né indebolisce la protezione dei branch.",
-        "Non distribuisce una revisione sporca, non revisionata o ambigua.",
+        "Non distribuisce una revisione con modifiche non committate, non revisionata o ambigua.",
         "Non dichiara la produzione sana basandosi unicamente sul successo della CI."
       ]
     },

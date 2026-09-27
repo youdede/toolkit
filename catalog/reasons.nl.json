@@ -581,8 +581,8 @@
       "latency": "De skill ontwerpt een reproduceerbaar evaluatieharnas voor agenten met geïsoleerde gevallen, sporen, rechters en regressiepoorten, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-llm-evaluation": {
-      "risk": "Deze skill ontwerpt een LLM-evaluatie rond echte taken, gecontroleerde rechters, faaltaxonomie en beslissingsdrempels; het verklaart niet één model universeel beter op basis van een beperkte benchmark.",
-      "latency": "De skill ontwerpt een LLM-evaluatie rond echte taken, gecontroleerde rechters, faaltaxonomie en beslissingsdrempels, met behulp van opeenvolgend bewijs en verificatiestappen."
+      "risk": "Deze skill ontwerpt een LLM-evaluatie rond echte taken, gecontroleerde beoordelaars, een indeling van fouten en beslisgrenzen; hij roept op basis van een beperkte benchmark niet één model uit tot universeel beter.",
+      "latency": "De skill ontwerpt een LLM-evaluatie rond echte taken, gecontroleerde beoordelaars, een indeling van fouten en beslisgrenzen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-property-and-fuzz-tests": {
       "risk": "Deze skill vertaalt stabiele invarianten en dreigingsgrenzen in reproduceerbare, op eigenschappen gebaseerde en fuzz-tests; het voert geen grenzeloze fuzz-campagnes uit en richt zich ook niet op productie en gedeelde diensten.",
@@ -845,8 +845,8 @@
       "latency": "De skill plant een verandering van de infrastructuur ten opzichte van de huidige staat door middel van gefaseerde transitie, verificatie en herstel, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "build-macos-metrics-collector": {
-      "risk": "Met deze skill bouwt u een lokale verzamelaar voor macOS-gegevens met lage overheadkosten op, met standaard privéopslag; er zijn geen privé API's nodig voor de kernwerking.",
-      "latency": "De skill bouwt een lokale macOS-metriekverzamelaar met lage overheadkosten op met standaard privéopslag, via opeenvolgende stappen voor bewijsgaring en verificatie."
+      "risk": "Deze skill bouwt een lokale macOS-metricscollector met lage overhead en opslag die standaard privé is; hij vereist geen private API's voor de kernwerking.",
+      "latency": "De skill bouwt een lokale macOS-metricscollector met lage overhead en opslag die standaard privé is, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "design-observability-signals": {
       "risk": "Deze skill ontwerpt logboeken, statistieken, sporen en waarschuwingen rond beslissingen, foutmodi, kosten en privacy; het registreert geen geheimen, onbewerkte klantenladingen of onnodige identificatiegegevens.",
@@ -865,7 +865,7 @@
       "latency": "De skill verifieert een kandidaat voor mobiele release op het gebied van identiteit, ondertekening van bewijsmateriaal, trajecten, compatibiliteit, uitrol en herstel, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "verify-production-release": {
-      "risk": "Het dringt aan op een exacte revisie en observeert een productie-implementatie, zodat een fout de live service kan beïnvloeden.",
+      "risk": "Hij pusht een exacte revisie en observeert een productiedeployment, zodat een fout de live service kan raken.",
       "latency": "De skill geeft een exacte revisie vrij via CI en bewijst de gezondheid van de implementatie vóór voltooiing, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "decompose-dependent-work-slices": {
@@ -889,8 +889,8 @@
       "latency": "Hij verifieert de hashes van het logboek en reconstrueert de geciteerde sessiecontext uit meerdere vermeldingen."
     },
     "author-guided-setup-wizard": {
-      "risk": "Deze skill zorgt voor een hervatbaar, door mensen geleid installatiescript met veilige geheime afhandeling en geverifieerde controlepunten; het vraagt ​​gebruikers niet om geheimen in chat, logs, argumenten of zichtbare terminalinvoer te plakken.",
-      "latency": "De skill schrijft een hervatbaar, door mensen geleid installatiescript met veilige geheime afhandeling en geverifieerde controlepunten, met behulp van opeenvolgend bewijs en verificatiestappen."
+      "risk": "Deze skill schrijft een hervatbaar installatiescript met menselijke begeleiding, veilige omgang met geheimen en geverifieerde controlepunten; hij vraagt gebruikers niet om geheimen in chat, logs, argumenten of zichtbare terminalinvoer te plakken.",
+      "latency": "De skill schrijft een hervatbaar installatiescript met menselijke begeleiding, veilige omgang met geheimen en geverifieerde controlepunten, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "build-repository-quality-gates": {
       "risk": "Deze skill bouwt proportionele lokale en CI-kwaliteitspoorten op op basis van de feitelijke risico's en opdrachten van de repository; het plaatst geen traag, netwerkafhankelijk, geprivilegieerd of gebrekkig werk in een blokkerende commit hook.",
@@ -901,8 +901,8 @@
       "latency": "De onbekende vaardigheidsgidsen zetten één geverifieerde actie tegelijk op, terwijl de volledige checklist behouden blijft, met behulp van opeenvolgend bewijs en verificatiestappen."
     },
     "keep-macos-awake": {
-      "risk": "Deze skill houdt macOS wakker voor goedgekeurd werk met omkeerbare en waarneembare bedieningselementen; het claimt geen succes zonder de bewering over actief vermogen te inspecteren.",
-      "latency": "De skill houdt macOS wakker voor goedgekeurd werk met omkeerbare en waarneembare controles, via opeenvolgende stappen voor bewijsgaring en verificatie."
+      "risk": "Deze skill houdt macOS wakker voor goedgekeurd werk met omkeerbare en waarneembare mechanismen; hij claimt geen succes zonder de actieve power assertion te inspecteren.",
+      "latency": "De skill houdt macOS wakker voor goedgekeurd werk met omkeerbare en waarneembare mechanismen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "research-online-purchase": {
       "risk": "Deze skill vergelijkt eerlijke prijzen, gerenommeerde verkopers en kooppassen zonder een bestelling te plaatsen; het raadt een onbekende verkoper niet aan, alleen omdat deze het goedkoopst is.",
@@ -913,8 +913,8 @@
       "latency": "De skill verandert een vage onderzoeksbehoefte in een op zichzelf staande, op bewijs gerichte opdracht, waarbij gebruik wordt gemaakt van opeenvolgende bewijs- en verificatiestappen."
     },
     "extract-youtube-captions": {
-      "risk": "Het haalt ondertitels op van YouTube en schrijft lokale uitvoer, met zichtbaarheid op het netwerk en gedownloade inhoud.",
-      "latency": "De skill extraheert beschikbare YouTube-ondertitels in schone tekst zonder media te downloaden, met behulp van opeenvolgend bewijs en verificatiestappen."
+      "risk": "Het haalt ondertitels op van YouTube en schrijft lokale uitvoer, en is daardoor blootgesteld aan het netwerk en aan gedownloade inhoud.",
+      "latency": "De skill extraheert beschikbare YouTube-ondertitels in schone tekst zonder media te downloaden, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "conduct-source-backed-research": {
       "risk": "Deze skill onderzoekt een beslissing met primaire bronnen, citaten op claimniveau en een gap pass; het presenteert geen gevolgtrekkingen, voorspellingen of forumanekdotes als bevestigde feiten.",
@@ -929,8 +929,8 @@
       "latency": "De skill beoordeelt authenticatie- en autorisatiegrenzen via concrete identiteiten, bronnen en geweigerde paden, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "plan-dependency-upgrade": {
-      "risk": "Deze skill plant een afhankelijkheidsupgrade van releasebewijs, compatibiliteitsoppervlak, migratiestappen en terugdraaien; het upgradet geen niet-gerelateerde pakketten om een ​​schone nieuwste staat te bereiken.",
-      "latency": "De skill plant een afhankelijkheidsupgrade van releasebewijs, compatibiliteitsoppervlak, migratiestappen en terugdraaien, via opeenvolgende stappen voor bewijsgaring en verificatie."
+      "risk": "Deze skill plant een upgrade van een afhankelijkheid en voert die door op basis van release-informatie, compatibiliteitsaspecten, migratiestappen en rollback; hij upgradet geen niet-gerelateerde pakketten om alles naar de nieuwste versie te brengen.",
+      "latency": "De skill plant een upgrade van een afhankelijkheid en voert die door op basis van release-informatie, compatibiliteitsaspecten, migratiestappen en rollback, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "review-supply-chain-change": {
       "risk": "Deze skill beoordeelt het gewijzigde pakket en bouwt input op van begrensd, offline repository-bewijsmateriaal; er worden geen afhankelijkheden of werkstroomacties geïnstalleerd, bijgewerkt, opgelost, uitgevoerd, in quarantaine geplaatst of verwijderd.",
@@ -1261,5 +1261,5 @@
       "latency": "De specialist voert op statische wijze een procedure uit voor vereisten, status, waarneembare resultaten, nieuwe pogingen en herstelvertakkingen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     }
   },
-  "sourceHash": "e5ba317c2cafb0c0a2a1916d61b402e388661cd9d2e17f66033b7faad9abbf81"
+  "sourceHash": "b522e72c3af97cddfd2e2e415c0412097a8b2e73e8989f2a5b0e6c5ca4c14a36"
 }

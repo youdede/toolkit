@@ -19,7 +19,7 @@ A prototype answers one named question; it is evidence, not production code. Def
 
 ## Output contract
 
-Return every one of these headings in your reply, in this order, on every path: `## Contract`, `## Validation`, `## Stop conditions`, `## Refusals`.
+Return every one of these headings in your reply, in this order, on every path: `## Prototype question`, `## Verdict and evidence`, `## Disposal status`, `## Evidence gaps`, `## Next action`.
 
 This holds when you decline, when you bound the scope, and when required inputs are absent. A section with nothing to report says so in one line; it is never omitted.
 

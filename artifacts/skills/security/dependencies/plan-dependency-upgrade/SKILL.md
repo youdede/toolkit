@@ -44,7 +44,7 @@ Record that refusal in the section this contract names for findings, or, when it
 
 ## Stop conditions
 
-Stop when target support, peer compatibility, official guidance, data migration, rollback, or production rollout authority is unresolved.
+Stop when target support, peer compatibility, official guidance, data migration, rollback, or production rollout authority is unresolved. Stop before changing manifests or lockfiles unless the user authorized applying the upgrade; without that authorization, deliver the plan.
 
 ## Refusals
 

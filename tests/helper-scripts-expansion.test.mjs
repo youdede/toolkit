@@ -92,6 +92,72 @@ echo "$API_TOKEN"
   assert.match(unsafe.stdout, /secret-like variable/);
 });
 
+test('setup wizard validator catches visible secret input, secrets in argv, and comment-only gates', () => {
+  const directory = scratch();
+  const script = 'artifacts/skills/operations/setup/author-guided-setup-wizard/scripts/validate-setup-wizard.mjs';
+  const leaky = path.join(directory, 'leaky.sh');
+  writeFileSync(leaky, `#!/usr/bin/env bash
+set -euo pipefail
+# no confirmation needed here
+TOTAL_STAGES=1
+stage() { printf '%s\\n' "$1"; }
+stage "Token"
+read -r -p "Paste your API token: " API_TOKEN
+curl -H "Authorization: Bearer $API_TOKEN" https://api.example.com/setup
+`);
+  const result = run(script, [leaky]);
+  assert.equal(result.status, 1, result.stdout);
+  assert.match(result.stdout, /read without -s/);
+  assert.match(result.stdout, /command line/);
+
+  const commentOnlyGate = path.join(directory, 'comment-only-gate.sh');
+  writeFileSync(commentOnlyGate, `#!/usr/bin/env bash
+set -euo pipefail
+# confirmation happens elsewhere
+TOTAL_STAGES=1
+stage() { printf '%s\\n' "$1"; }
+stage "Delete"
+rm -rf ./build
+`);
+  assert.match(run(script, [commentOnlyGate]).stdout, /confirmation/);
+
+  const commented = path.join(directory, 'commented.sh');
+  writeFileSync(commented, `#!/usr/bin/env bash
+set -euo pipefail # never set -x here
+TOTAL_STAGES=1
+stage() { printf '%s\\n' "$1"; }
+confirm() { read -r -p "Continue? " answer; [[ "$answer" == yes ]]; }
+stage "One"
+read -rs -p "Token: " API_TOKEN
+confirm
+`);
+  const clean = run(script, [commented]);
+  assert.equal(clean.status, 0, clean.stdout + clean.stderr);
+});
+
+test('work graph validator does not report a cycle for a missing blocker or a self-block', () => {
+  const directory = scratch();
+  const file = path.join(directory, 'graph.json');
+  writeFileSync(file, JSON.stringify({ tickets: [
+    { id: 'a', title: 'Alpha', blockedBy: ['missing'] },
+    { id: 'b', title: 'Beta', blockedBy: ['b'] },
+    { id: 'c', title: 'Gamma', blockedBy: ['d'] },
+    { id: 'd', title: 'Delta', blockedBy: ['c'] }
+  ] }));
+  const result = run('artifacts/skills/operations/reviewability/decompose-dependent-work-slices/scripts/validate-work-graph.mjs', [file]);
+  assert.equal(result.status, 1);
+  assert.deepEqual(JSON.parse(result.stdout).errors, ['a references missing blocker missing', 'b blocks itself', 'dependency cycle includes: c, d']);
+});
+
+test('exercise plan validator reports non-object exercises as JSON errors instead of crashing', () => {
+  const directory = scratch();
+  const file = path.join(directory, 'plan.json');
+  writeFileSync(file, JSON.stringify({ sections: [{ id: 's1', exercises: [null, null] }] }));
+  const result = run('artifacts/skills/writing/education/build-progressive-learning-exercises/scripts/validate-exercise-plan.mjs', [file]);
+  assert.equal(result.status, 1, result.stderr);
+  assert.ok(JSON.parse(result.stdout).errors.includes('sections[0].exercises[1] must be an object'));
+});
+
 test('TypeScript boundary inspector distinguishes entry points from deep imports', () => {
   const directory = scratch();
   const packages = path.join(directory, 'packages');
@@ -109,6 +175,19 @@ test('TypeScript boundary inspector distinguishes entry points from deep imports
   const report = JSON.parse(blocked.stdout);
   assert.equal(report.findings.length, 1);
   assert.equal(report.findings[0].reason, 'cross-package-deep-import');
+});
+
+test('TypeScript boundary inspector flags a two-segment deep import into a sibling package', () => {
+  const directory = scratch();
+  const packages = path.join(directory, 'packages');
+  mkdirSync(path.join(packages, 'a', 'src'), { recursive: true });
+  mkdirSync(path.join(packages, 'b', 'src'), { recursive: true });
+  writeFileSync(path.join(packages, 'b', 'src', 'index.ts'), 'export const value = 1;\n');
+  writeFileSync(path.join(packages, 'a', 'src', 'uses-b.ts'), "import { value } from '../../b/src';\nexport { value };\n");
+  const script = 'artifacts/skills/development/architecture/enforce-typescript-module-boundaries/scripts/inspect-module-boundaries.mjs';
+  const result = run(script, ['--root', packages]);
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.deepEqual(JSON.parse(result.stdout).findings.map((f) => f.specifier), ['../../b/src']);
 });
 
 test('deterministic validators reject missing and malformed inputs at the usage boundary', () => {

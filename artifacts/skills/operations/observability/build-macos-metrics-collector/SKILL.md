@@ -3,7 +3,7 @@ name: build-macos-metrics-collector
 description: "Design and validate a native macOS metrics collector using supported system interfaces, bounded sampling, SQLite, and launchd. Use for local device observability where privacy and low overhead are required."
 ---
 
-# Build Macos Metrics Collector
+# Build macOS Metrics Collector
 
 ## Contract
 
