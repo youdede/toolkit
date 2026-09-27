@@ -668,7 +668,8 @@ export function globVariants(entry, vocabulary, limit = 64) {
   const protectedExecutable = tokens.length > 0 && (vocabulary.has(name)
     || patterns.some((pattern) => { try { return new RegExp(pattern.source, pattern.flags.replace(/[gy]/g, '')).test(name); } catch { return true; } }));
   const substitute = (value) => ({ value, dynamic: false, substituted: true });
-  let combinations = [[]];
+  const choices = [];
+  let count = 1;
   for (const [position, token] of tokens.entries()) {
     let options = [token];
     if (position > 0 && (globWord(token) || token.capped)) {
@@ -690,8 +691,16 @@ export function globVariants(entry, vocabulary, limit = 64) {
         options = [literal, ...[...words].map(substitute)];
       }
     }
-    combinations = combinations.flatMap((prefix) => options.map((option) => [...prefix, option]));
-    if (combinations.length > limit) return null;
+    choices.push(options);
+    count *= options.length;
+    if (count > limit) return null;
+  }
+  // Single-option positions are appended in place: copying every prefix per token was quadratic in
+  // the word count ('find . -exec '.repeat(15000) took seconds).
+  let combinations = [[]];
+  for (const options of choices) {
+    if (options.length === 1) for (const combination of combinations) combination.push(options[0]);
+    else combinations = combinations.flatMap((prefix) => options.map((option) => [...prefix, option]));
   }
   return combinations.map((variant) => ({ ...entry, tokens: variant }));
 }
