@@ -208,8 +208,8 @@ function walk(commands, state, depth) {
   return true;
 }
 
-// What the `git commit` calls in a shell command will take. Returns { ambiguous: true } when the
-// command cannot be analyzed, else { found, unsupportedScope, worktree, noVerify, ignored }:
+// What the `git commit` calls in a shell command will take. Returns { ambiguous: true, relevant } when
+// the command cannot be analyzed (`relevant` when an ambiguous entry is relevant to every hook), else { found, unsupportedScope, worktree, noVerify, ignored }:
 // - unsupportedScope: a commit runs after cd/pushd or with -C/--git-dir/--work-tree;
 // - worktree: a commit can take working-tree content (staged earlier in the command, -a, pathspec);
 // - noVerify: a commit skips repository hooks (-n, --no-verify, -c core.hooksPath=…);
@@ -223,7 +223,8 @@ export function analyzeCommitContent(command, options = {}) {
     aliases: options.aliases, configured: undefined, localAliases: new Map(),
     found: false, unsupportedScope: false, worktree: false, noVerify: false, stagedEarlier: false, ignored: null
   };
-  if (!walk(parsed.commands, state, 0)) return { ambiguous: true };
+  // `relevant`: an ambiguous command whose executable is a glob may be any command, a commit too.
+  if (!walk(parsed.commands, state, 0)) return parsed.commands.some((entry) => entry.relevant) ? { ambiguous: true, relevant: true } : { ambiguous: true };
   const { found, unsupportedScope, worktree, noVerify, ignored } = state;
   return { found, unsupportedScope, worktree, noVerify, ignored };
 }

@@ -169,12 +169,14 @@ function ansiCString(source, start) {
 // Bash brace expansion of a word given as [character, unquoted] pairs: comma lists `{a,b}` (nested
 // too), sequences `{x..y}` and `{x..y..step}` of integers (zero-padded when an end has a leading zero)
 // or single letters. Only unquoted `{`, `,`, `}` count, and an invalid form (`{a}`, `{}`, `{x..}`)
-// stays literal. Returns { words, certain }: `words` stops after SHELL_MAX_BRACE_WORDS + 1 results,
-// and `certain` is false when a form is not known for certain (a zero step, a negative padded end).
+// stays literal. Returns { words, kept, certain }: `words` stops after SHELL_MAX_BRACE_WORDS + 1
+// results, `kept[i]` is false for a null word (no character and no quotes, which bash removes: `{,npm}`
+// is just `npm`; a quote is an entry ['', false]), and `certain` is false when a form is not known for
+// certain (a zero step, a negative padded end).
 const SHELL_MAX_BRACE_WORDS = 64;
 // ponytail: a longer word is not expanded (each group rescans the word); it stays dynamic, whole.
 const SHELL_MAX_BRACE_LENGTH = 1024;
-function braceExpand(chars, out = { words: [], certain: true }) {
+function braceExpand(chars, out = { words: [], kept: [], certain: true }) {
   for (let open = 0; open < chars.length; open += 1) {
     if (chars[open][0] !== '{' || !chars[open][1]) continue;
     let depth = 0;
@@ -207,7 +209,90 @@ function braceExpand(chars, out = { words: [], certain: true }) {
     return out;
   }
   out.words.push(chars.map(([character]) => character).join(''));
+  out.kept.push(chars.length > 0);
   return out;
+}
+
+// What an unquoted glob word may match, for a hook's text: every alternative of its bracket sets
+// (`n[px]m`) and pattern groups (`n@(p|x)m`), and its literal text. `wild` is true when the word can
+// match anything the text cannot list: `*`, `?`, a negated or class bracket, a repeated, negated, or
+// nested group, or more than SHELL_MAX_GLOB_WORDS alternatives.
+const SHELL_MAX_GLOB_WORDS = 16;
+function globAlternatives(text) {
+  let words = [''];
+  let wild = false;
+  const append = (options) => {
+    words = words.flatMap((word) => options.map((option) => word + option));
+    if (words.length > SHELL_MAX_GLOB_WORDS) { wild = true; words = words.slice(0, SHELL_MAX_GLOB_WORDS); }
+  };
+  for (let index = 0; index < text.length; index += 1) {
+    const character = text[index];
+    const group = character === '(' || ('@*+?!'.includes(character) && text[index + 1] === '(');
+    if (group) {
+      const start = character === '(' ? index : index + 1;
+      const end = patternGroupEnd(text, start);
+      if (end > 0) {
+        const inner = text.slice(start + 1, end - 1);
+        if ('*+!'.includes(character) || /[()[*?]/.test(inner)) wild = true;
+        else append([...(character === '?' ? [''] : []), ...inner.split('|')]);
+        index = end - 1;
+        continue;
+      }
+    }
+    if (character === '*' || character === '?') { wild = true; continue; }
+    const close = character === '[' ? text.indexOf(']', index + 2) : -1;
+    if (close > 0) {
+      const set = bracketSet(text.slice(index + 1, close));
+      if (set) append(set); else wild = true;
+      index = close;
+      continue;
+    }
+    append([character]);
+  }
+  return { words, wild };
+}
+
+// The characters a bracket expression lists (`pq`, `a-c`), or null for a negated set, a class, or a
+// range wider than SHELL_MAX_GLOB_WORDS.
+function bracketSet(body) {
+  if (/^[!^]|\[:|\[=|\[\./.test(body)) return null;
+  const set = [];
+  for (let index = 0; index < body.length; index += 1) {
+    if (body[index + 1] === '-' && index + 2 < body.length) {
+      const from = body.charCodeAt(index);
+      const to = body.charCodeAt(index + 2);
+      if (to < from || to - from >= SHELL_MAX_GLOB_WORDS) return null;
+      for (let code = from; code <= to; code += 1) set.push(String.fromCharCode(code));
+      index += 2;
+    } else set.push(body[index]);
+  }
+  return set.length ? [...new Set(set)] : null;
+}
+
+// Whether an unquoted glob argument may decide what `entry` does, for a hook that protects its
+// executable: `words` is how many leading words that are not options decide the operation (`npm
+// publish` 1, `aws ec2 terminate-instances` 2, Infinity when every word may). A glob among them, among
+// the options before them, or an option glob anywhere (`--pu*`) may spell the protected verb or option,
+// so the hook treats the command as uninspectable; `npm test -- src/*.test.js` is decided by `test`.
+// A word right after an option without `=` may be its value and is not counted (fail closed).
+export function globDecides(entry, words) {
+  let counted = 0;
+  let value = false;
+  for (const token of entry.tokens?.slice(1) ?? []) {
+    if (token.value === '--') break;
+    const option = token.value.startsWith('-');
+    if (globWord(token) && (option || counted < words)) return true;
+    if (option) { value = !token.value.includes('='); continue; }
+    if (value) { value = false; continue; }
+    counted += 1;
+  }
+  return false;
+}
+
+// An unquoted glob word: `*`, `?`, a bracket expression, or a pattern group. A static word that only
+// holds a `[` (the `[` command) is not one.
+export function globWord(token) {
+  return Boolean(token?.glob) && /[*?(]|\[.+\]/.test(token.value);
 }
 
 // The values of a brace sequence body (`1..3`, `a..e..2`, `01..10`), or null when it is not one.
@@ -248,18 +333,6 @@ function patternGroupEnd(source, start) {
     else if (character === ')' && --depth === 0) return index + 1;
   }
   return -1;
-}
-
-// Index in `group` (`(a|b)`) where its first top-level alternative ends.
-function patternAlternativeEnd(group) {
-  let depth = 0;
-  for (let index = 1; index < group.length - 1; index += 1) {
-    if (group[index] === '\\') index += 1;
-    else if (group[index] === '(') depth += 1;
-    else if (group[index] === ')') depth -= 1;
-    else if (group[index] === '|' && depth === 0) return index;
-  }
-  return group.length - 1;
 }
 
 // `<<` or `<<-` (not the here-string `<<<`) at `index`.
@@ -374,6 +447,8 @@ function lexShell(source, options = {}) {
     return { variable };
   };
   const begin = () => { if (!token) token = { value: '', dynamic: false }; };
+  // A quote opened at this point of the word: an empty quoted word is not a null word.
+  const quoted = () => { token.quoted = true; (token.quotes ??= []).push(token.value.length); };
   // Text known only at run time: `cuts` marks where it sits in the value, so `bare` can drop it.
   const unknown = (text) => {
     (token.cuts ??= []).push([token.value.length, token.value.length + text.length]);
@@ -393,23 +468,40 @@ function lexShell(source, options = {}) {
     // word whose `bare` text is the first expansion (a word over SHELL_MAX_BRACE_LENGTH keeps its text).
     // An assignment (`x={a,b}`) is not expanded.
     const unquoted = new Set(token.unquoted);
-    let chars = token.value.split('').map((character, position) => [character, unquoted.has(position)]);
-    for (const [from, to] of [...(token.cuts ?? [])].reverse()) chars.splice(from, to - from);
+    const quotes = new Set(token.quotes);
+    // Cuts are in order and do not overlap, so one pass drops them.
+    const cuts = token.cuts ?? [];
+    const chars = [];
+    for (let position = 0, next = 0; position <= token.value.length; position += 1) {
+      while (next < cuts.length && cuts[next][1] <= position) next += 1;
+      const [from, to] = cuts[next] ?? [Infinity, Infinity];
+      if (quotes.has(position) && !(position > from && position < to)) chars.push(['', false]);
+      if (position < token.value.length && !(position >= from && position < to)) chars.push([token.value[position], unquoted.has(position)]);
+    }
     const assignment = !redirect && SHELL_ASSIGNMENT.test(token.value) && tokens.every((word) => SHELL_ASSIGNMENT.test(word.value));
     const braces = !token.braces || assignment ? null
-      : chars.length > SHELL_MAX_BRACE_LENGTH ? { words: [chars.map(([character]) => character).join('')], certain: false }
+      : chars.length > SHELL_MAX_BRACE_LENGTH ? { words: [chars.map(([character]) => character).join('')], kept: [true], certain: false }
         : braceExpand(chars);
-    const words = braces?.words ?? [chars.map(([character]) => character).join('')];
+    // Bash removes an unquoted null word (`{,npm} publish` runs `npm publish`).
+    const words = braces ? braces.words.filter((word, position) => braces.kept[position]) : [chars.map(([character]) => character).join('')];
     const { glob } = token;
-    const split = braces && !token.dynamic && braces.certain && words.length <= SHELL_MAX_BRACE_WORDS && (!redirect || words.length === 1);
+    const split = braces && !token.dynamic && braces.certain && braces.words.length <= SHELL_MAX_BRACE_WORDS && (!redirect || words.length === 1);
     let pushed = [token];
     if (split) pushed = words.map((value) => ({ value, dynamic: false, ...(glob ? { glob } : {}) }));
     else if (braces && (braces.words.length > 1 || !braces.certain || token.dynamic)) {
       token.dynamic = true;
-      token.bare = words[0];
+      token.bare = words.join(' ');
     } else if (token.cuts) token.bare = words[0];
-    // `bare` is a dynamic token's value with its run-time text removed (`n${x}pm` is `npm`).
-    for (const word of pushed) { delete word.braces; delete word.quoted; delete word.cuts; delete word.unquoted; }
+    // `bare` is a dynamic token's value with its run-time text removed (`n${x}pm` is `npm`); a glob word's
+    // lists what it may match, and `wild` marks one that may match anything.
+    for (const word of pushed) {
+      if (globWord(word)) {
+        const matches = globAlternatives(word.bare ?? word.value);
+        word.bare = matches.words.join(' ');
+        if (matches.wild) word.wild = true;
+      }
+      delete word.braces; delete word.quoted; delete word.cuts; delete word.unquoted; delete word.quotes;
+    }
     if (redirect) { redirections.push({ operator: redirect, target: pushed[0], ...redirectVariable }); redirect = null; } else tokens.push(...pushed);
     token = null;
   };
@@ -457,19 +549,19 @@ function lexShell(source, options = {}) {
           if (!heredoc.quoted && !scanSubstitutions(heredoc.body, heredoc.owner)) return { error: 'unterminated expansion' };
         }
       }
-    } else if (character === "'" || character === '"') { begin(); token.quoted = true; quote = character; }
+    } else if (character === "'" || character === '"') { begin(); quoted(); quote = character; }
     else if (character === '\\') { begin(); if (++index >= source.length) return { error: 'trailing escape' }; token.value += source[index]; }
     else if (character === '$' && source[index + 1] === "'") {
       // `$'…'` is a quoted fragment of the word, decoded; one not known for certain is run-time text.
       const ansi = ansiCString(source, index);
       if (!ansi) return { error: 'unterminated quote' };
-      begin(); token.quoted = true;
+      begin(); quoted();
       if (ansi.value === null) unknown(source.slice(index, ansi.end)); else token.value += ansi.value;
       index = ansi.end - 1;
     } else if (character === '$' && source[index + 1] === '"') {
       // `$"…"` is translated through the locale's message catalog at run time: the word is dynamic, and
       // its source text is kept for a hook's text match.
-      begin(); token.quoted = true; token.dynamic = true; quote = '"'; index += 1;
+      begin(); quoted(); token.dynamic = true; quote = '"'; index += 1;
     } else if (character === '$' || character === '`' || ((character === '<' || character === '>') && source[index + 1] === '(')) {
       begin();
       const end = expansion(index);
@@ -517,17 +609,13 @@ function lexShell(source, options = {}) {
       && !(SHELL_RESERVED.has(token.value) && tokens.every((word) => SHELL_PREFIX_KEYWORDS.has(word.value)))) {
       // `(` glued to word text is a pattern group of that word: bash extglob `@(…)`, `+(…)`, `*(…)`,
       // `?(…)`, `!(…)`, zsh `n(p|x)m` and qualifiers `*(.)`, or zsh `=(…)`, which runs its text like
-      // `<(…)`. The word is a dynamic glob; `bare` keeps its text with the group's first alternative. A
+      // `<(…)`. The word is a dynamic glob; its `bare` text lists the group's alternatives. A
       // reserved word where a command starts (`if(true)`, `!(cmd)`) is followed by a subshell instead.
       const end = patternGroupEnd(source, index);
       if (end < 0) return { error: 'unterminated pattern group' };
       const group = source.slice(index, end);
       if (token.value === '=') substitutions.push(group.slice(1, -1));
       else if (!scanSubstitutions(group, substitutions)) return { error: 'unterminated expansion' };
-      const alternative = patternAlternativeEnd(group);
-      const from = token.value.length;
-      const operatorCut = /[@*+?!]$/.test(token.value) ? 1 : 0;
-      (token.cuts ??= []).push([from - operatorCut, from + 1], [from + alternative, from + group.length]);
       token.value += group; token.dynamic = true; token.glob = true;
       index = end - 1;
     } else if (';&|()'.includes(character)) {
@@ -635,6 +723,9 @@ function unwrapCommand(original, depth, inherited = [], parseOptions = {}, redir
   if (index >= tokens.length) return [];
   for (let count = 0; count < SHELL_MAX_WRAPPERS && index < tokens.length; count += 1) {
     const executable = tokens[index];
+    // A glob executable is a file name known only at run time, which may spell any command (`n[p]m`):
+    // it is ambiguous and relevant to every hook.
+    if (globWord(executable)) return [{ ambiguous: true, relevant: true, glob: true, wrappers }];
     if (executable.dynamic || executable.placeholder || /[*?]|\[[^\]]*\]/.test(executable.value)) return ambiguous();
     if (SHELL_RESERVED.has(executable.value) && !SHELL_KNOWN_RESERVED.has(executable.value)) return ambiguous();
     // `time` times a pipeline, so `time ! cmd` runs cmd; any other prefix word after a wrapper
@@ -862,6 +953,8 @@ export function parseShellCommands(command, depth = 0, wrappers = [], options = 
         entry.segment ??= segment.tokens;
         // The segment with run-time text removed, so a hook still sees a word split by it (`n${x}pm`).
         entry.text ??= entry.segment.map((token) => token.bare ?? token.value).join(' ');
+        // A glob argument that may match anything may be any word the hook looks for.
+        if (entry.segment.some((token) => token.wild)) entry.relevant = true;
       }
     }
     output.push(...entries);
@@ -904,7 +997,7 @@ export function gitInvocation(tokens) {
   let index = 1;
   while (index < tokens.length) {
     const token = tokens[index];
-    if (token.dynamic || token.placeholder) return { ambiguous: true };
+    if (token.dynamic || token.placeholder || globWord(token)) return { ambiguous: true };
     const value = token.value;
     if (value === '--') { index += 1; break; }
     if (!value.startsWith('-')) break;
@@ -922,6 +1015,6 @@ export function gitInvocation(tokens) {
   const subcommand = tokens[index];
   const scoped = globals.directories.length > 0 || globals.gitDir !== null || globals.workTree !== null;
   if (!subcommand) return { globals, scoped, args: [] };
-  if (subcommand.dynamic || subcommand.placeholder) return { ambiguous: true };
+  if (subcommand.dynamic || subcommand.placeholder || globWord(subcommand)) return { ambiguous: true };
   return { name: subcommand.value.toLowerCase(), index, args: tokens.slice(index + 1), globals, scoped };
 }

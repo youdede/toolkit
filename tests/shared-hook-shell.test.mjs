@@ -5,7 +5,7 @@ import { mkdtempSync, readdirSync, readFileSync, rmSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
-import { SHELL_MAX_COMMAND_BYTES, gitInvocation, parseShellCommands } from '../scripts/lib/shared-hook/shell.mjs';
+import { SHELL_MAX_COMMAND_BYTES, gitInvocation, globDecides, parseShellCommands } from '../scripts/lib/shared-hook/shell.mjs';
 import { analyzeCommitContent, commitReadsWorkingTree, commitSkipsHooks, parseGitAliases, readGitAliases } from '../scripts/lib/shared-hook/commit-content.mjs';
 import { generateSharedHooks, loadSharedModules, renderSharedBlocks } from '../scripts/generate-shared-hooks.mjs';
 
@@ -126,6 +126,15 @@ const SHELL_PROBES = [
   ['x={a,b} git status; echo x={a,b}', ['|git status [;]', '|echo x=a x=b []']],
   ['echo {1..100} {1..3..0} n{p..p}m$x', ['|echo ${1..100} ${1..3..0} $n{p..p}m$x []']],
   ['{ npm publish; }', ['|npm publish [;]']],
+  // An unquoted null word from a brace expansion is removed; a quoted empty word stays (PR38-CODEX15-1).
+  ['{,npm} publish', ['|npm publish []']],
+  ['git switch -c tmp && npm {,publish}', ['|git switch -c tmp [&&]', '|npm publish []']],
+  ["cd src; npm {,''} x {\"\",y} a{,}b {,}", ['|cd src [;]', '|npm  x  y ab ab [] cd']],
+  // A glob executable may spell any command: ambiguous and relevant to every hook (PR38-CODEX15-2).
+  ['n[p]m pub[l]ish', ['AMBIGUOUS']],
+  ['cd src && n@(x|p)m publish', ['|cd src [&&]', 'AMBIGUOUS']],
+  ['sudo r[m] -rf /', ['AMBIGUOUS']],
+  ['[ -f x ] && ls *.md [Rr]eadme*', ['|[ -f x ] [&&]', '|ls *.md [Rr]eadme* []']],
   // A function definition runs nothing; each later call stands for its body (PR38-CODEX10-2).
   ['function deploy { npm publish; }', []],
   ['deploy() { npm publish; }', []],
@@ -290,12 +299,28 @@ test('the shell module normalizes segments, operators, quoting, wrappers, and co
   const bareText = (command) => parseShellCommands(command).commands.map((entry) => entry.text ?? null);
   assert.deepEqual(bareText('n${x}pm pu$(true)blish'), [null, 'npm publish']);
   assert.deepEqual(bareText("cd src && sys\"$e\"temctl res`:`tart nginx"), [null, null, 'systemctl restart nginx']);
-  // A pattern group keeps its first alternative, a locale string its source text (PR38-CODEX13-1, PR38-CODEX13-2).
-  assert.deepEqual(bareText('n@(p|x)m pu+(b)lish'), ['npm publish']);
+  // A glob executable's entry is relevant; so is one with a glob argument that may match anything.
+  const relevance = (command) => parseShellCommands(command).commands.map((entry) => entry.relevant ?? false);
+  assert.deepEqual(relevance('n[p]m pub[l]ish; $CMD pub[l]ish; $CMD *.md; ls *.md'), [true, false, true, false]);
+  assert.deepEqual(bareText('$CMD pub[l]ish n[px]m'), [' publish npm nxm']);
+  assert.deepEqual(parseShellCommands('g[i]t commit').commands[0].glob, true);
+  // `globDecides`: a glob among the deciding words or options of a protected command (PR38-CODEX15-2).
+  const decides = (command, words) => globDecides(parseShellCommands(command).commands[0], words);
+  assert.equal(decides('npm pub[l]ish', 1), true);
+  assert.equal(decides('npm --prefix dir pub*', 1), true);
+  assert.equal(decides('npm test -- src/*.test.js', 1), false);
+  assert.equal(decides('npm publish *.tgz', 1), false);
+  assert.equal(decides('aws ec2 ter[m]inate-instances', 2), true);
+  assert.equal(decides('rm -r[f] /', 0), true);
+  assert.equal(decides('rm -f dist/*.js', 0), false);
+  assert.equal(decides('crontab x*', Infinity), true);
+  // A locale string keeps its source text (PR38-CODEX13-1, PR38-CODEX13-2).
+  // Every alternative of a glob's bracket sets and groups; `+(…)` repeats, so it may match anything (PR38-CODEX15-2).
+  assert.deepEqual(bareText('n@(p|x)m pu+(b)lish'), ['npm nxm pulish']);
   assert.deepEqual(bareText('cron(t)ab -r'), ['crontab -r']);
-  // A brace word not expanded for certain keeps its first expansion (PR38-CODEX14-1).
+  // A brace word not expanded for certain keeps its expansions, up to the bound (PR38-CODEX14-1).
   assert.deepEqual(bareText('n{p..p}m$x pub{l..l}ish'), ['npm publish']);
-  assert.deepEqual(bareText('{npm,x}{1..100} publish'), ['npm1 publish']);
+  assert.match(bareText('{npm,x}{1..100} publish')[0], /^npm1 npm2 .* npm65 publish$/);
   assert.deepEqual(bareText('$"safe" $"go"'), ['safe go']);
   assert.deepEqual(bareText("$'\\x00'npm publish"), ['npm publish']);
   assert.equal(parseShellCommands('x'.repeat(SHELL_MAX_COMMAND_BYTES + 1)).error, 'command exceeds analysis limit');
