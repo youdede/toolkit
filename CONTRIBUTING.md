@@ -26,7 +26,7 @@ release/     codex/       agent/
 
 The policy also accepts `dependabot/` and `renovate/` for automated dependency branches.
 
-Commit headers follow Conventional Commits and are at most 72 characters (the ` (#123)` suffix a GitHub squash merge appends is not counted, but only when a manual run validates history already on `main`):
+Commit headers follow Conventional Commits and are at most 72 characters (the ` (#123)` suffix a GitHub squash merge appends is not counted only for commits that Git confirms are reachable from `origin/main`, when a manual run validates that history; without `origin/main` every header is measured whole):
 
 ```text
 type(optional-scope): lowercase imperative summary

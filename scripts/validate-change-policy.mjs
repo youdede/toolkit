@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { lstatSync, readFileSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
@@ -17,8 +17,8 @@ function violation(rule, message) {
   return { rule, message };
 }
 
-// `squashSuffix` is only for history already on main (label `repository-commit`): a GitHub squash merge
-// appends " (#123)" to the reviewed header. A local, pull request, or pushed commit is measured whole.
+// `squashSuffix` is only for history already on main: a GitHub squash merge appends " (#123)" to the
+// reviewed header. A local, pull request, or pushed commit is measured whole.
 export function evaluateCommitMessage(input, { squashSuffix = false } = {}) {
   const violations = [];
   if (typeof input !== 'string') {
@@ -117,6 +117,12 @@ function subjectsForRange(input) {
   return commits;
 }
 
+// True when `hash` is an ancestor of (or equal to) origin/main; false when it is not or origin/main is missing.
+export function reachableFromMain(hash, cwd = process.cwd()) {
+  const result = spawnSync('git', ['merge-base', '--is-ancestor', hash, 'origin/main'], { cwd, stdio: 'ignore', timeout: 10_000 });
+  return result.status === 0;
+}
+
 function argumentValue(flag) {
   const index = process.argv.indexOf(flag);
   if (index === -1) return undefined;
@@ -155,8 +161,13 @@ function runCli() {
   }
 
   const commits = subjectsForRange(range);
-  const squashSuffix = label === 'repository-commit';
-  for (const commit of commits) report(`${label}:${commit.hash.slice(0, 12)}`, evaluateCommitMessage(commit.subject, { squashSuffix }));
+  // The label asks for the squash-merge exception; Git decides it: only a commit reachable from
+  // origin/main gets it, and without origin/main no commit does.
+  const squashRequested = label === 'repository-commit';
+  for (const commit of commits) {
+    const squashSuffix = squashRequested && reachableFromMain(commit.hash);
+    report(`${label}:${commit.hash.slice(0, 12)}`, evaluateCommitMessage(commit.subject, { squashSuffix }));
+  }
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {

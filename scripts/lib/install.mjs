@@ -70,7 +70,10 @@ function assertNoSymlinkWithin(root, target, label) {
   let current = root;
   for (const segment of ['', ...relative.split(path.sep).filter(Boolean)]) {
     if (segment) current = path.join(current, segment);
-    if (existsSync(current) && lstatSync(current).isSymbolicLink()) {
+    // lstat, not existsSync: a dangling link is still a link.
+    let link = false;
+    try { link = lstatSync(current).isSymbolicLink(); } catch {}
+    if (link) {
       throw new Error(`${label} traverses symbolic link '${path.relative(root, current) || '.'}'`);
     }
   }
@@ -143,8 +146,18 @@ function renderNotice(state, root) {
 // script rather than a hot path. Move to per-key locking only if that stops being true.
 function withStateLock(configRoot, operation) {
   const file = lockPath(configRoot);
+  // Nothing on the way to the lock or the state may be a symbolic link: checked before the lock is
+  // created, read, reclaimed, or removed, so a refusal never touches a path outside the root.
+  assertNoSymlinkWithin(configRoot, configRoot, 'installation root');
+  assertNoSymlinkWithin(configRoot, path.dirname(file), 'installation state lock');
+  assertNoSymlinkWithin(configRoot, path.dirname(statePath(configRoot)), 'installation state');
   mkdirSync(path.dirname(file), { recursive: true });
   const deadline = Date.now() + STATE_LOCK_TIMEOUT_MS;
+  // Every retry checks the deadline and waits before trying again.
+  const retry = (message) => {
+    if (Date.now() > deadline) throw new Error(message);
+    sleepBriefly();
+  };
   let descriptor = null;
   for (;;) {
     try {
@@ -152,25 +165,29 @@ function withStateLock(configRoot, operation) {
       break;
     } catch (error) {
       if (error.code === 'ENOENT') {
-        if (Date.now() > deadline) throw new Error(`cannot create ${file}; its directory keeps disappearing`);
+        retry(`cannot create ${file}; its directory keeps disappearing`);
         mkdirSync(path.dirname(file), { recursive: true });
         continue;
       }
+      if (error.code === 'ELOOP') throw new Error(`${file} is a symbolic link; refusing to use it as the installation lock`);
       if (error.code !== 'EEXIST') throw error;
-      let age = 0;
-      try { age = Date.now() - statSync(file).mtimeMs; } catch { continue; }
+      let metadata;
+      try { metadata = lstatSync(file); } catch {
+        retry(`cannot inspect ${file}; it keeps changing`);
+        continue;
+      }
+      if (metadata.isSymbolicLink()) throw new Error(`${file} is a symbolic link; refusing to use it as the installation lock`);
+      if (!metadata.isFile()) throw new Error(`${file} is not a regular file; refusing to use it as the installation lock`);
       // ponytail: stale reclaim removes by name, so two processes that both saw the same stale
       // lock can both proceed. It needs a lock older than 120 s; replace with an OS advisory
       // lock if concurrent installs ever become routine.
-      if (age > STATE_LOCK_STALE_MS) {
+      if (Date.now() - metadata.mtimeMs > STATE_LOCK_STALE_MS) {
         // The holder died without releasing. Reclaim rather than block a user forever.
         try { rmSync(file, { force: true }); } catch {}
+        retry(`cannot reclaim the stale lock ${file}`);
         continue;
       }
-      if (Date.now() > deadline) {
-        throw new Error(`another youdede-toolkit process holds ${file}; wait for it to finish or delete the lock`);
-      }
-      sleepBriefly();
+      retry(`another youdede-toolkit process holds ${file}; wait for it to finish or delete the lock`);
     }
   }
   try {

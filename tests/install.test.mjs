@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { chmodSync, existsSync, mkdtempSync, mkdirSync, readFileSync, rmSync, statSync, symlinkSync, writeFileSync } from 'node:fs';
+import { chmodSync, existsSync, lstatSync, mkdtempSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, symlinkSync, utimesSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -459,6 +459,44 @@ test('concurrent installs into one config root record every artifact', (context)
   assert.equal(Object.keys(state.installs).length, slugs.length);
   assert.equal(existsSync(path.join(directory, '.claude', '.youdede-toolkit', 'state.lock')), false);
   assert.equal(doctor({ cwd: directory }).findings.length, 0);
+});
+
+test('a symlinked state directory is refused before the lock touches anything outside the root (PR38-CODEX8-2)', { skip: process.platform === 'win32' }, (context) => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-install-lock-link-'));
+  const outside = mkdtempSync(path.join(os.tmpdir(), 'youdede-install-lock-outside-'));
+  context.after(() => {
+    rmSync(directory, { recursive: true, force: true });
+    rmSync(outside, { recursive: true, force: true });
+  });
+  mkdirSync(path.join(directory, '.claude'));
+  symlinkSync(outside, path.join(directory, '.claude', '.youdede-toolkit'));
+  const external = path.join(outside, 'state.lock');
+  writeFileSync(external, 'EXTERNAL-LOCK-MUST-SURVIVE\n');
+  const old = new Date(Date.now() - 180_000);
+  utimesSync(external, old, old);
+  const cli = fileURLToPath(new URL('../bin/youdede-toolkit.mjs', import.meta.url));
+  const result = spawnSync(process.execPath, [cli, 'add', 'commit-guard', '--target', 'claude-code', '--scope', 'project'], { cwd: directory, encoding: 'utf8' });
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /traverses symbolic link '\.youdede-toolkit'/);
+  assert.equal(readFileSync(external, 'utf8'), 'EXTERNAL-LOCK-MUST-SURVIVE\n');
+  assert.deepEqual(readdirSync(outside), ['state.lock']);
+});
+
+test('a lock that is a dangling symbolic link is refused at once (PR38-CODEX8-3)', { skip: process.platform === 'win32' }, (context) => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-install-lock-dangling-'));
+  context.after(() => rmSync(directory, { recursive: true, force: true }));
+  const stateDirectory = path.join(directory, '.claude', '.youdede-toolkit');
+  mkdirSync(stateDirectory, { recursive: true });
+  const lock = path.join(stateDirectory, 'state.lock');
+  symlinkSync(path.join(directory, 'missing-target'), lock);
+  const cli = fileURLToPath(new URL('../bin/youdede-toolkit.mjs', import.meta.url));
+  const started = Date.now();
+  const result = spawnSync(process.execPath, [cli, 'add', 'commit-guard', '--target', 'claude-code', '--scope', 'project'], { cwd: directory, encoding: 'utf8', timeout: 10_000 });
+  assert.equal(result.error, undefined);
+  assert.ok(Date.now() - started < 5_000, `took ${Date.now() - started} ms`);
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /is a symbolic link; refusing to use it as the installation lock/);
+  assert.equal(lstatSync(lock).isSymbolicLink(), true);
 });
 
 test('a failed multi-file install rolls back every file it had already written', { skip: process.platform === 'win32' }, (context) => {

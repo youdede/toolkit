@@ -31,8 +31,8 @@ const SHELL_PROBES = [
   ['git switch main; git push', ['|git switch main [;]', '|git push []']],
   ['a || b | c & d\ne', ['|a [||]', '|b [|]', '|c [&]', '|d [\n]', '|e []']],
   ['(cd sub && make)', ['|cd sub [&&]', '|make [)] cd']],
-  ['npm test 2>&1 | tail -20', ['|npm test 2>&1 [|]', '|tail -20 []']],
-  ['make &>/dev/null', ['|make &>/dev/null []']],
+  ['npm test 2>&1 | tail -20', ['|npm test [|]', '|tail -20 []']],
+  ['make &>/dev/null', ['|make []']],
   // Quoting, escaping, and expansions.
   ['git commit -m "fix; rm -rf /"', ['|git commit -m fix; rm -rf / []']],
   ["'gh' 'repo' 'delete' x", ['|gh repo delete x []']],
@@ -59,6 +59,12 @@ const SHELL_PROBES = [
   ['bash <&3', ['AMBIGUOUS']],
   ["bash 3<<< 'npm publish'", ['AMBIGUOUS']],
   ["bash 0 <<< 'npm publish'", ['|bash 0 []']],
+  // Redirections leave the arguments in any position, also before the command (PR38-CODEX8-1).
+  ['>/tmp/o npm publish', ['|npm publish []']],
+  ['2>/dev/null rm -rf / && >/dev/null git push --force origin main', ['|rm -rf / [&&]', '|git push --force origin main []']],
+  ['>out.txt echo hi; 2>/dev/null ls', ['|echo hi [;]', '|ls []']],
+  ["0<<< 'npm publish' bash", ['bash|npm publish []']],
+  ['exec >log 2>&1', []],
   // Between double quotes bash keeps a backslash before other characters (PR38-CODEX6-2).
   ['echo "C:\\Users" "a\\$b"', ['|echo C:\\Users a$b []']],
   ['diff <(sort a) <(sort b)', ['|sort a [;]', '|sort b [;]', '|diff $<(sort a) $<(sort b) []']],
@@ -82,10 +88,10 @@ const SHELL_PROBES = [
   ['git com\\\nmit -m x', ['|git commit -m x []']],
   ['git commit "-m\\\nx"', ['|git commit -mx []']],
   // Here-document bodies are data; an unquoted delimiter still runs its substitutions (W3-REVIEW-3).
-  ["cat > notes.md <<'EOF'\nDon't forget\nEOF", ['|cat > notes.md <<EOF [\n]']],
-  ['cat <<EOF > deploy.sh\nnpm publish\nEOF\ngit switch main && git push', ['|cat <<EOF > deploy.sh [\n]', '|git switch main [&&]', '|git push []']],
-  ['cat <<-EOF\n\tit\'s $(npm publish)\n\tEOF', ['|npm publish [;]', '|cat <<-EOF [\n]']],
-  ["gh pr create --body \"$(cat <<'EOF'\nit's fine\nEOF\n)\"", ["|cat <<EOF [;]", "|gh pr create --body $$(cat <<'EOF'\nit's fine\nEOF\n) []"]],
+  ["cat > notes.md <<'EOF'\nDon't forget\nEOF", ['|cat [\n]']],
+  ['cat <<EOF > deploy.sh\nnpm publish\nEOF\ngit switch main && git push', ['|cat [\n]', '|git switch main [&&]', '|git push []']],
+  ['cat <<-EOF\n\tit\'s $(npm publish)\n\tEOF', ['|npm publish [;]', '|cat [\n]']],
+  ["gh pr create --body \"$(cat <<'EOF'\nit's fine\nEOF\n)\"", ["|cat [;]", "|gh pr create --body $$(cat <<'EOF'\nit's fine\nEOF\n) []"]],
   // Assignments alone run nothing; their substitutions do (W3-REVIEW-4).
   ['x=1', []],
   ['x=1; echo $x', ['|echo $$x []']],

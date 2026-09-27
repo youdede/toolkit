@@ -197,9 +197,10 @@ function scanSubstitutions(text, found, processSubstitutions = false) {
 // `[` marks it `glob`. Each segment lists in `substitutions` the command text of the `$(…)`, backtick,
 // and `<(…)`/`>(…)` substitutions it runs. A here-document body is data: it is skipped, and only the
 // substitutions of an unquoted-delimiter body are listed. `operator` is the one that
-// ends the segment: `&&`, `||`, `;`, `|`, `&`, `\n`, `(`, `)`, or '' at the end. With
-// `options.redirections`, redirections leave the tokens and go to `redirections` as { operator, target }:
-// `2>&1` is { operator: '2>&', target: '1' }, `x>out` is the token x and { operator: '>', target: 'out' }.
+// ends the segment: `&&`, `||`, `;`, `|`, `&`, `\n`, `(`, `)`, or '' at the end. Redirections, in any
+// position (`>out npm publish` runs npm), always leave the tokens and go to `redirections` as
+// { operator, target }: `2>&1` is { operator: '2>&', target: '1' }, `x>out` is the token x and
+// { operator: '>', target: 'out' }, a here-document's target carries its `heredoc`.
 function lexShell(source, options = {}) {
   const segments = [];
   let tokens = [];
@@ -228,7 +229,7 @@ function lexShell(source, options = {}) {
   const pushSegment = (operator) => {
     pushToken();
     if (redirect) return false;
-    if (tokens.length || redirections.length) segments.push(options.redirections ? { tokens, operator, redirections, substitutions } : { tokens, operator, substitutions });
+    if (tokens.length || redirections.length) segments.push({ tokens, operator, redirections, substitutions });
     tokens = [];
     redirections = [];
     substitutions = [];
@@ -275,17 +276,15 @@ function lexShell(source, options = {}) {
       if (!heredoc) return { error: 'redirection without target' };
       let operator = heredoc.operator;
       // A file descriptor number written right before the operator belongs to it (`0<<EOF`).
-      let fd = '';
-      if (token && !token.quoted && !token.dynamic && /^\d+$/.test(token.value)) { fd = token.value; operator = fd + operator; token = null; }
+      if (token && !token.quoted && !token.dynamic && /^\d+$/.test(token.value)) { operator = token.value + operator; token = null; }
       pushToken();
       if (redirect) return { error: 'redirection without target' };
-      if (options.redirections) redirections.push({ operator, target: { value: heredoc.delimiter, dynamic: false } });
-      else tokens.push({ value: operator + heredoc.delimiter, dynamic: false, heredoc, fd });
+      redirections.push({ operator, target: { value: heredoc.delimiter, dynamic: false, heredoc } });
       // The body of an unquoted delimiter is attached to this segment when it is read.
       heredoc.owner = substitutions;
       heredocs.push(heredoc);
       index = heredoc.end - 1;
-    } else if (options.redirections && (character === '<' || character === '>' || (character === '&' && source[index + 1] === '>'))) {
+    } else if (character === '<' || character === '>' || (character === '&' && source[index + 1] === '>')) {
       // A file descriptor number written right before the operator belongs to it.
       let operator = '';
       if (character !== '&' && token && !token.quoted && !token.dynamic && /^\d+$/.test(token.value)) { operator = token.value; token = null; }
@@ -303,22 +302,6 @@ function lexShell(source, options = {}) {
         } else if (next === '&' || next === '|' || (character === '<' && next === '>')) { operator += next; index += 1; }
       }
       redirect = operator;
-    } else if (!options.redirections && character === '<' && source.startsWith('<<<', index)) {
-      // A here-string: the next word is the input of the command, standard input unless a file
-      // descriptor number is written right before it (`0<<<` is standard input too).
-      let fd = '';
-      if (token && !token.quoted && !token.dynamic && /^\d+$/.test(token.value)) { fd = token.value; token = null; }
-      pushToken();
-      tokens.push({ value: `${fd}<<<`, dynamic: false, herestring: true, fd });
-      index += 2;
-    } else if (!options.redirections && character === '<' && source[index + 1] !== '(') {
-      // An input redirection (`< file`, `<file`): marked so a shell reading it is not given a script name.
-      begin();
-      token.value += character;
-      token.input = true;
-    } else if (character === '&' && (/[<>]$/.test(token?.value ?? '') || source[index + 1] === '>')) {
-      // `2>&1`, `>&2`, `&>file`: a redirection, not a command separator.
-      begin(); token.value += character;
     } else if (';&|()'.includes(character)) {
       let operator = character;
       if ((character === '&' || character === '|') && source[index + 1] === character) { operator += character; index += 1; }
@@ -379,7 +362,8 @@ function powershellCommands(tokens, index, depth, wrappers, name, parseOptions) 
   return [{ tokens: tokens.slice(index), wrappers }];
 }
 
-function unwrapCommand(original, depth, inherited = [], parseOptions = {}) {
+// `redirections` are those of the segment: a shell without -c reads its program from standard input.
+function unwrapCommand(original, depth, inherited = [], parseOptions = {}, redirections = []) {
   let tokens = original;
   let index = 0;
   const wrappers = [...inherited];
@@ -414,23 +398,17 @@ function unwrapCommand(original, depth, inherited = [], parseOptions = {}) {
         // `<&3`, a here-string on another descriptor) is ambiguous. Their words are never a script name.
         // The last input wins, as in bash.
         const feeds = [];
-        const rest = [];
-        for (let position = index + 1; position < tokens.length; position += 1) {
-          const token = tokens[position];
-          const stdinFeed = !token.fd || token.fd === '0';
-          if (token.heredoc) {
-            const { body, quoted } = token.heredoc;
+        for (const { operator, target } of redirections) {
+          const input = /^(\d*)(<<-?|<<<|<>|<&|<)$/.exec(operator);
+          if (!input) continue;
+          const stdinFeed = input[1] === '' || input[1] === '0';
+          if (target.heredoc) {
+            const { body, quoted } = target.heredoc;
             feeds.push(stdinFeed && (quoted || !/[$`\\]/.test(body)) ? { text: body } : { dynamic: true });
-          } else if (token.herestring) {
-            const word = tokens[position + 1];
-            position += 1;
-            feeds.push(stdinFeed && word && !word.dynamic && !word.placeholder ? { text: word.value } : { dynamic: true });
-          } else if (token.input) {
-            feeds.push({ dynamic: true });
-            if (/^\d*<[>&]?$/.test(token.value)) position += 1;
-          } else rest.push(token);
+          } else if (input[2] === '<<<') {
+            feeds.push(stdinFeed && !target.dynamic && !target.placeholder ? { text: target.value } : { dynamic: true });
+          } else feeds.push({ dynamic: true });
         }
-        tokens = [...tokens.slice(0, index + 1), ...rest];
         let command = false;
         let stdin = false;
         let cursor = index + 1;
@@ -522,6 +500,8 @@ function unwrapCommand(original, depth, inherited = [], parseOptions = {}) {
     }
   }
   if (index < tokens.length && SHELL_WRAPPERS.has(executableName(tokens[index]))) return ambiguous();
+  // `exec >log 2>&1` only applies its redirections: nothing runs.
+  if (index >= tokens.length && wrappers.length === inherited.length + 1 && wrappers.at(-1) === 'exec') return [];
   return index < tokens.length ? [{ tokens: tokens.slice(index), wrappers }] : ambiguous();
 }
 
@@ -564,8 +544,8 @@ export function parseShellCommands(command, depth = 0, wrappers = [], options = 
       if (inner.length) inner.at(-1).operator = ';';
       commands.push(...inner);
     }
-    let entries = unwrapCommand(segment.tokens, depth, wrappers, options);
-    if (segment.redirections?.length) {
+    let entries = unwrapCommand(segment.tokens, depth, wrappers, options, segment.redirections);
+    if (options.redirections && segment.redirections.length) {
       if (!entries.length) entries = [{ tokens: [], wrappers: [...wrappers] }];
       for (const entry of entries) entry.redirections = [...(entry.redirections ?? []), ...segment.redirections];
     }
@@ -927,8 +907,8 @@ export function inlineShellCommands(entry) {
   const sources = [...(program.shellLike ? [program.text] : []), ...program.literals];
   const commands = [];
   for (const source of sources) {
-    const parsed = parseShellCommands(source, 1, [...(entry.wrappers ?? []), executableName(entry.tokens[0])]);
-    if (!parsed.error) commands.push(...parsed.commands.filter((command) => command.tokens?.length || command.ambiguous));
+    const parsed = parseShellCommands(source, 1, [...(entry.wrappers ?? []), executableName(entry.tokens[0])], { redirections: true });
+    if (!parsed.error) commands.push(...parsed.commands.filter((command) => command.tokens?.length || command.redirections?.length || command.ambiguous));
   }
   if (program.ambiguous) commands.push(unfollowed);
   return commands;
@@ -943,9 +923,11 @@ const UNINSPECTABLE = 'package-publish-command-uninspectable';
 const suspect = (command) => /\b(?:publish|upload)\b|\b(?:gem|nuget)\b[^\n]*\bpush\b/i.test(command);
 // The executable's base name and its arguments; values that xargs or find supply at run time count
 // as dynamic.
+// A segment of redirections alone (`> file`) has no executable.
 function view(entry) {
   const args = entry.tokens.slice(1).map((token) => (token.placeholder ? { value: token.value, dynamic: true } : token));
-  return { executable: executableName(entry.tokens[0]), args, dynamic: args.some((token) => token.dynamic) };
+  const executable = entry.tokens.length ? executableName(entry.tokens[0]) : '';
+  return { executable, args, dynamic: args.some((token) => token.dynamic), redirections: entry.redirections ?? [] };
 }
 
 function skipOption(tokens, index, takesValue) {
@@ -967,7 +949,7 @@ function stripLeadingOptions(args, valueOptions = new Set()) {
 // shell or eval runs text that is not known here (`curl … | sh`, `bash script.sh`, `eval "$X"`).
 function firstRule(command, policy, suspect, uninspectable) {
   if (typeof command !== 'string') return uninspectable;
-  const parsed = parseShellCommands(command);
+  const parsed = parseShellCommands(command, 0, [], { redirections: true });
   if (parsed.error) return uninspectable;
   for (const entry of parsed.commands) {
     // An inline program the analysis cannot follow is ambiguous too: one known only at run time

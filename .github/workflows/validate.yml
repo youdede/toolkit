@@ -48,7 +48,10 @@ jobs:
         if: github.event_name == 'workflow_dispatch'
         env:
           HEAD_SHA: ${{ github.sha }}
-        run: node scripts/validate-change-policy.mjs --range "$HEAD_SHA" --label repository-commit
+        # The squash-merge suffix exception applies only to commits reachable from origin/main.
+        run: |
+          git fetch --no-tags origin +refs/heads/main:refs/remotes/origin/main
+          node scripts/validate-change-policy.mjs --range "$HEAD_SHA" --label repository-commit
 
   verify:
     name: verify / ${{ matrix.os }} / Node ${{ matrix.node }}

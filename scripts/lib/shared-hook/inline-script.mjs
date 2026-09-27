@@ -294,8 +294,8 @@ export function inlineShellCommands(entry) {
   const sources = [...(program.shellLike ? [program.text] : []), ...program.literals];
   const commands = [];
   for (const source of sources) {
-    const parsed = parseShellCommands(source, 1, [...(entry.wrappers ?? []), executableName(entry.tokens[0])]);
-    if (!parsed.error) commands.push(...parsed.commands.filter((command) => command.tokens?.length || command.ambiguous));
+    const parsed = parseShellCommands(source, 1, [...(entry.wrappers ?? []), executableName(entry.tokens[0])], { redirections: true });
+    if (!parsed.error) commands.push(...parsed.commands.filter((command) => command.tokens?.length || command.redirections?.length || command.ambiguous));
   }
   if (program.ambiguous) commands.push(unfollowed);
   return commands;
