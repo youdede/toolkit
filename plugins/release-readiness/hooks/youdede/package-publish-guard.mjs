@@ -611,21 +611,24 @@ const INLINE_MAX_LITERALS = 256;
 const INLINE_PAIRS = { '(': ')', '[': ']', '{': '}', '<': '>' };
 // A program is `capable` when its code (literal contents and comments removed) names something that
 // can run a command: a module, a call, an executing literal (backtick outside JS, `%x`, `qx`, whose
-// opener stays in the code), or a dynamic name. With a dynamic name the program can reach any call, so
-// it is also ambiguous. Without any of these, the program's literals are data.
+// opener stays in the code), or a dynamic name. A capable program is always ambiguous: the reader does
+// not follow how it builds its command. Without any of these, the program's literals are data.
 const INLINE_DYNAMIC_NAMES = /\b(?:getattr|__import__|importlib|eval|exec|compile|require|send|public_send|__send__|method|instance_eval|constantize)\b|\bimport\s*\(/;
 const INLINE_CAPABLE = /\b(?:subprocess|pty|PTY|commands|child_process|execa|Kernel|Open3|system|exec\w*|spawn\w*|posix_spawn\w*|fork|popen\w*|readpipe|syscall|open|shell_exec|passthru|proc_open|pcntl_exec|qx)\b|\b(?:os|posix)\s*\.\s*(?:system|popen|exec\w*|spawn\w*)|\bIO\s*\.\s*popen|\bBun\s*\.\s*(?:spawn\w*|\$)|\$`|\bDeno\s*\.\s*(?:Command|run)\b|`|%x/;
 // Interpolation inside a literal is code: Ruby `#{…}`, JS `${…}`, Perl `@{[…]}`, PHP `{$…}`.
 const INLINE_INTERPOLATION = /#\{|\$\{|@\{|\{\$/;
-// A here-document the reader does not follow: Ruby and Perl `<<ID`, `<<~ID`, `<<-ID`, `<<"ID"`, and PHP `<<<ID`.
-const INLINE_HEREDOC = { ruby: /<<[~-]?(?:[A-Za-z_]|["'`])/, perl: /<<~?(?:[A-Za-z_]|\s*["'`])/, php: /<<<\s*["']?[A-Za-z_]/ };
 
 // The opening of a literal at `index`: the text that opens it, its delimiter, and whether running the
 // program executes it as a command (backticks outside JS, Ruby `%x`, Perl `qx`). Quotes open a literal
-// in every language; Ruby adds `%q`/`%Q`/`%x` with any delimiter and `%(…)`-style bare forms, Perl
-// adds `q`/`qq`/`qx` with any delimiter.
+// in every language, and Python triple quotes (`'''`, `"""`) take a three-character delimiter; Ruby adds
+// `%q`/`%Q`/`%x` with any delimiter and `%(…)`-style bare forms, Perl adds `q`/`qq`/`qx`/`qw` with any
+// delimiter, a word character too when whitespace separates it (`q XtextX`).
 function literalOpening(program, index, language) {
   const character = program[index];
+  const triple = character.repeat(3);
+  if (language === 'python' && (character === "'" || character === '"') && program.startsWith(triple, index)) {
+    return { opener: triple, delimiter: triple, executes: false };
+  }
   if (character === "'" || character === '"') return { opener: character, delimiter: character, executes: false };
   if (character === '`') return { opener: '`', delimiter: '`', executes: language !== 'js' };
   const rest = program.slice(index, index + 8);
@@ -634,8 +637,8 @@ function literalOpening(program, index, language) {
     if (match && (match[1] || match[2] in INLINE_PAIRS)) return { opener: match[0], delimiter: match[2], executes: match[1] === 'x' };
   }
   if (language === 'perl' && character === 'q' && !/[\w$@%&>]/.test(program[index - 1] ?? '')) {
-    const match = /^(qq|qx|q)\s*([^\w\s=,;)])/.exec(rest);
-    if (match) return { opener: match[0], delimiter: match[2], executes: match[1] === 'qx' };
+    const match = /^(qq|qx|qw|q)(?:([^\w\s=,;)])|\s+([^\s=,;)#]))/.exec(program.slice(index, index + 64));
+    if (match) return { opener: match[0], delimiter: match[2] ?? match[3], executes: match[1] === 'qx' };
   }
   return null;
 }
@@ -712,6 +715,11 @@ function scanProgram(program, language, depth = 0) {
     for (; cursor < program.length; cursor += 1) {
       const character = program[cursor];
       if (character === '\\') { cursor += 1; body += program[cursor] ?? ''; continue; }
+      if (close.length > 1) {
+        if (program.startsWith(close, cursor)) break;
+        body += character;
+        continue;
+      }
       if (close !== open && character === open) nesting += 1;
       else if (character === close && --nesting === 0) break;
       body += character;
@@ -727,7 +735,7 @@ function scanProgram(program, language, depth = 0) {
       inner = nested.code;
     } else if (interpolated) incomplete = true;
     code += `${opening.executes ? opening.opener : ''} ${inner} `;
-    index = cursor + 1;
+    index = cursor + close.length;
   }
   return { literals, code, incomplete };
 }
@@ -763,32 +771,38 @@ export function inlineProgram(entry) {
   const text = parts.join('\n');
   const { literals, code, incomplete } = scanProgram(text, language);
   const capable = shellLike || INLINE_CAPABLE.test(code) || INLINE_DYNAMIC_NAMES.test(code);
-  // A program the reader did not follow to the end is ambiguous whatever the read part holds: the unread
-  // part may run anything. A capable program is ambiguous too when it names something dynamically or
-  // holds a here-document.
-  const ambiguous = !shellLike && (incomplete || (capable && (INLINE_DYNAMIC_NAMES.test(code) || Boolean(INLINE_HEREDOC[language]?.test(text)))));
-  return { text, dynamic, shellLike, literals, capable, ambiguous };
+  // A capable program is ambiguous, and so is one the reader did not follow to the end, whatever the
+  // read part holds: the unread part may run anything.
+  const ambiguous = !shellLike && (capable || incomplete);
+  // The literals joined without and with a space, so a hook deciding whether the text concerns it also
+  // sees a command split across adjacent literals (`'n' 'pm publish'`).
+  // ponytail: joins every literal, not only adjacent ones; extra joins only widen what looks relevant.
+  const literalText = `${literals.join('')}\n${literals.join(' ')}`;
+  return { text, dynamic, shellLike, literals, capable, ambiguous, literalText };
 }
 
 // Normalized commands (the shape parseShellCommands returns) found in the inline program of `entry`.
 // Without `capable`, the literals are data and nothing is returned. With it, every literal is read as a
-// shell command, even one the program only prints (`import subprocess; print('npm publish')` counts):
-// the reader does not follow data flow. Candidates that do not parse are skipped. A literal that runs a
-// shell without a static command (`sh`), a program not known before the command runs, a program the
-// reader did not follow to the end (capable or not), and a capable program with a dynamic name or a
-// here-document add an `{ ambiguous: true }` entry, after the literal commands.
+// shell command, so a static command gets its concrete rule, and one `{ ambiguous: true }` entry follows
+// them: the program may build a command from pieces (`'npm ' 'publish'`, a here-document, a variable).
+// A hook refuses that entry when the command text looks relevant to it. Candidates that do not parse
+// are skipped. A literal that runs a shell without a static command (`sh`), a program not known before
+// the command runs, and a program the reader did not follow to the end are ambiguous too. The
+// program-level entry carries no wrappers (a shell around the one-liner adds nothing unknown) and the
+// program's joined literals as `text`, for the hook's relevance check.
 export function inlineShellCommands(entry) {
   const program = inlineProgram(entry);
   if (!program) return [];
   if (program.dynamic) return [{ ambiguous: true, tokens: [], wrappers: entry.wrappers ?? [] }];
-  if (!program.capable) return program.ambiguous ? [{ ambiguous: true, tokens: [], wrappers: entry.wrappers ?? [] }] : [];
+  const unfollowed = { ambiguous: true, tokens: [], wrappers: [], text: program.literalText };
+  if (!program.capable) return program.ambiguous ? [unfollowed] : [];
   const sources = [...(program.shellLike ? [program.text] : []), ...program.literals];
   const commands = [];
   for (const source of sources) {
     const parsed = parseShellCommands(source, 1, [...(entry.wrappers ?? []), executableName(entry.tokens[0])]);
     if (!parsed.error) commands.push(...parsed.commands.filter((command) => command.tokens?.length || command.ambiguous));
   }
-  if (program.ambiguous) commands.push({ ambiguous: true, tokens: [], wrappers: entry.wrappers ?? [] });
+  if (program.ambiguous) commands.push(unfollowed);
   return commands;
 }
 // </youdede:shared>
@@ -828,10 +842,13 @@ function firstRule(command, policy, suspect, uninspectable) {
   const parsed = parseShellCommands(command);
   if (parsed.error) return uninspectable;
   for (const entry of parsed.commands) {
-    // An inline program known only at run time (`python3 -c "$CODE"`) is ambiguous too.
+    // An inline program the analysis cannot follow is ambiguous too: one known only at run time
+    // (`python3 -c "$CODE"`), or one that names something able to run a command.
     for (const candidate of entry.ambiguous ? [entry] : [entry, ...inlineShellCommands(entry)]) {
       if (candidate.ambiguous) {
-        if (suspect(command) || candidate.wrappers.some((name) => SHELL_NAMES.has(name) || name === 'eval')) return uninspectable;
+        // `text` holds an inline program's joined literals, so a command split across them still counts.
+        if (suspect(command) || (candidate.text !== undefined && suspect(candidate.text))
+          || candidate.wrappers.some((name) => SHELL_NAMES.has(name) || name === 'eval')) return uninspectable;
         continue;
       }
       const ruleId = policy(view(candidate));
