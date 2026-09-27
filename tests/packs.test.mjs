@@ -231,10 +231,12 @@ test('failed pack upgrade restores the exact pre-existing installation', (contex
   const settingsFile = path.join(directory, '.claude', 'settings.json');
   const stateFile = path.join(directory, '.claude', '.youdede-toolkit', 'state.json');
   const firstScript = path.join(directory, '.claude', 'hooks', 'youdede', 'first-hook.mjs');
+  const noticeFile = path.join(directory, '.claude', '.youdede-toolkit', 'NOTICE.md');
   const before = {
     settings: readFileSync(settingsFile),
     state: readFileSync(stateFile),
-    script: readFileSync(firstScript)
+    script: readFileSync(firstScript),
+    notice: readFileSync(noticeFile)
   };
 
   writeHookArtifact(repository, 'first-hook', '[youdede:shared-upgrade] colliding entry');
@@ -248,8 +250,68 @@ test('failed pack upgrade restores the exact pre-existing installation', (contex
   assert.deepEqual(readFileSync(settingsFile), before.settings);
   assert.deepEqual(readFileSync(stateFile), before.state);
   assert.deepEqual(readFileSync(firstScript), before.script);
+  assert.deepEqual(readFileSync(noticeFile), before.notice);
   assert.equal(existsSync(path.join(directory, '.claude', 'hooks', 'youdede', 'second-hook.mjs')), false);
   assert.equal(doctor({ cwd: directory }).findings.length, 0);
+});
+
+test('failed first pack install removes the notice it generated (PR38-CODEX4-4)', (context) => {
+  const repository = mkdtempSync(path.join(os.tmpdir(), 'youdede-pack-notice-repo-'));
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-pack-notice-target-'));
+  context.after(() => {
+    rmSync(repository, { recursive: true, force: true });
+    rmSync(directory, { recursive: true, force: true });
+  });
+  writeHookArtifact(repository, 'first-hook', '[youdede:shared-marker] colliding entry');
+  writeHookArtifact(repository, 'second-hook', '[youdede:shared-marker] colliding entry');
+  writeRollbackPack(repository, ['hook/operations/testing/first-hook', 'hook/operations/testing/second-hook']);
+
+  assert.throws(
+    () => installPack('rollback-pack', { root: repository, cwd: directory }),
+    /installation failed: settings contain a modified or unmanaged/
+  );
+  assert.equal(existsSync(path.join(directory, '.claude', '.youdede-toolkit', 'NOTICE.md')), false);
+  assert.equal(existsSync(path.join(directory, '.claude', 'hooks', 'youdede', 'first-hook.mjs')), false);
+});
+
+test('failed pack removal restores the notice with state and payloads (PR38-CODEX14-2)', (context) => {
+  const repository = mkdtempSync(path.join(os.tmpdir(), 'youdede-pack-remove-repo-'));
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-pack-remove-target-'));
+  context.after(() => {
+    rmSync(repository, { recursive: true, force: true });
+    rmSync(directory, { recursive: true, force: true });
+  });
+  const firstId = 'hook/operations/testing/first-hook';
+  const secondId = 'hook/operations/testing/second-hook';
+  writeHookArtifact(repository, 'first-hook', '[youdede:first-hook] first entry');
+  writeHookArtifact(repository, 'second-hook', '[youdede:second-hook] second entry');
+  writeRollbackPack(repository, [firstId, secondId]);
+  installPack('rollback-pack', { root: repository, cwd: directory });
+
+  // The first member's recorded hook loses its marker, so its removal fails after the second succeeds.
+  const stateFile = path.join(directory, '.claude', '.youdede-toolkit', 'state.json');
+  const state = JSON.parse(readFileSync(stateFile, 'utf8'));
+  const first = Object.values(state.installs).find((install) => install.artifactId === firstId);
+  for (const hook of first.hooks) {
+    delete hook.marker;
+    if (hook.entry) hook.entry = { ...hook.entry, description: 'marker removed' };
+  }
+  writeFileSync(stateFile, `${JSON.stringify(state, null, 2)}\n`);
+
+  const noticeFile = path.join(directory, '.claude', '.youdede-toolkit', 'NOTICE.md');
+  const settingsFile = path.join(directory, '.claude', 'settings.json');
+  const secondScript = path.join(directory, '.claude', 'hooks', 'youdede', 'second-hook.mjs');
+  const before = { notice: readFileSync(noticeFile), state: readFileSync(stateFile), settings: readFileSync(settingsFile), script: readFileSync(secondScript) };
+  assert.match(before.notice.toString(), /second-hook/);
+
+  assert.throws(
+    () => removePack('rollback-pack', { root: repository, cwd: directory, force: true }),
+    /rollback-pack removal failed/
+  );
+  assert.deepEqual(readFileSync(noticeFile), before.notice);
+  assert.deepEqual(readFileSync(stateFile), before.state);
+  assert.deepEqual(readFileSync(settingsFile), before.settings);
+  assert.deepEqual(readFileSync(secondScript), before.script);
 });
 
 test('pack removal follows recorded ownership after the pack manifest changes', (context) => {

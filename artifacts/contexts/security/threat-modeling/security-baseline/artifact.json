@@ -37,9 +37,9 @@
     ],
     "rules": [
       { "id": "review-tool-authority", "effect": "require", "action": "review-tool-authority", "sourceArtifactId": "skill/security/threat-modeling/review-agent-tool-boundaries", "sourceField": "summary" },
-      { "id": "do-not-reveal-detected-credentials", "effect": "forbid", "action": "reveal-detected-credentials", "sourceArtifactId": "hook/security/secrets/prompt-secret-guard", "sourceField": "refuses", "sourceIndex": 0 },
-      { "id": "do-not-read-protected-files", "effect": "forbid", "action": "read-protected-files", "sourceArtifactId": "hook/security/secrets/sensitive-file-access-guard", "sourceField": "refuses", "sourceIndex": 0 },
-      { "id": "do-not-upload-local-payloads", "effect": "forbid", "action": "upload-local-payloads", "sourceArtifactId": "hook/security/application-security/outbound-data-guard", "sourceField": "refuses", "sourceIndex": 0 }
+      { "id": "do-not-reveal-detected-credentials", "effect": "forbid", "action": "reveal-detected-credentials", "sourceArtifactId": "hook/security/secrets/prompt-secret-guard", "sourceField": "refuses", "sourceIndex": 0, "text": "Do not repeat, store, or transmit a detected credential." },
+      { "id": "do-not-read-protected-files", "effect": "forbid", "action": "read-protected-files", "sourceArtifactId": "hook/security/secrets/sensitive-file-access-guard", "sourceField": "refuses", "sourceIndex": 0, "text": "Do not read, print, or copy credential files, private keys, or environment secret files." },
+      { "id": "do-not-upload-local-payloads", "effect": "forbid", "action": "upload-local-payloads", "sourceArtifactId": "hook/security/application-security/outbound-data-guard", "sourceField": "refuses", "sourceIndex": 0, "text": "Do not send local file contents or dynamic payloads to a network service without explicit approval." }
     ]
   },
   "relationships": { "composesWith": [], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": [] },

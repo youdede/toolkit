@@ -21,8 +21,8 @@
       "latency": "De opdracht volgt een controle op de voorwaarden en meerdere workflowstappen, terwijl het de vrijgavebewijsketen voor de huidige versie controleert en een machinaal leesbaar oordeelsrapport verzendt."
     },
     "draft-evidenced-plan": {
-      "risk": "Deze opdracht stelt een geordend implementatieplan op, waarbij bij elke stap de code wordt vermeld die ermee verband houdt en het bewijs dat voltooiing bewijst; er worden tijdens de planning geen bestanden bewerkt, gemaakt of verwijderd; het leest alleen.",
-      "latency": "De opdracht volgt een controle op de randvoorwaarden en meerdere workflowstappen, terwijl het een geordend implementatieplan opstelt, waarbij elke stap de code vermeldt die ermee wordt aangeraakt en het bewijs dat de voltooiing bewijst."
+      "risk": "Dit commando stelt een geordend implementatieplan op, waarbij bij elke stap de code wordt vermeld die ermee verband houdt en het bewijs dat voltooiing bewijst; er worden tijdens de planning geen bestanden bewerkt, gemaakt of verwijderd; het leest alleen.",
+      "latency": "Het commando volgt een controle op de randvoorwaarden en meerdere workflowstappen, terwijl het een geordend implementatieplan opstelt, waarbij elke stap de code vermeldt die ermee wordt aangeraakt en het bewijs dat de voltooiing bewijst."
     },
     "verify-claims-against-output": {
       "risk": "Deze opdracht voert de aangegeven controles opnieuw uit en vergelijkt elke voltooiingsclaim met de nieuwe opdrachtuitvoer voordat deze wordt geaccepteerd; er worden geen controles uitgevoerd met vlaggen, omgevingen of invoer die de gebruiker niet heeft aangegeven.",
@@ -49,12 +49,12 @@
       "latency": "De runtime laadt statische richtlijnen om een door herkomst ondersteunde API-contractbasislijn toe te passen op de repositorybestanden waar dat beslissingsoppervlak actief is in het overeenkomende bestandsbereik."
     },
     "coding-style-baseline": {
-      "risk": "Deze context past gedragsbehoudende codekwaliteit en modulegrensrichtlijnen toe op implementatiebestanden; het biedt begeleiding zonder gereedschap of goedkeuringsbevoegdheid.",
-      "latency": "De runtime laadt statische richtlijnen om gedragsbehoudende codekwaliteit en modulegrensrichtlijnen toe te passen op implementatiebestanden in het overeenkomende bestandsbereik."
+      "risk": "Deze context past richtlijnen voor codekwaliteit en modulegrenzen toe op implementatiebestanden, met behoud van gedrag; hij biedt richtlijnen zonder bevoegdheid over tools of goedkeuringen.",
+      "latency": "De runtime laadt statische richtlijnen om richtlijnen voor codekwaliteit en modulegrenzen met behoud van gedrag toe te passen op implementatiebestanden in het overeenkomende bestandsbereik."
     },
     "testing-baseline": {
-      "risk": "In deze context worden test-first, evidence-backed en integriteitsbehoudende richtlijnen toegepast bij het werken met testbestanden; het biedt begeleiding zonder gereedschap of goedkeuringsbevoegdheid.",
-      "latency": "De runtime laadt statische richtlijnen om test-first, evidence-backed, integriteitsbehoudende richtlijnen toe te passen bij het werken met testbestanden in het overeenkomende bestandsbereik."
+      "risk": "Deze context past bij werk aan testbestanden op bewijs gebaseerde richtlijnen toe voor eerst testen en behoud van integriteit; hij biedt richtlijnen zonder bevoegdheid over tools of goedkeuringen.",
+      "latency": "De runtime laadt statische richtlijnen om bij werk aan testbestanden in het overeenkomende bestandsbereik op bewijs gebaseerde richtlijnen toe te passen voor eerst testen en behoud van integriteit."
     },
     "ci-workflow-baseline": {
       "risk": "Deze context past een op herkomst gebaseerde ci-workflowbasislijn toe op de repositorybestanden waar dat beslissingsoppervlak actief is; het biedt begeleiding zonder gereedschap of goedkeuringsbevoegdheid.",
@@ -62,15 +62,15 @@
     },
     "git-workflow-baseline": {
       "risk": "Deze context houdt de integratie van Git-branches herstelbaar, expliciet en gebaseerd op actuele repositorygegevens; hij biedt richtlijnen zonder bevoegdheid om tools te gebruiken of acties goed te keuren.",
-      "latency": "De runtime laadt statische richtlijnen om de vertakkingsintegratie herstelbaar en expliciet te houden en ondersteund door nieuw repositorybewijs in het overeenkomende bestandsbereik."
+      "latency": "De runtime laadt binnen het overeenkomende bestandsbereik statische richtlijnen om branch-integratie herstelbaar, expliciet en ondersteund door actueel repositorybewijs te houden."
     },
     "dependency-change-baseline": {
       "risk": "Deze context past een door de herkomst ondersteunde basislijn voor afhankelijkheidsverandering toe op de repositorybestanden waar dat beslissingsoppervlak actief is; het biedt begeleiding zonder gereedschap of goedkeuringsbevoegdheid.",
       "latency": "De runtime laadt statische richtlijnen om een door de herkomst ondersteunde basislijn voor afhankelijkheidswijziging toe te passen op de repositorybestanden waar dat beslissingsoppervlak actief is in het overeenkomende bestandsbereik."
     },
     "security-baseline": {
-      "risk": "Het biedt begeleiding met de minste autoriteit zonder toegang tot tools te verlenen of inloggegevens te wijzigen.",
-      "latency": "De runtime laadt statische richtlijnen om richtlijnen met de minste autoriteit toe te passen voor agenttools, referenties, gevoelige bestanden en uitgaande gegevens in het overeenkomende bestandsbereik."
+      "risk": "Hij biedt richtlijnen volgens het principe van minimale bevoegdheid zonder toegang tot tools te verlenen of inloggegevens te wijzigen.",
+      "latency": "De runtime laadt binnen het overeenkomende bestandsbereik statische richtlijnen om het principe van minimale bevoegdheid toe te passen op agenttools, inloggegevens, gevoelige bestanden en uitgaande gegevens."
     },
     "schema-compatibility-guard": {
       "risk": "Deze automatische controle blokkeert aantoonbaar incompatibele JSON Schema-, Avro- en Protobuf-contractbewerkingen; een onterechte blokkering kan het legitieme werk onderbreken, maar voert de geblokkeerde actie niet uit.",
@@ -885,8 +885,8 @@
       "latency": "De skill beoordeelt een binnenkomend probleem of trekt een verzoek naar een bewezen volgende staat zonder er stilzwijgend naar te handelen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "resume-session-work": {
-      "risk": "Deze skill reconstrueert de werkcontext vanuit het hash-chained session ledger met door hash geciteerde claims en een expliciet niet-geverifieerd gedeelte; het draagt ​​geen claim over zonder de hash van de grootboekinvoer te vermelden.",
-      "latency": "Het verifieert grootboek-hashes en reconstrueert de geciteerde sessiecontext uit meerdere vermeldingen."
+      "risk": "Deze skill reconstrueert de werkcontext uit het via hashes gekoppelde sessielogboek, met beweringen die naar hashes verwijzen en een expliciet gedeelte voor ongeverifieerde informatie; hij neemt geen bewering over zonder de hash van de bijbehorende logboekvermelding te citeren.",
+      "latency": "Hij verifieert de hashes van het logboek en reconstrueert de geciteerde sessiecontext uit meerdere vermeldingen."
     },
     "author-guided-setup-wizard": {
       "risk": "Deze skill zorgt voor een hervatbaar, door mensen geleid installatiescript met veilige geheime afhandeling en geverifieerde controlepunten; het vraagt ​​gebruikers niet om geheimen in chat, logs, argumenten of zichtbare terminalinvoer te plakken.",

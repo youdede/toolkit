@@ -12,7 +12,7 @@ const KIND_GUARANTEES = Object.freeze({
   hook: 'Executable guard with declared enforcing or observing behavior, failure policy, bounded adapter payload, and executable tests.',
   subagent: 'Narrow specialist whose native payload declares bounded tools or permissions and repeats its refusal boundary.',
   command: 'User invocation with an exact tool allowlist, declared preconditions, required evidence output, and authority-narrowing flags only.',
-  context: 'Scoped and ordered rules with source provenance; expiry and hook contradictions are checked before installation.',
+  context: 'Scoped and ordered rules with source provenance; a contradiction with a hook in the same install root blocks installation, and an expired context installs with a warning.',
   'mcp-server': 'Transport, egress, secret access, and trust boundaries are declared; local tools use description pins, while preview vendor servers use exact package and launch pins.'
 });
 

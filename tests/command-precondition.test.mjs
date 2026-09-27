@@ -81,6 +81,20 @@ test('file-exists rejects traversal, absolute paths, and workspace escapes', () 
   assert.match(missing.failures[0], /missing: absent\.txt/);
 }));
 
+test('file-exists reports a file under missing directories as missing, not as an escape', () => withTempRoot((root) => {
+  const result = evaluatePreconditions({ checks: [{ type: 'file-exists', paths: ['.claude/rules/youdede/base.md'] }] }, root);
+  assert.deepEqual(result.failures, ['file-exists: missing: .claude/rules/youdede/base.md']);
+  if (process.platform === 'win32') return;
+  const outside = mkdtempSync(path.join(os.tmpdir(), 'precondition-outside-'));
+  try {
+    spawnSync('ln', ['-s', outside, path.join(root, 'linked')]);
+    const escaped = evaluatePreconditions({ checks: [{ type: 'file-exists', paths: ['linked/absent/file.md'] }] }, root);
+    assert.match(escaped.failures[0], /path escapes the workspace/);
+  } finally {
+    rmSync(outside, { recursive: true, force: true });
+  }
+}));
+
 test('file-exists follows symlinks only inside the workspace', () => withTempRoot((root) => {
   if (process.platform === 'win32') return;
   const outside = mkdtempSync(path.join(os.tmpdir(), 'precondition-outside-'));

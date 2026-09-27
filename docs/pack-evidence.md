@@ -12,12 +12,14 @@ Every pack manifest declares:
 - the pack members permitted to support that outcome.
 
 Reports are JSON files no larger than 1 MiB. They must be regular files rather than symbolic links,
-use the published schema identifier, match the installed pack ID and version, cite a SHA-256 session
+use the published schema identifier, match the ID and version of the pack in the toolkit catalog, cite a SHA-256 session
 ledger entry, and contain every outcome exactly once. A verified outcome must include one unique
 evidence record for every member named by its mapping. Claims are short descriptions; their hashes
 bind the claim to the evidence material retained by the workflow.
 
 Validate a report without changing the workspace:
+
+> The package is not on npm yet. Until the first publication, run the same command from a checkout with `node bin/youdede-toolkit.mjs` in place of `npx @youdede/toolkit`.
 
 ```bash
 npx @youdede/toolkit verify-pack-evidence daily-driver \

@@ -50,7 +50,7 @@ npx @youdede/toolkit add commit-guard --target claude-code --dry-run
 <!-- stat-table:readme-matrix -->
 | | Claude Code | Codex | Gemini CLI | GitHub Copilot | Cursor | OpenCode |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Skills (167) | 167 | 166 | 167 | 167 | 167 | 167 |
+| Skills (167) | 167 | 166 | 166 | 166 | 166 | 166 |
 | Hooks (63) | 63 | 22 | 22 | 0 | 23 | 22 |
 | Subagents (62) | 62 | 0 | 62 | 62 | 0 | 50 |
 | Commands (10) | 10 | 0 | 0 | 0 | 0 | 0 |
