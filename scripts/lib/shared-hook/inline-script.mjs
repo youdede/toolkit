@@ -146,7 +146,9 @@ function scanProgram(program, language, depth = 0) {
 
 // The inline program of a normalized command entry, or null when it runs none. `dynamic` is true when
 // the program is not known before the command runs (`-c "$CODE"`, a word xargs supplies): the command
-// is then ambiguous. Ruby and perl accept several `-e`, so every program word is kept.
+// is then ambiguous. Ruby and perl accept several `-e`, and interpreters disagree on which word a
+// program option takes when another option follows it (Node runs `-p -e CODE` as CODE, Bun as `-e`), so
+// every candidate word is kept and the scan continues from the word after the option.
 export function inlineProgram(entry) {
   if (!entry?.tokens?.length) return null;
   const name = executableName(entry.tokens[0]);
@@ -167,14 +169,16 @@ export function inlineProgram(entry) {
     dynamic ||= words.some((token) => token.dynamic || token.placeholder);
     parts.push([...(attached ? [match[1]] : []), ...words.slice(attached ? 1 : 0).map((token) => token.value)].join(' '));
     if (toEnd) break;
-    index = first;
+    if (attached) index = first;
   }
   if (!parts.length) return null;
   const text = parts.join('\n');
   const { literals, code, incomplete } = scanProgram(text, language);
   const capable = shellLike || INLINE_CAPABLE.test(code) || INLINE_DYNAMIC_NAMES.test(code);
-  // A capable program the reader cannot follow to the end is ambiguous: its unread part may run anything.
-  const ambiguous = capable && !shellLike && (incomplete || INLINE_DYNAMIC_NAMES.test(code) || Boolean(INLINE_HEREDOC[language]?.test(text)));
+  // A program the reader did not follow to the end is ambiguous whatever the read part holds: the unread
+  // part may run anything. A capable program is ambiguous too when it names something dynamically or
+  // holds a here-document.
+  const ambiguous = !shellLike && (incomplete || (capable && (INLINE_DYNAMIC_NAMES.test(code) || Boolean(INLINE_HEREDOC[language]?.test(text)))));
   return { text, dynamic, shellLike, literals, capable, ambiguous };
 }
 
@@ -182,13 +186,14 @@ export function inlineProgram(entry) {
 // Without `capable`, the literals are data and nothing is returned. With it, every literal is read as a
 // shell command, even one the program only prints (`import subprocess; print('npm publish')` counts):
 // the reader does not follow data flow. Candidates that do not parse are skipped. A literal that runs a
-// shell without a static command (`sh`), a program not known before the command runs, and a capable
-// program the reader cannot follow add an `{ ambiguous: true }` entry, after the literal commands.
+// shell without a static command (`sh`), a program not known before the command runs, a program the
+// reader did not follow to the end (capable or not), and a capable program with a dynamic name or a
+// here-document add an `{ ambiguous: true }` entry, after the literal commands.
 export function inlineShellCommands(entry) {
   const program = inlineProgram(entry);
   if (!program) return [];
   if (program.dynamic) return [{ ambiguous: true, tokens: [], wrappers: entry.wrappers ?? [] }];
-  if (!program.capable) return [];
+  if (!program.capable) return program.ambiguous ? [{ ambiguous: true, tokens: [], wrappers: entry.wrappers ?? [] }] : [];
   const sources = [...(program.shellLike ? [program.text] : []), ...program.literals];
   const commands = [];
   for (const source of sources) {

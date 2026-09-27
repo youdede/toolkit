@@ -70,6 +70,14 @@ const PROBES = [
   ['perl -e \'system <<"CMD";\nnpm publish\nCMD\n\'', ['CMD', 'AMBIGUOUS']],
   [`python3 -c '${'"x";'.repeat(256)}import os; os.system("npm publish")'`, [...Array(256).fill('x'), 'AMBIGUOUS']],
   [`python3 -c '${'"x";'.repeat(256)}print(1)'`, []],
+  // A program option followed by another option keeps both candidate words (PR38-CODEX4-2).
+  ['node -p -e "require(\'child_process\').execSync(\'npm publish\')"', ['child_process', 'npm publish', 'AMBIGUOUS']],
+  ['node -e -p "require(\'child_process\').execSync(\'npm publish\')"', ['child_process', 'npm publish', 'AMBIGUOUS']],
+  ["perl -n -e 'system(\"npm publish\")'", ['npm publish']],
+  // Reaching a reader limit is ambiguous even when the read part is not capable (PR38-CODEX4-3).
+  [`ruby -e '${'"x";'.repeat(256)}%x{npm publish}'`, ['AMBIGUOUS']],
+  ['ruby -e "puts %Q{#{%Q{#{%Q{#{%x{npm publish}}}}}}}"', ['AMBIGUOUS']],
+  ['python3 -c "print(\'unterminated)"', ['AMBIGUOUS']],
   ['python3 script.py', []],
   ['node --version', []],
   ['python3 -c', []],

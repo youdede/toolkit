@@ -778,7 +778,9 @@ export function gitVisibleHoldsSensitive(root, options) {
 }
 
 const SAFE_ENV_SUFFIXES = ['.example', '.sample', '.template', '.dist'];
-const SENSITIVE_DIRECTORY_SUFFIXES = ['/.aws', '/.azure', '/.config/gcloud', '/.kube', '/.ssh'];
+// A credential directory is sensitive itself and so is everything under it, at any depth; `.ssh` keeps
+// its own rule because its public keys, config, and known_hosts are safe.
+const SENSITIVE_DIRECTORY_SUFFIXES = ['/.aws', '/.azure', '/.config/gcloud', '/.gnupg', '/.kube', '/.ssh'];
 const SAFE_SSH_FILES = new Set(['authorized_keys', 'config', 'known_hosts']);
 const EXACT_CREDENTIAL_SUFFIXES = [
   '/.aws/credentials',
@@ -1041,7 +1043,8 @@ export function isSensitivePath(value) {
   if (basename === '.env' || basename.startsWith('.env.')) return true;
   if (SSH_PRIVATE_KEY.test(normalized)) return true;
   if (normalized.includes('/.ssh/') && !basename.endsWith('.pub') && !SAFE_SSH_FILES.has(basename)) return true;
-  if (SENSITIVE_DIRECTORY_SUFFIXES.some((suffix) => normalized === suffix.slice(1) || normalized.endsWith(suffix))) return true;
+  if (SENSITIVE_DIRECTORY_SUFFIXES.some((suffix) => normalized === suffix.slice(1) || normalized.endsWith(suffix)
+    || (suffix !== '/.ssh' && (normalized.startsWith(`${suffix.slice(1)}/`) || normalized.includes(`${suffix}/`))))) return true;
   return EXACT_CREDENTIAL_SUFFIXES.some((suffix) => normalized === suffix.slice(1) || normalized.endsWith(suffix));
 }
 

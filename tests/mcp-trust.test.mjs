@@ -242,9 +242,49 @@ test('workspace MCP runtime refuses credential files it declares no access to', 
 });
 
 test('workspace MCP credential rules match the sensitive file guard', () => {
-  for (const relative of ['.env', '.env.local', '.env.example', 'app/.env.production.sample', 'id_rsa', 'keys/id_ed25519', '.ssh/config', '.ssh/deploy', '.aws/credentials', '.aws', '.kube/config', '.npmrc', '.netrc', '.pypirc', '.docker/config.json', '.config/gh/hosts.yml', 'src/app.js', 'README.md']) {
+  for (const relative of ['.env', '.env.local', '.env.example', 'app/.env.production.sample', 'id_rsa', 'keys/id_ed25519', '.ssh/config', '.ssh/deploy', '.aws/credentials', '.aws', '.kube/config', '.npmrc', '.netrc', '.pypirc', '.docker/config.json', '.config/gh/hosts.yml', 'src/app.js', 'README.md',
+    '.config/gcloud/credentials.db', 'sub/.aws/credentials', 'sub/.aws/sso/cache/token.json', '.azure/msal_token_cache.json', 'deep/.kube/cache/x', '.gnupg/private-keys-v1.d/k.key', '.ssh/known_hosts', '.ssh/id.pub', 'docs/aws.md']) {
     assert.equal(isSensitiveWorkspacePath(relative), guardIsSensitive(`/${relative}`), relative);
   }
+});
+
+test('MCP runtime refuses files under credential directories, in reads and diffs (PR38-CODEX4-1)', (context) => {
+  const workspace = mkdtempSync(path.join(os.tmpdir(), 'youdede-mcp-credential-dirs-'));
+  context.after(() => rmSync(workspace, { recursive: true, force: true }));
+  const git = (args) => assert.equal(spawnSync('git', args, { cwd: workspace, env: cleanGitEnvironment() }).status, 0, args.join(' '));
+  const files = ['.config/gcloud/credentials.db', 'sub/.aws/credentials'];
+  for (const file of files) {
+    mkdirSync(path.join(workspace, path.dirname(file)), { recursive: true });
+    writeFileSync(path.join(workspace, file), 'OAUTH_TOKEN=OLD-TOKEN\n');
+  }
+  writeFileSync(path.join(workspace, 'app.txt'), 'one\n');
+  git(['init', '-q']);
+  git(['config', 'user.email', 'tests@youdede.invalid']);
+  git(['config', 'user.name', 'youdede tests']);
+  git(['add', '.']);
+  git(['commit', '-qm', 'baseline']);
+  for (const file of files) writeFileSync(path.join(workspace, file), 'OAUTH_TOKEN=NEVER-RETURN-TOKEN\n');
+  writeFileSync(path.join(workspace, 'app.txt'), 'two\n');
+  const run = (profile, requests) => {
+    writeFileSync(path.join(workspace, 'profile.json'), readFileSync(`artifacts/mcp-servers/development/agent-tooling/${profile}/server.json`));
+    const result = spawnSync(process.execPath, [path.resolve('scripts/runtime/readonly-mcp-server.mjs'), '--profile', 'profile.json'], {
+      cwd: workspace, input: `${requests.map((request, index) => JSON.stringify({ jsonrpc: '2.0', id: index + 1, method: 'tools/call', params: request })).join('\n')}\n`, encoding: 'utf8'
+    });
+    assert.equal(result.status, 0, result.stderr);
+    return result.stdout.trim().split('\n').map((line) => JSON.parse(line).result);
+  };
+  const reads = run('workspace-files-readonly', [
+    ...files.map((file) => ({ name: 'read_file', arguments: { path: file } })),
+    { name: 'list_directory', arguments: { path: '.config' } },
+    { name: 'search_files', arguments: { query: 'credentials' } }
+  ]);
+  assert.equal(reads[0].isError, true);
+  assert.equal(reads[1].isError, true);
+  assert.doesNotMatch(reads[2].content[0].text, /gcloud/);
+  assert.doesNotMatch(reads[3].content[0].text, /credentials/);
+  const diffs = run('repository-git-readonly', [{ name: 'git_diff', arguments: {} }, { name: 'git_diff', arguments: { path: 'sub' } }]);
+  assert.match(diffs[0].content[0].text, /\+two/);
+  for (const result of [...reads, ...diffs]) assert.doesNotMatch(JSON.stringify(result), /TOKEN/);
 });
 
 test('repository MCP diff omits tracked credential files', (context) => {

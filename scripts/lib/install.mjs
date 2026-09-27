@@ -1097,6 +1097,8 @@ function packMutationPaths(planned) {
     for (const mutation of [...plan.writes, ...plan.removes]) files.add(path.join(plan.configRoot, mutation.path));
     if (plan.settings) files.add(path.join(plan.configRoot, plan.settings.path));
     if (plan.mcpConfig) files.add(path.join(plan.configRoot, plan.mcpConfig.path));
+    // Each member install rewrites the generated notice, so a failed pack restores or removes it too.
+    if (plan.notice) files.add(path.join(plan.configRoot, plan.notice.path));
     files.add(path.join(plan.configRoot, plan.state.path));
   }
   return { files, roots };
