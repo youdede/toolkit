@@ -22,11 +22,18 @@ const INLINE_PROGRAM_OPTIONS = [
 const INLINE_MAX_LITERALS = 256;
 const INLINE_PAIRS = { '(': ')', '[': ']', '{': '}', '<': '>' };
 // A program is `capable` when its code (literal contents and comments removed) names something that
-// can run a command: a module, a call, an executing literal (backtick outside JS, `%x`, `qx`, whose
-// opener stays in the code), or a dynamic name. A capable program is always ambiguous: the reader does
-// not follow how it builds its command. Without any of these, the program's literals are data.
-const INLINE_DYNAMIC_NAMES = /\b(?:getattr|__import__|importlib|eval|exec|compile|require|send|public_send|__send__|method|instance_eval|constantize)\b|\bimport\s*\(/;
-const INLINE_CAPABLE = /\b(?:subprocess|pty|PTY|commands|child_process|execa|Kernel|Open3|system|exec\w*|spawn\w*|posix_spawn\w*|fork|popen\w*|readpipe|syscall|open|shell_exec|passthru|proc_open|pcntl_exec|qx)\b|\b(?:os|posix)\s*\.\s*(?:system|popen|exec\w*|spawn\w*)|\bIO\s*\.\s*popen|\bBun\s*\.\s*(?:spawn\w*|\$)|\$`|\bDeno\s*\.\s*(?:Command|run)\b|`|%x/;
+// can run a command in its language: a module, a call, an executing literal (backtick outside JS, `%x`,
+// `qx`, whose opener stays in the code), or a dynamic name that can reach one. `open` counts only where
+// it can open a pipe (Ruby `Kernel#open`, Perl); Python and JavaScript `open` is file I/O. A capable
+// program is always ambiguous: the reader does not follow how it builds its command. Without any of
+// these, the program's literals are data.
+const INLINE_CAPABLE = {
+  python: /\b(?:subprocess|pty|commands|system|popen\w*|spawn\w*|posix_spawn\w*|exec[lv]\w*|fork\w*|startfile|getattr|__import__|importlib|eval|exec|compile)\b/,
+  js: /child_process|\b(?:execa|exec|execSync|execFile|execFileSync|spawn|spawnSync|fork|eval|require|Function)\b|\bimport\s*\(|\bprocess\s*\.\s*(?:binding|dlopen)\b|\bBun\s*\.\s*(?:spawn\w*|\$)|\$`|\bDeno\s*\.\s*(?:Command|run)\b/,
+  ruby: /\b(?:system|exec|spawn|fork|syscall|open|popen\w*|Open3|PTY|Kernel|eval|instance_eval|class_eval|module_eval|send|public_send|__send__|method|constantize|const_get|require|load)\b|`|%x/,
+  perl: /\b(?:system|exec|qx|open|readpipe|fork|eval|require)\b|IPC::|`/,
+  php: /\b(?:exec|system|passthru|shell_exec|popen|proc_open|pcntl_exec|eval|assert|create_function|call_user_func\w*|include|require\w*)\b|`/
+};
 // Interpolation inside a literal is code: Ruby `#{…}`, JS `${…}`, Perl `@{[…]}`, PHP `{$…}`.
 const INLINE_INTERPOLATION = /#\{|\$\{|@\{|\{\$/;
 
@@ -38,21 +45,65 @@ const INLINE_INTERPOLATION = /#\{|\$\{|@\{|\{\$/;
 function literalOpening(program, index, language) {
   const character = program[index];
   const triple = character.repeat(3);
-  if (language === 'python' && (character === "'" || character === '"') && program.startsWith(triple, index)) {
-    return { opener: triple, delimiter: triple, executes: false };
+  // How the literal's escapes decode: `single` knows only the backslash and the delimiter (Ruby, Perl,
+  // and PHP single quotes, `%q`, `q`, `qw`), `raw` none (Python raw strings, cmd).
+  const interpreting = language === 'cmd' ? 'raw' : language;
+  if (language === 'python' && (character === "'" || character === '"')) {
+    const escapes = /[rR]/.test(/[A-Za-z]{0,2}$/.exec(program.slice(Math.max(0, index - 2), index))[0]) ? 'raw' : 'python';
+    const delimiter = program.startsWith(triple, index) ? triple : character;
+    return { opener: delimiter, delimiter, executes: false, escapes };
   }
-  if (character === "'" || character === '"') return { opener: character, delimiter: character, executes: false };
-  if (character === '`') return { opener: '`', delimiter: '`', executes: language !== 'js' };
+  if (character === "'") return { opener: character, delimiter: character, executes: false, escapes: language === 'js' ? 'js' : interpreting === 'raw' ? 'raw' : 'single' };
+  if (character === '"') return { opener: character, delimiter: character, executes: false, escapes: interpreting };
+  if (character === '`') return { opener: '`', delimiter: '`', executes: language !== 'js', escapes: interpreting };
   const rest = program.slice(index, index + 8);
   if (language === 'ruby' && character === '%') {
     const match = /^%([qQx]?)([^\w\s])/.exec(rest);
-    if (match && (match[1] || match[2] in INLINE_PAIRS)) return { opener: match[0], delimiter: match[2], executes: match[1] === 'x' };
+    if (match && (match[1] || match[2] in INLINE_PAIRS)) return { opener: match[0], delimiter: match[2], executes: match[1] === 'x', escapes: match[1] === 'q' ? 'single' : 'ruby' };
   }
   if (language === 'perl' && character === 'q' && !/[\w$@%&>]/.test(program[index - 1] ?? '')) {
     const match = /^(qq|qx|qw|q)(?:([^\w\s=,;)])|\s+([^\s=,;)#]))/.exec(program.slice(index, index + 64));
-    if (match) return { opener: match[0], delimiter: match[2] ?? match[3], executes: match[1] === 'qx' };
+    if (match) return { opener: match[0], delimiter: match[2] ?? match[3], executes: match[1] === 'qx', escapes: match[1] === 'q' || match[1] === 'qw' ? 'single' : 'perl' };
   }
   return null;
+}
+
+// Static escapes each language decodes in an interpolating literal. `unknown` lists the escapes the
+// reader does not decode (`\\N{…}`, Perl case changes, Ruby control characters): a literal holding one
+// has a value the reader does not know.
+const INLINE_SIMPLE_ESCAPES = { n: '\n', t: '\t', r: '\r', f: '\f', v: '\v', a: '\x07', b: '\b', e: '\x1b', s: ' ' };
+const INLINE_ESCAPES = {
+  python: { simple: 'ntrfvab', hex: /^x([0-9A-Fa-f]{2})/, u4: true, u8: true, braces: null, unknown: /^[xuUN]/, keepOther: true },
+  js: { simple: 'ntrfvb', hex: /^x([0-9A-Fa-f]{2})/, u4: true, u8: false, braces: /^u\{([0-9A-Fa-f]{1,6})\}/, unknown: /^[xu]/, keepOther: false },
+  ruby: { simple: 'ntrfvabes', hex: /^x([0-9A-Fa-f]{1,2})/, u4: true, u8: false, braces: /^u\{([0-9A-Fa-f]{1,6})\}/, unknown: /^[xucCM]/, keepOther: false },
+  perl: { simple: 'ntrfabe', hex: /^x([0-9A-Fa-f]{1,2})/, u4: false, u8: false, braces: /^x\{([0-9A-Fa-f]{1,6})\}/, unknown: /^[xNclLuUQEF]/, keepOther: false },
+  php: { simple: 'ntrfve', hex: /^x([0-9A-Fa-f]{1,2})/, u4: false, u8: false, braces: /^u\{([0-9A-Fa-f]{1,6})\}/, unknown: /^u\{/, keepOther: true }
+};
+
+// The escape at `cursor` (a backslash) of a literal decoded with `mode`: its text, the index of its last
+// character, and whether the reader does not know its value.
+function decodeEscape(program, cursor, mode, open, close) {
+  const rest = program.slice(cursor + 1, cursor + 12);
+  const next = rest[0] ?? '';
+  const decoded = (text, length) => ({ text, end: cursor + length, unknown: false });
+  const point = (digits, base, length) => {
+    const value = parseInt(digits, base);
+    return value > 0x10ffff ? { text: '', end: cursor + length, unknown: true } : decoded(String.fromCodePoint(value), length);
+  };
+  if (mode === 'raw') return decoded(`\\${next}`, 1);
+  if (mode === 'single') return next === '\\' || next === open || next === close ? decoded(next, 1) : decoded(`\\${next}`, 1);
+  const rules = INLINE_ESCAPES[mode];
+  if (next === '\n') return decoded('', 1);
+  let match;
+  if (rules.braces && (match = rules.braces.exec(rest))) return point(match[1], 16, match[0].length);
+  if ((match = rules.hex.exec(rest))) return point(match[1], 16, match[0].length);
+  if (rules.u4 && (match = /^u([0-9A-Fa-f]{4})/.exec(rest))) return point(match[1], 16, match[0].length);
+  if (rules.u8 && (match = /^U([0-9A-Fa-f]{8})/.exec(rest))) return point(match[1], 16, match[0].length);
+  if ((match = /^[0-7]{1,3}/.exec(rest))) return point(match[0], 8, match[0].length);
+  if (rules.unknown.test(rest)) return { text: '', end: cursor + 1, unknown: true };
+  if (rules.simple.includes(next)) return decoded(INLINE_SIMPLE_ESCAPES[next], 1);
+  if ('\\\'"`$@'.includes(next) || next === open || next === close) return decoded(next, 1);
+  return decoded(rules.keepOther ? `\\${next}` : next, 1);
 }
 
 // The end of a comment at `index`, or -1 when none starts there. `#{` is Ruby interpolation, not a comment.
@@ -102,6 +153,7 @@ function scanProgram(program, language, depth = 0) {
   const literals = [];
   let code = '';
   let incomplete = false;
+  let undecoded = false;
   let index = 0;
   while (index < program.length) {
     if (regexStart(program, index, language, code)) {
@@ -126,7 +178,13 @@ function scanProgram(program, language, depth = 0) {
     let cursor = index + opening.opener.length;
     for (; cursor < program.length; cursor += 1) {
       const character = program[cursor];
-      if (character === '\\') { cursor += 1; body += program[cursor] ?? ''; continue; }
+      if (character === '\\') {
+        const escape = decodeEscape(program, cursor, opening.escapes, open, close);
+        body += escape.text;
+        undecoded ||= escape.unknown;
+        cursor = escape.end;
+        continue;
+      }
       if (close.length > 1) {
         if (program.startsWith(close, cursor)) break;
         body += character;
@@ -144,12 +202,13 @@ function scanProgram(program, language, depth = 0) {
       const nested = scanProgram(body, language, depth + 1);
       literals.push(...nested.literals);
       incomplete ||= nested.incomplete;
+      undecoded ||= nested.undecoded;
       inner = nested.code;
     } else if (interpolated) incomplete = true;
     code += `${opening.executes ? opening.opener : ''} ${inner} `;
     index = cursor + close.length;
   }
-  return { literals, code, incomplete };
+  return { literals, code, incomplete, undecoded };
 }
 
 // The inline program of a normalized command entry, or null when it runs none. `dynamic` is true when
@@ -181,8 +240,8 @@ export function inlineProgram(entry) {
   }
   if (!parts.length) return null;
   const text = parts.join('\n');
-  const { literals, code, incomplete } = scanProgram(text, language);
-  const capable = shellLike || INLINE_CAPABLE.test(code) || INLINE_DYNAMIC_NAMES.test(code);
+  const { literals, code, incomplete, undecoded } = scanProgram(text, language);
+  const capable = shellLike || INLINE_CAPABLE[language].test(code);
   // A capable program is ambiguous, and so is one the reader did not follow to the end, whatever the
   // read part holds: the unread part may run anything.
   const ambiguous = !shellLike && (capable || incomplete);
@@ -190,7 +249,8 @@ export function inlineProgram(entry) {
   // sees a command split across adjacent literals (`'n' 'pm publish'`).
   // ponytail: joins every literal, not only adjacent ones; extra joins only widen what looks relevant.
   const literalText = `${literals.join('')}\n${literals.join(' ')}`;
-  return { text, dynamic, shellLike, literals, capable, ambiguous, literalText };
+  // A capable program with a literal whose value the reader does not know counts as relevant to every hook.
+  return { text, dynamic, shellLike, literals, capable, ambiguous, literalText, relevant: capable && undecoded };
 }
 
 // Normalized commands (the shape parseShellCommands returns) found in the inline program of `entry`.
@@ -200,13 +260,14 @@ export function inlineProgram(entry) {
 // A hook refuses that entry when the command text looks relevant to it. Candidates that do not parse
 // are skipped. A literal that runs a shell without a static command (`sh`), a program not known before
 // the command runs, and a program the reader did not follow to the end are ambiguous too. The
-// program-level entry carries no wrappers (a shell around the one-liner adds nothing unknown) and the
-// program's joined literals as `text`, for the hook's relevance check.
+// program-level entry carries no wrappers (a shell around the one-liner adds nothing unknown), the
+// program's joined and decoded literals as `text`, for the hook's relevance check, and `relevant` when a
+// literal holds an escape the reader does not decode.
 export function inlineShellCommands(entry) {
   const program = inlineProgram(entry);
   if (!program) return [];
   if (program.dynamic) return [{ ambiguous: true, tokens: [], wrappers: entry.wrappers ?? [] }];
-  const unfollowed = { ambiguous: true, tokens: [], wrappers: [], text: program.literalText };
+  const unfollowed = { ambiguous: true, tokens: [], wrappers: [], text: program.literalText, relevant: program.relevant };
   if (!program.capable) return program.ambiguous ? [unfollowed] : [];
   const sources = [...(program.shellLike ? [program.text] : []), ...program.literals];
   const commands = [];

@@ -235,6 +235,8 @@ function lexShell(source, options = {}) {
       if (character === '"') quote = null;
       else if (character === '\\') {
         if (++index >= source.length) return { error: 'trailing escape' };
+        // Between double quotes bash removes a backslash only before $, `, ", \, and a newline.
+        if (!'$`"\\\n'.includes(source[index])) token.value += '\\';
         if (source[index] !== '\n') token.value += source[index];
       } else if (character === '$' || character === '`') {
         const end = expansion(index);
@@ -270,7 +272,7 @@ function lexShell(source, options = {}) {
       pushToken();
       if (redirect) return { error: 'redirection without target' };
       if (options.redirections) redirections.push({ operator, target: { value: heredoc.delimiter, dynamic: false } });
-      else tokens.push({ value: operator + heredoc.delimiter, dynamic: false });
+      else tokens.push({ value: operator + heredoc.delimiter, dynamic: false, heredoc });
       // The body of an unquoted delimiter is attached to this segment when it is read.
       heredoc.owner = substitutions;
       heredocs.push(heredoc);
@@ -293,6 +295,16 @@ function lexShell(source, options = {}) {
         } else if (next === '&' || next === '|' || (character === '<' && next === '>')) { operator += next; index += 1; }
       }
       redirect = operator;
+    } else if (!options.redirections && character === '<' && source.startsWith('<<<', index)) {
+      // A here-string: the next word is the standard input of the command.
+      pushToken();
+      tokens.push({ value: '<<<', dynamic: false, herestring: true });
+      index += 2;
+    } else if (!options.redirections && character === '<' && source[index + 1] !== '(') {
+      // An input redirection (`< file`, `<file`): marked so a shell reading it is not given a script name.
+      begin();
+      token.value += character;
+      token.input = true;
     } else if (character === '&' && (/[<>]$/.test(token?.value ?? '') || source[index + 1] === '>')) {
       // `2>&1`, `>&2`, `&>file`: a redirection, not a command separator.
       begin(); token.value += character;
@@ -386,6 +398,26 @@ function unwrapCommand(original, depth, inherited = [], parseOptions = {}) {
         // shell runs its standard input (`… | sh`, `sh -s`, `bash < file`), whose text the command itself
         // supplies and the hook cannot see, or a script file, which is judged like any other program
         // (`./script.sh` and `make` are not read either).
+        // A here-string or here-document gives the shell its program on standard input: a static one is
+        // read as commands, anything else is ambiguous. Their words are never a script name, and neither
+        // is the file of `bash < file`, whose text is not seen. The last input wins, as in bash.
+        const feeds = [];
+        const rest = [];
+        for (let position = index + 1; position < tokens.length; position += 1) {
+          const token = tokens[position];
+          if (token.heredoc) {
+            const { body, quoted } = token.heredoc;
+            feeds.push(quoted || !/[$`\\]/.test(body) ? { text: body } : { dynamic: true });
+          } else if (token.herestring) {
+            const word = tokens[position + 1];
+            position += 1;
+            feeds.push(word && !word.dynamic && !word.placeholder ? { text: word.value } : { dynamic: true });
+          } else if (token.input) {
+            feeds.push({ dynamic: true });
+            if (/^\d*<$/.test(token.value)) position += 1;
+          } else rest.push(token);
+        }
+        tokens = [...tokens.slice(0, index + 1), ...rest];
         let command = false;
         let stdin = false;
         let cursor = index + 1;
@@ -399,6 +431,12 @@ function unwrapCommand(original, depth, inherited = [], parseOptions = {}) {
           if (/^(?:[-+][oO]|--(?:rcfile|init-file))$/.test(option.value)) { cursor += 1; continue; }
           if (option.value === '--command' || /^-[^-]*c/.test(option.value)) command = true;
           else if (!/^[-+]./.test(option.value)) break;
+        }
+        if (!command && feeds.length && (stdin || !tokens[cursor])) {
+          const feed = feeds.at(-1);
+          if (feed.dynamic || depth >= SHELL_MAX_DEPTH) return [{ ambiguous: true, wrappers: [...wrappers, name] }];
+          const nested = parseShellCommands(feed.text, depth + 1, [...wrappers, name], parseOptions);
+          return nested.error ? [{ ambiguous: true, wrappers: [...wrappers, name] }] : nested.commands;
         }
         if (!command && (stdin || !tokens[cursor])) return [{ ambiguous: true, wrappers: [...wrappers, name] }];
         if (!command) return [{ tokens: tokens.slice(index), wrappers }];

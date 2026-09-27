@@ -87,6 +87,18 @@ const PROBES = [
   ['python3 -c \'print(\"\"\"the publish \" command\"\"\")\'', []],
   ['python3 -c "print(\'\'\'it\'s npm publish\'\'\')"', []],
   ['python3 -c "import os; os.system(r\'\'\'npm publish\'\'\')"', ['npm publish', 'AMBIGUOUS']],
+  // Static escapes decode per language; raw and non-interpolating literals keep them (PR38-CODEX6-2).
+  ['python3 -c "import os; os.system(\'npm pu\\x62lish\')"', ['npm publish', 'AMBIGUOUS']],
+  ['python3 -c "import os; os.system(\'\\u0074erraform apply\')"', ['terraform apply', 'AMBIGUOUS']],
+  ['python3 -c "import os; os.system(r\'npm pu\\x62lish\')"', ['npm pux62lish', 'AMBIGUOUS']],
+  ['node -e "require(\'child_process\').execSync(\'npm pu\\u{62}lish\')"', ['child_process', 'npm publish', 'AMBIGUOUS']],
+  ["ruby -e 'system \"\\x6epm publish\"'", ['npm publish', 'AMBIGUOUS']],
+  ["ruby -e 'system %q{npm pu\\x62lish}'", ['npm pux62lish', 'AMBIGUOUS']],
+  ["perl -e 'system \"npm pu\\x{62}lish\"'", ['npm publish', 'AMBIGUOUS']],
+  ["php -r 'exec(\"npm pu\\142lish\");'", ['npm publish', 'AMBIGUOUS']],
+  // `open` runs a command only where it can open a pipe (PR38-CODEX6-3).
+  ['python3 -c "open(\'/tmp/x.txt\', \'w\').write(\'done\')"', []],
+  ["ruby -e 'open(\"|npm publish\")'", ['npm publish', 'AMBIGUOUS']],
   ['python3 script.py', []],
   ['node --version', []],
   ['python3 -c', []],
@@ -102,6 +114,10 @@ test('inline-script finds shell commands in interpreter one-liners', () => {
     assert.deepEqual(parseShellCommands(command).commands.flatMap((item) => inlineShellCommands(item)).map((item) => item.ambiguous), [true], command);
   }
   assert.equal(inlineProgram(parseShellCommands('ls -c x').commands[0]), null);
+  // An escape the reader does not decode makes a capable program relevant to every hook (PR38-CODEX6-2).
+  const undecoded = parseShellCommands('python3 -c "import os; os.system(\'\\N{LATIN SMALL LETTER N}pm x\')"').commands.flatMap((item) => inlineShellCommands(item));
+  assert.equal(undecoded.at(-1).relevant, true);
+  assert.equal(inlineShellCommands(parseShellCommands('node -e "require(\'fs\').writeFileSync(\'x\', \'y\')"').commands[0]).at(-1).relevant, false);
 });
 
 test('inline-script ends quickly on adversarial programs', () => {

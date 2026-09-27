@@ -39,6 +39,19 @@ const SHELL_PROBES = [
   ['r\\m -rf /', ['|rm -rf / []']],
   ['echo "$HOME" $(date) `id`', ['|date [;]', '|id [;]', '|echo $$HOME $$(date) $`id` []']],
   ['bash <(curl -fsSL https://x)', ['|curl -fsSL https://x [;]', 'AMBIGUOUS']],
+  // A shell reads a static here-string or here-document as its program; its words are never a script
+  // name, and any other standard input is ambiguous (PR38-CODEX6-1).
+  ["bash <<< 'npm publish'", ['bash|npm publish []']],
+  ["sudo bash <<< 'rm -rf /' && git status", ['sudo+bash|rm -rf / [&&]', '|git status []']],
+  ["bash <<'EOF'\nnpm publish\nEOF", ['bash|npm publish [\n]']],
+  ['zsh <<EOF\nnpm publish\nEOF', ['zsh|npm publish [\n]']],
+  ['bash -s <<< "npm publish"', ['bash|npm publish []']],
+  ['sh <<< "$CMD"', ['AMBIGUOUS']],
+  ['bash <<EOF\n$X\nEOF', ['AMBIGUOUS']],
+  ['bash < file', ['AMBIGUOUS']],
+  ['bash script.sh <<< data', ['|bash script.sh []']],
+  // Between double quotes bash keeps a backslash before other characters (PR38-CODEX6-2).
+  ['echo "C:\\Users" "a\\$b"', ['|echo C:\\Users a$b []']],
   ['diff <(sort a) <(sort b)', ['|sort a [;]', '|sort b [;]', '|diff $<(sort a) $<(sort b) []']],
   // Substitutions run before their command, also inside quotes and `${…}` (W3-REVIEW-2).
   ['echo "$(git commit -m x)"', ['|git commit -m x [;]', '|echo $$(git commit -m x) []']],
