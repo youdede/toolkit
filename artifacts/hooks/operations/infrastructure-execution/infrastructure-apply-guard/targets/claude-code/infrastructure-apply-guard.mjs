@@ -45,6 +45,9 @@ const SHELL_KNOWN_RESERVED = new Set([...SHELL_PREFIX_KEYWORDS, ...SHELL_SKIPPED
   'declare', 'export', 'float', 'integer', 'local', 'readonly', 'typeset']);
 // Words that start a compound command: after `coproc NAME` they mark NAME as the coprocess name.
 const SHELL_COMPOUND_STARTS = new Set(['{', 'if', 'while', 'until', 'for', 'case', 'select', '[[', 'repeat', 'foreach']);
+// Wrappers after which the shell still looks up its functions (`time f`, zsh `noglob f`); every other
+// wrapper runs an external command or a builtin (`command f`, `sudo f`, `env f`), never a function.
+const SHELL_FUNCTION_WRAPPERS = new Set(['time', 'noglob']);
 const FIND_EXEC_ACTIONS = new Set(['-exec', '-execdir', '-ok', '-okdir']);
 
 // Options of each wrapper: `next` takes the following token as its value, `alone` stands alone or
@@ -233,6 +236,15 @@ function lexShell(source, options = {}) {
   let substitutions = [];
   let heredocs = [];
   let array = false;
+  let redirectVariable = {};
+  // Bash's `{name}` before an operator allocates a descriptor and stores it in name: it leaves the
+  // tokens, the operator stays the plain one (`{fd}>out` is `>` to out), and `variable` keeps the name.
+  const fdVariable = () => {
+    if (!token || token.quoted || token.dynamic || !/^\{[A-Za-z_]\w*\}$/.test(token.value)) return {};
+    const variable = token.value.slice(1, -1);
+    token = null;
+    return { variable };
+  };
   const begin = () => { if (!token) token = { value: '', dynamic: false }; };
   const expansion = (index) => {
     const end = expansionEnd(source, index);
@@ -246,7 +258,7 @@ function lexShell(source, options = {}) {
     if (token.braces && /\{[^{}]*(?:,|\.\.)[^{}]*\}/.test(token.value)) token.dynamic = true;
     delete token.braces;
     delete token.quoted;
-    if (redirect) { redirections.push({ operator: redirect, target: token }); redirect = null; } else tokens.push(token);
+    if (redirect) { redirections.push({ operator: redirect, target: token, ...redirectVariable }); redirect = null; } else tokens.push(token);
     token = null;
   };
   const pushSegment = (operator) => {
@@ -304,17 +316,20 @@ function lexShell(source, options = {}) {
       const heredoc = readHeredoc(source, index);
       if (!heredoc) return { error: 'redirection without target' };
       let operator = heredoc.operator;
-      // A file descriptor number written right before the operator belongs to it (`0<<EOF`).
+      // A file descriptor written right before the operator belongs to it (`0<<EOF`, `{fd}<<EOF`).
+      const variable = fdVariable();
       if (token && !token.quoted && !token.dynamic && /^\d+$/.test(token.value)) { operator = token.value + operator; token = null; }
       pushToken();
       if (redirect) return { error: 'redirection without target' };
-      redirections.push({ operator, target: { value: heredoc.delimiter, dynamic: false, heredoc } });
+      redirections.push({ operator, target: { value: heredoc.delimiter, dynamic: false, heredoc }, ...variable });
       // The body of an unquoted delimiter is attached to this segment when it is read.
       heredoc.owner = substitutions;
       heredocs.push(heredoc);
       index = heredoc.end - 1;
     } else if (character === '<' || character === '>' || (character === '&' && source[index + 1] === '>')) {
-      // A file descriptor number written right before the operator belongs to it.
+      // A file descriptor written right before the operator belongs to it: a number, or bash's
+      // `{name}` (`{fd}>out npm publish` runs npm).
+      const variable = character === '&' ? {} : fdVariable();
       let operator = '';
       if (character !== '&' && token && !token.quoted && !token.dynamic && /^\d+$/.test(token.value)) { operator = token.value; token = null; }
       pushToken();
@@ -331,6 +346,7 @@ function lexShell(source, options = {}) {
         } else if (next === '&' || next === '|' || (character === '<' && next === '>')) { operator += next; index += 1; }
       }
       redirect = operator;
+      redirectVariable = variable;
     } else if (character === '(' && token && !token.dynamic && !token.quoted && !redirect && /^[A-Za-z_]\w*\+?=$/.test(token.value)) {
       token.value += '(';
       array = true;
@@ -456,10 +472,11 @@ function unwrapCommand(original, depth, inherited = [], parseOptions = {}, redir
         // `<&3`, a here-string on another descriptor) is ambiguous. Their words are never a script name.
         // The last input wins, as in bash.
         const feeds = [];
-        for (const { operator, target } of redirections) {
+        for (const { operator, target, variable } of redirections) {
           const input = /^(\d*)(<<-?|<<<|<>|<&|<)$/.exec(operator);
           if (!input) continue;
-          const stdinFeed = input[1] === '' || input[1] === '0';
+          // `{fd}<<<text` feeds a new descriptor, not standard input.
+          const stdinFeed = !variable && (input[1] === '' || input[1] === '0');
           if (target.heredoc) {
             const { body, quoted } = target.heredoc;
             feeds.push(stdinFeed && (quoted || !/[$`\\]/.test(body)) ? { text: body } : { dynamic: true });
@@ -577,7 +594,9 @@ function unwrapCommand(original, depth, inherited = [], parseOptions = {}, redir
 // carries the `redirections` of its segment, and a segment made only of redirections (`> file`)
 // yields a command with no tokens. An ambiguous entry carries `segment`, the tokens of the innermost
 // segment it came from, so a hook can still judge that segment's text. A function definition runs
-// nothing: the commands of a `{ … }` body are kept aside and stand in for each later call of the name,
+// nothing: the commands of a `{ … }` body are kept aside and stand in for each later call of the name
+// that looks up functions (bare, or after `!`, `time`, `noglob`, a reserved word; not after `command`,
+// `builtin`, `exec`, `env`, `sudo`, or any other wrapper, where the name is an ordinary executable),
 // in this text and in the shells and substitutions it nests (fail closed: a nested shell sees them too).
 // ponytail: only a `{ … }` body is kept aside; any other body (`f() ( … )`) is read as if it ran now.
 export function parseShellCommands(command, depth = 0, wrappers = [], options = {}) {
@@ -596,6 +615,8 @@ export function parseShellCommands(command, depth = 0, wrappers = [], options = 
     if (segment.operator === '()') { header = segment.tokens.at(-1).value; continue; }
     if (!body) {
       const [first, name, open] = segment.tokens.slice(segment.tokens.findIndex((token) => token.dynamic || !SHELL_PREFIX_KEYWORDS.has(token.value)));
+      // `function name` then newlines, then `{`: the header waits for its body like `name()`.
+      if (isWord(first, 'function') && name && !name.dynamic && !open && segment.operator === '\n') { header = name.value; continue; }
       if (header && isWord(segment.tokens[0], '{')) body = { name: header, depth: 0, commands: [] };
       else if (isWord(first, 'function') && name && !name.dynamic && isWord(open, '{')) {
         body = { name: name.value, depth: 0, commands: [] };
@@ -631,6 +652,7 @@ export function parseShellCommands(command, depth = 0, wrappers = [], options = 
     }
     let entries = unwrapCommand(segment.tokens, depth, wrappers, options, segment.redirections)
       .flatMap((entry) => (entry.tokens?.length && functions.has(entry.tokens[0].value) && !entry.tokens[0].dynamic
+        && entry.wrappers.slice(wrappers.length).every((wrapper) => SHELL_FUNCTION_WRAPPERS.has(wrapper))
         ? functions.get(entry.tokens[0].value).map((call) => ({ ...call }))
         : [entry]));
     if (options.redirections && segment.redirections.length) {

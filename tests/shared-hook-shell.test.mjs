@@ -77,6 +77,11 @@ const SHELL_PROBES = [
   ['[[ -f .env ]] && npm test', ['|npm test []']],
   ['sudo nocorrect rm -rf /', ['AMBIGUOUS']],
   ['coproc NAME (npm publish)', ['AMBIGUOUS', '|npm publish [)]']],
+  // A here-string on a `{name}` descriptor does not feed the shell's standard input (PR38-CODEX11-1).
+  ["{fd}<<< 'npm publish' bash", ['AMBIGUOUS']],
+  ['{fd}>/tmp/out npm publish && git status', ['|npm publish [&&]', '|git status []']],
+  ['cd src; {fd}>&- git push --force origin main', ['|cd src [;]', '|git push --force origin main [] cd']],
+  ['echo {a,b} {x..y}', ['|echo ${a,b} ${x..y} []']],
   // A function definition runs nothing; each later call stands for its body (PR38-CODEX10-2).
   ['function deploy { npm publish; }', []],
   ['deploy() { npm publish; }', []],
@@ -90,6 +95,18 @@ const SHELL_PROBES = [
   ['f() { echo $(npm publish); }', []],
   ['f() { npm publish', ['|npm publish []']],
   ['f() ( npm publish )', ['|npm publish [)]']],
+  // Only a call that looks up functions runs the body; after an external-command wrapper the name is an
+  // ordinary executable (PR38-CODEX11-2).
+  ['f(){ npm publish; }; command f; builtin f; exec f', ['command|f [;]', 'builtin|f [;]', 'exec|f []']],
+  ['f(){ npm publish; }; env f; nice f; nohup f; timeout 1 f; sudo f', ['env|f [;]', 'nice|f [;]', 'nohup|f [;]', 'timeout|f [;]', 'sudo|f []']],
+  ['f(){ npm publish; }; echo a | xargs f; find . -exec f {} +', ['|echo a [|]', 'xargs|f <P> [;]', '|find . -exec f {} + []', 'find|f <P> []']],
+  ['f(){ npm publish; }; ! f && time f; noglob f; if f; then :; fi', ['|npm publish [&&]', '|npm publish [;]', '|npm publish [;]', '|npm publish [;]', '|: [;]']],
+  ['git switch -c tmp && f(){ npm publish; } && f', ['|git switch -c tmp [&&]', '|npm publish []']],
+  // `function NAME` keeps its header across newlines before `{` (PR38-CODEX11-3).
+  ['function deploy\n{\nnpm publish\n}', []],
+  ['function deploy\n\n\n{ npm publish; }\ncd src && deploy', ['|cd src [&&]', '|npm publish [] cd']],
+  ['function deploy()\n{\nnpm publish\n}', []],
+  ['deploy ()\n\n{\nnpm publish\n}', []],
   // Parentheses after `name=` or `name+=` hold array elements, which are data (PR38-CODEX10-3).
   ['arr=(npm publish)', []],
   ['cd src && arr=(npm publish) && echo "${arr[@]}"', ['|cd src [&&]', '|echo $${arr[@]} [] cd']],
@@ -243,6 +260,15 @@ test('the shell module marks unquoted globs and, on request, separates redirecti
   assert.deepEqual(redirected('diff <(sort a) b'), ['sort a {}', 'diff <(sort a) b {}']);
   assert.deepEqual(redirected("cat > f 2<<'EOF'\nit's > /etc/hosts\nEOF\ncd sub"), ['cat {>f 2<<EOF}', 'cd sub {}']);
   for (const broken of ['echo >', 'echo > ; ls', 'cat < < x']) assert.equal(redirected(broken), 'ERROR redirection without target', broken);
+  // Bash's `{name}` descriptor belongs to its redirection in any position; the operator stays plain (PR38-CODEX11-1).
+  const named = (command) => parseShellCommands(command, 0, [], { redirections: true }).commands
+    .map((entry) => `${entry.tokens.map((token) => token.value).join(' ')} {${(entry.redirections ?? []).map((item) => `${item.variable ?? ''}:${item.operator}${item.target.value}`).join(' ')}}`);
+  assert.deepEqual(named('{fd}>/tmp/out npm publish'), ['npm publish {fd:>/tmp/out}']);
+  assert.deepEqual(named('npm {fd}>>log publish {in}<file'), ['npm publish {fd:>>log in:<file}']);
+  assert.deepEqual(named('rm -rf / {fd}<>x {a}>&- {b}<&0 {c}>&2'), ['rm -rf / {fd:<>x a:>&- b:<&0 c:>&2}']);
+  assert.deepEqual(named("{fd}<<'EOF' git push --force\nx\nEOF"), ['git push --force {fd:<<EOF}']);
+  assert.deepEqual(named('echo {fd} >out "{fd}">q {a,b}>r'), ['echo {fd} {fd} {a,b} {:>out :>q :>r}']);
+  assert.deepEqual(named('{ npm publish; }'), ['npm publish {}']);
 });
 
 test('the shell module reads Git global options before the subcommand', () => {
