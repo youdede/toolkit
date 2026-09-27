@@ -48,9 +48,11 @@ const SHELL_KNOWN_RESERVED = new Set([...SHELL_PREFIX_KEYWORDS, ...SHELL_SKIPPED
   'declare', 'export', 'float', 'integer', 'local', 'readonly', 'typeset']);
 // Words that start a compound command: after `coproc NAME` they mark NAME as the coprocess name.
 const SHELL_COMPOUND_STARTS = new Set(['{', 'if', 'while', 'until', 'for', 'case', 'select', '[[', 'repeat', 'foreach']);
-// Wrappers after which the shell still looks up its functions (`time f`, zsh `noglob f`); every other
-// wrapper runs an external command or a builtin (`command f`, `sudo f`, `env f`), never a function.
-const SHELL_FUNCTION_WRAPPERS = new Set(['time', 'noglob']);
+// Wrappers after which a shell still looks up its functions: `time f`, zsh `noglob f`, and zsh
+// `exec f` (bash's `exec f` does not; the hook does not know the shell, so it keeps the body). zsh
+// `nocorrect f` and `- f` are prefix words and find functions too. `command f` and `builtin f` find no
+// function in bash or zsh 5.9, and the external-command wrappers (`env`, `sudo`, `nohup`, …) never do.
+const SHELL_FUNCTION_WRAPPERS = new Set(['time', 'noglob', 'exec']);
 const FIND_EXEC_ACTIONS = new Set(['-exec', '-execdir', '-ok', '-okdir']);
 
 // Options of each wrapper: `next` takes the following token as its value, `alone` stands alone or
@@ -138,6 +140,39 @@ function expansionEnd(source, start) {
     else if (character === close && --depth === 0) return index + 1;
   }
   return -1;
+}
+
+// Bash ANSI-C quoting `$'…'` opening at `start` (the `$`): { end, value }, with `value` null when an
+// escape is not decoded with certainty (a NUL, which ends the string in bash, a non-ASCII byte or code
+// point, whose bytes depend on the locale, an unknown escape, or a `\c` before a non-letter), and
+// null for an unterminated string. Escapes follow the GNU Bash Reference Manual, §3.1.2.4 ANSI-C Quoting.
+const ANSI_C_ESCAPES = { a: '\x07', b: '\b', e: '\x1b', E: '\x1b', f: '\f', n: '\n', r: '\r', t: '\t', v: '\v', '\\': '\\', "'": "'", '"': '"', '?': '?' };
+function ansiCString(source, start) {
+  let value = '';
+  let certain = true;
+  for (let index = start + 2; index < source.length; index += 1) {
+    const character = source[index];
+    if (character === "'") return { end: index + 1, value: certain ? value : null };
+    if (character !== '\\') { value += character; continue; }
+    const escape = source[index + 1] ?? '';
+    const numeric = /^(?:[0-7]{1,3}|x[0-9A-Fa-f]{1,2}|u[0-9A-Fa-f]{1,4}|U[0-9A-Fa-f]{1,8})/.exec(source.slice(index + 1, index + 10));
+    if (numeric) {
+      const text = numeric[0];
+      const code = /^[0-7]/.test(text) ? parseInt(text, 8) : parseInt(text.slice(1), 16);
+      if (code > 0 && code < 0x80) value += String.fromCharCode(code); else certain = false;
+      index += text.length;
+    } else if (escape === 'c' && /[A-Za-z]/.test(source[index + 2] ?? '')) {
+      value += String.fromCharCode(source.charCodeAt(index + 2) & 0x1f);
+      index += 2;
+    } else if (escape in ANSI_C_ESCAPES) {
+      value += ANSI_C_ESCAPES[escape];
+      index += 1;
+    } else {
+      certain = false;
+      index += 1;
+    }
+  }
+  return null;
 }
 
 // `<<` or `<<-` (not the here-string `<<<`) at `index`.
@@ -249,10 +284,15 @@ function lexShell(source, options = {}) {
     return { variable };
   };
   const begin = () => { if (!token) token = { value: '', dynamic: false }; };
+  // Text known only at run time: `cuts` marks where it sits in the value, so `bare` can drop it.
+  const unknown = (text) => {
+    (token.cuts ??= []).push([token.value.length, token.value.length + text.length]);
+    token.value += text; token.dynamic = true;
+  };
   const expansion = (index) => {
     const end = expansionEnd(source, index);
     if (end < 0 || !collectSubstitutions(source.slice(index, end), substitutions)) return -1;
-    token.value += source.slice(index, end); token.dynamic = true;
+    unknown(source.slice(index, end));
     return end;
   };
   const pushToken = () => {
@@ -261,6 +301,9 @@ function lexShell(source, options = {}) {
     if (token.braces && /\{[^{}]*(?:,|\.\.)[^{}]*\}/.test(token.value)) token.dynamic = true;
     delete token.braces;
     delete token.quoted;
+    // `bare` is a dynamic token's value with its run-time text removed (`n${x}pm` is `npm`).
+    if (token.cuts) token.bare = token.cuts.reduceRight((text, [from, to]) => text.slice(0, from) + text.slice(to), token.value);
+    delete token.cuts;
     if (redirect) { redirections.push({ operator: redirect, target: token, ...redirectVariable }); redirect = null; } else tokens.push(token);
     token = null;
   };
@@ -310,7 +353,17 @@ function lexShell(source, options = {}) {
       }
     } else if (character === "'" || character === '"') { begin(); token.quoted = true; quote = character; }
     else if (character === '\\') { begin(); if (++index >= source.length) return { error: 'trailing escape' }; token.value += source[index]; }
-    else if (character === '$' || character === '`' || ((character === '<' || character === '>') && source[index + 1] === '(')) {
+    else if (character === '$' && source[index + 1] === "'") {
+      // `$'…'` is a quoted fragment of the word, decoded; one not known for certain is run-time text.
+      const ansi = ansiCString(source, index);
+      if (!ansi) return { error: 'unterminated quote' };
+      begin(); token.quoted = true;
+      if (ansi.value === null) unknown(source.slice(index, ansi.end)); else token.value += ansi.value;
+      index = ansi.end - 1;
+    } else if (character === '$' && source[index + 1] === '"') {
+      // `$"…"` is a locale-translated string: read as a double-quoted one.
+      begin(); token.quoted = true; quote = '"'; index += 1;
+    } else if (character === '$' || character === '`' || ((character === '<' || character === '>') && source[index + 1] === '(')) {
       begin();
       const end = expansion(index);
       if (end < 0) return { error: 'unterminated expansion' };
@@ -596,10 +649,11 @@ function unwrapCommand(original, depth, inherited = [], parseOptions = {}, redir
 // true after cd, pushd, or popd in the same command. With `options.redirections`, each command also
 // carries the `redirections` of its segment, and a segment made only of redirections (`> file`)
 // yields a command with no tokens. An ambiguous entry carries `segment`, the tokens of the innermost
-// segment it came from, so a hook can still judge that segment's text. A function definition runs
+// segment it came from, and `text`, that segment with its run-time text removed, so a hook can still
+// judge it. A function definition runs
 // nothing: the commands of a `{ … }` body are kept aside and stand in for each later call of the name
-// that looks up functions (bare, or after `!`, `time`, `noglob`, a reserved word; not after `command`,
-// `builtin`, `exec`, `env`, `sudo`, or any other wrapper, where the name is an ordinary executable),
+// that looks up functions in bash or zsh (bare, or after `!`, `time`, `noglob`, `exec`, a reserved word;
+// not after `command`, `builtin`, `env`, `sudo`, or another wrapper, where the name is an ordinary executable),
 // in this text and in the shells and substitutions it nests (fail closed: a nested shell sees them too).
 // ponytail: only a `{ … }` body is kept aside; any other body (`f() ( … )`) is read as if it ran now.
 export function parseShellCommands(command, depth = 0, wrappers = [], options = {}) {
@@ -666,7 +720,11 @@ export function parseShellCommands(command, depth = 0, wrappers = [], options = 
     if (entries.length) entries.at(-1).operator = segment.operator;
     for (const entry of entries) {
       entry.operator ??= segment.operator;
-      if (entry.ambiguous) entry.segment ??= segment.tokens;
+      if (entry.ambiguous) {
+        entry.segment ??= segment.tokens;
+        // The segment with run-time text removed, so a hook still sees a word split by it (`n${x}pm`).
+        entry.text ??= entry.segment.map((token) => token.bare ?? token.value).join(' ');
+      }
     }
     output.push(...entries);
     if (body && body.depth <= 0) { functions.set(body.name, body.commands); body = null; }

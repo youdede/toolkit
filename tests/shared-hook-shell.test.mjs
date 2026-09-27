@@ -77,6 +77,18 @@ const SHELL_PROBES = [
   ['[[ -f .env ]] && npm test', ['|npm test []']],
   ['sudo nocorrect rm -rf /', ['AMBIGUOUS']],
   ['coproc NAME (npm publish)', ['AMBIGUOUS', '|npm publish [)]']],
+  // ANSI-C quoting `$'…'` is a decoded fragment of its word, and `$"…"` a double-quoted one; an escape
+  // not decoded for certain makes the word dynamic (PR38-CODEX12-1).
+  ["n$'\\x70'm pu$'\\x62'lish", ['|npm publish []']],
+  ["n$''pm pu$''blish && git status", ['|npm publish [&&]', '|git status []']],
+  ["git switch -c tmp; $'\\x61'ws ec2 $'\\164\\145rminate-instances' --instance-ids i-1", ['|git switch -c tmp [;]', '|aws ec2 terminate-instances --instance-ids i-1 []']],
+  ["d$'\\u006f'cker pu$'\\U00000073'h x", ['|docker push x []']],
+  ["echo $'a\\tb\\n\\e\\cA\\'\\\"\\?\\\\'", ['|echo a\tb\n\x1b\x01\'"?\\ []']],
+  ['$"np"m publish', ['|npm publish []']],
+  ["$'\\x00'npm publish", ['AMBIGUOUS']],
+  ["$'\\u00e9' $'\\z' $'\\c1'", ['AMBIGUOUS']],
+  ['echo "$\'x\'"', ["|echo $$'x' []"]],
+  ["$'abc", 'ERROR unterminated quote'],
   // A here-string on a `{name}` descriptor does not feed the shell's standard input (PR38-CODEX11-1).
   ["{fd}<<< 'npm publish' bash", ['AMBIGUOUS']],
   ['{fd}>/tmp/out npm publish && git status', ['|npm publish [&&]', '|git status []']],
@@ -95,9 +107,13 @@ const SHELL_PROBES = [
   ['f() { echo $(npm publish); }', []],
   ['f() { npm publish', ['|npm publish []']],
   ['f() ( npm publish )', ['|npm publish [)]']],
-  // Only a call that looks up functions runs the body; after an external-command wrapper the name is an
-  // ordinary executable (PR38-CODEX11-2).
-  ['f(){ npm publish; }; command f; builtin f; exec f', ['command|f [;]', 'builtin|f [;]', 'exec|f []']],
+  // Only a call that looks up functions in bash or zsh runs the body (PR38-CODEX11-2). `command f` and
+  // `builtin f` find no function in either shell; zsh `exec f`, `nocorrect f`, and `- f` do, so the
+  // body stands in there, whatever bash does with `exec f` (PR38-CODEX12-2).
+  ['f(){ npm publish; }; command f; builtin f', ['command|f [;]', 'builtin|f []']],
+  ["zsh -c 'f(){ npm publish; }; exec f'", ['zsh|npm publish []']],
+  ['f(){ npm publish; }; exec -c f', ['|npm publish []']],
+  ['f(){ npm publish; }; cd src && nocorrect f; - f', ['|cd src [&&]', '|npm publish [;] cd', '|npm publish [] cd']],
   ['f(){ npm publish; }; env f; nice f; nohup f; timeout 1 f; sudo f', ['env|f [;]', 'nice|f [;]', 'nohup|f [;]', 'timeout|f [;]', 'sudo|f []']],
   ['f(){ npm publish; }; echo a | xargs f; find . -exec f {} +', ['|echo a [|]', 'xargs|f <P> [;]', '|find . -exec f {} + []', 'find|f <P> []']],
   ['f(){ npm publish; }; ! f && time f; noglob f; if f; then :; fi', ['|npm publish [&&]', '|npm publish [;]', '|npm publish [;]', '|npm publish [;]', '|: [;]']],
@@ -238,6 +254,11 @@ test('the shell module normalizes segments, operators, quoting, wrappers, and co
   const segmentText = (command) => parseShellCommands(command).commands.map((entry) => entry.segment?.map((token) => token.value).join(' ') ?? null);
   assert.deepEqual(segmentText('git status && sudo -D /tmp rm x; npm test'), [null, 'sudo -D /tmp rm x', null]);
   assert.deepEqual(segmentText("bash -c 'ls; env -C / rm tests/a.py'"), [null, 'env -C / rm tests/a.py']);
+  // An ambiguous entry's `text` drops run-time text, so a word split by it is whole again (PR38-CODEX12-1).
+  const bareText = (command) => parseShellCommands(command).commands.map((entry) => entry.text ?? null);
+  assert.deepEqual(bareText('n${x}pm pu$(true)blish'), [null, 'npm publish']);
+  assert.deepEqual(bareText("cd src && sys\"$e\"temctl res`:`tart nginx"), [null, null, 'systemctl restart nginx']);
+  assert.deepEqual(bareText("$'\\x00'npm publish"), ['npm publish']);
   assert.equal(parseShellCommands('x'.repeat(SHELL_MAX_COMMAND_BYTES + 1)).error, 'command exceeds analysis limit');
 });
 
