@@ -77,18 +77,39 @@ const SHELL_PROBES = [
   ['[[ -f .env ]] && npm test', ['|npm test []']],
   ['sudo nocorrect rm -rf /', ['AMBIGUOUS']],
   ['coproc NAME (npm publish)', ['AMBIGUOUS', '|npm publish [)]']],
-  // ANSI-C quoting `$'…'` is a decoded fragment of its word, and `$"…"` a double-quoted one; an escape
+  // ANSI-C quoting `$'…'` is a decoded fragment of its word; an escape
   // not decoded for certain makes the word dynamic (PR38-CODEX12-1).
   ["n$'\\x70'm pu$'\\x62'lish", ['|npm publish []']],
   ["n$''pm pu$''blish && git status", ['|npm publish [&&]', '|git status []']],
   ["git switch -c tmp; $'\\x61'ws ec2 $'\\164\\145rminate-instances' --instance-ids i-1", ['|git switch -c tmp [;]', '|aws ec2 terminate-instances --instance-ids i-1 []']],
   ["d$'\\u006f'cker pu$'\\U00000073'h x", ['|docker push x []']],
   ["echo $'a\\tb\\n\\e\\cA\\'\\\"\\?\\\\'", ['|echo a\tb\n\x1b\x01\'"?\\ []']],
-  ['$"np"m publish', ['|npm publish []']],
+  // `$"…"` is translated by the locale at run time: dynamic, its source text kept (PR38-CODEX13-2).
+  ['$"np"m publish', ['AMBIGUOUS']],
+  ['echo $"hello"', ['|echo $hello []']],
+  // A `(` glued to word text opens a pattern group of that word, never a subshell (PR38-CODEX13-1).
+  ['n@(p)m publish', ['AMBIGUOUS']],
+  ["bash -O extglob -c 'r@(m) -rf /'", ['AMBIGUOUS']],
+  ['cd src && n(p|x)m pu+(b)lish; git status', ['|cd src [&&]', 'AMBIGUOUS', '|git status [] cd']],
+  ['rm -rf !(keep) *(.) ?(a)b', ['|rm -rf $!(keep) $*(.) $?(a)b []']],
+  ['echo @($(npm publish))', ['|npm publish [;]', '|echo $@($(npm publish)) []']],
+  ['diff =(ls) =(crontab -r)', ['|ls [;]', '|crontab -r [;]', '|diff $=(ls) $=(crontab -r) []']],
+  ['if(true); then ls; fi', ['|true [)]', '|ls [;]']],
+  ['!(false) && a&&(b)', ['|false [)]', '|a [&&]', '|b [)]']],
+  ['n@(p', 'ERROR unterminated pattern group'],
   ["$'\\x00'npm publish", ['AMBIGUOUS']],
   ["$'\\u00e9' $'\\z' $'\\c1'", ['AMBIGUOUS']],
   ['echo "$\'x\'"', ["|echo $$'x' []"]],
   ["$'abc", 'ERROR unterminated quote'],
+  // A function defined in a `( … )` or `$( … )` subshell ends with it; a `{ … }` group shares the scope
+  // (PR38-CODEX13-3).
+  ['( npm(){ npm publish; }; ); npm --version', ['|npm --version []']],
+  ['( f(){ npm publish; }; f )', ['|npm publish [)]']],
+  ['f(){ npm publish; }; ( cd src && f )', ['|cd src [&&]', '|npm publish [)] cd']],
+  ['( f(){ npm publish; } ); ( f )', ['|f [)]']],
+  ['echo $(f(){ npm publish; }); f', ['|echo $$(f(){ npm publish; }) [;]', '|f []']],
+  ['f(){ npm publish; }; echo $(f)', ['|npm publish [;]', '|echo $$(f) []']],
+  ['{ f(){ npm publish; }; }; git switch -c tmp && f', ['|git switch -c tmp [&&]', '|npm publish []']],
   // A here-string on a `{name}` descriptor does not feed the shell's standard input (PR38-CODEX11-1).
   ["{fd}<<< 'npm publish' bash", ['AMBIGUOUS']],
   ['{fd}>/tmp/out npm publish && git status', ['|npm publish [&&]', '|git status []']],
@@ -258,6 +279,10 @@ test('the shell module normalizes segments, operators, quoting, wrappers, and co
   const bareText = (command) => parseShellCommands(command).commands.map((entry) => entry.text ?? null);
   assert.deepEqual(bareText('n${x}pm pu$(true)blish'), [null, 'npm publish']);
   assert.deepEqual(bareText("cd src && sys\"$e\"temctl res`:`tart nginx"), [null, null, 'systemctl restart nginx']);
+  // A pattern group keeps its first alternative, a locale string its source text (PR38-CODEX13-1, PR38-CODEX13-2).
+  assert.deepEqual(bareText('n@(p|x)m pu+(b)lish'), ['npm publish']);
+  assert.deepEqual(bareText('cron(t)ab -r'), ['crontab -r']);
+  assert.deepEqual(bareText('$"safe" $"go"'), ['safe go']);
   assert.deepEqual(bareText("$'\\x00'npm publish"), ['npm publish']);
   assert.equal(parseShellCommands('x'.repeat(SHELL_MAX_COMMAND_BYTES + 1)).error, 'command exceeds analysis limit');
 });

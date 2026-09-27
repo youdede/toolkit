@@ -56,7 +56,7 @@ const PROBES = [
   ['python3 -c "print(\'system\', \'npm publish\')"', []],
   ['python3 -c "print(\'system\')"', []],
   ['python3 -c "print(\'x\')  # os.system(\'npm publish\')"', []],
-  ["ruby -e 'puts \"#{system(%q{npm publish})}\"'", ['#{system', '%q{npm publish}', 'npm publish', 'AMBIGUOUS']],
+  ["ruby -e 'puts \"#{system(%q{npm publish})}\"'", ['AMBIGUOUS', 'npm publish', 'AMBIGUOUS']],
   ['python3 -c "import os; getattr(os, \'system\')(\'npm publish\')"', ['system', 'npm publish', 'AMBIGUOUS']],
   ["ruby -e '`npm publish`'", ['npm publish', 'AMBIGUOUS']],
   ["perl -e 'print qx{npm publish}'", ['npm publish', 'AMBIGUOUS']],

@@ -174,6 +174,34 @@ function ansiCString(source, start) {
   return null;
 }
 
+// End index (exclusive) of the pattern group whose `(` is at `start`, balanced and past quotes and
+// escapes; -1 when unterminated.
+function patternGroupEnd(source, start) {
+  let depth = 0;
+  let quote = null;
+  for (let index = start; index < source.length; index += 1) {
+    const character = source[index];
+    if (quote) { if (character === quote) quote = null; else if (character === '\\' && quote === '"') index += 1; continue; }
+    if (character === '\\') index += 1;
+    else if (character === "'" || character === '"') quote = character;
+    else if (character === '(') depth += 1;
+    else if (character === ')' && --depth === 0) return index + 1;
+  }
+  return -1;
+}
+
+// Index in `group` (`(a|b)`) where its first top-level alternative ends.
+function patternAlternativeEnd(group) {
+  let depth = 0;
+  for (let index = 1; index < group.length - 1; index += 1) {
+    if (group[index] === '\\') index += 1;
+    else if (group[index] === '(') depth += 1;
+    else if (group[index] === ')') depth -= 1;
+    else if (group[index] === '|' && depth === 0) return index;
+  }
+  return group.length - 1;
+}
+
 // `<<` or `<<-` (not the here-string `<<<`) at `index`.
 function isHeredocStart(source, index) {
   return source[index] === '<' && source[index + 1] === '<' && source[index + 2] !== '<';
@@ -274,6 +302,9 @@ function lexShell(source, options = {}) {
   let heredocs = [];
   let array = false;
   let redirectVariable = {};
+  // Open `( … )` subshells, innermost last: a segment's `scope` is their path.
+  const subshells = [];
+  let subshellCount = 0;
   // Bash's `{name}` before an operator allocates a descriptor and stores it in name: it leaves the
   // tokens, the operator stays the plain one (`{fd}>out` is `>` to out), and `variable` keeps the name.
   const fdVariable = () => {
@@ -309,7 +340,7 @@ function lexShell(source, options = {}) {
   const pushSegment = (operator) => {
     pushToken();
     if (redirect) return false;
-    if (tokens.length || redirections.length) segments.push({ tokens, operator, redirections, substitutions });
+    if (tokens.length || redirections.length) segments.push({ tokens, operator, redirections, substitutions, scope: subshells.join('/') });
     tokens = [];
     redirections = [];
     substitutions = [];
@@ -360,8 +391,9 @@ function lexShell(source, options = {}) {
       if (ansi.value === null) unknown(source.slice(index, ansi.end)); else token.value += ansi.value;
       index = ansi.end - 1;
     } else if (character === '$' && source[index + 1] === '"') {
-      // `$"…"` is a locale-translated string: read as a double-quoted one.
-      begin(); token.quoted = true; quote = '"'; index += 1;
+      // `$"…"` is translated through the locale's message catalog at run time: the word is dynamic, and
+      // its source text is kept for a hook's text match.
+      begin(); token.quoted = true; token.dynamic = true; quote = '"'; index += 1;
     } else if (character === '$' || character === '`' || ((character === '<' || character === '>') && source[index + 1] === '(')) {
       begin();
       const end = expansion(index);
@@ -405,6 +437,23 @@ function lexShell(source, options = {}) {
     } else if (character === '(' && token && !token.dynamic && !token.quoted && !redirect && /^[A-Za-z_]\w*\+?=$/.test(token.value)) {
       token.value += '(';
       array = true;
+    } else if (character === '(' && token && !/[ \t]*\)/y.test(source.slice(index + 1, index + 64))
+      && !(SHELL_RESERVED.has(token.value) && tokens.every((word) => SHELL_PREFIX_KEYWORDS.has(word.value)))) {
+      // `(` glued to word text is a pattern group of that word: bash extglob `@(…)`, `+(…)`, `*(…)`,
+      // `?(…)`, `!(…)`, zsh `n(p|x)m` and qualifiers `*(.)`, or zsh `=(…)`, which runs its text like
+      // `<(…)`. The word is a dynamic glob; `bare` keeps its text with the group's first alternative. A
+      // reserved word where a command starts (`if(true)`, `!(cmd)`) is followed by a subshell instead.
+      const end = patternGroupEnd(source, index);
+      if (end < 0) return { error: 'unterminated pattern group' };
+      const group = source.slice(index, end);
+      if (token.value === '=') substitutions.push(group.slice(1, -1));
+      else if (!scanSubstitutions(group, substitutions)) return { error: 'unterminated expansion' };
+      const alternative = patternAlternativeEnd(group);
+      const from = token.value.length;
+      const operatorCut = /[@*+?!]$/.test(token.value) ? 1 : 0;
+      (token.cuts ??= []).push([from - operatorCut, from + 1], [from + alternative, from + group.length]);
+      token.value += group; token.dynamic = true; token.glob = true;
+      index = end - 1;
     } else if (';&|()'.includes(character)) {
       let operator = character;
       if (character === '(') {
@@ -419,6 +468,10 @@ function lexShell(source, options = {}) {
       }
       if ((character === '&' || character === '|') && source[index + 1] === character) { operator += character; index += 1; }
       if (!pushSegment(operator)) return { error: 'redirection without target' };
+      // A subshell's function definitions end with it. ponytail: a `case` pattern's `)` also closes one,
+      // so a definition after it may reach the outer scope; that only widens what a later call runs.
+      if (operator === '(') subshells.push(`p${++subshellCount}`);
+      else if (operator === ')') subshells.pop();
     } else {
       begin();
       token.value += character;
@@ -657,8 +710,10 @@ function unwrapCommand(original, depth, inherited = [], parseOptions = {}, redir
 // ponytail: only a `{ … }` body is kept aside; any other body (`f() ( … )`) is read as if it ran now.
 export function parseShellCommands(command, depth = 0, wrappers = [], options = {}) {
   if (typeof command !== 'string') return { commands: [] };
-  if (!options.functions) options = { ...options, functions: new Map() };
+  if (!options.functions) options = { ...options, functions: new Map(), scopes: { count: 0 } };
   const { functions } = options;
+  // Definitions are visible in their own scope and the subshells inside it (`a/p1` sees `a`).
+  const visible = (name, scope) => functions.get(name)?.findLast((definition) => !definition.scope || scope === definition.scope || scope.startsWith(`${definition.scope}/`));
   if (Buffer.byteLength(command, 'utf8') > SHELL_MAX_COMMAND_BYTES) return { error: 'command exceeds analysis limit', commands: [] };
   const lexed = lexShell(command, options);
   if (lexed.error) return { error: lexed.error, commands: [] };
@@ -668,14 +723,15 @@ export function parseShellCommands(command, depth = 0, wrappers = [], options = 
   let header = null;
   let body = null;
   for (const segment of lexed.segments) {
-    if (segment.operator === '()') { header = segment.tokens.at(-1).value; continue; }
+    const scope = [options.scope ?? '', segment.scope].filter(Boolean).join('/');
+    if (segment.operator === '()') { header = { name: segment.tokens.at(-1).value, scope }; continue; }
     if (!body) {
       const [first, name, open] = segment.tokens.slice(segment.tokens.findIndex((token) => token.dynamic || !SHELL_PREFIX_KEYWORDS.has(token.value)));
       // `function name` then newlines, then `{`: the header waits for its body like `name()`.
-      if (isWord(first, 'function') && name && !name.dynamic && !open && segment.operator === '\n') { header = name.value; continue; }
-      if (header && isWord(segment.tokens[0], '{')) body = { name: header, depth: 0, commands: [] };
+      if (isWord(first, 'function') && name && !name.dynamic && !open && segment.operator === '\n') { header = { name: name.value, scope }; continue; }
+      if (header && isWord(segment.tokens[0], '{')) body = { ...header, depth: 0, commands: [] };
       else if (isWord(first, 'function') && name && !name.dynamic && isWord(open, '{')) {
-        body = { name: name.value, depth: 0, commands: [] };
+        body = { name: name.value, scope, depth: 0, commands: [] };
         segment.tokens = segment.tokens.slice(segment.tokens.indexOf(open));
       }
     }
@@ -700,17 +756,23 @@ export function parseShellCommands(command, depth = 0, wrappers = [], options = 
         return name && loops.has(name[1] ?? name[2]) ? loops.get(name[1] ?? name[2]) : [token];
       });
     }
+    // A substitution runs in a subshell of its own; a nested shell or eval shares this scope (its
+    // definitions may reach later commands, which only widens what they run).
+    const local = { ...options, scope };
     for (const text of segment.substitutions) {
-      const nested = depth >= SHELL_MAX_DEPTH ? { error: 'too deep' } : parseShellCommands(text, depth + 1, wrappers, options);
+      const child = { ...options, scope: `${scope}/s${++options.scopes.count}` };
+      const nested = depth >= SHELL_MAX_DEPTH ? { error: 'too deep' } : parseShellCommands(text, depth + 1, wrappers, child);
       const inner = nested.error ? [{ ambiguous: true, wrappers: [...wrappers], segment: segment.tokens }] : nested.commands;
       if (inner.length) inner.at(-1).operator = ';';
       output.push(...inner);
     }
-    let entries = unwrapCommand(segment.tokens, depth, wrappers, options, segment.redirections)
-      .flatMap((entry) => (entry.tokens?.length && functions.has(entry.tokens[0].value) && !entry.tokens[0].dynamic
-        && entry.wrappers.slice(wrappers.length).every((wrapper) => SHELL_FUNCTION_WRAPPERS.has(wrapper))
-        ? functions.get(entry.tokens[0].value).map((call) => ({ ...call }))
-        : [entry]));
+    let entries = unwrapCommand(segment.tokens, depth, wrappers, local, segment.redirections)
+      .flatMap((entry) => {
+        const definition = entry.tokens?.length && !entry.tokens[0].dynamic && visible(entry.tokens[0].value, scope);
+        return definition && entry.wrappers.slice(wrappers.length).every((wrapper) => SHELL_FUNCTION_WRAPPERS.has(wrapper))
+          ? definition.commands.map((call) => ({ ...call }))
+          : [entry];
+      });
     if (options.redirections && segment.redirections.length) {
       if (!entries.length) entries = [{ tokens: [], wrappers: [...wrappers] }];
       for (const entry of entries) entry.redirections = [...(entry.redirections ?? []), ...segment.redirections];
@@ -726,7 +788,10 @@ export function parseShellCommands(command, depth = 0, wrappers = [], options = 
       }
     }
     output.push(...entries);
-    if (body && body.depth <= 0) { functions.set(body.name, body.commands); body = null; }
+    if (body && body.depth <= 0) {
+      functions.set(body.name, [...(functions.get(body.name) ?? []), { scope: body.scope, commands: body.commands }]);
+      body = null;
+    }
   }
   // A body left open is a syntax error, and nothing runs; its commands are kept (fail closed).
   if (body) commands.push(...body.commands);
