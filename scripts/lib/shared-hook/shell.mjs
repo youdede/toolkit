@@ -16,10 +16,28 @@ const WRAPPER_POSITIONAL = new Set(['timeout', 'chrt', 'taskset', 'flock']);
 const SHELL_DIRECTORY_CHANGERS = new Set(['cd', 'pushd', 'popd']);
 const SHELL_SENSITIVE_ASSIGNMENT = /^(?:PATH|SHELL|GIT_DIR|GIT_WORK_TREE|GIT_CONFIG[^=]*)=/;
 const SHELL_ASSIGNMENT = /^[A-Za-z_][A-Za-z0-9_]*=/;
-// Reserved words that precede a command, and those that end a compound command or start a header
-// (`for x in …`, `case … in`) whose words are not a command. `if true; then rm -rf /; fi` runs rm.
-const SHELL_PREFIX_KEYWORDS = new Set(['!', '{', 'if', 'then', 'else', 'elif', 'do', 'while', 'until']);
-const SHELL_SKIPPED_KEYWORDS = new Set(['}', 'fi', 'done', 'esac', 'for', 'select', 'case']);
+// Reserved words and precommand modifiers, from the GNU Bash Reference Manual (§3.1.2.1 Reserved Words:
+// `! case coproc do done elif else esac fi for function if in select then until while { } time [[ ]]`)
+// and zsh 5.9 zshmisc(1) (RESERVED WORDS: `do done esac then elif else fi for case if while function
+// repeat time until select coproc nocorrect foreach end ! [[ { } declare export float integer local
+// readonly typeset`; PRECOMMAND MODIFIERS: `-`, builtin, command, exec, nocorrect, noglob).
+// Prefix words precede a command (`if true; then rm -rf /; fi` runs rm; zsh `nocorrect rm`, `- rm`).
+// Skipped words end a compound command, start a header whose words are not a command (`for x in …`,
+// `case … in`, `foreach x (…)`), or open a conditional that runs nothing (`[[ -f x ]]`). `coproc`,
+// `repeat`, and `function` are handled where they are read; `time`, `exec`, `command`, `builtin`, and
+// `noglob` are wrappers; the declaration words are ordinary commands. Any other reserved word in
+// command position is ambiguous rather than taken for an executable.
+const SHELL_PREFIX_KEYWORDS = new Set(['!', '{', 'if', 'then', 'else', 'elif', 'do', 'while', 'until', 'nocorrect', '-']);
+const SHELL_SKIPPED_KEYWORDS = new Set(['}', 'fi', 'done', 'esac', 'for', 'select', 'case', 'foreach', 'end', 'in', '[[', ']]']);
+const SHELL_RESERVED = new Set([
+  '!', 'case', 'coproc', 'do', 'done', 'elif', 'else', 'esac', 'fi', 'for', 'function', 'if', 'in', 'select', 'then',
+  'until', 'while', '{', '}', 'time', '[[', ']]', 'repeat', 'nocorrect', 'foreach', 'end', 'declare', 'export',
+  'float', 'integer', 'local', 'readonly', 'typeset'
+]);
+const SHELL_KNOWN_RESERVED = new Set([...SHELL_PREFIX_KEYWORDS, ...SHELL_SKIPPED_KEYWORDS, 'coproc', 'repeat', 'function', 'time',
+  'declare', 'export', 'float', 'integer', 'local', 'readonly', 'typeset']);
+// Words that start a compound command: after `coproc NAME` they mark NAME as the coprocess name.
+const SHELL_COMPOUND_STARTS = new Set(['{', 'if', 'while', 'until', 'for', 'case', 'select', '[[', 'repeat', 'foreach']);
 const FIND_EXEC_ACTIONS = new Set(['-exec', '-execdir', '-ok', '-okdir']);
 
 // Options of each wrapper: `next` takes the following token as its value, `alone` stands alone or
@@ -34,7 +52,7 @@ const WRAPPER_OPTIONS = {
   doas: { next: /^-u$/, alone: /^-n$/, refuse: /^-[CsL]/ },
   setsid: { alone: /^(?:-[cfw]+|--(?:ctty|fork|wait))$/ },
   time: { next: /^(?:-f|-o|--format|--output)$/, alone: /^(?:-a|-p|-v|--append|--portability|--verbose|--quiet|--format=.+|--output=.+)$/ },
-  exec: { next: /^-a$/, alone: /^(?:-c|-l)$/ },
+  exec: { next: /^-a$/, alone: /^-[cl]+$/ },
   command: { alone: /^-p$/ },
   builtin: {},
   noglob: {},
@@ -363,9 +381,17 @@ function unwrapCommand(original, depth, inherited = [], parseOptions = {}, redir
   const wrappers = [...inherited];
   const ambiguous = () => [{ ambiguous: true, wrappers }];
   while (index < tokens.length && !tokens[index].dynamic) {
-    // `function name { …`: the body starts after the name.
-    if (tokens[index].value === 'function') index += 2;
-    else if (SHELL_PREFIX_KEYWORDS.has(tokens[index].value)) index += 1;
+    const word = tokens[index].value;
+    // `function name { …`: the body starts after the name. zsh `repeat N cmd` runs cmd N times.
+    if (word === 'function' || word === 'repeat') index += 2;
+    else if (word === 'coproc') {
+      // `coproc NAME { …; }` names the coprocess; `coproc cmd args` runs cmd. A lone NAME before a
+      // subshell (`coproc NAME ( … )`, split here) cannot be told apart from a command: ambiguous.
+      const [name, after] = tokens.slice(index + 1, index + 3);
+      const named = name && !name.dynamic && /^[A-Za-z_]\w*$/.test(name.value) && (!after || (!after.dynamic && SHELL_COMPOUND_STARTS.has(after.value)));
+      if (named && !after) return ambiguous();
+      index += named ? 2 : 1;
+    } else if (SHELL_PREFIX_KEYWORDS.has(word)) index += 1;
     else break;
   }
   if (index >= tokens.length || (!tokens[index].dynamic && SHELL_SKIPPED_KEYWORDS.has(tokens[index].value))) return [];
@@ -378,6 +404,13 @@ function unwrapCommand(original, depth, inherited = [], parseOptions = {}, redir
   for (let count = 0; count < SHELL_MAX_WRAPPERS && index < tokens.length; count += 1) {
     const executable = tokens[index];
     if (executable.dynamic || executable.placeholder || /[*?]|\[[^\]]*\]/.test(executable.value)) return ambiguous();
+    if (SHELL_RESERVED.has(executable.value) && !SHELL_KNOWN_RESERVED.has(executable.value)) return ambiguous();
+    // `time` times a pipeline, so `time ! cmd` runs cmd; any other prefix word after a wrapper
+    // (`sudo nocorrect cmd`) is not an executable either, and is ambiguous.
+    if (count > 0 && (SHELL_PREFIX_KEYWORDS.has(executable.value) || executable.value === 'coproc')) {
+      if (wrappers.at(-1) === 'time' && executable.value === '!') { index += 1; continue; }
+      return ambiguous();
+    }
     const name = executableName(executable);
     if (/^(?:pwsh|powershell)(?:\.exe)?$/.test(name)) return powershellCommands(tokens, index, depth, wrappers, name.replace(/\.exe$/, ''), parseOptions);
     if (SHELL_NAMES.has(name) || name === 'eval') {

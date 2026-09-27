@@ -22,10 +22,28 @@ const WRAPPER_POSITIONAL = new Set(['timeout', 'chrt', 'taskset', 'flock']);
 const SHELL_DIRECTORY_CHANGERS = new Set(['cd', 'pushd', 'popd']);
 const SHELL_SENSITIVE_ASSIGNMENT = /^(?:PATH|SHELL|GIT_DIR|GIT_WORK_TREE|GIT_CONFIG[^=]*)=/;
 const SHELL_ASSIGNMENT = /^[A-Za-z_][A-Za-z0-9_]*=/;
-// Reserved words that precede a command, and those that end a compound command or start a header
-// (`for x in …`, `case … in`) whose words are not a command. `if true; then rm -rf /; fi` runs rm.
-const SHELL_PREFIX_KEYWORDS = new Set(['!', '{', 'if', 'then', 'else', 'elif', 'do', 'while', 'until']);
-const SHELL_SKIPPED_KEYWORDS = new Set(['}', 'fi', 'done', 'esac', 'for', 'select', 'case']);
+// Reserved words and precommand modifiers, from the GNU Bash Reference Manual (§3.1.2.1 Reserved Words:
+// `! case coproc do done elif else esac fi for function if in select then until while { } time [[ ]]`)
+// and zsh 5.9 zshmisc(1) (RESERVED WORDS: `do done esac then elif else fi for case if while function
+// repeat time until select coproc nocorrect foreach end ! [[ { } declare export float integer local
+// readonly typeset`; PRECOMMAND MODIFIERS: `-`, builtin, command, exec, nocorrect, noglob).
+// Prefix words precede a command (`if true; then rm -rf /; fi` runs rm; zsh `nocorrect rm`, `- rm`).
+// Skipped words end a compound command, start a header whose words are not a command (`for x in …`,
+// `case … in`, `foreach x (…)`), or open a conditional that runs nothing (`[[ -f x ]]`). `coproc`,
+// `repeat`, and `function` are handled where they are read; `time`, `exec`, `command`, `builtin`, and
+// `noglob` are wrappers; the declaration words are ordinary commands. Any other reserved word in
+// command position is ambiguous rather than taken for an executable.
+const SHELL_PREFIX_KEYWORDS = new Set(['!', '{', 'if', 'then', 'else', 'elif', 'do', 'while', 'until', 'nocorrect', '-']);
+const SHELL_SKIPPED_KEYWORDS = new Set(['}', 'fi', 'done', 'esac', 'for', 'select', 'case', 'foreach', 'end', 'in', '[[', ']]']);
+const SHELL_RESERVED = new Set([
+  '!', 'case', 'coproc', 'do', 'done', 'elif', 'else', 'esac', 'fi', 'for', 'function', 'if', 'in', 'select', 'then',
+  'until', 'while', '{', '}', 'time', '[[', ']]', 'repeat', 'nocorrect', 'foreach', 'end', 'declare', 'export',
+  'float', 'integer', 'local', 'readonly', 'typeset'
+]);
+const SHELL_KNOWN_RESERVED = new Set([...SHELL_PREFIX_KEYWORDS, ...SHELL_SKIPPED_KEYWORDS, 'coproc', 'repeat', 'function', 'time',
+  'declare', 'export', 'float', 'integer', 'local', 'readonly', 'typeset']);
+// Words that start a compound command: after `coproc NAME` they mark NAME as the coprocess name.
+const SHELL_COMPOUND_STARTS = new Set(['{', 'if', 'while', 'until', 'for', 'case', 'select', '[[', 'repeat', 'foreach']);
 const FIND_EXEC_ACTIONS = new Set(['-exec', '-execdir', '-ok', '-okdir']);
 
 // Options of each wrapper: `next` takes the following token as its value, `alone` stands alone or
@@ -40,7 +58,7 @@ const WRAPPER_OPTIONS = {
   doas: { next: /^-u$/, alone: /^-n$/, refuse: /^-[CsL]/ },
   setsid: { alone: /^(?:-[cfw]+|--(?:ctty|fork|wait))$/ },
   time: { next: /^(?:-f|-o|--format|--output)$/, alone: /^(?:-a|-p|-v|--append|--portability|--verbose|--quiet|--format=.+|--output=.+)$/ },
-  exec: { next: /^-a$/, alone: /^(?:-c|-l)$/ },
+  exec: { next: /^-a$/, alone: /^-[cl]+$/ },
   command: { alone: /^-p$/ },
   builtin: {},
   noglob: {},
@@ -369,9 +387,17 @@ function unwrapCommand(original, depth, inherited = [], parseOptions = {}, redir
   const wrappers = [...inherited];
   const ambiguous = () => [{ ambiguous: true, wrappers }];
   while (index < tokens.length && !tokens[index].dynamic) {
-    // `function name { …`: the body starts after the name.
-    if (tokens[index].value === 'function') index += 2;
-    else if (SHELL_PREFIX_KEYWORDS.has(tokens[index].value)) index += 1;
+    const word = tokens[index].value;
+    // `function name { …`: the body starts after the name. zsh `repeat N cmd` runs cmd N times.
+    if (word === 'function' || word === 'repeat') index += 2;
+    else if (word === 'coproc') {
+      // `coproc NAME { …; }` names the coprocess; `coproc cmd args` runs cmd. A lone NAME before a
+      // subshell (`coproc NAME ( … )`, split here) cannot be told apart from a command: ambiguous.
+      const [name, after] = tokens.slice(index + 1, index + 3);
+      const named = name && !name.dynamic && /^[A-Za-z_]\w*$/.test(name.value) && (!after || (!after.dynamic && SHELL_COMPOUND_STARTS.has(after.value)));
+      if (named && !after) return ambiguous();
+      index += named ? 2 : 1;
+    } else if (SHELL_PREFIX_KEYWORDS.has(word)) index += 1;
     else break;
   }
   if (index >= tokens.length || (!tokens[index].dynamic && SHELL_SKIPPED_KEYWORDS.has(tokens[index].value))) return [];
@@ -384,6 +410,13 @@ function unwrapCommand(original, depth, inherited = [], parseOptions = {}, redir
   for (let count = 0; count < SHELL_MAX_WRAPPERS && index < tokens.length; count += 1) {
     const executable = tokens[index];
     if (executable.dynamic || executable.placeholder || /[*?]|\[[^\]]*\]/.test(executable.value)) return ambiguous();
+    if (SHELL_RESERVED.has(executable.value) && !SHELL_KNOWN_RESERVED.has(executable.value)) return ambiguous();
+    // `time` times a pipeline, so `time ! cmd` runs cmd; any other prefix word after a wrapper
+    // (`sudo nocorrect cmd`) is not an executable either, and is ambiguous.
+    if (count > 0 && (SHELL_PREFIX_KEYWORDS.has(executable.value) || executable.value === 'coproc')) {
+      if (wrappers.at(-1) === 'time' && executable.value === '!') { index += 1; continue; }
+      return ambiguous();
+    }
     const name = executableName(executable);
     if (/^(?:pwsh|powershell)(?:\.exe)?$/.test(name)) return powershellCommands(tokens, index, depth, wrappers, name.replace(/\.exe$/, ''), parseOptions);
     if (SHELL_NAMES.has(name) || name === 'eval') {
@@ -620,17 +653,26 @@ export function gitInvocation(tokens) {
 
 // Interpreter -> option that carries the inline program, as a separate word (`-c CODE`) or attached
 // (`-cCODE`, `--eval=CODE`): group 1 is the attached program. Then whether the program runs to the end
-// of the command line, and its language, which picks the literal and comment forms. cmd programs are
-// shell-like, so the whole program is read as a command too. PowerShell is unwrapped by the `shell`
-// block itself.
+// of the command line, and its language, which picks the literal and comment forms. Last, the option
+// region: options end at `--` or at the first operand (the script, `-` for standard input, a module
+// after `-m`/`-f`), and every later word belongs to that script (`node app.js --eval x` runs app.js).
+// `values` are the options whose value is the next word (`node -r mod`, `ruby -I dir`, `perl -I dir`),
+// so the value is not taken for the script; `stops` are options after which the rest belongs to a
+// module or file; `continues` are subcommands whose own options follow (`deno repl --eval`). cmd
+// programs are shell-like, so the whole program is read as a command too. PowerShell is unwrapped by
+// the `shell` block itself.
 const INLINE_PROGRAM_OPTIONS = [
-  [/^python(?:\d+(?:\.\d+)*)?(?:\.exe)?$/, /^-[bBdEhiIOPqsSuvVxR]*c(.*)$/s, false, 'python'],
-  [/^(?:node|nodejs|bun)(?:\.exe)?$/, /^(?:-(?:pe|ep|e|p)=?|--eval=|--eval$|--print=|--print$)(.*)$/s, false, 'js'],
-  [/^deno(?:\.exe)?$/, /^(?:eval$|--eval$|--eval=)(.*)$/s, true, 'js'],
-  [/^ruby(?:\.exe)?$/, /^-[acdlnpsSvwyU]*e(.*)$/s, false, 'ruby'],
-  [/^perl(?:\.exe)?$/, /^-(?:[acfnpsStTuUvwWX]|l[0-7]*|0[0-7]*|0x[0-9A-Fa-f]*)*[eE](.*)$/s, false, 'perl'],
-  [/^php(?:\.exe)?$/, /^(?:-[rBRE]|--(?:run|process-begin|process-code|process-end)(?:=|$))(.*)$/s, false, 'php'],
-  [/^cmd(?:\.exe)?$/, /^\/[cCkKrR](.*)$/s, true, 'cmd']
+  [/^python(?:\d+(?:\.\d+)*)?(?:\.exe)?$/, /^-[bBdEhiIOPqsSuvVxR]*c(.*)$/s, false, 'python',
+    { values: /^(?:-[WX]|--check-hash-based-pycs)$/, stops: /^-[bBdEhiIOPqsSuvVxR]*m/ }],
+  [/^(?:node|nodejs|bun)(?:\.exe)?$/, /^(?:-(?:pe|ep|e|p)=?|--eval=|--eval$|--print=|--print$)(.*)$/s, false, 'js',
+    { values: /^(?:-r|--require|--import|--loader|--experimental-loader|-C|--conditions|--input-type|--env-file|--title|--disable-warning|--watch-path|--inspect-port|--redirect-warnings|--report-dir|--openssl-config|--icu-data-dir)$/ }],
+  [/^deno(?:\.exe)?$/, /^(?:eval$|--eval$|--eval=)(.*)$/s, true, 'js', { continues: new Set(['repl']) }],
+  [/^ruby(?:\.exe)?$/, /^-[acdlnpsSvwyU]*e(.*)$/s, false, 'ruby',
+    { values: /^(?:-[IrCE]|--(?:encoding|external-encoding|internal-encoding|enable|disable|dump|backtrace-limit|crash-report))$/ }],
+  [/^perl(?:\.exe)?$/, /^-(?:[acfnpsStTuUvwWX]|l[0-7]*|0[0-7]*|0x[0-9A-Fa-f]*)*[eE](.*)$/s, false, 'perl', { values: /^-I$/ }],
+  [/^php(?:\.exe)?$/, /^(?:-[rBRE]|--(?:run|process-begin|process-code|process-end)(?:=|$))(.*)$/s, false, 'php',
+    { values: /^(?:-[cdzt]|--(?:php-ini|define|zend-extension|docroot))$/, stops: /^(?:-[fFS]|--(?:file|process-file|server))$/ }],
+  [/^cmd(?:\.exe)?$/, /^\/[cCkKrR](.*)$/s, true, 'cmd', { option: /^\// }]
 ];
 const INLINE_MAX_LITERALS = 256;
 const INLINE_PAIRS = { '(': ')', '[': ']', '{': '}', '<': '>' };
@@ -853,13 +895,26 @@ export function inlineProgram(entry) {
   const name = executableName(entry.tokens[0]);
   const known = INLINE_PROGRAM_OPTIONS.find(([executable]) => executable.test(name));
   if (!known) return null;
-  const [, option, toEnd, language] = known;
+  const [, option, toEnd, language, region] = known;
   const shellLike = language === 'cmd';
+  const isOption = (value) => (region.option ? region.option.test(value) : value.length > 1 && value.startsWith('-'));
   const parts = [];
   let dynamic = false;
   for (let index = 1; index < entry.tokens.length; index += 1) {
-    const match = option.exec(entry.tokens[index].value);
-    if (!match) continue;
+    const token = entry.tokens[index];
+    const match = option.exec(token.value);
+    if (!match) {
+      // A word known only at run time may be an option: keep reading rather than stop (fail closed).
+      if (token.dynamic || token.placeholder) continue;
+      if (token.value === '--') break;
+      if (!isOption(token.value)) {
+        if (region.continues?.has(token.value)) continue;
+        break;
+      }
+      if (region.stops?.test(token.value)) break;
+      if (region.values?.test(token.value)) index += 1;
+      continue;
+    }
     // A program attached to its option is part of the same word; otherwise it is the next word.
     const attached = match[1] !== '' || /=$/.test(entry.tokens[index].value);
     const first = attached ? index : index + 1;
@@ -868,7 +923,8 @@ export function inlineProgram(entry) {
     dynamic ||= words.some((token) => token.dynamic || token.placeholder);
     parts.push([...(attached ? [match[1]] : []), ...words.slice(attached ? 1 : 0).map((token) => token.value)].join(' '));
     if (toEnd) break;
-    if (attached) index = first;
+    // The program word is skipped; a word that looks like an option is read again as one.
+    if (attached || !isOption(words[0].value)) index = first;
   }
   if (!parts.length) return null;
   const text = parts.join('\n');

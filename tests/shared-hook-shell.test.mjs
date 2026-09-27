@@ -65,6 +65,18 @@ const SHELL_PROBES = [
   ['>out.txt echo hi; 2>/dev/null ls', ['|echo hi [;]', '|ls []']],
   ["0<<< 'npm publish' bash", ['bash|npm publish []']],
   ['exec >log 2>&1', []],
+  // Every bash and zsh precommand modifier and reserved word is read before the command (PR38-CODEX9-1).
+  ["zsh -c 'coproc npm publish'", ['zsh|npm publish []']],
+  ["zsh -c 'nocorrect npm publish'", ['zsh|npm publish []']],
+  ['coproc NAME { npm publish; } && git status', ['|npm publish [;]', '|git status []']],
+  ['- npm publish', ['|npm publish []']],
+  ['repeat 3 npm publish', ['|npm publish []']],
+  ['nocorrect noglob npm publish', ['noglob|npm publish []']],
+  ['time -p ! npm publish', ['time|npm publish []']],
+  ['exec -cl npm publish', ['exec|npm publish []']],
+  ['[[ -f .env ]] && npm test', ['|npm test []']],
+  ['sudo nocorrect rm -rf /', ['AMBIGUOUS']],
+  ['coproc NAME (npm publish)', ['AMBIGUOUS', '|npm publish [)]']],
   // Between double quotes bash keeps a backslash before other characters (PR38-CODEX6-2).
   ['echo "C:\\Users" "a\\$b"', ['|echo C:\\Users a$b []']],
   ['diff <(sort a) <(sort b)', ['|sort a [;]', '|sort b [;]', '|diff $<(sort a) $<(sort b) []']],

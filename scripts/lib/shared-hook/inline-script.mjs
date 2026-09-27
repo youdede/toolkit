@@ -7,17 +7,26 @@ import { executableName, parseShellCommands } from './shell.mjs';
 
 // Interpreter -> option that carries the inline program, as a separate word (`-c CODE`) or attached
 // (`-cCODE`, `--eval=CODE`): group 1 is the attached program. Then whether the program runs to the end
-// of the command line, and its language, which picks the literal and comment forms. cmd programs are
-// shell-like, so the whole program is read as a command too. PowerShell is unwrapped by the `shell`
-// block itself.
+// of the command line, and its language, which picks the literal and comment forms. Last, the option
+// region: options end at `--` or at the first operand (the script, `-` for standard input, a module
+// after `-m`/`-f`), and every later word belongs to that script (`node app.js --eval x` runs app.js).
+// `values` are the options whose value is the next word (`node -r mod`, `ruby -I dir`, `perl -I dir`),
+// so the value is not taken for the script; `stops` are options after which the rest belongs to a
+// module or file; `continues` are subcommands whose own options follow (`deno repl --eval`). cmd
+// programs are shell-like, so the whole program is read as a command too. PowerShell is unwrapped by
+// the `shell` block itself.
 const INLINE_PROGRAM_OPTIONS = [
-  [/^python(?:\d+(?:\.\d+)*)?(?:\.exe)?$/, /^-[bBdEhiIOPqsSuvVxR]*c(.*)$/s, false, 'python'],
-  [/^(?:node|nodejs|bun)(?:\.exe)?$/, /^(?:-(?:pe|ep|e|p)=?|--eval=|--eval$|--print=|--print$)(.*)$/s, false, 'js'],
-  [/^deno(?:\.exe)?$/, /^(?:eval$|--eval$|--eval=)(.*)$/s, true, 'js'],
-  [/^ruby(?:\.exe)?$/, /^-[acdlnpsSvwyU]*e(.*)$/s, false, 'ruby'],
-  [/^perl(?:\.exe)?$/, /^-(?:[acfnpsStTuUvwWX]|l[0-7]*|0[0-7]*|0x[0-9A-Fa-f]*)*[eE](.*)$/s, false, 'perl'],
-  [/^php(?:\.exe)?$/, /^(?:-[rBRE]|--(?:run|process-begin|process-code|process-end)(?:=|$))(.*)$/s, false, 'php'],
-  [/^cmd(?:\.exe)?$/, /^\/[cCkKrR](.*)$/s, true, 'cmd']
+  [/^python(?:\d+(?:\.\d+)*)?(?:\.exe)?$/, /^-[bBdEhiIOPqsSuvVxR]*c(.*)$/s, false, 'python',
+    { values: /^(?:-[WX]|--check-hash-based-pycs)$/, stops: /^-[bBdEhiIOPqsSuvVxR]*m/ }],
+  [/^(?:node|nodejs|bun)(?:\.exe)?$/, /^(?:-(?:pe|ep|e|p)=?|--eval=|--eval$|--print=|--print$)(.*)$/s, false, 'js',
+    { values: /^(?:-r|--require|--import|--loader|--experimental-loader|-C|--conditions|--input-type|--env-file|--title|--disable-warning|--watch-path|--inspect-port|--redirect-warnings|--report-dir|--openssl-config|--icu-data-dir)$/ }],
+  [/^deno(?:\.exe)?$/, /^(?:eval$|--eval$|--eval=)(.*)$/s, true, 'js', { continues: new Set(['repl']) }],
+  [/^ruby(?:\.exe)?$/, /^-[acdlnpsSvwyU]*e(.*)$/s, false, 'ruby',
+    { values: /^(?:-[IrCE]|--(?:encoding|external-encoding|internal-encoding|enable|disable|dump|backtrace-limit|crash-report))$/ }],
+  [/^perl(?:\.exe)?$/, /^-(?:[acfnpsStTuUvwWX]|l[0-7]*|0[0-7]*|0x[0-9A-Fa-f]*)*[eE](.*)$/s, false, 'perl', { values: /^-I$/ }],
+  [/^php(?:\.exe)?$/, /^(?:-[rBRE]|--(?:run|process-begin|process-code|process-end)(?:=|$))(.*)$/s, false, 'php',
+    { values: /^(?:-[cdzt]|--(?:php-ini|define|zend-extension|docroot))$/, stops: /^(?:-[fFS]|--(?:file|process-file|server))$/ }],
+  [/^cmd(?:\.exe)?$/, /^\/[cCkKrR](.*)$/s, true, 'cmd', { option: /^\// }]
 ];
 const INLINE_MAX_LITERALS = 256;
 const INLINE_PAIRS = { '(': ')', '[': ']', '{': '}', '<': '>' };
@@ -240,13 +249,26 @@ export function inlineProgram(entry) {
   const name = executableName(entry.tokens[0]);
   const known = INLINE_PROGRAM_OPTIONS.find(([executable]) => executable.test(name));
   if (!known) return null;
-  const [, option, toEnd, language] = known;
+  const [, option, toEnd, language, region] = known;
   const shellLike = language === 'cmd';
+  const isOption = (value) => (region.option ? region.option.test(value) : value.length > 1 && value.startsWith('-'));
   const parts = [];
   let dynamic = false;
   for (let index = 1; index < entry.tokens.length; index += 1) {
-    const match = option.exec(entry.tokens[index].value);
-    if (!match) continue;
+    const token = entry.tokens[index];
+    const match = option.exec(token.value);
+    if (!match) {
+      // A word known only at run time may be an option: keep reading rather than stop (fail closed).
+      if (token.dynamic || token.placeholder) continue;
+      if (token.value === '--') break;
+      if (!isOption(token.value)) {
+        if (region.continues?.has(token.value)) continue;
+        break;
+      }
+      if (region.stops?.test(token.value)) break;
+      if (region.values?.test(token.value)) index += 1;
+      continue;
+    }
     // A program attached to its option is part of the same word; otherwise it is the next word.
     const attached = match[1] !== '' || /=$/.test(entry.tokens[index].value);
     const first = attached ? index : index + 1;
@@ -255,7 +277,8 @@ export function inlineProgram(entry) {
     dynamic ||= words.some((token) => token.dynamic || token.placeholder);
     parts.push([...(attached ? [match[1]] : []), ...words.slice(attached ? 1 : 0).map((token) => token.value)].join(' '));
     if (toEnd) break;
-    if (attached) index = first;
+    // The program word is skipped; a word that looks like an option is read again as one.
+    if (attached || !isOption(words[0].value)) index = first;
   }
   if (!parts.length) return null;
   const text = parts.join('\n');
