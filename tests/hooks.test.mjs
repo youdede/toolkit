@@ -68,7 +68,7 @@ test('commit guard scans staged blobs and ignores unrelated Bash calls', (contex
   assert.equal(evaluateCommit({ cwd: directory, tool_input: { command: "bash -c '$SCRIPT'" } }).ruleId, 'commit-command-uninspectable');
   assert.equal(evaluateCommit({ cwd: directory, tool_input: { command: 'env -C ../other git commit -m x' } }).ruleId, 'commit-command-uninspectable');
   assert.equal(evaluateCommit({ cwd: directory, tool_input: { command: 'env GIT_DIR=$DIR git commit -m x' } }).ruleId, 'commit-command-uninspectable');
-  assert.equal(evaluateCommit({ cwd: directory, tool_input: { command: 'g{it,noop} commit -m x' } }).ruleId, 'commit-command-uninspectable');
+  assert.equal(evaluateCommit({ cwd: directory, tool_input: { command: '{git,x}{,{1..100}} commit -m x' } }).ruleId, 'commit-command-uninspectable');
 
   mkdirSync(path.join(directory, '.youdede'));
   writeFileSync(path.join(directory, '.youdede', 'commit-guard.json'), JSON.stringify({ ignoreSecretRules: ['github-token'] }));
@@ -154,7 +154,7 @@ test('shell command guard blocks catastrophic commands and preserves safe contro
   ];
   for (const [command, rule] of wrapped) assert.equal(evaluateShell({ tool_input: { command } }).ruleId, rule, command);
   assert.equal(evaluateShell({ tool_input: { command: "bash -c '$SCRIPT'" } }).ruleId, 'shell-command-uninspectable');
-  for (const command of ['env -C / rm -rf /', 'env --argv0 echo rm -rf /', 'PATH=/tmp rm -rf /', 'g{it,noop} push --force origin main']) {
+  for (const command of ['env -C / rm -rf /', 'env --argv0 echo rm -rf /', 'PATH=/tmp rm -rf /', '{git,x}{,{1..100}} push --force origin main']) {
     assert.equal(evaluateShell({ tool_input: { command } }).ruleId, 'shell-command-uninspectable', command);
   }
 

@@ -130,7 +130,7 @@ test('migration safety guard recognizes only explicit destructive command forms'
     "'dropdb' production"
   ]) assert.notEqual(evaluateMigration({ tool_input: { command } }, defaultContext).exitCode, 0, command);
   assert.equal(evaluateMigration({ tool_input: { command: "bash -c '$SCRIPT'" } }, defaultContext).ruleId, 'migration-command-uninspectable');
-  for (const command of ['env -C / dropdb production', 'PATH=/tmp dropdb production', 'drop{db,nope} production']) {
+  for (const command of ['env -C / dropdb production', 'PATH=/tmp dropdb production', '{dropdb,x}{,{1..100}} production']) {
     assert.equal(evaluateMigration({ tool_input: { command } }, defaultContext).ruleId, 'migration-command-uninspectable', command);
   }
 });
@@ -230,7 +230,7 @@ test('dependency change guard blocks direct lockfile edits and narrow unsafe fla
   }
   const dynamic = { cwd: directory, tool_input: { command: "bash -c '$SCRIPT'" } };
   assert.equal(evaluateDependency(dynamic, collectDependency(dynamic)).ruleId, 'dependency-command-uninspectable');
-  for (const command of ['env -C ../other git commit -m x', 'env GIT_WORK_TREE=$TREE git commit -m x', 'n{pm,ope} install --legacy-peer-deps']) {
+  for (const command of ['env -C ../other git commit -m x', 'env GIT_WORK_TREE=$TREE git commit -m x', '{npm,x}{,{1..100}} install --legacy-peer-deps']) {
     const input = { cwd: directory, tool_input: { command } };
     assert.equal(evaluateDependency(input, collectDependency(input)).ruleId, 'dependency-command-uninspectable', command);
   }
@@ -355,7 +355,7 @@ test('debug artifact guard normalizes wrappers, quoting, and static shell layers
     assert.equal(evaluateDebug({ tool_input: { command } }, { findings: [finding] }).ruleId, 'focused-test', command);
   }
   assert.equal(evaluateDebug({ tool_input: { command: "bash -c '$SCRIPT'" } }, {}).ruleId, 'debug-command-uninspectable');
-  for (const command of ['env -C ../other git commit -m x', 'env GIT_DIR=$DIR git commit -m x', 'g{it,noop} commit -m x']) {
+  for (const command of ['env -C ../other git commit -m x', 'env GIT_DIR=$DIR git commit -m x', '{git,x}{,{1..100}} commit -m x']) {
     assert.equal(evaluateDebug({ tool_input: { command } }, {}).ruleId, 'debug-command-uninspectable', command);
   }
 });

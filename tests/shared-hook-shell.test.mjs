@@ -114,7 +114,18 @@ const SHELL_PROBES = [
   ["{fd}<<< 'npm publish' bash", ['AMBIGUOUS']],
   ['{fd}>/tmp/out npm publish && git status', ['|npm publish [&&]', '|git status []']],
   ['cd src; {fd}>&- git push --force origin main', ['|cd src [;]', '|git push --force origin main [] cd']],
-  ['echo {a,b} {x..y}', ['|echo ${a,b} ${x..y} []']],
+  ['echo {a,b} {x..y}', ['|echo a b x y []']],
+  // Brace expansion is static, as in bash: each result is its own word (PR38-CODEX14-1).
+  ['n{p..p}m pub{l..l}ish', ['|npm publish []']],
+  ['git switch -c tmp && a{w..w}s e{c..c}2 ter{m..m}inate-instances --instance-ids i-1', ['|git switch -c tmp [&&]', '|aws ec2 terminate-instances --instance-ids i-1 []']],
+  ['cd src; {npm,x} publish', ['|cd src [;]', '|npm x publish [] cd']],
+  ['echo n{p,x}m a{b,{c,d}e}f {a,b}{1,2}', ['|echo npm nxm abf acef adef a1 a2 b1 b2 []']],
+  ['echo {1..10..3} {05..1..2} {a..e..2} {-3..-1} x{,y}', ['|echo 1 4 7 10 05 03 01 a c e -3 -2 -1 x xy []']],
+  ['echo {a} {} {x..} {1..a} stash@{0} {a,b}*', ['|echo {a} {} {x..} {1..a} stash@{0} a* b* []']],
+  ['echo "{a,b}" {"a",b} {a",",b} \\{a,b\\} ${x:-{a,b}}', ['|echo {a,b} a b a, b {a,b} $${x:-{a,b}} []']],
+  ['x={a,b} git status; echo x={a,b}', ['|git status [;]', '|echo x=a x=b []']],
+  ['echo {1..100} {1..3..0} n{p..p}m$x', ['|echo ${1..100} ${1..3..0} $n{p..p}m$x []']],
+  ['{ npm publish; }', ['|npm publish [;]']],
   // A function definition runs nothing; each later call stands for its body (PR38-CODEX10-2).
   ['function deploy { npm publish; }', []],
   ['deploy() { npm publish; }', []],
@@ -185,8 +196,8 @@ const SHELL_PROBES = [
   ['x=1', []],
   ['x=1; echo $x', ['|echo $$x []']],
   ['SHA=$(git rev-parse HEAD) && git switch main', ['|git rev-parse HEAD [;]', '|git switch main []']],
-  ['g{it,noop} push', ['AMBIGUOUS']],
-  ['echo {a..c} stash@{0} {}', ['|echo ${a..c} stash@{0} {} []']],
+  ['g{it,noop} push', ['|git gnoop push []']],
+  ['echo {a..c} stash@{0} {}', ['|echo a b c stash@{0} {} []']],
   ['echo "unterminated', 'ERROR unterminated quote'],
   ['echo $(date', 'ERROR unterminated expansion'],
   ['echo \\', 'ERROR trailing escape'],
@@ -282,6 +293,9 @@ test('the shell module normalizes segments, operators, quoting, wrappers, and co
   // A pattern group keeps its first alternative, a locale string its source text (PR38-CODEX13-1, PR38-CODEX13-2).
   assert.deepEqual(bareText('n@(p|x)m pu+(b)lish'), ['npm publish']);
   assert.deepEqual(bareText('cron(t)ab -r'), ['crontab -r']);
+  // A brace word not expanded for certain keeps its first expansion (PR38-CODEX14-1).
+  assert.deepEqual(bareText('n{p..p}m$x pub{l..l}ish'), ['npm publish']);
+  assert.deepEqual(bareText('{npm,x}{1..100} publish'), ['npm1 publish']);
   assert.deepEqual(bareText('$"safe" $"go"'), ['safe go']);
   assert.deepEqual(bareText("$'\\x00'npm publish"), ['npm publish']);
   assert.equal(parseShellCommands('x'.repeat(SHELL_MAX_COMMAND_BYTES + 1)).error, 'command exceeds analysis limit');
@@ -313,7 +327,9 @@ test('the shell module marks unquoted globs and, on request, separates redirecti
   assert.deepEqual(named('npm {fd}>>log publish {in}<file'), ['npm publish {fd:>>log in:<file}']);
   assert.deepEqual(named('rm -rf / {fd}<>x {a}>&- {b}<&0 {c}>&2'), ['rm -rf / {fd:<>x a:>&- b:<&0 c:>&2}']);
   assert.deepEqual(named("{fd}<<'EOF' git push --force\nx\nEOF"), ['git push --force {fd:<<EOF}']);
-  assert.deepEqual(named('echo {fd} >out "{fd}">q {a,b}>r'), ['echo {fd} {fd} {a,b} {:>out :>q :>r}']);
+  assert.deepEqual(named('echo {fd} >out "{fd}">q {a,b}>r'), ['echo {fd} {fd} a b {:>out :>q :>r}']);
+  // A redirection target with several brace words stays one dynamic word; with one it is that word.
+  assert.deepEqual(named('ls >{a,b} 2>{c..c}'), ['ls {:>{a,b} :2>c}']);
   assert.deepEqual(named('{ npm publish; }'), ['npm publish {}']);
 });
 

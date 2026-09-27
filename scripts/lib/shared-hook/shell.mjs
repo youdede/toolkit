@@ -166,6 +166,74 @@ function ansiCString(source, start) {
   return null;
 }
 
+// Bash brace expansion of a word given as [character, unquoted] pairs: comma lists `{a,b}` (nested
+// too), sequences `{x..y}` and `{x..y..step}` of integers (zero-padded when an end has a leading zero)
+// or single letters. Only unquoted `{`, `,`, `}` count, and an invalid form (`{a}`, `{}`, `{x..}`)
+// stays literal. Returns { words, certain }: `words` stops after SHELL_MAX_BRACE_WORDS + 1 results,
+// and `certain` is false when a form is not known for certain (a zero step, a negative padded end).
+const SHELL_MAX_BRACE_WORDS = 64;
+// ponytail: a longer word is not expanded (each group rescans the word); it stays dynamic, whole.
+const SHELL_MAX_BRACE_LENGTH = 1024;
+function braceExpand(chars, out = { words: [], certain: true }) {
+  for (let open = 0; open < chars.length; open += 1) {
+    if (chars[open][0] !== '{' || !chars[open][1]) continue;
+    let depth = 0;
+    let close = -1;
+    const commas = [];
+    for (let index = open; index < chars.length && close < 0; index += 1) {
+      const [character, unquoted] = chars[index];
+      if (!unquoted) continue;
+      if (character === '{') depth += 1;
+      else if (character === '}' && --depth === 0) close = index;
+      else if (character === ',' && depth === 1) commas.push(index);
+    }
+    if (close < 0) continue;
+    let parts = null;
+    if (commas.length) {
+      const bounds = [open, ...commas, close];
+      parts = bounds.slice(1).map((end, position) => chars.slice(bounds[position] + 1, end));
+    } else {
+      const sequence = braceSequence(chars.slice(open + 1, close));
+      if (sequence) {
+        out.certain &&= sequence.certain;
+        parts = sequence.values.map((value) => value.split('').map((character) => [character, false]));
+      }
+    }
+    if (!parts) continue;
+    for (const part of parts) {
+      if (out.words.length > SHELL_MAX_BRACE_WORDS) break;
+      braceExpand([...chars.slice(0, open), ...part, ...chars.slice(close + 1)], out);
+    }
+    return out;
+  }
+  out.words.push(chars.map(([character]) => character).join(''));
+  return out;
+}
+
+// The values of a brace sequence body (`1..3`, `a..e..2`, `01..10`), or null when it is not one.
+function braceSequence(chars) {
+  if (!chars.every(([, unquoted]) => unquoted)) return null;
+  const match = /^(?:(-?\d+)\.\.(-?\d+)|([A-Za-z])\.\.([A-Za-z]))(?:\.\.(-?\d+))?$/.exec(chars.map(([character]) => character).join(''));
+  if (!match) return null;
+  const step = Math.abs(Number(match[5] ?? 1)) || 1;
+  let certain = match[5] === undefined || Number(match[5]) !== 0;
+  const numeric = match[1] !== undefined;
+  const from = numeric ? Number(match[1]) : match[3].charCodeAt(0);
+  const to = numeric ? Number(match[2]) : match[4].charCodeAt(0);
+  if (!Number.isSafeInteger(from) || !Number.isSafeInteger(to)) return { values: [match[1] ?? match[3]], certain: false };
+  const padded = numeric && [match[1], match[2]].some((end) => /^-?0\d/.test(end));
+  if (padded && [match[1], match[2]].some((end) => end.startsWith('-'))) certain = false;
+  const width = padded ? Math.max(match[1].length, match[2].length) : 0;
+  const values = [];
+  const direction = from <= to ? 1 : -1;
+  for (let value = from; direction > 0 ? value <= to : value >= to; value += direction * step) {
+    const sign = value < 0 ? '-' : '';
+    values.push(numeric ? sign + String(Math.abs(value)).padStart(width - sign.length, '0') : String.fromCharCode(value));
+    if (values.length > SHELL_MAX_BRACE_WORDS) break;
+  }
+  return { values, certain };
+}
+
 // End index (exclusive) of the pattern group whose `(` is at `start`, balanced and past quotes and
 // escapes; -1 when unterminated.
 function patternGroupEnd(source, start) {
@@ -319,14 +387,30 @@ function lexShell(source, options = {}) {
   };
   const pushToken = () => {
     if (!token) return;
-    // Only `{a,b}` and `{x..y}` expand; `{}` and `stash@{0}` are literal.
-    if (token.braces && /\{[^{}]*(?:,|\.\.)[^{}]*\}/.test(token.value)) token.dynamic = true;
-    delete token.braces;
-    delete token.quoted;
+    // Brace expansion, as bash does it before any other expansion: a static word becomes its words
+    // (`n{p,x}m` is `npm nxm`). A word also known only at run time, a redirection target with several
+    // words, more than SHELL_MAX_BRACE_WORDS words, or a form not known for certain stays one dynamic
+    // word whose `bare` text is the first expansion (a word over SHELL_MAX_BRACE_LENGTH keeps its text).
+    // An assignment (`x={a,b}`) is not expanded.
+    const unquoted = new Set(token.unquoted);
+    let chars = token.value.split('').map((character, position) => [character, unquoted.has(position)]);
+    for (const [from, to] of [...(token.cuts ?? [])].reverse()) chars.splice(from, to - from);
+    const assignment = !redirect && SHELL_ASSIGNMENT.test(token.value) && tokens.every((word) => SHELL_ASSIGNMENT.test(word.value));
+    const braces = !token.braces || assignment ? null
+      : chars.length > SHELL_MAX_BRACE_LENGTH ? { words: [chars.map(([character]) => character).join('')], certain: false }
+        : braceExpand(chars);
+    const words = braces?.words ?? [chars.map(([character]) => character).join('')];
+    const { glob } = token;
+    const split = braces && !token.dynamic && braces.certain && words.length <= SHELL_MAX_BRACE_WORDS && (!redirect || words.length === 1);
+    let pushed = [token];
+    if (split) pushed = words.map((value) => ({ value, dynamic: false, ...(glob ? { glob } : {}) }));
+    else if (braces && (braces.words.length > 1 || !braces.certain || token.dynamic)) {
+      token.dynamic = true;
+      token.bare = words[0];
+    } else if (token.cuts) token.bare = words[0];
     // `bare` is a dynamic token's value with its run-time text removed (`n${x}pm` is `npm`).
-    if (token.cuts) token.bare = token.cuts.reduceRight((text, [from, to]) => text.slice(0, from) + text.slice(to), token.value);
-    delete token.cuts;
-    if (redirect) { redirections.push({ operator: redirect, target: token, ...redirectVariable }); redirect = null; } else tokens.push(token);
+    for (const word of pushed) { delete word.braces; delete word.quoted; delete word.cuts; delete word.unquoted; }
+    if (redirect) { redirections.push({ operator: redirect, target: pushed[0], ...redirectVariable }); redirect = null; } else tokens.push(...pushed);
     token = null;
   };
   const pushSegment = (operator) => {
@@ -466,8 +550,9 @@ function lexShell(source, options = {}) {
       else if (operator === ')') subshells.pop();
     } else {
       begin();
+      (token.unquoted ??= []).push(token.value.length);
       token.value += character;
-      if (character === '{' || character === '}') token.braces = true;
+      if (character === '{') token.braces = true;
       if (character === '*' || character === '?' || character === '[') token.glob = true;
     }
   }

@@ -1169,7 +1169,9 @@ export function removePack(query, options = {}) {
   if (drift.length > 0 && !options.force) {
     throw new Error(`${pack.id}: installed members have drift; use --force after review (${drift.map((item) => `${item.status}:${item.path}`).join(', ')})`);
   }
-  const mutationFiles = new Set(removable.map(({ configRoot }) => statePath(configRoot)));
+  // Every file a member removal may rewrite: state, the generated notice, payloads, hook settings,
+  // and MCP configuration, so a failed pack removal restores each one byte for byte.
+  const mutationFiles = new Set(removable.flatMap(({ configRoot }) => [statePath(configRoot), noticePath(configRoot)]));
   for (const { configRoot, installed } of removable) {
     for (const file of installed.files || []) {
       const absolute = path.join(configRoot, file.path);
@@ -1180,6 +1182,12 @@ export function removePack(query, options = {}) {
     if ((installed.hooks || []).length) {
       const kind = installed.kind || String(installed.artifactId || '').split('/')[0] || null;
       mutationFiles.add(path.resolve(configRoot, installed.settingsPath || path.relative(configRoot, defaultSettingsPath(target, configRoot, scope, kind))));
+    }
+    if ((installed.mcpServers || []).length) {
+      let adapter = null;
+      try { adapter = resolveArtifact(installed.artifactId, root).adapters?.[target]?.data; } catch { adapter = null; }
+      const mcpFile = installed.mcpConfigPath ? path.resolve(configRoot, installed.mcpConfigPath) : mcpConfigPath(configRoot, adapter);
+      if (mcpFile && within(configRoot, mcpFile)) mutationFiles.add(mcpFile);
     }
   }
   const snapshots = snapshotFiles(mutationFiles);
