@@ -203,6 +203,31 @@ async function fetchAllowlisted(profile, input) {
   return boundedText(Buffer.concat(chunks.map((chunk) => Buffer.from(chunk))));
 }
 
+// A diff never shows a path isSensitiveWorkspacePath classifies sensitive, in either mode. The changed
+// paths are listed first with the same options and each sensitive one is excluded by its exact name;
+// renames are off, so both sides of a rename are separate paths. Every file header of the result is
+// checked again, and the call is refused when a header cannot be read or names a sensitive path.
+const DIFF_MAX_EXCLUDED_PATHS = 1000;
+function gitDiff(workspace, input) {
+  const base = ['-c', 'core.quotePath=false', 'diff', '--no-ext-diff', '--no-textconv', '--no-renames'];
+  if (input.staged === true) base.push('--cached');
+  const scope = input.path === undefined ? [] : [safeRelative(input.path)];
+  const changed = runGit(workspace, [...base, '--name-only', '-z', '--', ...scope]).split('\0').filter(Boolean);
+  const sensitive = changed.filter((file) => isSensitiveWorkspacePath(file));
+  if (sensitive.length > DIFF_MAX_EXCLUDED_PATHS) throw new Error('the diff touches too many protected credential files to exclude safely');
+  const text = runGit(workspace, [...base, '--', ...scope, ...sensitive.map((file) => `:(exclude,literal)${file}`)]);
+  for (const line of text.split('\n')) {
+    if (!line.startsWith('diff --git ')) continue;
+    // Without renames both sides name one path: `a/P b/P`.
+    const sides = line.slice('diff --git '.length);
+    const file = sides.length % 2 === 1 ? sides.slice(2, 2 + (sides.length - 5) / 2) : null;
+    if (file === null || sides !== `a/${file} b/${file}` || isSensitiveWorkspacePath(file)) {
+      throw new Error('the diff would include a protected credential file');
+    }
+  }
+  return text;
+}
+
 async function callTool(profile, workspace, name, input) {
   if (!MODES[profile.mode].has(name) || !input || Array.isArray(input) || typeof input !== 'object') throw new Error('tool call is outside the profile contract');
   if (name === 'read_file') {
@@ -226,15 +251,7 @@ async function callTool(profile, workspace, name, input) {
   }
   if (name === 'git_status' || name === 'git_diff') refuseUntrustedFilters(workspace);
   if (name === 'git_status') return runGit(workspace, ['status', '--short', '--branch', '--untracked-files=normal']);
-  if (name === 'git_diff') {
-    const args = ['diff', '--no-ext-diff', '--no-textconv'];
-    if (input.staged === true) args.push('--cached');
-    args.push('--');
-    if (input.path !== undefined) args.push(safeRelative(input.path));
-    const CREDENTIAL_PATHSPECS = ['**/.env', '**/.env.*', '**/id_rsa', '**/id_dsa', '**/id_ecdsa', '**/id_ed25519', '**/.ssh/**', '**/.aws/**', '**/.azure/**', '**/.kube/**', '**/.config/gcloud/**', '**/.git-credentials', '**/.netrc', '**/.npmrc', '**/.pypirc', '**/.docker/config.json', '**/.config/gh/hosts.yml'];
-    args.push(...CREDENTIAL_PATHSPECS.map((pattern) => `:(exclude,glob)${pattern}`));
-    return runGit(workspace, args);
-  }
+  if (name === 'git_diff') return gitDiff(workspace, input);
   if (name === 'git_log') {
     const limit = input.limit === undefined ? 20 : input.limit;
     if (!Number.isInteger(limit) || limit < 1 || limit > 100) throw new Error('limit must be an integer from 1 through 100');

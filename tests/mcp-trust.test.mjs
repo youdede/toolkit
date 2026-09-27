@@ -268,6 +268,40 @@ test('repository MCP diff omits tracked credential files', (context) => {
   assert.doesNotMatch(text, /never-return-this/);
 });
 
+test('repository MCP diff never returns a sensitive path, including SSH key variants and renames', (context) => {
+  const workspace = mkdtempSync(path.join(os.tmpdir(), 'youdede-mcp-diff-sensitive-'));
+  context.after(() => rmSync(workspace, { recursive: true, force: true }));
+  const git = (args) => assert.equal(spawnSync('git', args, { cwd: workspace, env: cleanGitEnvironment() }).status, 0, args.join(' '));
+  git(['init', '-q']);
+  git(['config', 'user.email', 'tests@youdede.invalid']);
+  git(['config', 'user.name', 'youdede tests']);
+  writeFileSync(path.join(workspace, 'id_ed25519_sk'), 'PRIVATE-KEY-OLD\n');
+  writeFileSync(path.join(workspace, 'notes.txt'), 'plain notes\n');
+  writeFileSync(path.join(workspace, 'app.txt'), 'one\n');
+  git(['add', '.']);
+  git(['commit', '-qm', 'baseline']);
+  writeFileSync(path.join(workspace, 'id_ed25519_sk'), 'PRIVATE-KEY-NEVER-RETURN\n');
+  writeFileSync(path.join(workspace, 'app.txt'), 'two\n');
+  // A rename toward a sensitive name, with new content, staged.
+  git(['mv', 'notes.txt', '.NPMRC']);
+  writeFileSync(path.join(workspace, '.NPMRC'), '//registry/:_authToken=RENAMED-TOKEN-NEVER-RETURN\n');
+  git(['add', '.NPMRC']);
+  writeFileSync(path.join(workspace, 'profile.json'), readFileSync('artifacts/mcp-servers/development/agent-tooling/repository-git-readonly/server.json'));
+  const call = (argumentsValue) => {
+    const request = { jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name: 'git_diff', arguments: argumentsValue } };
+    const run = spawnSync(process.execPath, [path.resolve('scripts/runtime/readonly-mcp-server.mjs'), '--profile', 'profile.json'], { cwd: workspace, input: `${JSON.stringify(request)}\n`, encoding: 'utf8' });
+    return JSON.parse(run.stdout.trim()).result;
+  };
+  const worktree = call({}).content[0].text;
+  assert.match(worktree, /\+two/);
+  const staged = call({ staged: true }).content[0].text;
+  assert.match(staged, /-plain notes/);
+  for (const argumentsValue of [{}, { staged: true }, { path: 'id_ed25519_sk' }, { staged: true, path: '.NPMRC' }]) {
+    const text = call(argumentsValue).content[0].text;
+    assert.doesNotMatch(text, /PRIVATE-KEY|NEVER-RETURN|id_ed25519_sk|\.NPMRC/, JSON.stringify(argumentsValue));
+  }
+});
+
 
 test('MCP runtime negotiates a supported protocol version and reports parse errors', (context) => {
   const workspace = mkdtempSync(path.join(os.tmpdir(), 'youdede-mcp-protocol-'));
