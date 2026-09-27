@@ -277,28 +277,424 @@ function bracketSet(body) {
   return set.length ? [...new Set(set)] : null;
 }
 
-// Whether an unquoted glob argument may decide what `entry` does, for a hook that protects its
-// executable: `words` is how many leading words that are not options decide the operation (`npm
-// publish` 1, `aws ec2 terminate-instances` 2, Infinity when every word may). A glob among them, among
-// the options before them, or an option glob anywhere (`--pu*`) may spell the protected verb or option,
-// so the hook treats the command as uninspectable; `npm test -- src/*.test.js` is decided by `test`.
-// A word that may match anything (`wild`, a capped brace word) counts as a glob. `--` ends options,
-// not the deciding words: after it every word is an operand and counts (`npm -- pub[l]ish`). A word
-// right after an option without `=` may be its value and is not counted (fail closed), unless the
-// option is in `flags`, the CLI's boolean flags (`npm --silent test`).
-export function globDecides(entry, words, flags = []) {
-  let counted = 0;
-  let value = false;
-  let operands = false;
-  for (const token of entry.tokens?.slice(1) ?? []) {
-    if (token.value === '--' && !operands) { operands = true; value = false; continue; }
-    const option = !operands && token.value.startsWith('-');
-    if ((globWord(token) || token.wild) && (option || counted < words)) return true;
-    if (option) { value = !token.value.includes('=') && !flags.includes(token.value); continue; }
-    if (value) { value = false; continue; }
-    counted += 1;
+// The words a hook's policy compares command words against, read from its own code: every string
+// literal in the given functions' source and every element of the given sets or arrays. The regular
+// expressions it matches words with (regex literals in those functions, and given RegExp constants)
+// are kept in `patterns`, as { source, flags }, so a glob can be tested against the language of each.
+export function policyVocabulary(...sources) {
+  const words = new Set();
+  words.patterns = [];
+  const regexLiteral = /(?:^|[=(,:!&|?{};[>]|\breturn)\s*\/((?![*/])(?:\\.|\[(?:\\.|[^\]\\\n])*\]|[^/\\\n[])+)\/([dgimsuy]*)/g;
+  for (const source of sources) {
+    if (typeof source === 'function') {
+      const text = source.toString();
+      for (const match of text.matchAll(/'((?:[^'\\\n]|\\.)*)'|"((?:[^"\\\n]|\\.)*)"/g)) words.add(match[1] ?? match[2]);
+      for (const match of text.matchAll(regexLiteral)) words.patterns.push({ source: match[1], flags: match[2] });
+    } else if (source instanceof RegExp) {
+      words.patterns.push({ source: source.source, flags: source.flags });
+    } else if (typeof source?.[Symbol.iterator] === 'function' && typeof source !== 'string') {
+      for (const word of source) if (typeof word === 'string') words.add(word);
+    }
   }
-  return false;
+  words.delete('');
+  return words;
+}
+
+// Automata for the glob and regular-expression intersection test. An NFA is { start, accept, edges }
+// where each state's edges are { set } (one character of a set), { epsilon }, or the zero-width
+// { assert: 'start' | 'end' } of `^` and `$`. A set is { negated, ranges: [[low, high], …] } of code
+// points. `approximate` is set when a construct was widened (lookaround, backreference, `\b`, a
+// negated glob group, a long repetition): the language only grows, so an empty product is still
+// empty, and a witness found through it is checked against the real pattern.
+const ANY_SET = { negated: true, ranges: [] };
+function inSet(set, code, ignoreCase) {
+  const test = (value) => set.ranges.some(([low, high]) => value >= low && value <= high);
+  let found = test(code);
+  if (!found && ignoreCase) {
+    const character = String.fromCodePoint(code);
+    found = test(character.toLowerCase().codePointAt(0)) || test(character.toUpperCase().codePointAt(0));
+  }
+  return set.negated ? !found : found;
+}
+function automaton() {
+  const edges = [];
+  const state = () => { edges.push([]); return edges.length - 1; };
+  const fragment = (start, accept) => ({ start, accept });
+  const link = (from, edge) => edges[from].push(edge);
+  const single = (edge) => { const start = state(); const accept = state(); link(start, { ...edge, to: accept }); return fragment(start, accept); };
+  const epsilon = () => single({ epsilon: true });
+  const sequence = (parts) => {
+    if (!parts.length) return epsilon();
+    for (let index = 1; index < parts.length; index += 1) link(parts[index - 1].accept, { epsilon: true, to: parts[index].start });
+    return fragment(parts[0].start, parts.at(-1).accept);
+  };
+  const choice = (parts) => {
+    const start = state(); const accept = state();
+    for (const part of parts) { link(start, { epsilon: true, to: part.start }); link(part.accept, { epsilon: true, to: accept }); }
+    return fragment(start, accept);
+  };
+  const star = (part) => {
+    const start = state(); const accept = state();
+    link(start, { epsilon: true, to: part.start }); link(start, { epsilon: true, to: accept });
+    link(part.accept, { epsilon: true, to: part.start }); link(part.accept, { epsilon: true, to: accept });
+    return fragment(start, accept);
+  };
+  const optional = (part) => choice([part, epsilon()]);
+  return { edges, single, epsilon, sequence, choice, star, optional, approximate: false };
+}
+
+// A character class body at `index` (after `[`) in regex or glob syntax: { set, index after `]` }, null
+// without a closing `]`, or { invalid: true } for an unknown glob `[:class:]`.
+const CLASS_RANGES = { alpha: [[65, 90], [97, 122]], digit: [[48, 57]], alnum: [[48, 57], [65, 90], [97, 122]], upper: [[65, 90]],
+  lower: [[97, 122]], space: [[9, 13], [32, 32]], punct: [[33, 47], [58, 64], [91, 96], [123, 126]], xdigit: [[48, 57], [65, 70], [97, 102]],
+  word: [[48, 57], [65, 90], [95, 95], [97, 122]], blank: [[9, 9], [32, 32]], cntrl: [[0, 31], [127, 127]], print: [[32, 126]], graph: [[33, 126]] };
+const ESCAPE_RANGES = { d: [[48, 57]], w: CLASS_RANGES.word, s: [[9, 13], [32, 32], [160, 160]] };
+function readClass(text, index, glob) {
+  const set = { negated: false, ranges: [] };
+  if (text[index] === (glob ? '!' : '^') || (glob && text[index] === '^')) { set.negated = true; index += 1; }
+  let first = true;
+  while (index < text.length && (text[index] !== ']' || first)) {
+    first = false;
+    const named = glob ? /^\[:(\w+):\]/.exec(text.slice(index)) : null;
+    if (named) {
+      if (!CLASS_RANGES[named[1]]) return { invalid: true };
+      set.ranges.push(...CLASS_RANGES[named[1]]);
+      index += named[0].length;
+      continue;
+    }
+    let low;
+    if (!glob && text[index] === '\\') {
+      const escaped = text[index + 1];
+      if (ESCAPE_RANGES[escaped]) { set.ranges.push(...ESCAPE_RANGES[escaped]); index += 2; continue; }
+      if ('DWS'.includes(escaped)) { set.ranges.push([0, 0x10ffff]); index += 2; continue; }
+      low = ({ n: 10, t: 9, r: 13, f: 12, v: 11 })[escaped] ?? escaped.codePointAt(0);
+      index += 2;
+    } else { low = text.codePointAt(index); index += 1; }
+    if (text[index] === '-' && index + 1 < text.length && text[index + 1] !== ']') {
+      let high;
+      if (!glob && text[index + 1] === '\\') { high = text.codePointAt(index + 2); index += 3; } else { high = text.codePointAt(index + 1); index += 2; }
+      set.ranges.push([low, high]);
+    } else set.ranges.push([low, low]);
+  }
+  return index < text.length ? { set, index: index + 1 } : null;
+}
+
+// NFA of a JavaScript regular expression source, matched anywhere in a word as `test` does: an
+// unanchored side is free, and `^`/`$` are assertions. Null for syntax it cannot read.
+function regexAutomaton(source) {
+  const nfa = automaton();
+  let index = 0;
+  const atom = () => {
+    const character = source[index];
+    if (character === '(') {
+      index += 1;
+      let lookaround = false;
+      if (source[index] === '?') {
+        const head = /^\?(?:<[A-Za-z_]\w*>|:|=|!|<=|<!)/.exec(source.slice(index));
+        if (!head) throw new Error('group');
+        lookaround = /^\?(?:=|!|<=|<!)$/.test(head[0]);
+        index += head[0].length;
+      }
+      const inner = alternation();
+      if (source[index] !== ')') throw new Error('group');
+      index += 1;
+      if (lookaround) { nfa.approximate = true; return nfa.epsilon(); }
+      return inner;
+    }
+    if (character === '[') {
+      const read = readClass(source, index + 1, false);
+      if (!read) throw new Error('class');
+      index = read.index;
+      return nfa.single({ set: read.set });
+    }
+    if (character === '\\') {
+      const escaped = source[index + 1];
+      index += 2;
+      if (ESCAPE_RANGES[escaped]) return nfa.single({ set: { negated: false, ranges: ESCAPE_RANGES[escaped] } });
+      if ('DWS'.includes(escaped)) return nfa.single({ set: { negated: true, ranges: ESCAPE_RANGES[escaped.toLowerCase()] } });
+      if (escaped === 'b' || escaped === 'B') { nfa.approximate = true; return nfa.epsilon(); }
+      if (/[1-9]/.test(escaped) || escaped === 'k') { nfa.approximate = true; return nfa.star(nfa.single({ set: ANY_SET })); }
+      if (escaped === 'x') { const code = parseInt(source.slice(index, index + 2), 16); index += 2; return nfa.single({ set: { negated: false, ranges: [[code, code]] } }); }
+      if (escaped === 'u') { const code = parseInt(source.slice(index, index + 4), 16); index += 4; return nfa.single({ set: { negated: false, ranges: [[code, code]] } }); }
+      const code = ({ n: 10, t: 9, r: 13, f: 12, v: 11, 0: 0 })[escaped] ?? escaped.codePointAt(0);
+      return nfa.single({ set: { negated: false, ranges: [[code, code]] } });
+    }
+    index += 1;
+    if (character === '.') return nfa.single({ set: ANY_SET });
+    if (character === '^') return nfa.single({ assert: 'start' });
+    if (character === '$') return nfa.single({ assert: 'end' });
+    const code = character.codePointAt(0);
+    return nfa.single({ set: { negated: false, ranges: [[code, code]] } });
+  };
+  const repeat = (build, low, high) => {
+    const parts = [];
+    for (let count = 0; count < low; count += 1) parts.push(build());
+    if (high === Infinity) parts.push(nfa.star(build()));
+    else for (let count = low; count < high; count += 1) parts.push(nfa.optional(build()));
+    return nfa.sequence(parts);
+  };
+  const sequence = () => {
+    const parts = [];
+    while (index < source.length && source[index] !== '|' && source[index] !== ')') {
+      const from = index;
+      let part = atom();
+      const to = index;
+      const quantifier = /^(?:([?*+])|\{(\d+)(?:(,)(\d*))?\})\??/.exec(source.slice(index));
+      if (quantifier) {
+        index += quantifier[0].length;
+        let low = 1; let high = 1;
+        if (quantifier[1]) [low, high] = { '?': [0, 1], '*': [0, Infinity], '+': [1, Infinity] }[quantifier[1]];
+        else { low = Number(quantifier[2]); high = quantifier[3] ? (quantifier[4] ? Number(quantifier[4]) : Infinity) : low; }
+        // ponytail: more than 16 copies are widened to `*`; the witness check catches the difference.
+        if (high !== Infinity && high > 16) { high = Infinity; nfa.approximate = true; }
+        if (low > 16) { low = 16; nfa.approximate = true; }
+        const rebuild = () => { const saved = index; index = from; const copy = atom(); index = saved; return copy; };
+        index = to;
+        part = low === 1 && high === 1 ? part : repeat(rebuild, low, high);
+        index += quantifier[0].length;
+      }
+      parts.push(part);
+    }
+    return nfa.sequence(parts);
+  };
+  const alternation = () => {
+    const branches = [sequence()];
+    while (source[index] === '|') { index += 1; branches.push(sequence()); }
+    return branches.length === 1 ? branches[0] : nfa.choice(branches);
+  };
+  try {
+    const body = alternation();
+    if (index !== source.length) return null;
+    const free = () => nfa.star(nfa.single({ set: ANY_SET }));
+    const whole = nfa.sequence([free(), body, free()]);
+    return { edges: nfa.edges, start: whole.start, accept: whole.accept, approximate: nfa.approximate };
+  } catch { return null; }
+}
+
+// NFA of an unquoted glob word (bash semantics, `extglob` groups, zsh `(a|b)`). A negated group
+// `!(…)` is widened to `*`. Null for a form it cannot read.
+function globAutomaton(pattern) {
+  const nfa = automaton();
+  const build = (text) => {
+    const parts = [];
+    for (let index = 0; index < text.length; index += 1) {
+      const character = text[index];
+      const group = character === '(' || ('@*+?!'.includes(character) && text[index + 1] === '(');
+      if (group) {
+        const start = character === '(' ? index : index + 1;
+        const end = patternGroupEnd(text, start);
+        if (end < 0) return null;
+        const alternatives = text.slice(start + 1, end - 1).split('|').map(build);
+        if (alternatives.includes(null)) return null;
+        const body = nfa.choice(alternatives);
+        if (character === '!') { nfa.approximate = true; parts.push(nfa.star(nfa.single({ set: ANY_SET }))); }
+        else parts.push(character === '*' ? nfa.star(body) : character === '+' ? nfa.sequence([body, nfa.star(nfa.choice(text.slice(start + 1, end - 1).split('|').map(build)))])
+          : character === '?' ? nfa.optional(body) : body);
+        index = end - 1;
+      } else if (character === '*') parts.push(nfa.star(nfa.single({ set: ANY_SET })));
+      else if (character === '?') parts.push(nfa.single({ set: ANY_SET }));
+      else if (character === '[' && readClass(text, index + 1, true)) {
+        const read = readClass(text, index + 1, true);
+        if (read.invalid) return null;
+        parts.push(nfa.single({ set: read.set }));
+        index = read.index - 1;
+      } else {
+        const code = text.codePointAt(index);
+        parts.push(nfa.single({ set: { negated: false, ranges: [[code, code]] } }));
+      }
+    }
+    return nfa.sequence(parts);
+  };
+  const whole = build(pattern);
+  return whole && { edges: nfa.edges, start: whole.start, accept: whole.accept, approximate: nfa.approximate };
+}
+
+// A character both sets hold, or null: the range ends of either set and printable ASCII are tried.
+function commonCharacter(left, right, ignoreCase) {
+  const candidates = new Set([...left.ranges, ...right.ranges].flat());
+  for (let code = 32; code < 127; code += 1) candidates.add(code);
+  for (const code of candidates) if (inSet(left, code, false) && inSet(right, code, ignoreCase)) return code;
+  return null;
+}
+
+// A string both a glob word and a regular expression match, found by a breadth-first search of the
+// product of their NFAs: undefined when there is none, null when it cannot be decided (a pattern it
+// cannot read, or a witness of a widened automaton that the real patterns reject).
+// ponytail: the product is searched up to 20000 states; past that the answer is null (fail closed).
+function globRegexWitness(glob, pattern) {
+  const left = globAutomaton(glob);
+  const right = regexAutomaton(pattern.source);
+  if (!left || !right) return null;
+  const ignoreCase = pattern.flags.includes('i');
+  const key = (a, b, consumed, ended) => `${a},${b},${consumed ? 1 : 0},${ended ? 1 : 0}`;
+  const start = { a: left.start, b: right.start, consumed: false, ended: false, word: '' };
+  const seen = new Set([key(start.a, start.b, false, false)]);
+  const queue = [start];
+  for (let head = 0; head < queue.length; head += 1) {
+    if (queue.length > 20000) return null;
+    const node = queue[head];
+    if (node.a === left.accept && node.b === right.accept) {
+      const matches = globRegex(glob)?.test(node.word) && new RegExp(pattern.source, pattern.flags.replace(/[gy]/g, '')).test(node.word);
+      if (matches) return node.word;
+      if (left.approximate || right.approximate) return null;
+    }
+    const push = (next) => {
+      const id = key(next.a, next.b, next.consumed, next.ended);
+      if (!seen.has(id)) { seen.add(id); queue.push(next); }
+    };
+    for (const edge of left.edges[node.a]) if (edge.epsilon) push({ ...node, a: edge.to });
+    for (const edge of right.edges[node.b]) {
+      if (edge.epsilon) push({ ...node, b: edge.to });
+      else if (edge.assert === 'start' && !node.consumed) push({ ...node, b: edge.to });
+      else if (edge.assert === 'end') push({ ...node, b: edge.to, ended: true });
+    }
+    if (node.ended) continue;
+    for (const one of left.edges[node.a]) {
+      if (!one.set) continue;
+      for (const two of right.edges[node.b]) {
+        if (!two.set) continue;
+        const code = commonCharacter(one.set, two.set, ignoreCase);
+        if (code !== null) push({ a: one.to, b: two.to, consumed: true, ended: false, word: node.word + String.fromCodePoint(code) });
+      }
+    }
+  }
+  return undefined;
+}
+
+// Every string a finite glob word matches (bracket sets and `@()`, `?()`, zsh `(a|b)` groups only):
+// undefined for a glob that can match unboundedly many (`*`, `?`, a negated set, `*()`, `+()`, `!()`),
+// null for one with more than `limit` strings.
+function globExpansions(pattern, limit) {
+  const expand = (text) => {
+    let words = [''];
+    for (let index = 0; index < text.length; index += 1) {
+      const character = text[index];
+      let options;
+      const group = character === '(' || ('@?'.includes(character) && text[index + 1] === '(');
+      if (group) {
+        const start = character === '(' ? index : index + 1;
+        const end = patternGroupEnd(text, start);
+        if (end < 0) return null;
+        const alternatives = text.slice(start + 1, end - 1).split('|').map(expand);
+        if (alternatives.includes(undefined)) return undefined;
+        if (alternatives.includes(null)) return null;
+        options = [...(character === '?' ? [''] : []), ...alternatives.flat()];
+        index = end - 1;
+      } else if ('*?'.includes(character) || ('+!'.includes(character) && text[index + 1] === '(')) return undefined;
+      else if (character === '[' && readClass(text, index + 1, true)) {
+        const read = readClass(text, index + 1, true);
+        if (read.invalid) return null;
+        if (read.set.negated) return undefined;
+        options = [];
+        for (const [low, high] of read.set.ranges) {
+          if (high - low > limit) return null;
+          for (let code = low; code <= high; code += 1) options.push(String.fromCodePoint(code));
+        }
+        index = read.index - 1;
+      } else options = [character];
+      words = [...new Set(words.flatMap((word) => options.map((option) => word + option)))];
+      if (words.length > limit) return null;
+    }
+    return words;
+  };
+  return expand(pattern);
+}
+
+// A regular expression for an unquoted glob word with bash semantics: `*`, `?`, bracket expressions
+// with ranges, `!`/`^` negation, and `[:class:]`, and the pattern groups `@()`, `?()`, `*()`, `+()`,
+// `!()` and zsh `(a|b)`. Null for a form it does not read (it then fails closed).
+const GLOB_CLASSES = { alpha: 'A-Za-z', digit: '0-9', alnum: 'A-Za-z0-9', upper: 'A-Z', lower: 'a-z', space: '\\s', punct: '!-\\/:-@\\[-`{-~', xdigit: '0-9A-Fa-f', word: '\\w' };
+function globRegex(pattern) {
+  const escape = (character) => character.replace(/[\\^$.*+?()[\]{}|/-]/g, '\\$&');
+  const convert = (text) => {
+    let out = '';
+    for (let index = 0; index < text.length; index += 1) {
+      const character = text[index];
+      const group = character === '(' || ('@*+?!'.includes(character) && text[index + 1] === '(');
+      if (group) {
+        const start = character === '(' ? index : index + 1;
+        const end = patternGroupEnd(text, start);
+        if (end < 0) return null;
+        const alternatives = text.slice(start + 1, end - 1).split('|').map(convert);
+        if (alternatives.includes(null)) return null;
+        const body = `(?:${alternatives.join('|')})`;
+        out += character === '*' ? `${body}*` : character === '+' ? `${body}+` : character === '?' ? `${body}?`
+          : character === '!' ? `(?:(?!${body}$).*)` : body;
+        index = end - 1;
+      } else if (character === '*') out += '.*';
+      else if (character === '?') out += '.';
+      else if (character === '[') {
+        // The closing `]`: a `]` right after `[` or `[!` is literal, and `[:class:]` holds its own.
+        let close = index + 1 + (/[!^]/.test(text[index + 1] ?? '') ? 1 : 0);
+        if (text[close] === ']') close += 1;
+        while (close < text.length && text[close] !== ']') close = text.startsWith('[:', close) ? text.indexOf(':]', close + 2) + 2 || text.length : close + 1;
+        if (close >= text.length) { out += '\\['; continue; }
+        let body = text.slice(index + 1, close);
+        const negated = /^[!^]/.test(body);
+        if (negated) body = body.slice(1);
+        let set = '';
+        for (let cursor = 0; cursor < body.length; cursor += 1) {
+          const named = /^\[:(\w+):\]/.exec(body.slice(cursor));
+          if (named) {
+            if (!GLOB_CLASSES[named[1]]) return null;
+            set += GLOB_CLASSES[named[1]];
+            cursor += named[0].length - 1;
+          } else if (body[cursor + 1] === '-' && cursor + 2 < body.length) {
+            set += `${escape(body[cursor])}-${escape(body[cursor + 2])}`;
+            cursor += 2;
+          } else set += escape(body[cursor]);
+        }
+        out += `[${negated ? '^' : ''}${set}]`;
+        index = close;
+      } else out += escape(character);
+    }
+    return out;
+  };
+  const source = convert(pattern);
+  try { return source === null ? null : new RegExp(`^${source}$`); } catch { return null; }
+}
+
+// The command `entry` with each unquoted glob argument replaced, in turn, by the words it can expand
+// to that the policy may act on, and by itself as a static word (a glob that matches no file stays as
+// written): a hook runs its policy on each and blocks when one is blocked. A finite glob (`de[l]ete-vpc`,
+// `n@(p|x)m`) yields exactly its strings. Any other glob yields every vocabulary word it matches and,
+// for each policy pattern it can share a string with, one such string (`globRegexWitness`), so
+// `delete-v*` meets `/^delete(?:-[a-z0-9-]+)?$/` in `delete-v`. The executable is protected when the
+// vocabulary names it or a policy pattern matches it; for a protected executable an option glob, a
+// capped brace word, a glob it cannot read or decide, or more than `limit` combinations fails closed.
+export function globVariants(entry, vocabulary, limit = 64) {
+  const tokens = entry.tokens ?? [];
+  const patterns = vocabulary.patterns ?? [];
+  const name = tokens.length ? executableName(tokens[0]) : '';
+  const protectedExecutable = tokens.length > 0 && (vocabulary.has(name)
+    || patterns.some((pattern) => { try { return new RegExp(pattern.source, pattern.flags.replace(/[gy]/g, '')).test(name); } catch { return true; } }));
+  const substitute = (value) => ({ value, dynamic: false, substituted: true });
+  let combinations = [[]];
+  for (const [position, token] of tokens.entries()) {
+    let options = [token];
+    if (position > 0 && (globWord(token) || token.capped)) {
+      if (!protectedExecutable) return [entry];
+      if (token.capped || token.value.startsWith('-')) return null;
+      const literal = { value: token.value, dynamic: false };
+      const finite = globExpansions(token.value, limit);
+      if (finite === null) return null;
+      if (finite) options = [literal, ...finite.filter((word) => word !== token.value).map(substitute)];
+      else {
+        const regex = globRegex(token.value);
+        if (!regex) return null;
+        const words = new Set([...vocabulary].filter((word) => regex.test(word)));
+        for (const pattern of patterns) {
+          const witness = globRegexWitness(token.value, pattern);
+          if (witness === null) return null;
+          if (witness !== undefined) words.add(witness);
+        }
+        options = [literal, ...[...words].map(substitute)];
+      }
+    }
+    combinations = combinations.flatMap((prefix) => options.map((option) => [...prefix, option]));
+    if (combinations.length > limit) return null;
+  }
+  return combinations.map((variant) => ({ ...entry, tokens: variant }));
 }
 
 // An unquoted glob word: `*`, `?`, a bracket expression, or a pattern group. A static word that only
@@ -505,7 +901,7 @@ function lexShell(source, options = {}) {
       token.bare = words.join(' ');
       // Past a cap, or not known for certain, the word may be a result the text does not list: it may
       // match anything, like a `*` glob (`{` + 65 commas + `npm}` hides `npm` past the bound).
-      if (!braces.certain || braces.words.length > SHELL_MAX_BRACE_WORDS) token.wild = true;
+      if (!braces.certain || braces.words.length > SHELL_MAX_BRACE_WORDS) { token.wild = true; token.capped = true; }
     } else if (token.cuts) token.bare = words[0];
     // `bare` is a dynamic token's value with its run-time text removed (`n${x}pm` is `npm`); a glob word's
     // lists what it may match, and `wild` marks one that may match anything.

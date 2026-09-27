@@ -5,7 +5,7 @@ import { mkdtempSync, readdirSync, readFileSync, rmSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
-import { SHELL_MAX_COMMAND_BYTES, gitInvocation, globDecides, parseShellCommands } from '../scripts/lib/shared-hook/shell.mjs';
+import { SHELL_MAX_COMMAND_BYTES, gitInvocation, globVariants, parseShellCommands, policyVocabulary } from '../scripts/lib/shared-hook/shell.mjs';
 import { analyzeCommitContent, commitReadsWorkingTree, commitSkipsHooks, parseGitAliases, readGitAliases } from '../scripts/lib/shared-hook/commit-content.mjs';
 import { generateSharedHooks, loadSharedModules, renderSharedBlocks } from '../scripts/generate-shared-hooks.mjs';
 
@@ -313,26 +313,39 @@ test('the shell module normalizes segments, operators, quoting, wrappers, and co
   assert.deepEqual(relevance(`${'nice '.repeat(20)}npm publish`), [true]);
   assert.deepEqual(relevance(`bash -c "bash -c 'bash -c \\"bash -c true\\"'"`), [true]);
   assert.deepEqual(relevance('echo $(echo $(echo $(echo $(npm publish))))'), [true, false, false, false, false]);
-  // `globDecides`: a glob among the deciding words or options of a protected command (PR38-CODEX15-2).
-  const decides = (command, words, flags) => globDecides(parseShellCommands(command).commands[0], words, flags);
-  assert.equal(decides('npm pub[l]ish', 1), true);
-  assert.equal(decides('npm --prefix dir pub*', 1), true);
-  assert.equal(decides('npm test -- src/*.test.js', 1), false);
-  assert.equal(decides('npm publish *.tgz', 1), false);
-  assert.equal(decides('aws ec2 ter[m]inate-instances', 2), true);
-  assert.equal(decides('rm -r[f] /', 0), true);
-  assert.equal(decides('rm -f dist/*.js', 0), false);
-  assert.equal(decides('crontab x*', Infinity), true);
-  // `--` ends options, not the deciding words; boolean flags take no value (PR38-CODEX16-2, PR38-CODEX16-3).
-  assert.equal(decides('npm -- pub[l]ish', 1), true);
-  assert.equal(decides('npm -- -*', 1), true);
-  assert.equal(decides('npm test -- src/*.test.js', 1), false);
-  assert.equal(decides('npm --silent test src/*.test.js', 1, ['--silent']), false);
-  assert.equal(decides('npm --silent test src/*.test.js', 1), true);
-  assert.equal(decides('aws --no-cli-pager s3 ls logs/*.json', 2, ['--no-cli-pager']), false);
-  assert.equal(decides('aws --profile p ec2 ter[m]inate-instances', 2, ['--no-cli-pager']), true);
-  // A capped brace word may be any result it did not list (PR38-CODEX16-1).
-  assert.equal(decides(`npm {${','.repeat(65)}publish}`, 1), true);
+  // `globVariants`: a finite glob yields exactly its strings; any other glob yields the policy words it
+  // matches and one common string with each policy pattern it can share one with (NFA product). An
+  // option glob, a capped word, an unreadable or undecidable glob, or more than 64 combinations fails
+  // closed for an executable the policy names or matches (PR38-CODEX17-1, PR38-CODEX17-3).
+  const vocabulary = policyVocabulary(function policy(entry) {
+    if (/^(?:delete(?:-[a-z0-9-]+)?|terminate-instances)$/.test(entry) || /\.timer$/.test(entry)) return 1;
+    return ['npm', 'aws', 'terraform', 'docker'].includes(entry) && ['publish', 'test', 'state', 'rm', 'buildx', 'imagetools', 'create', '--dry-run'];
+  }, new Set(['--registry']), /^\/(?:create|run)$/i);
+  assert.deepEqual([...vocabulary].sort(), ['--dry-run', '--registry', 'aws', 'buildx', 'create', 'docker', 'imagetools', 'npm', 'publish', 'rm', 'state', 'terraform', 'test']);
+  assert.deepEqual(vocabulary.patterns.map((pattern) => pattern.source), ['^(?:delete(?:-[a-z0-9-]+)?|terminate-instances)$', '\\.timer$', '^\\/(?:create|run)$']);
+  const variants = (command) => globVariants(parseShellCommands(command).commands[0], vocabulary)?.map((entry) => entry.tokens.map((token) => token.value).join(' ')) ?? null;
+  // Finite globs expand exactly, with no vocabulary: `de[l]ete-vpc` is judged as `delete-vpc`.
+  assert.deepEqual(variants('npm pub[l]ish'), ['npm pub[l]ish', 'npm publish']);
+  assert.deepEqual(variants('aws ec2 de[l]ete-vpc'), ['aws ec2 de[l]ete-vpc', 'aws ec2 delete-vpc']);
+  assert.deepEqual(variants('aws ec2 delete-[v]pc'), ['aws ec2 delete-[v]pc', 'aws ec2 delete-vpc']);
+  assert.deepEqual(variants('terraform state r[m] x'), ['terraform state r[m] x', 'terraform state rm x']);
+  assert.deepEqual(variants('npm @(x|p)ublish ?(a)b'), ['npm @(x|p)ublish ?(a)b', 'npm @(x|p)ublish b', 'npm @(x|p)ublish ab', 'npm xublish ?(a)b', 'npm xublish b', 'npm xublish ab', 'npm publish ?(a)b', 'npm publish b', 'npm publish ab']);
+  // Infinite globs meet the policy's patterns: `delete-v*` shares `delete-v` with the delete pattern.
+  assert.deepEqual(variants('aws ec2 delete-v*'), ['aws ec2 delete-v*', 'aws ec2 delete-v', 'aws ec2 delete-v.timer']);
+  assert.ok(variants('aws ec2 ter*').includes('aws ec2 terminate-instances'));
+  assert.ok(variants('aws x /cr*').some((line) => /\/create$/i.test(line)));
+  assert.ok(variants('aws x backup.ti*').includes('aws x backup.timer'));
+  assert.deepEqual(variants('npm -- pub*'), ['npm -- pub*', 'npm -- publish', 'npm -- pub.timer']);
+  assert.deepEqual(variants('npm [!x]ublish'), ['npm [!x]ublish', 'npm publish']);
+  // A glob that meets no policy word or pattern yields only itself, whatever precedes it.
+  assert.deepEqual(variants('npm --no-progress test src/*.test.js'), ['npm --no-progress test src/*.test.js']);
+  assert.deepEqual(variants('aws s3 cp dist/*.js s3://b/'), ['aws s3 cp dist/*.js s3://b/']);
+  assert.deepEqual(variants('ls -r[f] *'), ['ls -r[f] *']);
+  assert.equal(variants('npm -r[f]'), null);
+  assert.equal(variants(`npm {${','.repeat(65)}publish}`), null);
+  assert.equal(variants(`npm ${'[ab]'.repeat(7)}`), null);
+  assert.equal(variants('npm [[:bogus:]]x'), null);
+  assert.equal(globVariants(parseShellCommands('npm pub[l]ish').commands[0], vocabulary)[1].tokens[1].substituted, true);
   // A locale string keeps its source text (PR38-CODEX13-1, PR38-CODEX13-2).
   // Every alternative of a glob's bracket sets and groups; `+(…)` repeats, so it may match anything (PR38-CODEX15-2).
   assert.deepEqual(bareText('n@(p|x)m pu+(b)lish'), ['npm nxm pulish']);
