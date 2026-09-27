@@ -40,6 +40,11 @@ test('commit policy rejects temporary, malformed, oversized, and ambiguous heade
   assert.equal(oversized.valid, false);
   assert.ok(oversized.violations.some(({ rule }) => rule === 'COMMIT_HEADER_LENGTH'));
 
+  const squashed = evaluateCommitMessage(`fix(cli): ${'a'.repeat(MAX_COMMIT_HEADER_CHARACTERS - 10)} (#1234)`);
+  assert.equal(squashed.violations.some(({ rule }) => rule === 'COMMIT_HEADER_LENGTH'), false);
+  const oversizedSquash = evaluateCommitMessage(`fix(cli): ${'a'.repeat(MAX_COMMIT_HEADER_CHARACTERS)} (#1234)`);
+  assert.ok(oversizedSquash.violations.some(({ rule }) => rule === 'COMMIT_HEADER_LENGTH'));
+
   const breaking = evaluateCommitMessage('feat!: remove compatibility alias');
   assert.equal(breaking.valid, false);
   assert.ok(breaking.violations.some(({ rule }) => rule === 'COMMIT_BREAKING_FOOTER'));

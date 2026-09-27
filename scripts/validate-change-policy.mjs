@@ -33,7 +33,8 @@ export function evaluateCommitMessage(input) {
 
   const lines = message.split('\n');
   const header = lines[0];
-  if (header.length > MAX_COMMIT_HEADER_CHARACTERS) {
+  // A squash merge on GitHub appends " (#123)" to the reviewed header; the limit applies to the header itself.
+  if (header.replace(/ \(#\d+\)$/u, '').length > MAX_COMMIT_HEADER_CHARACTERS) {
     violations.push(violation('COMMIT_HEADER_LENGTH', `commit header exceeds ${MAX_COMMIT_HEADER_CHARACTERS} characters`));
   }
   if (/^(?:fixup!|squash!|WIP(?:\b|:))/u.test(header)) {
