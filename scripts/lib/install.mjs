@@ -4,6 +4,7 @@ import {
   constants,
   existsSync,
   fchmodSync,
+  fstatSync,
   lstatSync,
   mkdirSync,
   openSync,
@@ -26,6 +27,8 @@ const MAX_DISPLACED_FILE_BYTES = 1024 * 1024;
 const STATE_LOCK_TIMEOUT_MS = 30_000;
 const STATE_LOCK_STALE_MS = 120_000;
 const STATE_LOCK_POLL_MS = 25;
+const STATE_LOCK_TOKEN_BYTES = 16;
+const STATE_LOCK_MAX_BYTES = 256;
 const integrityCatalogs = new Map();
 
 function sha256(data) {
@@ -70,7 +73,10 @@ function assertNoSymlinkWithin(root, target, label) {
   let current = root;
   for (const segment of ['', ...relative.split(path.sep).filter(Boolean)]) {
     if (segment) current = path.join(current, segment);
-    if (existsSync(current) && lstatSync(current).isSymbolicLink()) {
+    // lstat, not existsSync: a dangling link is still a link.
+    let link = false;
+    try { link = lstatSync(current).isSymbolicLink(); } catch {}
+    if (link) {
       throw new Error(`${label} traverses symbolic link '${path.relative(root, current) || '.'}'`);
     }
   }
@@ -138,41 +144,100 @@ function renderNotice(state, root) {
   return Buffer.from(`${lines.join('\n')}\n`);
 }
 
+export function removeStateLockIfOwned(file, ownerToken) {
+  try {
+    if (readFileSync(file, 'utf8') !== ownerToken) return false;
+    rmSync(file);
+    return true;
+  } catch (error) {
+    if (error.code === 'ENOENT') return false;
+    throw error;
+  }
+}
+
 // ponytail: one coarse lock per config root, held across the whole read-modify-write of
 // state.json. Installs are user-initiated and take milliseconds, so contention is a parallel
 // script rather than a hot path. Move to per-key locking only if that stops being true.
 function withStateLock(configRoot, operation) {
   const file = lockPath(configRoot);
+  // Nothing on the way to the lock or the state may be a symbolic link: checked before the lock is
+  // created, read, reclaimed, or removed, so a refusal never touches a path outside the root.
+  assertNoSymlinkWithin(configRoot, configRoot, 'installation root');
+  assertNoSymlinkWithin(configRoot, path.dirname(file), 'installation state lock');
+  assertNoSymlinkWithin(configRoot, path.dirname(statePath(configRoot)), 'installation state');
   mkdirSync(path.dirname(file), { recursive: true });
   const deadline = Date.now() + STATE_LOCK_TIMEOUT_MS;
+  // Every retry checks the deadline and waits before trying again.
+  const retry = (message) => {
+    if (Date.now() > deadline) throw new Error(message);
+    sleepBriefly();
+  };
   let descriptor = null;
+  let ownerToken = null;
   for (;;) {
     try {
       descriptor = openSync(file, constants.O_CREAT | constants.O_EXCL | constants.O_WRONLY | constants.O_NOFOLLOW, STATE_MODE);
       break;
     } catch (error) {
-      if (error.code !== 'EEXIST') throw error;
-      let age = 0;
-      try { age = Date.now() - statSync(file).mtimeMs; } catch { continue; }
-      if (age > STATE_LOCK_STALE_MS) {
-        // The holder died without releasing. Reclaim rather than block a user forever.
-        try { rmSync(file, { force: true }); } catch {}
+      if (error.code === 'ENOENT') {
+        retry(`cannot create ${file}; its directory keeps disappearing`);
+        mkdirSync(path.dirname(file), { recursive: true });
         continue;
       }
-      if (Date.now() > deadline) {
-        throw new Error(`another youdede-toolkit process holds ${file}; wait for it to finish or delete the lock`);
+      if (error.code === 'ELOOP') throw new Error(`${file} is a symbolic link; refusing to use it as the installation lock`);
+      if (error.code !== 'EEXIST') throw error;
+      let inspectionDescriptor = null;
+      let metadata;
+      let observedOwner;
+      try {
+        inspectionDescriptor = openSync(file, constants.O_RDONLY | (constants.O_NOFOLLOW || 0));
+        metadata = fstatSync(inspectionDescriptor);
+        if (!metadata.isFile()) throw new Error(`${file} is not a regular file; refusing to use it as the installation lock`);
+        if (metadata.size > STATE_LOCK_MAX_BYTES) throw new Error(`${file} exceeds the installation lock size limit`);
+        // The descriptor binds this token and metadata to the same inode even if the pathname is
+        // replaced immediately after inspection.
+        observedOwner = readFileSync(inspectionDescriptor, 'utf8');
+      } catch (inspectionError) {
+        if (inspectionError.code === 'ELOOP') {
+          throw new Error(`${file} is a symbolic link; refusing to use it as the installation lock`);
+        }
+        if (/not a regular file|size limit/u.test(inspectionError.message)) throw inspectionError;
+        retry(`cannot inspect ${file}; it keeps changing`);
+        continue;
+      } finally {
+        if (inspectionDescriptor !== null) closeSync(inspectionDescriptor);
       }
-      sleepBriefly();
+      if (Date.now() - metadata.mtimeMs > STATE_LOCK_STALE_MS) {
+        // Re-read ownership immediately before removal. Another installer may have replaced the
+        // stale file after the metadata observation above.
+        try {
+          if (!removeStateLockIfOwned(file, observedOwner)) {
+            retry(`cannot reclaim ${file}; its owner changed`);
+            continue;
+          }
+        } catch {
+          retry(`cannot reclaim the stale lock ${file}`);
+          continue;
+        }
+        retry(`cannot reclaim the stale lock ${file}`);
+        continue;
+      }
+      retry(`another youdede-toolkit process holds ${file}; wait for it to finish or delete the lock`);
     }
   }
   try {
-    writeFileSync(descriptor, `${process.pid}\n`);
+    ownerToken = `${process.pid}:${randomBytes(STATE_LOCK_TOKEN_BYTES).toString('hex')}\n`;
+    writeFileSync(descriptor, ownerToken);
     closeSync(descriptor);
     descriptor = null;
     return operation();
   } finally {
     if (descriptor !== null) closeSync(descriptor);
-    try { rmSync(file, { force: true }); } catch {}
+    if (ownerToken !== null) {
+      try { removeStateLockIfOwned(file, ownerToken); } catch {}
+    }
+    // Drop the directory once nothing is left in it; a concurrent installer recreates it.
+    try { rmdirSync(path.dirname(file)); } catch {}
   }
 }
 
@@ -661,7 +726,8 @@ export function planArtifactInstall(query, options = {}) {
     integrity,
     runtime: runtimeDisclosure(record, target, scope),
     warnings: contextInstallWarnings(record.manifest, options.now),
-    state: { path: path.relative(configRoot, statePath(configRoot)), action: 'update' }
+    state: { path: path.relative(configRoot, statePath(configRoot)), action: 'update' },
+    notice: { path: path.relative(configRoot, noticePath(configRoot)), action: existsSync(noticePath(configRoot)) ? 'update' : 'create' }
   };
 }
 
@@ -998,7 +1064,8 @@ function removeArtifactLocked(query, options = {}) {
       else atomicWrite(mcpFile, mcpAfter);
     }
     delete state.installs[key];
-    writeState(configRoot, state);
+    if (Object.keys(state.installs).length === 0) rmSync(statePath(configRoot), { force: true });
+    else writeState(configRoot, state);
 
     // Keep the generated notice in step with what is still installed, and drop it once the
     // last artifact leaves so uninstall does not litter the project.
@@ -1085,6 +1152,8 @@ function packMutationPaths(planned) {
     for (const mutation of [...plan.writes, ...plan.removes]) files.add(path.join(plan.configRoot, mutation.path));
     if (plan.settings) files.add(path.join(plan.configRoot, plan.settings.path));
     if (plan.mcpConfig) files.add(path.join(plan.configRoot, plan.mcpConfig.path));
+    // Each member install rewrites the generated notice, so a failed pack restores or removes it too.
+    if (plan.notice) files.add(path.join(plan.configRoot, plan.notice.path));
     files.add(path.join(plan.configRoot, plan.state.path));
   }
   return { files, roots };
@@ -1138,7 +1207,9 @@ export function removePack(query, options = {}) {
   if (drift.length > 0 && !options.force) {
     throw new Error(`${pack.id}: installed members have drift; use --force after review (${drift.map((item) => `${item.status}:${item.path}`).join(', ')})`);
   }
-  const mutationFiles = new Set(removable.map(({ configRoot }) => statePath(configRoot)));
+  // Every file a member removal may rewrite: state, the generated notice, payloads, hook settings,
+  // and MCP configuration, so a failed pack removal restores each one byte for byte.
+  const mutationFiles = new Set(removable.flatMap(({ configRoot }) => [statePath(configRoot), noticePath(configRoot)]));
   for (const { configRoot, installed } of removable) {
     for (const file of installed.files || []) {
       const absolute = path.join(configRoot, file.path);
@@ -1149,6 +1220,12 @@ export function removePack(query, options = {}) {
     if ((installed.hooks || []).length) {
       const kind = installed.kind || String(installed.artifactId || '').split('/')[0] || null;
       mutationFiles.add(path.resolve(configRoot, installed.settingsPath || path.relative(configRoot, defaultSettingsPath(target, configRoot, scope, kind))));
+    }
+    if ((installed.mcpServers || []).length) {
+      let adapter = null;
+      try { adapter = resolveArtifact(installed.artifactId, root).adapters?.[target]?.data; } catch { adapter = null; }
+      const mcpFile = installed.mcpConfigPath ? path.resolve(configRoot, installed.mcpConfigPath) : mcpConfigPath(configRoot, adapter);
+      if (mcpFile && within(configRoot, mcpFile)) mutationFiles.add(mcpFile);
     }
   }
   const snapshots = snapshotFiles(mutationFiles);

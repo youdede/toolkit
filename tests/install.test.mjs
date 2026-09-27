@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { chmodSync, existsSync, mkdtempSync, mkdirSync, readFileSync, rmSync, statSync, symlinkSync, writeFileSync } from 'node:fs';
+import { chmodSync, existsSync, lstatSync, mkdtempSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, symlinkSync, utimesSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { doctor, installArtifact, planArtifactInstall, removeArtifact } from '../scripts/lib/install.mjs';
+import { doctor, installArtifact, planArtifactInstall, removeArtifact, removeStateLockIfOwned } from '../scripts/lib/install.mjs';
 import { loadArtifacts } from '../scripts/lib/catalog.mjs';
 import { cleanGitEnvironment } from './git-env.mjs';
 import { fileURLToPath } from 'node:url';
@@ -461,6 +461,62 @@ test('concurrent installs into one config root record every artifact', (context)
   assert.equal(doctor({ cwd: directory }).findings.length, 0);
 });
 
+test('a symlinked state directory is refused before the lock touches anything outside the root (PR38-CODEX8-2)', { skip: process.platform === 'win32' }, (context) => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-install-lock-link-'));
+  const outside = mkdtempSync(path.join(os.tmpdir(), 'youdede-install-lock-outside-'));
+  context.after(() => {
+    rmSync(directory, { recursive: true, force: true });
+    rmSync(outside, { recursive: true, force: true });
+  });
+  mkdirSync(path.join(directory, '.claude'));
+  symlinkSync(outside, path.join(directory, '.claude', '.youdede-toolkit'));
+  const external = path.join(outside, 'state.lock');
+  writeFileSync(external, 'EXTERNAL-LOCK-MUST-SURVIVE\n');
+  const old = new Date(Date.now() - 180_000);
+  utimesSync(external, old, old);
+  const cli = fileURLToPath(new URL('../bin/youdede-toolkit.mjs', import.meta.url));
+  const result = spawnSync(process.execPath, [cli, 'add', 'commit-guard', '--target', 'claude-code', '--scope', 'project'], { cwd: directory, encoding: 'utf8' });
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /traverses symbolic link '\.youdede-toolkit'/);
+  assert.equal(readFileSync(external, 'utf8'), 'EXTERNAL-LOCK-MUST-SURVIVE\n');
+  assert.deepEqual(readdirSync(outside), ['state.lock']);
+});
+
+test('a lock that is a dangling symbolic link is refused at once (PR38-CODEX8-3)', { skip: process.platform === 'win32' }, (context) => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-install-lock-dangling-'));
+  context.after(() => rmSync(directory, { recursive: true, force: true }));
+  const stateDirectory = path.join(directory, '.claude', '.youdede-toolkit');
+  mkdirSync(stateDirectory, { recursive: true });
+  const lock = path.join(stateDirectory, 'state.lock');
+  symlinkSync(path.join(directory, 'missing-target'), lock);
+  const cli = fileURLToPath(new URL('../bin/youdede-toolkit.mjs', import.meta.url));
+  const started = Date.now();
+  const result = spawnSync(process.execPath, [cli, 'add', 'commit-guard', '--target', 'claude-code', '--scope', 'project'], { cwd: directory, encoding: 'utf8', timeout: 10_000 });
+  assert.equal(result.error, undefined);
+  assert.ok(Date.now() - started < 5_000, `took ${Date.now() - started} ms`);
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /is a symbolic link; refusing to use it as the installation lock/);
+  assert.equal(lstatSync(lock).isSymbolicLink(), true);
+});
+
+test('a stale observer cannot remove a replacement lock owner', (context) => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-install-lock-owner-'));
+  context.after(() => rmSync(directory, { recursive: true, force: true }));
+  const stateDirectory = path.join(directory, '.youdede-toolkit');
+  const lock = path.join(stateDirectory, 'state.lock');
+  mkdirSync(stateDirectory, { recursive: true });
+  const staleOwner = '100:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n';
+  const replacementOwner = '200:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n';
+  writeFileSync(lock, staleOwner);
+
+  // This replacement is the deterministic interleaving between stale observation and removal.
+  writeFileSync(lock, replacementOwner);
+  assert.equal(removeStateLockIfOwned(lock, staleOwner), false);
+  assert.equal(readFileSync(lock, 'utf8'), replacementOwner);
+  assert.equal(removeStateLockIfOwned(lock, replacementOwner), true);
+  assert.equal(existsSync(lock), false);
+});
+
 test('a failed multi-file install rolls back every file it had already written', { skip: process.platform === 'win32' }, (context) => {
   const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-install-rollback-'));
   context.after(() => rmSync(directory, { recursive: true, force: true }));
@@ -611,4 +667,14 @@ test('installed artifact remains removable after it leaves the current catalog',
   assert.equal(result.artifact.kind, 'skill');
   assert.equal(existsSync(installed), false);
   assert.equal(doctor({ cwd: directory }).installs, 0);
+});
+
+test('removing the last artifact leaves no installer state behind', (context) => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-install-cleanup-'));
+  context.after(() => rmSync(directory, { recursive: true, force: true }));
+  installArtifact('commit-guard', { cwd: directory });
+  removeArtifact('commit-guard', { cwd: directory });
+  assert.equal(existsSync(path.join(directory, '.claude', '.youdede-toolkit')), false);
+  installArtifact('commit-guard', { cwd: directory });
+  assert.equal(doctor({ cwd: directory }).findings.length, 0);
 });

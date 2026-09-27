@@ -211,6 +211,7 @@ async function main() {
         if (result.settings) process.stdout.write(`- ${result.settings.action} ${result.settings.path}\n`);
         if (result.mcpConfig) process.stdout.write(`- ${result.mcpConfig.action} ${result.mcpConfig.path}: ${result.mcpConfig.servers.join(', ')}\n`);
         process.stdout.write(`- update ${result.state.path}\n`);
+        process.stdout.write(`- ${result.notice.action} ${result.notice.path}\n`);
         printRuntimeDisclosure(result.runtime);
         for (const warning of result.warnings || []) process.stdout.write(`Warning: ${warning}\n`);
       }
