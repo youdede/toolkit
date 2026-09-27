@@ -304,8 +304,17 @@ test('the shell module normalizes segments, operators, quoting, wrappers, and co
   assert.deepEqual(relevance('n[p]m pub[l]ish; $CMD pub[l]ish; $CMD *.md; ls *.md'), [true, false, true, false]);
   assert.deepEqual(bareText('$CMD pub[l]ish n[px]m'), [' publish npm nxm']);
   assert.deepEqual(parseShellCommands('g[i]t commit').commands[0].glob, true);
+  // A cap always leaves an ambiguous, relevant entry: a brace word past its bound or not known for
+  // certain, wrappers past SHELL_MAX_WRAPPERS, shells and substitutions past the depth cap (PR38-CODEX16-1).
+  const hide = (text) => `{${','.repeat(65)}${text}}`;
+  assert.deepEqual(relevance(`${hide('n{p..p}m')} ${hide('pub{l..l}ish')}`), [true]);
+  assert.deepEqual(relevance(`${hide('npm')} test; {1..3..0}x run`), [true, true]);
+  assert.deepEqual(relevance(`${'x'.repeat(1030)}{a,b} run`), [true]);
+  assert.deepEqual(relevance(`${'nice '.repeat(20)}npm publish`), [true]);
+  assert.deepEqual(relevance(`bash -c "bash -c 'bash -c \\"bash -c true\\"'"`), [true]);
+  assert.deepEqual(relevance('echo $(echo $(echo $(echo $(npm publish))))'), [true, false, false, false, false]);
   // `globDecides`: a glob among the deciding words or options of a protected command (PR38-CODEX15-2).
-  const decides = (command, words) => globDecides(parseShellCommands(command).commands[0], words);
+  const decides = (command, words, flags) => globDecides(parseShellCommands(command).commands[0], words, flags);
   assert.equal(decides('npm pub[l]ish', 1), true);
   assert.equal(decides('npm --prefix dir pub*', 1), true);
   assert.equal(decides('npm test -- src/*.test.js', 1), false);
@@ -314,6 +323,16 @@ test('the shell module normalizes segments, operators, quoting, wrappers, and co
   assert.equal(decides('rm -r[f] /', 0), true);
   assert.equal(decides('rm -f dist/*.js', 0), false);
   assert.equal(decides('crontab x*', Infinity), true);
+  // `--` ends options, not the deciding words; boolean flags take no value (PR38-CODEX16-2, PR38-CODEX16-3).
+  assert.equal(decides('npm -- pub[l]ish', 1), true);
+  assert.equal(decides('npm -- -*', 1), true);
+  assert.equal(decides('npm test -- src/*.test.js', 1), false);
+  assert.equal(decides('npm --silent test src/*.test.js', 1, ['--silent']), false);
+  assert.equal(decides('npm --silent test src/*.test.js', 1), true);
+  assert.equal(decides('aws --no-cli-pager s3 ls logs/*.json', 2, ['--no-cli-pager']), false);
+  assert.equal(decides('aws --profile p ec2 ter[m]inate-instances', 2, ['--no-cli-pager']), true);
+  // A capped brace word may be any result it did not list (PR38-CODEX16-1).
+  assert.equal(decides(`npm {${','.repeat(65)}publish}`, 1), true);
   // A locale string keeps its source text (PR38-CODEX13-1, PR38-CODEX13-2).
   // Every alternative of a glob's bracket sets and groups; `+(…)` repeats, so it may match anything (PR38-CODEX15-2).
   assert.deepEqual(bareText('n@(p|x)m pu+(b)lish'), ['npm nxm pulish']);

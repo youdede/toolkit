@@ -280,15 +280,19 @@ function bracketSet(body) {
 // publish` 1, `aws ec2 terminate-instances` 2, Infinity when every word may). A glob among them, among
 // the options before them, or an option glob anywhere (`--pu*`) may spell the protected verb or option,
 // so the hook treats the command as uninspectable; `npm test -- src/*.test.js` is decided by `test`.
-// A word right after an option without `=` may be its value and is not counted (fail closed).
-export function globDecides(entry, words) {
+// A word that may match anything (`wild`, a capped brace word) counts as a glob. `--` ends options,
+// not the deciding words: after it every word is an operand and counts (`npm -- pub[l]ish`). A word
+// right after an option without `=` may be its value and is not counted (fail closed), unless the
+// option is in `flags`, the CLI's boolean flags (`npm --silent test`).
+export function globDecides(entry, words, flags = []) {
   let counted = 0;
   let value = false;
+  let operands = false;
   for (const token of entry.tokens?.slice(1) ?? []) {
-    if (token.value === '--') break;
-    const option = token.value.startsWith('-');
-    if (globWord(token) && (option || counted < words)) return true;
-    if (option) { value = !token.value.includes('='); continue; }
+    if (token.value === '--' && !operands) { operands = true; value = false; continue; }
+    const option = !operands && token.value.startsWith('-');
+    if ((globWord(token) || token.wild) && (option || counted < words)) return true;
+    if (option) { value = !token.value.includes('=') && !flags.includes(token.value); continue; }
     if (value) { value = false; continue; }
     counted += 1;
   }
@@ -497,6 +501,9 @@ function lexShell(source, options = {}) {
     else if (braces && (braces.words.length > 1 || !braces.certain || token.dynamic)) {
       token.dynamic = true;
       token.bare = words.join(' ');
+      // Past a cap, or not known for certain, the word may be a result the text does not list: it may
+      // match anything, like a `*` glob (`{` + 65 commas + `npm}` hides `npm` past the bound).
+      if (!braces.certain || braces.words.length > SHELL_MAX_BRACE_WORDS) token.wild = true;
     } else if (token.cuts) token.bare = words[0];
     // `bare` is a dynamic token's value with its run-time text removed (`n${x}pm` is `npm`); a glob word's
     // lists what it may match, and `wild` marks one that may match anything.
@@ -693,7 +700,8 @@ function powershellCommands(tokens, index, depth, wrappers, name, parseOptions) 
     let payload = cursor;
     if (/^-c(?:o(?:m(?:m(?:a(?:nd?)?)?)?)?)?$/.test(value)) payload = cursor + 1;
     else if (value.startsWith('-')) return [{ ambiguous: true, wrappers: layer }];
-    if (payload >= tokens.length || depth >= SHELL_MAX_DEPTH) return [{ ambiguous: true, wrappers: layer }];
+    if (depth >= SHELL_MAX_DEPTH) return [{ ambiguous: true, relevant: true, wrappers: layer }];
+    if (payload >= tokens.length) return [{ ambiguous: true, wrappers: layer }];
     const nested = parseShellCommands(tokens.slice(payload).map((entry) => entry.value).join(' '), depth + 1, layer, parseOptions);
     return nested.error ? [{ ambiguous: true, wrappers: layer }] : nested.commands;
   }
@@ -782,7 +790,8 @@ function unwrapCommand(original, depth, inherited = [], parseOptions = {}, redir
         }
         if (!command && feeds.length && (stdin || !tokens[cursor])) {
           const feed = feeds.at(-1);
-          if (feed.dynamic || depth >= SHELL_MAX_DEPTH) return [{ ambiguous: true, wrappers: [...wrappers, name] }];
+          if (depth >= SHELL_MAX_DEPTH) return [{ ambiguous: true, relevant: true, wrappers: [...wrappers, name] }];
+          if (feed.dynamic) return [{ ambiguous: true, wrappers: [...wrappers, name] }];
           const nested = parseShellCommands(feed.text, depth + 1, [...wrappers, name], parseOptions);
           return nested.error ? [{ ambiguous: true, wrappers: [...wrappers, name] }] : nested.commands;
         }
@@ -790,7 +799,8 @@ function unwrapCommand(original, depth, inherited = [], parseOptions = {}, redir
         if (!command) return [{ tokens: tokens.slice(index), wrappers }];
         payload = cursor;
       }
-      if (!tokens[payload] || depth >= SHELL_MAX_DEPTH) return [{ ambiguous: true, wrappers: [...wrappers, name] }];
+      if (depth >= SHELL_MAX_DEPTH) return [{ ambiguous: true, relevant: true, wrappers: [...wrappers, name] }];
+      if (!tokens[payload]) return [{ ambiguous: true, wrappers: [...wrappers, name] }];
       const inner = name === 'eval' ? tokens.slice(payload).map((entry) => entry.value).join(' ') : tokens[payload].value;
       const nested = parseShellCommands(inner, depth + 1, [...wrappers, name], parseOptions);
       if (nested.error) return [{ ambiguous: true, wrappers: [...wrappers, name] }];
@@ -841,7 +851,8 @@ function unwrapCommand(original, depth, inherited = [], parseOptions = {}, redir
       if (!tokens[index] || tokens[index].dynamic) return ambiguous();
       index += 1;
       if (name === 'flock' && /^(?:-c|--command)$/.test(tokens[index]?.value ?? '')) {
-        if (!tokens[index + 1] || depth >= SHELL_MAX_DEPTH) return ambiguous();
+        if (depth >= SHELL_MAX_DEPTH) return [{ ambiguous: true, relevant: true, wrappers }];
+        if (!tokens[index + 1]) return ambiguous();
         const nested = parseShellCommands(tokens[index + 1].value, depth + 1, wrappers, parseOptions);
         return nested.error ? ambiguous() : nested.commands;
       }
@@ -856,7 +867,8 @@ function unwrapCommand(original, depth, inherited = [], parseOptions = {}, redir
       index = 0;
     }
   }
-  if (index < tokens.length && SHELL_WRAPPERS.has(executableName(tokens[index]))) return ambiguous();
+  // More than SHELL_MAX_WRAPPERS wrappers: the command under them is not read, so it may be anything.
+  if (index < tokens.length && SHELL_WRAPPERS.has(executableName(tokens[index]))) return [{ ambiguous: true, relevant: true, wrappers }];
   // `exec >log 2>&1` only applies its redirections: nothing runs.
   if (index >= tokens.length && wrappers.length === inherited.length + 1 && wrappers.at(-1) === 'exec') return [];
   return index < tokens.length ? [{ tokens: tokens.slice(index), wrappers }] : ambiguous();
@@ -936,7 +948,8 @@ export function parseShellCommands(command, depth = 0, wrappers = [], options = 
     for (const text of segment.substitutions) {
       const child = { ...options, scope: `${scope}/s${++options.scopes.count}` };
       const nested = depth >= SHELL_MAX_DEPTH ? { error: 'too deep' } : parseShellCommands(text, depth + 1, wrappers, child);
-      const inner = nested.error ? [{ ambiguous: true, wrappers: [...wrappers], segment: segment.tokens }] : nested.commands;
+      // A substitution past the depth cap is not read, so it may be anything.
+      const inner = nested.error ? [{ ambiguous: true, ...(nested.error === 'too deep' ? { relevant: true } : {}), wrappers: [...wrappers], segment: segment.tokens }] : nested.commands;
       if (inner.length) inner.at(-1).operator = ';';
       output.push(...inner);
     }
@@ -1382,9 +1395,10 @@ function stripLeadingOptions(args, valueOptions = new Set()) {
   return args.slice(index);
 }
 
-// Per protected executable, how many leading words that are not options decide the operation; an
-// unquoted glob among them, or a glob option, makes the command uninspectable (see `globDecides`).
-const GLOB_DECISIVE = new Map([['terraform', 1], ['tofu', 1], ['pulumi', 1], ['kubectl', 1], ['helm', 1]]);
+// Per protected executable: how many leading words that are not options decide the operation, and
+// its common boolean flags, which take no value; an unquoted glob among those words, or a glob option,
+// makes the command uninspectable (see `globDecides`). Another flag without `=` may take the next word.
+const GLOB_DECISIVE = new Map([['terraform', 1], ['tofu', 1], ['pulumi', 1, ['--non-interactive', '-y', '--yes', '--skip-preview', '--emoji', '--color']], ['kubectl', 1, ['--insecure-skip-tls-verify']], ['helm', 1, ['--debug']]].map(([name, ...rule]) => [name, rule]));
 const globDecisive = (executable) => GLOB_DECISIVE.get(executable);
 
 // First rule hit among the normalized commands and the commands written inside their interpreter
@@ -1407,7 +1421,7 @@ function firstRule(command, policy, suspect, uninspectable) {
       }
       // A glob argument that may decide the operation is a file name known only at run time.
       const decisive = candidate.tokens?.length ? globDecisive(executableName(candidate.tokens[0])) : undefined;
-      if (decisive !== undefined && globDecides(candidate, decisive)) return uninspectable;
+      if (decisive !== undefined && globDecides(candidate, ...decisive)) return uninspectable;
       const ruleId = policy(view(candidate));
       if (ruleId) return ruleId;
     }
