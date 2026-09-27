@@ -171,11 +171,19 @@ function collectSubstitutions(text, found) {
 }
 
 // Substitutions in free text such as an expanded here-document body. `<(…)`/`>(…)` run only in the word
-// of a `${…}` (`${x:-<(cmd)}`); in a here-document body or `$((…))` they are text or comparisons.
+// of a `${…}` (`${x:-<(cmd)}`), and not between quotes there (`${x:-'<(cmd)'}` is text); in a
+// here-document body or `$((…))` they are text or comparisons. `$(…)` and backticks count even between
+// single quotes: inside a double-quoted `${…}` bash still runs them, and this text does not say which.
 function scanSubstitutions(text, found, processSubstitutions = false) {
+  let quote = null;
   for (let index = 0; index < text.length; index += 1) {
-    if (text[index] === '\\') { index += 1; continue; }
-    const substitution = processSubstitutions && (text[index] === '<' || text[index] === '>') && text[index + 1] === '(';
+    const character = text[index];
+    if (quote !== "'" && character === '\\') { index += 1; continue; }
+    if (processSubstitutions && (character === "'" || character === '"') && (!quote || quote === character)) {
+      quote = quote ? null : character;
+      continue;
+    }
+    const substitution = processSubstitutions && !quote && (character === '<' || character === '>') && text[index + 1] === '(';
     if (text[index] !== '$' && text[index] !== '`' && !substitution) continue;
     const end = expansionEnd(text, index);
     if (end < 0) return false;

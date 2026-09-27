@@ -48,6 +48,11 @@ const SHELL_PROBES = [
   ['echo ${x:-<(npm publish)}', ['|npm publish [;]', '|echo $${x:-<(npm publish)} []']],
   ['echo ${x:->(rm -rf /)} && echo ${y:-${z:-<(crontab -r)}}', ['|rm -rf / [;]', '|echo $${x:->(rm -rf /)} [&&]', '|crontab -r [;]', '|echo $${y:-${z:-<(crontab -r)}} []']],
   ['echo ${HOME:-/tmp}', ['|echo $${HOME:-/tmp} []']],
+  // Between quotes in `${…}`, `<(…)` is text; `$(…)` and backticks still run (PR38-CODEX2-3).
+  ["echo ${x:-'<(npm publish)'}", ["|echo $${x:-'<(npm publish)'} []"]],
+  ['echo ${x:-"<(npm publish)"} && echo "${x:-default}"', ['|echo $${x:-"<(npm publish)"} [&&]', '|echo $${x:-default} []']],
+  ['echo ${x:-"$(npm publish)"}', ['|npm publish [;]', '|echo $${x:-"$(npm publish)"} []']],
+  ['echo ${x:-"`npm publish`"}', ['|npm publish [;]', '|echo $${x:-"`npm publish`"} []']],
   ['echo $((a<(b)))', ['|echo $$((a<(b))) []']],
   ['echo $((1 << 2))', ['|echo $$((1 << 2)) []']],
   ['echo $(echo $(echo $(echo $(npm publish))))', ['AMBIGUOUS', '|echo $$(npm publish) [;]', '|echo $$(echo $(npm publish)) [;]', '|echo $$(echo $(echo $(npm publish))) [;]', '|echo $$(echo $(echo $(echo $(npm publish)))) []']],
