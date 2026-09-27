@@ -1646,7 +1646,7 @@
       ]
     },
     "git-workflow-baseline": {
-      "summary": "Houd branch-integratie herstelbaar, expliciet en ondersteund door vers bewijs uit de repository.",
+      "summary": "Houdt branch-integratie herstelbaar, expliciet en ondersteund door actueel bewijs uit de repository.",
       "description": "Een altijd actieve, gegenereerde context voor branchisolatie, integratiebewijs, beschermde branches en bescherming tegen geheimen in commits. De tekst wordt uit catalogusartefacten geselecteerd aan de hand van machineleesbare herkomstgegevens van regels.",
       "purposes": [],
       "refuses": [
@@ -2601,9 +2601,9 @@
       "description": "Hervat lopend werk door de hashketen van het sessielogboek te verifiëren, de laatste vermeldingen te lezen en de context te reconstrueren, waarbij elke overgenomen bewering verwijst naar de hash van de bijbehorende logboekvermelding. Verouderde beweringen en integriteitsfouten worden zichtbaar gemaakt en nooit verhuld. Te gebruiken bij het hervatten na een pauze, contextcompactie of het starten van een nieuwe sessie.",
       "purposes": [],
       "refuses": [
-        "Het behandelt geen gemanipuleerde of onverifieerbare logboekketen als waarheid.",
-        "Het draagt geen claim door zonder de hash van de logboekinvoer te citeren.",
-        "Het herschrijft, repareert of comprimeert geen alleen-toevoegend logboek; corruptie wordt gerapporteerd, nooit verholpen."
+        "Hij behandelt geen gemanipuleerde of onverifieerbare logboekketen als waarheid.",
+        "Hij neemt geen bewering over zonder de hash van de bijbehorende logboekvermelding te citeren.",
+        "Hij herschrijft, repareert of comprimeert het logboek, waaraan alleen items kunnen worden toegevoegd, niet; corruptie wordt gerapporteerd, nooit verholpen."
       ]
     },
     "review-agent-tool-boundaries": {

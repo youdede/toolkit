@@ -21,7 +21,7 @@
       "latency": "Il comando segue un controllo delle precondizioni e più passaggi del flusso di lavoro mentre controlla la catena delle prove di rilascio per la versione corrente ed emette un rapporto di verdetto leggibile dalla macchina."
     },
     "draft-evidenced-plan": {
-      "risk": "Questo comando redige un piano di implementazione ordinato in cui ogni passaggio cita il codice che tocca e le prove che ne dimostrano il completamento; non modifica, crea o elimina alcun file durante la pianificazione; si limita a leggere.",
+      "risk": "Questo comando redige un piano di implementazione ordinato in cui ogni passaggio cita il codice che tocca e le prove che ne dimostrano il completamento; non modifica, crea né elimina alcun file durante la pianificazione; si limita a leggere.",
       "latency": "Il comando segue un controllo delle precondizioni e più passaggi del flusso di lavoro mentre elabora un piano di implementazione ordinato in cui ogni passaggio cita il codice che tocca e le prove che dimostrano il completamento."
     },
     "verify-claims-against-output": {
@@ -49,28 +49,28 @@
       "latency": "Il runtime carica indicazioni statiche per applicare una linea di base del contratto API supportata dalla provenienza ai file del repository in cui tale superficie decisionale è attiva nell'ambito del file corrispondente."
     },
     "coding-style-baseline": {
-      "risk": "Questo contesto applica ai file di implementazione indicazioni sulla qualità del codice e sui limiti dei moduli che preservano il comportamento; fornisce una guida senza strumenti o autorità di approvazione.",
-      "latency": "Il runtime carica indicazioni statiche per applicare indicazioni sulla qualità del codice e sui limiti del modulo che preservano il comportamento ai file di implementazione nell'ambito del file corrispondente."
+      "risk": "Questo contesto applica ai file di implementazione indicazioni sulla qualità del codice e sui limiti dei moduli che preservano il comportamento; fornisce indicazioni senza alcuna autorità su strumenti o approvazioni.",
+      "latency": "Il runtime carica indicazioni statiche per applicare ai file di implementazione indicazioni sulla qualità del codice e sui confini dei moduli che preservano il comportamento, nell'ambito di file corrispondente."
     },
     "testing-baseline": {
-      "risk": "Questo contesto applica linee guida basate sul test, supportate dall'evidenza e che preservano l'integrità quando si lavora con file di test; fornisce una guida senza strumenti o autorità di approvazione.",
-      "latency": "Il runtime carica indicazioni statiche per applicare indicazioni basate prima sui test, supportate da prove e che preservano l'integrità quando si lavora con file di test nell'ambito dei file corrispondenti."
+      "risk": "Questo contesto applica indicazioni test-first, supportate da evidenze e che preservano l'integrità quando si lavora con file di test; fornisce indicazioni senza autorità sugli strumenti né sulle approvazioni.",
+      "latency": "Il runtime carica indicazioni statiche per applicare indicazioni test-first, supportate da prove e che preservano l'integrità quando si lavora con file di test nell'ambito dei file corrispondenti."
     },
     "ci-workflow-baseline": {
       "risk": "Questo contesto applica una linea di base del flusso di lavoro CI supportata dalla provenienza ai file del repository in cui è attiva la superficie decisionale; fornisce una guida senza strumenti o autorità di approvazione.",
       "latency": "Il runtime carica indicazioni statiche per applicare ai file pertinenti del repository una configurazione CI di base con provenienza verificabile."
     },
     "git-workflow-baseline": {
-      "risk": "Questo contesto rende l'integrazione dei branch recuperabile, esplicita e basata su evidenze aggiornate del repository; offre indicazioni senza poter usare strumenti né approvare operazioni.",
-      "latency": "Il runtime carica indicazioni statiche per mantenere l'integrazione dei rami recuperabile, esplicita e supportata da nuove prove del repository nell'ambito del file corrispondente."
+      "risk": "Questo contesto rende l'integrazione dei branch reversibile, esplicita e basata su evidenze aggiornate del repository; offre indicazioni senza poter usare strumenti né approvare operazioni.",
+      "latency": "Il runtime carica indicazioni statiche per mantenere l'integrazione dei rami reversibile, esplicita e supportata da prove aggiornate del repository nell'ambito del file corrispondente."
     },
     "dependency-change-baseline": {
       "risk": "Questo contesto applica una linea di base di modifica delle dipendenze supportata dalla provenienza ai file del repository in cui la superficie decisionale è attiva; fornisce una guida senza strumenti o autorità di approvazione.",
       "latency": "Il runtime carica indicazioni statiche per applicare una linea di base di modifica delle dipendenze supportata dalla provenienza ai file del repository in cui tale superficie decisionale è attiva nell'ambito del file corrispondente."
     },
     "security-baseline": {
-      "risk": "Fornisce una guida con autorità minima senza concedere l'accesso allo strumento o modificare le credenziali.",
-      "latency": "Il runtime carica indicazioni statiche per applicare indicazioni di autorità minima per strumenti dell'agente, credenziali, file sensibili e dati in uscita nell'ambito del file corrispondente."
+      "risk": "Fornisce indicazioni sul principio del minimo privilegio senza concedere l'accesso agli strumenti né modificare le credenziali.",
+      "latency": "Il runtime carica indicazioni statiche per applicare il principio del minimo privilegio a strumenti dell'agente, credenziali, file sensibili e dati in uscita nell'ambito del file corrispondente."
     },
     "schema-compatibility-guard": {
       "risk": "Questo controllo automatico blocca le modifiche al contratto JSON Schema, Avro e Protobuf dimostrabilmente incompatibili; un blocco errato può interrompere il lavoro legittimo, ma non esegue l'azione bloccata.",
@@ -885,8 +885,8 @@
       "latency": "La skill valuta un problema in arrivo o inserisce una richiesta in uno stato successivo evidenziato senza agire silenziosamente su di esso, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "resume-session-work": {
-      "risk": "Questa skill ricostruisce il contesto lavorativo dal registro della sessione concatenato con hash con affermazioni citate con hash e una sezione esplicita non verificata; non porta avanti un reclamo senza citare l'hash della sua voce nel registro.",
-      "latency": "Verifica gli hash del registro e ricostruisce il contesto della sessione citata da più voci."
+      "risk": "Questa skill ricostruisce il contesto di lavoro dal registro della sessione concatenato tramite hash, con affermazioni citate tramite hash e una sezione esplicita per ciò che non è verificato; non riporta un'affermazione senza citare l'hash della sua voce nel registro.",
+      "latency": "Verifica gli hash del registro e ricostruisce da più voci il contesto della sessione, con le relative citazioni."
     },
     "author-guided-setup-wizard": {
       "risk": "Questa skill crea uno script di configurazione ripristinabile guidato dall'uomo con gestione sicura dei segreti e checkpoint verificati; non chiede agli utenti di incollare segreti nella chat, nei registri, negli argomenti o nell'input del terminale visibile.",

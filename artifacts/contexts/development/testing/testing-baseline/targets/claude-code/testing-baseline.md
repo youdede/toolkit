@@ -16,7 +16,7 @@ Catalog context: `context/development/testing/testing-baseline`. Precedence: 200
 
 - [use-red-green-refactor; effect=require; action=use-red-green-refactor] Deliver behavior changes through a verified red-green-refactor loop. (Source: `skill/development/testing/deliver-test-first#summary`)
 - [verify-with-fresh-evidence; effect=require; action=verify-with-fresh-evidence] Verify completion claims with fresh commands, inspectable artifacts, and explicit remaining uncertainty. (Source: `skill/development/testing/verify-completion-evidence#summary`)
-- [do-not-weaken-test-integrity; effect=forbid; action=weaken-test-integrity] It does not run tests, measure coverage, repair a test, or decide whether a suppression is justified. (Source: `hook/development/testing/test-integrity-guard#refuses[0]`)
+- [do-not-weaken-test-integrity; effect=forbid; action=weaken-test-integrity] Do not weaken, skip, suppress, or delete tests or assertions to obtain a passing result. (Source: `hook/development/testing/test-integrity-guard#refuses[0]`)
 - [isolate-evaluation-cases; effect=require; action=isolate-evaluation-cases] Design a reproducible agent evaluation harness with isolated cases, traces, judges, and regression gates. (Source: `skill/development/testing/design-agent-evaluation-harness#summary`)
 
 ## Boundaries

@@ -27,7 +27,7 @@ test('Claude marketplace publishes only complete native pack compositions', () =
   assert.equal(marketplace.plugins.length, 12);
   assert.deepEqual(report.claudeCode.omitted, [{
     packId: 'pack/plan-and-verify-loop',
-    unsupportedArtifactIds: ['context/development/testing/testing-baseline']
+    unsupportedArtifactIds: ['context/development/code-quality/coding-style-baseline', 'context/development/testing/testing-baseline']
   }]);
 
   for (const entry of marketplace.plugins) {
