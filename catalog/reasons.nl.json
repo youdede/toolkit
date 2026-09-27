@@ -333,12 +333,12 @@
       "latency": "De oproep wacht binnen een begrensde aanvraag op het antwoord van de externe GitHub-server en zijn API."
     },
     "repository-git-readonly": {
-      "risk": "Dit MCP-profiel maakt begrensde lokale Git-status, diff en geschiedenisinspectie zichtbaar via een vastgezette MCP-server; het legt de repositorystatus niet vast, staget, herstelt, reset, schakelt, samenvoegt, ophaalt, pusht of muteert.",
+      "risk": "Dit MCP-profiel biedt via een vastgezette MCP-server afgebakende inspectie van lokale Git-status, verschillen en geschiedenis; het voert geen commit, stage, restore, reset, switch, merge, fetch of push uit en wijzigt de toestand van de repository niet.",
       "latency": "Een aanroep voert een begrensde lokale Git-inspectie uit en retourneert de verzamelde uitvoer."
     },
     "workspace-files-readonly": {
-      "risk": "Dit MCP-profiel maakt begrensde alleen-lezen werkruimte-bestandsinspectie mogelijk via een lokaal vastgezette MCP-server; Er worden geen werkruimtebestanden geschreven, verwijderd, hernoemd, uitgevoerd, geüpload of anderszins gemuteerd.",
-      "latency": "Een oproep leest begrensde werkruimtebestanden via de lokale server voordat deze terugkeert."
+      "risk": "Dit MCP-profiel maakt afgebakende alleen-lezen inspectie van werkruimtebestanden mogelijk via een lokaal vastgezette MCP-server; het schrijft, verwijdert of hernoemt geen werkruimtebestanden, voert ze niet uit, uploadt ze niet en wijzigt ze ook niet op andere wijze.",
+      "latency": "Een aanroep leest afgebakende werkruimtebestanden via de lokale server voordat die een resultaat teruggeeft."
     },
     "playwright-local-isolated": {
       "risk": "De adapter start @playwright/mcp via npx met browsertoegang tot loopback-webapps.",
