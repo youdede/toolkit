@@ -9,7 +9,7 @@ description: "Build or review a B2B prospect list using a defined ideal-customer
 
 Prospecting identifies organizations and relevant business context; it does not create permission to contact individuals. The user owns lawful basis, jurisdictional review, vendor terms, and outreach authority.
 
-At minimum, obtain lawful basis, jurisdictional review, vendor terms, and outreach authority. Without those, stop and request the missing one.
+At minimum, obtain the target situation with its fit and disqualifier rules, the list size cap, lawful basis, jurisdictional review, vendor terms, and outreach authority. Without those, stop and request the missing one.
 
 ## Discover and qualify accounts
 

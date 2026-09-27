@@ -60,3 +60,31 @@ test('skill validator checks structure, names, placeholders, and links', (contex
   assert.ok(result.errors.some((error) => /TODO/.test(error)));
   assert.ok(result.errors.some((error) => /missing/.test(error)));
 });
+
+test('skill validator accepts the optional Agent Skills fields, folded descriptions, and CRLF files', (context) => {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'youdede-spec-skill-'));
+  context.after(() => rmSync(root, { recursive: true, force: true }));
+  const directory = path.join(root, 'pdf-processing');
+  mkdirSync(directory);
+  const body = '# PDF processing\n\n## Validation\n\n- Output opens.\n\n## Refusals\n\n- It does not upload files.\n';
+  const frontmatter = [
+    '---',
+    'name: pdf-processing',
+    'description: >-',
+    '  Extract PDF text, fill forms, and merge files.',
+    '  Use when the user works with PDF documents.',
+    'license: Apache-2.0',
+    'compatibility: Requires poppler-utils',
+    'metadata:',
+    '  author: example-org',
+    'allowed-tools: Read Bash(pdftotext:*)',
+    '---',
+    ''
+  ].join('\n');
+  writeFileSync(path.join(directory, 'SKILL.md'), `${frontmatter}${body}`);
+  assert.deepEqual(validateSkill(directory), { valid: true, errors: [] });
+  writeFileSync(path.join(directory, 'SKILL.md'), `${frontmatter}${body}`.replaceAll('\n', '\r\n'));
+  assert.deepEqual(validateSkill(directory), { valid: true, errors: [] });
+  writeFileSync(path.join(directory, 'SKILL.md'), `${frontmatter.replace('license: Apache-2.0\n', 'owner: me\n')}${body}`);
+  assert.deepEqual(validateSkill(directory).errors, ['unsupported frontmatter fields: owner']);
+});

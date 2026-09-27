@@ -37,7 +37,8 @@ for (const file of files) {
     if (relative === '..' || relative.startsWith('..' + path.sep) || path.isAbsolute(relative)) continue;
     const targetParts = relative.split(path.sep);
     const targetPackage = targetParts[0];
-    const targetIsDeep = targetParts.length > 2;
+    // A package's own root index (`<pkg>` or `<pkg>/index`) is its entry point; any other path inside it is deep.
+    const targetIsDeep = targetParts.length > 2 || (targetParts.length === 2 && !/^index(?:\.[cm]?[jt]sx?)?$/.test(targetParts[1]));
     const crossPackage = targetPackage !== sourcePackage;
     const testPrivateAccess = testsAsConsumers && sourceIsTest && targetPackage === sourcePackage && targetIsDeep;
     if ((crossPackage && targetIsDeep) || testPrivateAccess) findings.push({ file: path.relative(process.cwd(), file), specifier, sourcePackage, targetPackage, reason: crossPackage ? 'cross-package-deep-import' : 'test-private-import' });

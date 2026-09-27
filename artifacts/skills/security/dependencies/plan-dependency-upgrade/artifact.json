@@ -6,8 +6,8 @@
   "name": "Plan Dependency Upgrade",
   "version": "1.4.0",
   "kind": "skill",
-  "summary": "Plan a dependency upgrade from release evidence, compatibility surface, migration steps, and rollback.",
-  "description": "Plan or review an application dependency upgrade using installed versions, release and migration documentation, affected usage, transitive changes, compatibility tests, rollout, and rollback. Use when an upgrade is material, breaking, security-driven, or framework-wide.",
+  "summary": "Plan and apply a dependency upgrade from release evidence, compatibility surface, migration steps, and rollback.",
+  "description": "Plan, apply, or review an application dependency upgrade using installed versions, release and migration documentation, affected usage, transitive changes, compatibility tests, rollout, and rollback. Use when an upgrade is material, breaking, security-driven, or framework-wide.",
   "domain": "security",
   "category": "dependencies",
   "problems": [
@@ -25,7 +25,7 @@
     "maintenance"
   ],
   "risk": "medium",
-  "risk_reason": "This skill plans a dependency upgrade from release evidence, compatibility surface, migration steps, and rollback; it does not upgrade unrelated packages to achieve a clean latest state.",
+  "risk_reason": "This skill plans and applies a dependency upgrade from release evidence, compatibility surface, migration steps, and rollback; it does not upgrade unrelated packages to achieve a clean latest state.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -48,6 +48,7 @@
     "opencode": "adapters/opencode.json"
   },
   "capabilities": [
+    "operate",
     "plan"
   ],
   "relationships": {
@@ -61,7 +62,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
-    "latency_reason": "The skill plans a dependency upgrade from release evidence, compatibility surface, migration steps, and rollback, using sequential evidence and verification steps.",
+    "latency_reason": "The skill plans and applies a dependency upgrade from release evidence, compatibility surface, migration steps, and rollback, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

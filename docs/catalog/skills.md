@@ -187,7 +187,7 @@ A procedure an agent loads when a task matches. Each states the evidence it need
 | --- | --- | --- | --- |
 | `audit-safe-browsing-readiness` | Audit a public site for security, transparency, and reputation readiness. | medium | all six |
 | `review-auth-boundary` | Review authentication and authorization boundaries through concrete identities, resources, and denied paths. | medium | all six |
-| `plan-dependency-upgrade` | Plan a dependency upgrade from release evidence, compatibility surface, migration steps, and rollback. | medium | all six |
+| `plan-dependency-upgrade` | Plan and apply a dependency upgrade from release evidence, compatibility surface, migration steps, and rollback. | medium | all six |
 | `review-supply-chain-change` | Review changed package and build inputs from bounded, offline repository evidence. | medium | all six |
 | `review-agent-tool-boundaries` | Review agent and MCP tool authority against prompt injection, confused-deputy, exfiltration, and unsafe side effects. | medium | all six |
 
