@@ -165,15 +165,17 @@ function collectSubstitutions(text, found) {
   if (text.startsWith('`')) { found.push(text.slice(1, -1).replace(/\\([\\`$])/g, '$1')); return true; }
   if (text.startsWith('$((')) return scanSubstitutions(text.slice(3, -2), found);
   if (/^(?:\$|<|>)\(/.test(text)) { found.push(text.slice(2, -1)); return true; }
-  if (text.startsWith('${')) return scanSubstitutions(text.slice(2, -1), found);
+  if (text.startsWith('${')) return scanSubstitutions(text.slice(2, -1), found, true);
   return true;
 }
 
-// Substitutions in free text such as an expanded here-document body.
-function scanSubstitutions(text, found) {
+// Substitutions in free text such as an expanded here-document body. `<(…)`/`>(…)` run only in the word
+// of a `${…}` (`${x:-<(cmd)}`); in a here-document body or `$((…))` they are text or comparisons.
+function scanSubstitutions(text, found, processSubstitutions = false) {
   for (let index = 0; index < text.length; index += 1) {
     if (text[index] === '\\') { index += 1; continue; }
-    if (text[index] !== '$' && text[index] !== '`') continue;
+    const substitution = processSubstitutions && (text[index] === '<' || text[index] === '>') && text[index + 1] === '(';
+    if (text[index] !== '$' && text[index] !== '`' && !substitution) continue;
     const end = expansionEnd(text, index);
     if (end < 0) return false;
     if (!collectSubstitutions(text.slice(index, end), found)) return false;
@@ -583,21 +585,31 @@ export function gitInvocation(tokens) {
 // `npm run shared-hooks`. Nothing is executed. A program that builds its command at run time, or passes
 // it as an argument list, is not seen.
 
-// Interpreter -> option that takes the inline program. cmd programs are shell-like, so the whole program
-// is read as a command too; for the others only quoted string literals are. PowerShell is unwrapped by
-// the `shell` block itself.
+// Interpreter -> option that carries the inline program, as a separate word (`-c CODE`) or attached
+// (`-cCODE`, `--eval=CODE`): group 1 is the attached program. Then the calls that run a command: only
+// with one of them are the program's string literals read as commands, otherwise they are data. Last,
+// whether the program runs to the end of the command line. cmd programs are shell-like (no call list),
+// so the whole program is read as a command too. PowerShell is unwrapped by the `shell` block itself.
+// ponytail: the call check is textual; a call name built at run time (getattr(os, 'sys' + 'tem')) is missed.
 const INLINE_PROGRAM_OPTIONS = [
-  [/^python(?:\d+(?:\.\d+)*)?(?:\.exe)?$/, /^-[A-Za-z]*c$/, false],
-  [/^(?:node|nodejs|bun)(?:\.exe)?$/, /^(?:-e|--eval|-p|--print)$/, false],
-  [/^deno(?:\.exe)?$/, /^eval$/, false],
-  [/^(?:ruby|perl)(?:\.exe)?$/, /^-[A-Za-z]*[eE]$/, false],
-  [/^php(?:\.exe)?$/, /^-r$/, false],
-  [/^cmd(?:\.exe)?$/, /^\/[cCkK]$/, true]
+  [/^python(?:\d+(?:\.\d+)*)?(?:\.exe)?$/, /^-[bBdEhiIOPqsSuvVxR]*c(.*)$/s,
+    /\b(?:system|popen|subprocess|pty|spawn\w*|posix_spawn\w*|exec[lv]\w*)\b/, false],
+  [/^(?:node|nodejs|bun)(?:\.exe)?$/, /^(?:-(?:pe|ep|e|p)=?|--eval=|--eval$|--print=|--print$)(.*)$/s,
+    /child_process|\b(?:exec|execSync|execFile|execFileSync|spawn|spawnSync|fork)\b|\bBun\s*\.\s*(?:spawn|spawnSync|\$)/, false],
+  [/^deno(?:\.exe)?$/, /^(?:eval$|--eval$|--eval=)(.*)$/s, /\bDeno\s*\.\s*(?:Command|run)\b/, true],
+  [/^ruby(?:\.exe)?$/, /^-[acdlnpsSvwyU]*e(.*)$/s,
+    /\b(?:system|exec|spawn|popen\w*|Open3|PTY|open|syscall)\b|`|%x/, false],
+  [/^perl(?:\.exe)?$/, /^-(?:[acfnpsStTuUvwWX]|l[0-7]*|0[0-7]*|0x[0-9A-Fa-f]*)*[eE](.*)$/s,
+    /\b(?:system|exec|qx|open|readpipe)\b|`|%x/, false],
+  [/^php(?:\.exe)?$/, /^(?:-[rBRE]|--(?:run|process-begin|process-code|process-end)(?:=|$))(.*)$/s,
+    /\b(?:exec|system|passthru|shell_exec|popen|proc_open|pcntl_exec)\b|`/, false],
+  [/^cmd(?:\.exe)?$/, /^\/[cCkKrR](.*)$/s, null, true]
 ];
 const INLINE_MAX_LITERALS = 256;
 
 // Quoted string literals of a program, without their quotes; escapes keep the escaped character.
-// One pass: an unterminated literal ends the scan.
+// Backticks count as quotes, and `%x(…)`/`qx{…}` bodies as literals too. One pass: an unterminated
+// literal ends the scan.
 function stringLiterals(program) {
   const literals = [];
   let literal = null;
@@ -605,40 +617,63 @@ function stringLiterals(program) {
   for (let index = 0; index < program.length && literals.length < INLINE_MAX_LITERALS; index += 1) {
     const character = program[index];
     if (!quote) {
-      if (character === "'" || character === '"') { quote = character; literal = ''; }
+      if (character === "'" || character === '"' || character === '`') { quote = character; literal = ''; }
       continue;
     }
     if (character === '\\') { index += 1; literal += program[index] ?? ''; }
     else if (character === quote) { literals.push(literal); quote = null; }
     else literal += character;
   }
+  for (const match of program.matchAll(/(?:%x|\bqx)\s*(?:\(([^)]*)\)|\{([^}]*)\}|\[([^\]]*)\]|<([^>]*)>)/g)) {
+    if (literals.length >= INLINE_MAX_LITERALS) break;
+    literals.push(match.slice(1).find((body) => body !== undefined));
+  }
   return literals;
 }
 
-// The inline program of a normalized command entry, or null when it runs none.
+// The inline program of a normalized command entry, or null when it runs none. `dynamic` is true when
+// the program is not known before the command runs (`-c "$CODE"`, a word xargs supplies): the command
+// is then ambiguous. Ruby and perl accept several `-e`, so every program word is kept.
 export function inlineProgram(entry) {
   if (!entry?.tokens?.length) return null;
   const name = executableName(entry.tokens[0]);
   const known = INLINE_PROGRAM_OPTIONS.find(([executable]) => executable.test(name));
   if (!known) return null;
-  const position = entry.tokens.findIndex((token, index) => index > 0 && known[1].test(token.value));
-  const program = position > 0 ? entry.tokens[position + 1] : null;
-  if (!program) return null;
-  // A PowerShell or cmd program continues to the end of the command line.
-  const text = known[2] ? entry.tokens.slice(position + 1).map((token) => token.value).join(' ') : program.value;
-  return { text, dynamic: program.dynamic || Boolean(program.placeholder), shellLike: known[2] };
+  const [, option, runs, toEnd] = known;
+  const shellLike = !runs;
+  const parts = [];
+  let dynamic = false;
+  for (let index = 1; index < entry.tokens.length; index += 1) {
+    const match = option.exec(entry.tokens[index].value);
+    if (!match) continue;
+    // A program attached to its option is part of the same word; otherwise it is the next word.
+    const attached = match[1] !== '' || /=$/.test(entry.tokens[index].value);
+    const first = attached ? index : index + 1;
+    const words = toEnd ? entry.tokens.slice(first) : entry.tokens.slice(first, first + 1);
+    if (!words.length) continue;
+    dynamic ||= words.some((token) => token.dynamic || token.placeholder);
+    parts.push([...(attached ? [match[1]] : []), ...words.slice(attached ? 1 : 0).map((token) => token.value)].join(' '));
+    if (toEnd) break;
+    index = first;
+  }
+  if (!parts.length) return null;
+  return { text: parts.join('\n'), dynamic, shellLike, runsCommands: shellLike || runs.test(parts.join('\n')) };
 }
 
 // Normalized commands (the shape parseShellCommands returns) found in the inline program of `entry`.
-// Candidates that do not parse are skipped: the literal was not a shell command.
+// Candidates that do not parse are skipped: the literal was not a shell command. A literal that runs
+// a shell without a static command (`sh`), or a program not known before the command runs, yields an
+// `{ ambiguous: true }` entry.
 export function inlineShellCommands(entry) {
   const program = inlineProgram(entry);
   if (!program) return [];
+  if (program.dynamic) return [{ ambiguous: true, tokens: [], wrappers: entry.wrappers ?? [] }];
+  if (!program.runsCommands) return [];
   const sources = [...(program.shellLike ? [program.text] : []), ...stringLiterals(program.text)];
   const commands = [];
   for (const source of sources) {
     const parsed = parseShellCommands(source, 1, [...(entry.wrappers ?? []), executableName(entry.tokens[0])]);
-    if (!parsed.error) commands.push(...parsed.commands.filter((command) => command.tokens?.length));
+    if (!parsed.error) commands.push(...parsed.commands.filter((command) => command.tokens?.length || command.ambiguous));
   }
   return commands;
 }
@@ -683,11 +718,12 @@ function firstRule(command, policy, suspect, uninspectable) {
   const parsed = parseShellCommands(command);
   if (parsed.error) return uninspectable;
   for (const entry of parsed.commands) {
-    if (entry.ambiguous) {
-      if (suspect(command) || entry.wrappers.some((name) => SHELL_NAMES.has(name) || name === 'eval')) return uninspectable;
-      continue;
-    }
-    for (const candidate of [entry, ...inlineShellCommands(entry)]) {
+    // An inline program known only at run time (`python3 -c "$CODE"`) is ambiguous too.
+    for (const candidate of entry.ambiguous ? [entry] : [entry, ...inlineShellCommands(entry)]) {
+      if (candidate.ambiguous) {
+        if (suspect(command) || candidate.wrappers.some((name) => SHELL_NAMES.has(name) || name === 'eval')) return uninspectable;
+        continue;
+      }
       const ruleId = policy(view(candidate));
       if (ruleId) return ruleId;
     }

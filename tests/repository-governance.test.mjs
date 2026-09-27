@@ -40,9 +40,13 @@ test('commit policy rejects temporary, malformed, oversized, and ambiguous heade
   assert.equal(oversized.valid, false);
   assert.ok(oversized.violations.some(({ rule }) => rule === 'COMMIT_HEADER_LENGTH'));
 
-  const squashed = evaluateCommitMessage(`fix(cli): ${'a'.repeat(MAX_COMMIT_HEADER_CHARACTERS - 10)} (#1234)`);
+  // The squash-merge suffix is ignored only for history already on main; elsewhere it counts.
+  const squashHeader = `fix(cli): ${'a'.repeat(MAX_COMMIT_HEADER_CHARACTERS - 10)} (#1234)`;
+  const squashed = evaluateCommitMessage(squashHeader, { squashSuffix: true });
   assert.equal(squashed.violations.some(({ rule }) => rule === 'COMMIT_HEADER_LENGTH'), false);
-  const oversizedSquash = evaluateCommitMessage(`fix(cli): ${'a'.repeat(MAX_COMMIT_HEADER_CHARACTERS)} (#1234)`);
+  assert.ok(evaluateCommitMessage(squashHeader).violations.some(({ rule }) => rule === 'COMMIT_HEADER_LENGTH'));
+  assert.ok(evaluateCommitMessage(`fix: ${'a'.repeat(66)} (#1)`).violations.some(({ rule }) => rule === 'COMMIT_HEADER_LENGTH'));
+  const oversizedSquash = evaluateCommitMessage(`fix(cli): ${'a'.repeat(MAX_COMMIT_HEADER_CHARACTERS)} (#1234)`, { squashSuffix: true });
   assert.ok(oversizedSquash.violations.some(({ rule }) => rule === 'COMMIT_HEADER_LENGTH'));
 
   const breaking = evaluateCommitMessage('feat!: remove compatibility alias');

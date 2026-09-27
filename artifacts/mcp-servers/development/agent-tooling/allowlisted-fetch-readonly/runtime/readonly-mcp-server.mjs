@@ -14,9 +14,9 @@ const MAX_RESULT_BYTES = 256 * 1024;
 const MAX_WALK_ENTRIES = 2000;
 // Newest first. Only versions whose initialize, tools/list, and tools/call shapes this server
 // implements unchanged; the source and date are in the pull request. 2026-07-28 is excluded because
-// it removes initialize. Not full support: 2025-03-26 requires receiving JSON-RPC batches, which
-// this server rejects as an invalid request.
-export const SUPPORTED_PROTOCOL_VERSIONS = Object.freeze(['2025-11-25', '2025-06-18', '2025-03-26', '2024-11-05']);
+// it removes initialize, and 2025-03-26 because it requires receiving JSON-RPC batches, which this
+// server rejects as an invalid request. A client asking for 2025-03-26 is offered the newest version.
+export const SUPPORTED_PROTOCOL_VERSIONS = Object.freeze(['2025-11-25', '2025-06-18', '2024-11-05']);
 const PRIVATE_DIRECTORIES = new Set(['.git', '.youdede', '.youdede-toolkit']);
 const isPrivateDirectory = (name) => PRIVATE_DIRECTORIES.has(name.toLowerCase());
 const SAFE_ENV_SUFFIXES = ['.example', '.sample', '.template', '.dist'];

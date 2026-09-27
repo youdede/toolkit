@@ -44,6 +44,11 @@ const SHELL_PROBES = [
   ['echo "$(git commit -m x)"', ['|git commit -m x [;]', '|echo $$(git commit -m x) []']],
   ['echo `rm -rf /` && git status', ['|rm -rf / [;]', '|echo $`rm -rf /` [&&]', '|git status []']],
   ['echo ${x:-$(npm publish)}', ['|npm publish [;]', '|echo $${x:-$(npm publish)} []']],
+  // A process substitution in the word of `${…}` runs too (PR38-CODEX-2); in `$((…))` `<(` is a comparison.
+  ['echo ${x:-<(npm publish)}', ['|npm publish [;]', '|echo $${x:-<(npm publish)} []']],
+  ['echo ${x:->(rm -rf /)} && echo ${y:-${z:-<(crontab -r)}}', ['|rm -rf / [;]', '|echo $${x:->(rm -rf /)} [&&]', '|crontab -r [;]', '|echo $${y:-${z:-<(crontab -r)}} []']],
+  ['echo ${HOME:-/tmp}', ['|echo $${HOME:-/tmp} []']],
+  ['echo $((a<(b)))', ['|echo $$((a<(b))) []']],
   ['echo $((1 << 2))', ['|echo $$((1 << 2)) []']],
   ['echo $(echo $(echo $(echo $(npm publish))))', ['AMBIGUOUS', '|echo $$(npm publish) [;]', '|echo $$(echo $(npm publish)) [;]', '|echo $$(echo $(echo $(npm publish))) [;]', '|echo $$(echo $(echo $(echo $(npm publish)))) []']],
   // A backslash-newline is removed before the analysis, as bash does (W3-REVIEW-2).

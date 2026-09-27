@@ -124,6 +124,8 @@ test('local MCP runtime lists pinned tools and confines file reads', (context) =
   const result = spawnSync(process.execPath, [runtime, '--profile', '.youdede/mcp/workspace-files-readonly/server.json'], { cwd: directory, input, encoding: 'utf8' });
   assert.equal(result.status, 0, result.stderr);
   const output = result.stdout.trim().split('\n').map(JSON.parse);
+  // 2025-03-26 requires JSON-RPC batches, which the server rejects, so it negotiates the newest version.
+  assert.equal(output[0].result.protocolVersion, SUPPORTED_PROTOCOL_VERSIONS[0]);
   assert.deepEqual(output[1].result.tools.map(({ name }) => name), ['read_file', 'list_directory', 'search_files']);
   assert.equal(output[2].result.content[0].text, 'bounded workspace value\n');
   assert.equal(output[3].result.isError, true);

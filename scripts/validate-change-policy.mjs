@@ -17,7 +17,9 @@ function violation(rule, message) {
   return { rule, message };
 }
 
-export function evaluateCommitMessage(input) {
+// `squashSuffix` is only for history already on main (label `repository-commit`): a GitHub squash merge
+// appends " (#123)" to the reviewed header. A local, pull request, or pushed commit is measured whole.
+export function evaluateCommitMessage(input, { squashSuffix = false } = {}) {
   const violations = [];
   if (typeof input !== 'string') {
     return { valid: false, violations: [violation('COMMIT_MESSAGE_TYPE', 'commit message must be text')] };
@@ -33,8 +35,7 @@ export function evaluateCommitMessage(input) {
 
   const lines = message.split('\n');
   const header = lines[0];
-  // A squash merge on GitHub appends " (#123)" to the reviewed header; the limit applies to the header itself.
-  if (header.replace(/ \(#\d+\)$/u, '').length > MAX_COMMIT_HEADER_CHARACTERS) {
+  if ((squashSuffix ? header.replace(/ \(#\d+\)$/u, '') : header).length > MAX_COMMIT_HEADER_CHARACTERS) {
     violations.push(violation('COMMIT_HEADER_LENGTH', `commit header exceeds ${MAX_COMMIT_HEADER_CHARACTERS} characters`));
   }
   if (/^(?:fixup!|squash!|WIP(?:\b|:))/u.test(header)) {
@@ -154,7 +155,8 @@ function runCli() {
   }
 
   const commits = subjectsForRange(range);
-  for (const commit of commits) report(`${label}:${commit.hash.slice(0, 12)}`, evaluateCommitMessage(commit.subject));
+  const squashSuffix = label === 'repository-commit';
+  for (const commit of commits) report(`${label}:${commit.hash.slice(0, 12)}`, evaluateCommitMessage(commit.subject, { squashSuffix }));
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {

@@ -8,7 +8,7 @@ import { inlineProgram, inlineShellCommands } from '../scripts/lib/shared-hook/i
 // Each command renders as its tokens; the probes cover every interpreter the module knows.
 function render(command) {
   return parseShellCommands(command).commands.flatMap((entry) => inlineShellCommands(entry))
-    .map((entry) => entry.tokens.map((token) => token.value).join(' '));
+    .map((entry) => (entry.ambiguous ? 'AMBIGUOUS' : entry.tokens.map((token) => token.value).join(' ')));
 }
 
 const PROBES = [
@@ -23,7 +23,25 @@ const PROBES = [
   ["pwsh -c 'Restart-Service spooler'", []],
   ['powershell -Command Stop-Service spooler', []],
   ['cmd /c "sc stop spooler"', ['sc stop spooler']],
-  ['sudo python3 -c "print(\'x\')"', ['x']],
+  // Attached program options run the program too (PR38-CODEX-1).
+  ['python3 -c"import os; os.system(\'npm publish\')"', ['npm publish']],
+  ['python3 -Ic"import subprocess; subprocess.run(\'npm publish\', shell=True)"', ['npm publish']],
+  ['node --eval="require(\'child_process\').execSync(\'npm publish\')"', ['child_process', 'npm publish']],
+  ['node -e"require(\'child_process\').execSync(\'npm publish\')"', ['child_process', 'npm publish']],
+  ['bun --print=\'Bun.spawnSync(["sh", "-c", "npm publish"])\'', ['AMBIGUOUS', '-c', 'npm publish']],
+  ['ruby -e"system(\'npm publish\')"', ['npm publish']],
+  ['ruby -we \'%x(npm publish)\'', ['npm publish']],
+  ['perl -e"system(\'npm publish\')"', ['npm publish']],
+  ['perl -lnE\'qx{npm publish}\'', ['npm publish']],
+  ['perl -e 1 -e \'system("npm publish")\'', ['npm publish']],
+  ['php -r"exec(\'npm publish\');"', ['npm publish']],
+  ['deno repl --eval="Deno.run({cmd: [\'ls\']})"', ['ls']],
+  ['cmd /c"sc stop spooler"', ['sc stop spooler']],
+  // Without a call that runs commands, the literals are data (PR38-CODEX-4).
+  ['sudo python3 -c "print(\'x\')"', []],
+  ['python3 -c "print(\'npm publish\')"', []],
+  ['node -e "console.log(\'systemctl restart nginx\')"', []],
+  ['perl -e \'print "crontab -r"\'', []],
   ['python3 script.py', []],
   ['node --version', []],
   ['python3 -c', []],
@@ -34,6 +52,10 @@ test('inline-script finds shell commands in interpreter one-liners', () => {
   for (const [command, expected] of PROBES) assert.deepEqual(render(command).sort(), [...expected].sort(), command);
   const [entry] = parseShellCommands('python3 -c "$CODE"').commands;
   assert.equal(inlineProgram(entry).dynamic, true);
+  // A program known only at run time is ambiguous, attached or supplied by xargs.
+  for (const command of ['python3 -c "$CODE"', 'node --eval="$CODE"', 'printf x | xargs python3 -c']) {
+    assert.deepEqual(parseShellCommands(command).commands.flatMap((item) => inlineShellCommands(item)).map((item) => item.ambiguous), [true], command);
+  }
   assert.equal(inlineProgram(parseShellCommands('ls -c x').commands[0]), null);
 });
 

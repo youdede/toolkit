@@ -166,15 +166,17 @@ function collectSubstitutions(text, found) {
   if (text.startsWith('`')) { found.push(text.slice(1, -1).replace(/\\([\\`$])/g, '$1')); return true; }
   if (text.startsWith('$((')) return scanSubstitutions(text.slice(3, -2), found);
   if (/^(?:\$|<|>)\(/.test(text)) { found.push(text.slice(2, -1)); return true; }
-  if (text.startsWith('${')) return scanSubstitutions(text.slice(2, -1), found);
+  if (text.startsWith('${')) return scanSubstitutions(text.slice(2, -1), found, true);
   return true;
 }
 
-// Substitutions in free text such as an expanded here-document body.
-function scanSubstitutions(text, found) {
+// Substitutions in free text such as an expanded here-document body. `<(…)`/`>(…)` run only in the word
+// of a `${…}` (`${x:-<(cmd)}`); in a here-document body or `$((…))` they are text or comparisons.
+function scanSubstitutions(text, found, processSubstitutions = false) {
   for (let index = 0; index < text.length; index += 1) {
     if (text[index] === '\\') { index += 1; continue; }
-    if (text[index] !== '$' && text[index] !== '`') continue;
+    const substitution = processSubstitutions && (text[index] === '<' || text[index] === '>') && text[index + 1] === '(';
+    if (text[index] !== '$' && text[index] !== '`' && !substitution) continue;
     const end = expansionEnd(text, index);
     if (end < 0) return false;
     if (!collectSubstitutions(text.slice(index, end), found)) return false;
@@ -788,7 +790,7 @@ function mutationFinding(tokens, namesTest) {
     for (let index = start; index < tokens.length; index += 1) {
       const value = tokens[index].value;
       if (value === '-t' || value === '--target-directory') targetDirectory = tokens[index + 1];
-      else if (value.startsWith('--target-directory=')) targetDirectory = { value: value.slice(value.indexOf('=') + 1), dynamic: tokens[index].dynamic };
+      else if (value.startsWith('--target-directory=')) targetDirectory = { value: value.slice(value.indexOf('=') + 1), dynamic: tokens[index].dynamic || tokens[index].placeholder };
     }
     if (targetDirectory) {
       const sources = positional(tokens.filter((_, index) => index !== tokens.indexOf(targetDirectory)), start);
