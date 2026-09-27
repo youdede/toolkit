@@ -23,8 +23,9 @@ const SHELL_WRAPPERS = new Set([
 // Wrappers whose first word after the options is not the command: a duration, priority, CPU mask, or lock file.
 const WRAPPER_POSITIONAL = new Set(['timeout', 'chrt', 'taskset', 'flock']);
 const SHELL_DIRECTORY_CHANGERS = new Set(['cd', 'pushd', 'popd']);
-const SHELL_SENSITIVE_ASSIGNMENT = /^(?:PATH|SHELL|GIT_DIR|GIT_WORK_TREE|GIT_CONFIG[^=]*)=/;
-const SHELL_ASSIGNMENT = /^[A-Za-z_][A-Za-z0-9_]*=/;
+// An assignment sets, appends to (`x+=`), or indexes (`a[1]=`) a variable.
+const SHELL_SENSITIVE_ASSIGNMENT = /^(?:PATH|SHELL|GIT_DIR|GIT_WORK_TREE|GIT_CONFIG[^=]*?)(?:\[[^\]]*\])?\+?=/;
+const SHELL_ASSIGNMENT = /^[A-Za-z_][A-Za-z0-9_]*(?:\[[^\]]*\])?\+?=/;
 // Reserved words and precommand modifiers, from the GNU Bash Reference Manual (§3.1.2.1 Reserved Words:
 // `! case coproc do done elif else esac fi for function if in select then until while { } time [[ ]]`)
 // and zsh 5.9 zshmisc(1) (RESERVED WORDS: `do done esac then elif else fi for case if while function
@@ -218,7 +219,10 @@ function scanSubstitutions(text, found, processSubstitutions = false) {
 // `[` marks it `glob`. Each segment lists in `substitutions` the command text of the `$(…)`, backtick,
 // and `<(…)`/`>(…)` substitutions it runs. A here-document body is data: it is skipped, and only the
 // substitutions of an unquoted-delimiter body are listed. `operator` is the one that
-// ends the segment: `&&`, `||`, `;`, `|`, `&`, `\n`, `(`, `)`, or '' at the end. Redirections, in any
+// ends the segment: `&&`, `||`, `;`, `|`, `&`, `\n`, `(`, `)`, or '' at the end; a function header
+// (`name()`, `function name ()`) is a segment of its own that ends with `()`. An array assignment
+// (`arr=(a b)`, `x+=(…)`, also as the argument of `declare`/`local`) stays one token: its elements are
+// data, and only the substitutions in them run. Redirections, in any
 // position (`>out npm publish` runs npm), always leave the tokens and go to `redirections` as
 // { operator, target }: `2>&1` is { operator: '2>&', target: '1' }, `x>out` is the token x and
 // { operator: '>', target: 'out' }, a here-document's target carries its `heredoc`.
@@ -231,6 +235,7 @@ function lexShell(source, options = {}) {
   let quote = null;
   let substitutions = [];
   let heredocs = [];
+  let array = false;
   const begin = () => { if (!token) token = { value: '', dynamic: false }; };
   const expansion = (index) => {
     const end = expansionEnd(source, index);
@@ -274,6 +279,12 @@ function lexShell(source, options = {}) {
       continue;
     }
     if (character === '\\' && source[index + 1] === '\n') { index += 1; continue; }
+    if (array) {
+      // Inside `arr=( … )` blanks separate elements and `)` closes the list; an operator is a syntax error.
+      if (/\s/.test(character)) { token.value += ' '; continue; }
+      if (character === ')') { token.value += ')'; array = false; continue; }
+      if (';&|('.includes(character) || ((character === '<' || character === '>') && source[index + 1] !== '(')) return { error: 'invalid array' };
+    }
     if (/\s/.test(character)) {
       pushToken();
       if (character !== '\n') continue;
@@ -323,8 +334,21 @@ function lexShell(source, options = {}) {
         } else if (next === '&' || next === '|' || (character === '<' && next === '>')) { operator += next; index += 1; }
       }
       redirect = operator;
+    } else if (character === '(' && token && !token.dynamic && !token.quoted && !redirect && /^[A-Za-z_]\w*\+?=$/.test(token.value)) {
+      token.value += '(';
+      array = true;
     } else if (';&|()'.includes(character)) {
       let operator = character;
+      if (character === '(') {
+        // `name ()`: a function definition header, whose name may follow reserved words (`then f()`).
+        pushToken();
+        const close = /[ \t]*\)/y;
+        close.lastIndex = index + 1;
+        const name = tokens.at(-1);
+        const header = name && !name.dynamic && !redirect && !redirections.length && close.test(source)
+          && tokens.slice(0, -1).every((word) => !word.dynamic && (SHELL_PREFIX_KEYWORDS.has(word.value) || word.value === 'function'));
+        if (header) { operator = '()'; index = close.lastIndex - 1; }
+      }
       if ((character === '&' || character === '|') && source[index + 1] === character) { operator += character; index += 1; }
       if (!pushSegment(operator)) return { error: 'redirection without target' };
     } else {
@@ -335,6 +359,7 @@ function lexShell(source, options = {}) {
     }
   }
   if (quote) return { error: 'unterminated quote' };
+  if (array) return { error: 'invalid array' };
   if (!pushSegment('')) return { error: 'redirection without target' };
   return { segments };
 }
@@ -554,15 +579,42 @@ function unwrapCommand(original, depth, inherited = [], parseOptions = {}, redir
 // true after cd, pushd, or popd in the same command. With `options.redirections`, each command also
 // carries the `redirections` of its segment, and a segment made only of redirections (`> file`)
 // yields a command with no tokens. An ambiguous entry carries `segment`, the tokens of the innermost
-// segment it came from, so a hook can still judge that segment's text.
+// segment it came from, so a hook can still judge that segment's text. A function definition runs
+// nothing: the commands of a `{ … }` body are kept aside and stand in for each later call of the name,
+// in this text and in the shells and substitutions it nests (fail closed: a nested shell sees them too).
+// ponytail: only a `{ … }` body is kept aside; any other body (`f() ( … )`) is read as if it ran now.
 export function parseShellCommands(command, depth = 0, wrappers = [], options = {}) {
   if (typeof command !== 'string') return { commands: [] };
+  if (!options.functions) options = { ...options, functions: new Map() };
+  const { functions } = options;
   if (Buffer.byteLength(command, 'utf8') > SHELL_MAX_COMMAND_BYTES) return { error: 'command exceeds analysis limit', commands: [] };
   const lexed = lexShell(command, options);
   if (lexed.error) return { error: lexed.error, commands: [] };
   const commands = [];
   const loops = new Map();
+  const isWord = (token, value) => Boolean(token) && !token.dynamic && token.value === value;
+  let header = null;
+  let body = null;
   for (const segment of lexed.segments) {
+    if (segment.operator === '()') { header = segment.tokens.at(-1).value; continue; }
+    if (!body) {
+      const [first, name, open] = segment.tokens.slice(segment.tokens.findIndex((token) => token.dynamic || !SHELL_PREFIX_KEYWORDS.has(token.value)));
+      if (header && isWord(segment.tokens[0], '{')) body = { name: header, depth: 0, commands: [] };
+      else if (isWord(first, 'function') && name && !name.dynamic && isWord(open, '{')) {
+        body = { name: name.value, depth: 0, commands: [] };
+        segment.tokens = segment.tokens.slice(segment.tokens.indexOf(open));
+      }
+    }
+    header = null;
+    const output = body ? body.commands : commands;
+    if (body) {
+      // `{` opens and `}` closes a group only where a command starts.
+      for (const token of segment.tokens) {
+        if (isWord(token, '{')) body.depth += 1;
+        else if (isWord(token, '}')) body.depth -= 1;
+        else if (token.dynamic || !SHELL_PREFIX_KEYWORDS.has(token.value)) break;
+      }
+    }
     const start = segment.tokens.findIndex((token) => token.dynamic || !SHELL_PREFIX_KEYWORDS.has(token.value));
     const [keyword, variable, word] = start < 0 ? [] : segment.tokens.slice(start);
     if (keyword?.value === 'for' && !keyword.dynamic && word?.value === 'in' && /^[A-Za-z_]\w*$/.test(variable?.value ?? '')) {
@@ -578,9 +630,12 @@ export function parseShellCommands(command, depth = 0, wrappers = [], options = 
       const nested = depth >= SHELL_MAX_DEPTH ? { error: 'too deep' } : parseShellCommands(text, depth + 1, wrappers, options);
       const inner = nested.error ? [{ ambiguous: true, wrappers: [...wrappers], segment: segment.tokens }] : nested.commands;
       if (inner.length) inner.at(-1).operator = ';';
-      commands.push(...inner);
+      output.push(...inner);
     }
-    let entries = unwrapCommand(segment.tokens, depth, wrappers, options, segment.redirections);
+    let entries = unwrapCommand(segment.tokens, depth, wrappers, options, segment.redirections)
+      .flatMap((entry) => (entry.tokens?.length && functions.has(entry.tokens[0].value) && !entry.tokens[0].dynamic
+        ? functions.get(entry.tokens[0].value).map((call) => ({ ...call }))
+        : [entry]));
     if (options.redirections && segment.redirections.length) {
       if (!entries.length) entries = [{ tokens: [], wrappers: [...wrappers] }];
       for (const entry of entries) entry.redirections = [...(entry.redirections ?? []), ...segment.redirections];
@@ -591,8 +646,11 @@ export function parseShellCommands(command, depth = 0, wrappers = [], options = 
       entry.operator ??= segment.operator;
       if (entry.ambiguous) entry.segment ??= segment.tokens;
     }
-    commands.push(...entries);
+    output.push(...entries);
+    if (body && body.depth <= 0) { functions.set(body.name, body.commands); body = null; }
   }
+  // A body left open is a syntax error, and nothing runs; its commands are kept (fail closed).
+  if (body) commands.push(...body.commands);
   if (depth === 0) {
     let changed = false;
     for (const entry of commands) {

@@ -10,22 +10,22 @@ import { executableName, parseShellCommands } from './shell.mjs';
 // of the command line, and its language, which picks the literal and comment forms. Last, the option
 // region: options end at `--` or at the first operand (the script, `-` for standard input, a module
 // after `-m`/`-f`), and every later word belongs to that script (`node app.js --eval x` runs app.js).
-// `values` are the options whose value is the next word (`node -r mod`, `ruby -I dir`, `perl -I dir`),
-// so the value is not taken for the script; `stops` are options after which the rest belongs to a
-// module or file; `continues` are subcommands whose own options follow (`deno repl --eval`). cmd
+// Any option may take the next word as its value (`node -r mod`, `node --inspect-publish-uid http`,
+// `ruby -I dir`), and no hand-written list of such options stays complete, so the word after an option
+// without `=` is read as its value, never as the script: a program option after it is still found
+// (fail closed: `node --no-warnings app.js -e x` is read as a one-liner too). `stops` are options after
+// which the rest belongs to a module or file; `continues` are subcommands whose own options follow
+// (`deno repl --eval`). cmd
 // programs are shell-like, so the whole program is read as a command too. PowerShell is unwrapped by
 // the `shell` block itself.
 const INLINE_PROGRAM_OPTIONS = [
-  [/^python(?:\d+(?:\.\d+)*)?(?:\.exe)?$/, /^-[bBdEhiIOPqsSuvVxR]*c(.*)$/s, false, 'python',
-    { values: /^(?:-[WX]|--check-hash-based-pycs)$/, stops: /^-[bBdEhiIOPqsSuvVxR]*m/ }],
-  [/^(?:node|nodejs|bun)(?:\.exe)?$/, /^(?:-(?:pe|ep|e|p)=?|--eval=|--eval$|--print=|--print$)(.*)$/s, false, 'js',
-    { values: /^(?:-r|--require|--import|--loader|--experimental-loader|-C|--conditions|--input-type|--env-file|--title|--disable-warning|--watch-path|--inspect-port|--redirect-warnings|--report-dir|--openssl-config|--icu-data-dir)$/ }],
+  [/^python(?:\d+(?:\.\d+)*)?(?:\.exe)?$/, /^-[bBdEhiIOPqsSuvVxR]*c(.*)$/s, false, 'python', { stops: /^-[bBdEhiIOPqsSuvVxR]*m/ }],
+  [/^(?:node|nodejs|bun)(?:\.exe)?$/, /^(?:-(?:pe|ep|e|p)=?|--eval=|--eval$|--print=|--print$)(.*)$/s, false, 'js', {}],
   [/^deno(?:\.exe)?$/, /^(?:eval$|--eval$|--eval=)(.*)$/s, true, 'js', { continues: new Set(['repl']) }],
-  [/^ruby(?:\.exe)?$/, /^-[acdlnpsSvwyU]*e(.*)$/s, false, 'ruby',
-    { values: /^(?:-[IrCE]|--(?:encoding|external-encoding|internal-encoding|enable|disable|dump|backtrace-limit|crash-report))$/ }],
-  [/^perl(?:\.exe)?$/, /^-(?:[acfnpsStTuUvwWX]|l[0-7]*|0[0-7]*|0x[0-9A-Fa-f]*)*[eE](.*)$/s, false, 'perl', { values: /^-I$/ }],
+  [/^ruby(?:\.exe)?$/, /^-[acdlnpsSvwyU]*e(.*)$/s, false, 'ruby', {}],
+  [/^perl(?:\.exe)?$/, /^-(?:[acfnpsStTuUvwWX]|l[0-7]*|0[0-7]*|0x[0-9A-Fa-f]*)*[eE](.*)$/s, false, 'perl', {}],
   [/^php(?:\.exe)?$/, /^(?:-[rBRE]|--(?:run|process-begin|process-code|process-end)(?:=|$))(.*)$/s, false, 'php',
-    { values: /^(?:-[cdzt]|--(?:php-ini|define|zend-extension|docroot))$/, stops: /^(?:-[fFS]|--(?:file|process-file|server))$/ }],
+    { stops: /^(?:-[fFS]|--(?:file|process-file|server))$/ }],
   [/^cmd(?:\.exe)?$/, /^\/[cCkKrR](.*)$/s, true, 'cmd', { option: /^\// }]
 ];
 const INLINE_MAX_LITERALS = 256;
@@ -266,7 +266,8 @@ export function inlineProgram(entry) {
         break;
       }
       if (region.stops?.test(token.value)) break;
-      if (region.values?.test(token.value)) index += 1;
+      const next = entry.tokens[index + 1];
+      if (!region.option && !token.value.includes('=') && next && !isOption(next.value)) index += 1;
       continue;
     }
     // A program attached to its option is part of the same word; otherwise it is the next word.
