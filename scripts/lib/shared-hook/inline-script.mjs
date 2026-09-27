@@ -34,6 +34,9 @@ const INLINE_CAPABLE = {
   perl: /\b(?:system|exec|qx|open|readpipe|fork|eval|require)\b|IPC::|`/,
   php: /\b(?:exec|system|passthru|shell_exec|popen|proc_open|pcntl_exec|eval|assert|create_function|call_user_func\w*|include|require\w*)\b|`/
 };
+// A here-document, whatever its delimiter: Ruby and Perl `<<ID`, `<<~ID`, `<<-ID`, `<<"ID"`, `<< "ID"`,
+// and PHP `<<<ID`. The reader does not follow its body, so a capable program holding one blocks.
+const INLINE_HEREDOC = { ruby: /<<[~-]?\s*(?:[A-Za-z_]|["'`])/, perl: /<<~?\s*(?:[A-Za-z_]|["'`])/, php: /<<<\s*["']?[A-Za-z_]/ };
 // Interpolation inside a literal is code: Ruby `#{…}`, JS `${…}`, Perl `@{[…]}`, PHP `{$…}`.
 const INLINE_INTERPOLATION = /#\{|\$\{|@\{|\{\$/;
 
@@ -80,8 +83,19 @@ const INLINE_ESCAPES = {
   php: { simple: 'ntrfve', hex: /^x([0-9A-Fa-f]{1,2})/, u4: false, u8: false, braces: /^u\{([0-9A-Fa-f]{1,6})\}/, unknown: /^u\{/, keepOther: true }
 };
 
+// The escapes the reader is sure of in each interpolating mode: backslash, quotes, sigils, `\\n`, `\\t`, `\\r`,
+// `\\xHH`, and `\\uHHHH` where the language has it. Any other escape is still decoded as well as the
+// reader can, but counts as unknown, so a capable program holding one blocks.
+const INLINE_CERTAIN_ESCAPES = {
+  python: /^(?:[\\'"ntr]|x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4})/,
+  js: /^(?:[\\'"`ntr]|x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4})/,
+  ruby: /^(?:[\\'"`#ntr]|x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4})/,
+  perl: /^(?:[\\'"`$@ntr]|x[0-9A-Fa-f]{2})/,
+  php: /^(?:[\\'"`ntr$]|x[0-9A-Fa-f]{2})/
+};
+
 // The escape at `cursor` (a backslash) of a literal decoded with `mode`: its text, the index of its last
-// character, and whether the reader does not know its value.
+// character, and whether the reader does not know its value for certain.
 function decodeEscape(program, cursor, mode, open, close) {
   const rest = program.slice(cursor + 1, cursor + 12);
   const next = rest[0] ?? '';
@@ -92,7 +106,12 @@ function decodeEscape(program, cursor, mode, open, close) {
   };
   if (mode === 'raw') return decoded(`\\${next}`, 1);
   if (mode === 'single') return next === '\\' || next === open || next === close ? decoded(next, 1) : decoded(`\\${next}`, 1);
-  const rules = INLINE_ESCAPES[mode];
+  const escape = decodeInterpolating(rest, next, decoded, point, INLINE_ESCAPES[mode], open, close);
+  const certain = INLINE_CERTAIN_ESCAPES[mode].test(rest) || next === open || next === close;
+  return certain ? escape : { ...escape, unknown: true };
+}
+
+function decodeInterpolating(rest, next, decoded, point, rules, open, close) {
   if (next === '\n') return decoded('', 1);
   let match;
   if (rules.braces && (match = rules.braces.exec(rest))) return point(match[1], 16, match[0].length);
@@ -100,7 +119,7 @@ function decodeEscape(program, cursor, mode, open, close) {
   if (rules.u4 && (match = /^u([0-9A-Fa-f]{4})/.exec(rest))) return point(match[1], 16, match[0].length);
   if (rules.u8 && (match = /^U([0-9A-Fa-f]{8})/.exec(rest))) return point(match[1], 16, match[0].length);
   if ((match = /^[0-7]{1,3}/.exec(rest))) return point(match[0], 8, match[0].length);
-  if (rules.unknown.test(rest)) return { text: '', end: cursor + 1, unknown: true };
+  if (rules.unknown.test(rest)) return { ...decoded('', 1), unknown: true };
   if (rules.simple.includes(next)) return decoded(INLINE_SIMPLE_ESCAPES[next], 1);
   if ('\\\'"`$@'.includes(next) || next === open || next === close) return decoded(next, 1);
   return decoded(rules.keepOther ? `\\${next}` : next, 1);
@@ -249,8 +268,11 @@ export function inlineProgram(entry) {
   // sees a command split across adjacent literals (`'n' 'pm publish'`).
   // ponytail: joins every literal, not only adjacent ones; extra joins only widen what looks relevant.
   const literalText = `${literals.join('')}\n${literals.join(' ')}`;
-  // A capable program with a literal whose value the reader does not know counts as relevant to every hook.
-  return { text, dynamic, shellLike, literals, capable, ambiguous, literalText, relevant: capable && undecoded };
+  // A capable program with a literal whose value the reader does not know for certain, or with a
+  // here-document, counts as relevant to every hook.
+  // ponytail: the here-document test is textual; a Ruby `a<<b` shift in a capable program also blocks.
+  const heredoc = Boolean(INLINE_HEREDOC[language]?.test(text));
+  return { text, dynamic, shellLike, literals, capable, ambiguous, literalText, relevant: capable && (undecoded || heredoc) };
 }
 
 // Normalized commands (the shape parseShellCommands returns) found in the inline program of `entry`.

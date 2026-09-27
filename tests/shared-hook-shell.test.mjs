@@ -50,6 +50,15 @@ const SHELL_PROBES = [
   ['bash <<EOF\n$X\nEOF', ['AMBIGUOUS']],
   ['bash < file', ['AMBIGUOUS']],
   ['bash script.sh <<< data', ['|bash script.sh []']],
+  // Descriptor 0 written before the operator is standard input too; other input redirections are ambiguous
+  // (PR38-CODEX7-1). With a space, `0` is a script name, as bash reads it.
+  ["bash 0<<< 'npm publish'", ['bash|npm publish []']],
+  ["bash 0<<'EOF'\nnpm publish\nEOF", ['bash|npm publish [\n]']],
+  ['bash 0<file && git status', ['AMBIGUOUS', '|git status []']],
+  ['bash 0<> file', ['AMBIGUOUS']],
+  ['bash <&3', ['AMBIGUOUS']],
+  ["bash 3<<< 'npm publish'", ['AMBIGUOUS']],
+  ["bash 0 <<< 'npm publish'", ['|bash 0 []']],
   // Between double quotes bash keeps a backslash before other characters (PR38-CODEX6-2).
   ['echo "C:\\Users" "a\\$b"', ['|echo C:\\Users a$b []']],
   ['diff <(sort a) <(sort b)', ['|sort a [;]', '|sort b [;]', '|diff $<(sort a) $<(sort b) []']],

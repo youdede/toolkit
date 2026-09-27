@@ -277,11 +277,13 @@ function lexShell(source, options = {}) {
       const heredoc = readHeredoc(source, index);
       if (!heredoc) return { error: 'redirection without target' };
       let operator = heredoc.operator;
-      if (options.redirections && token && !token.quoted && !token.dynamic && /^\d+$/.test(token.value)) { operator = token.value + operator; token = null; }
+      // A file descriptor number written right before the operator belongs to it (`0<<EOF`).
+      let fd = '';
+      if (token && !token.quoted && !token.dynamic && /^\d+$/.test(token.value)) { fd = token.value; operator = fd + operator; token = null; }
       pushToken();
       if (redirect) return { error: 'redirection without target' };
       if (options.redirections) redirections.push({ operator, target: { value: heredoc.delimiter, dynamic: false } });
-      else tokens.push({ value: operator + heredoc.delimiter, dynamic: false, heredoc });
+      else tokens.push({ value: operator + heredoc.delimiter, dynamic: false, heredoc, fd });
       // The body of an unquoted delimiter is attached to this segment when it is read.
       heredoc.owner = substitutions;
       heredocs.push(heredoc);
@@ -305,9 +307,12 @@ function lexShell(source, options = {}) {
       }
       redirect = operator;
     } else if (!options.redirections && character === '<' && source.startsWith('<<<', index)) {
-      // A here-string: the next word is the standard input of the command.
+      // A here-string: the next word is the input of the command, standard input unless a file
+      // descriptor number is written right before it (`0<<<` is standard input too).
+      let fd = '';
+      if (token && !token.quoted && !token.dynamic && /^\d+$/.test(token.value)) { fd = token.value; token = null; }
       pushToken();
-      tokens.push({ value: '<<<', dynamic: false, herestring: true });
+      tokens.push({ value: `${fd}<<<`, dynamic: false, herestring: true, fd });
       index += 2;
     } else if (!options.redirections && character === '<' && source[index + 1] !== '(') {
       // An input redirection (`< file`, `<file`): marked so a shell reading it is not given a script name.
@@ -407,23 +412,25 @@ function unwrapCommand(original, depth, inherited = [], parseOptions = {}) {
         // shell runs its standard input (`… | sh`, `sh -s`, `bash < file`), whose text the command itself
         // supplies and the hook cannot see, or a script file, which is judged like any other program
         // (`./script.sh` and `make` are not read either).
-        // A here-string or here-document gives the shell its program on standard input: a static one is
-        // read as commands, anything else is ambiguous. Their words are never a script name, and neither
-        // is the file of `bash < file`, whose text is not seen. The last input wins, as in bash.
+        // A here-string or here-document on standard input (no descriptor number, or 0) gives the shell
+        // its program: a static one is read as commands. Every other input redirection (`< file`, `0<>`,
+        // `<&3`, a here-string on another descriptor) is ambiguous. Their words are never a script name.
+        // The last input wins, as in bash.
         const feeds = [];
         const rest = [];
         for (let position = index + 1; position < tokens.length; position += 1) {
           const token = tokens[position];
+          const stdinFeed = !token.fd || token.fd === '0';
           if (token.heredoc) {
             const { body, quoted } = token.heredoc;
-            feeds.push(quoted || !/[$`\\]/.test(body) ? { text: body } : { dynamic: true });
+            feeds.push(stdinFeed && (quoted || !/[$`\\]/.test(body)) ? { text: body } : { dynamic: true });
           } else if (token.herestring) {
             const word = tokens[position + 1];
             position += 1;
-            feeds.push(word && !word.dynamic && !word.placeholder ? { text: word.value } : { dynamic: true });
+            feeds.push(stdinFeed && word && !word.dynamic && !word.placeholder ? { text: word.value } : { dynamic: true });
           } else if (token.input) {
             feeds.push({ dynamic: true });
-            if (/^\d*<$/.test(token.value)) position += 1;
+            if (/^\d*<[>&]?$/.test(token.value)) position += 1;
           } else rest.push(token);
         }
         tokens = [...tokens.slice(0, index + 1), ...rest];

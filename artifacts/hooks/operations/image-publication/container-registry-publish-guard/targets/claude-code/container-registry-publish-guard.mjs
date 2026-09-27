@@ -274,11 +274,13 @@ function lexShell(source, options = {}) {
       const heredoc = readHeredoc(source, index);
       if (!heredoc) return { error: 'redirection without target' };
       let operator = heredoc.operator;
-      if (options.redirections && token && !token.quoted && !token.dynamic && /^\d+$/.test(token.value)) { operator = token.value + operator; token = null; }
+      // A file descriptor number written right before the operator belongs to it (`0<<EOF`).
+      let fd = '';
+      if (token && !token.quoted && !token.dynamic && /^\d+$/.test(token.value)) { fd = token.value; operator = fd + operator; token = null; }
       pushToken();
       if (redirect) return { error: 'redirection without target' };
       if (options.redirections) redirections.push({ operator, target: { value: heredoc.delimiter, dynamic: false } });
-      else tokens.push({ value: operator + heredoc.delimiter, dynamic: false, heredoc });
+      else tokens.push({ value: operator + heredoc.delimiter, dynamic: false, heredoc, fd });
       // The body of an unquoted delimiter is attached to this segment when it is read.
       heredoc.owner = substitutions;
       heredocs.push(heredoc);
@@ -302,9 +304,12 @@ function lexShell(source, options = {}) {
       }
       redirect = operator;
     } else if (!options.redirections && character === '<' && source.startsWith('<<<', index)) {
-      // A here-string: the next word is the standard input of the command.
+      // A here-string: the next word is the input of the command, standard input unless a file
+      // descriptor number is written right before it (`0<<<` is standard input too).
+      let fd = '';
+      if (token && !token.quoted && !token.dynamic && /^\d+$/.test(token.value)) { fd = token.value; token = null; }
       pushToken();
-      tokens.push({ value: '<<<', dynamic: false, herestring: true });
+      tokens.push({ value: `${fd}<<<`, dynamic: false, herestring: true, fd });
       index += 2;
     } else if (!options.redirections && character === '<' && source[index + 1] !== '(') {
       // An input redirection (`< file`, `<file`): marked so a shell reading it is not given a script name.
@@ -404,23 +409,25 @@ function unwrapCommand(original, depth, inherited = [], parseOptions = {}) {
         // shell runs its standard input (`… | sh`, `sh -s`, `bash < file`), whose text the command itself
         // supplies and the hook cannot see, or a script file, which is judged like any other program
         // (`./script.sh` and `make` are not read either).
-        // A here-string or here-document gives the shell its program on standard input: a static one is
-        // read as commands, anything else is ambiguous. Their words are never a script name, and neither
-        // is the file of `bash < file`, whose text is not seen. The last input wins, as in bash.
+        // A here-string or here-document on standard input (no descriptor number, or 0) gives the shell
+        // its program: a static one is read as commands. Every other input redirection (`< file`, `0<>`,
+        // `<&3`, a here-string on another descriptor) is ambiguous. Their words are never a script name.
+        // The last input wins, as in bash.
         const feeds = [];
         const rest = [];
         for (let position = index + 1; position < tokens.length; position += 1) {
           const token = tokens[position];
+          const stdinFeed = !token.fd || token.fd === '0';
           if (token.heredoc) {
             const { body, quoted } = token.heredoc;
-            feeds.push(quoted || !/[$`\\]/.test(body) ? { text: body } : { dynamic: true });
+            feeds.push(stdinFeed && (quoted || !/[$`\\]/.test(body)) ? { text: body } : { dynamic: true });
           } else if (token.herestring) {
             const word = tokens[position + 1];
             position += 1;
-            feeds.push(word && !word.dynamic && !word.placeholder ? { text: word.value } : { dynamic: true });
+            feeds.push(stdinFeed && word && !word.dynamic && !word.placeholder ? { text: word.value } : { dynamic: true });
           } else if (token.input) {
             feeds.push({ dynamic: true });
-            if (/^\d*<$/.test(token.value)) position += 1;
+            if (/^\d*<[>&]?$/.test(token.value)) position += 1;
           } else rest.push(token);
         }
         tokens = [...tokens.slice(0, index + 1), ...rest];
@@ -660,6 +667,9 @@ const INLINE_CAPABLE = {
   perl: /\b(?:system|exec|qx|open|readpipe|fork|eval|require)\b|IPC::|`/,
   php: /\b(?:exec|system|passthru|shell_exec|popen|proc_open|pcntl_exec|eval|assert|create_function|call_user_func\w*|include|require\w*)\b|`/
 };
+// A here-document, whatever its delimiter: Ruby and Perl `<<ID`, `<<~ID`, `<<-ID`, `<<"ID"`, `<< "ID"`,
+// and PHP `<<<ID`. The reader does not follow its body, so a capable program holding one blocks.
+const INLINE_HEREDOC = { ruby: /<<[~-]?\s*(?:[A-Za-z_]|["'`])/, perl: /<<~?\s*(?:[A-Za-z_]|["'`])/, php: /<<<\s*["']?[A-Za-z_]/ };
 // Interpolation inside a literal is code: Ruby `#{…}`, JS `${…}`, Perl `@{[…]}`, PHP `{$…}`.
 const INLINE_INTERPOLATION = /#\{|\$\{|@\{|\{\$/;
 
@@ -706,8 +716,19 @@ const INLINE_ESCAPES = {
   php: { simple: 'ntrfve', hex: /^x([0-9A-Fa-f]{1,2})/, u4: false, u8: false, braces: /^u\{([0-9A-Fa-f]{1,6})\}/, unknown: /^u\{/, keepOther: true }
 };
 
+// The escapes the reader is sure of in each interpolating mode: backslash, quotes, sigils, `\\n`, `\\t`, `\\r`,
+// `\\xHH`, and `\\uHHHH` where the language has it. Any other escape is still decoded as well as the
+// reader can, but counts as unknown, so a capable program holding one blocks.
+const INLINE_CERTAIN_ESCAPES = {
+  python: /^(?:[\\'"ntr]|x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4})/,
+  js: /^(?:[\\'"`ntr]|x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4})/,
+  ruby: /^(?:[\\'"`#ntr]|x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4})/,
+  perl: /^(?:[\\'"`$@ntr]|x[0-9A-Fa-f]{2})/,
+  php: /^(?:[\\'"`ntr$]|x[0-9A-Fa-f]{2})/
+};
+
 // The escape at `cursor` (a backslash) of a literal decoded with `mode`: its text, the index of its last
-// character, and whether the reader does not know its value.
+// character, and whether the reader does not know its value for certain.
 function decodeEscape(program, cursor, mode, open, close) {
   const rest = program.slice(cursor + 1, cursor + 12);
   const next = rest[0] ?? '';
@@ -718,7 +739,12 @@ function decodeEscape(program, cursor, mode, open, close) {
   };
   if (mode === 'raw') return decoded(`\\${next}`, 1);
   if (mode === 'single') return next === '\\' || next === open || next === close ? decoded(next, 1) : decoded(`\\${next}`, 1);
-  const rules = INLINE_ESCAPES[mode];
+  const escape = decodeInterpolating(rest, next, decoded, point, INLINE_ESCAPES[mode], open, close);
+  const certain = INLINE_CERTAIN_ESCAPES[mode].test(rest) || next === open || next === close;
+  return certain ? escape : { ...escape, unknown: true };
+}
+
+function decodeInterpolating(rest, next, decoded, point, rules, open, close) {
   if (next === '\n') return decoded('', 1);
   let match;
   if (rules.braces && (match = rules.braces.exec(rest))) return point(match[1], 16, match[0].length);
@@ -726,7 +752,7 @@ function decodeEscape(program, cursor, mode, open, close) {
   if (rules.u4 && (match = /^u([0-9A-Fa-f]{4})/.exec(rest))) return point(match[1], 16, match[0].length);
   if (rules.u8 && (match = /^U([0-9A-Fa-f]{8})/.exec(rest))) return point(match[1], 16, match[0].length);
   if ((match = /^[0-7]{1,3}/.exec(rest))) return point(match[0], 8, match[0].length);
-  if (rules.unknown.test(rest)) return { text: '', end: cursor + 1, unknown: true };
+  if (rules.unknown.test(rest)) return { ...decoded('', 1), unknown: true };
   if (rules.simple.includes(next)) return decoded(INLINE_SIMPLE_ESCAPES[next], 1);
   if ('\\\'"`$@'.includes(next) || next === open || next === close) return decoded(next, 1);
   return decoded(rules.keepOther ? `\\${next}` : next, 1);
@@ -875,8 +901,11 @@ export function inlineProgram(entry) {
   // sees a command split across adjacent literals (`'n' 'pm publish'`).
   // ponytail: joins every literal, not only adjacent ones; extra joins only widen what looks relevant.
   const literalText = `${literals.join('')}\n${literals.join(' ')}`;
-  // A capable program with a literal whose value the reader does not know counts as relevant to every hook.
-  return { text, dynamic, shellLike, literals, capable, ambiguous, literalText, relevant: capable && undecoded };
+  // A capable program with a literal whose value the reader does not know for certain, or with a
+  // here-document, counts as relevant to every hook.
+  // ponytail: the here-document test is textual; a Ruby `a<<b` shift in a capable program also blocks.
+  const heredoc = Boolean(INLINE_HEREDOC[language]?.test(text));
+  return { text, dynamic, shellLike, literals, capable, ambiguous, literalText, relevant: capable && (undecoded || heredoc) };
 }
 
 // Normalized commands (the shape parseShellCommands returns) found in the inline program of `entry`.

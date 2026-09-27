@@ -118,6 +118,24 @@ test('inline-script finds shell commands in interpreter one-liners', () => {
   const undecoded = parseShellCommands('python3 -c "import os; os.system(\'\\N{LATIN SMALL LETTER N}pm x\')"').commands.flatMap((item) => inlineShellCommands(item));
   assert.equal(undecoded.at(-1).relevant, true);
   assert.equal(inlineShellCommands(parseShellCommands('node -e "require(\'fs\').writeFileSync(\'x\', \'y\')"').commands[0]).at(-1).relevant, false);
+  // In a capable program only certain escapes are trusted; any other escape or a here-document makes it
+  // relevant to every hook (PR38-CODEX7-2, PR38-CODEX7-3). Programs that are not capable are unchanged.
+  const relevance = (command) => parseShellCommands(command).commands.flatMap((item) => inlineShellCommands(item)).at(-1)?.relevant ?? null;
+  for (const command of [
+    'perl -e \'system "npm \\o{160}ublish"\'',
+    'python3 -c "import os; os.system(\'npm \\160ublish\')"',
+    'node -e "require(\'child_process\').execSync(\'npm pu\\u{62}lish\')"',
+    'ruby -e "system <<~CMD\nnpm pu\\x62lish\nCMD\n"',
+    'perl -e \'system <<"EOF";\nnpm publish\nEOF\n\''
+  ]) assert.equal(relevance(command), true, command);
+  for (const command of [
+    'python3 -c "import os; os.system(\'npm pu\\x62lish\')"',
+    'perl -e \'system "echo \\$HOME\\n"\'',
+    'ruby -e \'system("ls\\t-l")\''
+  ]) assert.equal(relevance(command), false, command);
+  for (const command of ['python3 -c "print(\'a\\tb\')"', 'ruby -e \'puts "hello\\n"\'', 'perl -e \'print "x\\n"\'']) {
+    assert.deepEqual(parseShellCommands(command).commands.flatMap((item) => inlineShellCommands(item)), [], command);
+  }
 });
 
 test('inline-script ends quickly on adversarial programs', () => {
