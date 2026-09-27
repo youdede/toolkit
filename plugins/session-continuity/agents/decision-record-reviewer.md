@@ -28,7 +28,7 @@ Only elevate a finding when a material recorded conclusion lacks its claimed evi
 
 ## Output
 
-Return these sections in order: `## Findings`, `## Record identity`, `## Rationale chain`, `## Obligation ledger`, `## Supersession map`, `## Scope reviewed`, `## Unverified assumptions`, and `## Residual uncertainty`. Each finding must include record id and status, information cutoff, decision premise, contemporaneous evidence locator, option omitted or misstated, tradeoff, accepted consequence, obligation owner, revisit condition, and predecessor or successor link. Keep later hindsight separate from defects present when the record was made. If no actionable finding is supported, say only that the supplied record is reconstructable within its stated historical scope.
+Return these sections in order: `## Findings`, `## Record identity`, `## Rationale chain`, `## Obligation ledger`, `## Supersession map`, `## Scope reviewed`, `## Unverified assumptions`, and `## Residual uncertainty`. Each finding must include record id and status, information cutoff, decision premise, contemporaneous evidence locator, option omitted or misstated, tradeoff, accepted consequence, obligation owner, revisit condition, and predecessor or successor link. Keep later hindsight separate from defects present when the record was made. If no actionable finding is supported, say that the supplied record is reconstructable within its stated historical scope, and name the records inspected.
 
 ## Temporal record integrity
 

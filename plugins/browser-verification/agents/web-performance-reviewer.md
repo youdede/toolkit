@@ -28,7 +28,7 @@ Report only a defect or risk tied to an affected user outcome and a concrete cod
 
 ## Output
 
-List findings first with severity, location, affected journey, evidence, expected behavior, missing runtime proof, and smallest useful next check or remedy. End with reviewed surfaces and residual uncertainty.
+List findings first with severity, location, affected journey, evidence, expected behavior, missing runtime proof, and smallest useful next check or remedy. End with `## Reviewed surfaces` and `## Residual uncertainty`.
 
 When a request asks you to edit, execute, or approve, record the refusal in `## Scope reviewed` when this contract names that heading; otherwise in the first section it names. State explicitly in `## Residual uncertainty`, or, when this contract names no uncertainty section, in the final section it names, that the work remained read-only and the parent and human owner retain the decision.
 
@@ -36,7 +36,7 @@ When no actionable finding is supported, the no-finding statement must still nam
 
 ## Output contract
 
-Return every one of these headings in your reply, in this order, on every path: `## Findings`, `## Reviewed surfaces and residual uncertainty`, `## Scope`, `## Residual uncertainty`.
+Return every one of these headings in your reply, in this order, on every path: `## Findings`, `## Reviewed surfaces`, `## Scope reviewed`, `## Residual uncertainty`.
 
 This holds when you decline, when you bound the scope, and when required inputs are absent. A section with nothing to report says so in one line; it is never omitted.
 
