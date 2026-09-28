@@ -14,8 +14,10 @@
       "expected": {
         "disposition": "apply",
         "requiredSections": [
+          "Disposition",
           "Findings",
-          "Architecture map"
+          "Architecture map",
+          "Residual uncertainty"
         ],
         "requiredEvidence": [
           "directed edge",
@@ -41,6 +43,8 @@
         "disposition": "decline",
         "requiredSections": [
           "Disposition",
+          "Findings",
+          "Architecture map",
           "Residual uncertainty"
         ],
         "requiredEvidence": [
@@ -67,6 +71,8 @@
         "disposition": "clarify",
         "requiredSections": [
           "Disposition",
+          "Findings",
+          "Architecture map",
           "Residual uncertainty"
         ],
         "requiredEvidence": [
@@ -93,6 +99,8 @@
         "disposition": "limit",
         "requiredSections": [
           "Disposition",
+          "Findings",
+          "Architecture map",
           "Residual uncertainty"
         ],
         "requiredEvidence": [

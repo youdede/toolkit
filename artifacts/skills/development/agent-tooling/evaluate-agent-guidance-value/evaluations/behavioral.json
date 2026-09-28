@@ -47,9 +47,8 @@
           "Next action"
         ],
         "requiredEvidence": [
-          "matched trials",
-          "within-arm variance",
-          "untested conditions"
+          "outside this skill",
+          "no guidance change"
         ],
         "forbiddenClaims": [
           "the entire guidance layer is proven unnecessary"
@@ -75,9 +74,8 @@
           "Next action"
         ],
         "requiredEvidence": [
-          "matched trials",
-          "within-arm variance",
-          "untested conditions"
+          "missing probe task and objective oracle",
+          "next question"
         ],
         "forbiddenClaims": [
           "the entire guidance layer is proven unnecessary"
@@ -96,7 +94,7 @@
         "separate prompt guidance from hooks"
       ],
       "expected": {
-        "disposition": "limit",
+        "disposition": "decline",
         "requiredSections": [
           "Evidence",
           "Decision",

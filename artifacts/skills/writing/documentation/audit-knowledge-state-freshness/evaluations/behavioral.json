@@ -16,7 +16,12 @@
         "requiredSections": [
           "Scope and coverage",
           "Contradicted and unsupported claims",
-          "Proposed one-location repair"
+          "Ambiguous items",
+          "Proposed one-location repair",
+          "Recurrence controls",
+          "Evidence",
+          "Decision",
+          "Next action"
         ],
         "requiredEvidence": [
           "newer authorized evidence",
@@ -42,6 +47,11 @@
       "expected": {
         "disposition": "decline",
         "requiredSections": [
+          "Scope and coverage",
+          "Contradicted and unsupported claims",
+          "Ambiguous items",
+          "Proposed one-location repair",
+          "Recurrence controls",
           "Evidence",
           "Decision",
           "Next action"
@@ -70,6 +80,11 @@
       "expected": {
         "disposition": "clarify",
         "requiredSections": [
+          "Scope and coverage",
+          "Contradicted and unsupported claims",
+          "Ambiguous items",
+          "Proposed one-location repair",
+          "Recurrence controls",
           "Evidence",
           "Decision",
           "Next action"
@@ -96,8 +111,13 @@
         "Historical events remain intact"
       ],
       "expected": {
-        "disposition": "limit",
+        "disposition": "decline",
         "requiredSections": [
+          "Scope and coverage",
+          "Contradicted and unsupported claims",
+          "Ambiguous items",
+          "Proposed one-location repair",
+          "Recurrence controls",
           "Evidence",
           "Decision",
           "Next action"
