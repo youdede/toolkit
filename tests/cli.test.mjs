@@ -121,6 +121,22 @@ test('add dry-run emits a machine-readable immutable plan', () => {
   assert.equal(plan.runtime.automaticExecution, false);
 });
 
+test('add dry-run lists every file the real install writes', (context) => {
+  const directory = mkdtempSync(path.join(tmpdir(), 'youdede-dry-run-'));
+  context.after(() => rmSync(directory, { recursive: true, force: true }));
+  const dry = cli(['add', 'commit-guard', '--cwd', directory, '--dry-run']);
+  assert.deepEqual(readdirSync(directory), []);
+  const plan = JSON.parse(cli(['add', 'commit-guard', '--cwd', directory, '--dry-run', '--json']));
+  assert.deepEqual(plan.notice, { path: path.join('.youdede-toolkit', 'NOTICE.md'), action: 'create' });
+  cli(['add', 'commit-guard', '--cwd', directory]);
+  const configRoot = path.join(directory, '.claude');
+  const written = readdirSync(configRoot, { recursive: true, withFileTypes: true })
+    .filter((entry) => entry.isFile())
+    .map((entry) => path.relative(configRoot, path.join(entry.parentPath, entry.name)));
+  assert.ok(written.includes(path.join('.youdede-toolkit', 'NOTICE.md')));
+  for (const file of written) assert.ok(dry.includes(` ${file}`), `dry-run did not list ${file}`);
+});
+
 test('verify-integrity exposes the reproducible catalog root and supports one artifact', () => {
   const all = cli(['verify-integrity', '--json']);
   const allResult = JSON.parse(all);
