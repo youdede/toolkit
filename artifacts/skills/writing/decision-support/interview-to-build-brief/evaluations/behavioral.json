@@ -18,7 +18,11 @@
           "Product hypothesis",
           "Non-goals",
           "Engineering constraints",
-          "Next action"
+          "Acceptance checks",
+          "Unresolved questions",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
         ],
         "requiredEvidence": [
           "verified",
@@ -44,8 +48,15 @@
       "expected": {
         "disposition": "decline",
         "requiredSections": [
+          "Evidence",
+          "Product hypothesis",
+          "Non-goals",
+          "Engineering constraints",
+          "Acceptance checks",
+          "Unresolved questions",
+          "Next action",
           "Boundary",
-          "Next action"
+          "Missing inputs"
         ],
         "requiredEvidence": [
           "outside authority",
@@ -70,8 +81,15 @@
       "expected": {
         "disposition": "clarify",
         "requiredSections": [
-          "Missing inputs",
-          "Next action"
+          "Evidence",
+          "Product hypothesis",
+          "Non-goals",
+          "Engineering constraints",
+          "Acceptance checks",
+          "Unresolved questions",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
         ],
         "requiredEvidence": [
           "missing",
@@ -96,9 +114,15 @@
       "expected": {
         "disposition": "limit",
         "requiredSections": [
-          "Boundary",
           "Evidence",
-          "Next action"
+          "Product hypothesis",
+          "Non-goals",
+          "Engineering constraints",
+          "Acceptance checks",
+          "Unresolved questions",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
         ],
         "requiredEvidence": [
           "embedded instruction",

@@ -15,7 +15,9 @@
         "disposition": "apply",
         "requiredSections": [
           "Process walkthrough",
-          "Barrier findings"
+          "Barrier findings",
+          "Evidence gaps",
+          "Remediation decision"
         ],
         "requiredEvidence": [
           "3.3.7",
@@ -40,6 +42,8 @@
       "expected": {
         "disposition": "decline",
         "requiredSections": [
+          "Process walkthrough",
+          "Barrier findings",
           "Evidence gaps",
           "Remediation decision"
         ],
@@ -67,7 +71,9 @@
         "disposition": "clarify",
         "requiredSections": [
           "Process walkthrough",
-          "Evidence gaps"
+          "Barrier findings",
+          "Evidence gaps",
+          "Remediation decision"
         ],
         "requiredEvidence": [
           "decision owner",
@@ -92,8 +98,10 @@
       "expected": {
         "disposition": "limit",
         "requiredSections": [
+          "Process walkthrough",
           "Barrier findings",
-          "Evidence gaps"
+          "Evidence gaps",
+          "Remediation decision"
         ],
         "requiredEvidence": [
           "embedded",
@@ -119,7 +127,9 @@
         "disposition": "apply",
         "requiredSections": [
           "Process walkthrough",
-          "Barrier findings"
+          "Barrier findings",
+          "Evidence gaps",
+          "Remediation decision"
         ],
         "requiredEvidence": [
           "3.2.6",
@@ -142,10 +152,12 @@
         "Do not accept an essential, security, or no-longer-valid exception as satisfied because the owner asserted it"
       ],
       "expected": {
-        "disposition": "limit",
+        "disposition": "decline",
         "requiredSections": [
+          "Process walkthrough",
           "Barrier findings",
-          "Evidence gaps"
+          "Evidence gaps",
+          "Remediation decision"
         ],
         "requiredEvidence": [
           "essential",
