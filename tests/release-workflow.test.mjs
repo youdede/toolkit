@@ -30,3 +30,9 @@ test('release scans reachable history and never references a stored npm token', 
   assert.doesNotMatch(workflow, /secrets\.(?:NPM|NODE_AUTH)_?TOKEN/i);
   assert.doesNotMatch(workflow, /NODE_AUTH_TOKEN/);
 });
+
+test('publish checks out the exact commit that verify inspected', () => {
+  assert.match(workflow, /^    outputs:\n      sha: \$\{\{ steps\.tag-commit\.outputs\.sha \}\}/m);
+  assert.match(workflow, /echo "sha=\$\(git rev-parse "\$TAG\^\{commit\}"\)" >> "\$GITHUB_OUTPUT"/);
+  assert.match(workflow, /ref: \$\{\{ needs\.verify\.outputs\.sha \}\}/);
+});
