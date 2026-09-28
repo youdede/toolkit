@@ -1,5 +1,5 @@
 {
-  "sourceHash": "60828913e04208f40fad286eab47d6b2ac9231073e8bed465c1378b12eba33c9",
+  "sourceHash": "ca53bb5af4f0af04a67a3998f37c8d4b65691a2f48a748b082429602801d89aa",
   "narratives": {
     "abuse-resistance-analyst": {
       "summary": "Analyseert één handeling op kostenversterking die een aanvaller kan sturen, fan-out en het omzeilen van quota.",
@@ -327,12 +327,12 @@
       "summary": "Maakt een hervatbaar installatiescript met begeleiding voor de gebruiker, veilige omgang met geheimen en geverifieerde controlepunten.",
       "description": "Schrijft een afgebakende shellwizard voor handmatige installatiestappen die menselijke interactie, inloggegevens, dashboards of bevestiging van onomkeerbare handelingen vereisen. Te gebruiken wanneer automatisering de procedure niet kan voltooien, maar een herhaalbaar begeleid traject waardevol is.",
       "purposes": [
-        "Valideert statisch Bash-syntax, geheimverwerkingsrisico's, bevestigingscontroles en het gedeclareerde aantal wizard-stadia."
+        "Valideert statisch de Bash-syntaxis, enkele lexicale patronen van blootstelling van geheimen, de aanwezigheid van een bevestigingsprompt en het gedeclareerde aantal wizardfasen."
       ],
       "refuses": [
-        "Het vraagt gebruikers niet om geheimen in te plakken in chat, logs, argumenten of zichtbare terminalinvoer.",
-        "Het automatiseert geen facturering, machtigingsverlening, verwijdering, overgang of andere onomkeerbare keuzes zonder een menselijke controle.",
-        "Het beweert niet dat provider UI-stappen actueel zijn, tenzij ze zijn geverifieerd tegen de actuele officiële documentatie."
+        "Hij vraagt gebruikers niet om geheimen in te plakken in chat, logs, argumenten of zichtbare terminalinvoer.",
+        "Hij automatiseert geen facturering, machtigingsverlening, verwijdering, overgang of andere onomkeerbare keuzes zonder een menselijke controle.",
+        "Hij beweert niet dat UI-stappen van providers actueel zijn, tenzij ze zijn geverifieerd aan de hand van de actuele officiële documentatie."
       ]
     },
     "author-mcp-server-contract": {
@@ -392,9 +392,9 @@
       "description": "Ontwerpt en valideert een native macOS-metricscollector met ondersteunde systeeminterfaces, begrensde sampling, SQLite en launchd. Te gebruiken voor lokale apparaatobservatie wanneer privacy en lage overhead vereist zijn.",
       "purposes": [],
       "refuses": [
-        "Het verzamelt geen scherminhoud, toetsaanslagen, inloggegevens of niet-gerelateerde applicatiegegevens.",
-        "Het vereist geen private API's voor de kernoperatie.",
-        "Het verzendt geen telemetrie en maakt back-ups standaard niet openbaar."
+        "Hij verzamelt geen scherminhoud, toetsaanslagen, inloggegevens of niet-gerelateerde applicatiegegevens.",
+        "Hij vereist geen private API's voor de kernoperatie.",
+        "Hij verzendt geen telemetrie en maakt back-ups standaard niet openbaar."
       ]
     },
     "build-marketing-operating-plan": {
@@ -891,12 +891,12 @@
     },
     "delegate-to-codex-cli": {
       "summary": "Delegeert een afgebakende taak aan Codex CLI in een geïsoleerde, controleerbare werkruimte.",
-      "description": "Delegeert een onafhankelijke codeer- of beoordelingstaak aan Codex CLI met een nauw afgebakende opdracht, een geïsoleerde worktree, begrensde machtigingen en verificatie door de bovenliggende agent. Gebruik dit alleen wanneer de CLI beschikbaar is en parallel delegeren waarde toevoegt.",
+      "description": "Delegeert een onafhankelijke codeer- of beoordelingstaak aan Codex CLI met een nauw afgebakende opdracht, een geïsoleerde worktree, begrensde machtigingen en verificatie door de bovenliggende agent. Alleen te gebruiken wanneer de CLI beschikbaar is en parallel delegeren waarde toevoegt.",
       "purposes": [],
       "refuses": [
-        "Het verleent geen ruimere toegang tot het bestandssysteem, het netwerk of inloggegevens dan de bovenliggende taak toestaat.",
-        "Het laat de gedelegeerde agent niet committen, pushen, uitrollen of mensen benaderen tenzij dat expliciet is toegestaan.",
-        "Het accepteert een claim van de gedelegeerde agent niet als bewijs zonder beoordeling door de bovenliggende agent."
+        "Hij verleent geen ruimere toegang tot het bestandssysteem, het netwerk of inloggegevens dan de bovenliggende taak toestaat.",
+        "Hij laat de gedelegeerde agent niet committen, pushen, uitrollen of mensen benaderen tenzij dat expliciet is toegestaan.",
+        "Hij accepteert een claim van de gedelegeerde agent niet als bewijs zonder beoordeling door de bovenliggende agent."
       ]
     },
     "deliver-incremental-change": {
@@ -1107,12 +1107,12 @@
     },
     "design-llm-evaluation": {
       "summary": "Ontwerpt een LLM-evaluatie rond echte taken, gecontroleerde beoordelaars, een indeling van fouten en beslisgrenzen.",
-      "description": "Ontwerpt of controleert een evaluatie voor een LLM-functie, agent, retrievalproces of prompt met representatieve taken, referentiebewijs, deterministische controles, gekalibreerde beoordelaars, onzekerheid en releasebeslissingen. Gebruik dit voordat modellen worden vergeleken of kwaliteitsverbetering wordt geclaimd.",
+      "description": "Ontwerpt of controleert een evaluatie voor een LLM-functie, agent, retrievalproces of prompt met representatieve taken, referentiebewijs, deterministische controles, gekalibreerde beoordelaars, onzekerheid en releasebeslissingen. Niet bedoeld om prompts af te stemmen of een model te certificeren; modelaanroepen worden niet uitgevoerd zonder afzonderlijke bevoegdheid voor uitvoering. Te gebruiken voordat modellen worden vergeleken of kwaliteitsverbetering wordt geclaimd.",
       "purposes": [],
       "refuses": [
-        "Het verzint geen ground truth, gebruikt geen privégegevens zonder autorisatie en stemt niet af op de apart gehouden testset.",
-        "Het verklaart een model niet universeel beter op basis van een beperkte benchmark.",
-        "Het verbergt geen veiligheidsregressies, meningsverschillen tussen beoordelaars, kosten, latentie of mislukte gevallen."
+        "Hij verzint geen ground truth, gebruikt geen privégegevens zonder autorisatie en stemt niet af op de apart gehouden testset.",
+        "Hij roept op basis van een beperkte benchmark niet één model uit tot universeel beter.",
+        "Hij verbergt geen veiligheidsregressies, meningsverschillen tussen beoordelaars, kosten, latentie of mislukte gevallen."
       ]
     },
     "design-marketing-measurement": {
@@ -1383,14 +1383,14 @@
     },
     "enforce-typescript-module-boundaries": {
       "summary": "Detecteert en handhaaft grenzen rond de entrypoints van TypeScript-pakketten zonder van één repository-indeling uit te gaan.",
-      "description": "Inspecteert en handhaaft TypeScript-modulegrenzen, zodat consumenten importeren via gedeclareerde ingangspunten terwijl internals lokaal blijven. Gebruikt wanneer diepe importen, pakketcycli of testtoegang contracten en refactoren onbetrouwbaar maken.",
+      "description": "Inspecteert en handhaaft TypeScript-modulegrenzen, zodat consumenten importeren via gedeclareerde ingangspunten terwijl internals lokaal blijven. Te gebruiken wanneer diepe imports, pakketcycli of testtoegang contracten en refactors onbetrouwbaar maken.",
       "purposes": [
-        "Scant statische TypeScript-importvormen op diepe imports tussen pakketten onder een door de aanroeper opgegeven pakkethoofdmap."
+        "Scant statische TypeScript-importvormen op diepe imports tussen pakketten onder een door de aanroeper opgegeven map waarvan de directe submappen pakketten zijn."
       ],
       "refuses": [
-        "Het installeert of overschrijft geen tool voor afhankelijkheidsanalyse voordat de bestaande configuratie is onderzocht.",
-        "Het behandelt niet-opgeloste aliassen of gegenereerde imports niet als bewezen overtredingen.",
-        "Het maakt geen gigantisch barrelbestand, breekt geen omgevingsspecifieke exports en claimt geen architectuurkwaliteit uitsluitend op basis van de diepte van paden."
+        "Hij installeert of overschrijft geen tool voor afhankelijkheidsanalyse voordat de bestaande configuratie is onderzocht.",
+        "Hij behandelt niet-opgeloste aliassen of gegenereerde imports niet als bewezen overtredingen.",
+        "Hij maakt geen gigantisch barrelbestand, breekt geen omgevingsspecifieke exports en claimt geen architectuurkwaliteit uitsluitend op basis van de diepte van paden."
       ]
     },
     "error-recovery-path-reviewer": {
@@ -1544,9 +1544,9 @@
         "Normaliseert gestructureerde YouTube-json3-ondertitels naar platte tekst met gedecodeerde entiteiten, zonder herhaalde tekst door overlap tussen doorlopende ondertitels."
       ],
       "refuses": [
-        "Het omzeilt geen toegangscontroles, geografische beperkingen of authenticatie-uitdagingen.",
-        "Het downloadt geen video of audio wanneer ondertitels de aanvraag zijn.",
-        "Het presenteert geen automatische ondertitels als een gezaghebbend letterlijk verslag."
+        "Hij omzeilt geen toegangscontroles, geografische beperkingen of authenticatie-uitdagingen.",
+        "Hij downloadt geen video of audio wanneer om ondertitels wordt gevraagd.",
+        "Hij presenteert geen automatische ondertitels als een gezaghebbend letterlijk verslag."
       ]
     },
     "failure-evidence-guard": {
@@ -1808,13 +1808,13 @@
       ]
     },
     "keep-macos-awake": {
-      "summary": "Houdt macOS actief voor goedgekeurd werk met omkeerbare en observeerbare controles.",
+      "summary": "Houdt macOS actief voor goedgekeurd werk met omkeerbare en observeerbare mechanismen.",
       "description": "Start, verifieert, inspecteert en stopt een afgebakende macOS-caffeinate-sessie of launch agent. Te gebruiken wanneer een goedgekeurd lokaal proces moet blijven draaien terwijl het scherm slaapt; instructies voor verwijdering zijn inbegrepen.",
       "purposes": [],
       "refuses": [
-        "Het schakelt de slaapstand niet systeembreed uit zonder expliciete eisen voor blijvende werking.",
-        "Het gebruikt geen brede kill-commando's die ongerelateerde processen kunnen beëindigen.",
-        "Het claimt geen succes zonder de actieve power assertion te inspecteren."
+        "Hij schakelt de slaapstand niet systeembreed uit zonder expliciete eisen voor blijvende werking.",
+        "Hij gebruikt geen brede kill-commando's die ongerelateerde processen kunnen beëindigen.",
+        "Hij claimt geen succes zonder de actieve power assertion te inspecteren."
       ]
     },
     "large-diff-review-guard": {
@@ -2117,13 +2117,13 @@
       ]
     },
     "plan-dependency-upgrade": {
-      "summary": "Plant een upgrade van een afhankelijkheid op basis van release-informatie, de betrokken compatibiliteitsaspecten, migratiestappen en rollback.",
-      "description": "Plant of beoordeelt een upgrade van een applicatieafhankelijkheid op basis van geïnstalleerde versies, release- en migratiedocumentatie, het getroffen gebruik, transitieve wijzigingen, compatibiliteitstests, uitrol en rollback. Te gebruiken wanneer een upgrade ingrijpend is, compatibiliteit doorbreekt, om beveiligingsredenen nodig is of het hele framework raakt.",
+      "summary": "Plant een upgrade van een afhankelijkheid en voert die door op basis van release-informatie, de betrokken compatibiliteitsaspecten, migratiestappen en rollback.",
+      "description": "Plant of beoordeelt een upgrade van een applicatieafhankelijkheid, of voert die door, op basis van geïnstalleerde versies, release- en migratiedocumentatie, het getroffen gebruik, transitieve wijzigingen, compatibiliteitstests, uitrol en rollback. Te gebruiken wanneer een upgrade ingrijpend is, compatibiliteit doorbreekt, om beveiligingsredenen nodig is of het hele framework raakt.",
       "purposes": [],
       "refuses": [
-        "Het upgradet geen niet-gerelateerde pakketten om alles naar de nieuwste versie te brengen.",
-        "Het bewerkt lockfiles niet handmatig en onderdrukt geen peer- of beveiligingswaarschuwingen zonder bewijs.",
-        "Het claimt geen compatibiliteit op basis van alleen compilatie of unittests wanneer runtimegrenzen zijn gewijzigd."
+        "Hij upgradet geen niet-gerelateerde pakketten om alles naar de nieuwste versie te brengen.",
+        "Hij bewerkt lockfiles niet handmatig en onderdrukt geen peer- of beveiligingswaarschuwingen zonder bewijs.",
+        "Hij claimt geen compatibiliteit op basis van alleen compilatie of unittests wanneer runtimegrenzen zijn gewijzigd."
       ]
     },
     "plan-earned-media-outreach": {
@@ -3226,9 +3226,9 @@
       "description": "Bereidt een productierelease voor en verifieert die op basis van een exacte revisie, vereiste controles, deploymentbewijs, gezondheidscontroles en inzicht in rollbackmogelijkheden. Alleen te gebruiken wanneer de bevoegdheid voor een productierelease expliciet is.",
       "purposes": [],
       "refuses": [
-        "Het voert geen force-push uit, omzeilt geen controles en verzwakt geen branchbescherming.",
-        "Het deployt geen revisie met ongecommitte wijzigingen, een niet-beoordeelde revisie of een revisie waarvan de identiteit onduidelijk is.",
-        "Het verklaart de productieomgeving niet gezond op basis van alleen CI-succes."
+        "Hij voert geen force-push uit, omzeilt geen controles en verzwakt geen branchbescherming.",
+        "Hij deployt geen revisie met ongecommitte wijzigingen, een niet-beoordeelde revisie of een revisie waarvan de identiteit onduidelijk is.",
+        "Hij verklaart de productieomgeving niet gezond op basis van alleen CI-succes."
       ]
     },
     "verify-session-ledger": {

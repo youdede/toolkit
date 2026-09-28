@@ -11,7 +11,7 @@ A handoff records state and evidence, not a new mandate. Reference durable proje
 
 ## Workflow
 
-1. Resolve this skill's installed directory and run `node scripts/collect-git-state.mjs --cwd <repository>` to capture revision, branch, upstream, status, diff statistics, and recent commits deterministically. Inspect the active plan, relevant task text, and latest validation separately; do not rely on memory when the repository can answer.
+1. Resolve `<skill-root>` to the directory containing this loaded `SKILL.md` and run `node "<skill-root>/scripts/collect-git-state.mjs" --cwd <repository>` to capture revision, branch, upstream, status, diff statistics, and recent commits deterministically. Inspect the active plan, relevant task text, and latest validation separately; do not rely on memory when the repository can answer.
 2. Record the objective and scope, what is complete, what remains, key decisions with rationale, exact changed files, commands and outcomes, blockers, and the single best next action.
 3. Include dead ends only when they prevent repeated work. Link to source files, plans, ADRs, issues, and reports rather than copying long content.
 4. Redact credentials, personal data, transient tokens, and machine-specific paths. Re-read the handoff against actual state and clearly label uncertainty.

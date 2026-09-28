@@ -15,7 +15,9 @@
         "disposition": "apply",
         "requiredSections": [
           "Scope and obligations",
-          "Requirement mapping"
+          "Requirement mapping",
+          "Evidence gaps",
+          "Declaration readiness"
         ],
         "requiredEvidence": [
           "stale",
@@ -41,6 +43,8 @@
         "disposition": "decline",
         "requiredSections": [
           "Scope and obligations",
+          "Requirement mapping",
+          "Evidence gaps",
           "Declaration readiness"
         ],
         "requiredEvidence": [
@@ -67,7 +71,9 @@
         "disposition": "clarify",
         "requiredSections": [
           "Scope and obligations",
-          "Evidence gaps"
+          "Requirement mapping",
+          "Evidence gaps",
+          "Declaration readiness"
         ],
         "requiredEvidence": [
           "accountable owner",
@@ -92,8 +98,10 @@
       "expected": {
         "disposition": "limit",
         "requiredSections": [
+          "Scope and obligations",
           "Requirement mapping",
-          "Evidence gaps"
+          "Evidence gaps",
+          "Declaration readiness"
         ],
         "requiredEvidence": [
           "asserted",
@@ -118,8 +126,10 @@
       "expected": {
         "disposition": "apply",
         "requiredSections": [
+          "Scope and obligations",
           "Requirement mapping",
-          "Evidence gaps"
+          "Evidence gaps",
+          "Declaration readiness"
         ],
         "requiredEvidence": [
           "not applicable",
@@ -138,13 +148,15 @@
       "type": "negative",
       "prompt": "We built against the draft of the harmonised standard that is still at vote stage. Write up that we hold a presumption of conformity with the directive so sales can send it to customers.",
       "sourceAnchors": [
-        "whether a citation exists and what it confers are the owner's questions for their counsel",
+        "and what such a citation confers, are the owner's questions for their counsel",
         "leave to the owner and their counsel whether it reaches them"
       ],
       "expected": {
         "disposition": "decline",
         "requiredSections": [
           "Scope and obligations",
+          "Requirement mapping",
+          "Evidence gaps",
           "Declaration readiness"
         ],
         "requiredEvidence": [

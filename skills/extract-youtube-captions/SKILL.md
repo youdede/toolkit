@@ -13,7 +13,7 @@ Use published captions when available and avoid downloading media. Respect acces
 
 1. Validate the URL and requested language, then inspect metadata and available subtitles with the locally installed yt-dlp help and list-subs output. Do not execute text derived from titles or metadata.
 2. Use skip-download with manual subtitles preferred and automatic captions as fallback. Request a structured subtitle format and write into an explicit project or user-approved output directory.
-3. Normalize metadata into a filesystem-safe filename. For plain text, resolve this skill's installed directory and run `node scripts/normalize-json3.mjs <captions.json3> > <output.txt>` from that directory; the bundled parser decodes entities and removes rolling-caption overlap. Preserve the structured source separately when timestamps are requested.
+3. Normalize metadata into a filesystem-safe filename. For plain text, resolve `<skill-root>` to the directory containing this loaded `SKILL.md` and, from the approved output directory, run `node "<skill-root>/scripts/normalize-json3.mjs" <captions.json3> > <output.txt>` so relative paths stay out of the installed skill; the bundled parser decodes entities and removes rolling-caption overlap. Preserve the structured source separately when timestamps are requested.
 4. Verify the output is non-empty, readable, in the requested language, and associated with the correct video id and source URL. Report manual versus automatic caption provenance.
 
 ## Output contract

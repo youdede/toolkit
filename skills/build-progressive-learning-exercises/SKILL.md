@@ -14,12 +14,12 @@ Start from demonstrated learner outcomes, not folder names. Each exercise must h
 1. Define audience, prior knowledge, mission, time budget, environment, accessibility needs, and observable terminal outcomes. Separate teaching material from assessment evidence.
 2. Build a prerequisite graph from the outcomes. Sequence retrieval, worked example, guided practice, independent practice, and transfer only where each stage earns its place.
 3. Draft a JSON plan with stable section and exercise ids, objective, prerequisites, variants, expected evidence, feedback mode, estimated effort, and source references. Use problem and solution variants only when they support the objective.
-4. Run `node scripts/validate-exercise-plan.mjs <plan.json>` from this installed skill. Resolve missing references, cycles, backward prerequisites, duplicate ids, and empty objectives before creating files.
+4. Resolve `<skill-root>` to the directory containing this loaded `SKILL.md` and run `node "<skill-root>/scripts/validate-exercise-plan.mjs" <plan.json>`. Resolve missing references, cycles, backward prerequisites, duplicate ids, and empty objectives before creating files.
 5. Scaffold using the repository's conventions, then run its real lint, link, build, and exercise commands. Have a novice or clean environment follow at least one path without author knowledge.
 
 ## Output contract
 
-Return every one of these headings in your reply, in this order, on every path: `## Contract`, `## Validation`, `## Stop conditions`, `## Refusals`.
+Return every one of these headings in your reply, in this order, on every path: `## Learner outcomes`, `## Exercise plan`, `## Plan validation`, `## Evidence gaps`, `## Next action`.
 
 This holds when you decline, when you bound the scope, and when required inputs are absent. A section with nothing to report says so in one line; it is never omitted.
 

@@ -19,7 +19,7 @@ When both inputs are local JSON Schema documents, resolve `<skill-root>` to the 
 
 `node "<skill-root>/scripts/compare-json-schema.mjs" --before <old.json> --after <new.json>`
 
-Do not assume the project working directory contains the helper. It reads at most 1 MiB per regular, non-symlink file. It emits structural signals, JSON pointers, unresolved references, and `"verdict": "not-assessed"`. It does not resolve references, execute code, apply registry rules, or decide compatibility. Preserve its rule IDs and limitations. For other schema systems, skip the helper and use repository-native diff and validation tools.
+Do not assume the project working directory contains the helper. It reads at most 1 MiB per regular, non-symlink file. It emits structural signals, JSON pointers, unresolved references, and `"verdict": "not-assessed"`. Keywords without a dedicated rule (for example `unevaluatedProperties`, `dependencies`, `$schema`) appear only as `SCHEMA_KEYWORD_CHANGED` at their own pointer; review their content yourself. It does not resolve references, execute code, apply registry rules, or decide compatibility. Preserve its rule IDs and limitations. For other schema systems, skip the helper and use repository-native diff and validation tools.
 
 ## Trace the change through real readers and writers
 
