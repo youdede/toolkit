@@ -1,5 +1,5 @@
 {
-  "sourceHash": "ca53bb5af4f0af04a67a3998f37c8d4b65691a2f48a748b082429602801d89aa",
+  "sourceHash": "23023cdd38247d8e71cc5dd426f8d10a2cd64c1cac9190bf740e9d3e462c7a7b",
   "narratives": {
     "abuse-resistance-analyst": {
       "summary": "Analyseert één handeling op kostenversterking die een aanvaller kan sturen, fan-out en het omzeilen van quota.",
@@ -39,9 +39,9 @@
       "description": "Beoordeelt een aangeleverde interfacewijziging aan de hand van benoemde toegankelijkheidscriteria, gebruikersreizen, semantiek en beschikbaar testbewijs. Te gebruiken vóór integratie wanneer de bovenliggende agent afgebakende toegankelijkheidsbevindingen op basis van alleen-lezen onderzoek nodig heeft, in plaats van implementatie of certificering.",
       "purposes": [],
       "refuses": [
-        "Het bewerkt geen interfacecode, stijlen, tests, ontwerp-tokens of toegankelijkheidsconfiguratie.",
-        "Het certificeert geen WCAG-conformiteit, wettelijke naleving of gedrag van ondersteunende technologie zonder passend, afgebakend bewijs.",
-        "Het doet geen uitspraken over kleurcontrast, toetsenbordgedrag of schermlezeruitvoer die niet met statisch bewijs kunnen worden onderbouwd."
+        "Hij bewerkt geen interfacecode, stijlen, tests, ontwerp-tokens of toegankelijkheidsconfiguratie.",
+        "Hij certificeert geen WCAG-conformiteit, wettelijke naleving of gedrag van ondersteunende technologie op basis van een afgebakende beoordeling.",
+        "Hij doet geen uitspraken over kleurcontrast, toetsenbordgedrag of schermlezeruitvoer die niet met statisch bewijs kunnen worden onderbouwd."
       ]
     },
     "accessibility-journey-tester": {
@@ -943,12 +943,12 @@
     },
     "dependency-risk-reviewer": {
       "summary": "Beoordeelt afhankelijkheidsverschillen voor risico's in de toeleveringsketen en compatibiliteit zonder de repository te wijzigen.",
-      "description": "Een specialist in Claude Code met een beperkt bereik, alleen-lezen, voor risico's in manifesten, lockfiles, herkomst, installatie-scripts, runtime en integraties na wijzigingen in afhankelijkheden.",
+      "description": "Een specialistische subagent met een beperkt bereik en alleen-lezen toegang voor risico's in manifesten, lockfiles, herkomst, installatiescripts, runtime en integraties na wijzigingen in afhankelijkheden.",
       "purposes": [],
       "refuses": [
-        "Het wijzigt geen manifesten, lockfiles, broncode of repositoryconfiguratie.",
-        "Het voert geen installatieprogramma’s voor afhankelijkheden, lifecyclescripts, pakketbeheerders of netwerkverzoeken uit.",
-        "Het stelt geen kwetsbaarheid of kwaadwilligheid vast zonder toerekenbaar bewijs."
+        "Hij wijzigt geen manifesten, lockfiles, broncode of repositoryconfiguratie.",
+        "Hij voert geen installatieprogramma’s voor afhankelijkheden, lifecyclescripts, pakketbeheerders of netwerkverzoeken uit.",
+        "Hij stelt geen kwetsbaarheid of kwaadwilligheid vast zonder toerekenbaar bewijs."
       ]
     },
     "dependency-source-guard": {
@@ -3058,13 +3058,13 @@
       ]
     },
     "test-gap-reviewer": {
-      "summary": "Vindt betekenisvolle ongebewezen gedragingen in een afgebakende verandering zonder tests te schrijven of uit te voeren.",
-      "description": "Een alleen-lezen Claude Code specialist die beoogd gedrag in kaart brengt naar tests en met hoge zekerheid regressie-, grens-, fout-, integratie- en duurzaamheidsleemtes rapporteert.",
+      "summary": "Vindt betekenisvolle onbewezen gedragingen in een afgebakende verandering zonder tests te schrijven of uit te voeren.",
+      "description": "Een specialistische subagent met alleen-lezen toegang die beoogd gedrag koppelt aan tests en met hoge zekerheid leemtes rapporteert op het gebied van regressie, grenswaarden, fouten, integratie en duurzaamheid.",
       "purposes": [],
       "refuses": [
-        "Het schrijft geen tests, snapshots, fixtures, productiecode of configuratie.",
-        "Het claimt geen uitvoerings- of dekkingsresultaten die niet als bewijs zijn verstrekt.",
-        "Het breidt een afgebakende testbeoordeling niet uit tot een niet-gerelateerde algemene codebeoordeling."
+        "Hij schrijft geen tests, snapshots, fixtures, productiecode of configuratie.",
+        "Hij claimt geen uitvoerings- of dekkingsresultaten die niet als bewijs zijn verstrekt.",
+        "Hij breidt een afgebakende testbeoordeling niet uit tot een niet-gerelateerde algemene codebeoordeling."
       ]
     },
     "test-integrity-guard": {

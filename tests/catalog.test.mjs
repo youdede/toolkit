@@ -6,6 +6,8 @@ import {
   loadPacks,
   publicCatalog,
   publicPackCatalog,
+  subagentBodyDrift,
+  unknownClaudeCodeSubagentTools,
   validateArtifact,
   validatePack,
   validateRelationshipIntegrity,
@@ -282,4 +284,19 @@ test('relationship arrays must be sorted and orphan analysis is non-punitive', (
   assert.ok(graph.counts.orphanArtifacts > 0, 'standalone artifacts remain visible without becoming validation failures');
   assert.equal(graph.counts.compositionEdges * 2, graph.counts.directedEdges.composesWith);
   assert.ok(graph.counts.crossKindCompositionEdges > 0);
+});
+
+test('subagent bodies must match across targets apart from the Copilot turn budget line', () => {
+  const body = '---\nname: x\n---\n\nYou review.\n\n## Refusals\n- a\n';
+  assert.deepEqual(subagentBodyDrift({ 'claude-code': body, 'gemini-cli': body }), []);
+  const copilot = body.replace('You review.\n', 'Complete the brief within 10 turns. Stop and return partial evidence instead of expanding the scope when that budget is exhausted.\n\nYou review.\n');
+  assert.deepEqual(subagentBodyDrift({ 'claude-code': body, 'github-copilot': copilot }), []);
+  assert.deepEqual(subagentBodyDrift({ 'claude-code': body, opencode: body.replace('You review.', 'You approve.') }), ['opencode']);
+});
+
+test('claude code subagents may only name the documented read-only tools', () => {
+  // Source: https://code.claude.com/docs/en/tools-reference (read 2026-09-26) has no NotebookRead;
+  // Read already returns .ipynb cells with outputs.
+  assert.deepEqual(unknownClaudeCodeSubagentTools('Read, Grep, Glob'), []);
+  assert.deepEqual(unknownClaudeCodeSubagentTools('Read, Grep, Glob, NotebookRead'), ['NotebookRead']);
 });

@@ -1,5 +1,5 @@
 {
-  "sourceHash": "ca53bb5af4f0af04a67a3998f37c8d4b65691a2f48a748b082429602801d89aa",
+  "sourceHash": "23023cdd38247d8e71cc5dd426f8d10a2cd64c1cac9190bf740e9d3e462c7a7b",
   "narratives": {
     "abuse-resistance-analyst": {
       "summary": "Analizza una singola operazione per individuare costi moltiplicati da input controllati da un attaccante, richieste a cascata ed elusione delle quote.",
@@ -35,12 +35,12 @@
       ]
     },
     "accessibility-conformance-reviewer": {
-      "summary": "Esamina una modifica dell'interfaccia con limiti definiti per rischi di conformità all'accessibilità basati su evidenze e barriere per l'utente.",
-      "description": "Esamina una modifica dell'interfaccia fornita rispetto a criteri di accessibilità specificati, percorsi utente, semantica e evidenze di test disponibili. Utilizza prima dell'integrazione quando un genitore necessita di risultati di accessibilità di sola lettura piuttosto che implementazione o certificazione.",
+      "summary": "Esamina una modifica dell'interfaccia con limiti definiti alla ricerca di rischi di conformità all'accessibilità basati su evidenze e di barriere per l'utente.",
+      "description": "Esamina una modifica dell'interfaccia fornita rispetto a criteri di accessibilità specificati, percorsi utente, semantica ed evidenze di test disponibili. Da usare prima dell'integrazione quando l'agente padre necessita di risultati di accessibilità delimitati e di sola lettura, anziché di un'implementazione o di una certificazione.",
       "purposes": [],
       "refuses": [
         "Non modifica il codice dell'interfaccia, gli stili, i test, i token di progettazione o la configurazione dell'accessibilità.",
-        "Non certifica la conformità WCAG, la conformità legale o il comportamento delle tecnologie assistive senza evidenze opportunamente definite.",
+        "Non certifica la conformità WCAG, la conformità legale o il comportamento delle tecnologie assistive sulla base di una revisione delimitata.",
         "Non dichiara contrasto di colore, comportamento della tastiera o output del lettore di schermo che le evidenze statiche non possono stabilire."
       ]
     },
@@ -943,12 +943,12 @@
     },
     "dependency-risk-reviewer": {
       "summary": "Esamina le differenze delle dipendenze per rischi relativi alla catena di fornitura e alla compatibilità senza modificare il repository.",
-      "description": "Uno specialista Claude Code ristretto e di sola lettura per rischi relativi a manifest, lockfile, provenienza, script di installazione, runtime e integrazione dopo modifiche alle dipendenze.",
+      "description": "Un subagent specialista, ristretto e di sola lettura, per i rischi relativi a manifest, lockfile, provenienza, script di installazione, runtime e integrazione dopo modifiche alle dipendenze.",
       "purposes": [],
       "refuses": [
         "Non modifica manifest, lockfile, codice sorgente o configurazione del repository.",
         "Non esegue installatori di dipendenze, script del ciclo di vita, package manager o richieste di rete.",
-        "Non afferma vulnerabilità o malizia senza evidenze attribuibili."
+        "Non afferma vulnerabilità o natura malevola senza evidenze attribuibili."
       ]
     },
     "dependency-source-guard": {
@@ -3059,7 +3059,7 @@
     },
     "test-gap-reviewer": {
       "summary": "Individua comportamenti non provati significativi in una modifica con limiti definiti senza scrivere o eseguire test.",
-      "description": "È uno specialista di Claude Code di sola lettura che mappa il comportamento previsto ai test e segnala lacune di regressione, limite, errore, integrazione e durata ad alta confidenza.",
+      "description": "È un subagent specialista di sola lettura che mappa il comportamento previsto sui test e segnala, con alta confidenza, lacune di regressione, limite, errore, integrazione e durabilità.",
       "purposes": [],
       "refuses": [
         "Non scrive test, snapshot, fixture, codice di produzione o configurazione.",
