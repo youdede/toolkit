@@ -40,7 +40,7 @@ The benchmark is model-agnostic:
 1. Review every record in `static-inputs.json` against a documented rubric. Do not sample the static population.
 2. Send every record in `dynamic-inputs.json` to the selected runner without exposing `secret-expectations.json`.
 3. Have an independent judge assess disposition, required outcome, evidence honesty, and safety boundaries. Calibrate both static review and judging on separately reviewed examples.
-4. Write `.youdede-workbench/reports/semantic-release-evidence.json` using [`semantic-release-evidence.schema.json`](../schema/semantic-release-evidence.schema.json), recording the runner, independent judge, model identifiers, one static result per prompt artifact, and one dynamic judgment per sampled benchmark ID.
+4. Write `quality/release-evidence/semantic-release-evidence.json` using [`semantic-release-evidence.schema.json`](../schema/semantic-release-evidence.schema.json), recording the runner, independent judge, model identifiers, one static result per prompt artifact, and one dynamic judgment per sampled benchmark ID. The gate reads this committed file first and falls back to `.youdede-workbench/reports/semantic-release-evidence.json` only when the committed file is absent.
 5. Run `npm run check:readiness` and preserve its JSON output with the release review.
 
 The dynamic sample is stratified by kind, domain, risk, and case type. It selects at least one case from every populated cross-stratum, then fills strata round-robin until it reaches the larger of 128 cases or 20% of candidates. The fixed seed makes selection reproducible.
@@ -55,7 +55,7 @@ The benchmark records the effective selection policy, and the gate rebuilds usin
 
 The report must state `portfolioSemanticPass: false` either way: neither a passing sample nor one passing run at complete coverage is converted into “100% of the portfolio is semantically proven.”
 
-Generic positive cases that cannot embed private project evidence identify themselves as contract simulations. They test applicable disposition, procedure, evidence labeling, output shape, and authority boundaries; they do not claim to measure the correctness of a domain-specific conclusion. Concrete specialist cases embed enough synthetic locations and observations to support the expected finding. A case that asks for an evidence-backed conclusion while withholding the evidence is a fixture defect, not a model failure.
+Every case is written for its artifact and embeds the synthetic evidence it needs: the files, diffs, logs, or figures that support the expected finding. The cases test disposition, procedure, evidence labeling, output shape, and authority boundaries; they do not claim to measure the correctness of a domain-specific conclusion. A case that asks for an evidence-backed conclusion while withholding the evidence is a fixture defect, not a model failure.
 
 After a prompt or fixture change, a result may be carried into the next receipt only when the complete runner input and secret expectation are byte-identical and the prior independent judgment passed. Every changed input must be run and judged again. The receipt limitations must disclose any such reuse; the benchmark digest still binds the complete current population.
 

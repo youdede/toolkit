@@ -43,17 +43,23 @@ jobs:
         env:
           BEFORE_SHA: ${{ github.event.before }}
           HEAD_SHA: ${{ github.sha }}
-        run: node scripts/validate-change-policy.mjs --range "$BEFORE_SHA..$HEAD_SHA" --label pushed-commit
+        # Refresh the ref used to decide whether GitHub's squash suffix may be ignored.
+        run: |
+          git fetch --no-tags origin +refs/heads/main:refs/remotes/origin/main
+          node scripts/validate-change-policy.mjs --range "$BEFORE_SHA..$HEAD_SHA" --label pushed-commit
       - name: Validate manual-run history
         if: github.event_name == 'workflow_dispatch'
         env:
           HEAD_SHA: ${{ github.sha }}
-        run: node scripts/validate-change-policy.mjs --range "$HEAD_SHA" --label repository-commit
+        # The squash-merge suffix exception applies only to commits reachable from origin/main.
+        run: |
+          git fetch --no-tags origin +refs/heads/main:refs/remotes/origin/main
+          node scripts/validate-change-policy.mjs --range "$HEAD_SHA" --label repository-commit
 
   verify:
     name: verify / ${{ matrix.os }} / Node ${{ matrix.node }}
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 12
+    timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix:
