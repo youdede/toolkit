@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "mobile-release-readiness",
   "displayName": "Mobile release readiness",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Review mobile release evidence, accessibility, and reliability. Guards stop fastlane-action, EAS, Xcode, and Gradle uploads from a dirty tree or bad versions; custom lanes pass.",
   "author": {
     "name": "Youdede",
@@ -24,9 +24,10 @@
       "skill/operations/release/verify-mobile-release-readiness",
       "subagent/development/testing/mobile-reliability-accessibility-reviewer",
       "hook/operations/repository-state/release-clean-state-guard",
-      "hook/operations/versioning/release-version-consistency-guard"
+      "hook/operations/versioning/release-version-consistency-guard",
+      "hook/security/application-security/shell-command-guard"
     ],
-    "refusalCount": 15,
+    "refusalCount": 18,
     "evidenceBadges": [
       "ledger-linked-evidence",
       "behaviorally-evaluated"

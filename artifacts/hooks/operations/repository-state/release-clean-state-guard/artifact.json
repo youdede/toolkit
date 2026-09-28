@@ -71,7 +71,12 @@
     ],
     "conflictsWith": [],
     "supersedes": [],
-    "prerequisites": [],
+    "prerequisites": [
+      "hook/security/application-security/shell-command-guard"
+    ],
+    "linkReasons": {
+      "hook/security/application-security/shell-command-guard": "release-clean-state-guard cannot see hidden commands (e.g. bash -c \"$X\"): shell-command-guard stops them."
+    },
     "packIds": [
       "pack/mobile-release-readiness",
       "pack/release-readiness"

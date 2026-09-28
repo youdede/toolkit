@@ -436,6 +436,24 @@
       }
     },
     {
+      "id": "hook-mcp-egress",
+      "artifactIds": [
+        "hook/security/network-control/mcp-egress-guard"
+      ],
+      "testFiles": [
+        "tests/mcp-egress-guard.test.mjs"
+      ],
+      "coverage": {
+        "allow": "allow: an exact declared host passes",
+        "deny-or-observe": "deny-or-observe: none blocks every URL",
+        "malformed": "malformed: non-object input blocks",
+        "oversized": "oversized: bounded stdin fails closed",
+        "boundary": "boundary: non-toolkit MCP identities are outside this guard",
+        "false-positive": "false-positive: an argument without URL passes",
+        "process-exit": "process-exit: malformed native input blocks"
+      }
+    },
+    {
       "id": "mcp-readonly-runtime",
       "artifactIds": [
         "mcp-server/development/agent-tooling/allowlisted-fetch-readonly",

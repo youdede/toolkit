@@ -6,7 +6,7 @@
   "name": "MCP capability drift guard",
   "version": "1.0.0",
   "kind": "hook",
-  "summary": "Block toolkit MCP tool calls when the server, tool name, or observed description is not pinned.",
+  "summary": "Block toolkit MCP calls whose server or tool name is not pinned, or whose supplied description differs from the pin.",
   "description": "A deterministic fail-closed pre-tool gate that accepts only curated Youdede MCP server and tool identities from a generated pin registry and rejects unknown or description-drifted capabilities.",
   "domain": "security",
   "category": "network-control",
@@ -16,17 +16,17 @@
   "languages": ["javascript"],
   "lifecycle": ["implementation", "maintenance", "review"],
   "risk": "medium",
-  "risk_reason": "This automatic gate blocks toolkit MCP tool calls when the server, tool name, or observed description is not pinned; a false denial can interrupt legitimate work, but it does not execute the blocked action.",
+  "risk_reason": "This automatic gate blocks toolkit MCP tool calls when the server or tool name is not pinned, or when the client supplies a description that differs from the pin; a false denial can interrupt legitimate work, but it does not execute the blocked action.",
   "license": "MIT",
   "authors": ["Youdede"],
   "refuses": [
     "It does not trust MCP annotations, server names, or tool descriptions that are absent from the generated pin registry.",
-    "It does not silently accept added, removed, renamed, or description-drifted tools from curated servers.",
+    "It does not silently accept added, removed, or renamed tools from curated servers, or description-drifted tools when the client supplies the description.",
     "It does not widen egress, secret, filesystem, subprocess, or mutation authority for an MCP server."
   ],
   "execution": {"mode": "deterministic", "entrypoints": [{"path": "targets/claude-code/mcp-capability-drift-guard.mjs", "runtime": "node", "purpose": "Compare a toolkit MCP tool call and any observed inventory with the generated capability pin registry.", "sideEffects": "none"}]},
   "hookGuard": {"blockedActions": ["invoke-unpinned-mcp-tool"]},
   "relationships": {"composesWith": ["command/development/agent-tooling/re-pin-mcp-tools", "mcp-server/development/agent-tooling/allowlisted-fetch-readonly", "mcp-server/development/agent-tooling/repository-git-readonly", "mcp-server/development/agent-tooling/workspace-files-readonly", "skill/security/threat-modeling/review-agent-tool-boundaries"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": ["pack/mcp-baseline", "pack/secure-agent-boundaries"]},
-  "operational": {"behavior": "enforcing", "failurePolicy": "fail-closed", "latencyClass": "immediate", "latency_reason": "The entrypoint handles one intercepted event to block toolkit MCP tool calls when the server, tool name, or observed description is not pinned without deferred work.", "dataRetention": "none"},
+  "operational": {"behavior": "enforcing", "failurePolicy": "fail-closed", "latencyClass": "immediate", "latency_reason": "The entrypoint handles one intercepted event to block toolkit MCP tool calls when the server or tool name is not pinned, or when a supplied description differs from the pin, without deferred work.", "dataRetention": "none"},
   "adapters": {"claude-code": "adapters/claude-code.json", "cursor": "adapters/cursor.json"}
 }

@@ -7,6 +7,7 @@ import { spawnSync } from 'node:child_process';
 import { cleanGitEnvironment } from './git-env.mjs';
 import {
   MAX_STDIN_BYTES as COMMIT_MAX_STDIN_BYTES,
+  commitReadsWorkingTree,
   detectCommitIntent,
   evaluate as evaluateCommit
 } from '../artifacts/hooks/security/secrets/commit-guard/targets/claude-code/commit-guard.mjs';
@@ -15,6 +16,10 @@ import {
   evaluate as evaluatePolicy
 } from '../artifacts/hooks/development/code-quality/policy-file-guard/targets/claude-code/policy-file-guard.mjs';
 import { evaluate as evaluateShell } from '../artifacts/hooks/security/application-security/shell-command-guard/targets/claude-code/shell-command-guard.mjs';
+
+// The guards prefer CLAUDE_PROJECT_DIR over the payload cwd; clear an inherited value so the
+// fixtures stay hermetic when the suite runs inside a Claude Code session.
+delete process.env.CLAUDE_PROJECT_DIR;
 
 function git(cwd, args) {
   const result = spawnSync('git', args, { cwd, encoding: 'utf8', env: cleanGitEnvironment() });
@@ -60,10 +65,13 @@ test('commit guard scans staged blobs and ignores unrelated Bash calls', (contex
   const wrapped = evaluateCommit({ cwd: directory, tool_input: { command: "exec bash -lc 'git commit -m wrapped'" } });
   assert.equal(wrapped.exitCode, 2);
   assert.match(wrapped.message, /GitHub token/);
-  assert.equal(evaluateCommit({ cwd: directory, tool_input: { command: "bash -c '$SCRIPT'" } }).ruleId, 'commit-command-uninspectable');
-  assert.equal(evaluateCommit({ cwd: directory, tool_input: { command: 'env -C ../other git commit -m x' } }).ruleId, 'commit-command-uninspectable');
-  assert.equal(evaluateCommit({ cwd: directory, tool_input: { command: 'env GIT_DIR=$DIR git commit -m x' } }).ruleId, 'commit-command-uninspectable');
-  assert.equal(evaluateCommit({ cwd: directory, tool_input: { command: 'g{it,noop} commit -m x' } }).ruleId, 'commit-command-uninspectable');
+  // A program known only at run time belongs to shell-command-guard (option B, hook-design 1.7).
+  assert.equal(evaluateCommit({ cwd: directory, tool_input: { command: "bash -c '$SCRIPT'" } }).exitCode, 0);
+  assert.equal(evaluateShell({ tool_input: { command: "bash -c '$SCRIPT'" } }).ruleId, 'shell-command-uninspectable');
+  // The item parser reads `env -C` and `GIT_DIR=`, so these are scope changes, not unreadable commands.
+  assert.equal(evaluateCommit({ cwd: directory, tool_input: { command: 'env -C ../other git commit -m x' } }).ruleId, 'commit-scope-unsupported');
+  assert.equal(evaluateCommit({ cwd: directory, tool_input: { command: 'env GIT_DIR=$DIR git commit -m x' } }).ruleId, 'commit-scope-unsupported');
+  assert.equal(evaluateCommit({ cwd: directory, tool_input: { command: '{git,x}{,{1..100}} commit -m x' } }).ruleId, 'commit-command-uninspectable');
 
   mkdirSync(path.join(directory, '.youdede'));
   writeFileSync(path.join(directory, '.youdede', 'commit-guard.json'), JSON.stringify({ ignoreSecretRules: ['github-token'] }));
@@ -149,9 +157,11 @@ test('shell command guard blocks catastrophic commands and preserves safe contro
   ];
   for (const [command, rule] of wrapped) assert.equal(evaluateShell({ tool_input: { command } }).ruleId, rule, command);
   assert.equal(evaluateShell({ tool_input: { command: "bash -c '$SCRIPT'" } }).ruleId, 'shell-command-uninspectable');
-  for (const command of ['env -C / rm -rf /', 'env --argv0 echo rm -rf /', 'PATH=/tmp rm -rf /', 'g{it,noop} push --force origin main']) {
-    assert.equal(evaluateShell({ tool_input: { command } }).ruleId, 'shell-command-uninspectable', command);
+  // The item parser reads these wrappers and assignments, so the concrete rule applies.
+  for (const command of ['env -C / rm -rf /', 'env --argv0 echo rm -rf /', 'PATH=/tmp rm -rf /']) {
+    assert.equal(evaluateShell({ tool_input: { command } }).ruleId, 'broad-filesystem-delete', command);
   }
+  assert.equal(evaluateShell({ tool_input: { command: '{git,x}{,{1..100}} push --force origin main' } }).ruleId, 'shell-command-uninspectable');
 
   const allowed = [
     'rm -rf node_modules',
@@ -232,4 +242,55 @@ test('a guard inspects its own working directory even when GIT_DIR points elsewh
   const verdict = evaluateCommit({ cwd: target, tool_input: { command: 'git commit -m "unsafe"' } });
   assert.equal(verdict.exitCode, 2, 'the guard must read the staged secret in its own working directory');
   assert.match(verdict.message, /potential GitHub token/);
+});
+
+test('commit guard inspects content that the same command stages or commits from the working tree', (context) => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-commit-worktree-'));
+  context.after(() => rmSync(directory, { recursive: true, force: true }));
+  git(directory, ['init', '-q']);
+  git(directory, ['config', 'user.email', 'tests@youdede.invalid']);
+  git(directory, ['config', 'user.name', 'youdede tests']);
+  writeFileSync(path.join(directory, 'app.js'), 'export const value = 1;\n');
+  git(directory, ['add', 'app.js']);
+  git(directory, ['commit', '-qm', 'baseline']);
+
+  const fixtureKey = ['AKIA', 'ABCDEFGHIJKLMNOP'].join('');
+  writeFileSync(path.join(directory, 'app.js'), `export const key = "${fixtureKey}";\n`);
+  for (const command of [
+    'git commit -am x',
+    'git commit -a -m x',
+    'git commit --all -m x',
+    'git commit -m x app.js',
+    'git commit -m x -- app.js',
+    'git commit -i -m x app.js',
+    'git add app.js && git commit -m x',
+    'git add -A; git commit -m x',
+    'git stage . && git commit -m x'
+  ]) {
+    const verdict = evaluateCommit({ cwd: directory, tool_input: { command } });
+    assert.equal(verdict.exitCode, 2, command);
+    assert.match(verdict.message, /AWS access key id/, command);
+    assert.doesNotMatch(verdict.message, /AKIA/, command);
+  }
+
+  writeFileSync(path.join(directory, 'app.js'), 'export const value = 2;\n');
+  writeFileSync(path.join(directory, '.env'), `KEY=${fixtureKey}\n`);
+  const env = evaluateCommit({ cwd: directory, tool_input: { command: 'git add .env && git commit -m x' } });
+  assert.equal(env.exitCode, 2);
+  assert.match(env.message, /\.env: sensitive file type/);
+
+  // Unchanged: without a staging step or a working-tree commit form, only the index is inspected.
+  assert.equal(evaluateCommit({ cwd: directory, tool_input: { command: 'git commit -m x' } }).exitCode, 0);
+  assert.equal(evaluateCommit({ cwd: directory, tool_input: { command: 'npm test && git commit -m x' } }).exitCode, 0);
+  assert.equal(evaluateCommit({ cwd: directory, tool_input: { command: 'git commit -S -m x' } }).exitCode, 0);
+});
+
+test('commit working-tree detection follows commit option syntax', () => {
+  const tokens = (text) => text.split(' ').map((value) => ({ kind: 'static', text: value }));
+  for (const args of ['-am x', '-a -m x', '--all -m x', '-m x app.js', '-m x -- app.js', '--only -m x', '--include -m x', '-p', '--interactive', '--pathspec-from-file=list.txt']) {
+    assert.equal(commitReadsWorkingTree(tokens(args)), true, args);
+  }
+  for (const args of ['-m x', '-F msg.txt', '--amend --no-edit', '-S -m x', '-Sdeadbeef -m x', '-C HEAD', '--author=me -m x', '-s -m x', '-uno -m x']) {
+    assert.equal(commitReadsWorkingTree(tokens(args)), false, args);
+  }
 });

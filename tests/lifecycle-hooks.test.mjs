@@ -140,6 +140,22 @@ test('completion evidence opt-in is scoped to the current task or latest subagen
   assert.equal(optedInTask.ruleId, 'completion-evidence-missing');
 });
 
+test('an ordinary task needs no transcript and an Agent prompt marker opts a subagent in (PR38-HOOK-1)', (context) => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-completion-optin-'));
+  context.after(() => rmSync(directory, { recursive: true, force: true }));
+  const plain = { hook_event_name: 'TaskCompleted', task_id: 't', task_description: 'plain task', transcript_path: path.join(directory, 'missing.jsonl') };
+  assert.equal(completionGuard.evaluate(plain, completionGuard.collectContext(plain)).ruleId, 'completion-evidence-not-required');
+  assert.equal(completionGuard.evaluate(plain, { inspectionError: 'transcript-unsafe' }).exitCode, 0);
+  const transcript = path.join(directory, 'transcript.jsonl');
+  writeFileSync(transcript, [
+    JSON.stringify({ type: 'user', message: { content: 'review please' } }),
+    JSON.stringify({ type: 'assistant', message: { content: [{ type: 'tool_use', name: 'Agent', input: { prompt: '[youdede:evidence-required] review the diff' } }] } })
+  ].join('\n'));
+  const stop = { hook_event_name: 'SubagentStop', agent_type: 'code-reviewer', last_assistant_message: 'looks fine', transcript_path: transcript };
+  assert.equal(completionGuard.evaluate(stop, completionGuard.collectContext(stop)).ruleId, 'completion-evidence-missing');
+  assert.equal(completionGuard.evaluate({ ...stop, transcript_path: path.join(directory, 'missing.jsonl') }, { inspectionError: 'transcript-unreadable' }).ruleId, 'completion-evidence-unverified');
+});
+
 test('completion process blocks malformed, oversized, and missing receipts', (context) => {
   const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-completion-process-'));
   context.after(() => rmSync(directory, { recursive: true, force: true }));
@@ -177,6 +193,25 @@ test('configuration guard blocks explicit bypasses and permits safe project sett
   writeFileSync(settings, '{bad');
   assert.equal(configGuard.evaluate(input, configGuard.collectContext(input)).ruleId, 'config-change-unverified');
   assert.equal(configGuard.evaluate({ ...input, source: 'policy_settings' }, {}).exitCode, 0);
+});
+
+test('configuration guard finds the project root, derives the settings path, and allows deletion (PR38-HOOK-2)', (context) => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-config-root-'));
+  context.after(() => rmSync(directory, { recursive: true, force: true }));
+  mkdirSync(path.join(directory, '.claude'));
+  mkdirSync(path.join(directory, 'sub'));
+  const settings = path.join(directory, '.claude', 'settings.json');
+  writeFileSync(settings, JSON.stringify({ permissions: { allow: ['Bash(npm test)'] } }));
+  const env = { HOME: path.join(directory, 'home') };
+  const judge = (input) => configGuard.evaluate(input, configGuard.collectContext(input, directory, env));
+  assert.equal(judge({ hook_event_name: 'ConfigChange', source: 'project_settings', cwd: path.join(directory, 'sub'), file_path: settings }).exitCode, 0);
+  assert.equal(judge({ hook_event_name: 'ConfigChange', source: 'project_settings', cwd: directory }).exitCode, 0);
+  assert.equal(judge({ hook_event_name: 'ConfigChange', source: 'local_settings', cwd: directory, file_path: path.join(directory, '.claude', 'settings.local.json') }).ruleId, 'config-removed');
+  writeFileSync(settings, JSON.stringify({ disableAllHooks: true }));
+  assert.equal(judge({ hook_event_name: 'ConfigChange', source: 'project_settings', cwd: path.join(directory, 'sub') }).ruleId, 'config-hooks-disabled');
+  // A path outside the project, or a missing file that is not a settings file, stays unverified.
+  assert.equal(judge({ hook_event_name: 'ConfigChange', source: 'project_settings', cwd: directory, file_path: path.join(os.tmpdir(), 'x', 'settings.json') }).ruleId, 'config-change-unverified');
+  assert.equal(judge({ hook_event_name: 'ConfigChange', source: 'user_settings', cwd: directory }).exitCode, 0);
 });
 
 test('instruction path drift is observed but never presented as blockable', (context) => {

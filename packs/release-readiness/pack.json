@@ -4,7 +4,7 @@
   "id": "pack/release-readiness",
   "slug": "release-readiness",
   "name": "Release readiness",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "summary": "Build an evidence-backed release decision and stop publication from unsafe repository state.",
   "outcomes": [
     "release-evidence",
@@ -15,7 +15,7 @@
     "ledgerLinkRequired": true,
     "outcomeEvidence": [
       {"outcome": "release-evidence", "memberArtifactIds": ["command/development/workflow/audit-release-evidence", "skill/operations/release/verify-production-release", "subagent/operations/release/release-evidence-verifier", "subagent/operations/release/release-risk-reviewer"]},
-      {"outcome": "safe-publication", "memberArtifactIds": ["hook/operations/package-publication/package-publish-guard", "hook/operations/repository-state/release-clean-state-guard", "hook/operations/versioning/release-version-consistency-guard"]}
+      {"outcome": "safe-publication", "memberArtifactIds": ["hook/security/application-security/shell-command-guard", "hook/operations/package-publication/package-publish-guard", "hook/operations/repository-state/release-clean-state-guard", "hook/operations/versioning/release-version-consistency-guard"]}
     ]
   },
   "members": [
@@ -46,6 +46,11 @@
     },
     {
       "artifactId": "hook/operations/versioning/release-version-consistency-guard",
+      "role": "enforcement",
+      "required": true
+    },
+    {
+      "artifactId": "hook/security/application-security/shell-command-guard",
       "role": "enforcement",
       "required": true
     },

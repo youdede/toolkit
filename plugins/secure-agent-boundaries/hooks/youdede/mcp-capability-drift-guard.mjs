@@ -11,13 +11,26 @@ function sha256(value) {
   return createHash('sha256').update(value).digest('hex');
 }
 
-function parseToolIdentity(input) {
-  const raw = input.tool_name || input.toolName || input.tool || '';
-  if (typeof raw !== 'string') return null;
-  const claude = /^mcp__(youdede-[a-z0-9-]+)__([a-z0-9_-]+)$/.exec(raw);
-  const portable = /^(youdede-[a-z0-9-]+):([a-z0-9_-]+)$/.exec(raw);
-  const match = claude || portable;
-  return match ? { server: match[1], tool: match[2] } : null;
+// Every server identity the client reports: the Claude Code tool name (`mcp__<server>__<tool>`, or
+// `mcp__plugin_<plugin>_<server>__<tool>` for a plugin server) and `mcp_server.name`, the Cursor
+// `mcp_server_name` with a bare `tool_name`, or the portable `<server>:<tool>`. Names are compared
+// case-insensitively, so a Youdede claim in any case is resolved or refused.
+function parseToolIdentity(input, registry) {
+  const raw = input.tool_name ?? input.toolName ?? input.tool ?? '';
+  if (typeof raw !== 'string') return { unknown: true };
+  const claude = /^mcp__(.+?)__(.+)$/.exec(raw);
+  const portable = claude ? null : /^([^:\s]+):(.+)$/.exec(raw);
+  const tool = claude?.[2] ?? portable?.[2] ?? raw;
+  const candidates = [claude?.[1], portable?.[1], input.mcp_server?.name, input.mcp_server_name]
+    .filter((value) => typeof value === 'string')
+    .map((value) => value.toLowerCase())
+    .filter((value) => value.includes('youdede'));
+  if (!candidates.length) return null;
+  const names = Object.keys(registry?.servers || {});
+  const resolved = new Set(candidates.map((value) => names.find((name) => value === name || value.endsWith(`_${name}`))));
+  const server = candidates.find((value) => value.startsWith('youdede')) ?? candidates[0];
+  if (resolved.size !== 1 || resolved.has(undefined)) return { unknown: true, server };
+  return { server: [...resolved][0], tool };
 }
 
 function allow() {
@@ -34,11 +47,11 @@ function block(ruleId, server = 'unknown') {
 
 export function evaluate(input, registry) {
   if (!input || typeof input !== 'object' || Array.isArray(input)) return block('mcp-envelope-invalid');
-  const identity = parseToolIdentity(input);
+  const identity = parseToolIdentity(input, registry);
   if (!identity) return allow();
-  const pinned = registry?.servers?.[identity.server];
-  if (!pinned) return block('mcp-server-unpinned', identity.server);
-  const expected = pinned.tools?.[identity.tool];
+  if (identity.unknown) return block('mcp-server-unpinned', identity.server);
+  const pinned = registry.servers[identity.server];
+  const expected = Object.hasOwn(pinned.tools || {}, identity.tool) ? pinned.tools[identity.tool] : undefined;
   if (!expected) return block('mcp-tool-unpinned', identity.server);
   const description = input.tool_description ?? input.toolDescription;
   if (description !== undefined && (typeof description !== 'string' || sha256(description) !== expected)) {
@@ -64,7 +77,7 @@ async function receiveEnvelope() {
     if (bytes > MAX_STDIN_BYTES) throw new Error('input-limit');
     chunks.push(chunk);
   }
-  const value = JSON.parse(Buffer.concat(chunks).toString('utf8') || '{}');
+  const value = JSON.parse(Buffer.concat(chunks).toString('utf8'));
   if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('envelope-invalid');
   return value;
 }
@@ -82,5 +95,4 @@ async function main() {
   process.exitCode = result.exitCode;
 }
 
-function canonical(file) { try { return realpathSync(file); } catch { return ''; } }
-if (process.argv[1] && canonical(process.argv[1]) === canonical(fileURLToPath(import.meta.url))) await main();
+if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) await main();

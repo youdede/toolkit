@@ -9,10 +9,17 @@ export const MAX_CONTENT_BYTES = 512 * 1024;
 const ALLOW = { exitCode: 0 };
 const BLOCK = (ruleId, reason) => ({ exitCode: 2, ruleId, message: `BLOCKED by dynamic-code-execution-guard [${ruleId}]: ${reason}` });
 
+const SUPPORTED_SOURCE = /\.(?:js|jsx|mjs|cjs|ts|tsx|py|php|rb)$/i;
+
+// An absolute path may name the project through a symlink (/var and /private/var on macOS), so it
+// is compared with the project path as given and with its real path.
 function safePath(filePath, cwd) {
   if (typeof filePath !== 'string' || filePath.length === 0 || filePath.includes('\0')) throw new Error('invalid path');
-  const root = realpathSync(cwd); const target = path.resolve(root, filePath); const relative = path.relative(root, target);
-  if (relative.startsWith(`..${path.sep}`) || relative === '..' || path.isAbsolute(relative)) throw new Error('outside project');
+  const lexical = path.resolve(cwd); const root = realpathSync(lexical);
+  const relative = [lexical, root].map((base) => path.relative(base, path.resolve(base, filePath)))
+    .find((candidate) => !candidate.startsWith(`..${path.sep}`) && candidate !== '..' && !path.isAbsolute(candidate));
+  if (relative === undefined) throw new Error('outside project');
+  const target = path.join(root, relative);
   let cursor = root;
   for (const part of relative.split(path.sep).filter(Boolean)) { cursor = path.join(cursor, part); if (!existsSync(cursor)) break; if (lstatSync(cursor).isSymbolicLink()) throw new Error('symlink path'); }
   return target;
@@ -29,7 +36,10 @@ function replaceExactly(source, edit) {
 
 export function reconstructChange(input, cwd = process.cwd()) {
   if (!input || !['Write', 'Edit', 'MultiEdit'].includes(input.tool_name) || !input.tool_input) return { relevant: false };
-  const filePath = input.tool_input.file_path || input.tool_input.file; const target = safePath(filePath, cwd); const before = readBounded(target); let after;
+  const filePath = input.tool_input.file_path || input.tool_input.file;
+  // Only supported source files are scanned; other files are not reconstructed at all.
+  if (typeof filePath === 'string' && !SUPPORTED_SOURCE.test(filePath)) return { relevant: false, filePath, before: '', after: '' };
+  const target = safePath(filePath, cwd); const before = readBounded(target); let after;
   if (input.tool_name === 'Write') { if (typeof input.tool_input.content !== 'string') throw new Error('missing content'); after = input.tool_input.content; }
   else if (input.tool_name === 'Edit') { if (!existsSync(target)) throw new Error('missing edit target'); after = replaceExactly(before, input.tool_input); }
   else { if (!existsSync(target) || !Array.isArray(input.tool_input.edits) || input.tool_input.edits.length === 0) throw new Error('invalid edits'); after = input.tool_input.edits.reduce(replaceExactly, before); }
@@ -37,7 +47,8 @@ export function reconstructChange(input, cwd = process.cwd()) {
   return { relevant: true, filePath, before, after };
 }
 
-function maskCommentsAndStrings(source, hashComments) {
+// Python and Ruby have no // or /* */ comments: `1 // 2` is integer division in Python.
+function maskCommentsAndStrings(source, hashComments, slashComments = true) {
   let output = ''; let state = 'code'; let quote = '';
   for (let index = 0; index < source.length; index += 1) {
     const current = source[index]; const next = source[index + 1];
@@ -45,8 +56,8 @@ function maskCommentsAndStrings(source, hashComments) {
     if (state === 'block') { if (current === '*' && next === '/') { output += '  '; index += 1; state = 'code'; } else output += current === '\n' ? '\n' : ' '; continue; }
     if (quote) { if (current === '\\') { output += '  '; index += 1; } else if (current === quote) { output += ' '; quote = ''; } else output += current === '\n' ? '\n' : ' '; continue; }
     if (current === "'" || current === '"' || current === '`') { quote = current; output += ' '; continue; }
-    if (current === '/' && next === '/') { output += '  '; index += 1; state = 'line'; continue; }
-    if (current === '/' && next === '*') { output += '  '; index += 1; state = 'block'; continue; }
+    if (slashComments && current === '/' && next === '/') { output += '  '; index += 1; state = 'line'; continue; }
+    if (slashComments && current === '/' && next === '*') { output += '  '; index += 1; state = 'block'; continue; }
     if (hashComments && current === '#') { output += ' '; state = 'line'; continue; }
     output += current;
   }
@@ -55,7 +66,7 @@ function maskCommentsAndStrings(source, hashComments) {
 
 function executableCode(filePath, source) {
   const isJavaScript = /\.(?:js|jsx|mjs|cjs|ts|tsx)$/i.test(String(filePath));
-  const masked = maskCommentsAndStrings(source, !isJavaScript && /\.(?:py|rb|php)$/i.test(String(filePath)));
+  const masked = maskCommentsAndStrings(source, !isJavaScript && /\.(?:py|rb|php)$/i.test(String(filePath)), !/\.(?:py|rb)$/i.test(String(filePath)));
   if (!isJavaScript) return masked;
   const templateExpressions = [];
   for (const match of source.matchAll(/\$\{([\s\S]*?)\}/g)) templateExpressions.push(maskCommentsAndStrings(match[1], false));
@@ -64,10 +75,10 @@ function executableCode(filePath, source) {
 
 export function scanDynamicCode(filePath, source) {
   const normalizedPath = String(filePath || '').toLowerCase(); const code = executableCode(normalizedPath, source); const findings = [];
-  if (/\.(?:js|jsx|mjs|cjs|ts|tsx)$/.test(normalizedPath) && (/\beval\s*\(/.test(code) || /\bnew\s+Function\s*\(/.test(code))) findings.push('javascript-dynamic-execution');
+  if (/\.(?:js|jsx|mjs|cjs|ts|tsx)$/.test(normalizedPath) && (/\beval\s*\(/.test(code) || /\b(?:new\s+)?Function\s*\(/.test(code))) findings.push('javascript-dynamic-execution');
   if (/\.py$/.test(normalizedPath) && /\b(?:eval|exec)\s*\(/.test(code)) findings.push('python-dynamic-execution');
   if (/\.php$/.test(normalizedPath) && /\b(?:eval|assert)\s*\(/.test(code)) findings.push('php-dynamic-execution');
-  if (/\.rb$/.test(normalizedPath) && /\b(?:eval|class_eval|module_eval|instance_eval)\s*\(/.test(code)) findings.push('ruby-dynamic-execution');
+  if (/\.rb$/.test(normalizedPath) && /\b(?:eval|class_eval|module_eval|instance_eval)\b(?=\s*\(|[ \t]+[^\s=.,;)\]}])/.test(code)) findings.push('ruby-dynamic-execution');
   return findings;
 }
 
@@ -89,7 +100,7 @@ export function evaluate(input, context) {
 }
 
 async function readInput() { const chunks = []; let size = 0; for await (const chunk of process.stdin) { size += chunk.length; if (size > MAX_STDIN_BYTES) throw new Error('oversized'); chunks.push(chunk); } return JSON.parse(Buffer.concat(chunks).toString('utf8')); }
-if (process.argv[1] && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  try { const input = await readInput(); const cwd = input.cwd || process.env.CLAUDE_PROJECT_DIR || process.cwd(); const result = evaluate(input, reconstructChange(input, cwd)); if (result.exitCode) process.stderr.write(`${result.message}\n`); process.exitCode = result.exitCode; }
+if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
+  try { const input = await readInput(); const cwd = process.env.CLAUDE_PROJECT_DIR || input.cwd || process.cwd(); const result = evaluate(input, reconstructChange(input, cwd)); if (result.exitCode) process.stderr.write(`${result.message}\n`); process.exitCode = result.exitCode; }
   catch { process.stderr.write('BLOCKED by dynamic-code-execution-guard [dynamic-code-input-invalid]: hook input is invalid or oversized.\n'); process.exitCode = 2; }
 }

@@ -6,6 +6,10 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { evaluate, collectContext } from '../artifacts/hooks/development/workflow/phase-gate-guard/targets/claude-code/phase-gate-guard.mjs';
 
+// The guards prefer CLAUDE_PROJECT_DIR over the payload cwd; clear an inherited value so the
+// fixtures stay hermetic when the suite runs inside a Claude Code session.
+delete process.env.CLAUDE_PROJECT_DIR;
+
 const SCRIPT = path.resolve('artifacts/hooks/development/workflow/phase-gate-guard/targets/claude-code/phase-gate-guard.mjs');
 const runHook = (input, rawOverride) => spawnSync(process.execPath, [SCRIPT], { input: rawOverride ?? JSON.stringify(input), encoding: 'utf8' });
 const evidence = (phase) => JSON.stringify({ phase, summary: `Completed ${phase} evidence for the bounded change request.`, anchors: ['src/index.js'] });

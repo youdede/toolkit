@@ -1,10 +1,14 @@
 # Release version consistency guard for Claude Code
 
-This hook verifies the local metadata identity used for a Node package release. It compares package.json with package-lock.json or npm-shrinkwrap.json before publication.
+This hook verifies the local metadata identity used for a Node package release. It compares package.json with package-lock.json or npm-shrinkwrap.json before `npm publish`. For `pnpm publish`, `yarn publish`, and `yarn npm publish` it validates package.json only, because pnpm and Yarn lockfiles do not record the root version. Commands are read through the shared item parser (sequences, `sudo`, `env`, `bash -c`); after a static `cd`, the package in that directory is inspected. Values of publish options such as `--tag` and `--access` are not package specs; publishing a tarball, a folder, or a workspace is refused as uninspectable.
+
+For the mobile store uploads that `release-clean-state-guard` recognizes (fastlane `deliver`, `pilot upload`, `upload_to_app_store`, `upload_to_testflight`, `supply`, `upload_to_play_store`, `eas submit`, `eas build --auto-submit`, `xcrun altool` and `iTMSTransporter` uploads, Gradle `publish*` tasks), it reads the literal version values of the targeted platform under the project directory (and `ios/`, `android/`): Xcode `MARKETING_VERSION` and `CURRENT_PROJECT_VERSION` outside test bundles, `Info.plist` `CFBundleShortVersionString` and `CFBundleVersion` outside `*Tests` folders, Gradle `versionName` and `versionCode` in `app/build.gradle(.kts)`, and Expo `app.json` `version`, `ios.buildNumber`, and `android.versionCode`. It blocks a value outside the store format (`1`, `1.2`, or `1.2.3`; a version code from 1 to 2100000000) and iOS app and extension targets that disagree on the version or build number. Values built from variables or code (`$(…)`, `rootProject.ext…`, `app.config.js`) are skipped, Android flavors may differ, and a project without any mobile version source passes.
 
 Matching valid versions on a publishable package, explicit package-manager dry runs, and unrelated commands remain allowed.
 
 Registry availability, remote tags, artifact contents, and version compatibility are outside this local deterministic check.
+
+A program the command runs but does not contain (`bash -c "$CMD"`, `curl … | sh`, `eval "$(tool)"`, `python3 -c "$CODE"`) is judged by shell-command-guard; this hook refuses one only when its text names `npm publish`, `pnpm publish`, `yarn publish`, `fastlane`, `eas submit`, `altool` and similar phrases.
 
 ## Refusals
 
@@ -12,3 +16,10 @@ Registry availability, remote tags, artifact contents, and version compatibility
 - It does not contact a registry or prove that a version is available, unique, or semantically correct.
 - It does not treat a matching lockfile as evidence that package contents or provenance are safe.
 - It does not accept command options, prompt text, or project-authored files as a bypass.
+
+Works with shell-command-guard. Alone, this hook judges the commands it can read in the call. It cannot see inside a command that hides what it runs (`bash -c "$X"`, `curl … | sh`, `eval "$(tool)"`); shell-command-guard, installed with it by default, is the hook that stops those. The installer asks first in a terminal (default yes) and installs it with a notice elsewhere; `youdede-toolkit add release-version-consistency-guard --no-prerequisites` installs this hook alone, and `youdede-toolkit add shell-command-guard` adds it later.
+
+Retained false positives (hook-design 4.3), each refused on purpose:
+
+- An opaque executable (`$"x" …`, translated by the locale at run time) is uninspectable when its words can be one of the commands this hook protects.
+- An option the hook has not verified, before a safe option (`npm publish --unknown --dry-run`), is read both ways, so the safe mode does not count; verifying the option into the CLI fixture fixes it.

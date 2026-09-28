@@ -18,6 +18,10 @@ import * as h10 from '../artifacts/hooks/operations/delegation-budget/subagent-f
 import * as h11 from '../artifacts/hooks/operations/process-lifecycle/foreground-process-guard/targets/claude-code/foreground-process-guard.mjs';
 import * as h12 from '../artifacts/hooks/design/authentication-access/authentication-accessibility-guard/targets/claude-code/authentication-accessibility-guard.mjs';
 
+// The guards prefer CLAUDE_PROJECT_DIR over the payload cwd; clear an inherited value so the
+// fixtures stay hermetic when the suite runs inside a Claude Code session.
+delete process.env.CLAUDE_PROJECT_DIR;
+
 const scripts = {
   'schema-compatibility-guard': path.resolve('artifacts/hooks/data/compatibility/schema-compatibility-guard/targets/claude-code/schema-compatibility-guard.mjs'),
   'api-contract-compatibility-guard': path.resolve('artifacts/hooks/development/contract-compatibility/api-contract-compatibility-guard/targets/claude-code/api-contract-compatibility-guard.mjs'),
@@ -69,7 +73,9 @@ test('reported false positives remain allowed without weakening the boundary', (
     [h7, writeInput('view.tsx'), { file: 'view.tsx', before: '<button id="save" role="button">Save</button>', proposed: '<button id="save">Save</button>', complete: true }],
     [h8, writeInput('app.css'), { file: 'app.css', before: '', proposed: '.x:focus{outline:none;box-shadow:0 0 0 2px blue}', complete: true }],
     [h9, { tool_name: 'mcp__search__query', tool_input: { query: 'delete old records' } }, {}],
-    [h9, { tool_name: 'Bash', tool_input: { command: 'mysql -e "SELECT `DELETE` FROM audit"' } }, {}],
+    // A backtick-quoted identifier inside a single-quoted SQL argument (inside double quotes the
+    // backticks are a command substitution, asserted below).
+    [h9, { tool_name: 'Bash', tool_input: { command: "mysql -e 'SELECT `DELETE` FROM audit'" } }, {}],
     [h10, { tool_name: 'Task' }, { priorDelegations: 2 }],
     [h11, { tool_name: 'Bash', tool_input: { command: 'timeout 30 npm run dev' } }, {}],
     [h11, { tool_name: 'Bash', tool_input: { command: 'npm run dev & echo ready' } }, {}],
@@ -80,6 +86,7 @@ test('reported false positives remain allowed without weakening the boundary', (
     [h7, writeInput('Dialog.jsx'), { file: 'Dialog.jsx', before: '<button id="close">x</button>', proposed: '<button id="close" aria-hidden="true" tabindex="-1">x</button>', complete: true }]
   ];
   for (const [module, input, context] of allowed) assert.equal(module.evaluate(input, context).exitCode, 0, JSON.stringify(input));
+  assert.equal(h9.evaluate({ tool_name: 'Bash', tool_input: { command: 'mysql -e "SELECT `DELETE` FROM audit"' } }).ruleId, 'database-query-uninspectable');
 });
 
 test('specific bypass forms are rejected', () => {

@@ -25,6 +25,17 @@
       },
       {
         "matcher": "Bash",
+        "description": "[youdede:shell-command-guard] Reject catastrophic shell commands",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/youdede/shell-command-guard.mjs\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
         "description": "[youdede:package-publish-guard] Refuse package publication",
         "hooks": [
           {

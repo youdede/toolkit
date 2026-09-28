@@ -1,0 +1,262 @@
+git status --short
+git status --branch --short
+git diff --stat
+git diff --check
+git diff --cached --stat
+git diff --name-only origin/main...HEAD
+git log --oneline -10
+git log --graph --decorate --all -20
+git show --stat HEAD
+git show --name-status --format=fuller HEAD
+git show HEAD:package.json
+git branch --list
+git branch --show-current
+git branch -vv
+git remote -v
+git remote get-url origin
+git ls-files
+git ls-files -m
+git ls-files --others --exclude-standard
+git grep -n TODO
+git rev-parse HEAD
+git rev-parse --show-toplevel
+git merge-base HEAD origin/main
+git cat-file -t HEAD
+git tag --list
+git describe --tags --always
+git config --list --show-origin
+git config --get remote.origin.url
+git check-ignore -v .env
+git blame -L 1,20 README.md
+git shortlog -sn --all
+git fsck --no-progress
+git worktree list --porcelain
+git submodule status
+git format-patch --stdout -1 HEAD >/dev/null
+git ls-remote --heads origin
+git fetch --dry-run origin
+npm test
+npm run check
+npm run lint
+npm run build
+npm run typecheck
+npm run test -- --runInBand
+npm exec -- eslint .
+npm view react version
+npm outdated
+npm audit --omit=dev
+npm ls --depth=0
+npm pack --dry-run
+npm install --dry-run --ignore-scripts
+npm ci --ignore-scripts
+pnpm test
+pnpm run lint
+pnpm run build
+pnpm exec vitest run
+pnpm list --depth 0
+pnpm outdated
+pnpm audit
+pnpm why react
+yarn test
+yarn lint
+yarn build
+yarn list --depth=0
+yarn outdated
+yarn audit --groups dependencies
+yarn why react
+bun test
+bun run build
+bun pm ls
+bun outdated
+docker ps
+docker ps -a
+docker images
+docker image ls
+docker inspect app
+docker logs --tail 100 app
+docker stats --no-stream
+docker network ls
+docker volume ls
+docker system df
+docker info
+docker version
+docker compose ps
+docker compose ls
+docker compose config
+docker compose config --quiet
+docker compose logs --tail 100
+docker compose images
+docker compose top
+docker build --check .
+docker build --progress=plain .
+docker buildx ls
+docker buildx inspect
+docker history alpine:latest
+terraform fmt -check -recursive
+terraform validate
+terraform plan
+terraform plan -refresh=false
+terraform show
+terraform show -json
+terraform providers
+terraform providers schema -json
+terraform version
+terraform workspace show
+terraform workspace list
+terraform state list
+terraform state show module.app.aws_s3_bucket.logs
+terraform output
+terraform output -json
+terraform init -backend=false
+tofu fmt -check -recursive
+tofu validate
+tofu plan
+tofu show
+tofu state list
+pulumi preview
+pulumi refresh --preview-only
+aws sts get-caller-identity
+aws configure list
+aws s3 ls
+aws s3api list-buckets
+aws ec2 describe-instances
+aws ec2 describe-security-groups
+aws iam list-roles
+aws iam get-role --role-name app
+aws lambda list-functions
+aws logs describe-log-groups
+aws cloudformation describe-stacks
+aws cloudformation list-stack-resources --stack-name app
+aws secretsmanager describe-secret --secret-id app
+aws rds describe-db-instances
+aws eks list-clusters
+aws resourcegroupstaggingapi get-resources
+gcloud auth list
+gcloud config list
+gcloud projects list
+gcloud compute instances list
+gcloud compute networks list
+gcloud iam service-accounts list
+gcloud functions list
+gcloud run services list
+gcloud container clusters list
+gcloud storage ls
+gcloud secrets list
+gcloud sql instances list
+az account show
+az account list
+az group list
+az resource list
+az vm list
+az network vnet list
+az ad sp list --display-name app
+az functionapp list
+az webapp list
+az aks list
+az storage account list
+az keyvault list
+kubectl cluster-info
+kubectl config current-context
+kubectl config get-contexts
+kubectl get namespaces
+kubectl get pods -A
+kubectl get deployments -A
+kubectl get services -A
+kubectl get events --sort-by=.metadata.creationTimestamp
+kubectl describe pod app-0
+kubectl logs app-0 --tail=100
+kubectl logs deployment/app --previous
+kubectl api-resources
+kubectl auth can-i get pods
+kubectl diff -f k8s/
+kubectl apply --dry-run=server -f k8s/
+kubectl create configmap app --from-file=.env.example --dry-run=client -o yaml
+helm list -A
+helm status app
+helm history app
+helm get values app
+helm get manifest app
+helm lint ./chart
+helm template app ./chart
+helm diff upgrade app ./chart
+helm show values bitnami/postgresql
+helm repo list
+helm search repo postgresql
+helm dependency list ./chart
+pytest -q
+pytest tests/unit
+pytest --collect-only -q
+python -m unittest discover
+python -m compileall src
+ruff check .
+mypy src
+jest --runInBand
+npx vitest run
+npx eslint .
+npx tsc --noEmit
+go test ./...
+go test -race ./...
+go vet ./...
+go list ./...
+cargo test
+cargo test --no-run
+cargo check
+cargo clippy --all-targets
+mvn test
+mvn verify -DskipTests
+./gradlew test
+./gradlew check
+bundle exec rspec
+bundle exec rubocop
+make test
+make check
+make -n install
+cmake -S . -B build
+cmake --build build --target help
+ctest --test-dir build --show-only
+ninja -C build -n
+meson test -C build --list
+bazel test //...
+bazel query //...
+for file in src/*.js; do node --check "$file"; done
+for dir in packages/*; do test -d "$dir" && printf '%s\n' "$dir"; done
+while IFS= read -r file; do printf '%s\n' "$file"; done < files.txt
+if test -f package-lock.json; then npm test; else echo no-lockfile; fi
+until git diff --quiet; do git diff --stat; break; done
+bash -c $'cat <<EOF\nhello\nEOF'
+bash -c $'cat <<\'EOF\'\n$HOME stays literal\nEOF'
+node -e "console.log(process.version)"
+find . -type f -name '*.js' -print
+find . -name '*.md' -print0 | xargs -0 grep -n TODO
+find src -type f -exec wc -l {} +
+find . -maxdepth 2 -type d | sort
+printf '%s\n' src/*.js | xargs -n1 basename
+git ls-files -z | xargs -0 wc -l
+sed -n '1,80p' README.md
+sed -E 's/[[:space:]]+$//' README.md
+awk '{print NR ":" $0}' README.md
+awk -F: '{print $1}' /etc/passwd | sort
+jq empty package.json
+jq -r '.scripts | keys[]' package.json
+rg -n 'TODO|FIXME' src tests
+rg --files | sort
+gh pr status
+gh pr view --json number,title,state
+gh pr checks --watch=false
+gh pr diff --name-only
+gh pr create --title "fix: handle empty input" --body "Adds validation and tests."
+gh pr create --title "docs: update guide" --body-file /tmp/pr-body.md
+gh issue list --limit 20
+gh run list --limit 10
+curl -fsSI https://example.com
+curl -fsS https://example.com/health | jq .
+printf '%s\n' "$PATH" | tr ':' '\n'
+command -v node npm git
+type -a python3
+df -h
+du -sh .
+ls -la
+pyenv versions
+time { npm test; }
+case "$CI" in true) npm test ;; *) echo local ;; esac
+env | sort

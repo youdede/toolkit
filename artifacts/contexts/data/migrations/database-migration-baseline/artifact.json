@@ -86,6 +86,16 @@
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],
+    "suggests": [
+      "hook/data/migrations/migration-safety-guard",
+      "skill/data/migrations/review-database-migration-plan",
+      "skill/data/schemas/review-schema-evolution"
+    ],
+    "linkReasons": {
+      "hook/data/migrations/migration-safety-guard": "to require approval before destructive migration actions",
+      "skill/data/migrations/review-database-migration-plan": "for the migration plan review its rules cite",
+      "skill/data/schemas/review-schema-evolution": "for the schema evolution review its rules cite"
+    },
     "packIds": []
   },
   "operational": {

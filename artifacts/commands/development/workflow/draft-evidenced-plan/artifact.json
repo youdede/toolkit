@@ -76,7 +76,12 @@
     ],
     "conflictsWith": [],
     "supersedes": [],
-    "prerequisites": [],
+    "prerequisites": [
+      "context/development/code-quality/coding-style-baseline"
+    ],
+    "linkReasons": {
+      "context/development/code-quality/coding-style-baseline": "draft-evidenced-plan stops without the coding-style-baseline rules file."
+    },
     "packIds": [
       "pack/plan-and-verify-loop"
     ]

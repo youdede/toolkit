@@ -15,7 +15,9 @@ function nearestExistingParent(candidate) { let cursor = candidate; while (!exis
 export function collectContext(input, cwd = process.cwd()) {
   const file = input?.tool_input?.file_path || input?.tool_input?.file || '';
   if (typeof file !== 'string' || !file) return { file: '', existing: false };
-  const root = path.resolve(input?.cwd || cwd); const absolute = path.resolve(root, file);
+  const root = path.resolve(process.env.CLAUDE_PROJECT_DIR || input?.cwd || cwd); const absolute = path.resolve(root, file);
+  // A target that does not exist yet is not a binary to protect, wherever it is.
+  try { lstatSync(absolute); } catch (error) { if (error?.code === 'ENOENT' || error?.code === 'ENOTDIR') return { file, existing: false }; }
   if (!within(root, absolute)) return { file, existing: true, inspectionError: 'path-escape' };
   try {
     const canonicalRoot = realpathSync(root); const boundary = realpathSync(nearestExistingParent(absolute));
@@ -34,7 +36,7 @@ function binaryPrefix(buffer) {
   if (!Buffer.isBuffer(buffer)) return false;
   if (buffer.subarray(0, 2).equals(Buffer.from([0xff, 0xfe])) || buffer.subarray(0, 2).equals(Buffer.from([0xfe, 0xff]))) return false;
   const signatures = ['89504e47','ffd8ff','47494638','52494646','25504446','504b0304','1f8b08','7f454c46','0061736d','cafebabe','52617221','377abcaf271c','53514c69746520666f726d6174203300'];
-  const head = buffer.subarray(0, 8).toString('hex');
+  const head = buffer.subarray(0, 16).toString('hex');
   return buffer.includes(0) || signatures.some((signature) => head.startsWith(signature));
 }
 export function evaluate(input, context = {}) {
@@ -43,7 +45,7 @@ export function evaluate(input, context = {}) {
   if (!input.tool_input || typeof input.tool_input !== 'object' || typeof (input.tool_input.file_path || input.tool_input.file) !== 'string') return block('binary-mutation-input-invalid', 'the file edit input is malformed');
   const file = context.file || input.tool_input.file_path || input.tool_input.file;
   if (!context.existing) return allow();
-  if (context.symlink || context.inspectionError) return block('binary-target-unverified', 'the existing target cannot be inspected without following a link');
+  if (context.symlink || context.inspectionError) return block('binary-target-unverified', 'the existing target is outside the project, behind a link, or unreadable, so it cannot be inspected safely');
   if (BINARY_EXTENSIONS.test(file) || binaryPrefix(context.prefix)) return block('binary-text-mutation', 'a text editing tool targeted an existing binary file');
   return allow();
 }
