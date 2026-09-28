@@ -7,7 +7,7 @@
   "version": "1.0.0",
   "kind": "hook",
   "summary": "Block net-new broad diagnostic suppressions while allowing scoped rule exceptions.",
-  "description": "Compares bounded source revisions and rejects new file-wide or code-less ESLint, TypeScript, Python, Go, and IDE suppressions while allowing narrow identifiers.",
+  "description": "Compares bounded source revisions and rejects new ESLint, Python, Go, and IDE suppressions that name no rule and new TypeScript @ts-ignore or @ts-nocheck directives, while allowing directives that name a rule.",
   "domain": "development",
   "category": "diagnostic-suppression",
   "problems": [

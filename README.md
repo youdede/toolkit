@@ -6,7 +6,7 @@
 
 [![validate](https://github.com/udede/toolkit/actions/workflows/validate.yml/badge.svg)](https://github.com/udede/toolkit/actions/workflows/validate.yml)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![artifacts](https://img.shields.io/badge/artifacts-315-2F8F83.svg)](catalog/artifacts.json)
+[![artifacts](https://img.shields.io/badge/artifacts-316-2F8F83.svg)](catalog/artifacts.json)
 [![runtimes](https://img.shields.io/badge/runtimes-6-2F8F83.svg)](docs/targets.md)
 
 ---
@@ -19,10 +19,10 @@ You cannot review every action it takes. So the rules have to live where the age
 
 ## What this is
 
-A catalog of <!-- stat:artifact-count -->315<!-- /stat --> things you can install into a coding agent, one command each:
+A catalog of <!-- stat:artifact-count -->316<!-- /stat --> things you can install into a coding agent, one command each:
 
 - **<!-- stat:skill-count -->167<!-- /stat --> skills**: procedures an agent loads when a task matches. Each one states what it does, what evidence it requires, and what it refuses to do.
-- **<!-- stat:hook-count -->63<!-- /stat --> hooks**: deterministic gates that inspect a command before it runs and block it. No model in the decision path. `commit-guard` scans staged blobs for secrets. `protected-branch-guard` refuses a force push to `main`.
+- **<!-- stat:hook-count -->64<!-- /stat --> hooks**: deterministic gates that inspect a command before it runs and block it. No model in the decision path. `commit-guard` scans staged blobs for secrets. `protected-branch-guard` refuses a force push to `main`.
 - **<!-- stat:subagent-count -->62<!-- /stat --> subagents**: specialists with a deliberately narrow brief, no authority to edit or approve anything, and a required section for what they could not verify.
 - **<!-- stat:pack-count -->13<!-- /stat --> packs**: the above composed into versioned outcomes, with explicit member-to-evidence mappings and behavioral evaluations. The workflow packs include `plan-and-verify-loop`, `session-continuity`, `daily-driver`, `mcp-baseline`, `remote-review-evidence`, and `browser-verification`.
 
@@ -51,7 +51,7 @@ npx @youdede/toolkit add commit-guard --target claude-code --dry-run
 | | Claude Code | Codex | Gemini CLI | GitHub Copilot | Cursor | OpenCode |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | Skills (167) | 167 | 166 | 166 | 166 | 166 | 166 |
-| Hooks (63) | 63 | 22 | 22 | 0 | 23 | 22 |
+| Hooks (64) | 64 | 22 | 22 | 0 | 24 | 22 |
 | Subagents (62) | 62 | 0 | 62 | 62 | 0 | 50 |
 | Commands (10) | 10 | 0 | 0 | 0 | 0 | 0 |
 | Contexts (8) | 8 | 0 | 0 | 8 | 8 | 0 |
@@ -67,7 +67,7 @@ Every artifact is listed, with what it does and which runtimes carry it, so you 
 | | | |
 | --- | --- | --- |
 | [Skills](docs/catalog/skills.md) | <!-- stat:skill-count -->167<!-- /stat --> | Procedures an agent loads when a task matches |
-| [Hooks](docs/catalog/hooks.md) | <!-- stat:hook-count -->63<!-- /stat --> | Deterministic gates that block a command before it runs |
+| [Hooks](docs/catalog/hooks.md) | <!-- stat:hook-count -->64<!-- /stat --> | Deterministic gates that block a command before it runs |
 | [Subagents](docs/catalog/subagents.md) | <!-- stat:subagent-count -->62<!-- /stat --> | Specialists with a narrow brief and no authority to act |
 | [Packs](docs/catalog/packs.md) | <!-- stat:pack-count -->13<!-- /stat --> | The above composed into versioned, evidence-backed outcomes |
 

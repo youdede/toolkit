@@ -58,7 +58,12 @@
     "composesWith": [],
     "conflictsWith": [],
     "supersedes": [],
-    "prerequisites": [],
+    "prerequisites": [
+      "hook/security/application-security/shell-command-guard"
+    ],
+    "linkReasons": {
+      "hook/security/application-security/shell-command-guard": "submodule-target-guard cannot see hidden commands (e.g. bash -c \"$X\"): shell-command-guard stops them."
+    },
     "packIds": []
   },
   "operational": {

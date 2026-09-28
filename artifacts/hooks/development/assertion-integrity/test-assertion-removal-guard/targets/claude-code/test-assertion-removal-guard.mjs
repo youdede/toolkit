@@ -18,12 +18,12 @@ function rebuildRevision(input, before) {
 }
 export function collectContext(input, cwd = process.cwd()) {
   const file = input?.tool_input?.file_path || input?.tool_input?.file || ''; if (typeof file !== 'string' || !file) return { file: '', complete: false };
-  const root = path.resolve(input?.cwd || cwd); const absolute = path.resolve(root, file); if (!within(root, absolute)) return { file, complete: false, inspectionError: 'path-escape' };
+  const root = path.resolve(process.env.CLAUDE_PROJECT_DIR || input?.cwd || cwd); const absolute = path.resolve(root, file); if (!within(root, absolute)) return { file, complete: false, inspectionError: 'path-escape' };
   try { const canonicalRoot = realpathSync(root); const boundary = realpathSync(nearestExistingParent(absolute)); if (!within(canonicalRoot, boundary)) return { file, complete: false, inspectionError: 'path-alias-escape' }; let before = ''; if (existsSync(absolute)) { const stat = lstatSync(absolute); if (!stat.isFile() || stat.isSymbolicLink() || stat.size > MAX_TEXT_BYTES) return { file, complete: false, inspectionError: 'unsafe-target' }; before = readFileSync(absolute, 'utf8'); } return { file, before, ...rebuildRevision(input, before) }; }
   catch { return { file, complete: false, inspectionError: 'read-failed' }; }
 }
 
-function isTestFile(file) { return /(?:^|\/)(?:test|tests|spec|specs)\/|(?:\.test|\.spec|_test|_spec)\.[^/]+$/i.test(file); }
+function isTestFile(file) { return /(?:^|\/)(?:test|tests|spec|specs)\/|(?:\.test|\.spec|_test|_spec)\.[^/]+$|(?:^|\/)test_[^/]+\.py$/i.test(file); }
 function assertionCount(text) {
   const source = maskSyntax(text);
   const expressions = [

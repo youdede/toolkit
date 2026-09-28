@@ -23,9 +23,17 @@ function strings(value, output = []) {
   return output;
 }
 
+// The prompts of the subagents an assistant message starts (`Agent`, or `Task` in older transcripts).
+function agentPrompts(message) {
+  const content = Array.isArray(message?.content) ? message.content : [];
+  return content.filter((part) => part?.type === 'tool_use' && ['Agent', 'Task'].includes(part.name) && typeof part.input?.prompt === 'string')
+    .map((part) => part.input.prompt);
+}
+
 function transcriptContext(raw) {
   const assistantValues = [];
   const userValues = [];
+  const prompts = [];
   for (const line of raw.split(/\r?\n/)) {
     if (!line.trim()) continue;
     try {
@@ -33,7 +41,10 @@ function transcriptContext(raw) {
       const assistant = event?.type === 'assistant'
         || event?.role === 'assistant'
         || event?.message?.role === 'assistant';
-      if (assistant) strings(event?.message ?? event?.content ?? event, assistantValues);
+      if (assistant) {
+        strings(event?.message ?? event?.content ?? event, assistantValues);
+        prompts.push(...agentPrompts(event?.message ?? event));
+      }
       const user = event?.type === 'user'
         || event?.role === 'user'
         || event?.message?.role === 'user';
@@ -42,7 +53,8 @@ function transcriptContext(raw) {
     catch { throw new Error('transcript-invalid'); }
   }
   return {
-    latestUserMarker: REQUIRED_MARKER.test(userValues.at(-1) || ''),
+    // A subagent is opted in by the latest user message or by the prompt it was started with.
+    latestUserMarker: REQUIRED_MARKER.test(userValues.at(-1) || '') || REQUIRED_MARKER.test(prompts.at(-1) || ''),
     lastAssistant: [...assistantValues].reverse().find((value) => /\[youdede:evidence\b/i.test(value)) || ''
   };
 }
@@ -77,12 +89,13 @@ export function evaluate(input, context = {}) {
   }
   const event = input.hook_event_name;
   if (!['TaskCompleted', 'SubagentStop'].includes(event)) return allow('completion-event-irrelevant');
-  if (context.inspectionError) return block('completion-evidence-unverified', 'the bounded transcript could not be inspected');
 
+  // A TaskCompleted event opts in through its task description alone, so an ordinary task needs no
+  // transcript. A SubagentStop event may opt in through the transcript, which must then be readable.
   const descriptionRequires = typeof input.task_description === 'string' && REQUIRED_MARKER.test(input.task_description);
-  const required = event === 'TaskCompleted'
-    ? descriptionRequires
-    : descriptionRequires || context.latestUserMarker === true;
+  if (event === 'TaskCompleted' && !descriptionRequires) return allow();
+  if (context.inspectionError) return block('completion-evidence-unverified', 'the bounded transcript could not be inspected');
+  const required = descriptionRequires || context.latestUserMarker === true;
   if (!required) return allow();
 
   const message = event === 'SubagentStop' && typeof input.last_assistant_message === 'string'

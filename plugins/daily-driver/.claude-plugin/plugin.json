@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "daily-driver",
   "displayName": "Daily driver",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Deliver bounded incremental changes, prepare review evidence, and prevent unreviewable diffs.",
   "author": {
     "name": "Youdede",
@@ -25,9 +25,10 @@
       "hook/operations/reviewability/large-diff-review-guard",
       "skill/development/code-quality/deliver-incremental-change",
       "skill/operations/reviewability/prepare-reviewable-pull-request",
-      "subagent/development/code-quality/refactor-equivalence-reviewer"
+      "subagent/development/code-quality/refactor-equivalence-reviewer",
+      "hook/security/application-security/shell-command-guard"
     ],
-    "refusalCount": 16,
+    "refusalCount": 19,
     "evidenceBadges": [
       "ledger-linked-evidence",
       "behaviorally-evaluated"

@@ -7,7 +7,7 @@
   "version": "1.0.0",
   "kind": "hook",
   "summary": "Block removal of the last recognizable assertion from an existing test file.",
-  "description": "Compares bounded test-file revisions and stops a change when recognizable tests remain but all assertion or failure primitives disappear from a previously asserting file.",
+  "description": "Compares bounded test-file revisions and stops a change when a test that stays in the file loses every recognizable assertion or failure primitive.",
   "domain": "development",
   "category": "assertion-integrity",
   "problems": [

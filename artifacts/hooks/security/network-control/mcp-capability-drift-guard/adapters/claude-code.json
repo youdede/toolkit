@@ -7,6 +7,7 @@
     {"from": "targets/claude-code/mcp-capability-drift-guard.mjs", "to": "hooks/youdede/mcp-capability-drift-guard.mjs", "executable": true},
     {"root": "package", "from": "catalog/mcp-pins.json", "to": "hooks/youdede/mcp-pins.json"}
   ],
-  "settingsPatch": {"hooks": {"PreToolUse": [{"matcher": "^mcp__youdede-.+__.+$", "description": "[youdede:mcp-capability-drift-guard] Require pinned MCP capabilities", "hooks": [{"type": "command", "command": "node \"{claudeRoot}/hooks/youdede/mcp-capability-drift-guard.mjs\"", "timeout": 10}]}]}},
-  "bindings": [{"event": "PreToolUse", "matcher": "^mcp__youdede-.+__.+$"}]
+  "settingsPatch": {"hooks": {"PreToolUse": [{"matcher": "^mcp__.+__.+$", "description": "[youdede:mcp-capability-drift-guard] Require pinned MCP capabilities", "hooks": [{"type": "command", "command": "node \"{claudeRoot}/hooks/youdede/mcp-capability-drift-guard.mjs\"", "timeout": 10}]}]}},
+  "bindings": [{"event": "PreToolUse", "matcher": "^mcp__.+__.+$"}],
+  "limitations": ["The matcher fires on every MCP tool and the script selects Youdede servers case-insensitively, including plugin-scoped names (mcp__plugin_<plugin>_<server>__<tool>); MCP servers outside the Youdede namespace pass unchecked.", "The documented PreToolUse payload carries no tool description or inventory, so on Claude Code the guard checks server and tool names; description drift is checked only when a payload includes that evidence."]
 }

@@ -83,7 +83,20 @@
         "composesWith": { "$ref": "#/$defs/artifactIds" },
         "conflictsWith": { "$ref": "#/$defs/artifactIds" },
         "supersedes": { "$ref": "#/$defs/artifactIds" },
-        "prerequisites": { "$ref": "#/$defs/artifactIds" },
+        "prerequisites": {
+          "$ref": "#/$defs/artifactIds",
+          "description": "Required: artifacts this one does not work without. The installer asks once (default yes) to install the missing ones with it."
+        },
+        "suggests": {
+          "$ref": "#/$defs/artifactIds",
+          "description": "Suggested: artifacts it works better with. Never asked; after an install, one line hints at the ones not installed."
+        },
+        "linkReasons": {
+          "type": "object",
+          "description": "One short plain-English reason per prerequisite and per suggestion, keyed by the target artifact id; no other key. A prerequisite's reason is a sentence ending with a period, shown before the install question. A suggestion's reason completes 'add <slug> ...' (for example 'for extra MCP checks'): it starts lowercase and has no final period.",
+          "propertyNames": { "pattern": "^(skill|hook|subagent|command|context|mcp-server)/[a-z0-9-]+/[a-z0-9-]+/[a-z0-9-]+$" },
+          "additionalProperties": { "type": "string", "minLength": 10, "maxLength": 120, "pattern": "^\\S(?:.*\\S)?$" }
+        },
         "packIds": {
           "type": "array",
           "uniqueItems": true,

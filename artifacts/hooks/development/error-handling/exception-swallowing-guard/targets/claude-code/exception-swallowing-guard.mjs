@@ -28,7 +28,7 @@ function rebuildRevision(input, before) {
 export function collectContext(input, cwd = process.cwd()) {
   const file = input?.tool_input?.file_path || input?.tool_input?.file || '';
   if (typeof file !== 'string' || !file) return { file: '', complete: false };
-  const root = path.resolve(input?.cwd || cwd); const absolute = path.resolve(root, file);
+  const root = path.resolve(process.env.CLAUDE_PROJECT_DIR || input?.cwd || cwd); const absolute = path.resolve(root, file);
   if (!within(root, absolute)) return { file, complete: false, inspectionError: 'path-escape' };
   try {
     const canonicalRoot = realpathSync(root); const boundary = realpathSync(nearestExistingParent(absolute));

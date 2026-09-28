@@ -1,0 +1,32 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "hook/security/network-control/mcp-egress-guard",
+  "slug": "mcp-egress-guard",
+  "name": "MCP egress guard",
+  "version": "1.0.0",
+  "kind": "hook",
+  "summary": "Block toolkit MCP tool calls whose arguments name a host outside the server's declared egress.",
+  "description": "A deterministic fail-closed pre-tool gate that extracts every URL and host from a Youdede MCP tool call, normalizes it with the WHATWG URL parser, and blocks hosts absent from the egress list generated from the curated server profiles.",
+  "domain": "security",
+  "category": "network-control",
+  "capabilities": ["enforce"],
+  "problems": ["agent-policy-integrity"],
+  "frameworks": ["agnostic", "nodejs"],
+  "languages": ["javascript"],
+  "lifecycle": ["implementation", "maintenance", "review"],
+  "risk": "medium",
+  "risk_reason": "This automatic gate blocks toolkit MCP tool calls whose arguments name a host outside the declared egress; a false denial can interrupt legitimate work, but it does not execute the blocked action.",
+  "license": "MIT",
+  "authors": ["Youdede"],
+  "refuses": [
+    "It does not accept a lookalike, subdomain, userinfo, IP, or punycode host that differs from an exact declared egress host.",
+    "It does not accept a Youdede-named MCP server that is absent from the generated registry.",
+    "It does not inspect or restrict MCP servers outside the Youdede namespace."
+  ],
+  "execution": {"mode": "deterministic", "entrypoints": [{"path": "targets/claude-code/mcp-egress-guard.mjs", "runtime": "node", "purpose": "Compare every URL and host in a toolkit MCP tool call with the server egress from the generated registry.", "sideEffects": "none"}]},
+  "hookGuard": {"blockedActions": ["invoke-mcp-tool-with-undeclared-egress"]},
+  "relationships": {"composesWith": ["mcp-server/development/agent-tooling/allowlisted-fetch-readonly", "mcp-server/development/agent-tooling/github-readonly", "mcp-server/development/agent-tooling/repository-git-readonly", "mcp-server/development/agent-tooling/workspace-files-readonly", "mcp-server/development/testing/playwright-local-isolated", "skill/security/threat-modeling/review-agent-tool-boundaries"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": ["pack/secure-agent-boundaries"]},
+  "operational": {"behavior": "enforcing", "failurePolicy": "fail-closed", "latencyClass": "immediate", "latency_reason": "The entrypoint handles one intercepted event to block toolkit MCP tool calls that name an undeclared egress host without deferred work.", "dataRetention": "none"},
+  "adapters": {"claude-code": "adapters/claude-code.json", "cursor": "adapters/cursor.json"}
+}

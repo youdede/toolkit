@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "count": 13,
   "packs": [
     {
@@ -135,6 +135,7 @@
           "count": 3
         }
       ],
+      "suggests": [],
       "install": [
         {
           "target": "claude-code",
@@ -229,6 +230,15 @@
         }
       },
       "hookFanout": [],
+      "suggests": [
+        {
+          "id": "hook/security/network-control/mcp-egress-guard",
+          "reason": "to check browser tool arguments against declared egress (not page requests)",
+          "suggestedBy": [
+            "mcp-server/development/testing/playwright-local-isolated"
+          ]
+        }
+      ],
       "install": [
         {
           "target": "claude-code",
@@ -243,7 +253,7 @@
       "id": "pack/daily-driver",
       "slug": "daily-driver",
       "name": "Daily driver",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "summary": "Deliver bounded incremental changes, prepare review evidence, and prevent unreviewable diffs.",
       "outcomes": [
         "incremental-delivery",
@@ -256,6 +266,7 @@
           {
             "outcome": "incremental-delivery",
             "memberArtifactIds": [
+              "hook/security/application-security/shell-command-guard",
               "hook/operations/reviewability/large-diff-review-guard",
               "skill/development/code-quality/deliver-incremental-change"
             ]
@@ -294,6 +305,11 @@
         {
           "artifactId": "subagent/development/code-quality/refactor-equivalence-reviewer",
           "role": "specialist",
+          "required": true
+        },
+        {
+          "artifactId": "hook/security/application-security/shell-command-guard",
+          "role": "enforcement",
           "required": true
         }
       ],
@@ -334,7 +350,7 @@
           "collector": 0,
           "specialist": 1,
           "verifier": 1,
-          "enforcement": 1,
+          "enforcement": 2,
           "observer": 0,
           "entrypoint": 1,
           "baseline": 0,
@@ -347,6 +363,7 @@
           "count": 1
         }
       ],
+      "suggests": [],
       "install": [
         {
           "target": "claude-code",
@@ -361,7 +378,7 @@
       "id": "pack/data-change-safety",
       "slug": "data-change-safety",
       "name": "Data change safety",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "summary": "Review schema and migration changes with deterministic safety checks and independent risk analysis.",
       "outcomes": [
         "compatible-data-change",
@@ -381,6 +398,7 @@
           {
             "outcome": "migration-safety",
             "memberArtifactIds": [
+              "hook/security/application-security/shell-command-guard",
               "hook/data/migrations/migration-safety-guard",
               "skill/data/migrations/review-database-migration-plan"
             ]
@@ -405,6 +423,11 @@
         },
         {
           "artifactId": "hook/data/migrations/migration-safety-guard",
+          "role": "enforcement",
+          "required": true
+        },
+        {
+          "artifactId": "hook/security/application-security/shell-command-guard",
           "role": "enforcement",
           "required": true
         }
@@ -445,7 +468,7 @@
           "collector": 0,
           "specialist": 1,
           "verifier": 1,
-          "enforcement": 1,
+          "enforcement": 2,
           "observer": 0,
           "entrypoint": 0,
           "baseline": 0,
@@ -458,6 +481,7 @@
           "count": 1
         }
       ],
+      "suggests": [],
       "install": [
         {
           "target": "claude-code",
@@ -595,6 +619,7 @@
         }
       },
       "hookFanout": [],
+      "suggests": [],
       "install": [
         {
           "target": "claude-code",
@@ -736,8 +761,19 @@
       },
       "hookFanout": [
         {
-          "boundary": "claude-code:PreToolUse:^mcp__youdede-.+__.+$",
+          "boundary": "claude-code:PreToolUse:^mcp__.+__.+$",
           "count": 1
+        }
+      ],
+      "suggests": [
+        {
+          "id": "hook/security/network-control/mcp-egress-guard",
+          "reason": "to check this server's MCP tool arguments against its declared egress",
+          "suggestedBy": [
+            "mcp-server/development/agent-tooling/allowlisted-fetch-readonly",
+            "mcp-server/development/agent-tooling/repository-git-readonly",
+            "mcp-server/development/agent-tooling/workspace-files-readonly"
+          ]
         }
       ],
       "install": [
@@ -754,7 +790,7 @@
       "id": "pack/mobile-release-readiness",
       "slug": "mobile-release-readiness",
       "name": "Mobile release readiness",
-      "version": "1.0.2",
+      "version": "1.1.0",
       "summary": "Review mobile release evidence, accessibility, and reliability. Guards stop fastlane-action, EAS, Xcode, and Gradle uploads from a dirty tree or bad versions; custom lanes pass.",
       "outcomes": [
         "mobile-release-evidence",
@@ -774,6 +810,7 @@
           {
             "outcome": "safe-publication",
             "memberArtifactIds": [
+              "hook/security/application-security/shell-command-guard",
               "hook/operations/repository-state/release-clean-state-guard",
               "hook/operations/versioning/release-version-consistency-guard"
             ]
@@ -798,6 +835,11 @@
         },
         {
           "artifactId": "hook/operations/versioning/release-version-consistency-guard",
+          "role": "enforcement",
+          "required": true
+        },
+        {
+          "artifactId": "hook/security/application-security/shell-command-guard",
           "role": "enforcement",
           "required": true
         }
@@ -848,7 +890,7 @@
           "collector": 0,
           "specialist": 1,
           "verifier": 0,
-          "enforcement": 2,
+          "enforcement": 3,
           "observer": 0,
           "entrypoint": 0,
           "baseline": 0,
@@ -865,6 +907,7 @@
           "count": 2
         }
       ],
+      "suggests": [],
       "install": [
         {
           "target": "claude-code",
@@ -1001,6 +1044,7 @@
           "count": 1
         }
       ],
+      "suggests": [],
       "install": [
         {
           "target": "claude-code",
@@ -1015,7 +1059,7 @@
       "id": "pack/release-readiness",
       "slug": "release-readiness",
       "name": "Release readiness",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "summary": "Build an evidence-backed release decision and stop publication from unsafe repository state.",
       "outcomes": [
         "release-evidence",
@@ -1037,6 +1081,7 @@
           {
             "outcome": "safe-publication",
             "memberArtifactIds": [
+              "hook/security/application-security/shell-command-guard",
               "hook/operations/package-publication/package-publish-guard",
               "hook/operations/repository-state/release-clean-state-guard",
               "hook/operations/versioning/release-version-consistency-guard"
@@ -1072,6 +1117,11 @@
         },
         {
           "artifactId": "hook/operations/versioning/release-version-consistency-guard",
+          "role": "enforcement",
+          "required": true
+        },
+        {
+          "artifactId": "hook/security/application-security/shell-command-guard",
           "role": "enforcement",
           "required": true
         },
@@ -1118,7 +1168,7 @@
           "collector": 0,
           "specialist": 1,
           "verifier": 1,
-          "enforcement": 3,
+          "enforcement": 4,
           "observer": 0,
           "entrypoint": 1,
           "baseline": 0,
@@ -1131,6 +1181,7 @@
           "count": 3
         }
       ],
+      "suggests": [],
       "install": [
         {
           "target": "claude-code",
@@ -1238,6 +1289,15 @@
         }
       },
       "hookFanout": [],
+      "suggests": [
+        {
+          "id": "hook/security/network-control/mcp-egress-guard",
+          "reason": "to check this server's MCP tool arguments against its declared egress",
+          "suggestedBy": [
+            "mcp-server/development/agent-tooling/github-readonly"
+          ]
+        }
+      ],
       "install": [
         {
           "target": "claude-code",
@@ -1252,7 +1312,7 @@
       "id": "pack/reviewable-change",
       "slug": "reviewable-change",
       "name": "Reviewable change",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "summary": "Prepare bounded code changes, obtain independent review, and prevent oversized unreviewable commits.",
       "outcomes": [
         "independent-review",
@@ -1273,6 +1333,7 @@
           {
             "outcome": "reviewable-delivery",
             "memberArtifactIds": [
+              "hook/security/application-security/shell-command-guard",
               "hook/operations/reviewability/large-diff-review-guard",
               "skill/development/code-quality/evaluate-code-review-feedback",
               "skill/operations/reviewability/prepare-reviewable-pull-request"
@@ -1308,6 +1369,11 @@
         },
         {
           "artifactId": "hook/operations/reviewability/large-diff-review-guard",
+          "role": "enforcement",
+          "required": true
+        },
+        {
+          "artifactId": "hook/security/application-security/shell-command-guard",
           "role": "enforcement",
           "required": true
         }
@@ -1349,7 +1415,7 @@
           "collector": 0,
           "specialist": 1,
           "verifier": 1,
-          "enforcement": 1,
+          "enforcement": 2,
           "observer": 0,
           "entrypoint": 1,
           "baseline": 0,
@@ -1362,6 +1428,7 @@
           "count": 1
         }
       ],
+      "suggests": [],
       "install": [
         {
           "target": "claude-code",
@@ -1376,7 +1443,7 @@
       "id": "pack/secure-agent-boundaries",
       "slug": "secure-agent-boundaries",
       "name": "Secure agent boundaries",
-      "version": "1.1.0",
+      "version": "1.3.0",
       "summary": "Design agent integrations, review their trust boundary, and block obvious data-exposure paths.",
       "outcomes": [
         "agent-tool-security",
@@ -1390,6 +1457,7 @@
             "outcome": "agent-tool-security",
             "memberArtifactIds": [
               "hook/security/network-control/mcp-capability-drift-guard",
+              "hook/security/network-control/mcp-egress-guard",
               "skill/development/agent-tooling/author-mcp-server-contract",
               "skill/security/threat-modeling/review-agent-tool-boundaries",
               "subagent/security/application-security/application-security-reviewer",
@@ -1399,6 +1467,7 @@
           {
             "outcome": "data-exposure-control",
             "memberArtifactIds": [
+              "hook/security/application-security/shell-command-guard",
               "hook/security/application-security/outbound-data-guard",
               "hook/security/secrets/sensitive-file-access-guard"
             ]
@@ -1440,6 +1509,16 @@
           "artifactId": "hook/security/network-control/mcp-capability-drift-guard",
           "role": "enforcement",
           "required": true
+        },
+        {
+          "artifactId": "hook/security/network-control/mcp-egress-guard",
+          "role": "enforcement",
+          "required": true
+        },
+        {
+          "artifactId": "hook/security/application-security/shell-command-guard",
+          "role": "enforcement",
+          "required": true
         }
       ],
       "targets": [
@@ -1478,7 +1557,7 @@
           "collector": 0,
           "specialist": 2,
           "verifier": 1,
-          "enforcement": 3,
+          "enforcement": 5,
           "observer": 0,
           "entrypoint": 0,
           "baseline": 0,
@@ -1487,8 +1566,8 @@
       },
       "hookFanout": [
         {
-          "boundary": "claude-code:PreToolUse:^mcp__youdede-.+__.+$",
-          "count": 1
+          "boundary": "claude-code:PreToolUse:^mcp__.+__.+$",
+          "count": 2
         },
         {
           "boundary": "claude-code:PreToolUse:Bash|PowerShell",
@@ -1499,6 +1578,7 @@
           "count": 1
         }
       ],
+      "suggests": [],
       "install": [
         {
           "target": "claude-code",
@@ -1637,6 +1717,7 @@
           "count": 1
         }
       ],
+      "suggests": [],
       "install": [
         {
           "target": "claude-code",

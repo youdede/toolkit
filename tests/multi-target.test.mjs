@@ -11,7 +11,7 @@ import { resolveConfigRoot, resolveConfigRoots, SUPPORTED_TARGETS } from '../scr
 
 const MATRIX = {
   skill: { 'claude-code': 167, codex: 166, 'gemini-cli': 166, 'github-copilot': 166, cursor: 166, opencode: 166 },
-  hook: { 'claude-code': 63, codex: 22, 'gemini-cli': 22, 'github-copilot': 0, cursor: 23, opencode: 22 },
+  hook: { 'claude-code': 64, codex: 22, 'gemini-cli': 22, 'github-copilot': 0, cursor: 24, opencode: 22 },
   subagent: { 'claude-code': 62, codex: 0, 'gemini-cli': 62, 'github-copilot': 62, cursor: 0, opencode: 50 },
   command: { 'claude-code': 10, codex: 0, 'gemini-cli': 0, 'github-copilot': 0, cursor: 0, opencode: 0 },
   context: { 'claude-code': 8, codex: 0, 'gemini-cli': 0, 'github-copilot': 8, cursor: 8, opencode: 0 },
@@ -152,7 +152,8 @@ test('Codex, Gemini, and Cursor shell guards allow safe calls and block destruct
 
 test('Codex, Gemini, and Cursor settings use native schemas and stable ownership markers', (context) => {
   const directory = temporary(context, 'youdede-native-hook-settings-');
-  installArtifact('commit-guard', { cwd: directory, target: 'codex' });
+  // commit-guard alone (without its shell-command-guard prerequisite), so its entry is the only one.
+  installArtifact('commit-guard', { cwd: directory, target: 'codex', prerequisites: false });
   const codex = JSON.parse(readFileSync(path.join(directory, '.codex', 'hooks.json'), 'utf8'));
   assert.equal(codex.hooks.PreToolUse[0].matcher, 'Bash');
   assert.equal(codex.hooks.PreToolUse[0].hooks[0].timeout, 30);
@@ -160,14 +161,14 @@ test('Codex, Gemini, and Cursor settings use native schemas and stable ownership
   assert.match(codex.hooks.PreToolUse[0].hooks[0].command, /\.codex\/hooks\/youdede\/commit-guard\.mjs/);
   removeArtifact('commit-guard', { cwd: directory, target: 'codex' });
 
-  installArtifact('commit-guard', { cwd: directory, target: 'gemini-cli' });
+  installArtifact('commit-guard', { cwd: directory, target: 'gemini-cli', prerequisites: false });
   const gemini = JSON.parse(readFileSync(path.join(directory, '.gemini', 'settings.json'), 'utf8'));
   assert.equal(gemini.hooks.BeforeTool[0].matcher, 'run_shell_command');
   assert.equal(gemini.hooks.BeforeTool[0].hooks[0].timeout, 30000);
   assert.match(gemini.hooks.BeforeTool[0].hooks[0].description, /\[youdede:commit-guard\]/);
   removeArtifact('commit-guard', { cwd: directory, target: 'gemini-cli' });
 
-  installArtifact('commit-guard', { cwd: directory, target: 'cursor' });
+  installArtifact('commit-guard', { cwd: directory, target: 'cursor', prerequisites: false });
   const cursor = JSON.parse(readFileSync(path.join(directory, '.cursor', 'hooks.json'), 'utf8'));
   assert.equal(cursor.version, 1);
   assert.deepEqual(Object.keys(cursor.hooks), ['preToolUse']);
@@ -184,10 +185,11 @@ test('multiple native shell guards compose without settings or file collisions',
     for (const slug of slugs) installArtifact(slug, { cwd: directory, target });
     assert.deepEqual(doctor({ cwd: directory, target }), {
       configRoot: resolveConfigRoot(target, 'project', directory, 'hook'),
-      installs: slugs.length,
+      // package-publish-guard brings shell-command-guard as its prerequisite.
+      installs: slugs.length + 1,
       findings: []
     });
-    for (const slug of slugs.toReversed()) removeArtifact(slug, { cwd: directory, target });
+    for (const slug of [...slugs.toReversed(), 'shell-command-guard']) removeArtifact(slug, { cwd: directory, target });
     assert.equal(doctor({ cwd: directory, target }).installs, 0);
   }
 });

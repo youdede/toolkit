@@ -24,12 +24,34 @@
         ]
       },
       {
-        "matcher": "^mcp__youdede-.+__.+$",
+        "matcher": "^mcp__.+__.+$",
         "description": "[youdede:mcp-capability-drift-guard] Require pinned MCP capabilities",
         "hooks": [
           {
             "type": "command",
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/youdede/mcp-capability-drift-guard.mjs\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "^mcp__.+__.+$",
+        "description": "[youdede:mcp-egress-guard] Keep MCP arguments inside declared egress",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/youdede/mcp-egress-guard.mjs\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "description": "[youdede:shell-command-guard] Reject catastrophic shell commands",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/youdede/shell-command-guard.mjs\"",
             "timeout": 10
           }
         ]

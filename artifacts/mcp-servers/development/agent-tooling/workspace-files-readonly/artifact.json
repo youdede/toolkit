@@ -36,7 +36,7 @@
       {"name": "search_files", "descriptionHash": "81b173f6d41e01e2463d40b217fa5076fd6df64740cfff244adbb785c14cd1f3"}
     ]
   },
-  "relationships": {"composesWith": ["hook/security/network-control/mcp-capability-drift-guard"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": ["pack/mcp-baseline"]},
+  "relationships": {"composesWith": ["hook/security/network-control/mcp-capability-drift-guard", "hook/security/network-control/mcp-egress-guard"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "suggests": ["hook/security/network-control/mcp-egress-guard"], "linkReasons": {"hook/security/network-control/mcp-egress-guard": "to check this server's MCP tool arguments against its declared egress"}, "packIds": ["pack/mcp-baseline"]},
   "operational": {"behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "bounded", "latency_reason": "A call reads bounded workspace files through the local server before returning.", "dataRetention": "none"},
   "adapters": {"claude-code": "adapters/claude-code.json", "cursor": "adapters/cursor.json"}
 }

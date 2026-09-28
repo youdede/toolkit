@@ -11,6 +11,7 @@ import { SUPPORTED_PROTOCOL_VERSIONS } from '../scripts/runtime/readonly-mcp-ser
 import { evaluate as evaluateGuard } from '../artifacts/hooks/security/network-control/mcp-capability-drift-guard/targets/claude-code/mcp-capability-drift-guard.mjs';
 import { buildProposal } from '../artifacts/commands/development/agent-tooling/re-pin-mcp-tools/scripts/propose-repin.mjs';
 import { isSensitiveWorkspacePath } from '../scripts/runtime/readonly-mcp-server.mjs';
+import { isSensitivePath as guardIsSensitive } from '../artifacts/hooks/security/secrets/sensitive-file-access-guard/targets/claude-code/sensitive-file-access-guard.mjs';
 import { cleanGitEnvironment } from './git-env.mjs';
 
 function temporary(context, prefix) {
@@ -238,6 +239,13 @@ test('workspace MCP runtime refuses credential files it declares no access to', 
   assert.doesNotMatch(results.get(5).content[0].text, /(^|\n)\.env(\n|$)/);
   assert.match(results.get(5).content[0].text, /\.env\.example/);
   assert.doesNotMatch(results.get(6).content[0].text, /\t\.env(\n|$)/);
+});
+
+test('workspace MCP credential rules match the sensitive file guard', () => {
+  for (const relative of ['.env', '.env.local', '.env.example', 'app/.env.production.sample', 'id_rsa', 'keys/id_ed25519', '.ssh/config', '.ssh/deploy', '.aws/credentials', '.aws', '.kube/config', '.npmrc', '.netrc', '.pypirc', '.docker/config.json', '.config/gh/hosts.yml', 'src/app.js', 'README.md',
+    '.config/gcloud/credentials.db', 'sub/.aws/credentials', 'sub/.aws/sso/cache/token.json', '.azure/msal_token_cache.json', 'deep/.kube/cache/x', '.gnupg/private-keys-v1.d/k.key', '.ssh/known_hosts', '.ssh/id.pub', 'docs/aws.md']) {
+    assert.equal(isSensitiveWorkspacePath(relative), guardIsSensitive(`/${relative}`), relative);
+  }
 });
 
 test('MCP runtime refuses files under credential directories, in reads and diffs (PR38-CODEX4-1)', (context) => {

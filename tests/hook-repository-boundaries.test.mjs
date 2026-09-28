@@ -1,4 +1,4 @@
-import test from 'node:test';
+import test, { mock } from 'node:test';
 import assert from 'node:assert/strict';
 import os from 'node:os';
 import path from 'node:path';
@@ -20,12 +20,14 @@ import {
 } from '../artifacts/hooks/security/application-security/workspace-boundary-guard/targets/claude-code/workspace-boundary-guard.mjs';
 import {
   MAX_COMMAND_BYTES,
+  GIT_BUDGET_MS,
   GIT_TIMEOUT_MS,
   MAX_STDIN_BYTES as BRANCH_MAX_STDIN,
   collectContext as collectBranch,
   evaluate as evaluateBranch,
   normalizeShell
 } from '../artifacts/hooks/operations/git/protected-branch-guard/targets/claude-code/protected-branch-guard.mjs';
+import { evaluate as evaluateShell } from '../artifacts/hooks/security/application-security/shell-command-guard/targets/claude-code/shell-command-guard.mjs';
 
 // The guards prefer CLAUDE_PROJECT_DIR over the payload cwd, so a value
 // inherited from a Claude Code hook would redirect fixtures at the real
@@ -274,10 +276,13 @@ test('protected branch parser handles wrappers and refuses dynamic or shifted Gi
     ['nice git push origin main', 'protected-branch-direct-push'],
     ['timeout 30 git push origin main', 'protected-branch-direct-push'],
     ["bash -lc 'git branch -D main'", 'protected-branch-delete'],
-    ['echo $(git push origin main)', 'protected-command-uninspectable'],
-    ['echo `git push origin main`', 'protected-command-uninspectable'],
-    ["bash -c '$SCRIPT'", 'protected-command-uninspectable'],
-    ['env -C ../other git commit -m x', 'protected-command-uninspectable'],
+    // Substitutions are read, so the push inside is judged itself (W3-REVIEW-2).
+    ['echo $(git push origin main)', 'protected-branch-direct-push'],
+    ['echo `git push origin main`', 'protected-branch-direct-push'],
+    ['git status && echo "$(git switch main && git push)"', 'protected-branch-direct-push'],
+    ['echo $(echo $(echo $(echo $(git push origin main))))', 'protected-command-uninspectable'],
+    // The item parser reads env -C as a directory change.
+    ['env -C ../other git commit -m x', 'protected-git-scope-uninspectable'],
     ['GIT_WORK_TREE=$TREE git commit -m x', 'protected-command-uninspectable'],
     ['cd ../other && git commit -m x', 'protected-git-scope-uninspectable'],
     ['git -C ../other commit -m x', 'protected-git-command-uninspectable'],
@@ -288,6 +293,10 @@ test('protected branch parser handles wrappers and refuses dynamic or shifted Gi
     const input = { tool_name: 'Bash', cwd: root, tool_input: { command } };
     assert.equal(branchDecision(input, root).ruleId, ruleId, command);
   }
+
+  // A program known only at run time belongs to shell-command-guard (option B, hook-design 1.7).
+  assert.equal(branchDecision({ tool_name: 'Bash', cwd: root, tool_input: { command: "bash -c '$SCRIPT'" } }, root).exitCode, 0);
+  assert.equal(evaluateShell({ tool_input: { command: "bash -c '$SCRIPT'" } }).ruleId, 'shell-command-uninspectable');
 
   assert.deepEqual(normalizeShell("bash -lc 'git status'").invocations.map((tokens) => tokens.map((token) => token.value)), [['git', 'status']]);
 });
@@ -301,6 +310,10 @@ test('protected branch fails closed when Git inspection itself fails', () => {
   });
   assert.equal(context.inspectionError, true);
   assert.equal(evaluateBranch(input, context).ruleId, 'protected-branch-unverified');
+  // Without the alias table an unknown subcommand may be an alias for a protected push.
+  const bash = (command) => evaluateBranch({ tool_name: 'Bash', tool_input: { command } }, context);
+  assert.equal(bash('git ship').ruleId, 'protected-branch-unverified');
+  assert.equal(bash('git status && git log -1').exitCode, 0);
 });
 
 test('new hook wrappers use stable process exits for valid, blocked, malformed, and oversized input', (context) => {
@@ -347,4 +360,113 @@ test('new hook wrappers use stable process exits for valid, blocked, malformed, 
     { repo: true, currentBranch: 'feature', defaultBranch: 'main' }
   );
   assert.equal(oversizedCommand.ruleId, 'protected-command-too-large');
+});
+
+test('protected branch resolves push destinations, aliases, push mappings, and command runners', (context) => {
+  const parent = temporary(context, 'youdede-branch-config-');
+  const remote = path.join(parent, 'remote.git');
+  const root = path.join(parent, 'work');
+  mkdirSync(root);
+  git(parent, ['init', '-q', '--bare', remote]);
+  initRepository(root, 'main');
+  git(root, ['remote', 'add', 'origin', remote]);
+  git(root, ['push', '-q', '-u', 'origin', 'main']);
+  git(root, ['switch', '-qc', 'feature/config']);
+  git(root, ['push', '-q', '-u', 'origin', 'feature/config']);
+  const decide = (command) => branchDecision({ tool_name: 'Bash', cwd: root, tool_input: { command } }, root);
+
+  assert.equal(decide('git push').exitCode, 0);
+  assert.equal(decide('git push origin').exitCode, 0);
+  assert.equal(decide('git push --force').exitCode, 0);
+
+  git(root, ['branch', '-q', '-u', 'origin/main']);
+  git(root, ['config', 'push.default', 'upstream']);
+  assert.equal(decide('git push').ruleId, 'protected-branch-direct-push');
+  git(root, ['config', '--unset', 'push.default']);
+  git(root, ['branch', '-q', '-u', 'origin/feature/config']);
+
+  git(root, ['config', 'alias.ship', 'push --force origin feature/config:main']);
+  assert.equal(decide('git ship').ruleId, 'protected-branch-direct-push');
+  git(root, ['config', 'alias.st', 'status']);
+  assert.equal(decide('git st').exitCode, 0);
+  git(root, ['config', 'alias.run', '!git push origin feature/config:main']);
+  assert.equal(decide('git run').ruleId, 'protected-git-command-uninspectable');
+
+  git(root, ['config', 'remote.origin.push', 'refs/heads/feature/config:refs/heads/main']);
+  assert.equal(decide('git push origin feature/config').ruleId, 'protected-git-command-uninspectable');
+  assert.equal(decide('git push').ruleId, 'protected-branch-direct-push');
+  assert.equal(decide('git push origin feature/config:feature/config').exitCode, 0);
+  git(root, ['config', '--unset', 'remote.origin.push']);
+
+  assert.equal(decide(`git send-pack ${remote} feature/config:main`).ruleId, 'protected-git-command-uninspectable');
+  assert.equal(decide('echo main | xargs git push origin').ruleId, 'protected-command-uninspectable');
+  assert.equal(decide('find . -maxdepth 0 -exec git push origin feature/config:main \;').ruleId, 'protected-command-uninspectable');
+  assert.equal(decide('find . -name "*.md" -exec git status \;').exitCode, 0);
+});
+
+test('protected branch checks later Git commands against every branch an earlier command can switch to', (context) => {
+  const parent = temporary(context, 'youdede-branch-sequence-');
+  const remote = path.join(parent, 'remote.git');
+  const root = path.join(parent, 'work');
+  mkdirSync(root);
+  git(parent, ['init', '-q', '--bare', remote]);
+  initRepository(root, 'main');
+  git(root, ['remote', 'add', 'origin', remote]);
+  git(root, ['push', '-q', '-u', 'origin', 'main']);
+  git(root, ['switch', '-qc', 'feature']);
+  git(root, ['push', '-q', '-u', 'origin', 'feature']);
+  const decide = (command) => branchDecision({ tool_name: 'Bash', cwd: root, tool_input: { command } }, root);
+
+  for (const [command, ruleId] of [
+    ['git switch main && git merge feature && git push', 'protected-branch-history-mutation'],
+    ['git checkout main; git commit --allow-empty -m x', 'protected-branch-history-mutation'],
+    ['git switch main; git push', 'protected-branch-direct-push'],
+    ['git rebase feature main', 'protected-branch-history-mutation'],
+    ['git switch other && git push', 'protected-git-sequence-uninspectable'],
+    ['git checkout - && git push origin HEAD', 'protected-git-sequence-uninspectable'],
+    ['gh pr checkout 12 && git commit -m x', 'protected-git-sequence-uninspectable'],
+    ['git config push.default upstream && git push', 'protected-git-sequence-uninspectable'],
+    ['git config alias.ship "push --force origin feature:main" && git ship', 'protected-branch-direct-push'],
+    ['git config alias.x "$V" && git x', 'protected-git-sequence-uninspectable'],
+    ['git fetch . feature:main', 'protected-branch-update'],
+    ['git switch main && git pull origin feature', 'protected-branch-history-mutation'],
+    ['cd .. && cd work && git pull origin feature', 'protected-git-scope-uninspectable'],
+    ['git worktree add -B main ../wt feature', 'protected-branch-update']
+  ]) assert.equal(decide(command).ruleId, ruleId, command);
+
+  for (const command of [
+    'git push',
+    'git switch other && git push origin feature',
+    'git switch -c feature/y && git push -u origin feature/y',
+    'git checkout src/app.js && git commit -m x',
+    'git fetch && git rebase origin/main && git push --force-with-lease',
+    'git stash && git switch main && git pull && git switch feature && git stash pop',
+    'git fetch origin main:main',
+    'git worktree add -b feature/wt ../wt'
+  ]) assert.equal(decide(command).exitCode, 0, command);
+
+  git(root, ['switch', '-q', 'main']);
+  assert.equal(decide('git pull origin feature').ruleId, 'protected-branch-history-mutation');
+  assert.equal(decide('git pull').exitCode, 0);
+  assert.equal(decide('git pull origin main').exitCode, 0);
+});
+
+test('protected branch keeps all Git subprocesses inside one budget below the adapter timeout', () => {
+  mock.timers.enable({ apis: ['Date'] });
+  try {
+    const timeouts = [];
+    const context = collectBranch({ tool_name: 'Write', tool_input: {} }, {
+      cwd: '/',
+      env: {},
+      runGit: (root, args, options) => {
+        timeouts.push(options.timeout);
+        mock.timers.tick(GIT_TIMEOUT_MS);
+        return { status: 0, stdout: args[0] === 'symbolic-ref' ? 'feature' : '.git', stderr: '' };
+      }
+    });
+    assert.equal(context.inspectionError, true);
+    assert.deepEqual(timeouts, [GIT_TIMEOUT_MS, GIT_TIMEOUT_MS, GIT_BUDGET_MS - 2 * GIT_TIMEOUT_MS]);
+  } finally {
+    mock.timers.reset();
+  }
 });

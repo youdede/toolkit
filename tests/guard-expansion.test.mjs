@@ -5,6 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { cleanGitEnvironment } from './git-env.mjs';
+import { evaluate as evaluateShell } from '../artifacts/hooks/security/application-security/shell-command-guard/targets/claude-code/shell-command-guard.mjs';
 
 import {
   MAX_STDIN_BYTES as GENERATED_MAX_STDIN,
@@ -27,6 +28,10 @@ import {
   evaluate as evaluateDebug,
   scanContent
 } from '../artifacts/hooks/development/debugging/debug-artifact-guard/targets/claude-code/debug-artifact-guard.mjs';
+
+// The guards prefer CLAUDE_PROJECT_DIR over the payload cwd; clear an inherited value so the
+// fixtures stay hermetic when the suite runs inside a Claude Code session.
+delete process.env.CLAUDE_PROJECT_DIR;
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 
@@ -125,10 +130,14 @@ test('migration safety guard recognizes only explicit destructive command forms'
     "bash -lc 'dropdb production'",
     "'dropdb' production"
   ]) assert.notEqual(evaluateMigration({ tool_input: { command } }, defaultContext).exitCode, 0, command);
-  assert.equal(evaluateMigration({ tool_input: { command: "bash -c '$SCRIPT'" } }, defaultContext).ruleId, 'migration-command-uninspectable');
-  for (const command of ['env -C / dropdb production', 'PATH=/tmp dropdb production', 'drop{db,nope} production']) {
-    assert.equal(evaluateMigration({ tool_input: { command } }, defaultContext).ruleId, 'migration-command-uninspectable', command);
+  // A program known only at run time belongs to shell-command-guard (option B, hook-design 1.7).
+  assert.equal(evaluateMigration({ tool_input: { command: "bash -c '$SCRIPT'" } }, defaultContext).exitCode, 0);
+  assert.equal(evaluateShell({ tool_input: { command: "bash -c '$SCRIPT'" } }).ruleId, 'shell-command-uninspectable');
+  // The item parser reads env -C and assignment prefixes (hook-design 1.4), so dropdb is judged itself.
+  for (const command of ['env -C / dropdb production', 'PATH=/tmp dropdb production']) {
+    assert.equal(evaluateMigration({ tool_input: { command } }, defaultContext).ruleId, 'database-drop-command', command);
   }
+  assert.equal(evaluateMigration({ tool_input: { command: '{dropdb,x}{,{1..100}} production' } }, defaultContext).ruleId, 'migration-command-uninspectable');
 });
 
 test('migration safety guard bounds static SQL checks to migration files', (context) => {
@@ -225,11 +234,16 @@ test('dependency change guard blocks direct lockfile edits and narrow unsafe fla
     assert.notEqual(evaluateDependency(input, collectDependency(input)).exitCode, 0, command);
   }
   const dynamic = { cwd: directory, tool_input: { command: "bash -c '$SCRIPT'" } };
-  assert.equal(evaluateDependency(dynamic, collectDependency(dynamic)).ruleId, 'dependency-command-uninspectable');
-  for (const command of ['env -C ../other git commit -m x', 'env GIT_WORK_TREE=$TREE git commit -m x', 'n{pm,ope} install --legacy-peer-deps']) {
+  // A program known only at run time belongs to shell-command-guard (option B, hook-design 1.7).
+  assert.equal(evaluateDependency(dynamic, collectDependency(dynamic)).exitCode, 0);
+  assert.equal(evaluateShell({ tool_input: { command: "bash -c '$SCRIPT'" } }).ruleId, 'shell-command-uninspectable');
+  // The item parser reads `env -C` and `GIT_WORK_TREE=`, so these are scope changes.
+  for (const command of ['env -C ../other git commit -m x', 'env GIT_WORK_TREE=$TREE git commit -m x']) {
     const input = { cwd: directory, tool_input: { command } };
-    assert.equal(evaluateDependency(input, collectDependency(input)).ruleId, 'dependency-command-uninspectable', command);
+    assert.equal(evaluateDependency(input, collectDependency(input)).ruleId, 'dependency-commit-scope-unsupported', command);
   }
+  const braces = { cwd: directory, tool_input: { command: '{npm,x}{,{1..100}} install --legacy-peer-deps' } };
+  assert.equal(evaluateDependency(braces, collectDependency(braces)).ruleId, 'dependency-command-uninspectable');
   for (const command of ['git -C ../other commit -m "x"', 'cd ../other && git commit -m "x"']) {
     const input = { cwd: directory, tool_input: { command } };
     assert.equal(evaluateDependency(input, collectDependency(input)).ruleId, 'dependency-commit-scope-unsupported', command);
@@ -350,10 +364,11 @@ test('debug artifact guard normalizes wrappers, quoting, and static shell layers
   ]) {
     assert.equal(evaluateDebug({ tool_input: { command } }, { findings: [finding] }).ruleId, 'focused-test', command);
   }
-  assert.equal(evaluateDebug({ tool_input: { command: "bash -c '$SCRIPT'" } }, {}).ruleId, 'debug-command-uninspectable');
-  for (const command of ['env -C ../other git commit -m x', 'env GIT_DIR=$DIR git commit -m x', 'g{it,noop} commit -m x']) {
-    assert.equal(evaluateDebug({ tool_input: { command } }, {}).ruleId, 'debug-command-uninspectable', command);
+  assert.equal(evaluateDebug({ tool_input: { command: "bash -c '$SCRIPT'" } }, {}).exitCode, 0);
+  for (const command of ['env -C ../other git commit -m x', 'env GIT_DIR=$DIR git commit -m x']) {
+    assert.equal(evaluateDebug({ tool_input: { command } }, {}).ruleId, 'debug-commit-scope-unsupported', command);
   }
+  assert.equal(evaluateDebug({ tool_input: { command: '{git,x}{,{1..100}} commit -m x' } }, {}).ruleId, 'debug-command-uninspectable');
 });
 
 test('all new hook wrappers fail closed on malformed and oversized input', () => {
