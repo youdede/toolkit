@@ -12,11 +12,11 @@ npm run setup:repo
 npm run check
 ```
 
-The setup command configures only this checkout. It enables `.githooks/commit-msg`, sets pulls to fast-forward only, and prunes deleted remote branches on fetch.
+The setup command configures only this checkout. It points Git at `.githooks/`, which enables `commit-msg` (commit policy) and `pre-push` (runs `npm run check`), sets pulls to fast-forward only, and prunes deleted remote branches on fetch.
 
 ## Branches and commits
 
-Work on a short-lived branch. Use one of these prefixes followed by a lowercase hyphenated description:
+Work on a short-lived branch. Use one of these prefixes followed by a lowercase description whose words are separated by hyphens, dots, underscores, or slashes:
 
 ```text
 feat/        fix/         docs/       refactor/
@@ -24,7 +24,9 @@ test/        ci/          chore/      security/
 release/     codex/       agent/
 ```
 
-Commit headers follow Conventional Commits and are at most 72 characters:
+The policy also accepts `dependabot/` and `renovate/` for automated dependency branches.
+
+Commit headers follow Conventional Commits and are at most 72 characters (the ` (#123)` suffix a GitHub squash merge appends is not counted only for commits that Git confirms are reachable from `origin/main`, when a manual run validates that history; without `origin/main` every header is measured whole):
 
 ```text
 type(optional-scope): lowercase imperative summary
