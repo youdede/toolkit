@@ -42,8 +42,8 @@
     {
       "name": "browser-verification",
       "source": "./plugins/browser-verification",
-      "description": "Exercise an unauthenticated local interface in an isolated browser and preserve journey-level verification evidence.",
-      "version": "1.0.0",
+      "description": "Exercise an unauthenticated local interface in an isolated browser, preserve journey-level evidence, and review the change for web performance risks.",
+      "version": "1.0.1",
       "author": {
         "name": "Youdede",
         "url": "https://github.com/udede/toolkit"
@@ -201,8 +201,8 @@
     {
       "name": "mobile-release-readiness",
       "source": "./plugins/mobile-release-readiness",
-      "description": "Review mobile release evidence, accessibility, reliability, repository state, and version consistency.",
-      "version": "1.0.0",
+      "description": "Review mobile release evidence, accessibility, and reliability. Guards stop fastlane-action, EAS, Xcode, and Gradle uploads from a dirty tree or bad versions; custom lanes pass.",
+      "version": "1.0.2",
       "author": {
         "name": "Youdede",
         "url": "https://github.com/udede/toolkit"
@@ -362,7 +362,7 @@
       "name": "session-continuity",
       "source": "./plugins/session-continuity",
       "description": "Persist bounded hash-chained checkpoints, restore cited context, and verify continuity across sessions.",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": {
         "name": "Youdede",
         "url": "https://github.com/udede/toolkit"

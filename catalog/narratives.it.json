@@ -582,10 +582,10 @@
     },
     "coding-style-baseline": {
       "summary": "Applica una guida di qualità del codice e di confini di modulo che preserva il comportamento ai file di implementazione.",
-      "description": "Un contesto con ambito generato assemblato da una guida del catalogo per la semplificazione, i confini di modulo e la sicurezza dei file generati. Ogni regola nomina il suo artefatto di origine e può essere rigenerata senza prosa copiata a mano.",
+      "description": "Un contesto generato con ambito definito, assemblato dalla guida del catalogo per la semplificazione, i confini di modulo e la sicurezza dei file generati. Ogni regola nomina il suo artefatto di origine e può essere rigenerata senza prosa copiata a mano.",
       "purposes": [],
       "refuses": [
-        "Non sovrascrive la configurazione locale del repository per lo stile, il formattatore, il linter o l'architettura.",
+        "Non prevale sulla configurazione locale del repository per stile, formattatore, linter o architettura.",
         "Non trasforma il contesto consultivo in permesso di modificare file generati o allargare i confini di modulo.",
         "Non rimane silenziosamente autorevole dopo la sua data di scadenza dichiarata."
       ]
@@ -1646,13 +1646,13 @@
       ]
     },
     "git-workflow-baseline": {
-      "summary": "Mantiene l'integrazione dei rami recuperabile, esplicita e supportata da prove fresche del repository.",
-      "description": "Un contesto generato sempre attivo per l'isolamento dei rami, le prove di integrazione, i rami protetti e la sicurezza dei commit-secret. La sua prosa è selezionata dagli artefatti del catalogo tramite la provenienza leggibile dalla macchina.",
+      "summary": "Mantiene l'integrazione dei rami reversibile, esplicita e supportata da prove aggiornate del repository.",
+      "description": "Un contesto generato sempre attivo per l'isolamento dei rami, le prove di integrazione, i rami protetti e la sicurezza dei segreti nei commit. La sua prosa è selezionata dagli artefatti del catalogo tramite la provenienza delle regole leggibile dalla macchina.",
       "purposes": [],
       "refuses": [
         "Non autorizza commit, push, merge, rebase, eliminazione di rami né rimozione di worktree.",
         "Non considera il successo dei test locali come prova che l'integrazione o la pubblicazione remota siano avvenute.",
-        "Non indebolisce gli hook protetti-branch o di scansione dei secret quando la loro policy blocca un'operazione."
+        "Non indebolisce gli hook di protezione dei branch o di scansione dei segreti quando la loro policy blocca un'operazione."
       ]
     },
     "github-readonly": {
@@ -2597,12 +2597,12 @@
       ]
     },
     "resume-session-work": {
-      "summary": "Ricostruisce il contesto di lavoro dal registro delle sessioni concatenato tramite hash con affermazioni citate tramite hash e una sezione esplicita non verificata.",
-      "description": "Riprende il lavoro in corso verificando la catena del registro delle sessioni, leggendone la coda e ricostruendo il contesto in cui ogni affermazione trasportata cita l'hash della sua voce del registro. Le affermazioni obsolete e i guasti all'integrità vengono segnalati, senza essere mai attenuati. Utilizzare quando si riprende dopo un'interruzione, una compattazione o una nuova sessione.",
+      "summary": "Ricostruisce il contesto di lavoro dal registro delle sessioni concatenato tramite hash con affermazioni citate tramite hash e una sezione esplicita per ciò che non è verificato.",
+      "description": "Riprende il lavoro in corso verificando la catena del registro delle sessioni, leggendone la coda e ricostruendo il contesto in cui ogni affermazione riportata cita l'hash della sua voce del registro. Le affermazioni obsolete e gli errori di integrità vengono segnalati, mai attenuati. Da usare quando si riprende dopo un'interruzione, una compattazione o una nuova sessione.",
       "purposes": [],
       "refuses": [
         "Non tratta una catena di registro manomessa o non verificabile come verità assoluta.",
-        "Non trasporta un'affermazione senza citare l'hash della sua voce del registro.",
+        "Non riporta un'affermazione senza citare l'hash della sua voce del registro.",
         "Non riscrive, ripara o compatta il registro append-only; la corruzione viene segnalata, non corretta."
       ]
     },
@@ -2762,11 +2762,11 @@
       ]
     },
     "security-baseline": {
-      "summary": "Applica la guida del principio del minimo privilegio per gli agent tools, le credenziali, i file sensibili e i dati in uscita.",
+      "summary": "Applica la guida del principio del minimo privilegio per gli strumenti degli agenti, le credenziali, i file sensibili e i dati in uscita.",
       "description": "Un contesto di sicurezza generato sempre attivo derivato dal threat-modeling e dai confini di guardia deterministici del catalogo. Guida le decisioni del modello senza pretendere di sostituire gli hook di enforcement.",
       "purposes": [],
       "refuses": [
-        "Non afferma che le istruzioni immediate possano far rispettare un confine di sicurezza indipendentemente dai controlli deterministici.",
+        "Non afferma che le istruzioni del prompt possano far rispettare un confine di sicurezza indipendentemente dai controlli deterministici.",
         "Non autorizza la lettura di credenziali, file protetti o dati non dichiarati per un contesto aggiuntivo.",
         "Non autorizza la trasmissione di rete, l'espansione delle credenziali né le elusioni oltre la policy di guardia installata."
       ]
@@ -3102,12 +3102,12 @@
     },
     "testing-baseline": {
       "summary": "Applica una guida che preserva l'integrità, basata su prove e test-first quando si lavora con file di test.",
-      "description": "Un contesto di test generato con ambito di percorso derivato da delivery test-first, evidenza di completamento, applicazione dell'integrità dei test e guida alla valutazione riproducibile nel catalogo.",
+      "description": "Un contesto di test generato, con ambito limitato per percorso, derivato dalle indicazioni del catalogo su delivery test-first, evidenze di completamento, applicazione dell'integrità dei test e valutazione riproducibile.",
       "purposes": [],
       "refuses": [
         "Non prescrive un comando o un framework di test prima di ispezionare la configurazione del repository.",
-        "Non permette l'indebolimento, la soppressione o l'eliminazione delle asserzioni per fabbricare un risultato positivo.",
-        "Non tratta l'output obsoleto, parziale o di seconda mano come evidenza di completamento fresca."
+        "Non permette l'indebolimento delle asserzioni, la soppressione o l'eliminazione di test per fabbricare un risultato positivo.",
+        "Non tratta output obsoleto, parziale o di seconda mano come evidenza di completamento aggiornata."
       ]
     },
     "threat-model-mapper": {

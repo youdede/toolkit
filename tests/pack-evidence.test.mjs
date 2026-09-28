@@ -4,10 +4,11 @@ import { existsSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import os from 'node:os';
 import path from 'node:path';
-import { loadPacks, validateRepository } from '../scripts/lib/catalog.mjs';
+import { loadPacks, validateRepository, ROOT } from '../scripts/lib/catalog.mjs';
 import { doctor, installPack, removePack } from '../scripts/lib/install.mjs';
 import { validatePackEvaluations } from '../scripts/validate-pack-evaluations.mjs';
 import { verifyPackEvidence } from '../scripts/verify-pack-evidence.mjs';
+import { cleanGitEnvironment } from './git-env.mjs';
 
 function reportFor(pack) {
   return {
@@ -95,5 +96,26 @@ test('new workflow packs install and remove as atomic Claude Code compositions',
     removePack(slug, { cwd: directory });
     assert.equal(doctor({ cwd: directory }).installs, 0);
     assert.equal(existsSync(path.join(directory, '.mcp.json')), false);
+  }
+});
+
+test('plan-and-verify-loop commands pass their preconditions right after add-pack', (context) => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-plan-loop-e2e-'));
+  context.after(() => rmSync(directory, { recursive: true, force: true }));
+  const env = cleanGitEnvironment();
+  const git = (...args) => {
+    const result = spawnSync('git', args, { cwd: directory, encoding: 'utf8', env });
+    assert.equal(result.status, 0, result.stderr);
+  };
+  git('init', '-q');
+  const added = spawnSync(process.execPath, [path.join(ROOT, 'bin/youdede-toolkit.mjs'), 'add-pack', 'plan-and-verify-loop', '--cwd', directory], { encoding: 'utf8', env });
+  assert.equal(added.status, 0, added.stderr);
+  // verify-claims-against-output requires a clean worktree, so record the installation first.
+  git('add', '-A');
+  git('-c', 'user.name=t', '-c', 'user.email=t@example.invalid', '-c', 'commit.gpgsign=false', 'commit', '-qm', 'install');
+  for (const command of ['draft-evidenced-plan', 'verify-claims-against-output']) {
+    const script = path.join(directory, '.claude/commands/youdede', command, 'check-preconditions.mjs');
+    const checked = spawnSync(process.execPath, [script], { cwd: directory, encoding: 'utf8', env: { ...env, CLAUDE_PROJECT_DIR: directory } });
+    assert.equal(checked.status, 0, `${command}: ${checked.stdout}${checked.stderr}`);
   }
 });

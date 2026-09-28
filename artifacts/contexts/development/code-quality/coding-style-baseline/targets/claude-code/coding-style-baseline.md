@@ -23,7 +23,7 @@ Catalog context: `context/development/code-quality/coding-style-baseline`. Prece
 
 - [preserve-observable-behavior; effect=require; action=preserve-observable-behavior] Simplify a bounded code path while preserving observable behavior and repository conventions. (Source: `skill/development/code-quality/simplify-code-with-invariants#summary`)
 - [respect-module-entrypoints; effect=require; action=respect-module-entrypoints] Detect and enforce TypeScript package entry-point boundaries without assuming one repository layout. (Source: `skill/development/architecture/enforce-typescript-module-boundaries#summary`)
-- [do-not-edit-generated-files; effect=forbid; action=edit-generated-files] It does not regenerate a protected file, identify its generator, or edit its source template. (Source: `hook/development/code-quality/generated-file-guard#refuses[0]`)
+- [do-not-edit-generated-files; effect=forbid; action=edit-generated-files] Do not edit generated files directly; change the generator or its source template and regenerate. (Source: `hook/development/code-quality/generated-file-guard#refuses[0]`)
 
 ## Boundaries
 

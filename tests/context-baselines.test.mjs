@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync, mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -54,9 +54,23 @@ test('generated target contexts carry native scope metadata and catalog source t
       }
       for (const rule of record.manifest.context.rules) {
         const origin = byId.get(rule.sourceArtifactId);
-        const text = rule.sourceField === 'summary' ? origin.summary : origin.refuses[rule.sourceIndex];
+        const text = rule.text ?? (rule.sourceField === 'summary' ? origin.summary : origin.refuses[rule.sourceIndex]);
         assert.ok(rendered.includes(text), `${target}/${record.manifest.slug} omits ${rule.id}`);
       }
+    }
+  }
+});
+
+test('forbid rules state a prohibition, never a source refusal that describes what the source does not do', () => {
+  const records = loadArtifacts();
+  const byId = new Map(records.map((record) => [record.manifest.id, record.manifest]));
+  for (const record of orderContextRecords(records)) {
+    const rendered = readFileSync(path.join(record.directory, record.adapters['claude-code'].data.files[0].from), 'utf8');
+    for (const line of rendered.split('\n').filter((item) => /^- \[[^\]]*effect=forbid/.test(item))) {
+      assert.match(line, /\] Do not /, `${record.manifest.slug}: ${line}`);
+    }
+    for (const rule of record.manifest.context.rules.filter(({ sourceField }) => sourceField === 'refuses')) {
+      assert.ok(!rendered.includes(byId.get(rule.sourceArtifactId).refuses[rule.sourceIndex]), `${record.manifest.slug} renders refusal text as rule ${rule.id}`);
     }
   }
 });
@@ -141,3 +155,27 @@ test('install-set validation names a context rule contradicted by a hook', () =>
     /context rule 'publish-now'.*requires 'publish-directly'.*deny-direct-publish blocks it/
   );
 }));
+
+test('every context installs at the documented native path on every target', () => {
+  // docs/targets.md: Claude Code `.claude/rules/youdede/*.md`, Cursor `.cursor/rules/*.mdc`,
+  // GitHub Copilot `.github/instructions/*.instructions.md`.
+  const expected = {
+    'claude-code': /^\.claude\/rules\/youdede\/[^/]+\.md$/,
+    cursor: /^\.cursor\/rules\/[^/]+\.mdc$/,
+    'github-copilot': /^\.github\/instructions\/[^/]+\.instructions\.md$/
+  };
+  for (const record of orderContextRecords(loadArtifacts())) {
+    assert.deepEqual(Object.keys(record.adapters).sort(), Object.keys(expected).sort(), record.manifest.id);
+    for (const target of Object.keys(record.adapters)) {
+      withTempDirectory('youdede-context-path-', (directory) => {
+        installArtifact(record.manifest.slug, { cwd: directory, target });
+        const installed = readdirSync(directory, { recursive: true, withFileTypes: true })
+          .filter((entry) => entry.isFile())
+          .map((entry) => path.relative(directory, path.join(entry.parentPath ?? entry.path, entry.name)).split(path.sep).join('/'))
+          .filter((file) => !file.includes('.youdede-toolkit/') && !/(^|\/)NOTICE[^/]*$/.test(file));
+        assert.equal(installed.length, 1, `${target}/${record.manifest.slug}: ${installed.join(', ')}`);
+        assert.match(installed[0], expected[target], `${target}/${record.manifest.slug}`);
+      });
+    }
+  }
+});
