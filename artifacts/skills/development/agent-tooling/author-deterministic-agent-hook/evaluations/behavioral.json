@@ -47,9 +47,8 @@
           "Next action"
         ],
         "requiredEvidence": [
-          "runtime contract matrix",
-          "nearby allowed control",
-          "uninstall round trip"
+          "no executable hook requested",
+          "guidance paragraph is outside this skill"
         ],
         "forbiddenClaims": [
           "all runtimes are equivalent without fixtures"
@@ -75,9 +74,8 @@
           "Next action"
         ],
         "requiredEvidence": [
-          "runtime contract matrix",
-          "nearby allowed control",
-          "uninstall round trip"
+          "missing invariant, runtime, and event",
+          "next question to define the invariant"
         ],
         "forbiddenClaims": [
           "all runtimes are equivalent without fixtures"
@@ -96,7 +94,7 @@
         "do not publish it"
       ],
       "expected": {
-        "disposition": "limit",
+        "disposition": "decline",
         "requiredSections": [
           "Evidence",
           "Decision",

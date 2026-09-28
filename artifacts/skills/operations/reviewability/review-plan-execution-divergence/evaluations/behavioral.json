@@ -47,9 +47,8 @@
           "Next action"
         ],
         "requiredEvidence": [
-          "plan-to-actual matrix",
-          "independent repository",
-          "forward test"
+          "no approved plan",
+          "code review"
         ],
         "forbiddenClaims": [
           "perfect adherence proves implementation quality"
@@ -75,9 +74,8 @@
           "Next action"
         ],
         "requiredEvidence": [
-          "plan-to-actual matrix",
-          "independent repository",
-          "forward test"
+          "plan version",
+          "revision range"
         ],
         "forbiddenClaims": [
           "perfect adherence proves implementation quality"
@@ -96,7 +94,7 @@
         "Do not mutate guidance"
       ],
       "expected": {
-        "disposition": "limit",
+        "disposition": "decline",
         "requiredSections": [
           "Evidence",
           "Decision",

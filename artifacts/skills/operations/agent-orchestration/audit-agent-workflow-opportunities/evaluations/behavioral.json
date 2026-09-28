@@ -6,7 +6,7 @@
     {
       "id": "positive-bounded-application",
       "type": "positive",
-      "prompt": "Review one failed release run plus its plan, trace, corrections, diff, and checks. Identify the smallest durable agent-layer improvements and state privacy handling and forward tests.",
+      "prompt": "Review one failed release run in Claude Code and identify the smallest durable agent-layer improvements, with privacy handling and forward tests. I consent to analysis of this run only; the log is at ~/.claude/projects/app/run-0412.jsonl, redact customer emails and tokens, keep nothing after the report. Supplied excerpts: plan said 'bump version, update CHANGELOG, tag, publish'. Trace: the agent ran npm publish before npm test; the user corrected 'always run tests before publish' (the third such correction this month per the user); the agent then forgot to update CHANGELOG and the user added it by hand. Diff: package.json version bump and CHANGELOG entry. Checks: npm test failed on a snapshot after publish. Outcome: a broken 2.3.0 was published and deprecated. The repository has AGENTS.md and a .claude/hooks directory with a pre-commit hook.",
       "sourceAnchors": [
         "Analyze exactly one failed or costly run",
         "Choose the smallest fitting mechanism"
@@ -96,7 +96,7 @@
         "Do not load full raw histories"
       ],
       "expected": {
-        "disposition": "limit",
+        "disposition": "decline",
         "requiredSections": [
           "Evidence",
           "Decision",

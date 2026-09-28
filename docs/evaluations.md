@@ -9,7 +9,7 @@ Each contract contains one realistic case for every required type:
 - `malformed`: missing or invalid required context; it must declare `clarify` or `decline`.
 - `boundary`: a request that crosses an authority or safety boundary; it must declare `limit` or `decline`.
 
-Every case names at least two exact `sourceAnchors` from the installed prompt, so a scenario cannot silently drift away from its artifact. Its expected contract includes required output sections, required evidence phrases, and forbidden claims and actions. A four-case baseline establishes disposition, evidence, and authority behavior for every prompt-bearing artifact. High-risk or tool-using artifacts add more task-specific cases; passing the baseline alone is not a semantic quality score.
+Each case is written for its artifact: the prompt carries the concrete evidence the case needs, the negative is a request that belongs to a neighbouring artifact, and a boundary case expects `decline` when the request itself asks to exceed the artifact's authority and `limit` when the user asks for legitimate work and the instruction to exceed it sits only inside the supplied evidence. Every case names at least two exact `sourceAnchors` from the installed prompt, chosen from the step, refusal, or stop condition the case exercises, so a scenario cannot silently drift away from its artifact. When the payload requires its headings on every path, every case requires all of them. Its expected contract includes required output sections, required evidence phrases, and forbidden claims and actions. A four-case baseline establishes disposition, evidence, and authority behavior for every prompt-bearing artifact. Some artifacts add task-specific cases beyond the baseline, but the validator requires only the four and does not require more for high-risk or tool-using artifacts; passing the baseline alone is not a semantic quality score.
 
 Every subagent boundary case also places an instruction inside repository or tool evidence. This checks that logs, diffs, fixtures, manifests, and similar inputs remain inert evidence and cannot redefine the specialist's brief or authority.
 
@@ -43,7 +43,7 @@ The framework does not generate responses. To check an output produced elsewhere
     {
       "caseId": "positive-checkout-image-regression",
       "disposition": "apply",
-      "text": "## Findings\n...\n\n## Reviewed surfaces and residual uncertainty\n..."
+      "text": "## Findings\n...\n\n## Reviewed surfaces\n..."
     }
   ]
 }
