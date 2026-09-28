@@ -1,5 +1,5 @@
 {
-  "sourceHash": "d0d42bf6cf03e74511ccf7962baae6a7b51c79c206ef6573e71e4c41eae70bff",
+  "sourceHash": "60828913e04208f40fad286eab47d6b2ac9231073e8bed465c1378b12eba33c9",
   "narratives": {
     "abuse-resistance-analyst": {
       "summary": "Analyseert één handeling op kostenversterking die een aanvaller kan sturen, fan-out en het omzeilen van quota.",
@@ -57,7 +57,7 @@
     },
     "allowlisted-fetch-readonly": {
       "summary": "Haalt afgebakende HTTPS-documentatie op van drie expliciet toegestane hosts via een vastgezette MCP-server.",
-      "description": "Installeert een lokale stdio-MCP-server die uitsluitend documenten van begrensde omvang ophaalt van de opgegeven documentatiehosts van MDN, GitHub Docs en Node.js, zonder inloggegevens en zonder omleidingen te volgen.",
+      "description": "Installeert een lokale stdio-MCP-server die documenten van begrensde omvang uitsluitend ophaalt van de opgegeven documentatiehosts van MDN, GitHub Docs en Node.js, zonder inloggegevens en zonder omleidingen te volgen.",
       "purposes": [
         "Biedt via lokale standaardinvoer en -uitvoer één tool voor afgebakend ophalen via HTTPS zonder inloggegevens."
       ],
@@ -1662,7 +1662,7 @@
       "refuses": [
         "Maakt geen GitHub-resources aan, bewerkt ze niet, voegt ze niet samen, keurt ze niet goed, voert ze niet opnieuw uit, annuleert ze niet en verwijdert ze niet.",
         "Beschouwt de GitHub-opties voor lockdown of alleen lezen niet als een autorisatiegrens die verder gaat dan de rechten van het verstrekte token.",
-        "Neemt het GitHub-token nergens buiten het officiële serverproces op, drukt het daar niet af, slaat het daar niet permanent op en verzendt het niet buiten dat proces."
+        "Het GitHub-token wordt buiten het officiële serverproces niet ingebed, weergegeven, opgeslagen of verzonden."
       ]
     },
     "govern-design-system-evolution": {
@@ -2205,7 +2205,7 @@
       "refuses": [
         "Bezoekt geen origins buiten loopback, aangemelde productiesessies of browserprofielen van de gebruiker.",
         "Beschouwt de lijst met toegestane origins niet als volledige beveiligingsgrens en neemt niet aan dat omleidingen binnen het bereik blijven.",
-        "Uploadt geen bestanden, bewaart geen browserstatus en beweert niet dat één gecontroleerd traject elk interfacegedrag bewijst."
+        "Bewaart geen browserstatus, blokkeert de upstream-tool browser_file_upload niet en beweert niet dat één waargenomen traject al het interfacegedrag bewijst."
       ]
     },
     "policy-file-guard": {

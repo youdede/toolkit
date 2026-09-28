@@ -1,5 +1,5 @@
 {
-  "sourceHash": "d0d42bf6cf03e74511ccf7962baae6a7b51c79c206ef6573e71e4c41eae70bff",
+  "sourceHash": "60828913e04208f40fad286eab47d6b2ac9231073e8bed465c1378b12eba33c9",
   "narratives": {
     "abuse-resistance-analyst": {
       "summary": "Analizza una singola operazione per individuare costi moltiplicati da input controllati da un attaccante, richieste a cascata ed elusione delle quote.",
@@ -57,14 +57,14 @@
     },
     "allowlisted-fetch-readonly": {
       "summary": "Recupera documentazione HTTPS, con limiti definiti, da tre host dichiarati tramite un server MCP con versione fissata.",
-      "description": "Installa un server MCP locale tramite input e output standard che recupera documenti con limiti definiti solo dagli host dichiarati di MDN, GitHub Docs e della documentazione Node.js, senza credenziali né reindirizzamenti.",
+      "description": "Installa un server MCP stdio locale che recupera documenti con limiti definiti solo dagli host dichiarati di MDN, GitHub Docs e della documentazione Node.js, senza usare credenziali e senza seguire reindirizzamenti.",
       "purposes": [
-        "Espone tramite input e output standard uno strumento HTTPS senza credenziali e con risposta limitata."
+        "Espone tramite input e output standard locali un unico strumento di recupero HTTPS, senza credenziali e con limiti definiti."
       ],
       "refuses": [
-        "Non recupera contenuti da siti fuori dall'elenco HTTPS dichiarato.",
+        "Non recupera contenuti da host esterni all'esatta lista consentita di documentazione HTTPS dichiarata.",
         "Non invia credenziali, non segue reindirizzamenti, non invia corpi di richiesta e non accetta intestazioni arbitrarie.",
-        "Non considera i contenuti recuperati affidabili, aggiornati, innocui o pronti per essere eseguiti."
+        "Non afferma che i contenuti recuperati siano affidabili, aggiornati, innocui o adatti all'esecuzione."
       ]
     },
     "api-contract-baseline": {
@@ -1656,7 +1656,7 @@
       ]
     },
     "github-readonly": {
-      "summary": "Consulta repository, issue, pull request e Actions su GitHub tramite il server ufficiale in modalità di sola lettura.",
+      "summary": "Consulta evidenze delimitate su repository, issue, pull request e Actions di GitHub tramite il server ufficiale in modalità di sola lettura.",
       "description": "Avvia il server MCP ufficiale di GitHub da un'immagine container fissata tramite digest, con modalità di sola lettura e strumenti selezionati per esaminare le prove del repository.",
       "purposes": [],
       "refuses": [
@@ -2199,13 +2199,13 @@
       ]
     },
     "playwright-local-isolated": {
-      "summary": "Verifica interfacce web locali con una versione precisa di Playwright MCP e una sessione isolata.",
+      "summary": "Verifica interfacce browser locali tramite una versione precisa di Playwright MCP, con stato isolato e origini limitate al loopback.",
       "description": "Avvia il pacchetto ufficiale Playwright MCP a una versione npm precisa, con stato del browser isolato, service worker bloccati e origini consentite limitate all’host locale di loopback.",
       "purposes": [],
       "refuses": [
-        "Non naviga su origini remote, sessioni di produzione autenticate o profili browser dell'utente.",
+        "Non naviga su origini diverse dal loopback, su sessioni di produzione autenticate o sui profili browser dell'utente.",
         "Non considera l'elenco delle origini consentite una barriera di sicurezza completa e non presume che i reindirizzamenti restino nel perimetro.",
-        "Non carica file, non conserva lo stato del browser e non sostiene che un percorso osservato dimostri ogni comportamento dell'interfaccia."
+        "Non conserva lo stato del browser, non blocca lo strumento upstream browser_file_upload e non sostiene che un percorso osservato dimostri ogni comportamento dell'interfaccia."
       ]
     },
     "policy-file-guard": {
@@ -2515,15 +2515,15 @@
       ]
     },
     "repository-git-readonly": {
-      "summary": "Consulta stato, differenze e cronologia Git locali tramite un server MCP con risposte limitate.",
-      "description": "Installa un server MCP locale che esegue solo forme prestabilite di git status, diff e log nel repository corrente. Ignora le variabili d'ambiente di Git e non contatta i remoti.",
+      "summary": "Espone l'ispezione limitata di stato, differenze e cronologia Git locali tramite un server MCP con versione fissata.",
+      "description": "Installa un server MCP stdio locale che esegue solo forme prestabilite di sola lettura di git status, diff e log nel repository corrente. Rimuove gli override delle variabili d'ambiente di Git e non contatta mai i remoti.",
       "purposes": [
-        "Espone tramite input e output standard tre strumenti Git di sola lettura, con risposte limitate."
+        "Espone tramite input e output standard locali tre strumenti fissi di ispezione Git in sola lettura, con risposte limitate."
       ],
       "refuses": [
-        "Non esegue commit, stage, restore, reset, switch, merge, fetch o push e non modifica i contenuti del repository.",
+        "Non esegue commit, stage, restore, reset, switch, merge, fetch o push e non modifica lo stato del repository.",
         "Non accetta opzioni Git arbitrarie, revisioni, sottoprocessi, alias, configurazioni o variabili d'ambiente sostitutive.",
-        "Non contatta i remoti, non legge credenziali e non presume che la cronologia consultata sia autentica o affidabile."
+        "Non contatta i remoti, non legge credenziali e non afferma che la cronologia consultata sia autentica o affidabile."
       ]
     },
     "request-independent-code-review": {
@@ -3270,11 +3270,11 @@
       "summary": "Espone l’ispezione di sola lettura dei file nell’area di lavoro, con limiti definiti, tramite un server MCP locale con versione fissata.",
       "description": "Installa un server MCP locale tramite input e output standard che legge file normali in UTF-8, elenca directory e cerca nomi di file solo nell’area di lavoro corrente, con limiti fissi ai risultati e senza accesso alla rete o ai segreti.",
       "purposes": [
-        "Espone tramite input e output standard gli strumenti di lettura dei file previsti dal profilo, con risposte limitate."
+        "Espone tramite input e output standard locali gli strumenti di ispezione dell'area di lavoro, con versione fissata e risposte limitate."
       ],
       "refuses": [
         "Non legge percorsi o destinazioni di link simbolici fuori dall'area di lavoro corrente.",
-        "Non scrive, elimina, rinomina, esegue o carica file e non modifica l'area di lavoro.",
+        "Non scrive, elimina, rinomina, esegue, carica né modifica in altro modo i file dell'area di lavoro.",
         "Non usa servizi di rete o variabili d'ambiente riservate e non legge i file interni di Git o del toolkit."
       ]
     },

@@ -1,14 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync, mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, mkdirSync, readFileSync, rmSync, statSync, utimesSync, writeFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import os from 'node:os';
 import path from 'node:path';
 import { loadArtifacts } from '../scripts/lib/catalog.mjs';
 import { doctor, installArtifact, planArtifactInstall, removeArtifact } from '../scripts/lib/install.mjs';
 import { compareObservedTools, verifyMcpRecord } from '../scripts/verify-mcp.mjs';
+import { SUPPORTED_PROTOCOL_VERSIONS } from '../scripts/runtime/readonly-mcp-server.mjs';
 import { evaluate as evaluateGuard } from '../artifacts/hooks/security/network-control/mcp-capability-drift-guard/targets/claude-code/mcp-capability-drift-guard.mjs';
 import { buildProposal } from '../artifacts/commands/development/agent-tooling/re-pin-mcp-tools/scripts/propose-repin.mjs';
+import { isSensitiveWorkspacePath } from '../scripts/runtime/readonly-mcp-server.mjs';
+import { cleanGitEnvironment } from './git-env.mjs';
 
 function temporary(context, prefix) {
   const directory = mkdtempSync(path.join(os.tmpdir(), prefix));
@@ -120,6 +123,8 @@ test('local MCP runtime lists pinned tools and confines file reads', (context) =
   const result = spawnSync(process.execPath, [runtime, '--profile', '.youdede/mcp/workspace-files-readonly/server.json'], { cwd: directory, input, encoding: 'utf8' });
   assert.equal(result.status, 0, result.stderr);
   const output = result.stdout.trim().split('\n').map(JSON.parse);
+  // 2025-03-26 requires JSON-RPC batches, which the server rejects, so it negotiates the newest version.
+  assert.equal(output[0].result.protocolVersion, SUPPORTED_PROTOCOL_VERSIONS[0]);
   assert.deepEqual(output[1].result.tools.map(({ name }) => name), ['read_file', 'list_directory', 'search_files']);
   assert.equal(output[2].result.content[0].text, 'bounded workspace value\n');
   assert.equal(output[3].result.isError, true);
@@ -131,7 +136,7 @@ test('local MCP runtime lists pinned tools and confines file reads', (context) =
 
   const malformed = spawnSync(process.execPath, [runtime, '--profile', '.youdede/mcp/workspace-files-readonly/server.json'], { cwd: directory, input: '{malformed\n', encoding: 'utf8' });
   assert.equal(malformed.status, 0);
-  assert.match(malformed.stdout, /Invalid request/);
+  assert.match(malformed.stdout, /"code":-32700/);
 });
 
 test('capability guard and re-pin proposal expose exact drift without raw descriptions', () => {
@@ -183,4 +188,260 @@ test('re-pin command entrypoints and proposal boundaries are exercised', () => {
   assert.notDeepEqual(proposal.previousTools, proposal.proposedTools); // negative: drift stays visible
   assert.throws(() => buildProposal(registry, 'unknown', observation)); // malformed: unknown servers refuse
   assert.throws(() => buildProposal(registry, 'youdede-workspace-files-readonly', { tools: [] })); // boundary: empty inventories refuse
+});
+
+test('installed re-pin proposal reads the repository registry, not an install-time copy', (context) => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-repin-'));
+  context.after(() => rmSync(directory, { recursive: true, force: true }));
+  installArtifact('re-pin-mcp-tools', { cwd: directory });
+  const registry = JSON.parse(readFileSync('catalog/mcp-pins.json', 'utf8'));
+  registry.servers['youdede-workspace-files-readonly'].tools = { read_file: 'f'.repeat(64) };
+  mkdirSync(path.join(directory, 'catalog'));
+  writeFileSync(path.join(directory, 'catalog', 'mcp-pins.json'), JSON.stringify(registry));
+  writeFileSync(path.join(directory, 'observed.json'), JSON.stringify({ tools: [{ name: 'read_file', description: 'A bounded read-only tool description proposed for explicit review.' }] }));
+  const script = path.join(directory, '.claude/commands/youdede/re-pin-mcp-tools/propose-repin.mjs');
+  const run = spawnSync(process.execPath, [script, '--server', 'youdede-workspace-files-readonly', '--observed', 'observed.json'], { cwd: directory, encoding: 'utf8' });
+  assert.equal(run.status, 0, run.stderr);
+  assert.deepEqual(JSON.parse(run.stdout).previousTools, { read_file: 'f'.repeat(64) });
+});
+
+test('workspace MCP runtime refuses credential files it declares no access to', (context) => {
+  const workspace = mkdtempSync(path.join(os.tmpdir(), 'youdede-mcp-secret-'));
+  context.after(() => rmSync(workspace, { recursive: true, force: true }));
+  writeFileSync(path.join(workspace, 'profile.json'), readFileSync('artifacts/mcp-servers/development/agent-tooling/workspace-files-readonly/server.json'));
+  writeFileSync(path.join(workspace, '.env'), 'API_KEY=never-return-this\n');
+  writeFileSync(path.join(workspace, '.env.example'), 'API_KEY=\n');
+  mkdirSync(path.join(workspace, 'config'));
+  writeFileSync(path.join(workspace, 'config', 'id_ed25519'), 'PRIVATE-KEY-BODY\n');
+  writeFileSync(path.join(workspace, 'notes.txt'), 'public\n');
+  const call = (id, name, args) => ({ jsonrpc: '2.0', id, method: 'tools/call', params: { name, arguments: args } });
+  const requests = [
+    call(1, 'read_file', { path: '.env' }),
+    call(2, 'read_file', { path: 'config/id_ed25519' }),
+    call(3, 'read_file', { path: '.env.example' }),
+    call(4, 'read_file', { path: 'notes.txt' }),
+    call(5, 'search_files', { query: 'env' }),
+    call(6, 'list_directory', { path: '.' })
+  ];
+  const run = spawnSync(process.execPath, [path.resolve('scripts/runtime/readonly-mcp-server.mjs'), '--profile', 'profile.json'], {
+    cwd: workspace,
+    input: `${requests.map((request) => JSON.stringify(request)).join('\n')}\n`,
+    encoding: 'utf8'
+  });
+  assert.equal(run.status, 0, run.stderr);
+  const results = new Map(run.stdout.trim().split('\n').map((line) => JSON.parse(line)).map((message) => [message.id, message.result]));
+  assert.doesNotMatch(run.stdout, /never-return-this|PRIVATE-KEY-BODY/);
+  assert.equal(results.get(1).isError, true);
+  assert.equal(results.get(2).isError, true);
+  assert.equal(results.get(3).content[0].text, 'API_KEY=\n');
+  assert.equal(results.get(4).content[0].text, 'public\n');
+  assert.doesNotMatch(results.get(5).content[0].text, /(^|\n)\.env(\n|$)/);
+  assert.match(results.get(5).content[0].text, /\.env\.example/);
+  assert.doesNotMatch(results.get(6).content[0].text, /\t\.env(\n|$)/);
+});
+
+test('MCP runtime refuses files under credential directories, in reads and diffs (PR38-CODEX4-1)', (context) => {
+  const workspace = mkdtempSync(path.join(os.tmpdir(), 'youdede-mcp-credential-dirs-'));
+  context.after(() => rmSync(workspace, { recursive: true, force: true }));
+  const git = (args) => assert.equal(spawnSync('git', args, { cwd: workspace, env: cleanGitEnvironment() }).status, 0, args.join(' '));
+  const files = ['.config/gcloud/credentials.db', 'sub/.aws/credentials'];
+  for (const file of files) {
+    mkdirSync(path.join(workspace, path.dirname(file)), { recursive: true });
+    writeFileSync(path.join(workspace, file), 'OAUTH_TOKEN=OLD-TOKEN\n');
+  }
+  writeFileSync(path.join(workspace, 'app.txt'), 'one\n');
+  git(['init', '-q']);
+  git(['config', 'user.email', 'tests@youdede.invalid']);
+  git(['config', 'user.name', 'youdede tests']);
+  git(['add', '.']);
+  git(['commit', '-qm', 'baseline']);
+  for (const file of files) writeFileSync(path.join(workspace, file), 'OAUTH_TOKEN=NEVER-RETURN-TOKEN\n');
+  writeFileSync(path.join(workspace, 'app.txt'), 'two\n');
+  const run = (profile, requests) => {
+    writeFileSync(path.join(workspace, 'profile.json'), readFileSync(`artifacts/mcp-servers/development/agent-tooling/${profile}/server.json`));
+    const result = spawnSync(process.execPath, [path.resolve('scripts/runtime/readonly-mcp-server.mjs'), '--profile', 'profile.json'], {
+      cwd: workspace, input: `${requests.map((request, index) => JSON.stringify({ jsonrpc: '2.0', id: index + 1, method: 'tools/call', params: request })).join('\n')}\n`, encoding: 'utf8'
+    });
+    assert.equal(result.status, 0, result.stderr);
+    return result.stdout.trim().split('\n').map((line) => JSON.parse(line).result);
+  };
+  const reads = run('workspace-files-readonly', [
+    ...files.map((file) => ({ name: 'read_file', arguments: { path: file } })),
+    { name: 'list_directory', arguments: { path: '.config' } },
+    { name: 'search_files', arguments: { query: 'credentials' } }
+  ]);
+  assert.equal(reads[0].isError, true);
+  assert.equal(reads[1].isError, true);
+  assert.doesNotMatch(reads[2].content[0].text, /gcloud/);
+  assert.doesNotMatch(reads[3].content[0].text, /credentials/);
+  const diffs = run('repository-git-readonly', [{ name: 'git_diff', arguments: {} }, { name: 'git_diff', arguments: { path: 'sub' } }]);
+  assert.match(diffs[0].content[0].text, /\+two/);
+  for (const result of [...reads, ...diffs]) assert.doesNotMatch(JSON.stringify(result), /TOKEN/);
+});
+
+test('repository MCP diff omits tracked credential files', (context) => {
+  const workspace = mkdtempSync(path.join(os.tmpdir(), 'youdede-mcp-diff-'));
+  context.after(() => rmSync(workspace, { recursive: true, force: true }));
+  const git = (args) => assert.equal(spawnSync('git', args, { cwd: workspace, env: cleanGitEnvironment() }).status, 0, args.join(' '));
+  git(['init', '-q']);
+  git(['config', 'user.email', 'tests@youdede.invalid']);
+  git(['config', 'user.name', 'youdede tests']);
+  writeFileSync(path.join(workspace, '.env'), 'A=1\n');
+  writeFileSync(path.join(workspace, 'app.txt'), 'one\n');
+  git(['add', '.']);
+  git(['commit', '-qm', 'baseline']);
+  writeFileSync(path.join(workspace, '.env'), 'A=never-return-this\n');
+  writeFileSync(path.join(workspace, 'app.txt'), 'two\n');
+  writeFileSync(path.join(workspace, 'profile.json'), readFileSync('artifacts/mcp-servers/development/agent-tooling/repository-git-readonly/server.json'));
+  const request = { jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name: 'git_diff', arguments: {} } };
+  const run = spawnSync(process.execPath, [path.resolve('scripts/runtime/readonly-mcp-server.mjs'), '--profile', 'profile.json'], { cwd: workspace, input: `${JSON.stringify(request)}\n`, encoding: 'utf8' });
+  const text = JSON.parse(run.stdout.trim()).result.content[0].text;
+  assert.match(text, /\+two/);
+  assert.doesNotMatch(text, /never-return-this/);
+});
+
+test('repository MCP diff never returns a sensitive path, including SSH key variants and renames', (context) => {
+  const workspace = mkdtempSync(path.join(os.tmpdir(), 'youdede-mcp-diff-sensitive-'));
+  context.after(() => rmSync(workspace, { recursive: true, force: true }));
+  const git = (args) => assert.equal(spawnSync('git', args, { cwd: workspace, env: cleanGitEnvironment() }).status, 0, args.join(' '));
+  git(['init', '-q']);
+  git(['config', 'user.email', 'tests@youdede.invalid']);
+  git(['config', 'user.name', 'youdede tests']);
+  writeFileSync(path.join(workspace, 'id_ed25519_sk'), 'PRIVATE-KEY-OLD\n');
+  writeFileSync(path.join(workspace, 'notes.txt'), 'plain notes\n');
+  writeFileSync(path.join(workspace, 'app.txt'), 'one\n');
+  git(['add', '.']);
+  git(['commit', '-qm', 'baseline']);
+  writeFileSync(path.join(workspace, 'id_ed25519_sk'), 'PRIVATE-KEY-NEVER-RETURN\n');
+  writeFileSync(path.join(workspace, 'app.txt'), 'two\n');
+  // A rename toward a sensitive name, with new content, staged.
+  git(['mv', 'notes.txt', '.NPMRC']);
+  writeFileSync(path.join(workspace, '.NPMRC'), '//registry/:_authToken=RENAMED-TOKEN-NEVER-RETURN\n');
+  git(['add', '.NPMRC']);
+  writeFileSync(path.join(workspace, 'profile.json'), readFileSync('artifacts/mcp-servers/development/agent-tooling/repository-git-readonly/server.json'));
+  const call = (argumentsValue) => {
+    const request = { jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name: 'git_diff', arguments: argumentsValue } };
+    const run = spawnSync(process.execPath, [path.resolve('scripts/runtime/readonly-mcp-server.mjs'), '--profile', 'profile.json'], { cwd: workspace, input: `${JSON.stringify(request)}\n`, encoding: 'utf8' });
+    return JSON.parse(run.stdout.trim()).result;
+  };
+  const worktree = call({}).content[0].text;
+  assert.match(worktree, /\+two/);
+  const staged = call({ staged: true }).content[0].text;
+  assert.match(staged, /-plain notes/);
+  for (const argumentsValue of [{}, { staged: true }, { path: 'id_ed25519_sk' }, { staged: true, path: '.NPMRC' }]) {
+    const text = call(argumentsValue).content[0].text;
+    assert.doesNotMatch(text, /PRIVATE-KEY|NEVER-RETURN|id_ed25519_sk|\.NPMRC/, JSON.stringify(argumentsValue));
+  }
+});
+
+
+test('MCP runtime negotiates a supported protocol version and reports parse errors', (context) => {
+  const workspace = mkdtempSync(path.join(os.tmpdir(), 'youdede-mcp-protocol-'));
+  context.after(() => rmSync(workspace, { recursive: true, force: true }));
+  writeFileSync(path.join(workspace, 'profile.json'), readFileSync('artifacts/mcp-servers/development/agent-tooling/workspace-files-readonly/server.json'));
+  const input = [
+    JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '1999-01-01' } }),
+    JSON.stringify({ jsonrpc: '2.0', id: 2, method: 'initialize', params: { protocolVersion: SUPPORTED_PROTOCOL_VERSIONS.at(-1) } }),
+    'not json'
+  ].join('\n');
+  const run = spawnSync(process.execPath, [path.resolve('scripts/runtime/readonly-mcp-server.mjs'), '--profile', 'profile.json'], { cwd: workspace, input: `${input}\n`, encoding: 'utf8' });
+  const [first, second, third] = run.stdout.trim().split('\n').map((line) => JSON.parse(line));
+  assert.equal(first.result.protocolVersion, SUPPORTED_PROTOCOL_VERSIONS[0]);
+  assert.equal(second.result.protocolVersion, SUPPORTED_PROTOCOL_VERSIONS.at(-1));
+  assert.equal(third.error.code, -32700);
+});
+
+test('repository MCP git tools run no configured programs and never write the index', (context) => {
+  const workspace = temporary(context, 'youdede-mcp-readonly-git-');
+  const git = (args, input) => {
+    const run = spawnSync('git', args, { cwd: workspace, env: cleanGitEnvironment(), input, encoding: 'utf8' });
+    assert.equal(run.status, 0, args.join(' '));
+    return run.stdout.trim();
+  };
+  git(['init', '-q']);
+  git(['config', 'user.email', 'tests@youdede.invalid']);
+  git(['config', 'user.name', 'youdede tests']);
+  writeFileSync(path.join(workspace, 'app.txt'), 'one\n');
+  git(['add', '.']);
+  git(['commit', '-qm', 'baseline']);
+  // A signature header is enough for log.showSignature to hand the commit to gpg.program.
+  const signed = git(['hash-object', '-t', 'commit', '-w', '--stdin'], [
+    `tree ${git(['rev-parse', 'HEAD^{tree}'])}`, `parent ${git(['rev-parse', 'HEAD'])}`,
+    'author t <t@youdede.invalid> 1700000000 +0000', 'committer t <t@youdede.invalid> 1700000000 +0000',
+    'gpgsig -----BEGIN PGP SIGNATURE-----', ' ', ' x', ' -----END PGP SIGNATURE-----', '', 'signed', ''
+  ].join('\n'));
+  git(['update-ref', 'HEAD', signed]);
+  const marker = path.join(path.dirname(workspace), `${path.basename(workspace)}-ran`);
+  context.after(() => rmSync(marker, { force: true }));
+  const program = path.join(workspace, 'program.sh');
+  writeFileSync(program, `#!/bin/sh\necho "$0 $*" >> '${marker}'\n`, { mode: 0o755 });
+  git(['config', 'core.fsmonitor', program]);
+  git(['config', 'core.untrackedCache', 'true']);
+  git(['config', 'log.showSignature', 'true']);
+  git(['config', 'gpg.program', program]);
+  writeFileSync(path.join(workspace, 'profile.json'), readFileSync('artifacts/mcp-servers/development/agent-tooling/repository-git-readonly/server.json'));
+  const index = path.join(workspace, '.git', 'index');
+  const past = new Date('2020-01-01T00:00:00Z');
+  utimesSync(index, past, past);
+  // A different mtime with identical content is what makes git refresh and rewrite the index.
+  const stale = new Date('2019-01-01T00:00:00Z');
+  utimesSync(path.join(workspace, 'app.txt'), stale, stale);
+  const before = readFileSync(index);
+  for (const name of ['git_status', 'git_diff', 'git_log']) {
+    const request = { jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name, arguments: {} } };
+    const run = spawnSync(process.execPath, [path.resolve('scripts/runtime/readonly-mcp-server.mjs'), '--profile', 'profile.json'], { cwd: workspace, input: `${JSON.stringify(request)}\n`, encoding: 'utf8' });
+    assert.ok(JSON.parse(run.stdout.trim()).result, `${name}: ${run.stdout}`);
+    assert.equal(existsSync(marker), false, `${name} ran a configured program`);
+    assert.equal(statSync(index).mtimeMs, past.getTime(), `${name} rewrote the index`);
+    assert.deepEqual(readFileSync(index), before, `${name} changed the index`);
+  }
+});
+
+test('repository MCP git tools refuse filter drivers other than standard Git LFS', (context) => {
+  const setup = () => {
+    const workspace = temporary(context, 'youdede-mcp-git-filter-');
+    const git = (args) => assert.equal(spawnSync('git', args, { cwd: workspace, env: cleanGitEnvironment() }).status, 0, args.join(' '));
+    git(['init', '-q']);
+    git(['config', 'user.email', 'tests@youdede.invalid']);
+    git(['config', 'user.name', 'youdede tests']);
+    writeFileSync(path.join(workspace, '.gitattributes'), '*.txt filter=evil\n');
+    writeFileSync(path.join(workspace, 'app.txt'), 'one\n');
+    git(['add', '.']);
+    git(['commit', '-qm', 'baseline']);
+    writeFileSync(path.join(workspace, 'app.txt'), 'two\n');
+    writeFileSync(path.join(workspace, 'profile.json'), readFileSync('artifacts/mcp-servers/development/agent-tooling/repository-git-readonly/server.json'));
+    return { workspace, git };
+  };
+  const call = (workspace, name) => {
+    const request = { jsonrpc: '2.0', id: 1, method: 'tools/call', params: { name, arguments: {} } };
+    const run = spawnSync(process.execPath, [path.resolve('scripts/runtime/readonly-mcp-server.mjs'), '--profile', 'profile.json'], { cwd: workspace, input: `${JSON.stringify(request)}\n`, encoding: 'utf8' });
+    return JSON.parse(run.stdout.trim()).result;
+  };
+  const lfs = [['filter.lfs.clean', 'git-lfs clean -- %f'], ['filter.lfs.smudge', 'git-lfs smudge -- %f'], ['filter.lfs.process', 'git-lfs filter-process'], ['filter.lfs.required', 'true']];
+
+  const evil = setup();
+  const sentinel = path.join(path.dirname(evil.workspace), `${path.basename(evil.workspace)}-filter-ran`);
+  context.after(() => rmSync(sentinel, { force: true }));
+  writeFileSync(path.join(evil.workspace, 'filter.sh'), `#!/bin/sh\necho ran >> '${sentinel}'\ncat\n`, { mode: 0o755 });
+  evil.git(['config', 'filter.evil.clean', path.join(evil.workspace, 'filter.sh')]);
+  for (const name of ['git_status', 'git_diff']) {
+    const result = call(evil.workspace, name);
+    assert.equal(result.isError, true, name);
+    assert.match(result.content[0].text, /filter\.evil\.clean/, name);
+    assert.equal(existsSync(sentinel), false, `${name} ran the filter`);
+  }
+
+  const standard = setup();
+  for (const [key, value] of lfs) standard.git(['config', key, value]);
+  for (const name of ['git_status', 'git_diff']) assert.notEqual(call(standard.workspace, name).isError, true, name);
+  const skipSmudge = setup();
+  for (const [key, value] of [...lfs, ['filter.lfs.smudge', 'git-lfs smudge --skip -- %f'], ['filter.lfs.process', 'git-lfs filter-process --skip']]) skipSmudge.git(['config', key, value]);
+  assert.notEqual(call(skipSmudge.workspace, 'git_status').isError, true, 'git lfs install --skip-smudge');
+
+  const altered = setup();
+  for (const [key, value] of lfs) altered.git(['config', key, value]);
+  altered.git(['config', 'filter.lfs.process', 'git-lfs filter-process; touch pwned']);
+  const refused = call(altered.workspace, 'git_status');
+  assert.equal(refused.isError, true);
+  assert.match(refused.content[0].text, /filter\.lfs\.process/);
 });

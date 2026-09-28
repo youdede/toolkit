@@ -42,7 +42,8 @@ export function buildProposal(registry, server, observation) {
 export function main(argv = process.argv.slice(2)) {
   const server = option('server', argv);
   const observed = option('observed', argv);
-  const registry = option('registry', argv) || path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'mcp-pins.json');
+  // The repository registry, not an install-time copy: a copy goes stale after the first re-pin.
+  const registry = option('registry', argv) || path.resolve('catalog', 'mcp-pins.json');
   if (!server || !observed) throw new Error('usage: propose-repin --server <name> --observed <tools-list.json> [--registry <pins.json>]');
   process.stdout.write(`${JSON.stringify(buildProposal(readBoundedJson(registry), server, readBoundedJson(observed)), null, 2)}\n`);
 }

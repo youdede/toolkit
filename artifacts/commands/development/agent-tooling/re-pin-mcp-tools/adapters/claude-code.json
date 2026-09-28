@@ -9,7 +9,6 @@
     {"from": "scripts/propose-repin.mjs", "to": "commands/youdede/re-pin-mcp-tools/propose-repin.mjs", "executable": true},
     {"from": "preconditions.json", "to": "commands/youdede/re-pin-mcp-tools/preconditions.json"},
     {"root": "package", "from": "scripts/runtime/command-precondition.mjs", "to": "commands/youdede/lib/command-precondition.mjs"},
-    {"root": "package", "from": "scripts/runtime/session-ledger.mjs", "to": "hooks/youdede/lib/session-ledger.mjs"},
-    {"root": "package", "from": "catalog/mcp-pins.json", "to": "commands/youdede/re-pin-mcp-tools/mcp-pins.json"}
+    {"root": "package", "from": "scripts/runtime/session-ledger.mjs", "to": "hooks/youdede/lib/session-ledger.mjs"}
   ]
 }

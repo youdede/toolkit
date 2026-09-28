@@ -8457,9 +8457,10 @@
           "bindings": []
         },
         "cursor": {
-          "stability": "stable",
+          "stability": "preview",
           "limitations": [
-            "The fixed host allowlist cannot be widened through runtime arguments or project environment variables."
+            "The fixed host allowlist cannot be widened through runtime arguments or project environment variables.",
+            "ADR 0002 keeps MCP servers out of stable until an MCP egress guard covers the target; the mcp-egress-guard Cursor adapter binds beforeMCPExecution but is preview until verified in a live Cursor client."
           ],
           "bindings": []
         }
@@ -8636,13 +8637,17 @@
       "targetCompatibility": {
         "claude-code": {
           "stability": "stable",
-          "limitations": [],
+          "limitations": [
+            "git_status and git_diff refuse to run when the effective Git configuration defines a filter driver command other than the standard Git LFS ones."
+          ],
           "bindings": []
         },
         "cursor": {
-          "stability": "stable",
+          "stability": "preview",
           "limitations": [
-            "The server requires a local Git repository and Node.js 20 or newer."
+            "The server requires a local Git repository and Node.js 20 or newer.",
+            "git_status and git_diff refuse to run when the effective Git configuration defines a filter driver command other than the standard Git LFS ones.",
+            "ADR 0002 keeps MCP servers out of stable until an MCP egress guard covers the target; the mcp-egress-guard Cursor adapter binds beforeMCPExecution but is preview until verified in a live Cursor client."
           ],
           "bindings": []
         }
@@ -8734,9 +8739,10 @@
           "bindings": []
         },
         "cursor": {
-          "stability": "stable",
+          "stability": "preview",
           "limitations": [
-            "The server is project-scoped and requires Node.js 20 or newer on the local machine."
+            "The server is project-scoped and requires Node.js 20 or newer on the local machine.",
+            "ADR 0002 keeps MCP servers out of stable until an MCP egress guard covers the target; the mcp-egress-guard Cursor adapter binds beforeMCPExecution but is preview until verified in a live Cursor client."
           ],
           "bindings": []
         }
@@ -8807,7 +8813,7 @@
       "refuses": [
         "It does not browse non-loopback origins, authenticated production sessions, or user browser profiles.",
         "It does not treat allowed origins as a complete security boundary or assume redirects remain in scope.",
-        "It does not upload files, persist browser state, or claim an observed journey proves all interface behavior."
+        "It does not persist browser state, block the upstream browser_file_upload tool, or claim an observed journey proves all interface behavior."
       ],
       "targets": [
         "claude-code",

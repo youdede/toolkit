@@ -325,24 +325,24 @@
       "latency": "Il punto di ingresso gestisce un evento intercettato per bloccare le modifiche ad alta confidenza all'origine e alla configurazione che disabilitano la verifica del trasporto senza attività differite."
     },
     "allowlisted-fetch-readonly": {
-      "risk": "Questo profilo MCP recupera la documentazione HTTPS delimitata da tre host espliciti tramite un server MCP bloccato; non viene recuperato da host al di fuori dell'esatta lista consentita della documentazione HTTPS dichiarata.",
-      "latency": "Una chiamata attende la risposta di un documento HTTPS inserito nella lista consentita e applica limiti di contenuto delimitati."
+      "risk": "Questo profilo MCP recupera documentazione HTTPS con limiti definiti da tre host espliciti tramite un server MCP con versione fissata; non recupera contenuti da host esterni all'esatta lista consentita di documentazione HTTPS dichiarata.",
+      "latency": "Una chiamata attende la risposta di un documento HTTPS presente nella lista consentita e applica limiti al contenuto."
     },
     "github-readonly": {
       "risk": "L'adattatore passa un token GitHub a un server Docker che espone strumenti per repository, pull request, issue e GitHub Actions.",
       "latency": "La chiamata attende la risposta del server GitHub esterno e della sua API entro un limite di tempo."
     },
     "repository-git-readonly": {
-      "risk": "Questo profilo MCP espone lo stato Git locale limitato, le differenze e l'ispezione della cronologia tramite un server MCP bloccato; non esegue il commit, lo stage, il ripristino, la reimpostazione, il cambio, l'unione, il recupero, il push o la modifica dello stato del repository.",
+      "risk": "Questo profilo MCP espone l'ispezione limitata di stato, differenze e cronologia Git locali tramite un server MCP con versione fissata; non esegue commit, stage, restore, reset, switch, merge, fetch o push e non modifica lo stato del repository.",
       "latency": "Una chiamata esegue un'ispezione Git locale limitata e restituisce l'output raccolto."
     },
     "workspace-files-readonly": {
-      "risk": "Questo profilo MCP espone l'ispezione limitata dei file dell'area di lavoro di sola lettura tramite un server MCP aggiunto localmente; non scrive, elimina, rinomina, esegue, carica o modifica in altro modo i file dell'area di lavoro.",
-      "latency": "Una chiamata legge i file dell'area di lavoro delimitata tramite il server locale prima di rispondere."
+      "risk": "Questo profilo MCP espone l'ispezione di sola lettura, con limiti definiti, dei file dell'area di lavoro tramite un server MCP locale con versione fissata; non scrive, elimina, rinomina, esegue, carica né modifica in altro modo i file dell'area di lavoro.",
+      "latency": "Una chiamata legge file dell'area di lavoro, entro limiti definiti, tramite il server locale prima di rispondere."
     },
     "playwright-local-isolated": {
       "risk": "L'adattatore avvia @playwright/mcp tramite npx con accesso tramite browser alle app Web di loopback.",
-      "latency": "Un percorso nel browser richiede l'avvio del server aggiunto e l'attesa delle azioni e dei risultati della pagina."
+      "latency": "Un percorso nel browser richiede l'avvio del server con versione fissata e l'attesa delle azioni e dei risultati della pagina."
     },
     "design-data-quality-controls": {
       "risk": "Questa skill progetta contratti, controlli, proprietà e comportamento degli incidenti sulla qualità dei dati attorno a decisioni reali; non equivale al superamento dei controlli dello schema con un significato analitico affidabile.",
