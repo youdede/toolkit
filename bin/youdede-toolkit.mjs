@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 
 import path from 'node:path';
-import { hookBindings, loadArtifacts, loadPacks, resolvePack, ROOT, validateRepository } from '../scripts/lib/catalog.mjs';
-import { doctor, installArtifact, installPack, planArtifactInstall, planPackInstall, removeArtifact, removePack, resolveArtifact } from '../scripts/lib/install.mjs';
+import { createInterface } from 'node:readline/promises';
+import { hookBindings, loadArtifacts, loadPacks, prerequisiteMembers, resolvePack, ROOT, validateRepository } from '../scripts/lib/catalog.mjs';
+import { doctor, installArtifact, installedDependentsOf, installPack, planArtifactInstall, planPackInstall, removeArtifact, neededByMessage, removePack, resolveArtifact, suggestionsFor } from '../scripts/lib/install.mjs';
+import { confirmRemoval, decidePrerequisites, parseAnswer, skippedNotice, suggestionHint } from '../scripts/lib/prerequisite-consent.mjs';
 import { readIntegrityManifest, verifyArtifactAttestation, verifyIntegrityManifest } from '../scripts/lib/integrity.mjs';
 import { validateBehavioralEvaluations } from '../scripts/validate-evaluations.mjs';
 import { readPackEvidenceReport, verifyPackEvidence } from '../scripts/verify-pack-evidence.mjs';
@@ -18,7 +20,7 @@ function parse(argv) {
       continue;
     }
     const name = value.slice(2);
-    if (['dry-run', 'force', 'help', 'json'].includes(name)) options[name] = true;
+    if (['dry-run', 'force', 'help', 'json', 'no-prerequisites'].includes(name)) options[name] = true;
     else {
       const next = argv[index + 1];
       if (!next || next.startsWith('--')) throw new Error(`--${name} requires a value`);
@@ -29,7 +31,8 @@ function parse(argv) {
   return { positional, options };
 }
 
-const INSTALL_FLAGS = ['target', 'scope', 'cwd', 'force', 'dry-run', 'json'];
+const INSTALL_FLAGS = ['target', 'scope', 'cwd', 'force', 'dry-run', 'json', 'no-prerequisites'];
+// What an automatically installed prerequisite does for the artifact that needs it.
 const COMMAND_FLAGS = {
   help: [],
   list: ['kind', 'domain', 'category', 'capability', 'problem', 'framework', 'language', 'lifecycle', 'risk', 'target', 'execution'],
@@ -59,6 +62,23 @@ function assertKnownFlags(command, options) {
   }
 }
 
+// A prompt is shown only when a person is at the terminal: an agent, CI, or a pipe gets notices.
+const interactive = () => Boolean(process.stdin.isTTY && process.stdout.isTTY);
+async function ask(question, defaultYes) {
+  const terminal = createInterface({ input: process.stdin, output: process.stdout });
+  try {
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      const answer = parseAnswer(await terminal.question(attempt ? 'Please answer y or n: ' : question), defaultYes);
+      if (answer !== null) return answer;
+    }
+    return defaultYes;
+  } finally {
+    terminal.close();
+  }
+}
+const slugOf = (id) => id.split('/').at(-1);
+const write = (line) => process.stdout.write(`${line}\n`);
+
 function help() {
   const targets = SUPPORTED_TARGETS.join('|');
   process.stdout.write(`youdede-toolkit\n\n`);
@@ -68,8 +88,8 @@ function help() {
   process.stdout.write(`  packs\n`);
   process.stdout.write(`  pack-info <id-or-slug>\n`);
   process.stdout.write(`  verify-pack-evidence <id-or-slug> --report path [--json]\n`);
-  process.stdout.write(`  add <id-or-slug> [--target ${targets}] [--scope project|user] [--cwd path] [--dry-run] [--json] [--force]\n`);
-  process.stdout.write(`  add-pack <id-or-slug> [--target ${targets}] [--scope project|user] [--cwd path] [--dry-run] [--json] [--force]\n`);
+  process.stdout.write(`  add <id-or-slug> [--target ${targets}] [--scope project|user] [--cwd path] [--dry-run] [--json] [--force] [--no-prerequisites]\n`);
+  process.stdout.write(`  add-pack <id-or-slug> [--target ${targets}] [--scope project|user] [--cwd path] [--dry-run] [--json] [--force] [--no-prerequisites]\n`);
   process.stdout.write(`  remove <id-or-slug> [--target ${targets}] [--scope project|user] [--cwd path] [--force]\n`);
   process.stdout.write(`  remove-pack <id-or-slug> [--target ${targets}] [--scope project|user] [--cwd path] [--force]\n`);
   process.stdout.write(`  doctor [--target ${targets}] [--scope project|user] [--cwd path]\n`);
@@ -167,10 +187,11 @@ async function main() {
     // hash files under the user's config root as a side effect.
     const target = options.target || 'claude-code';
     const fanout = new Map();
+    const prerequisites = prerequisiteMembers(manifest, (id) => { try { return resolveArtifact(id); } catch { return null; } });
     for (const member of manifest.members) {
       let record = null;
       try { record = resolveArtifact(member.artifactId); } catch { continue; }
-      if (record.manifest.kind !== 'hook') continue;
+      if (record.manifest.kind !== 'hook' || prerequisites.has(member.artifactId)) continue;
       const adapter = record.adapters[target]?.data;
       if (!adapter) continue;
       for (const binding of hookBindings(adapter)) {
@@ -178,7 +199,8 @@ async function main() {
         fanout.set(boundary, (fanout.get(boundary) || 0) + 1);
       }
     }
-    if (fanout.size) process.stdout.write(`Hook fan-out: ${[...fanout].sort((a, b) => b[1] - a[1]).map(([boundary, count]) => `${boundary}=${count}`).join(', ')}\n`);
+    const extra = prerequisites.size ? ` (plus ${prerequisites.size === 1 ? 'prerequisite' : 'prerequisites'}: ${[...prerequisites].map((id) => id.split('/').at(-1)).join(', ')})` : '';
+    if (fanout.size) process.stdout.write(`Hook fan-out: ${[...fanout].sort((a, b) => b[1] - a[1]).map(([boundary, count]) => `${boundary}=${count}`).join(', ')}${extra}\n`);
     return;
   }
 
@@ -204,6 +226,13 @@ async function main() {
       });
       if (options.json) process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
       else {
+        // A prerequisite is listed with the files it writes, which the real install writes as well.
+        for (const id of result.prerequisites) {
+          process.stdout.write(`Would ${options['no-prerequisites'] ? 'skip' : 'install'} prerequisite ${id}\n`);
+          if (options['no-prerequisites']) continue;
+          const prerequisite = planArtifactInstall(id, { target: options.target, scope: options.scope, cwd: options.cwd, force: options.force });
+          for (const file of prerequisite.writes) process.stdout.write(`- ${file.action} ${file.path} (${file.bytes} bytes, sha256 ${file.sha256})\n`);
+        }
         process.stdout.write(`Would install ${result.artifact.id} in ${result.configRoot}\n`);
         if (result.integrity) process.stdout.write(`Verified ${result.integrity.integrityId}\n`);
         for (const file of result.writes) process.stdout.write(`- ${file.action} ${file.path} (${file.bytes} bytes, sha256 ${file.sha256})\n`);
@@ -217,19 +246,36 @@ async function main() {
       }
       return;
     }
-    const result = installArtifact(requireQuery(positional), {
-      target: options.target,
-      scope: options.scope,
-      cwd: options.cwd,
-      force: options.force
+    const query = requireQuery(positional);
+    const placement = { target: options.target, scope: options.scope, cwd: options.cwd, force: options.force };
+    // Ask (or notify) once before installing the missing prerequisites, with the reason of each link. A
+    // plan that fails is left to the install, which reports the same error before anything is asked.
+    let planned = null;
+    try { planned = planArtifactInstall(query, placement); } catch {}
+    const reasonOf = (id) => planned?.prerequisiteReasons?.[id] ?? null;
+    const asking = interactive() && !options['no-prerequisites'];
+    const prerequisites = await decidePrerequisites({
+      subject: planned?.artifact.slug ?? query,
+      prerequisites: (planned?.prerequisites ?? []).map((id) => ({ slug: slugOf(id), reason: reasonOf(id) })),
+      interactive: interactive(),
+      skip: Boolean(options['no-prerequisites']),
+      ask,
+      write
     });
+    const result = installArtifact(query, { ...placement, prerequisites });
+    for (const manifest of result.prerequisites) process.stdout.write(`Installed prerequisite ${manifest.slug}.\n`);
     process.stdout.write(`Installed ${result.artifact.id} in ${result.configRoot}\n`);
+    if (result.skippedPrerequisites.length) {
+      write(skippedNotice(result.artifact.slug, result.skippedPrerequisites.map((manifest) => ({ slug: manifest.slug, reason: reasonOf(manifest.id) })), { asked: asking }));
+    }
     for (const file of result.files) process.stdout.write(`- ${file}\n`);
     if (result.settingsFile) process.stdout.write(`- merged ${result.settingsFile}\n`);
     if (result.mcpConfigFile) process.stdout.write(`- merged ${result.mcpConfigFile}\n`);
     if (result.integrity) process.stdout.write(`- verified ${result.integrity.integrityId}\n`);
     printRuntimeDisclosure(result.runtime);
     for (const warning of result.warnings || []) process.stdout.write(`Warning: ${warning}\n`);
+    const hint = suggestionHint(suggestionsFor([result.artifact.id, ...result.prerequisites.map((manifest) => manifest.id)], placement));
+    if (hint) write(hint);
     return;
   }
 
@@ -244,20 +290,57 @@ async function main() {
       }
       return;
     }
-    const result = installPack(requireQuery(positional), installOptions);
+    // The prerequisites members need that the pack does not contain: asked once for the pack.
+    const query = requireQuery(positional);
+    const planned = planPackInstall(query, installOptions);
+    const members = new Set(planned.members.map((item) => item.member.artifactId));
+    const reasons = new Map();
+    for (const item of planned.members) for (const [id, reason] of Object.entries(item.plan?.prerequisiteReasons ?? {})) if (!reasons.has(id)) reasons.set(id, reason);
+    const outside = [...reasons.keys()].filter((id) => !members.has(id));
+    const subject = `the ${planned.pack.slug} pack`;
+    const prerequisites = await decidePrerequisites({
+      subject,
+      prerequisites: outside.map((id) => ({ slug: slugOf(id), reason: reasons.get(id) })),
+      interactive: interactive(),
+      skip: Boolean(options['no-prerequisites']),
+      ask,
+      write
+    });
+    const result = installPack(query, { ...installOptions, prerequisites });
     process.stdout.write(`Installed ${result.pack.id} for ${result.target}/${result.scope}\n`);
-    for (const item of result.installed) process.stdout.write(`- ${item.artifact.id}\n`);
+    for (const item of result.installed) {
+      for (const manifest of item.prerequisites ?? []) process.stdout.write(`- ${manifest.id} (prerequisite)\n`);
+      process.stdout.write(`- ${item.artifact.id}\n`);
+    }
+    const skipped = [...new Set(result.installed.flatMap((item) => (item.skippedPrerequisites ?? []).map((manifest) => manifest.id)))].filter((id) => !members.has(id));
+    if (skipped.length) write(skippedNotice(subject, skipped.map((id) => ({ slug: slugOf(id), reason: reasons.get(id) ?? null })), { asked: interactive() && !options['no-prerequisites'] }));
     for (const item of result.skipped) process.stdout.write(`- skipped ${item.member.artifactId}: ${item.skipped}\n`);
+    const installedIds = result.installed.flatMap((item) => [item.artifact.id, ...(item.prerequisites ?? []).map((manifest) => manifest.id)]);
+    const hint = suggestionHint(suggestionsFor(installedIds, { ...installOptions, exclude: [...members] }));
+    if (hint) write(hint);
     return;
   }
 
   if (command === 'remove') {
-    const result = removeArtifact(requireQuery(positional), {
-      target: options.target,
-      scope: options.scope,
-      cwd: options.cwd,
-      force: options.force
-    });
+    const query = requireQuery(positional);
+    const placement = { target: options.target, scope: options.scope, cwd: options.cwd, force: options.force };
+    // Removing a prerequisite that installed artifacts require: asked in a terminal (default no);
+    // elsewhere the removal refuses unless --force. Suggested and related links never block.
+    let confirmedDependents = false;
+    const dependents = options.force ? [] : installedDependentsOf(query, placement);
+    if (dependents.length && !interactive()) {
+      process.stderr.write(`${neededByMessage(slugOf(resolveArtifact(query).manifest.id), dependents.map(({ slug }) => slug))}\n`);
+      process.exitCode = 1;
+      return;
+    }
+    if (dependents.length) {
+      confirmedDependents = await confirmRemoval({ prerequisite: slugOf(resolveArtifact(query).manifest.id), dependents, interactive: true, ask });
+      if (!confirmedDependents) {
+        write(`Kept ${query}.`);
+        return;
+      }
+    }
+    const result = removeArtifact(query, { ...placement, confirmedDependents });
     process.stdout.write(`Removed ${result.artifact.id} from ${result.configRoot}\n`);
     return;
   }

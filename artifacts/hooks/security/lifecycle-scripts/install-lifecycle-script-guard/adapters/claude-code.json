@@ -5,7 +5,7 @@
   "scopes": ["project"],
   "files": [{"from": "targets/claude-code/install-lifecycle-script-guard.mjs", "to": "hooks/youdede/install-lifecycle-script-guard.mjs", "executable": true}],
   "settingsPatch": {"hooks": {"PreToolUse": [{
-    "matcher": "Write|Edit|MultiEdit",
+    "matcher": "Bash|Write|Edit|MultiEdit",
     "description": "[youdede:install-lifecycle-script-guard] Prevent new install-time package scripts",
     "hooks": [{"type": "command", "command": "node \"{claudeRoot}/hooks/youdede/install-lifecycle-script-guard.mjs\"", "timeout": 10}]
   }]}}

@@ -12,7 +12,7 @@ produce provenance for that source state.
 ## Applying decisions 1 and 2
 
 Both are one-line decisions with a wide blast radius: the holder string `Youdede` appears in over
-300 tracked files, including the `authors` field of all <!-- stat:artifact-count -->315<!-- /stat --> `artifact.json` manifests, and the
+300 tracked files, including the `authors` field of all <!-- stat:artifact-count -->316<!-- /stat --> `artifact.json` manifests, and the
 namespace in the five files listed under step 2. [`scripts/set-publisher-identity.mjs`](../scripts/set-publisher-identity.mjs) applies either or
 both in one pass, over tracked files only, and refuses to run without an explicit value. Its
 `--holder` pass still targets the retired `youdede contributors` placeholder, so update its
@@ -40,7 +40,7 @@ substitute an invented company name. `scripts/verify-legal.mjs` asserts the curr
 update that check in the same change.
 
 **Files to update together:** `LICENSE`, `NOTICE`, `CITATION.cff`, `scripts/verify-legal.mjs`, and
-the `authors` field of all <!-- stat:artifact-count -->315<!-- /stat --> `artifact.json` manifests.
+the `authors` field of all <!-- stat:artifact-count -->316<!-- /stat --> `artifact.json` manifests.
 
 ## 2. Migrate the namespace
 

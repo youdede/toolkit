@@ -97,6 +97,10 @@ jobs:
       - name: Structural and behavioural gate
         run: npm run check
 
+      # npm run check runs most hook verdict cases in process; a release runs every case as a hook process.
+      - name: Every hook verdict as a hook process
+        run: npm run check:hook-verdicts
+
       - name: Release-readiness gate
         run: npm run check:readiness
 

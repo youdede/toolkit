@@ -79,9 +79,15 @@
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],
-      "packIds": [
-        "pack/remote-review-evidence"
-      ]
+    "suggests": [
+      "mcp-server/development/agent-tooling/github-readonly"
+    ],
+    "linkReasons": {
+      "mcp-server/development/agent-tooling/github-readonly": "to read GitHub Actions run evidence when no logs are supplied"
+    },
+    "packIds": [
+      "pack/remote-review-evidence"
+    ]
   },
   "operational": {
     "behavior": "advisory",

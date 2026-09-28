@@ -1,6 +1,6 @@
 # test-assertion-removal-guard
 
-Compares bounded test-file revisions and stops a change when recognizable tests remain but all assertion or failure primitives disappear from a previously asserting file.
+Compares bounded test-file revisions and stops a change when a test that stays in the file loses every recognizable assertion or failure primitive. Test files are those under `test`/`tests`/`spec`/`specs`, those named `*.test.*`, `*.spec.*`, `*_test.*`, or `*_spec.*`, and pytest's `test_*.py`.
 
 The hook is deterministic, reads at most 1 MiB from stdin, emits exit code 0 to allow and 2 to block, and never repeats submitted content in a diagnostic. It has no project-writable exception file.
 

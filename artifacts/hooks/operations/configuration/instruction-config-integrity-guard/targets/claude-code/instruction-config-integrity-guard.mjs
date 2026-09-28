@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { lstatSync, readFileSync, realpathSync } from 'node:fs';
+import { existsSync, lstatSync, readFileSync, realpathSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -20,15 +20,44 @@ function block(ruleId, detail) {
   return { exitCode: 2, ruleId, message: `BLOCKED by instruction-config-integrity-guard [${ruleId}]: ${detail}.` };
 }
 
-export function collectContext(input, defaultCwd = process.cwd()) {
-  const file = input?.file_path;
+const SETTINGS_FILES = { project_settings: 'settings.json', local_settings: 'settings.local.json' };
+
+// The project root: CLAUDE_PROJECT_DIR when set, else the nearest directory at or above `cwd`, below the
+// home directory (whose `.claude` holds user settings), that holds `.claude` (the event `cwd` follows
+// the session into subdirectories), else `cwd`.
+function projectRoot(cwd, env) {
+  if (typeof env.CLAUDE_PROJECT_DIR === 'string' && path.isAbsolute(env.CLAUDE_PROJECT_DIR)) return realpathSync(env.CLAUDE_PROJECT_DIR);
+  const start = realpathSync(cwd);
+  let home = null;
+  try { home = typeof env.HOME === 'string' && env.HOME ? realpathSync(env.HOME) : null; } catch { home = null; }
+  for (let directory = start, steps = 0; steps < 64 && directory !== home; steps += 1) {
+    if (existsSync(path.join(directory, '.claude'))) return directory;
+    const parent = path.dirname(directory);
+    if (parent === directory) break;
+    directory = parent;
+  }
+  return start;
+}
+
+export function collectContext(input, defaultCwd = process.cwd(), env = process.env) {
   const cwd = input?.cwd || defaultCwd;
-  if (typeof file !== 'string' || typeof cwd !== 'string' || !path.isAbsolute(file)) {
-    return { inspectionError: 'path-missing' };
+  if (typeof cwd !== 'string' || !path.isAbsolute(cwd)) return { inspectionError: 'path-missing' };
+  let root;
+  try { root = projectRoot(cwd, env); } catch { return { inspectionError: 'path-unreadable' }; }
+  // ConfigChange `file_path` is optional: the project and local settings files have canonical paths.
+  const settings = input?.hook_event_name === 'ConfigChange' ? SETTINGS_FILES[input.source] : undefined;
+  const file = input?.file_path ?? (settings ? path.join(root, '.claude', settings) : undefined);
+  if (typeof file !== 'string' || !path.isAbsolute(file)) return { inspectionError: 'path-missing' };
+  let metadata;
+  try { metadata = lstatSync(file); } catch (error) {
+    // A deleted project or local settings file introduces no bypass value.
+    if (error.code !== 'ENOENT' || !settings) return { inspectionError: 'path-unreadable' };
+    try {
+      const resolved = path.join(realpathSync(path.dirname(file)), path.basename(file));
+      return { pathInsideProject: within(root, resolved), removed: true };
+    } catch { return { inspectionError: 'path-unreadable' }; }
   }
   try {
-    const root = realpathSync(cwd);
-    const metadata = lstatSync(file);
     if (!metadata.isFile() || metadata.isSymbolicLink()) return { inspectionError: 'path-unsafe' };
     const resolved = realpathSync(file);
     const pathInsideProject = within(root, resolved);
@@ -60,6 +89,7 @@ export function evaluate(input, context = {}) {
   if (input.hook_event_name !== 'ConfigChange') return allow('instruction-config-event-irrelevant');
   if (input.source === 'policy_settings') return allow('managed-policy-not-blockable');
   if (!['project_settings', 'local_settings'].includes(input.source)) return allow('config-scope-irrelevant');
+  if (context.removed === true && context.pathInsideProject === true) return allow('config-removed');
   if (context.inspectionError || context.pathInsideProject !== true || !context.config || Array.isArray(context.config)) {
     return block('config-change-unverified', 'the changed project configuration cannot be verified as a bounded JSON file');
   }

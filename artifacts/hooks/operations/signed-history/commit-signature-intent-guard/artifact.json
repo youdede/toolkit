@@ -7,7 +7,7 @@
   "version": "1.0.0",
   "kind": "hook",
   "summary": "Require an explicit or configured cryptographic-signing intent for Git commits.",
-  "description": "A deterministic Claude Code PreToolUse gate for Bash that recognizes direct Git commit commands and blocks explicit signature bypass, dynamic command shapes, or commits without -S when commit.gpgSign is not enabled.",
+  "description": "A deterministic Claude Code PreToolUse gate for Bash that recognizes Git commands that create commits (commit, also through aliases, merge --no-ff, cherry-pick, revert, am) and blocks explicit signature bypass, dynamic command shapes, or such commands without -S when commit.gpgSign is not enabled.",
   "domain": "operations",
   "category": "signed-history",
   "problems": [
@@ -62,7 +62,12 @@
     "composesWith": [],
     "conflictsWith": [],
     "supersedes": [],
-    "prerequisites": [],
+    "prerequisites": [
+      "hook/security/application-security/shell-command-guard"
+    ],
+    "linkReasons": {
+      "hook/security/application-security/shell-command-guard": "commit-signature-intent-guard cannot see hidden commands (e.g. bash -c \"$X\"): shell-command-guard stops them."
+    },
     "packIds": []
   },
   "operational": {

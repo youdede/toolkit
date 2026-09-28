@@ -74,12 +74,19 @@
     "composesWith": [],
     "conflictsWith": [],
     "supersedes": [],
-    "prerequisites": [
+    "prerequisites": [],
+    "suggests": [
       "hook/operations/configuration/instruction-config-integrity-guard",
       "skill/development/agent-tooling/audit-agent-guidance-drift",
       "skill/development/agent-tooling/write-folder-agent-guidance",
       "skill/development/agent-tooling/write-project-agent-guidance"
     ],
+    "linkReasons": {
+      "hook/operations/configuration/instruction-config-integrity-guard": "to guard instruction files and settings against enforcement bypasses",
+      "skill/development/agent-tooling/audit-agent-guidance-drift": "to turn audit findings into evidence-backed guidance corrections",
+      "skill/development/agent-tooling/write-folder-agent-guidance": "to write the scoped folder guidance the audit asks for",
+      "skill/development/agent-tooling/write-project-agent-guidance": "to rewrite root agent guidance from verified project facts"
+    },
     "packIds": []
   },
   "operational": {

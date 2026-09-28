@@ -4,7 +4,6 @@ import {
   constants,
   existsSync,
   fchmodSync,
-  fstatSync,
   lstatSync,
   mkdirSync,
   openSync,
@@ -27,8 +26,6 @@ const MAX_DISPLACED_FILE_BYTES = 1024 * 1024;
 const STATE_LOCK_TIMEOUT_MS = 30_000;
 const STATE_LOCK_STALE_MS = 120_000;
 const STATE_LOCK_POLL_MS = 25;
-const STATE_LOCK_TOKEN_BYTES = 16;
-const STATE_LOCK_MAX_BYTES = 256;
 const integrityCatalogs = new Map();
 
 function sha256(data) {
@@ -144,17 +141,6 @@ function renderNotice(state, root) {
   return Buffer.from(`${lines.join('\n')}\n`);
 }
 
-export function removeStateLockIfOwned(file, ownerToken) {
-  try {
-    if (readFileSync(file, 'utf8') !== ownerToken) return false;
-    rmSync(file);
-    return true;
-  } catch (error) {
-    if (error.code === 'ENOENT') return false;
-    throw error;
-  }
-}
-
 // ponytail: one coarse lock per config root, held across the whole read-modify-write of
 // state.json. Installs are user-initiated and take milliseconds, so contention is a parallel
 // script rather than a hot path. Move to per-key locking only if that stops being true.
@@ -173,7 +159,6 @@ function withStateLock(configRoot, operation) {
     sleepBriefly();
   };
   let descriptor = null;
-  let ownerToken = null;
   for (;;) {
     try {
       descriptor = openSync(file, constants.O_CREAT | constants.O_EXCL | constants.O_WRONLY | constants.O_NOFOLLOW, STATE_MODE);
@@ -186,39 +171,19 @@ function withStateLock(configRoot, operation) {
       }
       if (error.code === 'ELOOP') throw new Error(`${file} is a symbolic link; refusing to use it as the installation lock`);
       if (error.code !== 'EEXIST') throw error;
-      let inspectionDescriptor = null;
       let metadata;
-      let observedOwner;
-      try {
-        inspectionDescriptor = openSync(file, constants.O_RDONLY | (constants.O_NOFOLLOW || 0));
-        metadata = fstatSync(inspectionDescriptor);
-        if (!metadata.isFile()) throw new Error(`${file} is not a regular file; refusing to use it as the installation lock`);
-        if (metadata.size > STATE_LOCK_MAX_BYTES) throw new Error(`${file} exceeds the installation lock size limit`);
-        // The descriptor binds this token and metadata to the same inode even if the pathname is
-        // replaced immediately after inspection.
-        observedOwner = readFileSync(inspectionDescriptor, 'utf8');
-      } catch (inspectionError) {
-        if (inspectionError.code === 'ELOOP') {
-          throw new Error(`${file} is a symbolic link; refusing to use it as the installation lock`);
-        }
-        if (/not a regular file|size limit/u.test(inspectionError.message)) throw inspectionError;
+      try { metadata = lstatSync(file); } catch {
         retry(`cannot inspect ${file}; it keeps changing`);
         continue;
-      } finally {
-        if (inspectionDescriptor !== null) closeSync(inspectionDescriptor);
       }
+      if (metadata.isSymbolicLink()) throw new Error(`${file} is a symbolic link; refusing to use it as the installation lock`);
+      if (!metadata.isFile()) throw new Error(`${file} is not a regular file; refusing to use it as the installation lock`);
+      // ponytail: stale reclaim removes by name, so two processes that both saw the same stale
+      // lock can both proceed. It needs a lock older than 120 s; replace with an OS advisory
+      // lock if concurrent installs ever become routine.
       if (Date.now() - metadata.mtimeMs > STATE_LOCK_STALE_MS) {
-        // Re-read ownership immediately before removal. Another installer may have replaced the
-        // stale file after the metadata observation above.
-        try {
-          if (!removeStateLockIfOwned(file, observedOwner)) {
-            retry(`cannot reclaim ${file}; its owner changed`);
-            continue;
-          }
-        } catch {
-          retry(`cannot reclaim the stale lock ${file}`);
-          continue;
-        }
+        // The holder died without releasing. Reclaim rather than block a user forever.
+        try { rmSync(file, { force: true }); } catch {}
         retry(`cannot reclaim the stale lock ${file}`);
         continue;
       }
@@ -226,16 +191,13 @@ function withStateLock(configRoot, operation) {
     }
   }
   try {
-    ownerToken = `${process.pid}:${randomBytes(STATE_LOCK_TOKEN_BYTES).toString('hex')}\n`;
-    writeFileSync(descriptor, ownerToken);
+    writeFileSync(descriptor, `${process.pid}\n`);
     closeSync(descriptor);
     descriptor = null;
     return operation();
   } finally {
     if (descriptor !== null) closeSync(descriptor);
-    if (ownerToken !== null) {
-      try { removeStateLockIfOwned(file, ownerToken); } catch {}
-    }
+    try { rmSync(file, { force: true }); } catch {}
     // Drop the directory once nothing is left in it; a concurrent installer recreates it.
     try { rmdirSync(path.dirname(file)); } catch {}
   }
@@ -693,11 +655,110 @@ function prepareInstall(query, options = {}) {
   return { record, target, scope, configRoot, key, state, ownedInstall, filePlan, stale, settings, mcp, integrity, displacedByPath, displacedFiles };
 }
 
+// Every recorded install of this target and scope, across its config roots (a kind may install in
+// its own root). Read-only.
+function installsOf(target, scope, cwd) {
+  const installs = [];
+  for (const configRoot of resolveConfigRoots(target, scope, cwd)) {
+    if (!existsSync(statePath(configRoot))) continue;
+    for (const install of Object.values(loadState(configRoot).installs)) if (install.target === target && install.scope === scope) installs.push(install);
+  }
+  return installs;
+}
+
+// The prerequisites (`relationships.prerequisites`, transitively, dependencies first) not yet installed
+// for this target and scope, each with the reason of the edge that needs it (`relationships.linkReasons`).
+function missingPrerequisites(record, installs, root) {
+  const installed = new Set(installs.map((install) => install.artifactId));
+  const order = [];
+  const visit = (current, trail) => {
+    for (const id of current.manifest.relationships?.prerequisites || []) {
+      if (trail.has(id) || installed.has(id) || order.some((entry) => entry.manifest.id === id)) continue;
+      const prerequisite = resolveArtifact(id, root);
+      visit(prerequisite, new Set([...trail, id]));
+      order.push({ ...prerequisite, reason: current.manifest.relationships.linkReasons?.[id] ?? null, neededBy: current.manifest.slug });
+    }
+  };
+  visit(record, new Set([record.manifest.id]));
+  return order;
+}
+
+// A prerequisite installs with the artifact, in the same config root and under the same lock. Where it
+// cannot (validation keeps every prerequisite on its dependent's targets and scopes, but a kind may use
+// another root), the install stops before any question with the manual step.
+export function prerequisiteBlocker(record, prerequisites, target, scope, cwd) {
+  const configRoot = resolveConfigRoot(target, scope, cwd, record.manifest.kind);
+  for (const prerequisite of prerequisites) {
+    const adapter = prerequisite.adapters[target]?.data;
+    const manual = `install it yourself first (youdede-toolkit add ${prerequisite.manifest.slug} --target ${target} --scope ${scope}), then add ${record.manifest.slug} again`;
+    if (!adapter || !adapter.scopes.includes(scope)) return `${record.manifest.slug} needs ${prerequisite.manifest.slug}, which does not support ${target} ${scope} scope; install ${record.manifest.slug} elsewhere`;
+    if (resolveConfigRoot(target, scope, cwd, prerequisite.manifest.kind) !== configRoot) return `${record.manifest.slug} needs ${prerequisite.manifest.slug}, which ${target} keeps in another directory: ${manual}`;
+  }
+  return null;
+}
+
+// Suggestions (`relationships.suggests`) of `artifactIds` worth a hint: supported on this target and
+// scope, not installed, and not in `exclude` (a pack's members). One entry per suggested artifact, with
+// the reason of the first artifact that suggests it.
+export function suggestionsFor(artifactIds, options = {}) {
+  const target = options.target || 'claude-code';
+  const scope = options.scope || 'project';
+  const root = options.root || ROOT;
+  const installed = new Set(installsOf(target, scope, options.cwd || process.cwd()).map((install) => install.artifactId));
+  const exclude = new Set([...(options.exclude || []), ...artifactIds]);
+  const found = new Map();
+  for (const artifactId of [...artifactIds].sort()) {
+    let manifest;
+    try { manifest = resolveArtifact(artifactId, root).manifest; } catch { continue; }
+    for (const id of manifest.relationships?.suggests || []) {
+      if (found.has(id) || installed.has(id) || exclude.has(id)) continue;
+      let suggested;
+      try { suggested = resolveArtifact(id, root); } catch { continue; }
+      if (!suggested.adapters[target]?.data?.scopes.includes(scope)) continue;
+      found.set(id, { id, slug: suggested.manifest.slug, reason: manifest.relationships.linkReasons?.[id] ?? null });
+    }
+  }
+  return [...found.values()].sort((left, right) => left.slug.localeCompare(right.slug));
+}
+
+// The one-line refusal to remove `slug` while installed artifacts require it.
+export function neededByMessage(slug, dependents) {
+  return `${slug} is needed by ${dependents.join(', ')}. Remove ${dependents.length === 1 ? dependents[0] : 'them'} first, or use --force.`;
+}
+
+// Installed artifacts that name `artifactId` as a prerequisite, with the reason of that edge.
+function installedDependents(artifactId, installs, root) {
+  const dependents = new Map();
+  for (const install of installs) {
+    if (install.artifactId === artifactId) continue;
+    try {
+      const manifest = resolveArtifact(install.artifactId, root).manifest;
+      if (manifest.relationships?.prerequisites?.includes(artifactId)) dependents.set(manifest.slug, { slug: manifest.slug, reason: manifest.relationships.linkReasons?.[artifactId] ?? null });
+    } catch {}
+  }
+  return [...dependents.values()];
+}
+
+// The installed artifacts that require `query` (slug and reason), for a removal confirmation.
+// Read-only; the removal itself checks again under the lock.
+export function installedDependentsOf(query, options = {}) {
+  const root = options.root || ROOT;
+  let artifactId;
+  try { artifactId = resolveArtifact(query, root).manifest.id; } catch { return []; }
+  return installedDependents(artifactId, installsOf(options.target || 'claude-code', options.scope || 'project', options.cwd || process.cwd()), root);
+}
+
 export function planArtifactInstall(query, options = {}) {
   const prepared = prepareInstall(query, options);
   const { record, target, scope, configRoot, filePlan, stale, settings, mcp, integrity, displacedByPath } = prepared;
+  const missing = missingPrerequisites(record, installsOf(target, scope, options.cwd || process.cwd()), options.root || ROOT);
+  const blocker = prerequisiteBlocker(record, missing, target, scope, options.cwd || process.cwd());
+  if (blocker) throw new Error(blocker);
   return {
     artifact: record.manifest,
+    prerequisites: missing.map((prerequisite) => prerequisite.manifest.id),
+    // The reason of the edge that needs each missing prerequisite, for the install question.
+    prerequisiteReasons: Object.fromEntries(missing.map((prerequisite) => [prerequisite.manifest.id, prerequisite.reason])),
     target,
     scope,
     configRoot,
@@ -744,7 +805,28 @@ export function installArtifact(query, options = {}) {
   if (!adapter) throw new Error(`${record.manifest.id} does not support ${target}`);
   if (!adapter.scopes.includes(scope)) throw new Error(`${record.manifest.id} does not support ${scope} scope`);
   const configRoot = resolveConfigRoot(target, scope, options.cwd || process.cwd(), record.manifest.kind);
-  return withStateLock(configRoot, () => installArtifactLocked(query, options));
+  return withStateLock(configRoot, () => {
+    // Prerequisites install first, in the same lock; if the artifact then fails, they are removed again.
+    // `prerequisites: false` (the user declined, or `--no-prerequisites`) installs the artifact alone.
+    const missing = missingPrerequisites(record, installsOf(target, scope, options.cwd || process.cwd()), options.root || ROOT);
+    const prerequisites = options.prerequisites === false ? [] : missing;
+    const skippedPrerequisites = options.prerequisites === false ? missing.map((prerequisite) => prerequisite.manifest) : [];
+    const blocker = prerequisiteBlocker(record, prerequisites, target, scope, options.cwd || process.cwd());
+    if (blocker) throw new Error(blocker);
+    const added = [];
+    try {
+      for (const prerequisite of prerequisites) {
+        installArtifactLocked(prerequisite.manifest.id, options);
+        added.push(prerequisite.manifest);
+      }
+      return { ...installArtifactLocked(query, options), prerequisites: added, skippedPrerequisites };
+    } catch (error) {
+      for (const manifest of added.toReversed()) {
+        try { removeArtifactLocked(manifest.id, { ...options, force: false }); } catch {}
+      }
+      throw error;
+    }
+  });
 }
 
 function installArtifactLocked(query, options = {}) {
@@ -928,6 +1010,11 @@ function removeArtifactLocked(query, options = {}) {
     installed.owners = owners.filter((candidate) => candidate !== owner);
     writeState(configRoot, state);
     return { artifact, configRoot, removed: [], ownershipReleased: owner };
+  }
+  const dependents = installedDependents(installed.artifactId, installsOf(target, scope, cwd), root).map((dependent) => dependent.slug);
+  // `confirmedDependents`: the user confirmed removing a prerequisite; it does not relax other checks.
+  if (dependents.length && !force && !options.confirmedDependents) {
+    throw new Error(neededByMessage(artifact.slug || artifact.id, dependents));
   }
 
   for (const file of installed.files || []) {

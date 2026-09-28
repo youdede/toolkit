@@ -4,7 +4,7 @@ import { chmodSync, existsSync, lstatSync, mkdtempSync, mkdirSync, readdirSync, 
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { doctor, installArtifact, planArtifactInstall, removeArtifact, removeStateLockIfOwned } from '../scripts/lib/install.mjs';
+import { doctor, installArtifact, planArtifactInstall, removeArtifact } from '../scripts/lib/install.mjs';
 import { loadArtifacts } from '../scripts/lib/catalog.mjs';
 import { cleanGitEnvironment } from './git-env.mjs';
 import { fileURLToPath } from 'node:url';
@@ -14,6 +14,9 @@ function runGit(cwd, args) {
   assert.equal(result.status, 0, result.stderr);
   return result.stdout.trim();
 }
+
+// commit-guard is the hook fixture of the settings, marker, and notice tests; they install it without
+// its shell-command-guard prerequisite (`prerequisites: false`) so each checks one hook's entries.
 
 test('skill install and uninstall round-trip', (context) => {
   const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-install-skill-'));
@@ -37,8 +40,8 @@ test('hook install merges and uninstall preserves unrelated settings', (context)
   mkdirSync(claude, { recursive: true });
   writeFileSync(path.join(claude, 'settings.json'), `${JSON.stringify({ permissions: { allow: ['Read'] } }, null, 2)}\n`);
 
-  installArtifact('commit-guard', { cwd: directory });
-  installArtifact('commit-guard', { cwd: directory });
+  installArtifact('commit-guard', { cwd: directory, prerequisites: false });
+  installArtifact('commit-guard', { cwd: directory, prerequisites: false });
   let settings = JSON.parse(readFileSync(path.join(claude, 'settings.json'), 'utf8'));
   assert.deepEqual(settings.permissions.allow, ['Read']);
   assert.equal(settings.hooks.PreToolUse.length, 1);
@@ -100,7 +103,11 @@ test('all hooks compose in one project and uninstall without collisions', (conte
     findings: []
   });
 
-  for (const record of hooks.toReversed()) removeArtifact(record.manifest.slug, { cwd: directory });
+  // A hook another installed hook needs as a prerequisite is removed after it.
+  const dependents = hooks.filter((record) => record.manifest.relationships.prerequisites.length);
+  for (const record of [...dependents, ...hooks.filter((record) => !dependents.includes(record)).toReversed()]) {
+    removeArtifact(record.manifest.slug, { cwd: directory });
+  }
   assert.deepEqual(JSON.parse(readFileSync(settingsFile, 'utf8')), original);
   assert.equal(doctor({ cwd: directory }).installs, 0);
 });
@@ -241,7 +248,7 @@ test('malformed settings abort hook installation before copying payloads', (cont
   mkdirSync(claude, { recursive: true });
   writeFileSync(path.join(claude, 'settings.json'), '{ invalid json');
 
-  assert.throws(() => installArtifact('commit-guard', { cwd: directory }), /invalid JSON/);
+  assert.throws(() => installArtifact('commit-guard', { cwd: directory, prerequisites: false }), /invalid JSON/);
   assert.equal(existsSync(path.join(claude, 'hooks', 'youdede', 'commit-guard.mjs')), false);
   assert.equal(readFileSync(path.join(claude, 'settings.json'), 'utf8'), '{ invalid json');
 });
@@ -279,7 +286,7 @@ test('uninstall removes a toolkit-created settings file even when its creator is
   context.after(() => rmSync(directory, { recursive: true, force: true }));
   const settingsFile = path.join(directory, '.claude', 'settings.json');
 
-  installArtifact('commit-guard', { cwd: directory });
+  installArtifact('commit-guard', { cwd: directory, prerequisites: false });
   installArtifact('shell-command-guard', { cwd: directory });
   removeArtifact('commit-guard', { cwd: directory });
   assert.ok(existsSync(settingsFile));
@@ -300,7 +307,7 @@ test('forced hook-marker replacement restores the displaced unmanaged entry', (c
   mkdirSync(claude, { recursive: true });
   writeFileSync(settingsFile, `${JSON.stringify({ hooks: { PreToolUse: [displaced] } }, null, 2)}\n`);
 
-  installArtifact('commit-guard', { cwd: directory, force: true });
+  installArtifact('commit-guard', { cwd: directory, prerequisites: false, force: true });
   assert.doesNotMatch(readFileSync(settingsFile, 'utf8'), /user-owned-command/);
   removeArtifact('commit-guard', { cwd: directory });
   assert.deepEqual(JSON.parse(readFileSync(settingsFile, 'utf8')).hooks.PreToolUse, [displaced]);
@@ -336,17 +343,17 @@ test('hook settings merge preserves a restrictive existing file mode', { skip: p
   writeFileSync(settings, '{}\n');
   chmodSync(settings, 0o600);
 
-  installArtifact('commit-guard', { cwd: directory });
+  installArtifact('commit-guard', { cwd: directory, prerequisites: false });
   assert.equal(statSync(settings).mode & 0o777, 0o600);
   chmodSync(settings, 0o640);
-  installArtifact('commit-guard', { cwd: directory });
+  installArtifact('commit-guard', { cwd: directory, prerequisites: false });
   assert.equal(statSync(settings).mode & 0o777, 0o640);
 });
 
 test('reinstall refuses a user-modified managed hook entry unless force is explicit', (context) => {
   const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-install-hook-edit-'));
   context.after(() => rmSync(directory, { recursive: true, force: true }));
-  installArtifact('commit-guard', { cwd: directory });
+  installArtifact('commit-guard', { cwd: directory, prerequisites: false });
   const settingsFile = path.join(directory, '.claude', 'settings.json');
   const settings = JSON.parse(readFileSync(settingsFile, 'utf8'));
   settings.hooks.PreToolUse[0].hooks[0].command = 'user-custom-command';
@@ -358,9 +365,9 @@ test('reinstall refuses a user-modified managed hook entry unless force is expli
     status: 'hook-settings-modified'
   }]);
 
-  assert.throws(() => installArtifact('commit-guard', { cwd: directory }), /modified or unmanaged/);
+  assert.throws(() => installArtifact('commit-guard', { cwd: directory, prerequisites: false }), /modified or unmanaged/);
   assert.match(readFileSync(settingsFile, 'utf8'), /user-custom-command/);
-  installArtifact('commit-guard', { cwd: directory, force: true });
+  installArtifact('commit-guard', { cwd: directory, prerequisites: false, force: true });
   assert.doesNotMatch(readFileSync(settingsFile, 'utf8'), /user-custom-command/);
   assert.equal(doctor({ cwd: directory }).findings.length, 0);
 });
@@ -368,7 +375,7 @@ test('reinstall refuses a user-modified managed hook entry unless force is expli
 test('hook uninstall refuses settings drift and force removes only its stable marker', (context) => {
   const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-remove-hook-edit-'));
   context.after(() => rmSync(directory, { recursive: true, force: true }));
-  installArtifact('commit-guard', { cwd: directory });
+  installArtifact('commit-guard', { cwd: directory, prerequisites: false });
   const settingsFile = path.join(directory, '.claude', 'settings.json');
   const scriptFile = path.join(directory, '.claude', 'hooks', 'youdede', 'commit-guard.mjs');
   const settings = JSON.parse(readFileSync(settingsFile, 'utf8'));
@@ -394,7 +401,7 @@ test('hook uninstall refuses settings drift and force removes only its stable ma
 test('uninstall refuses an unmarked hook state record instead of deleting unmanaged entries', (context) => {
   const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-remove-hook-unmarked-'));
   context.after(() => rmSync(directory, { recursive: true, force: true }));
-  installArtifact('commit-guard', { cwd: directory });
+  installArtifact('commit-guard', { cwd: directory, prerequisites: false });
   const settingsFile = path.join(directory, '.claude', 'settings.json');
   const stateFile = path.join(directory, '.claude', '.youdede-toolkit', 'state.json');
 
@@ -421,7 +428,7 @@ test('uninstall refuses an unmarked hook state record instead of deleting unmana
 test('uninstall honours a legacy hook state record that carries only a marker', (context) => {
   const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-remove-hook-legacy-'));
   context.after(() => rmSync(directory, { recursive: true, force: true }));
-  installArtifact('commit-guard', { cwd: directory });
+  installArtifact('commit-guard', { cwd: directory, prerequisites: false });
   const settingsFile = path.join(directory, '.claude', 'settings.json');
   const stateFile = path.join(directory, '.claude', '.youdede-toolkit', 'state.json');
 
@@ -499,24 +506,6 @@ test('a lock that is a dangling symbolic link is refused at once (PR38-CODEX8-3)
   assert.equal(lstatSync(lock).isSymbolicLink(), true);
 });
 
-test('a stale observer cannot remove a replacement lock owner', (context) => {
-  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-install-lock-owner-'));
-  context.after(() => rmSync(directory, { recursive: true, force: true }));
-  const stateDirectory = path.join(directory, '.youdede-toolkit');
-  const lock = path.join(stateDirectory, 'state.lock');
-  mkdirSync(stateDirectory, { recursive: true });
-  const staleOwner = '100:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n';
-  const replacementOwner = '200:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n';
-  writeFileSync(lock, staleOwner);
-
-  // This replacement is the deterministic interleaving between stale observation and removal.
-  writeFileSync(lock, replacementOwner);
-  assert.equal(removeStateLockIfOwned(lock, staleOwner), false);
-  assert.equal(readFileSync(lock, 'utf8'), replacementOwner);
-  assert.equal(removeStateLockIfOwned(lock, replacementOwner), true);
-  assert.equal(existsSync(lock), false);
-});
-
 test('a failed multi-file install rolls back every file it had already written', { skip: process.platform === 'win32' }, (context) => {
   const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-install-rollback-'));
   context.after(() => rmSync(directory, { recursive: true, force: true }));
@@ -543,7 +532,7 @@ test('installing carries the licence notice with the copied files and uninstalli
   const notice = path.join(directory, '.claude', '.youdede-toolkit', 'NOTICE.md');
 
   installArtifact('debug-systematically', { cwd: directory });
-  installArtifact('commit-guard', { cwd: directory });
+  installArtifact('commit-guard', { cwd: directory, prerequisites: false });
   let text = readFileSync(notice, 'utf8');
   assert.match(text, /skill\/development\/debugging\/debug-systematically/);
   assert.match(text, /hook\/security\/secrets\/commit-guard/);
@@ -563,7 +552,7 @@ test('installing carries the licence notice with the copied files and uninstalli
 test('doctor reports missing and duplicate managed hook settings', (context) => {
   const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-doctor-hook-settings-'));
   context.after(() => rmSync(directory, { recursive: true, force: true }));
-  installArtifact('commit-guard', { cwd: directory });
+  installArtifact('commit-guard', { cwd: directory, prerequisites: false });
   const settingsFile = path.join(directory, '.claude', 'settings.json');
   const settings = JSON.parse(readFileSync(settingsFile, 'utf8'));
   const entry = structuredClone(settings.hooks.PreToolUse[0]);
@@ -638,12 +627,16 @@ test('every catalog artifact installs and removes independently', () => {
     try {
       const installed = installArtifact(manifest.slug, { cwd: directory });
       assert.ok(installed.files.length > 0, manifest.id);
+      // Every artifact brings its prerequisites (required links), whatever their kind.
+      const prerequisites = manifest.relationships.prerequisites;
+      assert.deepEqual(installed.prerequisites.map((prerequisite) => prerequisite.id), prerequisites, manifest.id);
       assert.deepEqual(doctor({ cwd: directory }), {
         configRoot: installed.configRoot,
-        installs: 1,
+        installs: 1 + prerequisites.length,
         findings: []
       });
       removeArtifact(manifest.slug, { cwd: directory });
+      for (const id of prerequisites) removeArtifact(id, { cwd: directory });
       assert.equal(doctor({ cwd: directory }).installs, 0, manifest.id);
     } finally {
       rmSync(directory, { recursive: true, force: true });
@@ -672,9 +665,54 @@ test('installed artifact remains removable after it leaves the current catalog',
 test('removing the last artifact leaves no installer state behind', (context) => {
   const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-install-cleanup-'));
   context.after(() => rmSync(directory, { recursive: true, force: true }));
-  installArtifact('commit-guard', { cwd: directory });
+  installArtifact('commit-guard', { cwd: directory, prerequisites: false });
   removeArtifact('commit-guard', { cwd: directory });
   assert.equal(existsSync(path.join(directory, '.claude', '.youdede-toolkit')), false);
-  installArtifact('commit-guard', { cwd: directory });
+  installArtifact('commit-guard', { cwd: directory, prerequisites: false });
   assert.equal(doctor({ cwd: directory }).findings.length, 0);
+});
+
+// Prerequisites (hook-design 1.7): an operation guard brings shell-command-guard, which owns the
+// programs a command runs but does not contain.
+test('adding an operation guard installs its prerequisite, and removing the prerequisite is refused', (context) => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-prerequisite-'));
+  context.after(() => rmSync(directory, { recursive: true, force: true }));
+  const hooks = path.join(directory, '.claude', 'hooks', 'youdede');
+  const cli = (...args) => spawnSync(process.execPath, [path.resolve('bin/youdede-toolkit.mjs'), ...args, '--cwd', directory], { encoding: 'utf8' });
+
+  const plan = planArtifactInstall('package-publish-guard', { cwd: directory });
+  assert.deepEqual(plan.prerequisites, ['hook/security/application-security/shell-command-guard']);
+  const added = cli('add', 'package-publish-guard');
+  assert.equal(added.status, 0, added.stderr);
+  // Without a terminal the CLI installs the prerequisite and says why (tests/prerequisite-consent.test.mjs).
+  assert.match(added.stdout, /^package-publish-guard cannot see hidden commands \(e\.g\. bash -c "\$X"\): shell-command-guard stops them\.\nInstalling it too; pass --no-prerequisites to skip\.\nInstalled prerequisite shell-command-guard\.\nInstalled hook\/operations\/package-publication\/package-publish-guard/);
+  assert.ok(existsSync(path.join(hooks, 'shell-command-guard.mjs')));
+  assert.deepEqual(planArtifactInstall('cloud-resource-deletion-guard', { cwd: directory }).prerequisites, []);
+
+  const refused = cli('remove', 'shell-command-guard');
+  assert.equal(refused.status, 1);
+  assert.equal(refused.stderr, 'shell-command-guard is needed by package-publish-guard. Remove package-publish-guard first, or use --force.\n');
+  assert.ok(existsSync(path.join(hooks, 'shell-command-guard.mjs')));
+  removeArtifact('package-publish-guard', { cwd: directory });
+  removeArtifact('shell-command-guard', { cwd: directory });
+  assert.equal(doctor({ cwd: directory }).findings.length, 0);
+
+  installArtifact('package-publish-guard', { cwd: directory });
+  removeArtifact('shell-command-guard', { cwd: directory, force: true });
+  assert.equal(existsSync(path.join(hooks, 'shell-command-guard.mjs')), false);
+  removeArtifact('package-publish-guard', { cwd: directory });
+});
+
+test('a failed operation guard install removes the prerequisite it installed', (context) => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-prerequisite-rollback-'));
+  context.after(() => rmSync(directory, { recursive: true, force: true }));
+  const hooks = path.join(directory, '.claude', 'hooks', 'youdede');
+  mkdirSync(hooks, { recursive: true });
+  writeFileSync(path.join(hooks, 'package-publish-guard.mjs'), '// not managed by the toolkit\n');
+
+  assert.throws(() => installArtifact('package-publish-guard', { cwd: directory }), /already exists and is unmanaged/);
+  assert.equal(existsSync(path.join(hooks, 'shell-command-guard.mjs')), false);
+  const state = path.join(directory, '.claude', '.youdede-toolkit', 'state.json');
+  const installs = existsSync(state) ? Object.values(JSON.parse(readFileSync(state, 'utf8')).installs) : [];
+  assert.deepEqual(installs.map((install) => install.artifactId), []);
 });

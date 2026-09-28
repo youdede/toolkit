@@ -2,7 +2,7 @@
 
 Measures shell tool output against a declared 64 KiB per-call budget after the call completes, and emits bounded guidance (pagination, filtering, redirect-to-file) when output exceeds it. Context pressure becomes a visible signal instead of silent truncation risk.
 
-The hook reads at most 8 MiB of observation input, never echoes observed content, and always exits 0.
+The hook reads at most 8 MiB of observation input; larger input is reported as exceeding that limit without being parsed. It never echoes observed content and always exits 0.
 
 ## Refusals and limits
 

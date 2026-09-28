@@ -19,7 +19,7 @@ const SUBAGENT_ROLES = new Set([
   'reviewer', 'specialist', 'tester', 'verifier'
 ]);
 const MAX_PACK_HOOK_FANOUT = 3;
-const ARTIFACT_RELATIONSHIP_KEYS = ['composesWith', 'conflictsWith', 'supersedes', 'prerequisites'];
+const ARTIFACT_RELATIONSHIP_KEYS = ['composesWith', 'conflictsWith', 'supersedes', 'prerequisites', 'suggests'];
 const KIND_PLURALS = Object.freeze({
   skill: 'skills',
   hook: 'hooks',
@@ -202,8 +202,9 @@ export function analyzePackWorkflow(manifest, artifacts) {
 
   const knownEntries = entries.filter(({ record }) => record);
   const adjacency = new Map(knownEntries.map(({ member }) => [member.artifactId, new Set()]));
+  // A prerequisite is part of the workflow of the member that needs it.
   for (const { member, record } of knownEntries) {
-    for (const relatedId of record.manifest.relationships?.composesWith || []) {
+    for (const relatedId of [...(record.manifest.relationships?.composesWith || []), ...(record.manifest.relationships?.prerequisites || [])]) {
       if (adjacency.has(relatedId)) adjacency.get(member.artifactId).add(relatedId);
     }
   }
@@ -719,7 +720,8 @@ export function validateArtifact(record, taxonomy, artifactsRoot = ARTIFACTS_ROO
   if (!relationships || typeof relationships !== 'object' || Array.isArray(relationships)) {
     errors.push('relationships must be an object');
   } else {
-    for (const key of relationshipKeys) {
+    for (const key of [...relationshipKeys, 'suggests']) {
+      if (key === 'suggests' && relationships.suggests === undefined) continue;
       if (!Array.isArray(relationships[key])) errors.push(`relationships.${key} must be an array`);
       else {
         if (new Set(relationships[key]).size !== relationships[key].length) errors.push(`relationships.${key} contains duplicates`);
@@ -728,6 +730,7 @@ export function validateArtifact(record, taxonomy, artifactsRoot = ARTIFACTS_ROO
         }
       }
     }
+    for (const problem of linkReasonProblems(relationships)) errors.push(problem);
   }
 
   validateKindContract(manifest, errors);
@@ -896,6 +899,36 @@ export function validateArtifact(record, taxonomy, artifactsRoot = ARTIFACTS_ROO
   return errors;
 }
 
+// A reason for every prerequisite (required) and every suggestion (suggested), and for nothing else.
+// The installer prints them: a prerequisite's reason as the sentence before its install question, a
+// suggestion's reason after "add <slug>" in the hint line.
+export const LINK_REASON_MAX = 120;
+export function linkReasonProblems(relationships) {
+  const problems = [];
+  const reasons = relationships.linkReasons ?? {};
+  if (!reasons || typeof reasons !== 'object' || Array.isArray(reasons)) return ['relationships.linkReasons must be an object'];
+  const prerequisites = Array.isArray(relationships.prerequisites) ? relationships.prerequisites : [];
+  const suggests = Array.isArray(relationships.suggests) ? relationships.suggests : [];
+  for (const id of suggests) if (prerequisites.includes(id)) problems.push(`relationships.suggests may not repeat prerequisite '${id}'`);
+  const keys = Object.keys(reasons);
+  if (keys.some((key, index) => index > 0 && keys[index - 1].localeCompare(key) > 0)) problems.push('relationships.linkReasons must be sorted');
+  for (const [kind, ids] of [['prerequisite', prerequisites], ['suggestion', suggests]]) {
+    for (const id of ids) {
+      const reason = reasons[id];
+      if (typeof reason !== 'string' || !reason.trim()) { problems.push(`relationships.linkReasons needs a reason for ${kind} '${id}'`); continue; }
+      if (reason !== reason.trim() || /\n/.test(reason) || reason.length < 10 || reason.length > LINK_REASON_MAX) {
+        problems.push(`relationships.linkReasons['${id}'] must be one line of 10-${LINK_REASON_MAX} characters`);
+      }
+      if (kind === 'prerequisite' && !/[.!?]$/.test(reason)) problems.push(`relationships.linkReasons['${id}'] is a prerequisite's reason: end it as a sentence`);
+      if (kind === 'suggestion' && (!/^[a-z]/.test(reason) || /[.!?]$/.test(reason))) {
+        problems.push(`relationships.linkReasons['${id}'] completes "add <slug> ...": start it lowercase, without a final period`);
+      }
+    }
+  }
+  for (const id of keys) if (!prerequisites.includes(id) && !suggests.includes(id)) problems.push(`relationships.linkReasons names '${id}', which is neither a prerequisite nor a suggestion`);
+  return problems;
+}
+
 function canonicalCycle(cycle) {
   const body = cycle.slice(0, -1);
   const rotations = body.map((_, index) => [...body.slice(index), ...body.slice(0, index)]);
@@ -999,6 +1032,24 @@ export function validateRelationshipIntegrity(results, packs) {
     }
     if (left.relationships.prerequisites.includes(rightId) || right.relationships.prerequisites.includes(leftId)) {
       resultById.get(leftId).errors.push(`relationships with '${rightId}' may not both require and conflict`);
+    }
+  }
+  // The installer installs a prerequisite with the artifact on its target and scope, so it must exist
+  // there; a suggestion is hinted only where both exist, so it must share at least one target.
+  for (const result of results) {
+    const manifest = result.record.manifest;
+    for (const id of manifest.relationships?.prerequisites || []) {
+      const needed = resultById.get(id)?.record;
+      if (!needed) continue;
+      for (const [target, adapter] of Object.entries(result.record.adapters || {})) {
+        const other = needed.adapters?.[target]?.data;
+        if (!other) result.errors.push(`relationships.prerequisites '${id}' does not support ${target}`);
+        else for (const scope of adapter.data?.scopes || []) if (!other.scopes.includes(scope)) result.errors.push(`relationships.prerequisites '${id}' does not support ${target} ${scope} scope`);
+      }
+    }
+    for (const id of manifest.relationships?.suggests || []) {
+      const other = resultById.get(id)?.record;
+      if (other && !Object.keys(result.record.adapters || {}).some((target) => other.adapters?.[target])) result.errors.push(`relationships.suggests '${id}' shares no target`);
     }
   }
   for (const key of ['prerequisites', 'supersedes']) {
@@ -1149,10 +1200,11 @@ export function validatePack(record, knownIds, artifacts, root = ROOT) {
     errors.push(`required member '${gap.artifactId}' needs required prerequisite '${gap.prerequisiteId}'`);
   }
   if (!workflow.criteria.compatibleInstallCoordinate) errors.push('pack required members have no common installation target and scope');
+  const prerequisites = prerequisiteMembers(manifest, (id) => byId.get(id));
   for (const { target } of workflow.compatibility) {
     for (const member of manifest.members) {
       const record = byId.get(member.artifactId);
-      if (record?.manifest.kind !== 'hook') continue;
+      if (record?.manifest.kind !== 'hook' || prerequisites.has(member.artifactId)) continue;
       for (const binding of hookBindings(record.adapters[target]?.data)) {
         const boundary = `${target}:${binding.event}:${binding.matcher}`;
         hookFanout.set(boundary, (hookFanout.get(boundary) || 0) + 1);
@@ -1186,7 +1238,7 @@ export function publicCatalog(artifacts) {
       risk_reason: manifest.risk_reason,
       license: manifest.license,
       execution: manifest.execution,
-      relationships: manifest.relationships,
+      relationships: publicRelationships(manifest.relationships),
       operational: manifest.operational,
       refuses: manifest.refuses,
       targets: Object.keys(manifest.adapters).sort(),
@@ -1203,17 +1255,86 @@ export function publicCatalog(artifacts) {
     }))
     .sort((a, b) => a.id.localeCompare(b.id));
 
+  const links = relationshipLinks(artifacts);
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     counts: {
       total: items.length,
       skills: items.filter((item) => item.kind === 'skill').length,
       hooks: items.filter((item) => item.kind === 'hook').length,
       subagents: items.filter((item) => item.kind === 'subagent').length
     },
-    relationshipGraph: analyzeRelationshipGraph(artifacts),
+    relationshipGraph: {
+      ...analyzeRelationshipGraph(artifacts),
+      linkCounts: Object.fromEntries(LINK_KINDS.map((kind) => [kind, links.filter((link) => link.kind === kind).length]))
+    },
+    links,
     artifacts: items
   };
+}
+
+// Every relationship key, with the optional ones present, in one order, for the public catalog.
+function publicRelationships(relationships) {
+  return {
+    composesWith: relationships.composesWith,
+    conflictsWith: relationships.conflictsWith,
+    supersedes: relationships.supersedes,
+    prerequisites: relationships.prerequisites,
+    suggests: relationships.suggests ?? [],
+    linkReasons: relationships.linkReasons ?? {},
+    packIds: relationships.packIds
+  };
+}
+
+// The link graph for the website: one edge per required, suggested, and superseding link (directed),
+// and one per related or conflicting pair (symmetric, stored once with `from` before `to`). `targets`
+// lists the targets on which both ends exist. docs/catalog-format.md describes it.
+export const LINK_KINDS = ['required', 'suggested', 'related', 'conflicts', 'supersedes'];
+export function relationshipLinks(artifacts) {
+  const targetsOf = new Map(artifacts.map(({ manifest }) => [manifest.id, Object.keys(manifest.adapters)]));
+  const links = [];
+  for (const { manifest } of artifacts) {
+    const relationships = manifest.relationships;
+    const add = (to, kind, reason) => links.push({
+      from: manifest.id,
+      to,
+      kind,
+      ...(reason ? { reason } : {}),
+      targets: (targetsOf.get(manifest.id) || []).filter((target) => (targetsOf.get(to) || []).includes(target)).sort()
+    });
+    for (const to of relationships.prerequisites) add(to, 'required', relationships.linkReasons?.[to]);
+    for (const to of relationships.suggests ?? []) add(to, 'suggested', relationships.linkReasons?.[to]);
+    for (const to of relationships.composesWith) if (manifest.id.localeCompare(to) < 0) add(to, 'related');
+    for (const to of relationships.conflictsWith) if (manifest.id.localeCompare(to) < 0) add(to, 'conflicts');
+    for (const to of relationships.supersedes) add(to, 'supersedes');
+  }
+  return links.sort((left, right) => left.from.localeCompare(right.from) || left.to.localeCompare(right.to)
+    || LINK_KINDS.indexOf(left.kind) - LINK_KINDS.indexOf(right.kind));
+}
+
+// Companions outside a pack that its members suggest, for "goes well with": one entry per companion,
+// with the reason of the first member (in id order) that suggests it and every member that does.
+export function packSuggestions(manifest, byId) {
+  const members = new Set(manifest.members.map(({ artifactId }) => artifactId));
+  const found = new Map();
+  for (const memberId of [...members].sort()) {
+    const relationships = byId.get(memberId)?.manifest.relationships;
+    for (const id of relationships?.suggests ?? []) {
+      if (members.has(id)) continue;
+      if (!found.has(id)) found.set(id, { id, reason: relationships.linkReasons?.[id] ?? null, suggestedBy: [] });
+      found.get(id).suggestedBy.push(memberId);
+    }
+  }
+  return [...found.values()].sort((left, right) => left.id.localeCompare(right.id));
+}
+
+// A hook that is a prerequisite of another hook in the pack is installed with it anyway, so it does not
+// count toward the fan-out of independently chosen hooks (hook-design 1.7).
+export function prerequisiteMembers(manifest, lookup) {
+  return new Set(manifest.members.flatMap((member) => {
+    const record = lookup(member.artifactId);
+    return record?.manifest.kind === 'hook' ? record.manifest.relationships?.prerequisites || [] : [];
+  }));
 }
 
 export function publicPackCatalog(packs, artifacts) {
@@ -1222,10 +1343,11 @@ export function publicPackCatalog(packs, artifacts) {
     const workflow = analyzePackWorkflow(manifest, artifacts);
     const targets = workflow.compatibility.map(({ target }) => target);
     const hookFanout = new Map();
+    const prerequisites = prerequisiteMembers(manifest, (id) => byId.get(id));
     for (const target of targets) {
       for (const { artifactId } of manifest.members) {
         const record = byId.get(artifactId);
-        if (record?.manifest.kind !== 'hook') continue;
+        if (record?.manifest.kind !== 'hook' || prerequisites.has(artifactId)) continue;
         for (const binding of hookBindings(record.adapters[target]?.data)) {
           const boundary = `${target}:${binding.event}:${binding.matcher}`;
           hookFanout.set(boundary, (hookFanout.get(boundary) || 0) + 1);
@@ -1246,6 +1368,7 @@ export function publicPackCatalog(packs, artifacts) {
         roleCounts: workflow.roleCounts
       },
       hookFanout: [...hookFanout].map(([boundary, count]) => ({ boundary, count })).sort((left, right) => right.count - left.count || left.boundary.localeCompare(right.boundary)),
+      suggests: packSuggestions(manifest, byId),
       install: workflow.compatibility.map(({ target, scopes }) => {
         const scope = scopes.includes('project') ? 'project' : scopes[0];
         return {
@@ -1256,5 +1379,5 @@ export function publicPackCatalog(packs, artifacts) {
       })
     };
   }).sort((left, right) => left.id.localeCompare(right.id));
-  return { schemaVersion: 1, count: items.length, packs: items };
+  return { schemaVersion: 2, count: items.length, packs: items };
 }

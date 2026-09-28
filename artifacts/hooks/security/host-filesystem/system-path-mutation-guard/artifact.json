@@ -61,7 +61,12 @@
     "composesWith": [],
     "conflictsWith": [],
     "supersedes": [],
-    "prerequisites": [],
+    "prerequisites": [
+      "hook/security/application-security/shell-command-guard"
+    ],
+    "linkReasons": {
+      "hook/security/application-security/shell-command-guard": "system-path-mutation-guard cannot see hidden commands (e.g. bash -c \"$X\"): shell-command-guard stops them."
+    },
     "packIds": []
   },
   "operational": {

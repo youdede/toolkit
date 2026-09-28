@@ -11,7 +11,8 @@ const RULES = [
   ['prompt-aws-access-key', /\b(?:AKIA|ASIA)[A-Z0-9]{16}\b/],
   ['prompt-github-token', /\b(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9]{30,}\b/],
   ['prompt-anthropic-key', /\bsk-ant-[A-Za-z0-9_-]{20,}\b/],
-  ['prompt-openai-key', /\bsk-(?:proj-)?[A-Za-z0-9_-]{20,}\b/],
+  // A key body is random; lowercase words joined by `-` (sk-dashboard-components-v2-legacy) name something.
+  ['prompt-openai-key', /\bsk-(?:proj-)?[A-Za-z0-9_-]{20,}\b/g, (match) => !/^sk-(?:proj-)?[a-z0-9]+(?:-[a-z0-9]+)+$/.test(match)],
   ['prompt-slack-token', /\bxox[baprs]-[A-Za-z0-9-]{20,}\b/],
   ['prompt-stripe-live-key', /\b(?:sk|rk)_live_[A-Za-z0-9]{16,}\b/]
 ];
@@ -20,13 +21,18 @@ function allow() {
   return { exitCode: 0, ruleId: 'prompt-secret-clear', output: null };
 }
 
+const ADVICE = {
+  'prompt-analysis-limit': 'Split the prompt into parts smaller than 256 KiB.',
+  'prompt-envelope-invalid': 'The hook input could not be read; resubmit the prompt, and check the hook installation if this repeats.'
+};
+
 function block(ruleId, reason) {
   return {
     exitCode: 0,
     ruleId,
     output: {
       decision: 'block',
-      reason: `Blocked by prompt-secret-guard [${ruleId}]: ${reason}. Remove or redact the credential before resubmitting.`,
+      reason: `Blocked by prompt-secret-guard [${ruleId}]: ${reason}. ${ADVICE[ruleId] ?? 'Remove or redact the credential before resubmitting.'}`,
       suppressOriginalPrompt: true
     }
   };
@@ -41,8 +47,9 @@ export function evaluate(input) {
   if (Buffer.byteLength(input.prompt, 'utf8') > MAX_PROMPT_BYTES) {
     return block('prompt-analysis-limit', `the prompt exceeds the ${MAX_PROMPT_BYTES}-byte inspection limit`);
   }
-  for (const [ruleId, pattern] of RULES) {
-    if (pattern.test(input.prompt)) return block(ruleId, 'a high-confidence credential format was detected');
+  for (const [ruleId, pattern, accept] of RULES) {
+    const found = accept ? [...input.prompt.matchAll(pattern)].some(([match]) => accept(match)) : pattern.test(input.prompt);
+    if (found) return block(ruleId, 'a high-confidence credential format was detected');
   }
   return allow();
 }

@@ -34,7 +34,7 @@
   "refuses": [
     "It does not create, rewrite, resolve, follow, approve, or remove a symbolic link.",
     "It does not claim that a contained symbolic-link target exists or is safe to consume.",
-    "It does not inspect unstaged links or links produced outside the intercepted Git commit path.",
+    "It does not inspect links the intercepted Git commit cannot publish or links produced outside the intercepted Git commit path.",
     "It does not expose a repository-controlled exception list or command-line bypass."
   ],
   "execution": {
@@ -62,7 +62,12 @@
     "composesWith": [],
     "conflictsWith": [],
     "supersedes": [],
-    "prerequisites": [],
+    "prerequisites": [
+      "hook/security/application-security/shell-command-guard"
+    ],
+    "linkReasons": {
+      "hook/security/application-security/shell-command-guard": "symlink-publication-guard cannot see hidden commands (e.g. bash -c \"$X\"): shell-command-guard stops them."
+    },
     "packIds": []
   },
   "operational": {

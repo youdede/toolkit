@@ -36,7 +36,7 @@
       {"name": "git_status", "descriptionHash": "58ecc9bfdf39f658fe9918563180bf64455e05e675a11539ddd3b810de7935cd"}
     ]
   },
-  "relationships": {"composesWith": ["hook/security/network-control/mcp-capability-drift-guard"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": ["pack/mcp-baseline"]},
+  "relationships": {"composesWith": ["hook/security/network-control/mcp-capability-drift-guard", "hook/security/network-control/mcp-egress-guard"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "suggests": ["hook/security/network-control/mcp-egress-guard"], "linkReasons": {"hook/security/network-control/mcp-egress-guard": "to check this server's MCP tool arguments against its declared egress"}, "packIds": ["pack/mcp-baseline"]},
   "operational": {"behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "bounded", "latency_reason": "A call runs bounded local Git inspection and returns its collected output.", "dataRetention": "none"},
   "adapters": {"claude-code": "adapters/claude-code.json", "cursor": "adapters/cursor.json"}
 }
