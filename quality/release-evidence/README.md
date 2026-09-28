@@ -6,7 +6,8 @@ machine that produced the evidence gates nothing: continuous integration clones 
 would see no evidence at all.
 
 Refresh it with `npm run benchmark:release:build` followed by the evaluation protocol in
-[docs/release-readiness.md](../../docs/release-readiness.md), then replace this file.
+[docs/release-readiness.md](../../docs/release-readiness.md), then replace this file. The
+evaluation runs outside this repository: no script here calls a model.
 
 The receipt states its own limitations, including the ones that weaken it. Read them before
 treating any figure in it as a quality score. `claims.portfolioSemanticPass` is permanently

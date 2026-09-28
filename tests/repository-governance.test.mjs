@@ -12,6 +12,7 @@ import {
 } from '../scripts/validate-change-policy.mjs';
 import { resolveNpmPackInvocation, spawnFailureDetail } from '../scripts/verify-package-command.mjs';
 import { discoverTestFiles } from '../scripts/run-tests.mjs';
+import { cleanGitEnvironment } from './git-env.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const POLICY_CLI = path.join(ROOT, 'scripts', 'validate-change-policy.mjs');
@@ -40,9 +41,47 @@ test('commit policy rejects temporary, malformed, oversized, and ambiguous heade
   assert.equal(oversized.valid, false);
   assert.ok(oversized.violations.some(({ rule }) => rule === 'COMMIT_HEADER_LENGTH'));
 
+  // The squash-merge suffix is ignored only for history already on main; elsewhere it counts.
+  const squashHeader = `fix(cli): ${'a'.repeat(MAX_COMMIT_HEADER_CHARACTERS - 10)} (#1234)`;
+  const squashed = evaluateCommitMessage(squashHeader, { squashSuffix: true });
+  assert.equal(squashed.violations.some(({ rule }) => rule === 'COMMIT_HEADER_LENGTH'), false);
+  assert.ok(evaluateCommitMessage(squashHeader).violations.some(({ rule }) => rule === 'COMMIT_HEADER_LENGTH'));
+  assert.ok(evaluateCommitMessage(`fix: ${'a'.repeat(66)} (#1)`).violations.some(({ rule }) => rule === 'COMMIT_HEADER_LENGTH'));
+  const oversizedSquash = evaluateCommitMessage(`fix(cli): ${'a'.repeat(MAX_COMMIT_HEADER_CHARACTERS)} (#1234)`, { squashSuffix: true });
+  assert.ok(oversizedSquash.violations.some(({ rule }) => rule === 'COMMIT_HEADER_LENGTH'));
+
   const breaking = evaluateCommitMessage('feat!: remove compatibility alias');
   assert.equal(breaking.valid, false);
   assert.ok(breaking.violations.some(({ rule }) => rule === 'COMMIT_BREAKING_FOOTER'));
+});
+
+test('the squash-merge suffix exception needs a commit reachable from origin/main, not only a label (PR38-CODEX8-4)', (context) => {
+  const repository = mkdtempSync(path.join(os.tmpdir(), 'youdede-policy-main-'));
+  context.after(() => rmSync(repository, { recursive: true, force: true }));
+  const git = (...args) => {
+    const result = spawnSync('git', args, { cwd: repository, env: cleanGitEnvironment(), encoding: 'utf8' });
+    assert.equal(result.status, 0, `${args.join(' ')}: ${result.stderr}`);
+  };
+  const policy = (label) => spawnSync(process.execPath, [POLICY_CLI, '--range', 'HEAD^..HEAD', '--label', label], { cwd: repository, env: cleanGitEnvironment(), encoding: 'utf8' }).status;
+  const suffixed = `fix: ${'a'.repeat(66)} (#1)`;
+  git('init', '-q');
+  git('config', 'user.email', 'tests@youdede.invalid');
+  git('config', 'user.name', 'youdede tests');
+  git('commit', '-q', '--allow-empty', '-m', 'chore: start');
+  git('commit', '-q', '--allow-empty', '-m', suffixed);
+  // Without origin/main no commit gets the exception, whatever the label.
+  assert.equal(policy('pull-request-commit'), 1);
+  assert.equal(policy('repository-commit'), 1);
+  assert.equal(policy('pushed-commit'), 1);
+  // Both main-history labels request the exception, but Git reachability grants it.
+  git('update-ref', 'refs/remotes/origin/main', 'HEAD');
+  assert.equal(policy('repository-commit'), 0);
+  assert.equal(policy('pushed-commit'), 0);
+  assert.equal(policy('pull-request-commit'), 1);
+  // A later commit that is not on origin/main is measured whole.
+  git('commit', '-q', '--allow-empty', '-m', suffixed);
+  assert.equal(policy('repository-commit'), 1);
+  assert.equal(policy('pushed-commit'), 1);
 });
 
 test('branch policy accepts controlled automation and contributor prefixes', () => {
@@ -134,4 +173,14 @@ test('package test discovery does not depend on shell glob expansion', () => {
   } finally {
     rmSync(directory, { recursive: true, force: true });
   }
+});
+
+test('the npm package excludes repository-only assets and marketplace copies', () => {
+  const manifest = JSON.parse(readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
+  assert.equal(manifest.files.includes('skills'), false);
+  assert.equal(manifest.files.includes('plugins'), false);
+  for (const marketplace of ['.agents', '.claude-plugin', '.codex-plugin']) {
+    assert.equal(manifest.files.includes(marketplace), false, `${marketplace} points at unpublished copies`);
+  }
+  assert.ok(manifest.files.includes('!docs/assets'));
 });

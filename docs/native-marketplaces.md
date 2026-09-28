@@ -13,14 +13,14 @@ claude plugin marketplace add udede/toolkit
 claude plugin install release-readiness@youdede-toolkit
 ```
 
-`.claude-plugin/marketplace.json` contains ten pack plugins. Their descriptions are the pack
+`.claude-plugin/marketplace.json` contains twelve pack plugins, one for every pack except `plan-and-verify-loop`. Their descriptions are the pack
 summaries, their versions are the pack versions, and their metadata records the exact member IDs,
 declared refusal count, and evidence badges. Generated hooks and MCP server paths resolve through
 `${CLAUDE_PLUGIN_ROOT}`, so cached installs stay self-contained.
 
 `plan-and-verify-loop` is intentionally absent from this marketplace. It requires the
-`testing-baseline` context artifact, while the Claude plugin contract does not load project context
-files. The npm installer remains the complete installation path for that pack. Publishing a partial
+`coding-style-baseline` and `testing-baseline` context artifacts, while the Claude plugin contract
+does not load project context files. The npm installer remains the complete installation path for that pack. Publishing a partial
 plugin under the same name would overstate the composition.
 
 ## Codex

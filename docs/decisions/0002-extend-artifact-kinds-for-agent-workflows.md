@@ -1,7 +1,8 @@
 # 0002: Extend artifact kinds for agent workflows
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-09-21
+- Accepted by the maintainer on 2026-09-26 during the repository audit.
 
 ## Context
 
@@ -30,21 +31,22 @@ Extend `catalog/taxonomy.json` and `schema/artifact.schema.json` with three new 
      deterministically as the command's mandatory first action), constraint-narrowing-only `flags`, and the shared
      `refuses` list.
    - `context`: `scope` (`always` | `glob`), `precedence`, optional `expires` (stale contexts warn
-     on install), rule-level `provenance` links to catalog artifact IDs, and a required
-     `conflictsWith` declaration surface against hooks.
+     on install), rule-level `provenance` links to catalog artifact IDs, and rule-level named
+     `action` contracts that are checked against the `hookGuard.blockedActions` of hooks.
    - `mcp-server`: `transport`, `egress` (declared network destinations or `none`),
      `secretAccess` (allowlist or `none`), `trustBoundary` statement, and a `pinnedTools` manifest
      (names + description hashes) enabling capability-drift detection.
 2. Adapter mappings for all six targets; where a runtime cannot express a kind (for example a
    runtime without slash commands), the adapter is withheld per authoring contract §4 rather than
    approximated.
-3. Kind-specific validation in `scripts/validate.mjs` and fixture tests under `tests/`.
+3. Kind-specific validation in `scripts/lib/catalog.mjs` (run by `scripts/validate.mjs`) and fixture
+   tests under `tests/`.
 4. Doc and catalog generation updated so counts and `docs/catalog/` pages are regenerated, never
    hand-edited.
 
 MCP server configs are distributed as manifests plus install-time materialization; the toolkit
-never bundles or executes third-party server code. Session continuity is implemented with existing
-`hook` and `skill` kinds (deterministic checkpoint scripts with declared retention and redaction),
+never bundles or executes third-party server code. Session continuity is implemented with the
+`hook`, `skill`, and `command` kinds (deterministic checkpoint scripts with declared retention and redaction),
 not with a new kind.
 
 ## Consequences

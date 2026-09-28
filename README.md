@@ -2,7 +2,7 @@
 
 # youdede toolkit: skills, hooks and subagents for coding agents
 
-**Every artifact states what it refuses to do, and ships the evidence that it does.** Install one at a time. Read every line before you do.
+**Every artifact states what it refuses to do, and ships the tests or behavioral cases that check it.** Install one at a time. Read every line before you do.
 
 [![validate](https://github.com/udede/toolkit/actions/workflows/validate.yml/badge.svg)](https://github.com/udede/toolkit/actions/workflows/validate.yml)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
@@ -22,13 +22,15 @@ You cannot review every action it takes. So the rules have to live where the age
 A catalog of <!-- stat:artifact-count -->316<!-- /stat --> things you can install into a coding agent, one command each:
 
 - **<!-- stat:skill-count -->167<!-- /stat --> skills**: procedures an agent loads when a task matches. Each one states what it does, what evidence it requires, and what it refuses to do.
-- **<!-- stat:hook-count -->64<!-- /stat --> hooks**: deterministic gates that inspect a command before it runs and block it. No model in the decision path. `commit-guard` scans staged blobs for secrets. `protected-branch-guard` refuses a force push to `main`.
+- **<!-- stat:hook-count -->64<!-- /stat --> hooks**: deterministic checks on an agent's tool calls and session events. Most inspect a command or file write before it runs and block it; a few only observe and warn. No model in the decision path. `commit-guard` scans staged blobs for secrets. `protected-branch-guard` refuses a force push to `main`.
 - **<!-- stat:subagent-count -->62<!-- /stat --> subagents**: specialists with a deliberately narrow brief, no authority to edit or approve anything, and a required section for what they could not verify.
 - **<!-- stat:pack-count -->13<!-- /stat --> packs**: the above composed into versioned outcomes, with explicit member-to-evidence mappings and behavioral evaluations. The workflow packs include `plan-and-verify-loop`, `session-continuity`, `daily-driver`, `mcp-baseline`, `remote-review-evidence`, and `browser-verification`.
 
-Everything is MIT, plain text, and inspectable before install.
+Every artifact is MIT-licensed plain text, inspectable before install.
 
 ## Try one in thirty seconds
+
+> The package is not on npm yet. Until the first publication, run the same commands from a checkout with `node bin/youdede-toolkit.mjs` in place of `npx @youdede/toolkit`.
 
 ```bash
 npx @youdede/toolkit add commit-guard --target claude-code --scope project
@@ -84,7 +86,7 @@ npx @youdede/toolkit pack-info daily-driver
 npx @youdede/toolkit verify-pack-evidence daily-driver --report .youdede/evidence/daily-driver.json
 ```
 
-The [artifact catalog](catalog/artifacts.json), [pack catalog](catalog/packs.json), and [taxonomy](catalog/taxonomy.json) are generated, stable, and suitable for a search index or an API of your own. The [pack evidence contract](docs/pack-evidence.md) explains what a verified report proves and what it does not.
+The [artifact catalog](catalog/artifacts.json), [pack catalog](catalog/packs.json), and [taxonomy](catalog/taxonomy.json) are generated, stable, and suitable for a search index or an API of your own. The [catalog format](docs/catalog-format.md) describes their fields, including the links between artifacts. The [pack evidence contract](docs/pack-evidence.md) explains what a verified report proves and what it does not.
 
 Each artifact also carries `risk_reason` and `operational.latency_reason`. Risk describes what using the artifact can do, not the severity of a problem it reviews. `operational.latencyClass` describes the work involved, not a measured response time. The [classification audit](docs/audits/risk-latency-2026-09-23.md) records the evidence and unresolved cases.
 
@@ -98,9 +100,9 @@ is generated from the same catalog, with unsupported compositions and kinds expl
 The catalog carries evidence, and the evidence states its own limits.
 
 - **<!-- stat:evaluation-case-count -->1044<!-- /stat --> behavioral cases.** Every prompt-bearing artifact declares positive, negative, malformed, and boundary cases. Each case names the sections a reply must carry, the phrases it must never assert, and the evidence it must supply.
-- **Deterministic gates are tested as programs.** Every hook has executable allow, block, malformed, oversized, false-positive, and process-exit tests. `npm test` runs them.
+- **Deterministic gates are tested as programs.** Every hook has executable tests. Across the hook suites they cover allow, block, malformed, oversized, false-positive, and process-exit cases; not every hook has every case, and observing hooks never block. `npm test` runs them.
 - **The GitHub MCP container is tested live.** CI starts the pinned image, checks its 25 advertised read-only tools, and verifies that four mutation calls are rejected. On pushes to `main`, it also reads this repository with a temporary `contents: read` token. This does not establish the scope of a token supplied by an installer or prove every tool has no side effects.
-- **Reproducible integrity.** `catalog/integrity.json` is a per-artifact checksum attestation regenerated byte-identically from the sources. `npx @youdede/toolkit verify-integrity` compares what you installed against it.
+- **Reproducible integrity.** `catalog/integrity.json` is a per-artifact checksum attestation regenerated byte-identically from the sources. `npx @youdede/toolkit verify-integrity` checks the package's own artifacts against it; `npx @youdede/toolkit doctor` checks the files you installed against what was recorded at install time.
 - **A release gate that can say no.** `npm run check:readiness` refuses to report publishable on stale evidence, incomplete coverage, or a weakened sampling policy.
 
 What that evidence does **not** claim: that the catalog is semantically proven. A passing run is a passing run. The receipt records its own limitations, and [docs/release-readiness.md](docs/release-readiness.md) explains why `portfolioSemanticPass` is permanently `false`.
@@ -119,11 +121,11 @@ That last one is not decoration. An artifact that cannot say what it will return
 
 ## Install locations
 
-Roots are resolved by target, scope, and kind, and the CLI rejects a target or scope the artifact's adapter does not declare. Every adapter path is validated so it cannot escape the install root, and `remove` restores exactly what it replaced. Paths, scopes, and collision rules are in [docs/install.md](docs/install.md).
+Roots are resolved by target, scope, and kind, and the CLI rejects a target or scope the artifact's adapter does not declare. Every adapter path is validated so it cannot escape the install root, and `remove` restores the files and settings entries it replaced (JSON settings are rewritten with two-space indentation, so formatting can change while content is preserved). Paths, scopes, and collision rules are in [docs/install.md](docs/install.md).
 
 ## Contributing
 
-Read [docs/authoring.md](docs/authoring.md) first: it is six rules, and an artifact that breaks one is rejected by the build rather than by a reviewer. Then [CONTRIBUTING.md](CONTRIBUTING.md) and [docs/governance.md](docs/governance.md).
+Read [docs/authoring.md](docs/authoring.md) first: it is six rules. The build rejects an artifact that breaks a structural one (for example fewer than three refusals, an adapter path that escapes the install root, or fewer than four behavioral cases); judgments such as the smallest useful unit are left to review. Then [CONTRIBUTING.md](CONTRIBUTING.md) and [docs/governance.md](docs/governance.md).
 
 ```bash
 npm run check       # structure, contracts, catalog, integrity, legal, package, tests

@@ -7,4 +7,4 @@ Each record states its status, date, context, decision, consequences, and replac
 ## Index
 
 - [`0001-protect-main-with-evidence-gates.md`](0001-protect-main-with-evidence-gates.md) — accepted
-- [`0002-extend-artifact-kinds-for-agent-workflows.md`](0002-extend-artifact-kinds-for-agent-workflows.md) — proposed
+- [`0002-extend-artifact-kinds-for-agent-workflows.md`](0002-extend-artifact-kinds-for-agent-workflows.md) — accepted
