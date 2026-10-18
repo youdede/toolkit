@@ -46,7 +46,7 @@ the `authors` field of all <!-- stat:artifact-count -->316<!-- /stat --> `artifa
 
 ## 2. Migrate the namespace
 
-The repository is `udede/toolkit`; the published identity is `@youdede/toolkit`. Until they match,
+The repository was `udede/toolkit` until the account rename of 2026-10-18; it is now `youdede/toolkit`, matching the published identity `@youdede/toolkit`. Before that,
 every link in the README, the CI badge, and the npm metadata points somewhere that does not exist
 publicly.
 

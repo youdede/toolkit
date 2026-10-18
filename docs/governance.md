@@ -39,7 +39,7 @@ Release tags use `vMAJOR.MINOR.PATCH`, must identify the exact package version, 
 
 ## Temporary private phase
 
-The current private repository is `udede/toolkit`. Before a public release or npm trusted-publisher setup, the maintainer will either rename the GitHub account or transfer the repository to the controlled `youdede` namespace, then update every namespace reference together; the [publishing checklist](publishing-checklist.md) lists the exact files.
+The private repository is `youdede/toolkit`. It was `udede/toolkit` until 2026-10-18, when the maintainer renamed the GitHub account into the controlled `youdede` namespace and updated every namespace reference together; the [publishing checklist](publishing-checklist.md) lists the files. GitHub redirects the old name only while nobody claims the `udede` username, so new references use `youdede/toolkit`.
 
 The repository must remain private until the full reachable history, Actions logs, issue content, and release metadata have been reviewed for publication. Making a private repository public exposes its complete reachable commit history.
 
