@@ -9,7 +9,7 @@ them and `npm run check:marketplaces` refuses drift.
 Add the repository marketplace, then install a complete pack plugin:
 
 ```bash
-claude plugin marketplace add udede/toolkit
+claude plugin marketplace add youdede/toolkit
 claude plugin install release-readiness@youdede-toolkit
 ```
 
@@ -28,7 +28,7 @@ plugin under the same name would overstate the composition.
 Add the repository marketplace, then install the generated skill plugin:
 
 ```bash
-codex plugin marketplace add udede/toolkit
+codex plugin marketplace add youdede/toolkit
 codex plugin add youdede-toolkit@youdede-toolkit
 ```
 

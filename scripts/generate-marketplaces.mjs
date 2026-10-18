@@ -15,7 +15,7 @@ import { fileURLToPath } from 'node:url';
 import { loadArtifacts, loadPacks, ROOT } from './lib/catalog.mjs';
 
 const CLAUDE_SCHEMA = 'https://json.schemastore.org/claude-code-plugin-manifest.json';
-const REPOSITORY = 'https://github.com/udede/toolkit';
+const REPOSITORY = 'https://github.com/youdede/toolkit';
 const AUTHOR = { name: 'Youdede', url: REPOSITORY };
 const CODEX_PLUGIN = 'youdede-toolkit';
 const NATIVE_KINDS = new Set(['skill', 'hook', 'subagent', 'command', 'mcp-server']);
