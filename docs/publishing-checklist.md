@@ -53,7 +53,7 @@ environment currently supplies an independent approval. Authorization instead re
 - the exact confirmation `publish @youdede/toolkit <tag>`;
 - a signed annotated tag whose commit is reachable from the default branch and whose signer is
   accepted by the default branch's `.github/allowed-signers` policy;
-- every deterministic and semantic release gate.
+- every deterministic release gate.
 
 If the repository becomes public or moves to a plan that supports reviewers for private
 repositories, add the accountable publisher as a required reviewer, prevent self-review where an
@@ -105,13 +105,8 @@ npx @youdede/toolkit verify-integrity
 That comparison is the only step that turns the local checksum manifest into something a third
 party can rely on, which is exactly the limit `NOTICE` and `docs/integrity.md` already state.
 
-## What remains blocked after all five
+## What remains after all five
 
-Semantic release evidence expires after 30 days and is invalidated by any change to a prompt-bearing
-payload. Regenerate it, do not carry it forward:
-
-```bash
-npm run benchmark:release:build
-# run the benchmark, judge it, write the receipt
-npm run check:readiness
-```
+Nothing blocks on semantic evaluation. It is an advisory maintainer test, run after prompt or case
+changes as [release-readiness.md](release-readiness.md) describes; `npm run check:readiness` reports
+its result when the workbench holds one and never fails on it.
