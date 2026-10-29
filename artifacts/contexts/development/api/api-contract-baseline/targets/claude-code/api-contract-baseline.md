@@ -16,9 +16,9 @@ Catalog context: `context/development/api/api-contract-baseline`. Precedence: 30
 
 ## Rules
 
-- [01-design-stable-contracts; effect=require; action=design-stable-contracts] Design an interface contract around consumers, invariants, compatibility, and failure semantics. (Source: `skill/development/api/design-stable-api-contract#summary`)
-- [02-keep-openapi-evidence; effect=require; action=keep-openapi-evidence] Build an OpenAPI contract from verified behavior, reusable schemas, failures, and executable checks. (Source: `skill/development/api/build-openapi-contract#summary`)
-- [03-remove-contract-surface; effect=require; action=remove-contract-surface] Block high-confidence removals from bounded OpenAPI contract edits. (Source: `hook/development/contract-compatibility/api-contract-compatibility-guard#summary`)
+- [01-design-stable-contracts; effect=require; action=design-stable-contracts] When the task calls for it: Design an interface contract around consumers, invariants, compatibility, and failure semantics. (Source: `skill/development/api/design-stable-api-contract#summary`)
+- [02-keep-openapi-evidence; effect=require; action=keep-openapi-evidence] When the task calls for it: Build an OpenAPI contract from verified behavior, reusable schemas, failures, and executable checks. (Source: `skill/development/api/build-openapi-contract#summary`)
+- [03-remove-contract-surface; effect=require; action=remove-contract-surface] When the task calls for it: Block high-confidence removals from bounded OpenAPI contract edits. (Source: `hook/development/contract-compatibility/api-contract-compatibility-guard#summary`)
 
 ## Boundaries
 
