@@ -91,6 +91,7 @@
     "check:quality": "node scripts/validate-release-readiness.mjs --structural-only",
     "check:readiness": "node scripts/validate-release-readiness.mjs",
     "benchmark:release:build": "node scripts/build-release-benchmark.mjs",
+    "release:prepare": "node scripts/prepare-release.mjs",
     "check:package": "node scripts/verify-package.mjs",
     "check:secrets": "node scripts/verify-secrets.mjs --tracked --package",
     "check:secrets:history": "node scripts/verify-secrets.mjs --history",

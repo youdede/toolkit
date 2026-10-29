@@ -22,7 +22,6 @@ const EXPECTED_MARKERS = {
     table: { 'readme-matrix': 1 },
   },
   'docs/targets.md': { stat: { 'hook-count:codex': 1 }, table: { targets: 1 } },
-  'docs/publishing-checklist.md': { stat: { 'artifact-count': 2 }, table: {} },
   'docs/architecture.md': { stat: { 'hook-count:codex': 1 }, table: {} },
   'docs/install.md': { stat: {}, table: {} },
   'docs/native-marketplaces.md': { stat: { 'skill-count:codex': 1 }, table: {} },

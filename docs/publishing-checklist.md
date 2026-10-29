@@ -1,6 +1,6 @@
 # Publishing checklist
 
-The five decisions in [release-readiness.md](release-readiness.md) under "Blocking publisher
+The decisions in [release-readiness.md](release-readiness.md) under "Blocking publisher
 decisions" cannot be automated. Each one needs an accountable human with credentials. This page
 records what each step needs, in the order that avoids rework, and what is already prepared.
 
@@ -9,41 +9,11 @@ The release workflow is manual-only, requires an exact package-and-tag confirmat
 complete reachable history, and refuses to publish from a private repository because npm cannot
 produce provenance for that source state.
 
-## Applying decisions 1 and 2
+## 1. Copyright holder
 
-Both are one-line decisions with a wide blast radius: the holder `Youdede` appears in over 300
-tracked files, including the `authors` field of all <!-- stat:artifact-count -->316<!-- /stat --> `artifact.json` manifests, and the
-namespace `youdede` in every repository link. [`scripts/set-publisher-identity.mjs`](../scripts/set-publisher-identity.mjs)
-applies either or both in one pass, over tracked files only, and refuses to run without an explicit
-value. Because `Youdede` is also the brand name (`YoudedeGuardPlugin`, "Youdede MCP server"), the
-`--holder` pass replaces only copyright lines, the NOTICE grant, and quoted author names. The
-`--owner` pass rewrites `github.com/youdede/toolkit` links and `@youdede` code owners; the npm scope
-`@youdede/toolkit` and bare `youdede/toolkit` references, such as the marketplace commands in
-`docs/native-marketplaces.md`, need a manual decision.
-
-```bash
-node scripts/set-publisher-identity.mjs --dry-run --holder "<exact legal name>" --owner "<github org>"
-```
-
-Check the printed file list, drop `--dry-run`, then run `npm run catalog`, `npm run integrity` and
-`npm run check`. `check:legal` asserts the holder string, so a green run proves the rename is complete.
-
-## 1. Name the copyright holder
-
-`LICENSE`, `NOTICE` and `CITATION.cff` all carry `Youdede`. Until it is confirmed which legal person
-or registered company that names, it cannot answer a licence or ownership question.
-
-Decide which is true, then make every file agree:
-
-- an individual, named in full; or
-- a registered company, with its exact registered name.
-
-If `Youdede` already is that exact name, record the confirmation and change nothing. Do not
-substitute an invented company name. `scripts/verify-legal.mjs` asserts the current string, so
-update that check in the same change.
-
-**Files to update together:** `LICENSE`, `NOTICE`, `CITATION.cff`, `scripts/verify-legal.mjs`, and
-the `authors` field of all <!-- stat:artifact-count -->316<!-- /stat --> `artifact.json` manifests.
+Done. `Youdede` is the exact name of the publisher's company, confirmed by the publisher on
+2026-10-29. `LICENSE`, `NOTICE`, `CITATION.cff`, and the `authors` field of every manifest carry it,
+and `check:legal` asserts it.
 
 ## 2. Namespace
 
@@ -94,9 +64,22 @@ as an additional fail-closed control.
 including repository admins, can merge into `main` without a green `quality-gate`. Do not add a
 bypass actor.
 
-## 5. Tag, dispatch, publish, then attest
+## 5. Version, tag, dispatch, publish, then attest
+
+Nobody chooses the version. On a clean checkout of the default branch, run:
 
 ```bash
+npm run release:prepare
+```
+
+It reads the Conventional Commits since the last version change (a breaking change is major, or
+minor while the version is 0.x; a `feat` is minor; anything else is a patch), turns the `Unreleased`
+changelog heading into that version, and updates `package.json`, `package-lock.json`,
+`CITATION.cff`, and the generated marketplace manifests. It refuses an empty `Unreleased` section.
+Merge the result through a pull request, then tag the merged commit:
+
+```bash
+git switch main && git pull --ff-only
 VERSION=$(node -p "require('./package.json').version")
 git tag -s "v$VERSION" -m "youdede toolkit $VERSION"
 git push origin "v$VERSION"
