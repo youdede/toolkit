@@ -363,7 +363,7 @@ function executableKeyWord(exe) {
   return { ...exe, parts };
 }
 
-// Runners (hook-design 1.4): the command a package runner starts, after the runner's options and its
+// Runners: the command a package runner starts, after the runner's options and its
 // verb (`npx`, `bunx`, `pnpx`, `pnpm [exec|dlx]`, `yarn [dlx|exec]`, `bun run|x`, `npm exec|x`,
 // `bundle exec`, `uv run`, `poetry run`). pnpm and Yarn also run a package binary without a verb. The
 // runner's last option may take the next word, so that word and the one after it are both read as

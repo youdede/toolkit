@@ -33,7 +33,7 @@ codex plugin add youdede-toolkit@youdede-toolkit
 ```
 
 `.agents/plugins/marketplace.json` points to `plugins/youdede-toolkit`, whose
-`.codex-plugin/plugin.json` exposes all 166 Codex-compatible skills. Commands, contexts, hooks, MCP
+`.codex-plugin/plugin.json` exposes all <!-- stat:skill-count:codex -->166<!-- /stat --> Codex-compatible skills. Commands, contexts, hooks, MCP
 servers, and subagents are withheld because this compatibility manifest does not preserve their
 runtime contracts. `resume-session-work` is also withheld: its hash-chained ledger runtime and
 lifecycle hooks are Claude-only, so its previous prompt-only Codex adapter could not satisfy the

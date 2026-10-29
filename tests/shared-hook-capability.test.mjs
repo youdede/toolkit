@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { NOT_MINE, U, canMatch, judge as judgeText, judgeCommand, judgeItems, mentions, strongest } from '../scripts/lib/shared-hook/capability.mjs';
+import { NOT_MINE, U, canMatch, judgeCommand, judgeItems, mentions, strongest } from '../scripts/lib/shared-hook/capability.mjs';
 import { commandKey } from '../scripts/lib/shared-hook/shell-items.mjs';
 import { spawnSync } from 'node:child_process';
 import { chmodSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
@@ -17,7 +17,7 @@ import { cleanGitEnvironment } from './git-env.mjs';
 // CPU time of this process in ms: load from other processes does not inflate it, unlike wall time.
 const cpuNow = () => { const { user, system } = process.cpuUsage(); return (user + system) / 1000; };
 
-// Rules of the capability matcher (hook-design.md 1.6), on hand-built commands. Word syntax of this
+// Rules of the capability matcher, on hand-built commands. Word syntax of this
 // file: words split on blanks outside quotes, quotes are removed, a bare `$x` splits and `"$x"` does not,
 // unquoted `*`, `?`, `[…]` are glob parts, `$"…"` is opaque, and `<P>` is an xargs placeholder.
 function word(token) {
@@ -384,7 +384,7 @@ test('items decide in order; limits are uninspectable; unseen programs belong to
   assert.equal(judgeItems(withBodies([['f', [command('npm publish')]]], command('"$HOME/x" y')), PACKAGE), NOT_MINE);
 });
 
-// Runners (hook-design 1.4): a hook with `runners: true` also judges the command a package runner starts.
+// Runners: a hook with `runners: true` also judges the command a package runner starts.
 test('runners reach the command a package runner starts, only for hooks that declare them', () => {
   const RESET = { hook: 'r', uninspectable: 'r-u', runners: true, families: [{ executables: ['prisma'], paths: [['migrate', 'reset']], rule: 'reset' }], checks: {} };
   for (const text of ['npx prisma migrate reset', 'npx --yes prisma migrate reset', 'npx -p prisma prisma migrate reset', 'bunx prisma migrate reset',
@@ -419,7 +419,7 @@ test('T7: declarations follow the schema, the evidence rule, and the CLI option 
   assert.match(errors({ families: [], extra: 1 }), /unknown key extra/);
 });
 
-// T7 inventory (hook-design 5): exactly the 31 Bash hooks export CAPABILITY, and no payload uses a
+// T7 inventory: exactly the 31 Bash hooks export CAPABILITY, and no payload uses a
 // name of the old shell analysis outside its shared blocks.
 const OLD_API = /\b(?:parseShellCommands|gitInvocation|executableName|analyzeCommitContent|inlineScriptCommands|policyVocabulary|globVariants|globWord|SHELL_MAX_COMMAND_BYTES|SHELL_NAMES|SHELL_WRAPPERS)\b/;
 test('T7: exactly the 31 Bash hooks declare a capability, and no payload uses the old shell API', () => {

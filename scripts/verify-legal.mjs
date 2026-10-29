@@ -22,6 +22,11 @@ if (!citation.includes('cff-version: 1.2.0') || !citation.includes('license: MIT
   || !citation.includes('catalog/integrity.json root digest')) {
   errors.push('CITATION.cff must identify the MIT release and reproducible integrity root');
 }
+const { version, repository } = JSON.parse(readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
+if (!citation.includes(`\nversion: ${version}\n`)) errors.push(`CITATION.cff version must match package.json (${version})`);
+if (!citation.includes(`repository-code: "${String(repository?.url ?? repository).replace(/^git\+/, '').replace(/\.git$/, '')}"`)) {
+  errors.push('CITATION.cff repository-code must match the package.json repository');
+}
 
 let artifactCount = 0;
 for (const { manifest } of loadArtifacts(ROOT)) {

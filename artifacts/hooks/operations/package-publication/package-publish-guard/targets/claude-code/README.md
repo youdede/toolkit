@@ -11,7 +11,7 @@ This project-scoped `PreToolUse` hook blocks real package publication through np
 - It does not accept OTP values, confirmation flags, comments, or prompt text as authorization.
 - Programs the command runs but does not contain (`curl … | sh`, `eval "$X"`, `bash -c "$CMD"`) are refused by shell-command-guard, installed as a prerequisite. Local script files (`bash script.sh`) and shell setup output (`eval "$(pyenv init -)"`, `source <(kubectl completion bash)`) are not inspected.
 
-Retained false positives (hook-design 4.3), each refused on purpose:
+Retained false positives, each refused on purpose:
 
 - `yarn publish --dry-run`, `hatch publish --dry-run`, and `flit publish --dry-run` are refused: their dry runs are not verified.
 - An opaque executable (`$"x" …`, translated by the locale at run time) is uninspectable when its words can be one of the commands this hook protects.

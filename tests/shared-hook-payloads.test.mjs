@@ -69,7 +69,7 @@ test('the generator keeps every shared block in sync and rejects broken markers'
   assert.match(errors('x\n// </youdede:shared>'), /closes without an opening marker/);
   assert.match(errors('// <youdede:shared shell-items>\n// <youdede:shared commit-content>\n// </youdede:shared>'), /opens inside shell-items/);
   assert.match(errors(block('nope')), /unknown shared module nope/);
-  // The first shell analysis and the inline-script reader are gone (hook-design S7).
+  // The first shell analysis and the inline-script reader are gone.
   assert.match(errors(block('shell')), /unknown shared module shell/);
   assert.match(errors(block('inline-script')), /unknown shared module inline-script/);
   assert.match(errors('// <youdede:shared shell-items >\n// </youdede:shared>'), /malformed shared marker/);

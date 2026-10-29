@@ -77,7 +77,7 @@ function within(parent, child) {
 }
 
 function gitEnvironment() {
-  return Object.fromEntries(Object.entries(process.env).filter(([key]) => !key.startsWith('GIT_')));
+  return Object.fromEntries(Object.entries(process.env).filter(([key]) => !/^GIT_/i.test(key)));
 }
 
 function assertSafeFile(file, unsafeCode, aliasCode) {

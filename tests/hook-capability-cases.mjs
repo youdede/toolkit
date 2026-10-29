@@ -1,6 +1,5 @@
-// T1 behavior table (hook-design 5 and appendix A): every case of design-critique.md and
-// design-critique-2.md and every row of the revision 3 prototype matrix, as [group, command, hook,
-// expected]. `expected` is 'allow', 'block' (any rule), 'U' (the hook's uninspectable rule), or a rule
+// T1 behavior table: every critique case and every row of the prototype matrix the capability
+// model was designed from, as [group, command, hook, expected]. `expected` is 'allow', 'block' (any rule), 'U' (the hook's uninspectable rule), or a rule
 // id. `needs` names a component a row depends on (`inline`: inline.mjs, the six operation guards).
 
 import { readFileSync } from 'node:fs';
@@ -19,7 +18,7 @@ export const BASH_HOOKS = [PACKAGE, INFRA, CLOUD, 'container-registry-publish-gu
   'user-account-mutation-guard', 'test-integrity-guard', 'migration-safety-guard', 'submodule-target-guard', 'protected-branch-guard'];
 // The everyday corpus of the final review (quality/everyday-commands.txt, one command per line).
 export const CORPUS = readFileSync(new URL('../quality/everyday-commands.txt', import.meta.url), 'utf8').split('\n').filter(Boolean);
-// Retained false positives (hook-design 4.3) among everyday commands.
+// Retained false positives among everyday commands.
 const RETAINED = { [INFRA]: { 'kubectl apply --dry-run=server -f k8s/': 'kubernetes-state-mutation' } };
 
 export const SPELLINGS = ['npm publish', 'n[p]m pub[l]ish', 'n@(p)m publish', 'n{p..p}m pub{l..l}ish', '{,npm} publish', "n$'\\x70'm publish",
@@ -176,7 +175,7 @@ function build() {
   // Critique 2 Medium 7 and the design's split-word rule (M3b).
   add('c2 M3b split words', 'f(){ aws "$@"; }; f ec2 terminate-instances', CLOUD, 'block');
   add('c2 M3b split words', 'aws $ARGS', CLOUD, 'U');
-  // Retained false positives (hook-design 4.3): each still blocks, as documented in the hook's limits.
+  // Retained false positives: each still blocks, as documented in the hook's limits.
   for (const [command, hook, expected, needs] of [
     ['rm *.log', 'test-integrity-guard', 'block'], ['cat "$F"', 'sensitive-file-access-guard', 'block'],
     ['$"x" -rf /', SHELL, 'U'], ['$"x" publish', PACKAGE, 'U'], ['npm publish --unknown --dry-run', PACKAGE, 'javascript-package-publish'],
@@ -184,7 +183,7 @@ function build() {
     ['kubectl apply --dry-run=server -f k8s/', INFRA, 'kubernetes-state-mutation'],
     ['yarn publish --dry-run', PACKAGE, 'block'], ['hatch publish --dry-run', PACKAGE, 'block'], ['flit publish --dry-run', PACKAGE, 'block']
   ]) add('4.3 retained false positives', command, hook, expected, needs);
-  // S6 ports (capabilities.md D.16 to D.31): runners, wrappers read through, and the cases found while porting.
+  // S6 ports: runners, wrappers read through, and the cases found while porting.
   for (const [command, hook, expected] of [
     ['npx prisma migrate reset', 'migration-safety-guard', 'orm-database-reset'], ['pnpm prisma migrate reset', 'migration-safety-guard', 'orm-database-reset'],
     ['bundle exec rails db:drop', 'migration-safety-guard', 'framework-database-reset'], ['rails db:$TASK', 'migration-safety-guard', 'U'],

@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { buildReleaseBenchmark, MINIMUM_DYNAMIC_SAMPLE, MINIMUM_DYNAMIC_FRACTION, MINIMUM_PER_STRATUM }
   from './build-release-benchmark.mjs';
 import { ROOT, validateRepository } from './lib/catalog.mjs';
+import { ARTIFACT_KINDS } from './lib/targets.mjs';
 import { validateBehavioralEvaluations } from './validate-evaluations.mjs';
 
 export const MAX_SEMANTIC_EVIDENCE_AGE_DAYS = 30;
@@ -176,7 +177,7 @@ export function assessStructuralEvidence(root = ROOT) {
     valid: reasons.length === 0,
     artifacts: {
       total: repository.artifacts.length,
-      byKind: Object.fromEntries(['skill', 'hook', 'subagent', 'command', 'context', 'mcp-server'].map((kind) => [kind, repository.artifacts.filter(({ manifest }) => manifest.kind === kind).length]))
+      byKind: Object.fromEntries(ARTIFACT_KINDS.map((kind) => [kind, repository.artifacts.filter(({ manifest }) => manifest.kind === kind).length]))
     },
     behavioral: {
       artifacts: behavioral.documents.length,

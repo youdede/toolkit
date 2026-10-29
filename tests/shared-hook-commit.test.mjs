@@ -5,8 +5,7 @@ import { commitIntent, commitReadsWorkingTree, commitSkipsHooks, gitCalls, parse
 import { parseShell } from '../scripts/lib/shared-hook/shell-items.mjs';
 import { validIntent } from './capability-contract.mjs';
 
-// Probes of the shared `commit-content` block: the CommitIntent of a command (hook-design 1.8,
-// capabilities.md C). Aliases are resolved one level; forced adds, alias definitions, shell aliases,
+// Probes of the shared `commit-content` block: the CommitIntent of a command. Aliases are resolved one level; forced adds, alias definitions, shell aliases,
 // and aliases of aliases in the same command as a commit are `unsupported`.
 const CONFIGURED = new Map([['ci', 'commit'], ['st', 'status'], ['sh', '!git commit -m shell'], ['loop', 'loop']]);
 const COMMIT_PROBES = [
@@ -60,7 +59,7 @@ const COMMIT_PROBES = [
   ['git -c "$X" commit -m x', { uninspectable: true }],
   ['g$x commit -m x', { uninspectable: true }],
   ['eval "$X"; git commit -m x', { found: true, uninspectable: true }],
-  // A program known only at run time belongs to shell-command-guard (option B).
+  // A program known only at run time belongs to shell-command-guard.
   ['bash -c "$SCRIPT"', { found: false, uninspectable: false }]
 ];
 

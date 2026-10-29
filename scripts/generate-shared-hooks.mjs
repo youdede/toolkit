@@ -3,7 +3,7 @@
 // Copyright (c) 2026 Youdede
 
 // Copies the shared hook modules of scripts/lib/shared-hook/ into every hook payload under
-// artifacts/, between `// <youdede:shared <name>>` and `// </youdede:shared>`. An installed hook stays
+// artifacts/ and every runtime under scripts/runtime/, between `// <youdede:shared <name>>` and `// </youdede:shared>`. An installed hook stays
 // one self-contained file. With --check it only reports payloads whose copy is stale. A broken,
 // nested, duplicate, or unknown marker, or a block whose dependency block is missing, fails.
 
@@ -89,7 +89,7 @@ export function generateSharedHooks({ check = false, root = ROOT } = {}) {
   const problems = [];
   const stale = [];
   let embedded = 0;
-  for (const file of listPayloads(path.join(root, 'artifacts'))) {
+  for (const file of ['artifacts', 'scripts/runtime'].flatMap((directory) => listPayloads(path.join(root, directory)))) {
     const source = readFileSync(file, 'utf8');
     if (!source.includes('youdede:shared')) continue;
     const relative = path.relative(root, file).split(path.sep).join('/');
@@ -115,7 +115,7 @@ function main() {
     process.exitCode = 1;
     return;
   }
-  process.stdout.write(`${embedded} hook payloads carry shared blocks${check ? '' : `, ${stale.length} updated`}\n`);
+  process.stdout.write(`${embedded} files carry shared blocks${check ? '' : `, ${stale.length} updated`}\n`);
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();

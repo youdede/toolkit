@@ -4,7 +4,6 @@
 
 import { realpathSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
-import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const MAX_STDIN_BYTES = 1024 * 1024;

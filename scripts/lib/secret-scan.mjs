@@ -2,6 +2,7 @@ import { spawnSync } from 'node:child_process';
 import { lstatSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { SECRET_RULES as HOOK_SECRET_RULES, secretMatch } from './shared-hook/secret-rules.mjs';
+import { isCommitSecretPath } from './shared-hook/sensitive-paths.mjs';
 
 export const MAX_SCANNED_FILE_BYTES = 5 * 1024 * 1024;
 export const MAX_HISTORY_OBJECTS = 50_000;
@@ -10,21 +11,12 @@ const MAX_HISTORY_BATCH_BYTES = 512 * 1024 * 1024;
 // The hooks' list, with the repository scan's upper-case rule ids (GITHUB_TOKEN).
 export const SECRET_RULES = Object.freeze(HOOK_SECRET_RULES.map((rule) => ({ ...rule, id: rule.id.toUpperCase().replaceAll('-', '_') })));
 
-const SAFE_ENV_SUFFIXES = Object.freeze(['.example', '.sample', '.template', '.dist']);
-
 function normalizeRelative(file) {
   return file.split(path.sep).join('/').replace(/^\.\//, '');
 }
 
-export function isSensitivePath(file) {
-  const normalized = normalizeRelative(file);
-  const base = path.posix.basename(normalized).toLowerCase();
-  const envLike = base === '.env' || base.startsWith('.env.');
-  if (envLike && !SAFE_ENV_SUFFIXES.some((suffix) => base.endsWith(suffix))) return true;
-  if (/^(?:id_rsa|id_dsa|id_ecdsa|id_ed25519)$/.test(base)) return true;
-  if (/\.(?:pem|p12|pfx|key|keystore|jks)$/i.test(base)) return true;
-  return /^(?:credentials?|secrets?)(?:\.(?:json|ya?ml|toml|ini))?$/i.test(base);
-}
+// The commit tier of the shared sensitive-paths block, the one commit-guard applies.
+export const isSensitivePath = isCommitSecretPath;
 
 function lineNumberAt(content, index) {
   return content.slice(0, index).split('\n').length;

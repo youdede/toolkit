@@ -13,7 +13,7 @@ The command a package runner starts is judged like a direct one (`uv run`, `npx`
 - It does not treat a custom `dry-run` string as proof that a mutating command is safe.
 - Programs the command runs but does not contain (`curl … | sh`, `eval "$X"`, `bash -c "$CMD"`) are refused by shell-command-guard, installed as a prerequisite. Local script files (`bash script.sh`) and shell setup output (`eval "$(pyenv init -)"`, `source <(kubectl completion bash)`) are not inspected.
 
-Retained false positives (hook-design 4.3), each refused on purpose:
+Retained false positives, each refused on purpose:
 
 - `kubectl apply --dry-run=server` and `helm … --dry-run=server` are refused: a server-side dry run is not a verified safe mode.
 - An opaque executable (`$"x" …`, translated by the locale at run time) is uninspectable when its words can be one of the commands this hook protects.

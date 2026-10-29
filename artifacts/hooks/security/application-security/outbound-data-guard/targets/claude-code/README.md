@@ -20,7 +20,7 @@ A program the command runs but does not contain (`bash -c "$CMD"`, `curl … | s
 
 Works with shell-command-guard. Alone, this hook judges the commands it can read in the call. It cannot see inside a command that hides what it runs (`bash -c "$X"`, `curl … | sh`, `eval "$(tool)"`); shell-command-guard, installed with it by default, is the hook that stops those. The installer asks first in a terminal (default yes) and installs it with a notice elsewhere; `youdede-toolkit add outbound-data-guard --no-prerequisites` installs this hook alone, and `youdede-toolkit add shell-command-guard` adds it later.
 
-Retained false positives (hook-design 4.3), each refused on purpose:
+Retained false positives, each refused on purpose:
 
 - An opaque executable (`$"x" …`, translated by the locale at run time) is uninspectable when its words can be one of the commands this hook protects.
 

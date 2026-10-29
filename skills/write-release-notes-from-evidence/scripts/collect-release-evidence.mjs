@@ -8,7 +8,7 @@ function cleanGitEnvironment(environment = process.env) {
   return Object.fromEntries(Object.entries(environment).filter(([name]) => !/^GIT_/i.test(name)));
 }
 
-// ponytail: git has no count limit for --name-status, so the list is read whole; 32 MiB holds
+// Known limit: git has no count limit for --name-status, so the list is read whole; 32 MiB holds
 // well over 100k long paths. Stream the output if a range ever exceeds it.
 const MAX_BUFFER = 32 * 1024 * 1024;
 const MAX_COMMITS = 50;

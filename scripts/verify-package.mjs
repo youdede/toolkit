@@ -93,6 +93,7 @@ const forbidden = [
   /^\.claude(?:\/|$)/,
   /^AGENTS\.md$/,
   /^CLAUDE\.md$/,
+  /^docs\/plans(?:\/|$)/,
   /^node_modules(?:\/|$)/,
   /^tests(?:\/|$)/
 ];

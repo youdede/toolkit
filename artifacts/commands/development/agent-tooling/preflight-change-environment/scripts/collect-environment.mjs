@@ -3,7 +3,7 @@ import { existsSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 const cwd = process.cwd();
-const git = (...args) => spawnSync('git', ['-C', cwd, ...args], { encoding: 'utf8', timeout: 5000, env: Object.fromEntries(Object.entries(process.env).filter(([key]) => !key.startsWith('GIT_'))) });
+const git = (...args) => spawnSync('git', ['-C', cwd, ...args], { encoding: 'utf8', timeout: 5000, env: Object.fromEntries(Object.entries(process.env).filter(([key]) => !/^GIT_/i.test(key))) });
 const revision = git('rev-parse', '--short=12', 'HEAD');
 const branch = git('symbolic-ref', '--short', '-q', 'HEAD');
 const status = git('status', '--porcelain');

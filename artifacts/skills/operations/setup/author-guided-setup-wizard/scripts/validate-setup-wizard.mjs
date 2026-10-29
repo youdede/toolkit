@@ -10,7 +10,7 @@ if (!file || process.argv.length !== 3) {
 const raw = readFileSync(file, 'utf8');
 const errors = [];
 if (!raw.startsWith('#!/usr/bin/env bash') && !raw.startsWith('#!/bin/bash')) errors.push('wizard needs a Bash shebang');
-// ponytail: drops `#` comments at line start or after whitespace; a `#` inside quotes after a space is cut too.
+// Known limit: drops `#` comments at line start or after whitespace; a `#` inside quotes after a space is cut too.
 const code = raw.split('\n').map((line) => line.replace(/(^|\s)#.*$/, '$1')).join('\n');
 if (!/set\s+-[^\n]*e/.test(code) || !/set\s+-[^\n]*u/.test(code) || !/pipefail/.test(code)) errors.push('wizard needs strict mode with errexit, nounset, and pipefail');
 if (/\bset\s+-[A-Za-z]*x|\bset\s+-o\s+xtrace\b/.test(code)) errors.push('wizard must not enable shell tracing');

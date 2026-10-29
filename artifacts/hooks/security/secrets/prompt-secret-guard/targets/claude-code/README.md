@@ -4,7 +4,7 @@ Install with `npx @youdede/toolkit add prompt-secret-guard`. The hook runs on `U
 
 The protected boundary is submitted prompt text only. It allows ordinary prose, redacted examples, and prompts without a recognized live credential format. An `sk-` word made only of lowercase letters and digits joined by `-` (such as a repository name) is not treated as an OpenAI key. It has no runtime configuration or project-writable bypass.
 
-The credential formats are the 117 rules of the hook's `secret-rules` block, shared with commit-guard, prompt-secret-guard, and the repository scan: private key headers and the provider prefixes or fixed structures of cloud, source-control, registry, CI/CD, observability, messaging, payment, and AI services. A format that needs a keyword next to the value, an entropy guess, a bare hex string, a UUID, or a JWT is not a rule, because those shapes also match hashes, identifiers, and documentation samples.
+The credential formats are the 117 rules of the hook's `secret-rules` block, shared with commit-guard and the repository scan: private key headers and the provider prefixes or fixed structures of cloud, source-control, registry, CI/CD, observability, messaging, payment, and AI services. A format that needs a keyword next to the value, an entropy guess, a bare hex string, a UUID, or a JWT is not a rule, because those shapes also match hashes, identifiers, and documentation samples.
 
 A block for a detected credential asks to remove or redact it; a block for a prompt over 256 KiB asks to split it; a block for unreadable hook input says so.
 

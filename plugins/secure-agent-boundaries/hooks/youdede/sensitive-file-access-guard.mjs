@@ -75,7 +75,7 @@ const POWERSHELL_FLAGS = /^-(?:nop|noprofile|nol|nologo|noni|noninteractive|noe|
 // Clients that fetch from the network: an unseen program they produce is `network` (only the rule id
 // depends on this list; every other producer is refused as well unless allowlisted).
 export const NETWORK_PRODUCERS = new Set(['curl', 'wget', 'fetch', 'aria2c', 'http', 'https', 'xh', 'nc', 'ncat', 'socat', 'ssh', 'gh', 'lynx', 'links']);
-// Reviewed allowlist of shell setup output (hook-design 1.7): `TOOL init|env|shellenv|hook|activate`,
+// Reviewed allowlist of shell setup output: `TOOL init|env|shellenv|hook|activate`,
 // `ssh-agent`, and any `… completion[s] …` as the first or second operand.
 const SETUP_TOOLS = new Set(['pyenv', 'rbenv', 'nodenv', 'jenv', 'goenv', 'fnm', 'starship', 'direnv', 'zoxide', 'mise', 'brew', 'conda', 'atuin']);
 const SETUP_VERBS = new Set(['init', 'env', 'shellenv', 'hook', 'activate']);
@@ -527,7 +527,7 @@ function bracket(pieces, index) {
   return null;
 }
 
-// The Word of a piece list (hook-design 1.2): static, pattern (with parts), or opaque.
+// The Word of a piece list: static, pattern (with parts), or opaque.
 function toWord(pieces, raw) {
   if (pieces.some((piece) => piece.opaque !== undefined)) return { kind: 'opaque', text: raw };
   const parts = [];
@@ -974,7 +974,7 @@ function unseen(source, producer, context, allowlisted = false) {
   return { kind: 'unseen', source, producer, allowlisted, text: context.text };
 }
 
-// Whether a producer's output is reviewed shell setup (hook-design 1.7): one static command.
+// Whether a producer's output is reviewed shell setup: one static command.
 function setupProducer(producer) {
   if (!producer || producer.kind !== 'command' || !producer.exe || !isStaticWord(producer.exe) || !producer.words.every(isStaticWord)) return false;
   if (producer.stdinFrom === 'pipe') return false;
@@ -1022,7 +1022,7 @@ function staticFeed(producer) {
   return null;
 }
 
-// Interpreters and the option that carries an inline program (hook-design 1.8 step 1): the program is
+// Interpreters and the option that carries an inline program: the program is
 // attached (group 1) or the next word. Options are read both ways; the scan stops at `--`, at `stops`
 // (python `-m`), and at a static operand no preceding option can take (the script owns later words).
 const INTERPRETERS = [
@@ -1295,7 +1295,7 @@ function findActions(words, entry, depth, context) {
   return items;
 }
 
-// The items of a Bash command, in the order they run (hook-design 1.2). `functions` maps each function
+// The items of a Bash command, in the order they run. `functions` maps each function
 // defined in the call to its body items; `changedDirectory` is true after cd, pushd, or popd.
 // Files a network producer writes: its standard output redirected to a file, the file its output
 // option names (`curl -o F`, `wget -O F`, `--output F`), the file `curl -O` or `wget` names after the
@@ -1757,7 +1757,7 @@ function executableKeyWord(exe) {
   return { ...exe, parts };
 }
 
-// Runners (hook-design 1.4): the command a package runner starts, after the runner's options and its
+// Runners: the command a package runner starts, after the runner's options and its
 // verb (`npx`, `bunx`, `pnpx`, `pnpm [exec|dlx]`, `yarn [dlx|exec]`, `bun run|x`, `npm exec|x`,
 // `bundle exec`, `uv run`, `poetry run`). pnpm and Yarn also run a package binary without a verb. The
 // runner's last option may take the next word, so that word and the one after it are both read as
@@ -1855,6 +1855,62 @@ export function judgeItems(items, cap, options = {}) {
 // The verdict of a hook's capability on a Bash command.
 export function judge(command, cap, options = {}) {
   return judgeItems(parseShell(command), cap, options);
+}
+// </youdede:shared>
+
+// <youdede:shared sensitive-paths>
+// Credential paths (shared block `sensitive-paths`): the one definition behind sensitive-file-access-guard,
+// the read-only MCP runtime, commit-guard, and the repository's own scan (scripts/lib/secret-scan.mjs).
+// Edit it here and run `npm run shared-hooks`.
+//
+// isCredentialPath is the access tier: environment files, private SSH identities, credential directories,
+// and the credential-store files of common clients. Nothing may read or commit them. isCommitSecretPath
+// is the commit tier. It adds key and keystore extensions and `credentials`/`secrets` files, which a
+// project may read (a `.pem` can be a public certificate) but should not commit. It drops `.npmrc`,
+// which projects commit for registry settings; a token inside it is caught by the npm-token content rule.
+
+const SAFE_ENV_SUFFIXES = ['.example', '.sample', '.template', '.dist'];
+// A credential directory is sensitive itself and so is everything under it, at any depth; `.ssh` keeps
+// its own rule because its public keys, config, and known_hosts are safe.
+const SENSITIVE_DIRECTORY_SUFFIXES = ['/.aws', '/.azure', '/.config/gcloud', '/.gnupg', '/.kube', '/.ssh'];
+const SAFE_SSH_FILES = new Set(['authorized_keys', 'config', 'known_hosts']);
+const EXACT_CREDENTIAL_SUFFIXES = [
+  '/.aws/credentials',
+  '/.azure/accesstokens.json',
+  '/.config/gcloud/application_default_credentials.json',
+  '/.config/gh/hosts.yml',
+  '/.docker/config.json',
+  '/.git-credentials',
+  '/.kube/config',
+  '/.netrc',
+  '/.npmrc',
+  '/.pypirc'
+];
+const SSH_PRIVATE_KEY = /\/(?:\.ssh\/)?id_(?:rsa|dsa|ecdsa|ed25519)(?:_sk)?$/;
+const KEY_FILE = /\.(?:pem|p12|pfx|key|keystore|jks)$/;
+const SECRETS_FILE = /^(?:credentials?|secrets?)(?:\.(?:json|ya?ml|toml|ini))?$/;
+
+// Lower-cased, forward slashes, one leading slash: a relative path is read from the root of its tree.
+function credentialForm(value) {
+  return `/${String(value).replaceAll('\\', '/').replace(/^\/+/, '')}`.toLowerCase();
+}
+
+export function isCredentialPath(value) {
+  const normalized = credentialForm(value);
+  const basename = normalized.split('/').at(-1);
+  if (basename.startsWith('.env') && SAFE_ENV_SUFFIXES.some((suffix) => basename.endsWith(suffix))) return false;
+  if (basename === '.env' || basename.startsWith('.env.')) return true;
+  if (SSH_PRIVATE_KEY.test(normalized)) return true;
+  if (normalized.includes('/.ssh/') && !basename.endsWith('.pub') && !SAFE_SSH_FILES.has(basename)) return true;
+  if (SENSITIVE_DIRECTORY_SUFFIXES.some((suffix) => normalized.endsWith(suffix) || (suffix !== '/.ssh' && normalized.includes(`${suffix}/`)))) return true;
+  return EXACT_CREDENTIAL_SUFFIXES.some((suffix) => normalized.endsWith(suffix));
+}
+
+export function isCommitSecretPath(value) {
+  const normalized = credentialForm(value);
+  const basename = normalized.split('/').at(-1);
+  if (basename === '.npmrc') return false;
+  return isCredentialPath(normalized) || KEY_FILE.test(basename) || SECRETS_FILE.test(basename);
 }
 // </youdede:shared>
 
@@ -1992,7 +2048,7 @@ export function directoryHoldsSensitive(root, options) {
       if (!options.hidden && entry.name.startsWith('.')) continue;
       const absolute = path.join(directory, entry.name);
       if (entry.isDirectory()) {
-        // ponytail: .git is skipped for speed; its config can hold a credential URL, which this
+        // Known limit: .git is skipped for speed; its config can hold a credential URL, which this
         // guard never listed as a protected path. Add it here if that list grows.
         if (entry.name === '.git' || options.excludeDirs.some((pattern) => pattern.test(entry.name))) continue;
         if (isSensitivePath(absolute)) return { sensitive: true };
@@ -2045,24 +2101,6 @@ export function gitVisibleHoldsSensitive(root, options) {
   return { sensitive: false };
 }
 
-const SAFE_ENV_SUFFIXES = ['.example', '.sample', '.template', '.dist'];
-// A credential directory is sensitive itself and so is everything under it, at any depth; `.ssh` keeps
-// its own rule because its public keys, config, and known_hosts are safe.
-const SENSITIVE_DIRECTORY_SUFFIXES = ['/.aws', '/.azure', '/.config/gcloud', '/.gnupg', '/.kube', '/.ssh'];
-const SAFE_SSH_FILES = new Set(['authorized_keys', 'config', 'known_hosts']);
-const EXACT_CREDENTIAL_SUFFIXES = [
-  '/.aws/credentials',
-  '/.azure/accessTokens.json',
-  '/.config/gcloud/application_default_credentials.json',
-  '/.config/gh/hosts.yml',
-  '/.docker/config.json',
-  '/.git-credentials',
-  '/.kube/config',
-  '/.netrc',
-  '/.npmrc',
-  '/.pypirc'
-].map((entry) => entry.toLowerCase());
-const SSH_PRIVATE_KEY = /\/(?:\.ssh\/)?id_(?:rsa|dsa|ecdsa|ed25519)(?:_sk)?$/i;
 
 function allowed() {
   return { exitCode: 0, ruleId: null, message: '' };
@@ -2352,15 +2390,7 @@ export function isSensitivePath(value) {
   let candidate = String(value);
   const embedded = /^(?:@|<)(.+)$|^[^=@\s]+(?:=|@)[@<]?(.+)$/.exec(candidate);
   if (embedded) candidate = embedded[1] || embedded[2];
-  const normalized = normalizedPortablePath(candidate).toLowerCase();
-  const basename = normalized.split('/').at(-1);
-  if (basename.startsWith('.env') && SAFE_ENV_SUFFIXES.some((suffix) => basename.endsWith(suffix))) return false;
-  if (basename === '.env' || basename.startsWith('.env.')) return true;
-  if (SSH_PRIVATE_KEY.test(normalized)) return true;
-  if (normalized.includes('/.ssh/') && !basename.endsWith('.pub') && !SAFE_SSH_FILES.has(basename)) return true;
-  if (SENSITIVE_DIRECTORY_SUFFIXES.some((suffix) => normalized === suffix.slice(1) || normalized.endsWith(suffix)
-    || (suffix !== '/.ssh' && (normalized.startsWith(`${suffix.slice(1)}/`) || normalized.includes(`${suffix}/`))))) return true;
-  return EXACT_CREDENTIAL_SUFFIXES.some((suffix) => normalized === suffix.slice(1) || normalized.endsWith(suffix));
+  return isCredentialPath(normalizedPortablePath(candidate));
 }
 
 function absoluteCandidate(value, cwd) {

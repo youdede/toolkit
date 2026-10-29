@@ -18,7 +18,7 @@ const PROSE_LIST = /Then provide ((?:`[^`]+`(?:, | and |, and )?)+)\./;
 // A mention that offers a fallback for an undeclared heading is conditional, not a contradiction.
 const CONDITIONAL = /when this contract names that heading|when this contract names no uncertainty section|when it names none, in the first section it names/;
 
-// ponytail: fixed list; `## Validation` and `## Scope` stay allowed because some deliverables use them.
+// Known limit: fixed list; `## Validation` and `## Scope` stay allowed because some deliverables use them.
 const INSTRUCTION_SECTIONS = new Set(['## Contract', '## Workflow', '## Refusals', '## Output contract']);
 
 const clean = (heading) => heading.replace(/\s+/g, ' ').trim();
@@ -76,7 +76,7 @@ export function payloadProblems({ manifest, evaluation, file, text }) {
     found.push(`${id} (${file}): the output contract names more than one uncertainty section: ${uncertainty.join(', ')}`);
   }
   // A reply heading that repeats a heading of the brief (for example `## Scope`) blurs input and output.
-  // ponytail: subagents only; skills reuse internal headings today and are fixed in their own task.
+  // Known limit: subagents only, because skills still reuse internal headings in their replies.
   if (manifest?.kind === 'subagent') {
     const own = new Set([...rest.matchAll(/^(##\s+.+?)\s*$/gm)].map((m) => clean(m[1])));
     for (const heading of contract.filter((h) => own.has(h))) {

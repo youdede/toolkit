@@ -130,10 +130,10 @@ test('migration safety guard recognizes only explicit destructive command forms'
     "bash -lc 'dropdb production'",
     "'dropdb' production"
   ]) assert.notEqual(evaluateMigration({ tool_input: { command } }, defaultContext).exitCode, 0, command);
-  // A program known only at run time belongs to shell-command-guard (option B, hook-design 1.7).
+  // A program known only at run time belongs to shell-command-guard.
   assert.equal(evaluateMigration({ tool_input: { command: "bash -c '$SCRIPT'" } }, defaultContext).exitCode, 0);
   assert.equal(evaluateShell({ tool_input: { command: "bash -c '$SCRIPT'" } }).ruleId, 'shell-command-uninspectable');
-  // The item parser reads env -C and assignment prefixes (hook-design 1.4), so dropdb is judged itself.
+  // The item parser reads env -C and assignment prefixes, so dropdb is judged itself.
   for (const command of ['env -C / dropdb production', 'PATH=/tmp dropdb production']) {
     assert.equal(evaluateMigration({ tool_input: { command } }, defaultContext).ruleId, 'database-drop-command', command);
   }
@@ -234,7 +234,7 @@ test('dependency change guard blocks direct lockfile edits and narrow unsafe fla
     assert.notEqual(evaluateDependency(input, collectDependency(input)).exitCode, 0, command);
   }
   const dynamic = { cwd: directory, tool_input: { command: "bash -c '$SCRIPT'" } };
-  // A program known only at run time belongs to shell-command-guard (option B, hook-design 1.7).
+  // A program known only at run time belongs to shell-command-guard.
   assert.equal(evaluateDependency(dynamic, collectDependency(dynamic)).exitCode, 0);
   assert.equal(evaluateShell({ tool_input: { command: "bash -c '$SCRIPT'" } }).ruleId, 'shell-command-uninspectable');
   // The item parser reads `env -C` and `GIT_WORK_TREE=`, so these are scope changes.

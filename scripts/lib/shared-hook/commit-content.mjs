@@ -1,5 +1,5 @@
 // What the `git commit` calls of a Bash command will take (shared block `commit-content`, which needs the
-// `shell-items` and `capability` blocks): the `CommitIntent` record of hook-design 1.8 and the resolved
+// `shell-items` and `capability` blocks): the `CommitIntent` record and the resolved
 // Git calls it is built from. Nothing is executed; configured aliases are read once, one level deep.
 // Edit it here and run `npm run shared-hooks`.
 import { NOT_MINE, U, isStatic, judgeItems } from './capability.mjs';
@@ -216,7 +216,7 @@ export function gitCalls(items, options = {}) {
   return { calls, uninspectable };
 }
 
-// Commit intent of a command (hook-design 1.8, capabilities.md C): `found` when a commit may run;
+// Commit intent of a command: `found` when a commit may run;
 // `unsupported` when it runs in the same command as a forced add, an alias definition, a shell alias,
 // or an alias of an alias; `scopeChanged` after cd/pushd or with -C, --git-dir, --work-tree, GIT_DIR, or
 // GIT_WORK_TREE; `worktree` when it can take working-tree content (earlier staging, -a, a pathspec);

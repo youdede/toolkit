@@ -4,6 +4,8 @@ This project-scoped `PreToolUse` hook blocks direct `Read`, `Write`, `Edit`, `Mu
 
 Protected paths include environment files such as `.env` and `.env.production`, private SSH identities, and exact credential-store files for common cloud, package, container, Kubernetes, Git, and CLI clients. Template environment files ending in `.example`, `.sample`, `.template`, or `.dist` are allowed. The hook reads path metadata and directory listings only: it never opens file contents and never includes submitted paths in diagnostics.
 
+The list is the access tier of the shared `sensitive-paths` block, which the read-only MCP servers apply too. commit-guard applies the commit tier of the same block, which also refuses key and keystore files such as `.pem` and `.key`; reading them stays allowed because a `.pem` is often a public certificate.
+
 ## Commands it analyzes
 
 Bash commands are read with the shared item parser, so every command behind `&&`, `||`, `;`, pipes, subshells, `sudo`, `doas`, `env`, `nice`, `timeout`, `setsid`, `exec`, `sh -c`, `bash -c`, `eval`, and `pwsh -Command` is checked. The hook looks at:
@@ -38,7 +40,7 @@ A program the command runs but does not contain (`bash -c "$CMD"`, `curl … | s
 
 Works with shell-command-guard. Alone, this hook judges the commands it can read in the call. It cannot see inside a command that hides what it runs (`bash -c "$X"`, `curl … | sh`, `eval "$(tool)"`); shell-command-guard, installed with it by default, is the hook that stops those. The installer asks first in a terminal (default yes) and installs it with a notice elsewhere; `youdede-toolkit add sensitive-file-access-guard --no-prerequisites` installs this hook alone, and `youdede-toolkit add shell-command-guard` adds it later.
 
-Retained false positives (hook-design 4.3), each refused on purpose:
+Retained false positives, each refused on purpose:
 
 - `cat "$F"` is refused: a path known only at run time could be a secret.
 
