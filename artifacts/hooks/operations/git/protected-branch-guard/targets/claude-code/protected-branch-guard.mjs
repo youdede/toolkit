@@ -1866,6 +1866,9 @@ export const GIT_BUDGET_MS = 8000;
 const UNKNOWN_HEAD = '\0unknown-head';
 const NATIVE_MUTATION_TOOLS = new Set(['Write', 'Edit', 'MultiEdit', 'NotebookEdit']);
 const HISTORY_MUTATIONS = new Set(['commit', 'merge', 'rebase', 'reset', 'cherry-pick', 'revert', 'am']);
+// Rewriters pick their refs from arguments or a stream (filter-repo takes every ref by default), so a
+// protected branch can be among them whatever branch HEAD is on.
+const HISTORY_REWRITERS = new Set(['filter-branch', 'filter-repo', 'fast-import']);
 const RECOVERY_FLAGS = new Set(['--abort', '--quit']);
 function toolName(input) {
   const value = input?.tool_name ?? input?.toolName;
@@ -1885,7 +1888,7 @@ const executable = (token) => (token ? commandKey(token.value) : '');
 const GIT_VALUE_OPTIONS = ['-C', '-c', '--git-dir', '--work-tree', '--namespace', '--config-env', '--exec-path', '--super-prefix', '--attr-source', '--list-cmds'];
 const GIT_SCOPE_VARIABLE = /^(?:GIT_DIR|GIT_WORK_TREE|GIT_CONFIG\w*)$/;
 const GIT_MUTATION = ['push', 'send-pack', 'http-push', 'branch', 'update-ref', 'checkout', 'switch', 'symbolic-ref', 'remote',
-  'commit', 'merge', 'rebase', 'reset', 'cherry-pick', 'revert', 'am', 'pull', 'fetch', 'config'];
+  'commit', 'merge', 'rebase', 'reset', 'cherry-pick', 'revert', 'am', 'pull', 'fetch', 'config', ...HISTORY_REWRITERS];
 
 // The evaluate loop below is today's (hook-design A7) and reads today's tokens: `value`, and
 // `dynamic` (an expansion), `glob` (only glob characters), or `placeholder` (a word xargs or find
@@ -2204,7 +2207,7 @@ function applyConfig(args, aliases, pushConfiguredRemotes) {
   return 'write';
 }
 
-const RELEVANT_SUBCOMMANDS = new Set(['push', 'send-pack', 'http-push', 'branch', 'update-ref', 'checkout', 'switch', 'symbolic-ref', 'remote', ...HISTORY_MUTATIONS]);
+const RELEVANT_SUBCOMMANDS = new Set(['push', 'send-pack', 'http-push', 'branch', 'update-ref', 'checkout', 'switch', 'symbolic-ref', 'remote', ...HISTORY_MUTATIONS, ...HISTORY_REWRITERS]);
 const RUNNER_SUBCOMMANDS = new Set([...RELEVANT_SUBCOMMANDS, 'pull', 'fetch']);
 // find stays listed: an -exec without its terminator is not unwrapped, and the guard still refuses it.
 const COMMAND_RUNNERS = new Set(['find', 'parallel', 'watch']);
@@ -2244,6 +2247,10 @@ function inspectGit(parsed, context) {
   }
   if (parsed.subcommand === 'remote' && parsed.args[0]?.value === 'set-head') {
     return block('protected-branch-update', 'the command mutates the locally discovered default-branch authority');
+  }
+  // ponytail: refused on any branch; reading their ref selection (rev-list options, --refs, the stream) is the upgrade.
+  if (HISTORY_REWRITERS.has(parsed.subcommand)) {
+    return block('protected-branch-history-mutation', 'the Git command rewrites history and can rewrite a protected branch');
   }
   if (!HISTORY_MUTATIONS.has(parsed.subcommand)) return null;
   if (parsed.args.some((token) => RECOVERY_FLAGS.has(token.value))) return null;

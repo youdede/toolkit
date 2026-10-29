@@ -55,7 +55,7 @@ What `add` and `add-pack` do:
 
 Project scope resolves from `--cwd` or the current directory. Roots are selected by target, scope, and artifact kind rather than by target alone; [targets.md](targets.md) lists the per-target project and user roots. `doctor` aggregates every active component root, while install and removal mutate only the root owned by the selected artifact. The CLI rejects a target or scope not declared by the artifact adapter.
 
-Codex project-scope hooks are written to `.codex/hooks.json` with the absolute path of the project on the installing machine. Do not commit that file for other machines; reinstall on each machine instead.
+Codex project-scope hooks are written to `.codex/hooks.json` with a path resolved from the Git root (`$(git rev-parse --show-toplevel)/.codex/...`, the form the Codex hooks documentation recommends) when `.codex` sits at the root of a Git work tree and the platform is not Windows, so the file works in every clone and from a subdirectory. Otherwise the absolute path of the project on the installing machine is written: do not commit that file for other machines, and reinstall on each machine instead. Codex lets a tool call proceed when its hook cannot be started.
 
 ## Existing files
 

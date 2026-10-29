@@ -14,6 +14,12 @@ originality, license compliance, endorsement, or ownership.
 Authenticate a release through its signed Git tag and npm provenance, then
 compare the published root digest before relying on it.
 
+Third-party material: many credential patterns in
+scripts/lib/shared-hook/secret-rules.mjs, which is embedded in the
+commit-guard and prompt-secret-guard hooks, are adapted from the gitleaks
+default configuration (https://github.com/gitleaks/gitleaks), MIT License,
+Copyright (c) 2019 Zachary Rice. Its permission notice travels in that file.
+
 No watermark, prompt, license notice, or checksum can force a model or another
 party to refuse copying. The enforceable obligations here are the applicable
 licenses and notice-retention requirements.

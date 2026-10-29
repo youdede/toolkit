@@ -1,24 +1,14 @@
 import { spawnSync } from 'node:child_process';
 import { lstatSync, readFileSync } from 'node:fs';
 import path from 'node:path';
+import { SECRET_RULES as HOOK_SECRET_RULES, secretMatch } from './shared-hook/secret-rules.mjs';
 
 export const MAX_SCANNED_FILE_BYTES = 5 * 1024 * 1024;
 export const MAX_HISTORY_OBJECTS = 50_000;
 const MAX_HISTORY_BATCH_BYTES = 512 * 1024 * 1024;
 
-export const SECRET_RULES = Object.freeze([
-  { id: 'PRIVATE_KEY', label: 'private key block', pattern: /-----BEGIN (?:RSA |EC |DSA |OPENSSH |PGP )?PRIVATE KEY-----/ },
-  { id: 'AWS_ACCESS_KEY', label: 'AWS access key id', pattern: /\b(?:AKIA|ASIA)[A-Z0-9]{16}\b/ },
-  { id: 'GITHUB_TOKEN', label: 'GitHub token', pattern: /\b(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9]{30,}\b/ },
-  { id: 'GITHUB_FINE_GRAINED_TOKEN', label: 'GitHub fine-grained token', pattern: /\bgithub_pat_[A-Za-z0-9_]{60,}\b/ },
-  { id: 'NPM_TOKEN', label: 'npm token', pattern: /\bnpm_[A-Za-z0-9]{36}\b/ },
-  { id: 'ANTHROPIC_KEY', label: 'Anthropic API key', pattern: /\bsk-ant-[A-Za-z0-9_-]{20,}\b/ },
-  { id: 'OPENAI_KEY', label: 'OpenAI API key', pattern: /\bsk-(?:proj-[A-Za-z0-9_-]{20,}|[A-Za-z0-9]{20,})\b/ },
-  { id: 'SLACK_TOKEN', label: 'Slack token', pattern: /\bxox[baprs]-[A-Za-z0-9-]{20,}\b/ },
-  { id: 'STRIPE_LIVE_KEY', label: 'Stripe live key', pattern: /\b(?:sk|rk)_live_[A-Za-z0-9]{16,}\b/ },
-  { id: 'GITLAB_TOKEN', label: 'GitLab token', pattern: /\bglpat-[A-Za-z0-9_-]{20,}\b/ },
-  { id: 'GOOGLE_API_KEY', label: 'Google API key', pattern: /\bAIza[0-9A-Za-z_-]{35}\b/ }
-]);
+// The hooks' list, with the repository scan's upper-case rule ids (GITHUB_TOKEN).
+export const SECRET_RULES = Object.freeze(HOOK_SECRET_RULES.map((rule) => ({ ...rule, id: rule.id.toUpperCase().replaceAll('-', '_') })));
 
 const SAFE_ENV_SUFFIXES = Object.freeze(['.example', '.sample', '.template', '.dist']);
 
@@ -43,7 +33,7 @@ function lineNumberAt(content, index) {
 export function scanSecretText(file, content, scope = 'workspace') {
   const findings = [];
   for (const rule of SECRET_RULES) {
-    const match = rule.pattern.exec(content);
+    const match = secretMatch(rule, content);
     if (match) {
       findings.push({
         ruleId: rule.id,

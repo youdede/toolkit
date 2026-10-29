@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "algorithm": "sha256",
   "claim": "Checksums bind published bytes to a reviewed release; they do not prove authorship, originality, license compliance, endorsement, or control downstream copying.",
-  "rootDigest": "c813d7bc6378366708ce7b05f8a10b0092794d3574ed14b335b6d7f316f9d93e",
+  "rootDigest": "9bb738504fb9e566de321666f3e4b9bc4e0486227ac0bc0c71d1c0c3ec502a20",
   "artifacts": [
     {
       "artifactId": "command/development/agent-tooling/audit-repository-instructions",
@@ -1687,8 +1687,8 @@
     {
       "artifactId": "hook/operations/git/protected-branch-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:00cf0358cb2a528b0f292ac3ad7784d61146a4a1406e3774f201ff483c553402",
-      "digest": "00cf0358cb2a528b0f292ac3ad7784d61146a4a1406e3774f201ff483c553402",
+      "integrityId": "urn:youdede:artifact:sha256:83e466bfadccefa9490539f5149ae5a5c2dc56d985554ccc8cfa2259b5d1896d",
+      "digest": "83e466bfadccefa9490539f5149ae5a5c2dc56d985554ccc8cfa2259b5d1896d",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -1706,13 +1706,13 @@
         },
         {
           "path": "artifacts/hooks/operations/git/protected-branch-guard/targets/claude-code/protected-branch-guard.mjs",
-          "bytes": 138610,
-          "sha256": "2523f4e37cc65c96b9ddc40b3a327110fd4b924f454443b1b36c5cffef2be0f2"
+          "bytes": 139208,
+          "sha256": "af57c5be58e4fe563432eb5987bd52969391b1fc1519ec05f750fc0513be8133"
         },
         {
           "path": "artifacts/hooks/operations/git/protected-branch-guard/targets/claude-code/README.md",
-          "bytes": 5569,
-          "sha256": "17a7929d0dea1dee4f2850fedc5f4b9a608aa5fcd22b9deda81d45167c11b316"
+          "bytes": 5805,
+          "sha256": "70ece6232cf542a5658a687672cf6de3536fcc80bb392422241d51102cb5a6f4"
         }
       ]
     },
@@ -3486,8 +3486,8 @@
     {
       "artifactId": "hook/security/secrets/commit-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:b32a2478bd3b348eeb0b5f8e6cbeaf3a540ceeb0404550d02c9bdd7db6b6a451",
-      "digest": "b32a2478bd3b348eeb0b5f8e6cbeaf3a540ceeb0404550d02c9bdd7db6b6a451",
+      "integrityId": "urn:youdede:artifact:sha256:07850a8a0e26d59eec69c0348749752b218492e45dc98d9e3fd9d65f7639cc26",
+      "digest": "07850a8a0e26d59eec69c0348749752b218492e45dc98d9e3fd9d65f7639cc26",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -3525,13 +3525,13 @@
         },
         {
           "path": "artifacts/hooks/security/secrets/commit-guard/targets/claude-code/commit-guard.mjs",
-          "bytes": 122860,
-          "sha256": "29bb84156020b23d8e8640082d226537b08dd0b4f2bf710332bc35ab7d25b935"
+          "bytes": 138068,
+          "sha256": "f1602598986d39fce7c62a5f6380cba9abefad2972a8acba60beaa06e5497929"
         },
         {
           "path": "artifacts/hooks/security/secrets/commit-guard/targets/claude-code/README.md",
-          "bytes": 4536,
-          "sha256": "70de9d0fe02fe5da663f55ad7e128cbb27ebb0e3406f3bc93ac5f7f71af2cfcf"
+          "bytes": 5045,
+          "sha256": "4b45318f5b257e96c88a90ef049b68fff0e131fd00f2d3fa19821cf305ccaf40"
         },
         {
           "path": "scripts/runtime/hook-command-bridge.mjs",
@@ -3548,8 +3548,8 @@
     {
       "artifactId": "hook/security/secrets/prompt-secret-guard",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:4db3a112ec89050a9ef8973f567ab00a59245c52ac741a1ad0c8e4001fdcad2e",
-      "digest": "4db3a112ec89050a9ef8973f567ab00a59245c52ac741a1ad0c8e4001fdcad2e",
+      "integrityId": "urn:youdede:artifact:sha256:8bd0b556085f99eb65766c0592c9f849e11fdd067bae722020cdd9d3708a5f06",
+      "digest": "8bd0b556085f99eb65766c0592c9f849e11fdd067bae722020cdd9d3708a5f06",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -3567,13 +3567,13 @@
         },
         {
           "path": "artifacts/hooks/security/secrets/prompt-secret-guard/targets/claude-code/prompt-secret-guard.mjs",
-          "bytes": 3276,
-          "sha256": "feacd2f11ccf3c7f2d16f9539b522ab1b8edbec5ecbe58dea6409d6b1146e838"
+          "bytes": 18449,
+          "sha256": "4d5b10c44acd8504aa4ac7e27ebb4a6452a10650d8a4c451cc06c614cfa8600c"
         },
         {
           "path": "artifacts/hooks/security/secrets/prompt-secret-guard/targets/claude-code/README.md",
-          "bytes": 1244,
-          "sha256": "9a9c8eaa8180c606d32d4ee21b1d58ca96d7e89805e5bce5d8270a4db21bb353"
+          "bytes": 1753,
+          "sha256": "71926532ed15c288d3e46ca0c94ed2eba526fecc7ed83cde10b4b684e6ca03eb"
         }
       ]
     },

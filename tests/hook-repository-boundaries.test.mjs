@@ -227,6 +227,18 @@ test('protected branch blocks static history mutations only on the protected cur
   assert.equal(branchDecision(featureCommit, root).exitCode, 0);
 });
 
+test('protected branch refuses history rewriters on any branch', (context) => {
+  const root = temporary(context, 'youdede-branch-rewriters-');
+  initRepository(root, 'main');
+  git(root, ['switch', '-qc', 'feature/rewrite']);
+  for (const command of ['git filter-branch -f --msg-filter cat HEAD', 'git filter-branch -- --all', 'git filter-repo --force', 'git fast-export --all | git fast-import', 'sudo git filter-branch']) {
+    const input = { tool_name: 'Bash', cwd: root, tool_input: { command } };
+    assert.equal(branchDecision(input, root).ruleId, 'protected-branch-history-mutation', command);
+  }
+  const exported = { tool_name: 'Bash', cwd: root, tool_input: { command: 'git fast-export --all > history.dump' } };
+  assert.equal(branchDecision(exported, root).exitCode, 0);
+});
+
 test('protected branch blocks protected local deletion and direct remote destinations', (context) => {
   const root = temporary(context, 'youdede-branch-targets-');
   initRepository(root, 'main');

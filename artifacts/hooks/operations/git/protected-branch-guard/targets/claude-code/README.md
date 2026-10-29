@@ -23,4 +23,5 @@ Works with shell-command-guard. Alone, this hook judges the commands it can read
 
 Retained false positives (hook-design 4.3), each refused on purpose:
 
+- `git filter-branch`, `git filter-repo`, and `git fast-import` are refused on every branch: they choose the refs they rewrite from arguments or an input stream (filter-repo rewrites every ref by default), which the hook does not read.
 - An opaque executable (`$"x" …`, translated by the locale at run time) is uninspectable when its words can be one of the commands this hook protects.

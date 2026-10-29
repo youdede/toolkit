@@ -38,6 +38,8 @@ test('prompt secret guard blocks high-confidence values without echoing them', (
   assert.equal(blocked.output.decision, 'block');
   assert.equal(blocked.output.suppressOriginalPrompt, true);
   assert.doesNotMatch(JSON.stringify(blocked), /ghp_/);
+  const fineGrained = ['github', 'pat', `${'A'.repeat(22)}_${'b'.repeat(59)}`].join('_');
+  assert.equal(promptGuard.evaluate({ hook_event_name: 'UserPromptSubmit', prompt: `use ${fineGrained}` }).ruleId, 'prompt-github-fine-grained-token');
 
   for (const prompt of [
     'Review the authentication design without credentials.',

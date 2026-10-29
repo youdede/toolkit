@@ -69,6 +69,7 @@ const required = [
   'scripts/lib/secret-scan.mjs',
   'scripts/validate-evaluations.mjs',
   'scripts/validate-release-readiness.mjs',
+  'scripts/verify-package-command.mjs',
   'scripts/verify-secrets.mjs'
 ];
 
@@ -98,6 +99,16 @@ const forbidden = [
 
 for (const file of files) {
   if (forbidden.some((pattern) => pattern.test(file))) fail(`private or development-only path '${file}' would be published`);
+}
+
+// A published module whose relative import is not published fails when it is loaded.
+for (const file of files) {
+  if (!/\.m?js$/.test(file)) continue;
+  const source = readFileSync(path.join(ROOT, file), 'utf8');
+  for (const [, specifier] of source.matchAll(/(?:\bfrom\s+|\bimport\s*\(\s*)['"](\.{1,2}\/[^'"]+)['"]/g)) {
+    const imported = path.posix.normalize(path.posix.join(path.posix.dirname(file), specifier));
+    if (!files.has(imported)) fail(`'${file}' imports '${imported}', which is missing from the package`);
+  }
 }
 
 for (const record of loadArtifacts(ROOT)) {
