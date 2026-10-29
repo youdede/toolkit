@@ -55,6 +55,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 - `scripts/set-publisher-identity.mjs` targets the current holder `Youdede` and namespace `youdede`, not the retired placeholders, and its `--holder` pass replaces only copyright lines, the NOTICE grant, and quoted author names. Replacing every `Youdede`, as the checklist advised, would also have renamed `YoudedeGuardPlugin` and the "Youdede MCP server" texts.
 - `.github/CODEOWNERS` and `docs/publishing-checklist.md` no longer describe the finished namespace migration as pending.
 - The internal working plans of `docs/plans` left the repository and the npm package, and `check:package` refuses them if they return.
+- The risk and latency audit in `docs/audits/risk-latency-2026-09-23.md` is now in English like the rest of the documentation; its values and links are unchanged.
 - Code comments and hook READMEs no longer cite sections of a design document that is not in the repository, nor use the `ponytail:` label of a private authoring tool; a deliberate limit is now marked `Known limit:`.
 - The package ships `scripts/verify-package-command.mjs`, which the published `scripts/verify-secrets.mjs` imports; `check:package` now fails on any published module whose relative import is not published.
 - `add --json` and `add-pack --json` print a JSON result instead of ignoring the flag (notices go to stderr and nothing is asked), and every option also accepts the `--name=value` form.
