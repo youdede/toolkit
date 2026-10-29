@@ -4,7 +4,6 @@
 // guidance when output exceeds it, so context pressure becomes visible instead of silent.
 // Never blocks, never rewrites output, never echoes observed content.
 
-import path from 'node:path';
 import { realpathSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 

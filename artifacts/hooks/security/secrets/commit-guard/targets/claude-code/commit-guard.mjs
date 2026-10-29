@@ -74,7 +74,7 @@ const POWERSHELL_FLAGS = /^-(?:nop|noprofile|nol|nologo|noni|noninteractive|noe|
 // Clients that fetch from the network: an unseen program they produce is `network` (only the rule id
 // depends on this list; every other producer is refused as well unless allowlisted).
 export const NETWORK_PRODUCERS = new Set(['curl', 'wget', 'fetch', 'aria2c', 'http', 'https', 'xh', 'nc', 'ncat', 'socat', 'ssh', 'gh', 'lynx', 'links']);
-// Reviewed allowlist of shell setup output (hook-design 1.7): `TOOL init|env|shellenv|hook|activate`,
+// Reviewed allowlist of shell setup output: `TOOL init|env|shellenv|hook|activate`,
 // `ssh-agent`, and any `… completion[s] …` as the first or second operand.
 const SETUP_TOOLS = new Set(['pyenv', 'rbenv', 'nodenv', 'jenv', 'goenv', 'fnm', 'starship', 'direnv', 'zoxide', 'mise', 'brew', 'conda', 'atuin']);
 const SETUP_VERBS = new Set(['init', 'env', 'shellenv', 'hook', 'activate']);
@@ -526,7 +526,7 @@ function bracket(pieces, index) {
   return null;
 }
 
-// The Word of a piece list (hook-design 1.2): static, pattern (with parts), or opaque.
+// The Word of a piece list: static, pattern (with parts), or opaque.
 function toWord(pieces, raw) {
   if (pieces.some((piece) => piece.opaque !== undefined)) return { kind: 'opaque', text: raw };
   const parts = [];
@@ -973,7 +973,7 @@ function unseen(source, producer, context, allowlisted = false) {
   return { kind: 'unseen', source, producer, allowlisted, text: context.text };
 }
 
-// Whether a producer's output is reviewed shell setup (hook-design 1.7): one static command.
+// Whether a producer's output is reviewed shell setup: one static command.
 function setupProducer(producer) {
   if (!producer || producer.kind !== 'command' || !producer.exe || !isStaticWord(producer.exe) || !producer.words.every(isStaticWord)) return false;
   if (producer.stdinFrom === 'pipe') return false;
@@ -1021,7 +1021,7 @@ function staticFeed(producer) {
   return null;
 }
 
-// Interpreters and the option that carries an inline program (hook-design 1.8 step 1): the program is
+// Interpreters and the option that carries an inline program: the program is
 // attached (group 1) or the next word. Options are read both ways; the scan stops at `--`, at `stops`
 // (python `-m`), and at a static operand no preceding option can take (the script owns later words).
 const INTERPRETERS = [
@@ -1294,7 +1294,7 @@ function findActions(words, entry, depth, context) {
   return items;
 }
 
-// The items of a Bash command, in the order they run (hook-design 1.2). `functions` maps each function
+// The items of a Bash command, in the order they run. `functions` maps each function
 // defined in the call to its body items; `changedDirectory` is true after cd, pushd, or popd.
 // Files a network producer writes: its standard output redirected to a file, the file its output
 // option names (`curl -o F`, `wget -O F`, `--output F`), the file `curl -O` or `wget` names after the
@@ -1756,7 +1756,7 @@ function executableKeyWord(exe) {
   return { ...exe, parts };
 }
 
-// Runners (hook-design 1.4): the command a package runner starts, after the runner's options and its
+// Runners: the command a package runner starts, after the runner's options and its
 // verb (`npx`, `bunx`, `pnpx`, `pnpm [exec|dlx]`, `yarn [dlx|exec]`, `bun run|x`, `npm exec|x`,
 // `bundle exec`, `uv run`, `poetry run`). pnpm and Yarn also run a package binary without a verb. The
 // runner's last option may take the next word, so that word and the one after it are both read as
@@ -1859,7 +1859,7 @@ export function judge(command, cap, options = {}) {
 
 // <youdede:shared commit-content>
 // What the `git commit` calls of a Bash command will take (shared block `commit-content`, which needs the
-// `shell-items` and `capability` blocks): the `CommitIntent` record of hook-design 1.8 and the resolved
+// `shell-items` and `capability` blocks): the `CommitIntent` record and the resolved
 // Git calls it is built from. Nothing is executed; configured aliases are read once, one level deep.
 // Edit it here and run `npm run shared-hooks`.
 
@@ -2074,7 +2074,7 @@ export function gitCalls(items, options = {}) {
   return { calls, uninspectable };
 }
 
-// Commit intent of a command (hook-design 1.8, capabilities.md C): `found` when a commit may run;
+// Commit intent of a command: `found` when a commit may run;
 // `unsupported` when it runs in the same command as a forced add, an alias definition, a shell alias,
 // or an alias of an alias; `scopeChanged` after cd/pushd or with -C, --git-dir, --work-tree, GIT_DIR, or
 // GIT_WORK_TREE; `worktree` when it can take working-tree content (earlier staging, -a, a pathspec);
@@ -2301,10 +2301,64 @@ export function secretMatch(rule, text) {
 }
 // </youdede:shared>
 
-// What an unsupported commit sequence contains (CommitIntent.unsupported).
-const UNSUPPORTED = { 'force-add': 'a forced add (`git add -f`)', 'alias-definition': 'a Git alias definition', 'shell-alias': 'a shell alias (`!…`)', 'alias-chain': 'an alias of an alias' };
+// <youdede:shared sensitive-paths>
+// Credential paths (shared block `sensitive-paths`): the one definition behind sensitive-file-access-guard,
+// the read-only MCP runtime, commit-guard, and the repository's own scan (scripts/lib/secret-scan.mjs).
+// Edit it here and run `npm run shared-hooks`.
+//
+// isCredentialPath is the access tier: environment files, private SSH identities, credential directories,
+// and the credential-store files of common clients. Nothing may read or commit them. isCommitSecretPath
+// is the commit tier. It adds key and keystore extensions and `credentials`/`secrets` files, which a
+// project may read (a `.pem` can be a public certificate) but should not commit. It drops `.npmrc`,
+// which projects commit for registry settings; a token inside it is caught by the npm-token content rule.
 
 const SAFE_ENV_SUFFIXES = ['.example', '.sample', '.template', '.dist'];
+// A credential directory is sensitive itself and so is everything under it, at any depth; `.ssh` keeps
+// its own rule because its public keys, config, and known_hosts are safe.
+const SENSITIVE_DIRECTORY_SUFFIXES = ['/.aws', '/.azure', '/.config/gcloud', '/.gnupg', '/.kube', '/.ssh'];
+const SAFE_SSH_FILES = new Set(['authorized_keys', 'config', 'known_hosts']);
+const EXACT_CREDENTIAL_SUFFIXES = [
+  '/.aws/credentials',
+  '/.azure/accesstokens.json',
+  '/.config/gcloud/application_default_credentials.json',
+  '/.config/gh/hosts.yml',
+  '/.docker/config.json',
+  '/.git-credentials',
+  '/.kube/config',
+  '/.netrc',
+  '/.npmrc',
+  '/.pypirc'
+];
+const SSH_PRIVATE_KEY = /\/(?:\.ssh\/)?id_(?:rsa|dsa|ecdsa|ed25519)(?:_sk)?$/;
+const KEY_FILE = /\.(?:pem|p12|pfx|key|keystore|jks)$/;
+const SECRETS_FILE = /^(?:credentials?|secrets?)(?:\.(?:json|ya?ml|toml|ini))?$/;
+
+// Lower-cased, forward slashes, one leading slash: a relative path is read from the root of its tree.
+function credentialForm(value) {
+  return `/${String(value).replaceAll('\\', '/').replace(/^\/+/, '')}`.toLowerCase();
+}
+
+export function isCredentialPath(value) {
+  const normalized = credentialForm(value);
+  const basename = normalized.split('/').at(-1);
+  if (basename.startsWith('.env') && SAFE_ENV_SUFFIXES.some((suffix) => basename.endsWith(suffix))) return false;
+  if (basename === '.env' || basename.startsWith('.env.')) return true;
+  if (SSH_PRIVATE_KEY.test(normalized)) return true;
+  if (normalized.includes('/.ssh/') && !basename.endsWith('.pub') && !SAFE_SSH_FILES.has(basename)) return true;
+  if (SENSITIVE_DIRECTORY_SUFFIXES.some((suffix) => normalized.endsWith(suffix) || (suffix !== '/.ssh' && normalized.includes(`${suffix}/`)))) return true;
+  return EXACT_CREDENTIAL_SUFFIXES.some((suffix) => normalized.endsWith(suffix));
+}
+
+export function isCommitSecretPath(value) {
+  const normalized = credentialForm(value);
+  const basename = normalized.split('/').at(-1);
+  if (basename === '.npmrc') return false;
+  return isCredentialPath(normalized) || KEY_FILE.test(basename) || SECRETS_FILE.test(basename);
+}
+// </youdede:shared>
+
+// What an unsupported commit sequence contains (CommitIntent.unsupported).
+const UNSUPPORTED = { 'force-add': 'a forced add (`git add -f`)', 'alias-definition': 'a Git alias definition', 'shell-alias': 'a shell alias (`!…`)', 'alias-chain': 'an alias of an alias' };
 
 function runGit(args, cwd, encoding = 'utf8') {
   return spawnSync('git', args, {
@@ -2339,16 +2393,6 @@ function normalizeRelative(file) {
   return file.split(path.sep).join('/').replace(/^\.\//, '');
 }
 
-function isSensitivePath(file) {
-  const normalized = normalizeRelative(file);
-  const base = path.posix.basename(normalized).toLowerCase();
-  const envLike = base === '.env' || base.startsWith('.env.');
-  if (envLike && !SAFE_ENV_SUFFIXES.some((suffix) => base.endsWith(suffix))) return true;
-  if (/^(?:id_rsa|id_dsa|id_ecdsa|id_ed25519)$/.test(base)) return true;
-  if (/\.(?:pem|p12|pfx|key|keystore|jks)$/i.test(base)) return true;
-  return /(?:^|\/)(?:credentials?|secrets?)(?:\.(?:json|ya?ml|toml|ini))?$/i.test(normalized);
-}
-
 function lineNumberAt(content, index) {
   return content.slice(0, index).split('\n').length;
 }
@@ -2368,7 +2412,7 @@ export function inspectStaged(cwd) {
   const findings = [];
 
   for (const file of files) {
-    if (isSensitivePath(file)) {
+    if (isCommitSecretPath(file)) {
       findings.push(`${file}: sensitive file type is staged`);
     }
 
@@ -2405,7 +2449,7 @@ export function inspectWorkingTree(cwd) {
   }
   const findings = [];
   for (const file of files) {
-    if (isSensitivePath(file)) findings.push(`${file}: sensitive file type is present in the working tree`);
+    if (isCommitSecretPath(file)) findings.push(`${file}: sensitive file type is present in the working tree`);
     let data;
     try {
       const absolute = path.join(top, file);

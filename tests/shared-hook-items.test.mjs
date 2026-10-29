@@ -12,7 +12,7 @@ const cpuNow = () => { const { user, system } = process.cpuUsage(); return (user
 v8.setFlagsFromString('--expose-gc');
 const collect = vm.runInNewContext('gc');
 
-// T2: the contract of parseShell (hook-design 1.2 to 1.5). An item renders as `exe word … [operator]`
+// T2: the contract of parseShell. An item renders as `exe word … [operator]`
 // for a command (`<kind:text>` for a word that is not static, `*` when it may split, `@` for a
 // placeholder), `UNSEEN source` (plus ` allowlisted`), or `LIMIT reason`.
 function renderWord(word) {

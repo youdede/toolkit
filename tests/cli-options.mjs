@@ -56,7 +56,7 @@ export const CLI_OPTIONS = {
   // kubectl v1.36.1: --dry-run accepts none, server, client; only client sends nothing to the server.
   kubectl: { ...infrastructure, safe: ['--dry-run=client'] },
   // helm and pulumi are not installed here: their safe spellings are the exemptions of 809400c4 plus the
-  // =true forms (capabilities.md, infrastructure-apply-guard).
+  // =true forms (infrastructure-apply-guard).
   helm: { ...infrastructure, safe: ['--dry-run', '--dry-run=client', '--dry-run=true'] },
   aws: cloud,
   gsutil: cloud,

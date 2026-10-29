@@ -73,7 +73,7 @@ const POWERSHELL_FLAGS = /^-(?:nop|noprofile|nol|nologo|noni|noninteractive|noe|
 // Clients that fetch from the network: an unseen program they produce is `network` (only the rule id
 // depends on this list; every other producer is refused as well unless allowlisted).
 export const NETWORK_PRODUCERS = new Set(['curl', 'wget', 'fetch', 'aria2c', 'http', 'https', 'xh', 'nc', 'ncat', 'socat', 'ssh', 'gh', 'lynx', 'links']);
-// Reviewed allowlist of shell setup output (hook-design 1.7): `TOOL init|env|shellenv|hook|activate`,
+// Reviewed allowlist of shell setup output: `TOOL init|env|shellenv|hook|activate`,
 // `ssh-agent`, and any `… completion[s] …` as the first or second operand.
 const SETUP_TOOLS = new Set(['pyenv', 'rbenv', 'nodenv', 'jenv', 'goenv', 'fnm', 'starship', 'direnv', 'zoxide', 'mise', 'brew', 'conda', 'atuin']);
 const SETUP_VERBS = new Set(['init', 'env', 'shellenv', 'hook', 'activate']);
@@ -525,7 +525,7 @@ function bracket(pieces, index) {
   return null;
 }
 
-// The Word of a piece list (hook-design 1.2): static, pattern (with parts), or opaque.
+// The Word of a piece list: static, pattern (with parts), or opaque.
 function toWord(pieces, raw) {
   if (pieces.some((piece) => piece.opaque !== undefined)) return { kind: 'opaque', text: raw };
   const parts = [];
@@ -972,7 +972,7 @@ function unseen(source, producer, context, allowlisted = false) {
   return { kind: 'unseen', source, producer, allowlisted, text: context.text };
 }
 
-// Whether a producer's output is reviewed shell setup (hook-design 1.7): one static command.
+// Whether a producer's output is reviewed shell setup: one static command.
 function setupProducer(producer) {
   if (!producer || producer.kind !== 'command' || !producer.exe || !isStaticWord(producer.exe) || !producer.words.every(isStaticWord)) return false;
   if (producer.stdinFrom === 'pipe') return false;
@@ -1020,7 +1020,7 @@ function staticFeed(producer) {
   return null;
 }
 
-// Interpreters and the option that carries an inline program (hook-design 1.8 step 1): the program is
+// Interpreters and the option that carries an inline program: the program is
 // attached (group 1) or the next word. Options are read both ways; the scan stops at `--`, at `stops`
 // (python `-m`), and at a static operand no preceding option can take (the script owns later words).
 const INTERPRETERS = [
@@ -1293,7 +1293,7 @@ function findActions(words, entry, depth, context) {
   return items;
 }
 
-// The items of a Bash command, in the order they run (hook-design 1.2). `functions` maps each function
+// The items of a Bash command, in the order they run. `functions` maps each function
 // defined in the call to its body items; `changedDirectory` is true after cd, pushd, or popd.
 // Files a network producer writes: its standard output redirected to a file, the file its output
 // option names (`curl -o F`, `wget -O F`, `--output F`), the file `curl -O` or `wget` names after the
@@ -1755,7 +1755,7 @@ function executableKeyWord(exe) {
   return { ...exe, parts };
 }
 
-// Runners (hook-design 1.4): the command a package runner starts, after the runner's options and its
+// Runners: the command a package runner starts, after the runner's options and its
 // verb (`npx`, `bunx`, `pnpx`, `pnpm [exec|dlx]`, `yarn [dlx|exec]`, `bun run|x`, `npm exec|x`,
 // `bundle exec`, `uv run`, `poetry run`). pnpm and Yarn also run a package binary without a verb. The
 // runner's last option may take the next word, so that word and the one after it are both read as
@@ -1890,7 +1890,7 @@ const GIT_SCOPE_VARIABLE = /^(?:GIT_DIR|GIT_WORK_TREE|GIT_CONFIG\w*)$/;
 const GIT_MUTATION = ['push', 'send-pack', 'http-push', 'branch', 'update-ref', 'checkout', 'switch', 'symbolic-ref', 'remote',
   'commit', 'merge', 'rebase', 'reset', 'cherry-pick', 'revert', 'am', 'pull', 'fetch', 'config', ...HISTORY_REWRITERS];
 
-// The evaluate loop below is today's (hook-design A7) and reads today's tokens: `value`, and
+// The evaluate loop below reads one token per word: `value`, and
 // `dynamic` (an expansion), `glob` (only glob characters), or `placeholder` (a word xargs or find
 // supplies). Its ambiguity gate is the item model's: a Limit, an unseen program that mentions Git
 // mutations, and a pattern executable or Git subcommand the family below can read as a mutation.
@@ -2248,7 +2248,8 @@ function inspectGit(parsed, context) {
   if (parsed.subcommand === 'remote' && parsed.args[0]?.value === 'set-head') {
     return block('protected-branch-update', 'the command mutates the locally discovered default-branch authority');
   }
-  // ponytail: refused on any branch; reading their ref selection (rev-list options, --refs, the stream) is the upgrade.
+  // Known limit: refused on any branch. Allowing them on other branches needs their ref selection
+  // (rev-list options, --refs, the fast-import stream) to be read.
   if (HISTORY_REWRITERS.has(parsed.subcommand)) {
     return block('protected-branch-history-mutation', 'the Git command rewrites history and can rewrite a protected branch');
   }

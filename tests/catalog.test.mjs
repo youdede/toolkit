@@ -15,12 +15,18 @@ import {
   validateRelationshipIntegrity,
   validateRepository
 } from '../scripts/lib/catalog.mjs';
+import { ARTIFACT_KINDS } from '../scripts/lib/targets.mjs';
 
 test('all published JSON schemas parse as strict JSON', () => {
   const schemaDirectory = new URL('../schema/', import.meta.url);
   for (const entry of readdirSync(schemaDirectory).filter((name) => name.endsWith('.json'))) {
     assert.doesNotThrow(() => JSON.parse(readFileSync(new URL(entry, schemaDirectory), 'utf8')), entry);
   }
+});
+
+test('the artifact kinds of the scripts are the kinds the schema accepts', () => {
+  const schema = JSON.parse(readFileSync(new URL('../schema/artifact.schema.json', import.meta.url), 'utf8'));
+  assert.deepEqual(schema.properties.kind.enum, [...ARTIFACT_KINDS]);
 });
 
 test('all artifact manifests and adapters validate', () => {

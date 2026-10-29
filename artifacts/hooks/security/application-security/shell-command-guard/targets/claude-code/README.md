@@ -20,7 +20,7 @@ This hook also owns every program a command runs but does not contain, for itsel
 
 Malformed or oversized hook input fails closed. Missing command fields are allowed because no Bash action was presented to inspect.
 
-Retained false positives (hook-design 4.3), each refused on purpose:
+Retained false positives, each refused on purpose:
 
 - `$CMD /` and `"$EDITOR" /` are uninspectable: `/` is evidence that a dynamic executable may be `rm`.
 - An opaque executable (`$"x" …`, translated by the locale at run time) is uninspectable when its words can be one of the commands this hook protects.

@@ -4,9 +4,8 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { analyzePackWorkflow, ROOT, validateRepository } from './lib/catalog.mjs';
-import { SUPPORTED_TARGETS } from './lib/targets.mjs';
+import { ARTIFACT_KINDS, SUPPORTED_TARGETS } from './lib/targets.mjs';
 
-const KIND_ORDER = ['skill', 'hook', 'subagent', 'command', 'context', 'mcp-server'];
 const KIND_GUARANTEES = Object.freeze({
   skill: 'Prompt procedure with a validated trigger, payload, operational contract, and at least three concrete refusals.',
   hook: 'Executable guard with declared enforcing or observing behavior, failure policy, bounded adapter payload, and executable tests.',
@@ -31,7 +30,7 @@ function targetCoverage(records) {
 }
 
 function artifactKindRows(artifacts) {
-  return KIND_ORDER.map((kind) => {
+  return ARTIFACT_KINDS.map((kind) => {
     const records = artifacts.filter(({ manifest }) => manifest.kind === kind);
     const behaviors = [...new Set(records.map(({ manifest }) => manifest.operational.behavior))].sort();
     const failurePolicies = [...new Set(records.map(({ manifest }) => manifest.operational.failurePolicy))].sort();

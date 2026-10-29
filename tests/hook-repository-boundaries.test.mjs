@@ -306,7 +306,7 @@ test('protected branch parser handles wrappers and refuses dynamic or shifted Gi
     assert.equal(branchDecision(input, root).ruleId, ruleId, command);
   }
 
-  // A program known only at run time belongs to shell-command-guard (option B, hook-design 1.7).
+  // A program known only at run time belongs to shell-command-guard.
   assert.equal(branchDecision({ tool_name: 'Bash', cwd: root, tool_input: { command: "bash -c '$SCRIPT'" } }, root).exitCode, 0);
   assert.equal(evaluateShell({ tool_input: { command: "bash -c '$SCRIPT'" } }).ruleId, 'shell-command-uninspectable');
 

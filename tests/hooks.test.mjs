@@ -65,7 +65,7 @@ test('commit guard scans staged blobs and ignores unrelated Bash calls', (contex
   const wrapped = evaluateCommit({ cwd: directory, tool_input: { command: "exec bash -lc 'git commit -m wrapped'" } });
   assert.equal(wrapped.exitCode, 2);
   assert.match(wrapped.message, /GitHub token/);
-  // A program known only at run time belongs to shell-command-guard (option B, hook-design 1.7).
+  // A program known only at run time belongs to shell-command-guard.
   assert.equal(evaluateCommit({ cwd: directory, tool_input: { command: "bash -c '$SCRIPT'" } }).exitCode, 0);
   assert.equal(evaluateShell({ tool_input: { command: "bash -c '$SCRIPT'" } }).ruleId, 'shell-command-uninspectable');
   // The item parser reads `env -C` and `GIT_DIR=`, so these are scope changes, not unreadable commands.

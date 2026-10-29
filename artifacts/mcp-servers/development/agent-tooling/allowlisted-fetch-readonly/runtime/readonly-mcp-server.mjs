@@ -8,6 +8,62 @@ import path from 'node:path';
 import readline from 'node:readline';
 import { fileURLToPath } from 'node:url';
 
+// <youdede:shared sensitive-paths>
+// Credential paths (shared block `sensitive-paths`): the one definition behind sensitive-file-access-guard,
+// the read-only MCP runtime, commit-guard, and the repository's own scan (scripts/lib/secret-scan.mjs).
+// Edit it here and run `npm run shared-hooks`.
+//
+// isCredentialPath is the access tier: environment files, private SSH identities, credential directories,
+// and the credential-store files of common clients. Nothing may read or commit them. isCommitSecretPath
+// is the commit tier. It adds key and keystore extensions and `credentials`/`secrets` files, which a
+// project may read (a `.pem` can be a public certificate) but should not commit. It drops `.npmrc`,
+// which projects commit for registry settings; a token inside it is caught by the npm-token content rule.
+
+const SAFE_ENV_SUFFIXES = ['.example', '.sample', '.template', '.dist'];
+// A credential directory is sensitive itself and so is everything under it, at any depth; `.ssh` keeps
+// its own rule because its public keys, config, and known_hosts are safe.
+const SENSITIVE_DIRECTORY_SUFFIXES = ['/.aws', '/.azure', '/.config/gcloud', '/.gnupg', '/.kube', '/.ssh'];
+const SAFE_SSH_FILES = new Set(['authorized_keys', 'config', 'known_hosts']);
+const EXACT_CREDENTIAL_SUFFIXES = [
+  '/.aws/credentials',
+  '/.azure/accesstokens.json',
+  '/.config/gcloud/application_default_credentials.json',
+  '/.config/gh/hosts.yml',
+  '/.docker/config.json',
+  '/.git-credentials',
+  '/.kube/config',
+  '/.netrc',
+  '/.npmrc',
+  '/.pypirc'
+];
+const SSH_PRIVATE_KEY = /\/(?:\.ssh\/)?id_(?:rsa|dsa|ecdsa|ed25519)(?:_sk)?$/;
+const KEY_FILE = /\.(?:pem|p12|pfx|key|keystore|jks)$/;
+const SECRETS_FILE = /^(?:credentials?|secrets?)(?:\.(?:json|ya?ml|toml|ini))?$/;
+
+// Lower-cased, forward slashes, one leading slash: a relative path is read from the root of its tree.
+function credentialForm(value) {
+  return `/${String(value).replaceAll('\\', '/').replace(/^\/+/, '')}`.toLowerCase();
+}
+
+export function isCredentialPath(value) {
+  const normalized = credentialForm(value);
+  const basename = normalized.split('/').at(-1);
+  if (basename.startsWith('.env') && SAFE_ENV_SUFFIXES.some((suffix) => basename.endsWith(suffix))) return false;
+  if (basename === '.env' || basename.startsWith('.env.')) return true;
+  if (SSH_PRIVATE_KEY.test(normalized)) return true;
+  if (normalized.includes('/.ssh/') && !basename.endsWith('.pub') && !SAFE_SSH_FILES.has(basename)) return true;
+  if (SENSITIVE_DIRECTORY_SUFFIXES.some((suffix) => normalized.endsWith(suffix) || (suffix !== '/.ssh' && normalized.includes(`${suffix}/`)))) return true;
+  return EXACT_CREDENTIAL_SUFFIXES.some((suffix) => normalized.endsWith(suffix));
+}
+
+export function isCommitSecretPath(value) {
+  const normalized = credentialForm(value);
+  const basename = normalized.split('/').at(-1);
+  if (basename === '.npmrc') return false;
+  return isCredentialPath(normalized) || KEY_FILE.test(basename) || SECRETS_FILE.test(basename);
+}
+// </youdede:shared>
+
 const MAX_MESSAGE_BYTES = 1024 * 1024;
 const MAX_PROFILE_BYTES = 64 * 1024;
 const MAX_RESULT_BYTES = 256 * 1024;
@@ -19,24 +75,6 @@ const MAX_WALK_ENTRIES = 2000;
 export const SUPPORTED_PROTOCOL_VERSIONS = Object.freeze(['2025-11-25', '2025-06-18', '2024-11-05']);
 const PRIVATE_DIRECTORIES = new Set(['.git', '.youdede', '.youdede-toolkit']);
 const isPrivateDirectory = (name) => PRIVATE_DIRECTORIES.has(name.toLowerCase());
-const SAFE_ENV_SUFFIXES = ['.example', '.sample', '.template', '.dist'];
-// A credential directory is sensitive itself and so is everything under it, at any depth; `.ssh` keeps
-// its own rule because its public keys, config, and known_hosts are safe.
-const SENSITIVE_DIRECTORY_SUFFIXES = ['/.aws', '/.azure', '/.config/gcloud', '/.gnupg', '/.kube', '/.ssh'];
-const SAFE_SSH_FILES = new Set(['authorized_keys', 'config', 'known_hosts']);
-const EXACT_CREDENTIAL_SUFFIXES = [
-  '/.aws/credentials',
-  '/.azure/accessTokens.json',
-  '/.config/gcloud/application_default_credentials.json',
-  '/.config/gh/hosts.yml',
-  '/.docker/config.json',
-  '/.git-credentials',
-  '/.kube/config',
-  '/.netrc',
-  '/.npmrc',
-  '/.pypirc'
-].map((entry) => entry.toLowerCase());
-const SSH_PRIVATE_KEY = /\/(?:\.ssh\/)?id_(?:rsa|dsa|ecdsa|ed25519)(?:_sk)?$/i;
 const MODES = Object.freeze({
   'workspace-files': new Set(['read_file', 'list_directory', 'search_files']),
   'repository-git': new Set(['git_status', 'git_diff', 'git_log']),
@@ -49,7 +87,7 @@ function within(parent, child) {
 }
 
 function cleanGitEnvironment() {
-  return Object.fromEntries(Object.entries(process.env).filter(([name]) => !name.startsWith('GIT_')));
+  return Object.fromEntries(Object.entries(process.env).filter(([name]) => !/^GIT_/i.test(name)));
 }
 
 function safeRelative(value, label = 'path') {
@@ -66,17 +104,9 @@ function rejectPrivatePath(workspace, candidate) {
   }
 }
 
-// Same rules as sensitive-file-access-guard; tests/mcp-trust.test.mjs compares the two. The
-// runtime is copied alone into user projects, so it cannot import the guard.
+// The access tier of the shared sensitive-paths block, as sensitive-file-access-guard applies it.
 export function isSensitiveWorkspacePath(relative) {
-  const normalized = `/${String(relative).replaceAll('\\', '/').split('/').filter((part) => part && part !== '.').join('/')}`.toLowerCase();
-  const basename = normalized.split('/').at(-1);
-  if (basename.startsWith('.env') && SAFE_ENV_SUFFIXES.some((suffix) => basename.endsWith(suffix))) return false;
-  if (basename === '.env' || basename.startsWith('.env.')) return true;
-  if (SSH_PRIVATE_KEY.test(normalized)) return true;
-  if (normalized.includes('/.ssh/') && !basename.endsWith('.pub') && !SAFE_SSH_FILES.has(basename)) return true;
-  if (SENSITIVE_DIRECTORY_SUFFIXES.some((suffix) => normalized.endsWith(suffix) || (suffix !== '/.ssh' && normalized.includes(`${suffix}/`)))) return true;
-  return EXACT_CREDENTIAL_SUFFIXES.some((suffix) => normalized.endsWith(suffix));
+  return isCredentialPath(String(relative).replaceAll('\\', '/').split('/').filter((part) => part && part !== '.').join('/'));
 }
 
 function rejectSensitivePath(workspace, candidate) {

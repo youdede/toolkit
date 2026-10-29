@@ -3,7 +3,7 @@
 import { existsSync, lstatSync, readFileSync, realpathSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { resolvePack, ROOT } from './lib/catalog.mjs';
+import { resolvePack } from './lib/catalog.mjs';
 
 const MAX_REPORT_BYTES = 1024 * 1024;
 const HASH = /^[0-9a-f]{64}$/;

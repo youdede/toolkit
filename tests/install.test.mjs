@@ -672,7 +672,7 @@ test('removing the last artifact leaves no installer state behind', (context) =>
   assert.equal(doctor({ cwd: directory }).findings.length, 0);
 });
 
-// Prerequisites (hook-design 1.7): an operation guard brings shell-command-guard, which owns the
+// Prerequisites: an operation guard brings shell-command-guard, which owns the
 // programs a command runs but does not contain.
 test('adding an operation guard installs its prerequisite, and removing the prerequisite is refused', (context) => {
   const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-prerequisite-'));

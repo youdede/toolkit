@@ -1329,7 +1329,7 @@ export function packSuggestions(manifest, byId) {
 }
 
 // A hook that is a prerequisite of another hook in the pack is installed with it anyway, so it does not
-// count toward the fan-out of independently chosen hooks (hook-design 1.7).
+// count toward the fan-out of independently chosen hooks.
 export function prerequisiteMembers(manifest, lookup) {
   return new Set(manifest.members.flatMap((member) => {
     const record = lookup(member.artifactId);

@@ -40,7 +40,7 @@ Codex uses component-specific native roots:
 | Hook | `.codex/hooks/youdede/<slug>.mjs` plus `.codex/hooks.json` merge | deliberately unsupported |
 | Subagent | deliberately unsupported | deliberately unsupported |
 
-Codex skill adapters also package `agents/openai.yaml` and every declared helper. Twenty-two shell-only gates have native Codex hook adapters; custom agents are withheld.
+Codex skill adapters also package `agents/openai.yaml` and every declared helper. Native Codex hook adapters cover <!-- stat:hook-count:codex -->22<!-- /stat --> shell-only gates; custom agents are withheld.
 
 Gemini CLI, GitHub Copilot, Cursor, and OpenCode use their native component roots and generated target profiles where frontmatter differs. The complete coverage, the per-runtime gate mechanics, and the reasons for every withheld combination are in [targets.md](targets.md). Adding a runtime requires a taxonomy entry, a component-aware root definition, target-aware validation, fixtures, and adapter files; it never means copying a Claude payload into a differently named folder and declaring success.
 

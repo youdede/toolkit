@@ -20,7 +20,7 @@ const GIT_TIMEOUT_MS = 5000;
 const KNOWN_CHECKS = new Set(['git-clean', 'file-exists', 'evidence-valid']);
 
 function gitEnvironment() {
-  return Object.fromEntries(Object.entries(process.env).filter(([key]) => !key.startsWith('GIT_')));
+  return Object.fromEntries(Object.entries(process.env).filter(([key]) => !/^GIT_/i.test(key)));
 }
 
 function fail(code, message) {

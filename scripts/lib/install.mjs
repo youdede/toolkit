@@ -21,7 +21,7 @@ import { createHash, randomBytes } from 'node:crypto';
 import path from 'node:path';
 import { findContextHookConflicts, loadArtifacts, resolvePack, ROOT } from './catalog.mjs';
 import { readIntegrityManifest, verifyArtifactAttestation } from './integrity.mjs';
-import { defaultSettingsPath, resolveConfigRoot, resolveConfigRoots } from './targets.mjs';
+import { DEFAULT_SCOPE, DEFAULT_TARGET, defaultSettingsPath, resolveConfigRoot, resolveConfigRoots } from './targets.mjs';
 
 const STATE_MODE = 0o600;
 const MAX_DISPLACED_FILE_BYTES = 1024 * 1024;
@@ -143,7 +143,7 @@ function renderNotice(state, root) {
   return Buffer.from(`${lines.join('\n')}\n`);
 }
 
-// ponytail: one coarse lock per config root, held across the whole read-modify-write of
+// Known limit: one coarse lock per config root, held across the whole read-modify-write of
 // state.json. Installs are user-initiated and take milliseconds, so contention is a parallel
 // script rather than a hot path. Move to per-key locking only if that stops being true.
 function withStateLock(configRoot, operation) {
@@ -180,7 +180,7 @@ function withStateLock(configRoot, operation) {
       }
       if (metadata.isSymbolicLink()) throw new Error(`${file} is a symbolic link; refusing to use it as the installation lock`);
       if (!metadata.isFile()) throw new Error(`${file} is not a regular file; refusing to use it as the installation lock`);
-      // ponytail: stale reclaim removes by name, so two processes that both saw the same stale
+      // Known limit: stale reclaim removes by name, so two processes that both saw the same stale
       // lock can both proceed. It needs a lock older than 120 s; replace with an OS advisory
       // lock if concurrent installs ever become routine.
       if (Date.now() - metadata.mtimeMs > STATE_LOCK_STALE_MS) {
@@ -600,8 +600,8 @@ export function resolveArtifact(query, root = ROOT) {
 
 function prepareInstall(query, options = {}) {
   const root = options.root || ROOT;
-  const target = options.target || 'claude-code';
-  const scope = options.scope || 'project';
+  const target = options.target || DEFAULT_TARGET;
+  const scope = options.scope || DEFAULT_SCOPE;
   const cwd = options.cwd || process.cwd();
   const force = Boolean(options.force);
   const record = resolveArtifact(query, root);
@@ -719,8 +719,8 @@ export function prerequisiteBlocker(record, prerequisites, target, scope, cwd) {
 // scope, not installed, and not in `exclude` (a pack's members). One entry per suggested artifact, with
 // the reason of the first artifact that suggests it.
 export function suggestionsFor(artifactIds, options = {}) {
-  const target = options.target || 'claude-code';
-  const scope = options.scope || 'project';
+  const target = options.target || DEFAULT_TARGET;
+  const scope = options.scope || DEFAULT_SCOPE;
   const root = options.root || ROOT;
   const installed = new Set(installsOf(target, scope, options.cwd || process.cwd()).map((install) => install.artifactId));
   const exclude = new Set([...(options.exclude || []), ...artifactIds]);
@@ -763,7 +763,7 @@ export function installedDependentsOf(query, options = {}) {
   const root = options.root || ROOT;
   let artifactId;
   try { artifactId = resolveArtifact(query, root).manifest.id; } catch { return []; }
-  return installedDependents(artifactId, installsOf(options.target || 'claude-code', options.scope || 'project', options.cwd || process.cwd()), root);
+  return installedDependents(artifactId, installsOf(options.target || DEFAULT_TARGET, options.scope || DEFAULT_SCOPE, options.cwd || process.cwd()), root);
 }
 
 export function planArtifactInstall(query, options = {}) {
@@ -814,8 +814,8 @@ export function installArtifact(query, options = {}) {
   // state.json is a read-modify-write across the whole plan-copy-record sequence, so the lock
   // is taken before prepareInstall reads it. installPack delegates here per member, one at a
   // time, so the lock is acquired and released per artifact and never nests.
-  const target = options.target || 'claude-code';
-  const scope = options.scope || 'project';
+  const target = options.target || DEFAULT_TARGET;
+  const scope = options.scope || DEFAULT_SCOPE;
   const record = resolveArtifact(query, options.root || ROOT);
   // Reject unsupported target/scope combinations before taking the lock, so a refused install
   // never creates the config root it was refused for.
@@ -950,8 +950,8 @@ export function contextInstallWarnings(manifest, now = new Date()) {
 export function removeArtifact(query, options = {}) {
   // Resolve the owning root read-only, then redo the search under the lock so the state the
   // removal acts on is the state it recorded its decisions from.
-  const target = options.target || 'claude-code';
-  const scope = options.scope || 'project';
+  const target = options.target || DEFAULT_TARGET;
+  const scope = options.scope || DEFAULT_SCOPE;
   const cwd = options.cwd || process.cwd();
   let owningRoot = null;
   for (const candidateRoot of resolveConfigRoots(target, scope, cwd)) {
@@ -973,8 +973,8 @@ export function removeArtifact(query, options = {}) {
 
 function removeArtifactLocked(query, options = {}) {
   const root = options.root || ROOT;
-  const target = options.target || 'claude-code';
-  const scope = options.scope || 'project';
+  const target = options.target || DEFAULT_TARGET;
+  const scope = options.scope || DEFAULT_SCOPE;
   const cwd = options.cwd || process.cwd();
   const force = Boolean(options.force);
   let record = null;
@@ -1202,7 +1202,7 @@ function removeArtifactLocked(query, options = {}) {
 export function planPackInstall(query, options = {}) {
   const root = options.root || ROOT;
   const pack = resolvePack(query, root).manifest;
-  const target = options.target || 'claude-code';
+  const target = options.target || DEFAULT_TARGET;
   const plans = [];
   for (const member of pack.members) {
     try {
@@ -1225,7 +1225,7 @@ export function planPackInstall(query, options = {}) {
       mutations.set(key, { artifactId: member.artifactId, sha256: mutation.sha256 });
     }
   }
-  return { pack, target, scope: options.scope || 'project', members: plans };
+  return { pack, target, scope: options.scope || DEFAULT_SCOPE, members: plans };
 }
 
 function snapshotFiles(files) {
@@ -1293,8 +1293,8 @@ export function removePack(query, options = {}) {
     if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) throw error;
     pack = { id: `pack/${slug}`, slug, version: 'unavailable', members: [] };
   }
-  const target = options.target || 'claude-code';
-  const scope = options.scope || 'project';
+  const target = options.target || DEFAULT_TARGET;
+  const scope = options.scope || DEFAULT_SCOPE;
   const cwd = options.cwd || process.cwd();
   const owner = `pack:${pack.slug}`;
   const removable = [];
@@ -1449,8 +1449,8 @@ function doctorRoot(target, scope, configRoot) {
 }
 
 export function doctor(options = {}) {
-  const target = options.target || 'claude-code';
-  const scope = options.scope || 'project';
+  const target = options.target || DEFAULT_TARGET;
+  const scope = options.scope || DEFAULT_SCOPE;
   const cwd = options.cwd || process.cwd();
   const possibleRoots = resolveConfigRoots(target, scope, cwd);
   const activeRoots = possibleRoots.filter((configRoot) => existsSync(statePath(configRoot)));

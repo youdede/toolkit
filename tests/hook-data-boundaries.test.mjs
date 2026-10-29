@@ -44,7 +44,7 @@ test('sensitive file guard blocks direct, quoted, wrapped, dynamic, and redirect
     [{ tool_name: 'Bash', tool_input: { command: 'cat "$SENSITIVE_PATH"' } }, 'sensitive-path-uninspectable'],
     [{ tool_name: 'Bash', tool_input: { command: 'wc < .netrc' } }, 'sensitive-path-access'],
     [{ tool_name: 'PowerShell', tool_input: { command: "Get-Content '.env'" } }, 'sensitive-path-access']
-    // A dynamic executable's operands are read as file operands (capabilities.md D.24).
+    // A dynamic executable's operands are read as file operands.
     ,[{ tool_name: 'Bash', tool_input: { command: 'READER=cat; $READER .env' } }, 'sensitive-path-access']
     ,[{ tool_name: 'Bash', tool_input: { command: "eval 'cat .env'" } }, 'sensitive-path-access']
     ,[{ tool_name: 'Bash', tool_input: { command: "pwsh -Command 'Get-Content .env'" } }, 'sensitive-path-access']
@@ -66,11 +66,11 @@ test('sensitive file guard treats malformed, oversized, and excessive boundaries
   assert.equal(evaluateSensitive({ tool_name: 'Read', tool_input: {} }).ruleId, 'sensitive-input-invalid');
   assert.equal(evaluateSensitive({ tool_name: 'MultiEdit', tool_input: { file_path: '.env' } }).ruleId, 'sensitive-path-access');
   assert.equal(evaluateSensitive({ tool_name: 'Edit', tool_input: { file_path: 42 } }).ruleId, 'sensitive-input-invalid');
-  // A syntax error is a bound of the analysis, uninspectable in every Bash hook (hook-design G11).
+  // A syntax error is a bound of the analysis, uninspectable in every Bash hook.
   assert.equal(evaluateSensitive({ tool_name: 'Bash', tool_input: { command: "cat 'unterminated" } }).ruleId, 'sensitive-path-uninspectable');
   assert.equal(evaluateSensitive({ tool_name: 'Bash', tool_input: {} }).ruleId, 'sensitive-input-invalid');
   assert.equal(evaluateSensitive({ tool_name: 'Bash', tool_input: { command: 42 } }).ruleId, 'sensitive-input-invalid');
-  // A program known only at run time belongs to shell-command-guard (option B, hook-design 1.7).
+  // A program known only at run time belongs to shell-command-guard.
   assert.equal(evaluateSensitive({ tool_name: 'Bash', tool_input: { command: "bash -c '$COMMAND'" } }).exitCode, 0);
   assert.equal(evaluateShell({ tool_input: { command: "bash -c '$COMMAND'" } }).ruleId, 'shell-command-uninspectable');
   assert.equal(evaluateSensitive({ tool_name: 'Bash', tool_input: { command: 'x'.repeat(MAX_SENSITIVE_COMMAND + 1) } }).ruleId, 'sensitive-input-invalid');
@@ -171,7 +171,7 @@ test('outbound data guard handles dynamic, quoted, attached, and wrapped payload
     assert.equal(result.ruleId, rule, command);
     assert.doesNotMatch(result.message, /TOP_SECRET|TOKEN|LOCAL_FILE|PAYLOAD|report\.txt/);
   }
-  // A program known only at run time belongs to shell-command-guard (option B, hook-design 1.7).
+  // A program known only at run time belongs to shell-command-guard.
   assert.equal(evaluateOutbound({ tool_name: 'Bash', tool_input: { command: "bash -c '$COMMAND'" } }).exitCode, 0);
   assert.equal(evaluateShell({ tool_input: { command: "bash -c '$COMMAND'" } }).ruleId, 'shell-command-uninspectable');
   assert.equal(evaluateOutbound({ tool_name: 'Bash', tool_input: { command: 'x'.repeat(MAX_OUTBOUND_COMMAND + 1) } }).ruleId, 'outbound-input-invalid');

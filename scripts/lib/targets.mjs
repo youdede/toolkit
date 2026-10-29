@@ -51,6 +51,9 @@ export const TARGETS = Object.freeze({
 });
 
 export const SUPPORTED_TARGETS = Object.freeze(Object.keys(TARGETS));
+// What the CLI installs when --target and --scope are omitted.
+export const DEFAULT_TARGET = 'claude-code';
+export const DEFAULT_SCOPE = 'project';
 
 export function targetDefinition(target) {
   const definition = TARGETS[target];

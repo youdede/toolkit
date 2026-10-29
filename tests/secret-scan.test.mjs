@@ -88,6 +88,12 @@ test('sensitive paths are narrow and template environment files remain valid', (
   assert.equal(isSensitivePath('config/.env.example'), false);
   assert.equal(isSensitivePath('docs/secrets/guide.md'), false);
   assert.equal(isSensitivePath('artifacts/security/secrets.json'), true);
+
+  // The commit tier keeps every credential store the access guard refuses, except a project .npmrc.
+  for (const file of ['.git-credentials', '.netrc', '.pypirc', '.kube/config', '.docker/config.json', 'home/.aws/credentials', '.ssh/deploy']) {
+    assert.equal(isSensitivePath(file), true, file);
+  }
+  for (const file of ['.npmrc', 'packages/app/.npmrc', '.ssh/config', '.ssh/id_ed25519.pub']) assert.equal(isSensitivePath(file), false, file);
 });
 
 test('workspace scanning fails closed on symlinks and redacts content', (context) => {

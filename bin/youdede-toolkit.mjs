@@ -8,7 +8,7 @@ import { confirmRemoval, decidePrerequisites, parseAnswer, skippedNotice, sugges
 import { readIntegrityManifest, verifyArtifactAttestation, verifyIntegrityManifest } from '../scripts/lib/integrity.mjs';
 import { validateBehavioralEvaluations } from '../scripts/validate-evaluations.mjs';
 import { readPackEvidenceReport, verifyPackEvidence } from '../scripts/verify-pack-evidence.mjs';
-import { SUPPORTED_TARGETS } from '../scripts/lib/targets.mjs';
+import { DEFAULT_TARGET, SUPPORTED_TARGETS } from '../scripts/lib/targets.mjs';
 
 function parse(argv) {
   const positional = [];
@@ -194,7 +194,7 @@ async function main() {
     // Fan-out is catalog data. Deriving it from an install plan made a read-only query depend on
     // the working directory and fail on unrelated workspace state, and made `pack-info` stat and
     // hash files under the user's config root as a side effect.
-    const target = options.target || 'claude-code';
+    const target = options.target || DEFAULT_TARGET;
     const fanout = new Map();
     const prerequisites = prerequisiteMembers(manifest, (id) => { try { return resolveArtifact(id); } catch { return null; } });
     for (const member of manifest.members) {

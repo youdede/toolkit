@@ -61,7 +61,7 @@ export function validateCapability(cap, fixture = CLI_OPTIONS) {
   return problems;
 }
 
-// Intent records (capabilities.md C): the only non-three-value returns of a sequence check.
+// Intent records: the only non-three-value returns of a sequence check.
 const oneOf = (value, list) => list.includes(value);
 const bool = (value) => typeof value === 'boolean';
 export const INTENT_SHAPES = {

@@ -11,14 +11,15 @@ produce provenance for that source state.
 
 ## Applying decisions 1 and 2
 
-Both are one-line decisions with a wide blast radius: the holder string `Youdede` appears in over
-300 tracked files, including the `authors` field of all <!-- stat:artifact-count -->316<!-- /stat --> `artifact.json` manifests, and the
-namespace in every tracked `github.com/udede/toolkit` link, well beyond the five files listed under step 2. [`scripts/set-publisher-identity.mjs`](../scripts/set-publisher-identity.mjs) applies either or
-both in one pass, over tracked files only, and refuses to run without an explicit value. Its
-`--holder` pass still targets the retired `youdede contributors` placeholder, so update its
-`PLACEHOLDER_HOLDER` constant to `Youdede` in the same change before renaming the holder. Its
-`--owner` pass rewrites `github.com/udede/toolkit` and `@udede` owners only; bare `udede/toolkit`
-references, such as the marketplace commands in `docs/native-marketplaces.md`, need a manual edit.
+Both are one-line decisions with a wide blast radius: the holder `Youdede` appears in over 300
+tracked files, including the `authors` field of all <!-- stat:artifact-count -->316<!-- /stat --> `artifact.json` manifests, and the
+namespace `youdede` in every repository link. [`scripts/set-publisher-identity.mjs`](../scripts/set-publisher-identity.mjs)
+applies either or both in one pass, over tracked files only, and refuses to run without an explicit
+value. Because `Youdede` is also the brand name (`YoudedeGuardPlugin`, "Youdede MCP server"), the
+`--holder` pass replaces only copyright lines, the NOTICE grant, and quoted author names. The
+`--owner` pass rewrites `github.com/youdede/toolkit` links and `@youdede` code owners; the npm scope
+`@youdede/toolkit` and bare `youdede/toolkit` references, such as the marketplace commands in
+`docs/native-marketplaces.md`, need a manual decision.
 
 ```bash
 node scripts/set-publisher-identity.mjs --dry-run --holder "<exact legal name>" --owner "<github org>"
@@ -44,21 +45,15 @@ update that check in the same change.
 **Files to update together:** `LICENSE`, `NOTICE`, `CITATION.cff`, `scripts/verify-legal.mjs`, and
 the `authors` field of all <!-- stat:artifact-count -->316<!-- /stat --> `artifact.json` manifests.
 
-## 2. Migrate the namespace
+## 2. Namespace
 
-The repository was `udede/toolkit` until the account rename of 2026-10-18; it is now `youdede/toolkit`, matching the published identity `@youdede/toolkit`. Before that,
-every link in the README, the CI badge, and the npm metadata points somewhere that does not exist
-publicly.
+Done. The repository was `udede/toolkit` until the account rename of 2026-10-18; it is now
+`youdede/toolkit`, matching the published identity `@youdede/toolkit`. The rename updated these
+together: `package.json` (`repository.url`, `homepage`, `bugs.url`), the `README.md` badge and
+repository links, `CITATION.cff` (`repository-code`, checked by `check:legal`), `.github/CODEOWNERS`,
+and `.github/ISSUE_TEMPLATE/config.yml`.
 
-Do the rename first, then update in one commit:
-
-- `package.json`: `repository.url`, `homepage`, `bugs.url`
-- `README.md`: badge URL and every repository link
-- `CITATION.cff`: `repository-code`
-- `.github/CODEOWNERS`: replace the temporary `@udede` owner
-- `.github/ISSUE_TEMPLATE/config.yml`
-
-Then confirm the badge renders and the issue links resolve while signed out.
+Before publication, confirm the badge renders and the issue links resolve while signed out.
 
 ## 3. Claim the npm scope
 
@@ -102,8 +97,9 @@ bypass actor.
 ## 5. Tag, dispatch, publish, then attest
 
 ```bash
-git tag -s v0.3.0 -m "youdede toolkit 0.3.0"
-git push origin v0.3.0
+VERSION=$(node -p "require('./package.json').version")
+git tag -s "v$VERSION" -m "youdede toolkit $VERSION"
+git push origin "v$VERSION"
 ```
 
 The tag must be signed and annotated, its name must equal the `package.json` version, and
@@ -112,8 +108,8 @@ against the allowed-signers policy on the default branch, and fails if the tagge
 reachable from that branch. A tag cannot authorize its own signing key.
 
 Pushing the tag does **not** start a release. In the GitHub Actions UI, manually run the `release`
-workflow from the default branch with `tag` set to `v0.3.0` and `confirmation` set to
-`publish @youdede/toolkit v0.3.0`. A malformed tag, mismatched confirmation, private repository,
+workflow from the default branch with `tag` set to `v<version>` and `confirmation` set to
+`publish @youdede/toolkit v<version>`. A malformed tag, mismatched confirmation, private repository,
 unsupported npm runtime, history finding, or failed readiness gate stops before `npm publish`.
 
 After publishing, take the root digest printed by the job and put it on the authenticated GitHub
