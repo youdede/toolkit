@@ -6,7 +6,7 @@
     {
       "id": "positive-shared-dashboard-loop",
       "type": "positive",
-      "prompt": "Audit the shared-dashboard loop for Plotlane, an analytics SaaS. Actor: a paying analyst. Value: a live dashboard shared with a stakeholder. Artifact: a public read-only link. Closing event: a viewer signs up and creates their own workspace. Last 90 days: 4,200 analysts; 31% shared at least one dashboard; 2.4 viewers per share on average; 58% of viewers opened the link; 3.1% of openers signed up; 40% of signups created a workspace within 14 days; median cycle 19 days. Paid acquisition brought 900 workspaces at 140 EUR each in the same period.",
+      "prompt": "Audit the shared-dashboard loop for Plotlane, an analytics SaaS. Actor: a paying analyst. Value: a live dashboard shared with a stakeholder. Artifact: a public read-only link. Closing event: a viewer signs up and creates their own workspace. Last 90 days: 4,200 analysts; 31% shared at least one dashboard; 2.4 viewers per share on average; 58% of viewers opened the link; 3.1% of openers signed up; 40% of signups created a workspace within 14 days; median cycle 19 days. Paid acquisition brought 900 workspaces at 140 EUR each in the same period. Each analyst who shared did so for one dashboard on average.",
       "sourceAnchors": [
         "Identify the limiting edge rather than multiplying optimistic averages.",
         "A cohort calculation uses observed edge rates and includes quality, cost, and saturation."

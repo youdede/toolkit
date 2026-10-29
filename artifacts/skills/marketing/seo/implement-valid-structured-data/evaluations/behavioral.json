@@ -6,7 +6,7 @@
     {
       "id": "positive-product-page-json-ld",
       "type": "positive",
-      "prompt": "Add structured data to /products/trail-shoe-x on our Next.js 14 App Router site; pages render server-side through app/products/[slug]/page.tsx. Visible on the page: name 'Trail Shoe X', price 129.00 EUR, 'In stock', brand 'Ridgeline', SKU RL-TSX-01, four product images. No reviews or ratings are shown. Canonical URL: https://shop.example/products/trail-shoe-x. The current Google merchant listing documentation, fetched today, is attached.",
+      "prompt": "Add structured data to /products/trail-shoe-x on our Next.js 14 App Router site; pages render server-side through app/products/[slug]/page.tsx. Visible on the page: name 'Trail Shoe X', price 129.00 EUR, 'In stock', brand 'Ridgeline', SKU RL-TSX-01, four product images. No reviews or ratings are shown. Canonical URL: https://shop.example/products/trail-shoe-x. Current guidance, from Google's product snippet and merchant listing documentation fetched today: Product requires name; merchant listings require offers with price and priceCurrency; availability, brand, sku or gtin, and image are recommended; review and aggregateRating must reflect content visible on the page.",
       "sourceAnchors": [
         "Choose the smallest applicable type graph and map each property to visible or authoritative data.",
         "Implement JSON-LD through the project’s established rendering path with safe serialization"

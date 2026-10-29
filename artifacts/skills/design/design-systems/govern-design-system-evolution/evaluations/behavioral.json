@@ -6,7 +6,7 @@
     {
       "id": "positive-three-team-operating-model",
       "type": "positive",
-      "prompt": "Three product teams consume our design system, one core team maintains it, and releases ship through a versioned npm package. Teams keep forking buttons. Plan how the system should evolve.",
+      "prompt": "Three product teams consume our design system, one core team maintains it, and releases ship through a versioned npm package. Teams keep forking buttons. Plan how the system should evolve. One core team maintains it today. Dana Lee, VP of Product, sponsors the system and can ratify governance changes. Each product team keeps its own Button copy because the shared one lacks a loading state and an icon-only variant. Next quarter we want to rename `Button.kind` to `Button.variant`, a breaking change.",
       "sourceAnchors": [
         "Bypasses are demand signals",
         "a trigger that starts it"

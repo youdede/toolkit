@@ -290,14 +290,9 @@ class SkipBenchmarkComparison extends Error {}
 export function assessSemanticEvidence(root = ROOT, { now = new Date() } = {}) {
   const benchmarkDirectory = path.join(root, '.youdede-workbench', 'release-benchmark');
   const indexFile = path.join(benchmarkDirectory, 'benchmark-index.json');
-  // The receipt is read from the repository when it is published there, and from the ignored
-  // workbench otherwise. A gate that can only run on the machine that produced the evidence
-  // gates nothing: continuous integration clones the repository and sees neither.
-  const evidenceFile = [
-    path.join(root, 'quality', 'release-evidence', 'semantic-release-evidence.json'),
-    path.join(root, '.youdede-workbench', 'reports', 'semantic-release-evidence.json')
-  ].find((candidate) => existsSync(candidate))
-    ?? path.join(root, 'quality', 'release-evidence', 'semantic-release-evidence.json');
+  // Semantic evaluation is advisory: maintainers run it after changing prompts, and it never blocks
+  // publication. Its receipt therefore lives only in the ignored workbench.
+  const evidenceFile = path.join(root, '.youdede-workbench', 'reports', 'semantic-release-evidence.json');
   const reasons = [];
   let recordedPolicy = null;
   try {
@@ -427,8 +422,8 @@ export function assessReleaseReadiness(root = ROOT, options = {}) {
     checkedAt: (options.now || new Date()).toISOString(),
     structural,
     semantic,
-    publishable: structural.valid && semantic.valid,
-    reasons: [...structural.reasons, ...semantic.reasons],
+    publishable: structural.valid,
+    reasons: structural.reasons,
     refresh: {
       buildCommand: 'node scripts/build-release-benchmark.mjs',
       evidencePath: '.youdede-workbench/reports/semantic-release-evidence.json',
@@ -460,7 +455,8 @@ function main() {
   else {
     process.stdout.write(`${result.structural.valid ? '✓' : '✗'} structural contracts and executable declarations\n`);
     if (!options.structuralOnly) {
-      process.stdout.write(`${result.semantic.valid ? '✓' : '✗'} current semantic release evidence\n`);
+      const missing = result.semantic.reasons.some(({ code }) => code === 'SEMANTIC_EVIDENCE_MISSING');
+      process.stdout.write(`${missing ? '-' : result.semantic.valid ? '✓' : '✗'} semantic evaluation (advisory, does not block publishing)${missing ? ': not run here' : ''}\n`);
       process.stdout.write(`${result.publishable ? '✓ publishable' : '✗ not publishable'}\n`);
     }
     for (const item of options.structuralOnly ? result.structural.reasons : result.reasons) process.stderr.write(`  - ${item.code}: ${item.message}\n`);

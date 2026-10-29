@@ -6,7 +6,7 @@
     {
       "id": "positive-rag-evaluation",
       "type": "positive",
-      "prompt": "Review the supplied RAG evaluation for a support-answering release. It includes corpus and pipeline IDs, record-level retrievals, contexts, answers, citations, labels, judge outputs, slices, thresholds, latency, and cost.",
+      "prompt": "Review this RAG evaluation for a support-answering release. Corpus: help-center snapshot hc-2026-10-01 (1,240 articles). Pipeline: rag-v7 (BM25 plus embeddings, top 8 chunks, gpt answerer). Dataset: 200 labelled queries. Aggregate: answer correctness 86%, judged by an LLM judge with no human agreement check reported. Retrieval recall@8: 91%. Record q-117: \"Can I get a refund after 30 days?\" retrieved refund-policy chunk 3 (correct), answer said \"yes, within 60 days\", citation pointed at the right article, judge marked correct. Record q-142: retrieval returned no billing article; answer was correct from model knowledge; judge marked correct. Slice billing (38 queries): correctness 71%. Threshold: 85% overall. Latency p95 2.1 s; cost 0.006 EUR per answer.",
       "sourceAnchors": [
         "Separate retrieval candidate recall",
         "Map each release conclusion"

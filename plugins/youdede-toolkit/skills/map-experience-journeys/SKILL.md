@@ -59,7 +59,7 @@ Whatever the outcome, the response must produce these sections in this order:
 
 - `## Map choice and scope`: the form chosen, why, the actor, and the start and end boundaries.
 - `## Evidence register`: numbered sources and what each one supports.
-- `## Mapped experience`: the map itself, rendered as a stage-by-lane table or a mermaid diagram with the source number or assumption tag inside each cell; narrative prose alone does not satisfy this section.
+- `## Mapped experience`: the map itself, rendered as a stage-by-lane table or a mermaid diagram with the source number or assumption tag inside each cell; narrative prose alone does not satisfy this section. When no map can be authored, because the request is declined or its boundaries are missing, the section says so in one line instead.
 - `## Friction and opportunities`: evidenced pain points, gaps, failure points, and opportunities ranked on evidence strength and impact with a rationale each.
 - `## Assumptions and validation plan`: every assumption-tagged cell and the cheapest way to test each one.
 

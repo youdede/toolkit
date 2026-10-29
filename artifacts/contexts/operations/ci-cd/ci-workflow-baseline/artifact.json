@@ -75,9 +75,9 @@
         "sourceField": "summary"
       },
       {
-        "id": "03-expand-ci-privilege",
+        "id": "03-block-ci-privilege-expansion",
         "effect": "require",
-        "action": "expand-ci-privilege",
+        "action": "block-ci-privilege-expansion",
         "sourceArtifactId": "hook/security/supply-chain/ci-trust-boundary-guard",
         "sourceField": "summary"
       }

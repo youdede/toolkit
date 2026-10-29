@@ -10,21 +10,38 @@
   "description": "An always-on generated security context derived from the catalog's threat-modeling and deterministic guard boundaries. It guides model decisions without claiming to replace enforcement hooks.",
   "domain": "security",
   "category": "threat-modeling",
-  "capabilities": ["operate"],
-  "problems": ["application-security-review"],
-  "frameworks": ["agnostic"],
-  "languages": ["agnostic"],
-  "lifecycle": ["planning", "implementation", "maintenance"],
+  "capabilities": [
+    "operate"
+  ],
+  "problems": [
+    "application-security-review"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "planning",
+    "implementation",
+    "maintenance"
+  ],
   "risk": "low",
   "risk_reason": "It supplies least-authority guidance without granting tool access or changing credentials.",
   "license": "MIT",
-  "authors": ["Youdede"],
+  "authors": [
+    "Youdede"
+  ],
   "refuses": [
     "It does not claim prompt instructions can enforce a security boundary independently of deterministic controls.",
     "It does not authorize reading credentials, protected files, or undeclared data for additional context.",
     "It does not authorize network transmission, credential expansion, or bypasses beyond installed guard policy."
   ],
-  "execution": { "mode": "prompt", "entrypoints": [] },
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
   "context": {
     "scope": "always",
     "precedence": 900,
@@ -36,14 +53,65 @@
       "hook/security/application-security/outbound-data-guard"
     ],
     "rules": [
-      { "id": "review-tool-authority", "effect": "require", "action": "review-tool-authority", "sourceArtifactId": "skill/security/threat-modeling/review-agent-tool-boundaries", "sourceField": "summary" },
-      { "id": "do-not-reveal-detected-credentials", "effect": "forbid", "action": "reveal-detected-credentials", "sourceArtifactId": "hook/security/secrets/prompt-secret-guard", "sourceField": "refuses", "sourceIndex": 0, "text": "Do not repeat, store, or transmit a detected credential." },
-      { "id": "do-not-read-protected-files", "effect": "forbid", "action": "read-protected-files", "sourceArtifactId": "hook/security/secrets/sensitive-file-access-guard", "sourceField": "refuses", "sourceIndex": 0, "text": "Do not read, print, or copy credential files, private keys, or environment secret files." },
-      { "id": "do-not-upload-local-payloads", "effect": "forbid", "action": "upload-local-payloads", "sourceArtifactId": "hook/security/application-security/outbound-data-guard", "sourceField": "refuses", "sourceIndex": 0, "text": "Do not send local file contents or dynamic payloads to a network service without explicit approval." }
+      {
+        "id": "review-tool-authority",
+        "effect": "require",
+        "action": "review-tool-authority",
+        "sourceArtifactId": "skill/security/threat-modeling/review-agent-tool-boundaries",
+        "sourceField": "summary"
+      },
+      {
+        "id": "do-not-reveal-detected-credentials",
+        "effect": "forbid",
+        "action": "reveal-detected-credentials",
+        "sourceArtifactId": "hook/security/secrets/prompt-secret-guard",
+        "sourceField": "refuses",
+        "sourceIndex": 0,
+        "text": "Do not repeat, store, or transmit a detected credential."
+      },
+      {
+        "id": "do-not-read-protected-files",
+        "effect": "forbid",
+        "action": "read-protected-files",
+        "sourceArtifactId": "hook/security/secrets/sensitive-file-access-guard",
+        "sourceField": "refuses",
+        "sourceIndex": 0,
+        "text": "Do not read, print, or copy credential files, private keys, or environment secret files."
+      },
+      {
+        "id": "do-not-upload-local-payloads",
+        "effect": "forbid",
+        "action": "upload-local-payloads",
+        "sourceArtifactId": "hook/security/application-security/outbound-data-guard",
+        "sourceField": "refuses",
+        "sourceIndex": 0,
+        "text": "Do not send local file contents or dynamic payloads to a network service without explicit approval."
+      },
+      {
+        "id": "do-not-claim-unverified-tool-security",
+        "effect": "forbid",
+        "action": "claim-unverified-tool-security",
+        "sourceArtifactId": "skill/security/threat-modeling/review-agent-tool-boundaries",
+        "sourceField": "refuses",
+        "sourceIndex": 2,
+        "text": "Do not describe a tool surface as secure while critical authority paths or negative tests remain unresolved; name what was verified and mark the rest unverified."
+      }
     ]
   },
-  "relationships": { "composesWith": [], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": [] },
-  "operational": { "behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "immediate", "latency_reason": "The runtime loads static guidance to apply least-authority guidance for agent tools, credentials, sensitive files, and outbound data in the matching file scope.", "dataRetention": "none" },
+  "relationships": {
+    "composesWith": [],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "immediate",
+    "latency_reason": "The runtime loads static guidance to apply least-authority guidance for agent tools, credentials, sensitive files, and outbound data in the matching file scope.",
+    "dataRetention": "none"
+  },
   "adapters": {
     "claude-code": "adapters/claude-code.json",
     "cursor": "adapters/cursor.json",

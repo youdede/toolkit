@@ -6,7 +6,7 @@
     {
       "id": "positive-transcript-clustering",
       "type": "positive",
-      "prompt": "Synthesize these six interview transcripts about invoice reconciliation into clustered findings before Thursday's roadmap decision. Each transcript carries a participant identifier.",
+      "prompt": "Synthesize these six interview excerpts about invoice reconciliation into clustered findings before Thursday's roadmap decision: whether to build automatic bank-to-invoice matching first. Participants consented to internal reuse of quotes without names.\nP1 (controller, 40 staff): \"I export the bank CSV every Monday and match by amount in Excel. Two hours, every week.\"\nP2 (bookkeeper, agency): \"Partial payments kill me. One invoice, three transfers, and nothing lines up.\"\nP3 (founder, 8 staff): \"I don't reconcile until the accountant asks, then it's a weekend.\"\nP4 (AR clerk): \"Customers put the wrong invoice number in the reference about a third of the time.\"\nP5 (controller): \"Matching by amount is fine until two invoices have the same total.\"\nP6 (bookkeeper): \"I'd pay for anything that handles partial payments.\"",
       "sourceAnchors": [
         "Cluster bottom-up",
         "supporting identifiers"

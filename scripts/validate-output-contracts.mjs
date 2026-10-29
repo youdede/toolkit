@@ -10,6 +10,7 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { loadArtifacts, ROOT } from './lib/catalog.mjs';
+import { extractOutputContract } from './lib/output-contract.mjs';
 
 const CONTRACT_LINE = /^Return every one of these headings[^\n]*/m;
 const BACKTICKED_HEADING = /`(##\s+[^`]+)`/g;
@@ -57,9 +58,14 @@ export function collectContractProblems(root = ROOT) {
 export function payloadProblems({ manifest, evaluation, file, text }) {
   const found = [];
   const line = text.match(CONTRACT_LINE);
-  if (!line) return found;
-  const contract = [...line[0].matchAll(BACKTICKED_HEADING)].map((m) => clean(m[1]));
   const id = manifest?.id ?? file;
+  // Every evaluated prompt payload names its reply headings. A context is the exception: it is
+  // loaded into every session, so a reply contract there would reshape every unrelated reply.
+  if (!line) {
+    const missing = evaluation && manifest?.kind !== 'context' && extractOutputContract(text).headings.length === 0;
+    return missing ? [`${id} (${file}): the payload has no output contract`] : found;
+  }
+  const contract = [...line[0].matchAll(BACKTICKED_HEADING)].map((m) => clean(m[1]));
   const rest = text.replace(line[0], '');
 
   if (contract.length === 0) {

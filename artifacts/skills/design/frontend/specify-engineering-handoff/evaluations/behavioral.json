@@ -6,7 +6,7 @@
     {
       "id": "positive-checkout-card-handoff",
       "type": "positive",
-      "prompt": "Package the redesigned checkout summary card for engineering. The frames, our token library, the supported widths, and the design lead who owns open questions are all provided.",
+      "prompt": "Package the redesigned checkout summary card for engineering. Design source, Figma frame \"Checkout / Summary card v3\": a card with line items (name, quantity, price), subtotal, a discount row shown only when a code applies, shipping, tax, and total, then a \"Place order\" button. Tokens used: surface.raised, text.primary, text.secondary, text.success (discount), space.3, space.4, radius.lg, type.body.md, type.heading.sm. States drawn: default, loading (skeleton rows), discount applied, and error (\"Prices changed, review your order\"); no disabled or focus state is drawn for the button. Widths: 320px to 480px in the mobile layout, 360px fixed in the desktop sidebar. Decision owner for open questions: Mira, design lead.",
       "sourceAnchors": [
         "design source",
         "decision owner"

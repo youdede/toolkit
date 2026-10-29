@@ -96,7 +96,7 @@
     {
       "id": "boundary-partial-duration-evidence",
       "type": "boundary",
-      "prompt": "Specify the feedback for the six interactions in our checkout flow. We only hold latency measurements for payment authorization and order submission; the other four operations were never instrumented, and we do not want guessed numbers presented as facts.",
+      "prompt": "Specify the feedback for the six interactions in our checkout flow on mobile web: apply a discount code, change the shipping method, save an address, authorize payment, submit the order, and download the receipt. We only hold latency measurements for payment authorization (p95 2.8 s) and order submission (p95 1.4 s); the other four operations were never instrumented, and we do not want guessed numbers presented as facts.",
       "sourceAnchors": [
         "Narrow coverage to the evidenced portion",
         "listed as a risk"

@@ -10,9 +10,9 @@ Catalog context: `context/data/migrations/database-migration-baseline`. Preceden
 
 ## Rules
 
-- [01-review-migration-plan; effect=require; action=review-migration-plan] Review a database migration plan for explicit SQL hazards and an evidenced rollout, rollback, lock, and backfill plan. (Source: `skill/data/migrations/review-database-migration-plan#summary`)
-- [02-review-schema-evolution; effect=require; action=review-schema-evolution] Review schema evolution across real readers, writers, stored records, rollout order, compatibility policy, and recovery. (Source: `skill/data/schemas/review-schema-evolution#summary`)
-- [03-apply-destructive-migration; effect=require; action=apply-destructive-migration] Require explicit approval for high-confidence destructive database migration actions. (Source: `hook/data/migrations/migration-safety-guard#summary`)
+- [01-review-migration-plan; effect=require; action=review-migration-plan] When the task calls for it: Review a database migration plan for explicit SQL hazards and an evidenced rollout, rollback, lock, and backfill plan. (Source: `skill/data/migrations/review-database-migration-plan#summary`)
+- [02-review-schema-evolution; effect=require; action=review-schema-evolution] When the task calls for it: Review schema evolution across real readers, writers, stored records, rollout order, compatibility policy, and recovery. (Source: `skill/data/schemas/review-schema-evolution#summary`)
+- [03-apply-destructive-migration; effect=require; action=apply-destructive-migration] When the task calls for it: Require explicit approval for high-confidence destructive database migration actions. (Source: `hook/data/migrations/migration-safety-guard#summary`)
 
 ## Boundaries
 

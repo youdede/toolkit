@@ -6,7 +6,7 @@
     {
       "id": "positive-verified-repository-handoff",
       "type": "positive",
-      "prompt": "Write a handoff for the current repository after the migration attempt. Capture the verified Git state, commands that actually ran, changed files, the failed migration branch, and the one next action.",
+      "prompt": "Write a handoff for the current repository after the migration attempt. Verified state: branch feat/orders-migration at revision 4d2f9a1, `git status --short` shows ` M db/migrations/0042_orders.sql` and `?? db/migrations/0043_backfill.sql`. Commands that ran: `npm run db:migrate` exited 1 with \"column \\\"status_v2\\\" contains null values\"; `npm test` exited 0 before the migration attempt. Changed files: db/migrations/0042_orders.sql, db/migrations/0043_backfill.sql. Lint and the integration suite were not run. The next step is to decide whether 0043 should backfill before 0042 adds the NOT NULL constraint.",
       "sourceAnchors": [
         "collect-git-state.mjs",
         "single best next action"

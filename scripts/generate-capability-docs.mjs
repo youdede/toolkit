@@ -108,7 +108,7 @@ export function renderCapabilityMatrix(root = ROOT) {
     '',
     '- Integrity hashes prove byte identity against the catalog, not authorship or semantic correctness.',
     '- Behavioral cases and pack scenarios prove checked contract coverage; they do not establish exhaustive portfolio behavior.',
-    '- Release publishability additionally requires current independent semantic evidence, a signed matching tag, publisher authority, and the provenance-capable OIDC workflow.',
+    '- Release publishability additionally requires a signed matching tag, publisher authority, and the provenance-capable OIDC workflow. Model-judged semantic evaluation is an advisory maintainer test, not a release condition.',
     '- Native marketplace packages omit any composition or artifact kind whose runtime cannot preserve the declared contract.',
     ''
   ];

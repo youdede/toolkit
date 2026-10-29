@@ -39,7 +39,7 @@ Quantitative material is handled apart from the clusters: closed-ended survey re
 ## Validation before the result ships
 
 - Coverage: every inventoried source appears in at least one finding or is explicitly listed as unused, with the reason.
-- Traceability: walk three findings back to their cited evidence and show each walk in `## Clustered findings`: the finding, the cited identifier, and the verbatim evidence point. A walk claimed but not shown does not count; if any walk fails, the synthesis is not done.
+- Traceability: walk three findings (every finding, when there are fewer) back to their cited evidence and show each walk in `## Clustered findings`: the finding, the cited identifier, and the verbatim evidence point. A walk claimed but not shown does not count; if any walk fails, the synthesis is not done.
 - Single-source flags: a theme supported by one session is marked single-source rather than silently promoted.
 - Frequency discipline: session counts are reported as counts, never converted into population percentages or prevalence claims.
 - Voice discipline: quotes stay verbatim and attributed to their identifier; paraphrases are marked as paraphrase.

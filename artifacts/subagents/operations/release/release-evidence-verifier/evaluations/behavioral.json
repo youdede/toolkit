@@ -6,7 +6,7 @@
     {
       "id": "positive-release-evidence",
       "type": "positive",
-      "prompt": "Verify the supplied release candidate against twelve acceptance criteria. The bundle contains immutable build IDs, digests, commands, timestamps, environments, configurations, full results, migration proof, rollback rehearsal, and operational checks.",
+      "prompt": "Verify release candidate rc-2026.10.29-2 (image digest sha256:4be1c9d07f2a, commit 8a1d3e2) against its acceptance criteria. AC1 unit tests: `npm test` at 8a1d3e2, exit 0, 1,204 passed, 2026-10-29 09:12 UTC. AC2 integration tests: run against commit 77c0f19, exit 0. AC3 migration proof: 0042 applied on a staging copy, 38 s, row counts match. AC4 rollback rehearsal: not recorded. AC5 smoke test in staging: green summary in Slack, no log or digest attached. AC6 config: prod config diff reviewed and attached.",
       "sourceAnchors": [
         "Freeze the candidate identity",
         "Map each criterion"

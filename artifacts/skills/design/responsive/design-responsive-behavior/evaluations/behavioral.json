@@ -6,7 +6,7 @@
     {
       "id": "positive-dashboard-range-spec",
       "type": "positive",
-      "prompt": "Specify responsive behavior for our analytics dashboard from small phones to widescreen desktops. The content inventory and priority order are attached, and both touch and pointer are supported.",
+      "prompt": "Specify responsive behavior for our analytics dashboard from small phones (320px) to widescreen desktops (2560px); device classes: phones, tablets, laptops, external monitors; touch and pointer are both supported; web only. Content inventory in priority order (set by Joel, product owner): 1. date-range picker, 2. four KPI tiles (revenue, orders, conversion, average order value), 3. revenue line chart, 4. top-products table (6 columns: product, units, revenue, margin, returns, trend sparkline), 5. channel breakdown donut, 6. export button, 7. notes panel. The KPI tiles hold numbers up to 9 digits with a currency symbol.",
       "sourceAnchors": [
         "priority order",
         "input methods"

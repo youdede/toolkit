@@ -6,7 +6,7 @@
     {
       "id": "positive-bounded-request",
       "type": "positive",
-      "prompt": "Turn supplied problem evidence into a build brief without treating the proposed implementation as the problem. The affected user, current workaround, consequence, authority, and outcome constraints are supplied. Return sections Evidence, Product hypothesis, Non-goals, Engineering constraints, and Next action; distinguish verified facts from unresolved uncertainty.",
+      "prompt": "Turn this problem evidence into a build brief without treating the proposed implementation as the problem. Evidence from three support calls and one ops interview: warehouse leads at our 4 sites re-key carrier pickup times from emails into the WMS each morning (about 40 minutes per site); twice in September a pickup was missed because a time was typed wrong, costing a 1,200 EUR re-delivery each. The ops director proposed \"an AI agent that reads the emails\". Authority: the ops director approves anything that writes to the WMS; IT owns WMS integrations. Outcome constraint: no change may move a pickup without a human seeing it first. Return sections Evidence, Product hypothesis, Non-goals, Engineering constraints, and Next action; distinguish verified facts from unresolved uncertainty.",
       "sourceAnchors": [
         "Interview To Build Brief",
         "Contract"

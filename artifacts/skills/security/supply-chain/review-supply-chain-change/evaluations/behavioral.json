@@ -6,7 +6,7 @@
     {
       "id": "positive-package-and-action-change",
       "type": "positive",
-      "prompt": "Review the supplied package.json, package-lock.json, and workflow diff that add a remote dependency, a postinstall script, and a third-party action before merge.",
+      "prompt": "Review this change before merge. package.json diff: + \"chart-tools\": \"github:dataviz-labs/chart-tools#main\" in dependencies, and + \"postinstall\": \"node scripts/fetch-fonts.js\" in scripts. scripts/fetch-fonts.js downloads https://cdn.fontsrv.io/pack.zip and unzips it into node_modules/.fonts, with no checksum. package-lock.json: chart-tools resolves to git+ssh://git@github.com/dataviz-labs/chart-tools.git#a91c... with no integrity field. .github/workflows/build.yml diff: + uses: some-org/setup-cache@v2 (a mutable tag), and the job already has `permissions: contents: write` and access to NPM_TOKEN.",
       "sourceAnchors": [
         "Compare manifest intent with the lockfile diff",
         "Review workflow action references"

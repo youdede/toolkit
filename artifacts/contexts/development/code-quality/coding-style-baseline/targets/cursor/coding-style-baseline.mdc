@@ -12,9 +12,10 @@ Catalog context: `context/development/code-quality/coding-style-baseline`. Prece
 
 ## Rules
 
-- [preserve-observable-behavior; effect=require; action=preserve-observable-behavior] Simplify a bounded code path while preserving observable behavior and repository conventions. (Source: `skill/development/code-quality/simplify-code-with-invariants#summary`)
-- [respect-module-entrypoints; effect=require; action=respect-module-entrypoints] Detect and enforce TypeScript package entry-point boundaries without assuming one repository layout. (Source: `skill/development/architecture/enforce-typescript-module-boundaries#summary`)
+- [preserve-observable-behavior; effect=require; action=preserve-observable-behavior] When the task calls for it: Simplify a bounded code path while preserving observable behavior and repository conventions. (Source: `skill/development/code-quality/simplify-code-with-invariants#summary`)
+- [respect-module-entrypoints; effect=require; action=respect-module-entrypoints] When the task calls for it: Detect and enforce TypeScript package entry-point boundaries without assuming one repository layout. (Source: `skill/development/architecture/enforce-typescript-module-boundaries#summary`)
 - [do-not-edit-generated-files; effect=forbid; action=edit-generated-files] Do not edit generated files directly; change the generator or its source template and regenerate. (Source: `hook/development/code-quality/generated-file-guard#refuses[0]`)
+- [do-not-delete-unproven-unused-code; effect=forbid; action=delete-unproven-unused-code] Do not delete behavior because it looks unused; cite the repository evidence that shows it is unused, or keep it and say the evidence is missing. (Source: `skill/development/code-quality/simplify-code-with-invariants#refuses[0]`)
 
 ## Boundaries
 

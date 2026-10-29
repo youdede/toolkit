@@ -22,8 +22,8 @@
         ],
         "requiredEvidence": [
           "failing JPY regression test",
-          "red command and expected failure",
-          "green command and passing result",
+          "red command and the failure it is expected to show",
+          "green command and the result that would confirm the fix, not reported as already run",
           "broader verification command"
         ],
         "forbiddenClaims": [

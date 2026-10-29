@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "The failover step is destructive, has no stop condition or success signal, and the runbook names neither rollback nor the authorized decision owner.",
+      "prompt": "Review runbook RB-21, \"Regional failover for the API\". Scenario: eu-west-1 outage. Authority: not stated. Prerequisites: \"make sure the standby is healthy\". Step 4: `terraform apply -target=module.primary -var region=eu-central-1 -auto-approve`, which destroys and recreates the primary cluster; no stop condition, no expected output. Verification: not stated. Rollback: not stated. Exercise evidence: none; last edited 2025-03.",
       "sourceAnchors": [
         "a stepwise operator-state ledger with precondition, action, observable result, and failure branch",
         "a required step lacks a precondition, safe action boundary, observable success test, recovery branch, or authorized owner"
@@ -36,7 +36,7 @@
     {
       "id": "positive-bounded-control-case",
       "type": "positive",
-      "prompt": "Every step has explicit state, bounded command, observable result, failure branch, owner, and recent rehearsal evidence. Review the supplied evidence and avoid manufacturing a finding when the specialist threshold is not met.",
+      "prompt": "Review runbook RB-14, \"Fail over the read replica\". Scenario: the primary database is unreachable for more than 5 minutes. Authority: the on-call SRE may execute; the incident commander approves step 3. Prerequisites: replica lag under 30 s, checked by `SELECT now() - pg_last_xact_replay_timestamp()`. Steps: each lists starting state, one bounded command, the expected output, a failure branch, and an owner. Verification: writes succeed on the new primary within 2 minutes. Rollback: re-point DNS to the old primary if it returns within 15 minutes. Exercise evidence: rehearsed 2026-10-07 in staging, log attached, 11 minutes end to end. Avoid manufacturing a finding when the specialist threshold is not met.",
       "sourceAnchors": [
         "Only elevate a finding when a required step lacks a precondition",
         "When no actionable finding is supported"

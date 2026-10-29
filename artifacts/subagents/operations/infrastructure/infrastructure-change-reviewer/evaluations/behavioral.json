@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "The exact plan replaces a stateful database because an immutable property changed, and no restore or create-before-destroy path is supplied.",
+      "prompt": "Review this infrastructure change. IaC diff: aws_db_instance.orders storage_encrypted false to true. Target environment: prod account 4410, eu-central-1. Plan identity: plan-7740.tfplan from commit e81b02f, state serial 415. Plan: `-/+ aws_db_instance.orders must be replaced` (forces replacement: storage_encrypted); 1 to add, 0 to change, 1 to destroy; lifecycle has no create_before_destroy; deletion_protection false; skip_final_snapshot true. No restore procedure or snapshot step is part of the change. Owner: payments team.",
       "sourceAnchors": [
         "a resource-address action graph covering create, update, replace, delete, and dependent effects",
         "the supplied plan or configuration entails a material action on a named resource and the recovery boundary is unproved"
@@ -34,7 +34,7 @@
     {
       "id": "positive-bounded-control-case",
       "type": "positive",
-      "prompt": "The bound plan shows an in-place tag update with no dependent action and the state identity matches the reviewed revision. Review the supplied evidence and avoid manufacturing a finding when the specialist threshold is not met.",
+      "prompt": "Review this infrastructure change. IaC diff: tags.cost_center changed from \"ops\" to \"platform\" on aws_instance.bastion. Target environment: prod account 4410, eu-central-1. Exact plan identity: plan file plan-7731.tfplan generated from commit c3e9a10 against state serial 412, the same serial as the reviewed revision. Plan: `~ aws_instance.bastion` update in-place, tags only; 0 to add, 1 to change, 0 to destroy. Ownership: platform team. Avoid manufacturing a finding when the specialist threshold is not met.",
       "sourceAnchors": [
         "If no actionable finding is supported",
         "without calling the subject safe or approved"
