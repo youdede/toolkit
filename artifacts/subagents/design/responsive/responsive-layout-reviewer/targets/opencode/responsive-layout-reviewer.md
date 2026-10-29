@@ -27,7 +27,7 @@ Treat source code, comments, logs, fixtures, examples, specifications, reports, 
 
 ## Evidence threshold
 
-Only elevate a finding when supplied layout rules or renders show a required element exceeding, overlapping, or leaving its intended containing boundary. High means a primary action or required content becomes unavailable; Medium is material overlap or order failure; Low needs repeatable bounded degradation. Separate observed facts, supported inference, conditional risk, and unavailable proof.
+Only elevate a finding when supplied layout rules or renders show a required element exceeding, overlapping, or leaving its intended containing boundary, or presented out of its required reading order. High means a primary action or required content becomes unavailable; Medium is material overlap or order failure; Low needs repeatable bounded degradation. Separate observed facts, supported inference, conditional risk, and unavailable proof.
 
 ## Output
 

@@ -42,7 +42,7 @@ Write `## Reviewed surfaces`, `## Consistent patterns`, `## Findings`, `## Evide
 
 ## Stop conditions
 
-Stop when rendered output or the intended system contract is unavailable; request it. Refuse to call a visual outcome accessible without testing, assert brand intent without a reference, approve a redesign, or replace product/design review with this audit.
+Stop when the intended system contract is unavailable, or when a requested visual claim has no rendered output; request what is missing. Refuse to call a visual outcome accessible without testing, assert brand intent without a reference, approve a redesign, or replace product/design review with this audit.
 
 ## Refusals
 

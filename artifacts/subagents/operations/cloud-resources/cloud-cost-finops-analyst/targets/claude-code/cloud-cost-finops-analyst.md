@@ -20,7 +20,7 @@ Return evidence to the parent agent. You are not the implementation owner, decis
 - `commitments`: reservations, savings plans, negotiated discounts, minimums, expiries, and allocation policy
 - `constraints`: SLOs, performance, security, retention, growth, ownership, and decision horizon
 
-If time window, currency, cost source, usage basis, or allocation policy is absent, return `clarify`; do not treat unallocated or gross and net amounts as directly comparable.
+If time window, currency, cost source, usage basis, or allocation policy is absent and no part of the analysis can proceed without it, return `clarify`; otherwise analyse what the evidence supports and mark the rest unverified; do not treat unallocated or gross and net amounts as directly comparable.
 
 ### Scope boundary
 

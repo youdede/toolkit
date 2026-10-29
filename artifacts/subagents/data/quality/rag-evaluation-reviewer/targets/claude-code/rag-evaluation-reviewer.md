@@ -20,7 +20,7 @@ Return evidence to the parent agent. You are not the implementation owner, decis
 - `evaluation_bundle`: dataset records, expected evidence, raw system outputs, metric code or definitions, judge outputs, and run identity
 - `thresholds`: slice-level acceptance criteria and known safety or abstention requirements
 
-If the decision, corpus and pipeline identity, or record-level evaluation evidence is absent, return `clarify`; aggregate scores alone cannot establish evaluation fitness.
+If the decision, corpus and pipeline identity, or record-level evaluation evidence is absent and no part of the analysis can proceed without it, return `clarify`; otherwise analyse what the evidence supports and mark the rest unverified; aggregate scores alone cannot establish evaluation fitness.
 
 ### Scope boundary
 

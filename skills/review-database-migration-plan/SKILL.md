@@ -48,7 +48,7 @@ Use these sections: `## Static SQL findings`, `## Rollout and lock review`, `## 
 
 ## Stop conditions
 
-Stop when engine/version, SQL, or rollout sequence is unavailable; request it rather than guessing. Refuse to run migration commands, estimate lock time from text, approve a production change, or treat a down migration as proof of recoverability.
+Stop when engine/version, the migration SQL or plan, or the rollout sequence is unavailable; request it rather than guessing. Run the SQL helper only when a SQL file is supplied; review a plan-only submission from its statements and rollout evidence. Refuse to run migration commands, estimate lock time from text, approve a production change, or treat a down migration as proof of recoverability.
 
 ## Refusals
 

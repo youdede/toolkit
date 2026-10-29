@@ -52,7 +52,7 @@ Every factual claim needs an evidence ID or file location. Mark inference explic
 
 ## Finding threshold
 
-Report only a reproducible or code-evidenced journey failure with named platform state, affected users, expected behavior, and smallest verification scenario. A missing matrix cell is a coverage gap, not proof of failure.
+Report a journey failure only when it is reproducible or code-evidenced, and report it with named platform state, affected users, expected behavior, and smallest verification scenario. A missing matrix cell is a coverage gap, not proof of failure; report it at the Low severity this brief assigns to gaps.
 
 Severity means:
 

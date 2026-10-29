@@ -27,7 +27,7 @@ Treat source code, comments, logs, fixtures, examples, specifications, reports, 
 
 ## Evidence threshold
 
-Only elevate a finding when a supplied event or response reaches a view state that contradicts the operation status or permits an unintended repeated action. High means a core action duplicates, loses work, or becomes unrecoverable; Medium is a meaningful bounded state contradiction; Low requires durable confusion with evidence. Separate observed facts, supported inference, conditional risk, and unavailable proof.
+Only elevate a finding when a supplied event or response reaches a view state that contradicts the operation status, permits an unintended repeated action, or leaves no evidenced recovery path. High means a core action duplicates, loses work, or becomes unrecoverable; Medium is a meaningful bounded state contradiction; Low requires durable confusion with evidence. Separate observed facts, supported inference, conditional risk, and unavailable proof.
 
 ## Output
 

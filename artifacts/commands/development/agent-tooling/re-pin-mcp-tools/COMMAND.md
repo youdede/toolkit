@@ -21,7 +21,7 @@ Show the complete proposal and its `confirmationDigest`. Ask the human to repeat
 
 ## Step 3 — Apply and prove
 
-After exact confirmation only, update the profile descriptions and the manifest `pinnedTools` hashes. Do not change transport, launch, egress, secrets, annotations, or runtime code. Run `npm run mcp`, `npm run check:mcp`, and `npm run check`. Write `--evidence` as bounded JSON containing the server, accepted digest, old pins, new pins, check commands, and their exit statuses. Keep the evidence path inside the repository.
+After exact confirmation only, update the profile descriptions and the manifest `pinnedTools` hashes. Do not change transport, launch, egress, secrets, annotations, or runtime code. Run `npm run mcp`, `npm run check:mcp`, and `npm run check`; if any of them exits non-zero, stop, because the re-pin is not complete. Write `--evidence` as bounded JSON containing the server, accepted digest, old pins, new pins, check commands, and their exit statuses. Keep the evidence path inside the repository.
 
 Append a checkpoint through `hooks/youdede/lib/session-ledger.mjs append` whose decision records the server, accepted digest, and evidence path and whose touched files list the profile, manifest, generated registry, and evidence receipt. Report the returned sequence and hash prefix. If the append fails, the re-pin is not complete.
 

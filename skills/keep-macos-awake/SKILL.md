@@ -13,8 +13,8 @@ Use the least persistent mechanism. Prefer a foreground caffeinate process tied 
 
 1. Confirm macOS, identify the process or time window, and explain battery and thermal impact. Inspect existing caffeinate and launchd state before creating anything.
 2. For a bounded run use `caffeinate` with an explicit PID (`-w <pid>`) or timeout (`-t <seconds>`), choosing the assertion that matches the need: `-i` idle sleep, `-d` display sleep, `-s` system sleep (on AC power only). For persistent use, create a uniquely labeled user LaunchAgent with exact arguments and no privileged paths.
-3. Load the job with `launchctl bootstrap gui/<uid> <plist>` (the legacy `load` and `unload` subcommands are replaced by `bootstrap` and `bootout`), then verify process identity, the assertion in `pmset -g assertions`, label, and logs. Avoid broad process-name matching.
-4. Provide and test the matching stop command (`launchctl bootout gui/<uid>/<label>` for the LaunchAgent). Remove only the exact file created and report whether the setting survives login.
+3. For the persistent path, load the job with `launchctl bootstrap gui/<uid> <plist>` (the legacy `load` and `unload` subcommands are replaced by `bootstrap` and `bootout`), then verify process identity, the assertion in `pmset -g assertions`, label, and logs. Avoid broad process-name matching.
+4. Provide the matching stop command (`launchctl bootout gui/<uid>/<label>` for the LaunchAgent). If you test it, start the session again and re-verify the assertion, so the user is left awake as requested. Remove only the exact file created and report whether the setting survives login.
 
 ## Output contract
 

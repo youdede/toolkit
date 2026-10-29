@@ -14,7 +14,7 @@ Generate auditable SQL and a verification plan; do not apply production grants u
 1. Inventory databases, schemas, relation types, ownership, RLS policies, sensitive tables, and required queries with an existing administrator. Define an allowlist and expiration or review date.
 2. Create a NOINHERIT or otherwise deliberately composed login role with default_transaction_read_only, statement timeout, idle timeout, and connection limit. Do not grant superuser, role creation, replication, or bypass RLS.
 3. Grant CONNECT, USAGE, and SELECT only to required objects. Treat default privileges as a separate reviewed decision because they silently grant access to future tables.
-4. Test as the role: allowed SELECT succeeds; INSERT, UPDATE, DELETE, DDL, COPY to server files, sensitive tables, and other schemas fail. Record revocation SQL alongside creation SQL.
+4. Test as the role inside a transaction you roll back, against a scratch table created for the test rather than real data, and point any COPY at a throwaway path: allowed SELECT succeeds; INSERT, UPDATE, DELETE, DDL, COPY to server files, sensitive tables, and other schemas fail. Record revocation SQL alongside creation SQL.
 
 ## Output contract
 

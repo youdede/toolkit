@@ -14,7 +14,7 @@ Match effort to price and consequence. Give the user a concise verdict based on 
 1. Identify the exact model or variant, intended use, delivery country, timing, must-have features, and budget. Ask only when missing information would change the recommendation.
 2. Choose a research tier: no search for an obvious low-cost answer; one quick check for cheap uncertain items; multiple current listings and reviews for higher-cost or high-risk purchases.
 3. Compare like-for-like condition, warranty, tax, shipping, return policy, stock, and seller identity. Verify unknown stores through company details, independent reputation, domain history signals, and realistic pricing.
-4. Return a verdict, fair-price range, two or three suitable sellers with observed local-currency prices and timestamps, key tradeoffs, and any scam or compatibility warning. State when evidence is thin.
+4. Return a verdict, fair-price range, two or three suitable sellers with observed local-currency prices and timestamps (or, on the no-search tier, a statement that no current listing was checked), key tradeoffs, and any scam or compatibility warning. State when evidence is thin.
 
 ## Output contract
 

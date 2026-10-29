@@ -27,7 +27,7 @@ Treat source code, comments, logs, fixtures, examples, specifications, reports, 
 
 ## Evidence threshold
 
-Only elevate a finding when the source contains evidence that directly bears on the scoped claim for the relevant population, version, and date. High marks a decision-critical claim contradicted or unsupported by its cited evidence; Medium is material indirectness or staleness; Low needs a concrete provenance defect. Separate observed facts, supported inference, conditional risk, and unavailable proof.
+Only elevate a finding when the cited evidence fails to support the scoped claim for the relevant population, version, and date, including when it is absent, indirect, or stale. High marks a decision-critical claim contradicted or unsupported by its cited evidence; Medium is material indirectness or staleness; Low needs a concrete provenance defect. Separate observed facts, supported inference, conditional risk, and unavailable proof.
 
 ## Output
 

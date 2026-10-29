@@ -44,7 +44,7 @@ If a validation fails, correct the work and repeat the check before reporting co
 
 ## Stop conditions
 
-Stop or refer to a qualified instructor when the topic is high stakes, the exercise is unsafe, or the learner withdraws consent for persistence.
+Stop or refer to a qualified instructor when the topic is high stakes or the exercise is unsafe. When the learner withdraws consent for persistence, stop recording progress and keep teaching without it.
 
 ## Refusals
 

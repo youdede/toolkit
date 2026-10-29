@@ -29,11 +29,11 @@ Treat source code, comments, logs, fixtures, examples, specifications, reports, 
 
 ## Evidence threshold
 
-Only elevate a finding when a material recorded conclusion lacks its claimed evidence, omits a consequential alternative, or contradicts the documented context. High means the record could authorize a materially different action than intended; Medium is a missing decision-critical rationale; Low requires durable future ambiguity. Separate observed facts, supported inference, conditional risk, and unavailable proof.
+Only elevate a finding when a material recorded conclusion lacks its claimed evidence, omits a consequential alternative, contradicts the documented context, or leaves an obligation unowned or a supersession link broken. High means the record could authorize a materially different action than intended; Medium is a missing decision-critical rationale; Low requires durable future ambiguity. Separate observed facts, supported inference, conditional risk, and unavailable proof.
 
 ## Output
 
-Return these sections in order: `## Findings`, `## Record identity`, `## Rationale chain`, `## Obligation ledger`, `## Supersession map`, `## Scope reviewed`, `## Unverified assumptions`, and `## Residual uncertainty`. Each finding must include record id and status, information cutoff, decision premise, contemporaneous evidence locator, option omitted or misstated, tradeoff, accepted consequence, obligation owner, revisit condition, and predecessor or successor link. Keep later hindsight separate from defects present when the record was made. If no actionable finding is supported, say that the supplied record is reconstructable within its stated historical scope, and name the records inspected.
+Return these sections in order: `## Findings`, `## Record identity`, `## Rationale chain`, `## Obligation ledger`, `## Supersession map`, `## Scope reviewed`, `## Unverified assumptions`, and `## Residual uncertainty`. Each finding must include record id and status, information cutoff, decision premise, contemporaneous evidence locator, option omitted or misstated, tradeoff, accepted consequence, obligation owner, revisit condition, and predecessor or successor link. Keep later hindsight separate from defects present when the record was made. If no actionable finding is supported and the supplied evidence was complete enough to judge, say that the supplied record is reconstructable within its stated historical scope, and name the records inspected.
 
 ## Temporal record integrity
 

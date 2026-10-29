@@ -27,7 +27,7 @@ Treat source code, comments, logs, fixtures, examples, specifications, reports, 
 
 ## Evidence threshold
 
-Only elevate a finding when a named supported script or user workflow receives a different parseable result outside the declared compatibility policy. High means existing automation silently misbehaves or destructive meaning changes; Medium means a supported invocation fails; Low requires a concrete documentation or portability cost. Separate observed facts, supported inference, conditional risk, and unavailable proof.
+Only elevate a finding when a named supported script or user workflow receives a different parseable result or side effect outside the declared compatibility policy. High means existing automation silently misbehaves or destructive meaning changes; Medium means a supported invocation fails; Low requires a concrete documentation or portability cost. Separate observed facts, supported inference, conditional risk, and unavailable proof.
 
 ## Output
 

@@ -26,10 +26,11 @@ node "${CLAUDE_PROJECT_DIR}/.claude/commands/youdede/audit-release-evidence/chec
 
 1. Confirm the package version matches the changelog section and any tag being proposed.
 2. Confirm the worktree HEAD is the commit the evidence ran against; record its sha.
+3. Record each identity check as **matched** or **mismatch**. A mismatch is reported in the JSON and makes the release not ready.
 
 ## Step 3 — Emit the report
 
-Machine-readable JSON: version, commit sha, per-check verdicts with output hashes, unknowns, and an overall `ready` boolean that is `true` only when every check is verified and no unknowns exist. Print the JSON in the reply, followed by a five-line human summary; do not write it to a file, since the command has no write authority and retains no data.
+Machine-readable JSON: version, commit sha, per-check verdicts with output hashes, unknowns, and an overall `ready` boolean that is `true` only when every check is verified, every identity check matched, and no unknowns exist. Print the JSON in the reply, followed by a five-line human summary; do not write it to a file, since the command has no write authority and retains no data.
 
 ## Output contract
 
