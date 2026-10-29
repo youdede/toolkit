@@ -10,7 +10,8 @@ function cleanGitEnvironment(environment = process.env) {
 }
 
 function git(cwd, args, required = true) {
-  const result = spawnSync('git', args, {
+  // Even read-only commands such as status can launch a configured fsmonitor program.
+  const result = spawnSync('git', ['-c', 'core.fsmonitor=false', ...args], {
     cwd,
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'pipe'],
