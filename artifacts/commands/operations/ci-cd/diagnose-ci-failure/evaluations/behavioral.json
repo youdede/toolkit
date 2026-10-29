@@ -8,7 +8,7 @@
       "type": "positive",
       "prompt": "Job \"test (node 20)\", step \"Run npm test\" failed on run 8812. The log excerpt starts at 00:00:41 with \"Error: connect ECONNREFUSED 127.0.0.1:5432 at tests/db/setup.ts:12\", followed by 37 failures of \"TypeError: Cannot read properties of undefined (reading 'query')\" in tests/orders/*.test.ts. .github/workflows/ci.yml declares a postgres:15 service with `ports: [\"5432:5432\"]` and no health-cmd options, and the test step runs immediately after npm ci.",
       "sourceAnchors": [
-        "Separate the first causal failure from downstream noise and rank at least two plausible causes.",
+        "Separate the first causal failure from downstream noise and rank the plausible causes",
         "Do not claim a root cause from a downstream error without causal evidence."
       ],
       "expected": {

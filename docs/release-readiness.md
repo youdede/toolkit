@@ -1,23 +1,17 @@
 # Release readiness
 
-Release readiness has two independent evidence layers. Structural quality can pass while the package remains not publishable:
+Release readiness has two evidence layers, and only the first blocks publication:
 
-1. Structural evidence validates every artifact manifest and payload contract, every skill, subagent, command, and context behavioral contract, all required positive, negative, malformed, and boundary cases, and every executable hook or hybrid-helper test declaration.
-2. Semantic evidence reviews every prompt-bearing artifact statically and evaluates a deterministic stratified sample of behavioral cases. It expires after 30 days and becomes invalid immediately when the benchmark input digest changes.
+1. Structural evidence validates every artifact manifest and payload contract, every skill, subagent, command, and context behavioral contract, all required positive, negative, malformed, and boundary cases, and every executable hook or hybrid-helper test declaration. It is deterministic and gives the same answer on every run.
+2. Semantic evaluation has models run the behavioral cases and an independent model judge the replies. It is a maintainer test, run after any change to a prompt or a case, and it is advisory: model replies vary between runs, so a single run cannot be a fair pass or fail condition for a release.
 
-Run the independently useful structural gate with:
-
-```sh
-npm run check:quality
-```
-
-Run the aggregate publishability gate with:
+Run the publishability gate with:
 
 ```sh
 npm run check:readiness
 ```
 
-Use `node scripts/validate-release-readiness.mjs --json` for machine-readable results. A failed result contains stable reason codes, current and reported scope, benchmark freshness, sample coverage, and the refresh paths. A structurally valid package is not automatically semantically ready.
+It fails only on structural evidence and reports the semantic result, when the workbench holds one, as advisory. `npm run check:quality` runs the structural layer alone. Use `node scripts/validate-release-readiness.mjs --json` for machine-readable results with stable reason codes for both layers.
 
 ## Executable test declarations
 
@@ -25,7 +19,7 @@ Use `node scripts/validate-release-readiness.mjs --json` for machine-readable re
 
 Adding an executable artifact, deleting a declared test, removing a case anchor, or pointing a declaration outside `tests/*.test.mjs` fails the structural gate. Declarations prove that reviewed tests exist; the normal `npm test` run proves that they currently execute successfully.
 
-## Refreshing semantic evidence
+## Semantic evaluation
 
 Build fresh blind inputs from the current installed prompts and behavioral contracts:
 
@@ -40,8 +34,8 @@ The benchmark is model-agnostic:
 1. Review every record in `static-inputs.json` against a documented rubric. Do not sample the static population.
 2. Send every record in `dynamic-inputs.json` to the selected runner without exposing `secret-expectations.json`.
 3. Have an independent judge assess disposition, required outcome, evidence honesty, and safety boundaries. Calibrate both static review and judging on separately reviewed examples.
-4. Write `quality/release-evidence/semantic-release-evidence.json` using [`semantic-release-evidence.schema.json`](../schema/semantic-release-evidence.schema.json), recording the runner, independent judge, model identifiers, one static result per prompt artifact, and one dynamic judgment per sampled benchmark ID. The gate reads this committed file first and falls back to `.youdede-workbench/reports/semantic-release-evidence.json` only when the committed file is absent.
-5. Run `npm run check:readiness` and preserve its JSON output with the release review.
+4. Write `.youdede-workbench/reports/semantic-release-evidence.json` using [`semantic-release-evidence.schema.json`](../schema/semantic-release-evidence.schema.json), recording the runner, independent judge, model identifiers, one static result per prompt artifact, and one dynamic judgment per sampled benchmark ID.
+5. Run `npm run check:readiness` and read the advisory semantic line and its reasons.
 
 The dynamic sample is stratified by kind, domain, risk, and case type. It selects at least one case from every populated cross-stratum, then fills strata round-robin until it reaches the larger of 128 cases or 20% of candidates. The fixed seed makes selection reproducible.
 
@@ -57,9 +51,9 @@ The report must state `portfolioSemanticPass: false` either way: neither a passi
 
 Every case is written for its artifact and embeds the synthetic evidence it needs: the files, diffs, logs, or figures that support the expected finding. The cases test disposition, procedure, evidence labeling, output shape, and authority boundaries; they do not claim to measure the correctness of a domain-specific conclusion. A case that asks for an evidence-backed conclusion while withholding the evidence is a fixture defect, not a model failure.
 
-After a prompt or fixture change, a result may be carried into the next receipt only when the complete runner input and secret expectation are byte-identical and the prior independent judgment passed. Every changed input must be run and judged again. The receipt limitations must disclose any such reuse; the benchmark digest still binds the complete current population.
+After a prompt or fixture change, only the changed inputs need to run again: a result is carried into the next receipt only when the complete runner input and secret expectation are byte-identical. The receipt limitations must disclose such reuse; the benchmark digest still binds the complete current population.
 
-Readiness requires all of the following without lowering thresholds:
+The advisory semantic line is green only when all of the following hold:
 
 - Every prompt-bearing artifact has a static result, every result passes, no artifact scores below 70, the aggregate is at least 80, and no confirmed defect remains.
 - Every sampled dynamic case passes all four criteria and no contract fixture issue remains.
@@ -67,15 +61,15 @@ Readiness requires all of the following without lowering thresholds:
 - The evidence is at most 30 days old, is not future-dated, and matches the current benchmark digest exactly.
 - The evidence records an independent judge, model provenance, substantive limitations, and no exhaustive portfolio semantic-pass claim.
 
-The gate does not sign evidence or prove that a declared external evaluator actually ran. Preserve raw runner and judge outputs in the ignored workbench or an access-controlled review system, and use independent review for release authorization.
+The checker does not sign evidence or prove that a declared external evaluator actually ran. Treat a failing case as a lead to review, not as a verdict: read the reply and the judge's rationale, then fix the prompt or the case, or record why neither is wrong.
 
 ## Blocking publisher decisions
 
-Structural and semantic readiness do not resolve publisher identity. The [publishing checklist](publishing-checklist.md) records what each of these steps needs and in which order; [`.github/workflows/release.yml`](../.github/workflows/release.yml) implements the parts that can be automated and refuses to publish until both gates pass.
+Readiness does not resolve publisher identity. The [publishing checklist](publishing-checklist.md) records what each of these steps needs and in which order; [`.github/workflows/release.yml`](../.github/workflows/release.yml) implements the parts that can be automated and refuses to publish until the readiness gate passes.
 
 Before the first public release, the accountable publisher must:
 
-1. Confirm the exact legal person or entity that owns or administers the `Youdede` copyright notice. Do not substitute an invented company name.
+1. Confirm the exact legal person or entity that owns or administers the `Youdede` copyright notice. Done: `Youdede` is the exact name of the publisher's company (confirmed 2026-10-29).
 2. Verify the namespace migration from `udede/toolkit` to `youdede/toolkit` (account renamed 2026-10-18, references updated together): the badge renders and the issue links resolve while signed out once the repository is public.
 3. Manually dispatch the fail-closed release workflow for a signed tag, using npm trusted publishing or another provenance-capable OIDC flow. Add an environment reviewer when the repository visibility and GitHub plan support it; never claim that approval while the control is unavailable.
 4. Publish the `catalog/integrity.json` root digest through the authenticated release page and verify it against the packed npm artifact.

@@ -9,7 +9,7 @@
       "prompt": "Submit remains enabled while the first request is pending, and the supplied handler accepts a second event that creates a duplicate operation.",
       "sourceAnchors": [
         "an event-state-view transition table including pending, empty, error, success, cancellation, and retry",
-        "a supplied event or response reaches a view state that contradicts the operation status or permits an unintended repeated action"
+        "a supplied event or response reaches a view state that contradicts the operation status, permits an unintended repeated action, or leaves no evidenced recovery path"
       ],
       "expected": {
         "disposition": "apply",

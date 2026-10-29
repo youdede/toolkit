@@ -6,7 +6,7 @@
     {
       "id": "positive-docs-product-navigation",
       "type": "positive",
-      "prompt": "Specify navigation and search for a documentation product with six top-level sections on desktop web and mobile web, where readers mostly retrieve reference pages by name and sometimes browse guides.",
+      "prompt": "Specify navigation and search for our documentation product on desktop web and mobile web. Six top-level sections: Get started, Guides, API reference (about 400 endpoint pages), SDKs, Changelog, and Support. Readers mostly retrieve reference pages by name (68% of site-search queries are endpoint or method names) and sometimes browse guides. Must survive: existing deep links of the form /reference/<endpoint>, and the Cmd+K search shortcut power users rely on.",
       "sourceAnchors": [
         "where am I, where can I go, how do I get back",
         "empty-result state that confirms the query"
@@ -35,7 +35,7 @@
     {
       "id": "positive-frequency-first-ordering",
       "type": "positive",
-      "prompt": "Order the six destinations of our banking app's bottom tab bar and desktop sidebar. Analytics show account overview and transfers dominate daily usage while settings and help are touched rarely.",
+      "prompt": "Order the six destinations of our banking app's bottom tab bar (iOS and Android) and desktop web sidebar: Accounts overview, Transfers, Cards, Payments, Settings, Help. Share of daily sessions over the last 90 days: Accounts overview 71%, Transfers 38%, Payments 22%, Cards 9%, Settings 3%, Help 2%. Behavior that must survive: the app opens on Accounts overview, and push notifications deep-link into Transfers.",
       "sourceAnchors": [
         "Order destinations by task frequency and convention",
         "long, unfamiliar, recall-driven lists"

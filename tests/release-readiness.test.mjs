@@ -139,7 +139,7 @@ test('semantic evidence cannot turn sample success into a portfolio-ready claim'
   assert.ok(reasons.some(({ code }) => code === 'UNSUPPORTED_READY_CLAIM'));
 });
 
-test('missing semantic evidence blocks publishability without blocking structural proof', { skip: process.platform === 'win32' }, (context) => {
+test('missing semantic evidence is reported without blocking publishability', { skip: process.platform === 'win32' }, (context) => {
   const root = mkdtempSync(path.join(os.tmpdir(), 'youdede-release-readiness-'));
   context.after(() => rmSync(root, { recursive: true, force: true }));
   for (const directory of ['artifacts', 'catalog', 'packs', 'schema', 'scripts', 'tests']) {
@@ -147,14 +147,14 @@ test('missing semantic evidence blocks publishability without blocking structura
   }
   mkdirSync(path.join(root, 'quality'));
   for (const entry of readdirSync(path.join(ROOT, 'quality'))) {
-    if (entry === 'release-evidence') continue;
     symlinkSync(path.join(ROOT, 'quality', entry), path.join(root, 'quality', entry));
   }
 
   const result = assessReleaseReadiness(root);
   assert.equal(result.structural.valid, true, JSON.stringify(result.structural.reasons, null, 2));
-  assert.equal(result.publishable, false);
-  assert.ok(result.reasons.some(({ code }) => code === 'SEMANTIC_EVIDENCE_MISSING'));
+  assert.equal(result.publishable, true);
+  assert.equal(result.semantic.valid, false);
+  assert.ok(result.semantic.reasons.some(({ code }) => code === 'SEMANTIC_EVIDENCE_MISSING'));
 
   const cli = spawnSync(process.execPath, ['scripts/validate-release-readiness.mjs', '--structural-only', '--json'], {
     cwd: ROOT,

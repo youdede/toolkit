@@ -10,24 +10,52 @@
   "description": "A scoped, generated context assembled from catalog guidance for simplification, module boundaries, and generated-file safety. Every rule names its source artifact and can be regenerated without hand-copied prose.",
   "domain": "development",
   "category": "code-quality",
-  "capabilities": ["operate"],
-  "problems": ["regression-prevention"],
-  "frameworks": ["agnostic"],
-  "languages": ["agnostic"],
-  "lifecycle": ["implementation", "maintenance"],
+  "capabilities": [
+    "operate"
+  ],
+  "problems": [
+    "regression-prevention"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "implementation",
+    "maintenance"
+  ],
   "risk": "low",
   "risk_reason": "This context applies behavior-preserving code-quality and module-boundary guidance to implementation files; it supplies guidance without tool or approval authority.",
   "license": "MIT",
-  "authors": ["Youdede"],
+  "authors": [
+    "Youdede"
+  ],
   "refuses": [
     "It does not override repository-local style, formatter, lint, or architecture configuration.",
     "It does not turn advisory context into permission to edit generated files or widen module boundaries.",
     "It does not remain silently authoritative after its declared expiry date."
   ],
-  "execution": { "mode": "prompt", "entrypoints": [] },
+  "execution": {
+    "mode": "prompt",
+    "entrypoints": []
+  },
   "context": {
     "scope": "glob",
-    "globs": ["**/*.c", "**/*.cpp", "**/*.go", "**/*.java", "**/*.js", "**/*.jsx", "**/*.mjs", "**/*.py", "**/*.rs", "**/*.ts", "**/*.tsx"],
+    "globs": [
+      "**/*.c",
+      "**/*.cpp",
+      "**/*.go",
+      "**/*.java",
+      "**/*.js",
+      "**/*.jsx",
+      "**/*.mjs",
+      "**/*.py",
+      "**/*.rs",
+      "**/*.ts",
+      "**/*.tsx"
+    ],
     "precedence": 100,
     "expires": "2027-09-21",
     "provenance": [
@@ -36,13 +64,58 @@
       "hook/development/code-quality/generated-file-guard"
     ],
     "rules": [
-      { "id": "preserve-observable-behavior", "effect": "require", "action": "preserve-observable-behavior", "sourceArtifactId": "skill/development/code-quality/simplify-code-with-invariants", "sourceField": "summary" },
-      { "id": "respect-module-entrypoints", "effect": "require", "action": "respect-module-entrypoints", "sourceArtifactId": "skill/development/architecture/enforce-typescript-module-boundaries", "sourceField": "summary" },
-      { "id": "do-not-edit-generated-files", "effect": "forbid", "action": "edit-generated-files", "sourceArtifactId": "hook/development/code-quality/generated-file-guard", "sourceField": "refuses", "sourceIndex": 0, "text": "Do not edit generated files directly; change the generator or its source template and regenerate." }
+      {
+        "id": "preserve-observable-behavior",
+        "effect": "require",
+        "action": "preserve-observable-behavior",
+        "sourceArtifactId": "skill/development/code-quality/simplify-code-with-invariants",
+        "sourceField": "summary"
+      },
+      {
+        "id": "respect-module-entrypoints",
+        "effect": "require",
+        "action": "respect-module-entrypoints",
+        "sourceArtifactId": "skill/development/architecture/enforce-typescript-module-boundaries",
+        "sourceField": "summary"
+      },
+      {
+        "id": "do-not-edit-generated-files",
+        "effect": "forbid",
+        "action": "edit-generated-files",
+        "sourceArtifactId": "hook/development/code-quality/generated-file-guard",
+        "sourceField": "refuses",
+        "sourceIndex": 0,
+        "text": "Do not edit generated files directly; change the generator or its source template and regenerate."
+      },
+      {
+        "id": "do-not-delete-unproven-unused-code",
+        "effect": "forbid",
+        "action": "delete-unproven-unused-code",
+        "sourceArtifactId": "skill/development/code-quality/simplify-code-with-invariants",
+        "sourceField": "refuses",
+        "sourceIndex": 0,
+        "text": "Do not delete behavior because it looks unused; cite the repository evidence that shows it is unused, or keep it and say the evidence is missing."
+      }
     ]
   },
-  "relationships": { "composesWith": ["command/development/workflow/draft-evidenced-plan"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": ["pack/plan-and-verify-loop"] },
-  "operational": { "behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "immediate", "latency_reason": "The runtime loads static guidance to apply behavior-preserving code-quality and module-boundary guidance to implementation files in the matching file scope.", "dataRetention": "none" },
+  "relationships": {
+    "composesWith": [
+      "command/development/workflow/draft-evidenced-plan"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": [
+      "pack/plan-and-verify-loop"
+    ]
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "immediate",
+    "latency_reason": "The runtime loads static guidance to apply behavior-preserving code-quality and module-boundary guidance to implementation files in the matching file scope.",
+    "dataRetention": "none"
+  },
   "adapters": {
     "claude-code": "adapters/claude-code.json",
     "cursor": "adapters/cursor.json",

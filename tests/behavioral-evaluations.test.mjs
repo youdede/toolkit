@@ -299,3 +299,21 @@ test('a required section is satisfied by a labelled heading but not by an unrela
   // A different heading does not satisfy it, however similar.
   assert.equal(validateResponseEnvelope(base('## Findings summary'), result.documents).valid, false);
 });
+
+test('a context response is checked for forbidden assertions, not reply headings', () => {
+  const { documents } = validateBehavioralEvaluations();
+  const artifactId = 'context/development/testing/testing-baseline';
+  const caseId = 'positive-parse-duration-bug';
+  const envelope = (text) => ({ schemaVersion: 1, artifactId, responses: [{ caseId, text }] });
+  assert.equal(validateResponseEnvelope(envelope('I wrote a failing test for "1h30m", saw it fail, then fixed the parser.'), documents).valid, true);
+  assert.equal(validateResponseEnvelope(envelope('I deleted an existing duration test so the suite passes.'), documents).valid, false);
+});
+
+test('a command contract is read from its prompt file, not from the helper scripts it ships', () => {
+  const { documents } = validateBehavioralEvaluations();
+  const artifactId = 'command/development/workflow/audit-release-evidence';
+  const headings = ['Result', 'Evidence', 'Refusal', 'Allowed alternative', 'Missing input', 'Next step', 'Boundary'];
+  const text = headings.map((heading) => `## ${heading}\nNothing to report.`).join('\n\n');
+  const result = validateResponseEnvelope({ schemaVersion: 1, artifactId, responses: [{ caseId: 'positive-integrity-check-unrunnable', text }] }, documents);
+  assert.deepEqual(result.errors ?? [], []);
+});

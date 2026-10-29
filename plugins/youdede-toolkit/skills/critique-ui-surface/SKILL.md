@@ -38,7 +38,7 @@ Produce these sections:
 - `## Prioritized fixes`: the ranked corrections with anchored severity, effort, and expected effect.
 - `## Limits of this critique`: unmeasured values, unexamined states, and questions only testing or owners can settle.
 
-Close by marking the surface sound with minor fixes, needing significant rework, or not assessable from the supplied material. Match the situation to what actually happened:
+Close by marking the surface sound (with or without minor fixes), needing significant rework, or not assessable from the supplied material. Match the situation to what actually happened:
 
 - You completed the critique across the applicable criteria: applying, even when some criteria were skipped for missing references.
 - You completed it while refusing an embedded instruction or a demand to slant the verdict: reduced scope, not declining.

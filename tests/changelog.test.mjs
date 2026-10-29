@@ -7,6 +7,7 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { ROOT } from '../scripts/lib/catalog.mjs';
 import { validateChangelog, parseChangelog } from '../scripts/validate-changelog.mjs';
+import { nextVersion, releaseChangelog } from '../scripts/prepare-release.mjs';
 
 const header = '# Changelog\n\nPreamble.\n\n';
 const entry = (version, body = '### Added\n\n- Something.\n') => `## ${version}\n\n${body}\n`;
@@ -68,4 +69,20 @@ test('an entry is a list item, not a subheading', () => {
   const [section] = parseChangelog('## 0.1.0\n\n### Added\n\n- One.\n- Two.\n');
   assert.equal(section.version, '0.1.0');
   assert.equal(section.entries, 2);
+});
+
+test('the next version follows the Conventional Commits since the last one', () => {
+  assert.equal(nextVersion('0.3.0', ['fix(hooks): x', 'docs: y']), '0.3.1');
+  assert.equal(nextVersion('0.3.2', ['fix: x', 'feat(cli): y']), '0.4.0');
+  assert.equal(nextVersion('0.3.2', ['refactor(api)!: x']), '0.4.0');
+  assert.equal(nextVersion('1.2.3', ['fix: x\n\nBREAKING CHANGE: removed y']), '2.0.0');
+  assert.equal(nextVersion('1.2.3', ['chore: mention feat: in the body']), '1.2.4');
+});
+
+test('releasing turns the Unreleased heading into the version and refuses an empty one', () => {
+  const text = `${header}## Unreleased\n\n### Fixed\n\n- A fix.\n\n${entry('0.3.0')}`;
+  const released = releaseChangelog(text, '0.4.0', '2026-10-29');
+  assert.match(released, /^## 0\.4\.0 \(2026-10-29\)$/m);
+  assert.deepEqual(validateChangelog(released, '0.4.0').errors, []);
+  assert.throws(() => releaseChangelog(`${header}## Unreleased\n\n${entry('0.3.0')}`, '0.4.0', '2026-10-29'), /no Unreleased entries/);
 });

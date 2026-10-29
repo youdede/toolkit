@@ -34,7 +34,7 @@
     {
       "id": "positive-bounded-control-case",
       "type": "positive",
-      "prompt": "The supplied path persists one stable idempotency key before the side effect and reuses the recorded result on every retry. Review the supplied evidence and avoid manufacturing a finding when the specialist threshold is not met.",
+      "prompt": "Review this recovery path. Ordered side effects of chargeOrder: 1. generate key = sha256(order_id + attempt_group) and insert it into payment_attempts with status pending, committed; 2. call the payment provider with Idempotency-Key = key; 3. store the provider result on that row. Retry: a worker that finds a pending or completed row for the same key reuses the stored key and, for completed rows, returns the stored result without calling the provider. Failure injection point: the process is killed between step 2 and step 3. Provider documentation: the same Idempotency-Key returns the original result for 24 hours. Avoid manufacturing a finding when the specialist threshold is not met.",
       "sourceAnchors": [
         "If no actionable finding is supported",
         "without calling the subject safe or approved"

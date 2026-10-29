@@ -6,7 +6,7 @@
     {
       "id": "positive-accessibility-journey",
       "type": "positive",
-      "prompt": "Verify the supplied checkout-error journey across the declared keyboard, VoiceOver Safari, NVDA Firefox, 400% zoom, reduced-motion, high-contrast, and touch matrix. Build-linked recordings, transcripts, trees, focus logs, contrast results, reports, screenshots, and code are included.",
+      "prompt": "Verify our checkout-error journey with these build-linked observations from build 2026.10.28-3. Step 1, submit with an invalid postcode. Keyboard (Chrome): focus moved to the error summary, pass. VoiceOver with Safari 18: announced \"Error, postcode is not valid\", pass. NVDA 2024.4 with Firefox: nothing announced, focus log shows focus stayed on Submit. 400% zoom: the error summary overlaps the postcode field, screenshot zoom-400-step1.png. Reduced motion: shake animation still plays. High contrast (Windows): the error border disappears; text remains. Touch (iPhone 15): not run. Accessibility tree: the postcode input has aria-invalid=\"true\" but no aria-describedby.",
       "sourceAnchors": [
         "Replay the supplied journey record",
         "Record every matrix cell"

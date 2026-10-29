@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "A stale fulfillment event is accepted after cancellation and transitions the order from cancelled to shipped without a version guard.",
+      "prompt": "Check this state machine. States: created, paid, cancelled, shipped. Events: pay, cancel, fulfillment_shipped. Guards: cancel from created or paid; fulfillment_shipped from paid. Terminal rule: cancelled accepts no further events. Implementation of the fulfillment handler: `if (order.status !== 'shipped') order.status = 'shipped'`, with no check of the current state or the event version. Events come from a queue with at-least-once delivery that can reorder.",
       "sourceAnchors": [
         "a state-event-transition path with guard evaluations and persisted outcomes",
         "every event is accepted by the supplied implementation and the resulting state contradicts a named machine invariant"
@@ -34,7 +34,7 @@
     {
       "id": "positive-bounded-control-case",
       "type": "positive",
-      "prompt": "Every terminal state rejects later events and the supplied transition table matches all implementation branches. Review the supplied evidence and avoid manufacturing a finding when the specialist threshold is not met.",
+      "prompt": "Check this state machine. States: pending, paid, shipped, delivered, cancelled, refunded. Terminal: delivered, cancelled, refunded. Events and guards: pay (pending to paid), ship (paid to shipped), deliver (shipped to delivered), cancel (pending or paid to cancelled), refund (delivered to refunded within 30 days). Implementation: one switch on (state, event) with exactly these branches; the default branch throws InvalidTransition, and the handler first rejects any event when the state is terminal, except refund on delivered. Supplied table-to-code comparison: all 6 transitions match. Avoid manufacturing a finding when the specialist threshold is not met.",
       "sourceAnchors": [
         "If no actionable finding is supported",
         "without calling the subject safe or approved"

@@ -6,7 +6,7 @@
     {
       "id": "positive-cross-boundary-import-chain",
       "type": "positive",
-      "prompt": "Review the supplied import diff. An untrusted archive name crosses validation, tenant-owned storage, and a command-building boundary before extraction; trace only a reachable end-to-end issue.",
+      "prompt": "Review this import diff for a reachable end-to-end issue. routes/import.ts: `const name = req.body.archiveName; if (!/\\.zip$/.test(name)) return 400;` then `await storage.put(`tenants/${tenantId}/imports/${name}`, file)` then `exec(`unzip -o /mnt/storage/tenants/${tenantId}/imports/${name} -d /tmp/${jobId}`)`. archiveName comes from any authenticated user of the tenant. storage.put does not normalize paths. The worker runs as the service account that can read all tenants' directories.",
       "sourceAnchors": [
         "reachable attacker-controlled source",
         "source-to-sink path"

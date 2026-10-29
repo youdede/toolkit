@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "The loader replaces explicit false with the true default because it uses logical OR rather than a nullish check.",
+      "prompt": "Review this config loader change. Sources in precedence order: built-in defaults, then config/app.yaml, then the env var FEATURE_AUDIT_LOG. Key: features.audit_log, default true. Coercion: the env var parses \"false\" to boolean false. Candidate code: `const auditLog = cfg.features.audit_log || true;`. Supplied observation: config/app.yaml sets `features: { audit_log: false }`, and the running service logs `audit_log=true`.",
       "sourceAnchors": [
         "a per-key provenance chain from supplied source values to the final typed value",
         "a supported explicit value is ignored, retyped, shadowed, or defaulted differently by the candidate"
@@ -34,7 +34,7 @@
     {
       "id": "positive-bounded-control-case",
       "type": "positive",
-      "prompt": "The candidate preserves explicit false and zero while applying the default only when the key is absent. Review the supplied evidence and avoid manufacturing a finding when the specialist threshold is not met.",
+      "prompt": "Review this config loader change. Sources: defaults.yaml, then the config file, then environment variables, highest last. Key: cache.enabled, default true. Key: cache.ttl_seconds, default 300. Coercion: env values \"false\" and \"0\" parse to false and 0. Candidate code: `const enabled = cfg.cache?.enabled ?? true; const ttl = cfg.cache?.ttl_seconds ?? 300;`. Supplied observations: file sets enabled: false, result false; env CACHE_TTL_SECONDS=0, result 0; key absent, results true and 300. Avoid manufacturing a finding when the specialist threshold is not met.",
       "sourceAnchors": [
         "If no actionable finding is supported",
         "without calling the subject safe or approved"

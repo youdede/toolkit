@@ -6,7 +6,7 @@
     {
       "id": "positive-multi-locale-constraints",
       "type": "positive",
-      "prompt": "We are adding German, French, and Arabic to our invoicing product. Derive localization constraints for the invoice editor and settings surfaces; the copy is English and the design lead accepts constraints.",
+      "prompt": "We are adding German, French, and Arabic to our invoicing product. Derive localization constraints for the invoice editor and the settings surfaces. The source copy is English; the tightest containers are the \"Send invoice\" button (12 characters), the \"Due date\" column header (8), the \"Mark as paid\" menu item (12), and a 64-character settings hint. The editor lays out sender on the left and recipient on the right, with a left-aligned amounts column. Owner who accepts the constraints: Hana, design lead.",
       "sourceAnchors": [
         "locale set",
         "start and end terms"

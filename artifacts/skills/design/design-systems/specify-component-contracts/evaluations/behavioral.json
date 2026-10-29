@@ -6,7 +6,7 @@
     {
       "id": "positive-notification-banner-spec",
       "type": "positive",
-      "prompt": "Spec our new inline notification banner for web and Android using the linked mockups and our existing token set, so both platform teams can build it next sprint.",
+      "prompt": "Spec our new inline notification banner for web (React) and Android (Jetpack Compose), so both platform teams can build it next sprint. Purpose: tell the user the outcome of an action, or a condition on the current page, without blocking it. Usage context: on the billing page, after a declined card update, a banner above the form says the card was declined and offers \"Update card\". From the mockups: four tones (info, success, warning, error), an optional title, body text, an optional action link, and an optional dismiss button. Tokens available: color.feedback.{info,success,warning,error}.{bg,fg,border}, space.2, space.3, space.4, radius.md, type.body.sm.",
       "sourceAnchors": [
         "Every state needs an exit.",
         "marked required or optional"

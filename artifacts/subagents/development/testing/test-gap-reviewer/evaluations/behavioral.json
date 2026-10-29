@@ -6,7 +6,7 @@
     {
       "id": "positive-coupon-expiry-gap",
       "type": "positive",
-      "prompt": "Review the supplied checkout change and its tests. Coupons now expire at midnight in the account timezone; identify meaningful unproved behavior without writing tests.",
+      "prompt": "Review this checkout change and its tests. Requirement: coupons now expire at midnight in the account's timezone. Change, src/coupons/isExpired.ts: `return now >= startOfDay(addDays(coupon.expiresOn, 1), account.timezone)`. Tests added, tests/coupons/isExpired.test.ts: account timezone UTC, coupon expiring 2026-11-01, now 2026-11-01T23:59Z gives false and now 2026-11-02T00:00Z gives true. No other tests touch isExpired; existing checkout tests stub it.",
       "sourceAnchors": [
         "Translate the intended change",
         "behavior-to-test map"

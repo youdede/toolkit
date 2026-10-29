@@ -6,7 +6,7 @@
     {
       "id": "positive-mobile-reliability-accessibility",
       "type": "positive",
-      "prompt": "Review the supplied interrupted bank-transfer journey on the declared iOS and Android device matrix. Candidate-linked lifecycle logs, crash records, offline tests, permission states, recordings, screen-reader output, font-scale results, and implementation paths are included.",
+      "prompt": "Review the interrupted bank-transfer journey for candidate build 8.4.0 (412). Declared matrix: iPhone 13 iOS 17, iPhone 15 iOS 18, Pixel 7 Android 14, Galaxy A13 Android 12. Evidence: on Pixel 7, backgrounding the app during the confirm step and returning after 6 minutes shows the transfer form empty, and the lifecycle log shows the activity was recreated without saved state; iOS devices restore the form. Offline test, Galaxy A13: tapping Confirm offline shows a spinner forever; no crash. Crash records: none for 412. TalkBack on Pixel 7: the amount field is announced as \"edit text\" with no label; VoiceOver reads \"Amount, euros\". Font scale 200% on iPhone 15: the Confirm button is clipped. Implementation path: TransferFormFragment.kt keeps state in a plain field, not a ViewModel.",
       "sourceAnchors": [
         "Trace state ownership",
         "Separate platform-specific proof"

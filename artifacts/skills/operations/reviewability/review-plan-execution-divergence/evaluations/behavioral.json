@@ -6,7 +6,7 @@
     {
       "id": "positive-bounded-application",
       "type": "positive",
-      "prompt": "Compare the approved implementation plan with commits main...feature, the final diff, validation logs, and two recorded amendments. Classify divergences and recommend only evidenced process improvements.",
+      "prompt": "Compare the approved plan with what shipped on main...feature/export-csv and classify divergences; recommend only evidenced process improvements. Plan (approved 2026-10-01): 1. add GET /exports/:id.csv streaming endpoint; 2. reuse the existing serializer; 3. add a 50k-row limit; 4. integration test against a seeded database. Commits: 4f1a stream endpoint; 7c2e new csv serializer (serializer.ts untouched); 9b30 integration test. Final diff: no row limit anywhere. Amendment A (2026-10-04, approved by Lea): new serializer because the old one buffers whole results. Amendment B (2026-10-06, approved by Lea): integration test uses fixtures instead of a seeded DB. Validation log: `npm run test:int` exited 0, 12 tests. The row limit was dropped without any amendment; the same unrecorded drop happened on the import feature in August.",
       "sourceAnchors": [
         "treat retrospective narratives as claims to verify",
         "Distinguish an implementation defect from a process gap"

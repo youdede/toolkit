@@ -6,7 +6,7 @@
     {
       "id": "positive-checkout-dialog-focus-loss",
       "type": "positive",
-      "prompt": "Review the supplied checkout-dialog change against WCAG 2.1 AA. The dialog opens after an address validation error; inspect the changed React code and provided keyboard test output for focus entry, error association, and focus return barriers.",
+      "prompt": "Review this checkout-dialog change against WCAG 2.1 AA. The dialog opens after an address validation error. Changed React code:\n```tsx\n{error && <div className=\"modal\" role=\"dialog\">\n  <p>{error.message}</p>\n  <button onClick={close}>OK</button>\n</div>}\n```\nThe close handler only sets error to null. Keyboard test output: after submitting the form with Tab and Enter, focus stays on the Submit button behind the dialog; Tab moves through the page underneath; after OK, focus goes to the document body. The address field has no aria-describedby or aria-invalid.",
       "sourceAnchors": [
         "named criterion",
         "smallest verification or remediation step"

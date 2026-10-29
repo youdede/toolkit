@@ -10,10 +10,11 @@ Catalog context: `context/security/threat-modeling/security-baseline`. Precedenc
 
 ## Rules
 
-- [review-tool-authority; effect=require; action=review-tool-authority] Review agent and MCP tool authority against prompt injection, confused-deputy, exfiltration, and unsafe side effects. (Source: `skill/security/threat-modeling/review-agent-tool-boundaries#summary`)
+- [review-tool-authority; effect=require; action=review-tool-authority] When the task calls for it: Review agent and MCP tool authority against prompt injection, confused-deputy, exfiltration, and unsafe side effects. (Source: `skill/security/threat-modeling/review-agent-tool-boundaries#summary`)
 - [do-not-reveal-detected-credentials; effect=forbid; action=reveal-detected-credentials] Do not repeat, store, or transmit a detected credential. (Source: `hook/security/secrets/prompt-secret-guard#refuses[0]`)
 - [do-not-read-protected-files; effect=forbid; action=read-protected-files] Do not read, print, or copy credential files, private keys, or environment secret files. (Source: `hook/security/secrets/sensitive-file-access-guard#refuses[0]`)
 - [do-not-upload-local-payloads; effect=forbid; action=upload-local-payloads] Do not send local file contents or dynamic payloads to a network service without explicit approval. (Source: `hook/security/application-security/outbound-data-guard#refuses[0]`)
+- [do-not-claim-unverified-tool-security; effect=forbid; action=claim-unverified-tool-security] Do not describe a tool surface as secure while critical authority paths or negative tests remain unresolved; name what was verified and mark the rest unverified. (Source: `skill/security/threat-modeling/review-agent-tool-boundaries#refuses[2]`)
 
 ## Boundaries
 

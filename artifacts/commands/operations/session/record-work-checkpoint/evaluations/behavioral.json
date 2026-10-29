@@ -6,7 +6,7 @@
     {
       "id": "positive-billing-cents-checkpoint",
       "type": "positive",
-      "prompt": "/record-work-checkpoint We are switching invoice math from floats to integer cents. Tests pass for src/billing/round.ts. I have not yet checked that the CSV export still matches the format finance imports. Decision: keep half-even rounding, do not revisit it. Files touched so far: src/billing/round.ts, src/billing/export.ts, tests/billing/round.test.ts. Preconditions pass.",
+      "prompt": "/record-work-checkpoint We are switching invoice math from floats to integer cents. Tests pass for src/billing/round.ts. I have not yet checked that the CSV export still matches the format finance imports. Decision: keep half-even rounding, do not revisit it. Files touched so far: src/billing/round.ts, src/billing/export.ts, tests/billing/round.test.ts. Preconditions pass. The ledger append printed {\"appended\":true,\"sequence\":14,\"hash\":\"7c41e9a0b2d35f6e8a91c4d7e02b6f13a5c8d9e4f7a1b2c3d4e5f60718293a4b\"}.",
       "sourceAnchors": [
         "`pendingClaims`: claims made but not yet verified, as short strings.",
         "State the appended entry's sequence number and the first 12 characters of its hash"

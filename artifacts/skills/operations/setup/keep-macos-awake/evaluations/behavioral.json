@@ -9,7 +9,7 @@
       "prompt": "I am on macOS 15 running a long Xcode archive build (`xcodebuild`, PID 48213). Keep the Mac from idle-sleeping until that build exits; the display may sleep. I do not need this to survive a logout.",
       "sourceAnchors": [
         "For a bounded run use `caffeinate` with an explicit PID (`-w <pid>`)",
-        "Provide and test the matching stop command"
+        "Provide the matching stop command"
       ],
       "expected": {
         "disposition": "apply",

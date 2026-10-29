@@ -10,8 +10,8 @@ Catalog context: `context/operations/git/git-workflow-baseline`. Precedence: 800
 
 ## Rules
 
-- [prepare-integration-evidence; effect=require; action=prepare-integration-evidence] Prepare a development branch for integration with clean evidence, explicit options, and recoverable actions. (Source: `skill/operations/git/prepare-branch-integration#summary`)
-- [isolate-concurrent-work; effect=require; action=isolate-concurrent-work] Isolate concurrent Git work and integrate only reviewed, verified changes. (Source: `skill/operations/git/isolate-work-with-worktrees#summary`)
+- [prepare-integration-evidence; effect=require; action=prepare-integration-evidence] When the task calls for it: Prepare a development branch for integration with clean evidence, explicit options, and recoverable actions. (Source: `skill/operations/git/prepare-branch-integration#summary`)
+- [isolate-concurrent-work; effect=require; action=isolate-concurrent-work] When the task calls for it: Isolate concurrent Git work and integrate only reviewed, verified changes. (Source: `skill/operations/git/isolate-work-with-worktrees#summary`)
 - [do-not-mutate-protected-branch; effect=forbid; action=mutate-protected-branch] Do not commit to, push to, or rewrite a protected branch; work on a separate branch. (Source: `hook/operations/git/protected-branch-guard#refuses[0]`)
 - [do-not-bypass-secret-guard; effect=forbid; action=bypass-commit-secret-guard] Do not bypass, suppress, or allowlist the commit secret guard; remove the secret from the commit instead. (Source: `hook/security/secrets/commit-guard#refuses[3]`)
 

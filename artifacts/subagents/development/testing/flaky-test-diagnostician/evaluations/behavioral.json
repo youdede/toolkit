@@ -6,7 +6,7 @@
     {
       "id": "positive-flaky-test",
       "type": "positive",
-      "prompt": "Diagnose why payment-timeout.spec alternates between a timeout and a pass across the supplied twelve CI runs. The bundle includes run IDs, worker counts, seeds, durations, logs, test code, and fixture setup.",
+      "prompt": "Diagnose why payment-timeout.spec alternates between a timeout and a pass. Twelve CI runs: runs 4101 to 4106 used 2 workers and all passed (1.8 to 2.2 s); runs 4107 to 4112 used 8 workers, and 4107, 4109, 4110 and 4112 timed out at 5 s while the others passed in 4.6 to 4.9 s. Seeds differ per run and show no pattern. Log on failures: \"waiting for mock payment server on :4010\". Test code: `beforeAll(() => startMockServer(4010))` and `it('times out after 3s', ..., 5000)`. Fixture setup: every spec file that needs payments starts its own mock on port 4010.",
       "sourceAnchors": [
         "Build a run signature table",
         "bounded discriminating experiment"

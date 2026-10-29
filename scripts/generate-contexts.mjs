@@ -36,8 +36,11 @@ function generatedBody(manifest) {
       : `${rule.sourceArtifactId}#summary`;
     // A refusal describes what its source does not do, so a forbid rule states its own prohibition
     // and keeps the refusal only as provenance.
+    // A summary describes what its source does when used, not a duty for every task, so a context
+    // states it conditionally rather than as an always-on requirement.
     const source = sourceText(rule);
-    const text = rule.sourceField === 'refuses' ? rule.text : source;
+    const conditional = source && `When the task calls for it: ${source}`;
+    const text = rule.sourceField === 'refuses' ? rule.text : conditional;
     if (!text) throw new Error(`${manifest.id} rule '${rule.id}' sourced from refuses needs its own text`);
     lines.push(`- [${rule.id}; effect=${rule.effect}; action=${rule.action}] ${text} (Source: \`${locator}\`)`);
   }

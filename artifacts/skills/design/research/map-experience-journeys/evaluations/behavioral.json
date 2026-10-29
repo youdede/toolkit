@@ -124,7 +124,7 @@
     {
       "id": "positive-blueprint-structure",
       "type": "positive",
-      "prompt": "Using the attached support-ticket transcripts and the operations runbook, produce a service blueprint of our returns process; the operations lead needs to see which backstage handoffs cause the delays customers complain about.",
+      "prompt": "Produce a service blueprint of our returns process; the operations lead needs to see which backstage handoffs cause the delays customers complain about. Actor: an online customer returning a shoe order. Scope: from the customer opening the returns page to the refund reaching their card. Evidence from support tickets: \"I printed the label two weeks ago and still no refund\" and \"Chat said the warehouse hasn't scanned it\". Operations runbook: the carrier scans the parcel, the warehouse inspects within 5 business days and marks it in the WMS, a nightly batch exports inspected returns to finance, and finance issues refunds in a weekly run on Fridays. Support agents can see the carrier scan but not the WMS status.",
       "sourceAnchors": [
         "the line of internal interaction",
         "stage-by-lane table"

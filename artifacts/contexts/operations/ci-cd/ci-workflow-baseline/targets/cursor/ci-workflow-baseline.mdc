@@ -12,9 +12,9 @@ Catalog context: `context/operations/ci-cd/ci-workflow-baseline`. Precedence: 50
 
 ## Rules
 
-- [01-review-ci-change; effect=require; action=review-ci-change] Review a CI workflow change for observable trigger, permission, command, artifact, and rollback evidence. (Source: `skill/operations/ci-cd/review-ci-workflow-change#summary`)
-- [02-preserve-quality-gates; effect=require; action=preserve-quality-gates] Build proportionate local and CI quality gates from the repository’s actual risks and commands. (Source: `skill/operations/setup/build-repository-quality-gates#summary`)
-- [03-expand-ci-privilege; effect=require; action=expand-ci-privilege] Block newly introduced high-confidence CI credential and execution privilege expansions. (Source: `hook/security/supply-chain/ci-trust-boundary-guard#summary`)
+- [01-review-ci-change; effect=require; action=review-ci-change] When the task calls for it: Review a CI workflow change for observable trigger, permission, command, artifact, and rollback evidence. (Source: `skill/operations/ci-cd/review-ci-workflow-change#summary`)
+- [02-preserve-quality-gates; effect=require; action=preserve-quality-gates] When the task calls for it: Build proportionate local and CI quality gates from the repository’s actual risks and commands. (Source: `skill/operations/setup/build-repository-quality-gates#summary`)
+- [03-block-ci-privilege-expansion; effect=require; action=block-ci-privilege-expansion] When the task calls for it: Block newly introduced high-confidence CI credential and execution privilege expansions. (Source: `hook/security/supply-chain/ci-trust-boundary-guard#summary`)
 
 ## Boundaries
 

@@ -6,7 +6,7 @@
     {
       "id": "positive-repository-architecture",
       "type": "positive",
-      "prompt": "Map the bounded order-ingestion path from the HTTP entrypoint through validation, persistence, and queue publication. Include only packages under services/orders and shared schemas.",
+      "prompt": "Map the bounded order-ingestion path from the HTTP entrypoint through validation, persistence, and queue publication; include only services/orders and shared/schemas. Repository root: ~/src/shop. Evidence: services/orders/src/server.ts:14 registers `app.post('/orders', createOrder)` from ./handlers/create.ts. handlers/create.ts:9 calls `OrderSchema.parse(body)` imported from shared/schemas/order.ts, then line 15 `await repo.insert(order)` from ../db/orderRepo.ts, then line 18 `await publisher.publish('orders.created', order)` from ../queue/publisher.ts. db/orderRepo.ts uses the pg pool from ../db/pool.ts. queue/publisher.ts wraps an SQS client. services/orders/src/legacy/importer.ts sits in the same folder but nothing imports it.",
       "sourceAnchors": [
         "Trace directed edges",
         "Separate observed edges"
