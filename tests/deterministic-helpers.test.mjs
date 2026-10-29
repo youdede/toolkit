@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, mkdirSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -41,6 +41,42 @@ test('handoff collector reports reproducible Git state without writing', (contex
   assert.match(state.status, /M tracked\.txt/);
   assert.match(state.unstagedStat, /tracked\.txt/);
   assert.match(state.recentCommits, /initial/);
+});
+
+test('handoff collectors disable configured fsmonitor programs in every distribution', async (context) => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-handoff-fsmonitor-'));
+  context.after(() => rmSync(directory, { recursive: true, force: true }));
+  git(directory, ['init', '-q']);
+  git(directory, ['config', 'user.email', 'test@example.test']);
+  git(directory, ['config', 'user.name', 'Toolkit Test']);
+  writeFileSync(path.join(directory, 'tracked.txt'), 'before\n');
+  git(directory, ['add', 'tracked.txt']);
+  git(directory, ['commit', '-qm', 'initial']);
+  writeFileSync(path.join(directory, 'tracked.txt'), 'after\n');
+
+  const marker = path.join(directory, 'fsmonitor-ran');
+  const monitor = path.join(directory, 'monitor.mjs');
+  writeFileSync(monitor, `import { writeFileSync } from 'node:fs';\nwriteFileSync(${JSON.stringify(marker)}, 'invoked');\n`);
+  git(directory, ['config', 'core.fsmonitor', `"${process.execPath}" "${monitor}"`]);
+  // Prove this Git installation executes the configured program before checking the guard.
+  git(directory, ['status', '--short']);
+  assert.equal(existsSync(marker), true, 'fixture must activate fsmonitor');
+  rmSync(marker);
+
+  const collectors = [
+    ['canonical', collectGitState],
+    ['standalone', (await import('../skills/write-session-handoff/scripts/collect-git-state.mjs')).collectGitState],
+    ['plugin', (await import('../plugins/youdede-toolkit/skills/write-session-handoff/scripts/collect-git-state.mjs')).collectGitState]
+  ];
+  for (const [distribution, collect] of collectors) {
+    const state = collect(directory);
+    assert.equal(existsSync(marker), false, `${distribution} must not launch fsmonitor`);
+    assert.equal(realpathSync.native(state.root), realpathSync.native(directory));
+    assert.match(state.head, /^[a-f0-9]{40}$/);
+    assert.match(state.status, /M tracked\.txt/);
+    assert.match(state.unstagedStat, /tracked\.txt/);
+    assert.match(state.recentCommits, /initial/);
+  }
 });
 
 test('skill validator checks structure, names, placeholders, and links', (context) => {
