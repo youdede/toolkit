@@ -21,6 +21,13 @@ test('a payload without an output contract is not checked', () => {
   assert.deepEqual(payloadProblems({ manifest: { id: 'x' }, evaluation: null, file: 'a.md', text: '# Plain\n\nNo contract here.\n' }), []);
 });
 
+test('an evaluated payload without an output contract is reported, unless it is a context', () => {
+  const evaluation = { cases: [] };
+  const text = '# Plain\n\nNo contract here.\n';
+  assert.equal(payloadProblems({ manifest: { id: 'command/x', kind: 'command' }, evaluation, file: 'COMMAND.md', text }).length, 1);
+  assert.deepEqual(payloadProblems({ manifest: { id: 'context/x', kind: 'context' }, evaluation, file: 'x.md', text }), []);
+});
+
 test('an agreeing payload reports nothing', () => {
   assert.deepEqual(check('## Validation\n\nWrite `## Findings`, `## Evidence gaps`, and `## Recommendation`.'), []);
 });

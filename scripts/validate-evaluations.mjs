@@ -389,8 +389,11 @@ export function validateResponseEnvelope(envelope, documents) {
   if (errors.length > 0) return { valid: false, errors };
 
   const cases = new Map(documentRecord.document.cases.map((item) => [item.id, item]));
-  const contractSections = outputContractSections(documentRecord.record);
-  if (contractSections.length === 0) {
+  // A context shapes behavior, not the reply: it has no output contract (see
+  // validate-output-contracts.mjs), so its responses are checked for forbidden assertions only.
+  const shapesReply = documentRecord.record.manifest.kind !== 'context';
+  const contractSections = shapesReply ? outputContractSections(documentRecord.record) : [];
+  if (shapesReply && contractSections.length === 0) {
     return { valid: false, errors: [`artifact '${envelope.artifactId}' has no single enforceable output contract`] };
   }
   const seen = new Set();
@@ -441,7 +444,7 @@ export function validateResponseEnvelope(envelope, documents) {
     const normalized = normalize(response.text);
     const caseItem = cases.get(response.caseId);
     const accepted = acceptedSectionSets(documentRecord.document, caseItem);
-    const satisfied = accepted.find((set) => set.every((section) => sectionPresent(response.text, section)));
+    const satisfied = !shapesReply || accepted.find((set) => set.every((section) => sectionPresent(response.text, section)));
     if (!satisfied) {
       const missing = expected.requiredSections.filter((section) => !sectionPresent(response.text, section));
       for (const section of missing) errors.push(`${prefix} is missing required section '${section}'`);
