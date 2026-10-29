@@ -9,12 +9,14 @@ import {
   openSync,
   readFileSync,
   readdirSync,
+  realpathSync,
   renameSync,
   rmdirSync,
   rmSync,
   statSync,
   writeFileSync
 } from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import { createHash, randomBytes } from 'node:crypto';
 import path from 'node:path';
 import { findContextHookConflicts, loadArtifacts, resolvePack, ROOT } from './catalog.mjs';
@@ -370,10 +372,25 @@ function buildFilePlan(record, adapter, configRoot) {
   return plan;
 }
 
+// Codex runs a hook from the session cwd, which may be a subdirectory, and names no project-dir variable;
+// its hooks documentation resolves repo-local hooks from the Git root. That form is used when `.codex` sits
+// at the Git root on a POSIX shell, so the file works in every clone; otherwise the absolute path stays and
+// docs/install.md asks for one install per machine.
+function codexProjectRoot(configRoot) {
+  if (process.platform === 'win32') return configRoot;
+  const project = path.dirname(configRoot);
+  const env = Object.fromEntries(Object.entries(process.env).filter(([name]) => !/^GIT_/i.test(name)));
+  const result = spawnSync('git', ['rev-parse', '--show-toplevel'], { cwd: project, encoding: 'utf8', env, shell: false, timeout: 5000 });
+  try {
+    if (result.status === 0 && realpathSync(result.stdout.trim()) === realpathSync(project)) return '$(git rev-parse --show-toplevel)/.codex';
+  } catch {}
+  return configRoot;
+}
+
 function hookTokens(target, scope, configRoot) {
   return {
     claudeRoot: scope === 'project' ? '${CLAUDE_PROJECT_DIR}/.claude' : '${HOME}/.claude',
-    codexRoot: configRoot,
+    codexRoot: target === 'codex' && scope === 'project' ? codexProjectRoot(configRoot) : configRoot,
     geminiRoot: scope === 'project' ? '${GEMINI_PROJECT_DIR}/.gemini' : '${HOME}/.gemini',
     cursorRoot: scope === 'project' ? '.cursor' : '${HOME}/.cursor',
     target
@@ -416,8 +433,9 @@ function prepareSettings(target, adapter, configRoot, scope, kind, ownedInstall,
   after.hooks ||= {};
   const installedHooks = [];
   const displacedHooks = structuredClone(ownedInstall?.displacedHooks || []);
+  const tokens = hookTokens(target, scope, configRoot);
   const desiredHooks = Object.entries(adapter.settingsPatch.hooks).flatMap(([event, rawEntries]) =>
-    replaceTokens(rawEntries, hookTokens(target, scope, configRoot)).map((entry) => ({ event, entry, marker: hookMarker(entry) })));
+    replaceTokens(rawEntries, tokens).map((entry) => ({ event, entry, marker: hookMarker(entry) })));
 
   for (const previous of ownedInstall?.hooks || []) {
     const previousMarker = recordedHookMarker(previous);
@@ -444,7 +462,7 @@ function prepareSettings(target, adapter, configRoot, scope, kind, ownedInstall,
   }
 
   for (const [event, rawEntries] of Object.entries(adapter.settingsPatch.hooks)) {
-    const entries = replaceTokens(rawEntries, hookTokens(target, scope, configRoot));
+    const entries = replaceTokens(rawEntries, tokens);
     after.hooks[event] ||= [];
     if (!Array.isArray(after.hooks[event])) throw new Error(`${file} hooks.${event} must be an array`);
     for (const entry of entries) {

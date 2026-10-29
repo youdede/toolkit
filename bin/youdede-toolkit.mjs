@@ -19,8 +19,17 @@ function parse(argv) {
       positional.push(value);
       continue;
     }
+    const boolean = ['dry-run', 'force', 'help', 'json', 'no-prerequisites'];
+    const equals = value.indexOf('=');
+    if (equals > 2) {
+      const name = value.slice(2, equals);
+      if (boolean.includes(name)) throw new Error(`--${name} does not take a value`);
+      if (equals === value.length - 1) throw new Error(`--${name} requires a value`);
+      options[name] = value.slice(equals + 1);
+      continue;
+    }
     const name = value.slice(2);
-    if (['dry-run', 'force', 'help', 'json', 'no-prerequisites'].includes(name)) options[name] = true;
+    if (boolean.includes(name)) options[name] = true;
     else {
       const next = argv[index + 1];
       if (!next || next.startsWith('--')) throw new Error(`--${name} requires a value`);
@@ -32,7 +41,6 @@ function parse(argv) {
 }
 
 const INSTALL_FLAGS = ['target', 'scope', 'cwd', 'force', 'dry-run', 'json', 'no-prerequisites'];
-// What an automatically installed prerequisite does for the artifact that needs it.
 const COMMAND_FLAGS = {
   help: [],
   list: ['kind', 'domain', 'category', 'capability', 'problem', 'framework', 'language', 'lifecycle', 'risk', 'target', 'execution'],
@@ -78,6 +86,7 @@ async function ask(question, defaultYes) {
 }
 const slugOf = (id) => id.split('/').at(-1);
 const write = (line) => process.stdout.write(`${line}\n`);
+const notify = (line) => process.stderr.write(`${line}\n`);
 
 function help() {
   const targets = SUPPORTED_TARGETS.join('|');
@@ -253,16 +262,33 @@ async function main() {
     let planned = null;
     try { planned = planArtifactInstall(query, placement); } catch {}
     const reasonOf = (id) => planned?.prerequisiteReasons?.[id] ?? null;
-    const asking = interactive() && !options['no-prerequisites'];
+    // With --json, stdout carries only the result: no question is asked and notices go to stderr.
+    const prompting = interactive() && !options.json;
+    const asking = prompting && !options['no-prerequisites'];
     const prerequisites = await decidePrerequisites({
       subject: planned?.artifact.slug ?? query,
       prerequisites: (planned?.prerequisites ?? []).map((id) => ({ slug: slugOf(id), reason: reasonOf(id) })),
-      interactive: interactive(),
+      interactive: prompting,
       skip: Boolean(options['no-prerequisites']),
       ask,
-      write
+      write: options.json ? notify : write
     });
     const result = installArtifact(query, { ...placement, prerequisites });
+    if (options.json) {
+      process.stdout.write(`${JSON.stringify({
+        artifact: result.artifact.id,
+        configRoot: result.configRoot,
+        prerequisites: result.prerequisites.map((manifest) => manifest.id),
+        skippedPrerequisites: result.skippedPrerequisites.map((manifest) => manifest.id),
+        files: result.files,
+        settingsFile: result.settingsFile,
+        mcpConfigFile: result.mcpConfigFile,
+        integrity: result.integrity,
+        runtime: result.runtime,
+        warnings: result.warnings || []
+      }, null, 2)}\n`);
+      return;
+    }
     for (const manifest of result.prerequisites) process.stdout.write(`Installed prerequisite ${manifest.slug}.\n`);
     process.stdout.write(`Installed ${result.artifact.id} in ${result.configRoot}\n`);
     if (result.skippedPrerequisites.length) {
@@ -301,12 +327,22 @@ async function main() {
     const prerequisites = await decidePrerequisites({
       subject,
       prerequisites: outside.map((id) => ({ slug: slugOf(id), reason: reasons.get(id) })),
-      interactive: interactive(),
+      interactive: interactive() && !options.json,
       skip: Boolean(options['no-prerequisites']),
       ask,
-      write
+      write: options.json ? notify : write
     });
     const result = installPack(query, { ...installOptions, prerequisites });
+    if (options.json) {
+      process.stdout.write(`${JSON.stringify({
+        pack: result.pack.id,
+        target: result.target,
+        scope: result.scope,
+        installed: result.installed.map((item) => ({ artifact: item.artifact.id, prerequisites: (item.prerequisites ?? []).map((manifest) => manifest.id), files: item.files })),
+        skipped: result.skipped.map((item) => ({ artifact: item.member.artifactId, reason: item.skipped }))
+      }, null, 2)}\n`);
+      return;
+    }
     process.stdout.write(`Installed ${result.pack.id} for ${result.target}/${result.scope}\n`);
     for (const item of result.installed) {
       for (const manifest of item.prerequisites ?? []) process.stdout.write(`- ${manifest.id} (prerequisite)\n`);
