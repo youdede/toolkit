@@ -6,7 +6,7 @@
     {
       "id": "positive-cloud-iac-policy",
       "type": "positive",
-      "prompt": "Review the supplied production network and database IaC change. Source revision, plan, state lineage, workspace, account, region, providers, variables, policy results, exceptions, availability objectives, and rollout contract are included.",
+      "prompt": "Review this production IaC change. Source revision 9f81c2d; workspace prod-eu, account 4410, region eu-central-1; providers aws 5.70. Plan excerpt: `aws_security_group_rule.db_ingress` will be created: cidr_blocks [\"0.0.0.0/0\"], port 5432; `aws_db_instance.main` will be updated in-place: publicly_accessible false to true, backup_retention_period 7 to (known after apply). Policy results: OPA check `no-public-db` passed because the rule only inspects aws_db_instance tags. Exceptions: none. Availability objective: 99.95%. Rollout contract: changes apply after one approval in the change window.",
       "sourceAnchors": [
         "Bind source revision",
         "Test the rollout contract"

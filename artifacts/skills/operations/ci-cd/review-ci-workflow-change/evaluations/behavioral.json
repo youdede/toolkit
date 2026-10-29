@@ -6,7 +6,7 @@
     {
       "id": "positive-review-workflow",
       "type": "positive",
-      "prompt": "Review this change to .github/workflows/release.yml before merge. Intended behavior: publish the npm package only on tags v*. Diff: `on:` changes from `push: tags: ['v*']` to `pull_request_target:`; `permissions: contents: read` becomes `permissions: write-all`; `uses: actions/checkout@v4` becomes `uses: actions/checkout@main`; a new step `run: npm publish` reads `NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}`.",
+      "prompt": "Review this change to .github/workflows/release.yml before merge. Intended behavior: publish the npm package only on tags v*. The new file, with line numbers:\n```\n 1 name: release\n 2 on:\n 3   pull_request_target:\n 4 permissions: write-all\n 5 jobs:\n 6   publish:\n 7     runs-on: ubuntu-latest\n 8     steps:\n 9       - uses: actions/checkout@main\n10         with:\n11           ref: ${{ github.event.pull_request.head.sha }}\n12       - run: npm ci\n13       - run: npm publish\n14         env:\n15           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}\n```\nThe previous version had `on: push: tags: ['v*']` at lines 2 to 4, `permissions: contents: read`, and `actions/checkout@v4`.",
       "sourceAnchors": [
         "line-signal collector",
         "Review findings"

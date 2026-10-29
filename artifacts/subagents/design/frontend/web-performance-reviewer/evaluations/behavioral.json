@@ -6,7 +6,7 @@
     {
       "id": "positive-checkout-image-regression",
       "type": "positive",
-      "prompt": "Review the supplied checkout-page diff. It adds a client-side carousel with remote product images; compare the provided mobile trace with the performance budget and identify a concrete regression risk.",
+      "prompt": "Review this checkout-page diff. It adds <ProductCarousel /> to src/checkout/Summary.tsx, a client-side component that loads 8 remote images from cdn.partner-img.com at 1600px width, without width/height attributes or lazy loading, above the order summary. Budget: mobile LCP under 2.5 s and CLS under 0.1 on the checkout journey (Moto G Power, slow 4G). Supplied mobile lab trace before the change: LCP 2.1 s (element: order total), CLS 0.02. No trace after the change was supplied.",
       "sourceAnchors": [
         "Map the change to loading",
         "List findings first"

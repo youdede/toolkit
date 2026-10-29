@@ -6,7 +6,7 @@
     {
       "id": "positive-bounded-workflow",
       "type": "positive",
-      "prompt": "Prepare a reviewable PR draft for this branch against main, using the supplied diff and test log.",
+      "prompt": "Prepare a reviewable PR draft for branch fix/session-timeout against main. `git log --oneline main..fix/session-timeout`: a1b2c3d fix(auth): refresh session before expiry; 9e8f7a6 test(auth): cover refresh near expiry. `git diff --stat main...fix/session-timeout`: src/auth/session.ts | 24 ++++--, tests/auth/session.test.ts | 41 ++++++ (2 files changed, 59 insertions, 6 deletions). The change refreshes the token when less than 60 s remain instead of after a 401. Test log: `npm test -- auth` exited 0 with 18 passed, 0 failed, in 2.4 s. Lint was not run.",
       "sourceAnchors": [
         "exact base and head",
         "## Pull-request draft"

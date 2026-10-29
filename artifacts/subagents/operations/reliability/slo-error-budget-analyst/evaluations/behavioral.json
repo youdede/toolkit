@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "The report compares a rolling thirty-day numerator with a calendar-month denominator and therefore overstates remaining budget.",
+      "prompt": "Check this SLO report. SLI contract: availability = successful checkout requests / eligible checkout requests, eligible excludes bot traffic, window calendar month in UTC, target 99.5%. Result series used by the report: numerator = successful requests over the rolling 30 days ending 2026-10-20 (9,880,000); denominator = eligible requests for October 1 to 20 (6,410,000). The report states 154% availability capped at 100% and \"full error budget remaining\".",
       "sourceAnchors": [
         "a numerator-denominator-window calculation ledger with exclusions and missing intervals",
         "the reported value changes when the supplied SLI contract is applied correctly to the same evidence"
@@ -34,7 +34,7 @@
     {
       "id": "positive-bounded-control-case",
       "type": "positive",
-      "prompt": "Numerator, denominator, exclusions, timezone, and window all match the supplied SLI contract and aggregate evidence. Review the supplied evidence and avoid manufacturing a finding when the specialist threshold is not met.",
+      "prompt": "Check this SLO report. SLI contract: good = HTTP responses with status < 500 and latency < 300 ms; eligible = all requests to /api/* excluding health checks and synthetic traffic; timezone UTC; window 28-day rolling. Target 99.9%. Result series (28-day rolling, ending 2026-10-28, UTC, same exclusions): eligible 412,300,000, good 412,010,000, so 99.930% and 70% of the budget consumed. The report's query uses the same filters and window. Avoid manufacturing a finding when the specialist threshold is not met.",
       "sourceAnchors": [
         "If no actionable finding is supported",
         "without calling the subject safe or approved"

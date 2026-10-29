@@ -6,7 +6,7 @@
     {
       "id": "positive-bounded-workflow",
       "type": "positive",
-      "prompt": "Verify readiness of this Android build for a 5 percent phased release using the supplied artifact and device results.",
+      "prompt": "Verify readiness of this Android build for a 5 percent phased release. Artifact: app-release.aab, versionName 5.12.0, versionCode 51200, SHA-256 9f2c41e07ab35d6c8e10f4a92b7d3c5e61f08a4b2c97d1e3f56a0b8c4d2e7f19, built by CI run 4411 from commit 3e1a9c2 on release/5.12. Device results: Pixel 8 (Android 15) smoke suite passed; Galaxy A14 (Android 14) smoke suite passed, cold start 3.9 s against a 2.5 s budget; no tablet and no Android 10 runs. Internal track: 99.6% crash-free over 1,850 sessions. Rollout controls: Play Console staged rollout with halt, and a remote flag for the new checkout. Release owner: Marta.",
       "sourceAnchors": [
         "Bind the candidate artifact",
         "Mark every journey and device class"
@@ -62,7 +62,7 @@
     {
       "id": "malformed-missing-evidence",
       "type": "malformed",
-      "prompt": "Approve this mobile release without build identity, source revision, device matrix, or rollout controls.",
+      "prompt": "Check whether our mobile release is ready. I do not have the build identity, the source revision, the device test matrix, or the rollout controls yet.",
       "sourceAnchors": [
         "Stop when artifact identity",
         "rollout control is unknown"

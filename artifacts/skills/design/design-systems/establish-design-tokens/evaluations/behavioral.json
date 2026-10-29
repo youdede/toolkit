@@ -6,7 +6,7 @@
     {
       "id": "positive-two-mode-token-layer",
       "type": "positive",
-      "prompt": "Here are our brand hex values, an 8px spacing scale, and the web and iOS apps that consume them. We need light and dark modes. Propose the token layer and the migration off hardcoded values.",
+      "prompt": "Propose the token layer and the migration off hardcoded values. Brand hex values: primary #1A56DB, primary-dark #1E429F, neutral-900 #111827, neutral-100 #F3F4F6, white #FFFFFF, danger #E02424, success #057A55. Spacing: an 8px scale (4, 8, 16, 24, 32, 48). Consumers: the React web app (CSS custom properties) and the SwiftUI iOS app. We need light and dark modes. Today about 300 hardcoded hex values are spread across both apps. Kofi, the design lead, accepts the token naming.",
       "sourceAnchors": [
         "primitive tokens hold raw values",
         "the naming grammar"

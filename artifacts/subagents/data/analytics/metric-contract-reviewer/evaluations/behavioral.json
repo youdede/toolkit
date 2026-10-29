@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "The candidate changes active_users from distinct users with one qualifying event to event count but preserves the same dashboard label.",
+      "prompt": "Review this metric change. Canonical definition (metrics.yaml): active_users = distinct user_id with at least one qualifying event, grain user, cohort all signed-in users, window calendar day in UTC, deduplication by user_id, denominator none. Baseline query: SELECT day, count(DISTINCT user_id) AS active_users FROM events WHERE qualifying GROUP BY day. Candidate query: SELECT day, count(*) AS active_users FROM events WHERE qualifying GROUP BY day. The dashboard tile keeps the label \"Active users\". On 2026-10-20 the baseline returns 12,400 and the candidate 88,900. Consumers: the growth dashboard and the board deck.",
       "sourceAnchors": [
         "a contract-diff table from semantic definition through query clauses to consumer labels",
         "the candidate computes a different population, unit, window, or aggregation while retaining the same metric identity"
@@ -34,7 +34,7 @@
     {
       "id": "positive-bounded-control-case",
       "type": "positive",
-      "prompt": "A query alias changes while grain, cohort, deduplication, window, and denominator remain semantically identical. Review the supplied evidence and avoid manufacturing a finding when the specialist threshold is not met.",
+      "prompt": "Review this metric change. Canonical definition (metrics.yaml): weekly_active_accounts = distinct account_id with at least one qualifying event, grain account, cohort all paying accounts, window ISO week in UTC, deduplication by account_id, denominator none. Baseline query: SELECT date_trunc('week', ts) AS wk, count(DISTINCT account_id) AS waa FROM events WHERE qualifying AND plan <> 'free' GROUP BY 1. Candidate query: identical except the output alias is renamed from waa to weekly_active_accounts and the dashboard tile now reads that column. Consumers: the exec KPI dashboard. Avoid manufacturing a finding when the specialist threshold is not met.",
       "sourceAnchors": [
         "If no actionable finding is supported",
         "without calling the subject safe or approved"

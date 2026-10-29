@@ -34,7 +34,7 @@
     {
       "id": "positive-bounded-control-case",
       "type": "positive",
-      "prompt": "Each worker updates immutable local state and the only shared write is protected by the supplied atomic compare-and-swap loop. Review the supplied evidence and avoid manufacturing a finding when the specialist threshold is not met.",
+      "prompt": "Look for a concurrency hazard. Entry points: N worker goroutines started by processBatch, each handling one item. Each worker builds its result in a local struct and never shares it. Shared state: a single counter `processed int64`, updated only by `for { old := atomic.LoadInt64(&processed); if atomic.CompareAndSwapInt64(&processed, old, old+1) { break } }`. Invariant: processed equals the number of finished items when wg.Wait() returns; it is only read after wg.Wait(). Avoid manufacturing a finding when the specialist threshold is not met.",
       "sourceAnchors": [
         "If no actionable finding is supported",
         "without calling the subject safe or approved"

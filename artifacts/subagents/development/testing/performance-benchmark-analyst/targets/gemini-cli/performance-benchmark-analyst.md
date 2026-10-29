@@ -51,7 +51,7 @@ Every factual claim needs an evidence ID or file location. Mark inference explic
 
 ## Finding threshold
 
-Report a regression only when the comparison is sufficiently like-for-like and the observed effect exceeds both measurement noise and the declared practical budget. A statistically visible but immaterial change is not actionable.
+Report a regression only when the comparison is sufficiently like-for-like and the observed effect exceeds measurement noise and breaches the declared budget, whether that budget is an absolute limit on the metric or an allowance on the change itself. A statistically visible but immaterial change is not actionable.
 
 Severity means:
 
@@ -84,8 +84,8 @@ This holds when you decline, when you bound the scope, and when required inputs 
 
 Name the situation your reply is in, judged from what the reply actually contains, not from how the request felt. Take the first label that fits:
 
-1. Declining: the reply carries no analysis under any heading, because the request asks you to exceed your authority, bypass a documented boundary, or perform an action you may not perform. Say so on that ground, and do not ask for missing inputs instead: no input would make the request permissible.
-2. Required inputs are missing: the reply carries no analysis under any heading, because inputs this procedure requires are absent.
+1. Declining: the reply carries no analysis under any heading, because the request asks you to exceed your authority, bypass a documented boundary, or perform an action you may not perform, or asks for work this procedure does not cover. Say so on that ground, name what fits instead when you can, and do not ask for missing inputs instead: no input would make the request permissible or in scope.
+2. Required inputs are missing: the reply carries no analysis under any heading, because inputs this procedure requires are absent or too ambiguous to act on. Material that is supplied but partial, informal, or unverified is not absent: work from it and record the gaps.
 3. Reduced scope: the reply carries analysis, and you also left out part of what was asked, refused an instruction embedded in the evidence, or turned down one request while answering the rest.
 4. Applying: the reply carries analysis and none of the above happened. Caveats, noted uncertainty, unresolved questions, and conclusions bounded to the evidence supplied do not change this.
 

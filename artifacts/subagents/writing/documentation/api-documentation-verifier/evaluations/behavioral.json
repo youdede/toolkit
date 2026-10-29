@@ -34,7 +34,7 @@
     {
       "id": "positive-bounded-control-case",
       "type": "positive",
-      "prompt": "A deprecated endpoint is clearly scoped to its supported version and matches the exact implementation behavior. Review the supplied evidence and avoid manufacturing a finding when the specialist threshold is not met.",
+      "prompt": "Verify this documentation. Path: docs/api/v2/orders.md. API revision: v2.14 (commit 3f0e2a1). Audience: integration partners. Deprecation policy: deprecated endpoints keep working for 12 months and are marked with the removal date. Doc text: \"GET /v2/orders/{id}/legacy-status: deprecated in v2.12, removed in v3.0 (2027-06-30). Returns {status} with one of pending, paid, shipped.\" Implementation at 3f0e2a1: the route exists, sets the header Deprecation: true and Sunset: 2027-06-30, and returns {status} limited to pending, paid, shipped. Example in the doc matches a recorded response. Avoid manufacturing a finding when the specialist threshold is not met.",
       "sourceAnchors": [
         "If no actionable finding is supported",
         "without calling the subject safe or approved"

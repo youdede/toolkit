@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "Two studies appear contradictory but use different populations and outcome windows; synthesize them without pooling or selecting a winner.",
+      "prompt": "Synthesize the evidence. Question: does a 14-day trial convert better than a 30-day trial? Inclusion: randomized or quasi-experimental studies from 2020 or later. Population: self-serve SaaS. Source packet: Study 1 (2023, randomized, 12,000 SMB signups): 14-day trial converted 4.1% vs 3.6% for 30-day, measured at day 45. Study 2 (2024, quasi-experimental, 2,300 mid-market signups): 30-day converted 9.8% vs 8.9% for 14-day, measured at day 90.",
       "sourceAnchors": [
         "a proposition-evidence table separating support, contradiction, population, method, and applicability",
         "a synthesis statement preserves the conditions and limitations shared by the evidence used to support it"
@@ -35,7 +35,7 @@
     {
       "id": "positive-bounded-control-case",
       "type": "positive",
-      "prompt": "Three documents repeat the same underlying dataset; treat them as one evidence chain rather than three independent confirmations. Review the supplied evidence and avoid manufacturing a finding when the specialist threshold is not met.",
+      "prompt": "Synthesize the evidence. Question: does adding a free tier raise paid conversion for B2B analytics tools? Inclusion: sources from 2022 or later with a stated method. Population: B2B SaaS products under 500 employees. Source packet: (A) Vendor X 2024 benchmark report, method: survey of 310 companies; (B) a 2025 blog post citing \"Vendor X data\" for a 23% lift; (C) a 2025 conference talk slide quoting the same 23% figure from Vendor X. Avoid manufacturing a finding when the specialist threshold is not met.",
       "sourceAnchors": [
         "If no actionable finding is supported",
         "without calling the conclusion universally established"

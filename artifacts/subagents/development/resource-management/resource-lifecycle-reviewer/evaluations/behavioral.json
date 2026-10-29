@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "The abort path returns before removing a listener and clearing its timer, so each cancelled request leaves two live resources.",
+      "prompt": "Review resource lifecycle in fetchWithTimeout(url, signal). Acquisition: `const timer = setTimeout(onTimeout, 10000);` and `signal.addEventListener('abort', onAbort);`. Ownership: both belong to this call; the caller's AbortController is shared across many requests and lives for the page. Exit paths: on success, `clearTimeout(timer); signal.removeEventListener('abort', onAbort); return res;`. On abort: `if (signal.aborted) return reject(new AbortError());` at the top of onAbort, before any cleanup. On timeout: same cleanup as success.",
       "sourceAnchors": [
         "an ownership ledger from acquisition through transfer, use, cancellation, and release",
         "a reachable exit leaks, releases twice, uses after release, or leaves a callback operating on invalid state"
@@ -34,7 +34,7 @@
     {
       "id": "positive-bounded-control-case",
       "type": "positive",
-      "prompt": "One finally block owns release after every successful acquisition and callbacks cannot escape the bounded operation. Review the supplied evidence and avoid manufacturing a finding when the specialist threshold is not met.",
+      "prompt": "Review resource lifecycle. Acquisition: `const conn = await pool.connect();` at the top of withTransaction(fn). Ownership: conn never leaves withTransaction; fn receives a query function bound to conn, not conn itself. Exit paths: fn resolves (COMMIT), fn throws (ROLLBACK), COMMIT throws. All three run inside `try { ... } finally { conn.release(); }`, and pool.connect is outside the try, so a failed acquisition releases nothing. Avoid manufacturing a finding when the specialist threshold is not met.",
       "sourceAnchors": [
         "If no actionable finding is supported",
         "without calling the subject safe or approved"

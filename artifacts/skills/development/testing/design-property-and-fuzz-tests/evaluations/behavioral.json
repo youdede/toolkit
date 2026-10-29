@@ -6,7 +6,7 @@
     {
       "id": "positive-bounded-workflow",
       "type": "positive",
-      "prompt": "Design property and fuzz tests for this binary decoder, including malformed lengths and round-trip behavior.",
+      "prompt": "Design property and fuzz tests for our binary decoder, including malformed lengths and round-trip behavior. Boundary: decodeFrame(buf: Uint8Array): Frame in src/wire/frame.ts, with encodeFrame as its inverse. Contract: a frame is a 1-byte type (0x01 to 0x05), a 4-byte big-endian payload length, then the payload; decodeFrame throws FrameError on an unknown type, a length above 1 MiB, or a length that exceeds the buffer, and never reads past the buffer. Existing examples: 9 hand-written cases in tests/wire/frame.test.ts. Limits: the CI job has 5 minutes and 2 GB of memory. Deterministic entrypoint: `npx vitest run tests/wire`. fast-check 3.x is already a dev dependency.",
       "sourceAnchors": [
         "observable contract",
         "deterministic replay"

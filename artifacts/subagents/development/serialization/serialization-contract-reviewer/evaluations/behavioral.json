@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "The new encoder omits false, while the old decoder assigns true when the field is missing, changing the value after a cross-version round trip.",
+      "prompt": "Review this wire change. Encoder: settings-service v2.0 now omits boolean fields whose value is false. Decoder: mobile app 4.x, which sets `notifications_enabled = json[\"notifications_enabled\"] ?? true`. Canonical fixtures: v1.9 encodes {\"user\":\"u1\",\"notifications_enabled\":false}; v2.0 encodes {\"user\":\"u1\"} for the same settings.",
       "sourceAnchors": [
         "a value-to-wire-to-value matrix across every supported version pairing",
         "a supported value fails round trip or a supported reader interprets the candidate encoding with different semantics"
@@ -34,7 +34,7 @@
     {
       "id": "positive-bounded-control-case",
       "type": "positive",
-      "prompt": "The candidate adds an unknown optional field and every named older decoder demonstrably preserves known fields while ignoring it. Review the supplied evidence and avoid manufacturing a finding when the specialist threshold is not met.",
+      "prompt": "Review this wire change. Encoder: orders-service v5.3 adds an optional `gift_note` string to the OrderCreated JSON event. Decoders: billing-consumer 2.8 (Jackson with FAIL_ON_UNKNOWN_PROPERTIES disabled) and analytics-loader 1.4 (Python, reads known keys by name). Canonical fixtures: v5.2 event {\"id\":\"o1\",\"total_cents\":1250}; v5.3 event {\"id\":\"o1\",\"total_cents\":1250,\"gift_note\":\"hi\"}. Supplied test results: both decoders parse both fixtures, with id and total_cents identical. Avoid manufacturing a finding when the specialist threshold is not met.",
       "sourceAnchors": [
         "If no actionable finding is supported",
         "without calling the subject safe or approved"

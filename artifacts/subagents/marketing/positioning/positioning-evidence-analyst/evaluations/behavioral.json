@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "The statement says this is the only platform for the audience, but supplied proof covers one feature and no market comparison.",
+      "prompt": "Check this positioning statement. Audience: operations managers at mid-size logistics firms. Problem: route changes during the day are coordinated by phone. Statement: \"The only platform built for logistics operations teams.\" Proof supplied: a demo of live route re-optimization and two customer quotes praising it. Alternative baseline: Onfleet, Routific, and phone plus spreadsheets; no comparison of their features was supplied.",
       "sourceAnchors": [
         "an audience-problem-claim-proof-comparison matrix with evidence directness",
         "the claim exceeds what supplied customer, product, or comparative evidence establishes for the named audience and scope"
@@ -34,7 +34,7 @@
     {
       "id": "positive-bounded-control-case",
       "type": "positive",
-      "prompt": "A scoped feature claim is supported by the named product behavior and primary customer evidence for the stated segment. Review the supplied evidence and avoid manufacturing a finding when the specialist threshold is not met.",
+      "prompt": "Check this positioning claim. Audience: finance teams at 50 to 500 person companies. Problem: month-end close takes too long because bank transactions are matched by hand. Claim on the homepage: \"Matches bank transactions to invoices automatically, including partial payments.\" Proof: the product's matching engine handles one-to-many matches (release notes 4.2, demo recording), and 9 of 12 customer interviews in September named partial-payment matching as the reason they bought. Alternative baseline: manual matching in Excel or the accounting suite's exact-amount matcher. Avoid manufacturing a finding when the specialist threshold is not met.",
       "sourceAnchors": [
         "If no actionable finding is supported",
         "without calling the subject safe or approved"

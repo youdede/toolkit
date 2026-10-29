@@ -6,7 +6,7 @@
     {
       "id": "positive-resume-from-verified-tail",
       "type": "positive",
-      "prompt": "Resume the interrupted repository task from its local session ledger, verify the chain first, cite each carried claim, and identify anything that is stale.",
+      "prompt": "Resume the interrupted repository task from its local session ledger, verify the chain first, cite each carried claim, and identify anything that is stale. Ledger verify output: {\"ok\":true,\"entries\":9,\"head\":\"b81e4c09a7d2f3e6\"}. Tail of 3 entries: seq 7, hash 52aa19c0e4b7..., decision \"use integer cents in src/billing/round.ts\", touched src/billing/round.ts; seq 8, hash 9e0d33f1b2c8..., claim \"tests pass for src/billing\", touched tests/billing/round.test.ts; seq 9, hash b81e4c09a7d2..., pending \"CSV export format not yet checked\", touched src/billing/export.ts. Current `git status --short` now: ` M src/billing/export.ts` and ` M src/billing/round.ts`; `git log -1` shows no commit since entry 9.",
       "sourceAnchors": [
         "## Step 1 — Verify before trusting",
         "## Step 3 — Reconstruct with citations"

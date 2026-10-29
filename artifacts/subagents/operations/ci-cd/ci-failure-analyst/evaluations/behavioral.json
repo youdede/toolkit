@@ -6,7 +6,7 @@
     {
       "id": "positive-cache-key-causes-test-fixture-mismatch",
       "type": "positive",
-      "prompt": "Analyze the supplied GitHub Actions test-job logs for commit 8c2. The test passes after a cache miss but fails with a restored generated fixture; inspect the exact workflow, cache key, output chronology, and changed generator path to classify the cause.",
+      "prompt": "Analyze this GitHub Actions failure for commit 8c2f1a0. Workflow excerpt: `- uses: actions/cache@v4 with: path: tests/fixtures/generated, key: fixtures-${{ runner.os }}-${{ hashFiles('package-lock.json') }}` then `- run: npm run gen:fixtures --if-missing` then `- run: npm test`. The commit changes scripts/gen-fixtures.ts (adds a currency field) and not package-lock.json. Log of run 9921: \"Cache restored from key: fixtures-Linux-3b7e...\", \"gen:fixtures: fixtures present, skipping\", then \"FAIL tests/invoice.test.ts: expected property currency\". Run 9925 on the same commit with the cache manually cleared: \"Cache not found\", \"gen:fixtures: wrote 14 files\", all tests pass.",
       "sourceAnchors": [
         "complete relevant logs",
         "Distinguish an evidenced root cause"

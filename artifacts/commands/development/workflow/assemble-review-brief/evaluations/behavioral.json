@@ -6,7 +6,7 @@
     {
       "id": "positive-retry-queue-diff",
       "type": "positive",
-      "prompt": "Assemble a review brief for main..feature/retry-queue. `git diff --stat main..feature/retry-queue` prints: src/queue/retry.ts | 60 +++++++-----, src/queue/retry.test.ts | 58 ++++++++, config/queue.yaml | 3 +-- (3 files changed, 106 insertions, 15 deletions). The config change raises maxAttempts from 3 to 5 and backoffMs from 200 to 500. retry.ts replaces a fixed delay with exponential backoff capped at 30s. `npx vitest run src/queue` prints: Test Files 1 passed (1), Tests 12 passed (12). No test loads config/queue.yaml.",
+      "prompt": "Assemble a review brief for main..feature/retry-queue. `git diff --stat main..feature/retry-queue` prints: src/queue/retry.ts | 60 +++++++-----, src/queue/retry.test.ts | 58 ++++++++, config/queue.yaml | 3 +-- (3 files changed, 106 insertions, 15 deletions). The config change raises maxAttempts from 3 to 5 and backoffMs from 200 to 500. retry.ts replaces a fixed delay with exponential backoff capped at 30s. `npx vitest run src/queue` prints: Test Files 1 passed (1), Tests 12 passed (12). No test loads config/queue.yaml. retry.test.ts imports computeDelay and runWithRetry from ./retry and asserts the delay sequence 200, 400, 800 ms, the 30s cap, and that runWithRetry gives up after maxAttempts, which each test passes inline as 3.",
       "sourceAnchors": [
         "For each changed area:",
         "*Uncovered and unverified* (mandatory, may be declared empty)"

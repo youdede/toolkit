@@ -6,7 +6,7 @@
     {
       "id": "positive-rename-with-live-old-readers",
       "type": "positive",
-      "prompt": "Review this migration that replaces orders.customer_id with account_id. During a two-step deploy, old workers still read customer_id; inspect the supplied migration, ORM diff, rollout order, and staging rehearsal for a compatibility risk.",
+      "prompt": "Review this migration that replaces orders.customer_id with account_id. Migration 0051: ALTER TABLE orders RENAME COLUMN customer_id TO account_id. ORM diff: the Order model field customer_id renamed to account_id. Rollout order: step 1 run migration 0051, step 2 deploy the new API and workers over 30 minutes with a rolling update. Old workers (v41) run `SELECT ... WHERE customer_id = $1` until they are replaced. Staging rehearsal log: the migration took 40 ms; during the rolling deploy, 212 \"column customer_id does not exist\" errors from v41 workers over 11 minutes.",
       "sourceAnchors": [
         "old and new application versions",
         "smallest safe pre-production check"

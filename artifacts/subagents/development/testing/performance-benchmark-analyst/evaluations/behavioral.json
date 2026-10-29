@@ -6,7 +6,7 @@
     {
       "id": "positive-performance-benchmark",
       "type": "positive",
-      "prompt": "Review the supplied baseline and candidate checkout benchmarks against the 200 ms p95 budget. Raw samples, build IDs, harness settings, datasets, warmups, hardware, and profiles are included.",
+      "prompt": "Compare these checkout benchmarks against the 200 ms p95 budget. Baseline: build 7.1.0, 5 runs of 2,000 requests each on c6i.xlarge, dataset seed-2026-09, 60 s warmup; p95 per run 168, 171, 165, 170, 169 ms. Candidate: build 7.2.0, 5 runs of 2,000 requests on c6i.xlarge, same dataset and warmup; p95 per run 186, 191, 183, 189, 188 ms. Harness: k6 0.51, constant arrival 50 rps for both. A sixth candidate run on a laptop gave 240 ms and is included in the team's chart. Profile for the candidate: 14 ms more in JSON schema validation added in 7.2.0.",
       "sourceAnchors": [
         "Normalize units",
         "Compare the observed interval"

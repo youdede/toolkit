@@ -6,7 +6,7 @@
     {
       "id": "positive-privacy-data-handling",
       "type": "positive",
-      "prompt": "Audit the supplied account-deletion flow for email, IP address, and support-message data. The scope, data classes, retention baseline, schemas, event contracts, stores, logs, and deletion jobs are provided.",
+      "prompt": "Audit the account-deletion flow. Data classes: email, IP address, support messages. Retention baseline: delete within 30 days of the request. Flow: DELETE /account marks users.deleted_at; a nightly job deletes rows in users and sessions older than 30 days after deleted_at. Stores: Postgres users (email), sessions (ip_address), Zendesk (support messages, keyed by email), the events table in BigQuery (ip_address, user_id), and application logs in Loki (email in login lines, 90-day retention). Event contract: account.deleted is published but only the billing service consumes it.",
       "sourceAnchors": [
         "Trace each field",
         "Distinguish an implementation fact"

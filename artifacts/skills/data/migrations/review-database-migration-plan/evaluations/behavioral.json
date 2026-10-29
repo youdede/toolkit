@@ -6,7 +6,7 @@
     {
       "id": "positive-migration-plan-review",
       "type": "positive",
-      "prompt": "Review this proposed migration SQL and rollout plan before the production change window.",
+      "prompt": "Review this proposed migration and rollout plan before Thursday's production change window. Engine: PostgreSQL 15. File migrations/0042_orders_status.sql:\n```sql\nALTER TABLE orders ADD COLUMN status_v2 text;\nUPDATE orders SET status_v2 = status;\nALTER TABLE orders DROP COLUMN status;\n```\nThe bundled SQL helper printed: [{\"ruleId\":\"MIG_SQL_UPDATE_WITHOUT_WHERE\",\"severity\":\"high\",\"line\":2},{\"ruleId\":\"MIG_SQL_DROP_COLUMN\",\"severity\":\"high\",\"line\":3}]. The orders table has 48M rows. Rollout plan: run the whole file in one transaction during the 20:00 window, deploy the app version that reads status_v2 right after, and roll back by restoring the nightly snapshot. Owner: Priya, data platform.",
       "sourceAnchors": [
         "Static SQL findings",
         "never claim a migration is safe"
@@ -64,7 +64,7 @@
     {
       "id": "malformed-no-sql",
       "type": "malformed",
-      "prompt": "Approve a database migration, but no SQL, engine, table, or rollout plan is available.",
+      "prompt": "Review the database migration for tonight's change window. I do not have the SQL yet, and I do not know the engine, the affected table, or the rollout plan.",
       "sourceAnchors": [
         "State missing inputs as blockers",
         "request it rather than guessing"

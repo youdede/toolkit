@@ -6,7 +6,7 @@
     {
       "id": "positive-bounded-workflow",
       "type": "positive",
-      "prompt": "Review this MCP issue-tracker server before we give the agent write credentials.",
+      "prompt": "Review our MCP issue-tracker server before we give the agent write credentials. Agent job: triage new bugs and label them. Identity: one service account, tracker-bot. Trust zones: the agent runs on developer laptops; the server runs locally over stdio and calls the Jira Cloud API. Tools: search_issues (read), get_issue (read), add_label (write), add_comment (write), transition_issue (write, any status including Closed). Schemas: transition_issue takes a free-text status name. Data classes: issue text may include customer emails. Credential: a Jira API token with project admin scope on all 14 projects. Confirmation rules: none. Logs: stdout only, not retained. Incident owner: Ravi, platform security.",
       "sourceAnchors": [
         "Every prompt, retrieved document",
         "Prefer structural controls outside the model"

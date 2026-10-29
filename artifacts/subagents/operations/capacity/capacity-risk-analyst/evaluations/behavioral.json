@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "Measured peak arrivals exceed the fixed worker service rate, making the bounded queue grow beyond its limit before the stated campaign ends.",
+      "prompt": "Assess capacity risk for the email-send queue during next week's 6-hour campaign. Measured demand: 1,800 messages per minute arrive at the campaign peak, sustained for the first 2 hours (from last month's campaign). Service rate: 12 fixed workers at 100 messages per minute each, 1,200 per minute, no autoscaling. Hard limit: the bounded queue holds 60,000 messages, then rejects. Seasonality: none beyond the campaign. Target headroom: 20%. Observed baseline outside campaigns: 300 per minute.",
       "sourceAnchors": [
         "a demand-capacity equation with assumptions, sensitivity ranges, and first limiting resource",
         "supplied measurements and limits imply a threshold crossing under a named plausible load scenario"
@@ -34,7 +34,7 @@
     {
       "id": "positive-bounded-control-case",
       "type": "positive",
-      "prompt": "Observed peak, sensitivity case, and downstream quotas all remain above the required headroom with consistent units. Review the supplied evidence and avoid manufacturing a finding when the specialist threshold is not met.",
+      "prompt": "Assess capacity risk for the export service before the holiday peak. Measured demand: last year's peak 420 jobs per minute, forecast 520 with seasonality from the last three holidays. Sensitivity case: 650 jobs per minute. Service rate: 24 workers at 40 jobs per minute each, so 960 per minute. Hard limits: the queue holds 50,000 jobs; the storage API quota is 2,000 writes per minute, and each job makes one write. Target headroom: 30% at the sensitivity case. Units are jobs per minute throughout. Avoid manufacturing a finding when the specialist threshold is not met.",
       "sourceAnchors": [
         "If no actionable finding is supported",
         "without calling the subject safe or approved"

@@ -6,7 +6,7 @@
     {
       "id": "positive-mcp-trust-boundary",
       "type": "positive",
-      "prompt": "Review the supplied filesystem-and-ticket MCP server. Registrations, schemas, handlers, authentication, credentials, tenancy, transport configuration, and deployment policy are in scope.",
+      "prompt": "Review this MCP server. Registration: tools read_file(path), list_dir(path), create_ticket(title, body). Handler for read_file: `fs.readFile(path.join(ROOT, args.path))`, with no check that the result stays under ROOT. create_ticket posts to the Jira API with a token from env JIRA_TOKEN (project admin scope). Authentication: none; stdio transport launched by the local agent. Tenancy: single user. Deployment policy: installed on developer laptops where ROOT is the repository and ~/.aws/credentials exists. The agent also reads untrusted issue text from Jira.",
       "sourceAnchors": [
         "Inventory each exposed MCP primitive",
         "Construct a non-executable abuse path"

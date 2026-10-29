@@ -6,7 +6,7 @@
     {
       "id": "positive-checkout-address-step",
       "type": "positive",
-      "prompt": "Design the shipping and billing address step of our mobile web checkout. The payments team supplied the candidate field list, the audience is returning shoppers, and the goal is completed orders.",
+      "prompt": "Design the shipping and billing address step of our mobile web checkout. The payments team supplied the candidate field list: full name, company, address line 1, address line 2, city, state or region, postal code, country, phone, email, a \"billing same as shipping\" choice, the same address fields again for billing, and VAT number. Audience: returning shoppers, mostly in the US and Germany, about 70% of them with a saved address. Goal: completed orders.",
       "sourceAnchors": [
         "name the consumer of its answer",
         "keep, derive, defer, or drop"
@@ -36,7 +36,7 @@
     {
       "id": "positive-clinic-intake-form",
       "type": "positive",
-      "prompt": "Design the new-patient intake form for our clinic's desktop portal. The records team supplied the candidate fields, the audience is first-time patients often filling it in at home, and the answers feed the medical record and billing.",
+      "prompt": "Design the new-patient intake form for our clinic's desktop portal. The records team supplied the candidate fields: legal name, preferred name, date of birth, sex assigned at birth, gender identity, home address, phone, email, emergency contact name and phone, insurance provider, policy number, insurance card photo, current medications, allergies, previous surgeries, primary reason for the visit, and consent to treatment and to the privacy notice. Audience: first-time patients, often filling it in at home. The answers feed the medical record and billing.",
       "sourceAnchors": [
         "one hard question per step",
         "the most common truthful answer"

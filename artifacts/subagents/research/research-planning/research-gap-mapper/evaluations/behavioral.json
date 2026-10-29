@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "For a retention decision, map the missing cohort-level churn evidence, the branches it changes, and a stop threshold instead of asking for more research generally.",
+      "prompt": "Map research gaps for this retention decision. Branches: if monthly churn of accounts in their first 90 days exceeds 6%, invest in onboarding; if churn concentrates in accounts older than a year, invest in account management; otherwise do neither. Available evidence: blended monthly churn 4.8% across all accounts, no breakdown by account age. Constraints: decision at the Q1 planning meeting in 5 weeks; analytics team has 2 days free. Acceptable uncertainty: plus or minus 1 point per cohort.",
       "sourceAnchors": [
         "a gap-to-decision-impact map with evidence method, cost class, and stop condition",
         "the unanswered question has at least two plausible answers that lead to different named decision branches"
@@ -37,7 +37,7 @@
     {
       "id": "positive-bounded-control-case",
       "type": "positive",
-      "prompt": "A cosmetic unknown cannot alter any named decision branch and should not outrank a missing outcome measure. Review the supplied evidence and avoid manufacturing a finding when the specialist threshold is not met.",
+      "prompt": "Map research gaps for this decision. Decision branches: launch the self-serve plan in Germany if trial-to-paid conversion is at least 4%, otherwise keep sales-led. Available evidence: US conversion 5.2%; no German conversion data; a survey says German users prefer a navy-blue logo. Constraints: decision due in 6 weeks, 15,000 EUR research budget. Acceptable uncertainty: a 1-point margin on conversion. Avoid manufacturing a finding when the specialist threshold is not met.",
       "sourceAnchors": [
         "If no actionable finding is supported",
         "without recommending research that cannot alter a branch"

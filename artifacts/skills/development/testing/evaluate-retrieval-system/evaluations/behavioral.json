@@ -6,7 +6,7 @@
     {
       "id": "positive-bounded-workflow",
       "type": "positive",
-      "prompt": "Evaluate our support RAG system with this approved corpus snapshot, query set, and citation policy.",
+      "prompt": "Evaluate our support RAG system. Decision: whether to switch the support widget from keyword search to RAG answers. Corpus snapshot: help-center export of 2026-10-01, 1,240 public articles, no private tickets. Retrieval: hybrid BM25 plus embeddings, top 8 chunks of 400 tokens. Query population: 300 real widget queries sampled from September, with 60 held out for tuning. Answer policy: answer only from retrieved articles, otherwise say it is not covered. Citation contract: every claim links the article URL it came from. Baseline: keyword search resolves 41% of queries without a ticket. Release threshold: at least 55% resolution with zero uncited policy claims. Budget: under 0.01 EUR and 2.5 s p95 per answer. Critical failures: wrong refund or cancellation terms.",
       "sourceAnchors": [
         "Measure retrieval independently",
         "claim-level support"

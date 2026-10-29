@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "A decision claim cites a vendor blog that references no primary measurement; audit the directness, method gap, and applicability rather than accepting the citation.",
+      "prompt": "Audit the source for this claim. Claim in our decision memo: \"Moving to Vendor Y's CDN cuts page load time by 40% for European users.\" Source: Vendor Y's blog post \"Why we're the fastest CDN\", published 2026-03-04, which states \"customers see up to 40% faster loads\", with no measurement method, dataset, or region breakdown and no link to a primary measurement. Freshness threshold: 12 months.",
       "sourceAnchors": [
         "a claim-source matrix recording provenance, directness, applicability, conflicts, and confidence",
         "the cited evidence fails to support the scoped claim for the relevant population, version, and date"
@@ -35,7 +35,7 @@
     {
       "id": "positive-bounded-control-case",
       "type": "positive",
-      "prompt": "A versioned primary specification states the exact behavior for the named version and the scoped claim does not exceed it. Review the supplied evidence and avoid manufacturing a finding when the specialist threshold is not met.",
+      "prompt": "Audit the source for this claim. Claim: \"In PostgreSQL 16, `ALTER TABLE ... ADD COLUMN ... DEFAULT <constant>` does not rewrite the table.\" Source: the PostgreSQL 16 documentation, ALTER TABLE page, published with release 16.0 (2023-09) and current for 16.4, which states that adding a column with a non-volatile default does not require a rewrite. Method: primary specification. Freshness threshold: documentation for the version in use. Avoid manufacturing a finding when the specialist threshold is not met.",
       "sourceAnchors": [
         "If no actionable finding is supported",
         "say so without calling the source verified or the claim approved"

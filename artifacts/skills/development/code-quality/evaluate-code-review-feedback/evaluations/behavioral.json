@@ -6,7 +6,7 @@
     {
       "id": "positive-evaluate-and-fix",
       "type": "positive",
-      "prompt": "Evaluate this review comment about authorization behavior, reproduce the claim, and apply a bounded correction if the evidence supports it.",
+      "prompt": "Evaluate this review comment on PR #212 and propose a bounded correction if the evidence supports it. Comment from the reviewer on src/api/projects.ts line 48: \"`canEdit` only checks `user.role === 'admin'`, so a project owner who is not an admin gets 403 on PATCH /projects/:id.\" Code at line 48: `if (user.role !== 'admin') return res.status(403).end();`. The authorization contract in docs/authz.md: \"Project owners and workspace admins may edit a project; members may not.\" Reproduction I ran: `curl -X PATCH /projects/p1` as owner u7 (role member, project.ownerId u7) returned 403; as admin u1 returned 200. Tests: tests/api/projects.test.ts covers admin 200 and member 403, not owner.",
       "sourceAnchors": [
         "Review feedback is a hypothesis",
         "implement one bounded correction"

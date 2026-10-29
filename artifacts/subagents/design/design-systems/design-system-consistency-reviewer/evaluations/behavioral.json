@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "The change introduces a raw brand color and custom button behavior although the catalog contains the matching semantic token and approved button variant.",
+      "prompt": "Review this change for design-system consistency. Changed interface, src/pricing/UpgradeCard.tsx:\n```tsx\n<button style={{ background: '#5B21B6', borderRadius: 6 }} onClick={upgrade}>Upgrade</button>\n```\nComponent catalog: Button with variants primary, secondary, ghost; primary renders a loading state and a visible focus ring. Token contract: color.brand.primary = #5B21B6, radius.md = 6px; raw hex values are not allowed in product code. Exception policy: an exception needs a design-system ticket and an expiry date; none is referenced.",
       "sourceAnchors": [
         "an element-to-primitive-and-token conformance map for the bounded change",
         "an applicable documented primitive exists and the candidate creates an unsupported duplicate, token, state, or exception"

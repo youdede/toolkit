@@ -343,6 +343,7 @@ function outputContractSections(record) {
     ? [path.join(record.directory, 'SKILL.md')]
     : Object.values(record.adapters)
       .flatMap(({ data }) => data.files || [])
+      .filter(({ from }) => /\.(md|mdc)$/.test(from ?? ''))
       .map(({ from }) => path.resolve(record.directory, from));
   const contracts = [...new Set(files.filter((file) => existsSync(file) && statSync(file).isFile()).map((file) => {
     const parsed = extractOutputContract(readFileSync(file, 'utf8'));

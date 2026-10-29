@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "Map the document-upload journey from untrusted client through parser, object storage, scanner, and reviewer download, including which controls are merely claimed.",
+      "prompt": "Map the threat model for the document-upload journey. Actors: an untrusted client (any signed-up user) and an internal reviewer. Assets: uploaded documents (may contain IDs and bank statements) and the reviewer's workstation. Journey: the client uploads through the web app to the API; the API streams the file to the PDF parser service, then to object storage bucket uploads-raw; a malware scanner reads from the bucket and tags the object; the reviewer downloads it from the review console. Deployment trust boundaries: internet to API (TLS, auth); API to parser (same VPC); bucket to scanner (IAM role); console to reviewer laptop. Claimed but unevidenced controls: \"the scanner blocks infected files before review\" and \"the parser is sandboxed\".",
       "sourceAnchors": [
         "an asset and data-flow map annotated with trust crossings, attacker capabilities, and controls",
         "an abuse hypothesis names an actor capability, a reachable trust crossing, an affected asset, and the evidence still needed"

@@ -6,7 +6,7 @@
     {
       "id": "positive-cloud-cost-finops",
       "type": "positive",
-      "prompt": "Analyze the supplied 28% month-over-month cloud-cost increase. Scoped line items, usage, pricing dates, currency rules, allocation keys, credits, taxes, egress, commitments, reliability constraints, and growth forecast are included.",
+      "prompt": "Analyze our 28% month-over-month cloud-cost increase (September 41,200 USD to October 52,700 USD, list prices as of each month, USD, taxes excluded). Line items: EC2 +3,100; NAT gateway data processing +6,900 (from 22 TB to 170 TB); S3 +400; RDS +1,100 (one new db.r6g.xlarge replica). Allocation: 82% of spend carries a team tag; the NAT increase sits in the untagged shared-network account. Credits: none in either month. Commitments: a compute savings plan covers 60% of EC2. Reliability constraint: the replica supports a 99.95% SLO. Growth forecast: traffic +5% month over month.",
       "sourceAnchors": [
         "Reconcile billed totals",
         "Estimate bounded optimization ranges"

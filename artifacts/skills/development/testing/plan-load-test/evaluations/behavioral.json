@@ -6,7 +6,7 @@
     {
       "id": "positive-bounded-workflow",
       "type": "positive",
-      "prompt": "Plan a bounded soak test for checkout at 200 requests per second using the supplied traffic trace and SLOs.",
+      "prompt": "Plan a bounded soak test for checkout at 200 requests per second. Decision: whether the new payment adapter can hold Black Friday peak for 4 hours. Target environment: the dedicated perf environment, a production-sized copy with the payment provider's sandbox. Journey: cart, shipping quote, payment authorization, order confirmation. Traffic trace from last Black Friday: 70% browse-to-cart, 20% checkout start, 10% payment; Poisson arrivals with a peak of 200 rps. Data: 2M synthetic customers, 50k SKUs. SLOs: p95 checkout latency under 800 ms, error rate under 0.5%. Dependencies: payment sandbox rate-limited at 300 rps, tax service mocked. Capacity: 12 app pods, database at 40% CPU at 100 rps. Observability: Grafana dashboards and traces. Accountable operator: Ines, SRE on call.",
       "sourceAnchors": [
         "derive request classes",
         "## Safety envelope"

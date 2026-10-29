@@ -9,7 +9,7 @@
       "prompt": "Delegate one task to Codex CLI while I keep working on the API layer. Task: add unit tests for `parseDuration` in `src/time/parse.ts`. Acceptance: `npm test -- src/time` passes, and tests cover \"1h30m\", \"90s\", negative input, and the empty string. Constraints: no changes outside `src/time/`, no network, no new dependencies. `codex --version` prints `codex-cli 0.41.0`; the repository is clean on branch `feat/api-layer`, and I am the only writer in `src/time/`.",
       "sourceAnchors": [
         "Create a worktree or clean isolated copy for mutating work.",
-        "Re-run relevant validation in the parent workspace before integrating or presenting a conclusion."
+        "Re-run relevant validation against the delegated revision"
       ],
       "expected": {
         "disposition": "apply",

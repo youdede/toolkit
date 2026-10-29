@@ -6,7 +6,7 @@
     {
       "id": "positive-bounded-workflow",
       "type": "positive",
-      "prompt": "Design the lifecycle for support transcripts that may contain customer personal data and are copied to analytics.",
+      "prompt": "Design the lifecycle for support transcripts that may contain customer personal data and are copied to analytics. Data classes in scope: customer name, email, order number, and free-text messages that sometimes include street addresses or the last four card digits. Purpose: resolving support tickets; the analytics copy feeds a weekly ticket-deflection report. Accountable owner: Maya Ruiz, Head of Support. Transcripts live in Zendesk and are exported nightly to a BigQuery dataset that analysts query directly.",
       "sourceAnchors": [
         "Follow every data state",
         "proof of deletion"

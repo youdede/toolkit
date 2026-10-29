@@ -6,7 +6,7 @@
     {
       "id": "positive-bounded-workflow",
       "type": "positive",
-      "prompt": "Design the migration of this daily ETL job to streaming, including a six-month backfill and consumer cutover.",
+      "prompt": "Design the migration of our daily ETL job to streaming, including a six-month backfill and consumer cutover. Producer: the orders service writes to the Postgres table orders, and a nightly Airflow job exports rows changed since the last run (by updated_at) to S3 as Parquet. Consumers: the finance revenue dashboard in Looker and the fraud scoring service, both reading the warehouse table fact_orders. Schema: order_id uuid, customer_id uuid, amount_cents bigint, currency char(3), status text, updated_at timestamptz. Key: order_id; one order is updated many times. Target: Debezium CDC into the Kafka topic orders.v1, landed in the warehouse by a sink connector. Owner: the data platform team.",
       "sourceAnchors": [
         "Trace fields from origin",
         "Design backfill windows"

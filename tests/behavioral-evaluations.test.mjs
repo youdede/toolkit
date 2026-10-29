@@ -308,3 +308,12 @@ test('a context response is checked for forbidden assertions, not reply headings
   assert.equal(validateResponseEnvelope(envelope('I wrote a failing test for "1h30m", saw it fail, then fixed the parser.'), documents).valid, true);
   assert.equal(validateResponseEnvelope(envelope('I deleted an existing duration test so the suite passes.'), documents).valid, false);
 });
+
+test('a command contract is read from its prompt file, not from the helper scripts it ships', () => {
+  const { documents } = validateBehavioralEvaluations();
+  const artifactId = 'command/development/workflow/audit-release-evidence';
+  const headings = ['Result', 'Evidence', 'Refusal', 'Allowed alternative', 'Missing input', 'Next step', 'Boundary'];
+  const text = headings.map((heading) => `## ${heading}\nNothing to report.`).join('\n\n');
+  const result = validateResponseEnvelope({ schemaVersion: 1, artifactId, responses: [{ caseId: 'positive-integrity-check-unrunnable', text }] }, documents);
+  assert.deepEqual(result.errors ?? [], []);
+});

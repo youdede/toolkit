@@ -6,7 +6,7 @@
     {
       "id": "positive-bounded-application",
       "type": "positive",
-      "prompt": "Replace our generic root agent instructions with a lean AGENTS.md for Codex and Claude. Inspect existing imports, package commands, architecture records, and policies; show the diff before writing and make reruns idempotent.",
+      "prompt": "Replace our generic root agent instructions with a lean AGENTS.md for Codex and Claude; show the exact diff before writing and make reruns idempotent. Current AGENTS.md (42 lines) is a generic template: \"Be helpful. Write clean code. Follow best practices.\" plus a copied list of 20 style tips. CLAUDE.md contains only `@AGENTS.md`. package.json scripts: {\"build\": \"tsc -p .\", \"test\": \"vitest run\", \"lint\": \"eslint . --max-warnings 0\", \"db:migrate\": \"prisma migrate deploy\"}. docs/adr/0003-no-orm-in-handlers.md: handlers call repositories in src/repo/, never Prisma directly. SECURITY.md: never commit .env files; secrets live in 1Password. Codex reads AGENTS.md from the repository root down; Claude Code reads CLAUDE.md, which imports AGENTS.md. Validation available: `npx agents-md-lint AGENTS.md` (exits 0 when the file parses).",
       "sourceAnchors": [
         "Create the smallest root steering document",
         "update it idempotently"

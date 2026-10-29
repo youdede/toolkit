@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "The production snapshot disables the required TLS enforcement flag while the bound desired revision enables it and no exception exists.",
+      "prompt": "Check for drift. Resource: azurerm_storage_account.prodlogs in subscription prod-01. Desired revision: infra repo commit 77d0b4e, which sets https_traffic_only_enabled = true and min_tls_version = TLS1_2. Observed state snapshot taken 2026-10-29T07:30Z: https_traffic_only_enabled = false, min_tls_version = TLS1_2. Approved exceptions register: no entry for this resource.",
       "sourceAnchors": [
         "a normalized expected-observed-exception table with evidence provenance and timestamps",
         "equivalent resource identities differ on a policy-relevant value after normalization and no valid exception covers the observation"
@@ -34,7 +34,7 @@
     {
       "id": "positive-bounded-control-case",
       "type": "positive",
-      "prompt": "A generated provider timestamp differs, but normalization policy explicitly excludes it and all semantic values match. Review the supplied evidence and avoid manufacturing a finding when the specialist threshold is not met.",
+      "prompt": "Check for drift. Resource: aws_s3_bucket.reports in account 1234, eu-west-1. Desired revision: infra repo commit 5a1c9e0. Observed state snapshot taken 2026-10-29T08:00Z. Diff after normalization: versioning Enabled in both, encryption aws:kms in both, public access block all true in both; only last_modified differs (desired 2026-10-01T10:02Z, observed 2026-10-28T23:14Z). Normalization policy: provider-generated timestamps are excluded from comparison. Approved exceptions: none. Avoid manufacturing a finding when the specialist threshold is not met.",
       "sourceAnchors": [
         "If no actionable finding is supported",
         "without calling the subject safe or approved"

@@ -62,7 +62,7 @@
     {
       "id": "malformed-missing-contract",
       "type": "malformed",
-      "prompt": "Mine all agent logs forever and tell me what to automate, but no path, time window, consent, runtime, or data handling rules are supplied.",
+      "prompt": "Tell me what to automate based on our agent logs. I have not said which log files, which time window, whether the people in them consented to analysis, which agent runtime produced them, or how the data may be handled.",
       "sourceAnchors": [
         "Analyze exactly one failed or costly run",
         "## Stop conditions"

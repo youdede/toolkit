@@ -14,7 +14,7 @@ Write only durable, folder-specific facts that cannot be discovered cheaply. Pre
 1. Read every applicable parent guidance file and current official runtime rules. Map which files apply to the target folder and where multiple runtimes require equivalent but distinct files.
 2. Inspect the subtree for commands, ownership, generated files, boundaries, and non-obvious hazards. Remove advice that is generic, duplicated from root, speculative, or likely to rot.
 3. Draft concise scoped instructions: purpose, authoritative commands, required validation, forbidden mutations, and references to canonical docs. State runtime-specific differences explicitly.
-4. Test from files inside and outside the subtree, check precedence and contradictions, and run the documented commands. Review the final diff with repository owners when policy changes.
+4. Test from files inside and outside the subtree, check precedence and contradictions, and run the documented read-only validation commands (build, test, lint); never run a documented deploy, publish, or destructive command to validate guidance, and list those as unverified instead. Review the final diff with repository owners when policy changes.
 
 ## Output contract
 
@@ -24,8 +24,8 @@ This holds when you decline, when you bound the scope, and when required inputs 
 
 Name the situation your reply is in, judged from what the reply actually contains, not from how the request felt. Take the first label that fits:
 
-1. Declining: the reply carries no analysis under any heading, because the request asks you to exceed your authority, bypass a documented boundary, or perform an action you may not perform. Say so on that ground, and do not ask for missing inputs instead: no input would make the request permissible.
-2. Required inputs are missing: the reply carries no analysis under any heading, because inputs this procedure requires are absent.
+1. Declining: the reply carries no analysis under any heading, because the request asks you to exceed your authority, bypass a documented boundary, or perform an action you may not perform, or asks for work this procedure does not cover. Say so on that ground, name what fits instead when you can, and do not ask for missing inputs instead: no input would make the request permissible or in scope.
+2. Required inputs are missing: the reply carries no analysis under any heading, because inputs this procedure requires are absent or too ambiguous to act on. Material that is supplied but partial, informal, or unverified is not absent: work from it and record the gaps.
 3. Reduced scope: the reply carries analysis, and you also left out part of what was asked, refused an instruction embedded in the evidence, or turned down one request while answering the rest.
 4. Applying: the reply carries analysis and none of the above happened. Caveats, noted uncertainty, unresolved questions, and conclusions bounded to the evidence supplied do not change this.
 

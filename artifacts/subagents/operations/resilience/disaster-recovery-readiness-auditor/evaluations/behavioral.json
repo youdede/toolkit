@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "Backups are current, but the only restore path requires an encryption key whose recovery has never been included in an exercise.",
+      "prompt": "Audit DR readiness for the document-storage service. Scope: object store, metadata database, and encryption keys. RTO 8 h, RPO 1 h. Restore procedure: runbook DR-12, which restores encrypted backups with a customer-managed key held in an HSM in the primary region only. Backups: hourly, the last one 40 minutes ago. Latest exercise, 2026-09-02: restored the metadata database from a decrypted test copy; key recovery from the HSM was out of scope and has never been exercised.",
       "sourceAnchors": [
         "an objective-control-exercise matrix for data, compute, identity, network, keys, and external dependencies",
         "a required recovery step or dependency has no recent result proving it can meet the named objective"
@@ -34,7 +34,7 @@
     {
       "id": "positive-bounded-control-case",
       "type": "positive",
-      "prompt": "A recent scoped exercise restores data, keys, identity, DNS, and service within the named RTO and RPO with immutable result evidence. Review the supplied evidence and avoid manufacturing a finding when the specialist threshold is not met.",
+      "prompt": "Audit DR readiness for the billing service (database, KMS keys, IAM roles, DNS, application). RTO 4 h, RPO 15 min. Restore procedure: runbook DR-07 v3. Latest exercise, 2026-10-14, result record stored immutably in the audit bucket: restored the database from snapshot to the standby region (data loss 6 min), recovered keys from the replicated KMS key, recreated IAM roles from IaC, switched DNS, and passed smoke tests; total 2 h 40 min. Avoid manufacturing a finding when the specialist threshold is not met.",
       "sourceAnchors": [
         "If no actionable finding is supported",
         "without calling the subject safe or approved"

@@ -6,7 +6,7 @@
     {
       "id": "positive-italian-captions-with-provenance",
       "type": "positive",
-      "prompt": "Get the available Italian captions for this public YouTube URL, save clean text to ./research, and tell me whether the result came from manual subtitles or automatic captions.",
+      "prompt": "Get the available Italian captions for https://www.youtube.com/watch?v=Xk3pQ9aLm2E, save clean text to ./research, and tell me whether the result came from manual subtitles or automatic captions. `yt-dlp --list-subs` already printed: \"Available subtitles: en (vtt, srv3). Available automatic captions: it (vtt, srv3), en, de, fr.\"",
       "sourceAnchors": [
         "manual subtitles preferred",
         "Preserve the structured source"

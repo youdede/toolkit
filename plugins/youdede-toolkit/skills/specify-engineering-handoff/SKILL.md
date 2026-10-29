@@ -29,7 +29,7 @@ At minimum, obtain the design source, the surface in scope, and the decision own
 
 When a build exists, compare it to the spec item by item: token usage, layout at each declared width, every enumerated state, content edge cases, and keyboard behavior. Each comparison row names how it was observed: a screenshot at a stated width, a computed-style check, or code inspection. A row with no named observation method is not a comparison and may not appear in the report.
 
-Record each mismatch with its spec reference, the observed value, and one of three severities: blocking when a token is wrong, a state is missing, or keyboard order is broken; degraded when tokens and states are correct but a measured spacing, size, or timing value deviates enough to change what users see; nit when the difference is an optical rounding of about one pixel that no token or state rule settles. Verification reports differences; waiving or accepting them belongs to the design owner.
+Record each mismatch with its spec reference, the observed value, and one of three severities: blocking when a token is wrong, a state is missing, keyboard order or activation is broken, or content or an asset differs from the spec; degraded when tokens and states are correct but a measured spacing, size, or timing value deviates enough to change what users see; nit when the difference is an optical rounding of about one pixel that no token or state rule settles. Verification reports differences; waiving or accepting them belongs to the design owner.
 
 ## Validation
 
