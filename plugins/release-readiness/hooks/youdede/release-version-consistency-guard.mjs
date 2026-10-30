@@ -832,31 +832,34 @@ function unwrap(start, depth, context, pipe) {
   const queue = [{ ...start, count: 0 }];
   let budget = ITEMS_MAX_ALTERNATIVES;
   while (queue.length) {
-    const entry = queue.shift();
+    // Wrapper readings share the word list and start at `offset`, so a chain of wrappers does not copy
+    // the remaining words once per wrapper.
+    const { offset = 0, ...entry } = queue.shift();
     if (--budget < 0) return [limit('wrappers')];
-    const [exe, ...rest] = entry.words;
+    const exe = entry.words[offset];
     if (!exe) continue;
-    if (!isStaticWord(exe)) { results.push(command({ ...entry, exe, words: rest }, depth, pipe)); continue; }
+    const rest = () => entry.words.slice(offset + 1);
+    if (!isStaticWord(exe)) { results.push(command({ ...entry, exe, words: rest() }, depth, pipe)); continue; }
     const key = commandKey(exe.text);
-    if (WRAPPERS.has(key) && !(key === 'command' && /^-[vV]$/.test(textOf(rest[0]) ?? ''))) {
+    if (WRAPPERS.has(key) && !(key === 'command' && /^-[vV]$/.test(textOf(entry.words[offset + 1]) ?? ''))) {
       if (entry.count >= ITEMS_MAX_WRAPPERS) return [limit('wrappers')];
-      const forks = wrapperForks(key, exe, rest, entry, depth, context, pipe);
+      const forks = wrapperForks(key, exe, entry.words, offset + 1, entry, depth, context, pipe);
       results.push(...forks.items);
       for (const fork of forks.entries) queue.push({ ...fork, count: entry.count + 1 });
       continue;
     }
-    results.push(...programItems(key, exe, rest, entry, depth, context, pipe));
+    results.push(...programItems(key, exe, rest(), entry, depth, context, pipe));
   }
   return results;
 }
 
 // The readings after one wrapper: { entries } to keep unwrapping and { items } that end here.
-function wrapperForks(name, exe, words, entry, depth, context, pipe) {
+function wrapperForks(name, exe, words, offset, entry, depth, context, pipe) {
   const options = WRAPPER_OPTIONS[name] ?? {};
   const wrappers = [...entry.wrappers, name];
   const forks = [];
   // Walk the options; `branches` are the readings still open: { index, changedDirectory, replace }.
-  let branches = [{ index: 0, changedDirectory: entry.changedDirectory, replace: null, assignments: entry.assignments, split: null }];
+  let branches = [{ index: offset, changedDirectory: entry.changedDirectory, replace: null, assignments: entry.assignments, split: null }];
   const done = [];
   for (let guard = 0; branches.length && guard < words.length + 2; guard += 1) {
     const next = [];
@@ -920,6 +923,11 @@ function wrapperForks(name, exe, words, entry, depth, context, pipe) {
   }
   const items = [];
   for (const branch of done) {
+    const facts = { wrappers, changedDirectory: branch.changedDirectory, assignments: branch.assignments };
+    if (!branch.split && !WRAPPER_POSITIONAL.has(name) && name !== 'xargs' && branch.index < words.length) {
+      forks.push({ ...entry, ...facts, offset: branch.index });
+      continue;
+    }
     let rest = words.slice(branch.index);
     if (branch.split) {
       if (!isStaticWord(branch.split)) { items.push(unseen('variable', null, context)); continue; }
@@ -951,10 +959,10 @@ function wrapperForks(name, exe, words, entry, depth, context, pipe) {
       // A wrapper without a command is the wrapper itself (`env | sort`, `sudo --`); `exec` with only
       // redirections runs nothing.
       if (name === 'exec') continue;
-      items.push(command({ ...entry, exe, words, assignments: branch.assignments }, depth, pipe));
+      items.push(command({ ...entry, exe, words: words.slice(offset), assignments: branch.assignments }, depth, pipe));
       continue;
     }
-    forks.push({ ...entry, words: rest, wrappers, changedDirectory: branch.changedDirectory, assignments: branch.assignments });
+    forks.push({ ...entry, ...facts, words: rest });
   }
   return { entries: forks, items };
 }
