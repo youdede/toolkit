@@ -58,6 +58,7 @@ Do not submit scraped prompt dumps, artifacts with unknown licenses, obfuscated 
 
 - Use a Conventional Commit title; squash merge uses that title as the canonical `main` commit.
 - Keep one reviewable concern per pull request.
+- A `feat` or `fix` pull request adds one line to `CHANGELOG.md` under `## Unreleased`, in the matching `### Added`, `### Changed`, `### Fixed`, or `### Removed` subsection. Say what changed for someone who installs the toolkit (a new skill, hook, or command, or the bug that no longer happens), not how. Leave out the version and date: `npm run release:prepare` adds them. The `policy` check fails such a pull request when `CHANGELOG.md` is untouched.
 - Resolve every review conversation and keep the branch current with `main`.
 - Include exact validation commands and distinguish observed evidence from inference.
 - Add an architecture decision record under `docs/decisions/` when a durable tradeoff changes.

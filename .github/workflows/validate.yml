@@ -38,6 +38,19 @@ jobs:
           node scripts/validate-change-policy.mjs --message "$PR_TITLE" --label pull-request-title
           node scripts/validate-change-policy.mjs --branch "$HEAD_BRANCH" --label pull-request-branch
           node scripts/validate-change-policy.mjs --range "$BASE_SHA..$HEAD_SHA" --label pull-request-commit
+      - name: Require a changelog entry for features and fixes
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        # CONTRIBUTING.md asks for one user-facing line under `## Unreleased`; release:prepare versions it.
+        run: |
+          if printf '%s' "$PR_TITLE" | grep -Eq '^(feat|fix)(\([^)]*\))?!?:' &&
+            ! git diff --name-only "$BASE_SHA" "$HEAD_SHA" | grep -qx 'CHANGELOG.md'; then
+            echo "::error::A feat or fix pull request must add a line under ## Unreleased in CHANGELOG.md (see CONTRIBUTING.md)."
+            exit 1
+          fi
       - name: Validate pushed commits
         if: github.event_name == 'push'
         env:
