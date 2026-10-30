@@ -10,7 +10,7 @@ Exercise an unauthenticated local interface in an isolated browser, preserve jou
 
 ## What it runs
 
-MCP server `youdede-playwright-local-isolated` runs locally over stdio. Its profile under `.youdede/mcp/` lists the only hosts it may reach (`egress`) and the secrets it may read (`secretAccess`).
+MCP server `youdede-playwright-local-isolated` runs over stdio with `npx --yes @playwright/mcp@0.0.82 --isolated --block-service-workers --allowed-hosts 127.0.0.1 --allowed-origins http://127.0.0.1:*`. Its profile under `.youdede/mcp/` lists the only hosts it may reach (`egress`) and the secrets it may read (`secretAccess`).
 
 Every member states what it refuses to do. Read each file before you install it.
 

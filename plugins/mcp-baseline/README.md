@@ -16,11 +16,11 @@ Install a guarded read-only MCP baseline with declared authority and independent
 
 Hooks run local Node.js scripts from `hooks/youdede/` on the tool calls and session events they declare. They make no network requests. Some run local `git` commands to read repository state.
 
-MCP server `youdede-allowlisted-fetch-readonly` runs locally over stdio. Its profile under `.youdede/mcp/` lists the only hosts it may reach (`egress`) and the secrets it may read (`secretAccess`).
+MCP server `youdede-allowlisted-fetch-readonly` runs over stdio with `node ${CLAUDE_PLUGIN_ROOT}/.youdede/mcp/runtime.mjs --profile ${CLAUDE_PLUGIN_ROOT}/.youdede/mcp/allowlisted-fetch-readonly/server.json`. Its profile under `.youdede/mcp/` lists the only hosts it may reach (`egress`) and the secrets it may read (`secretAccess`).
 
-MCP server `youdede-repository-git-readonly` runs locally over stdio. Its profile under `.youdede/mcp/` lists the only hosts it may reach (`egress`) and the secrets it may read (`secretAccess`).
+MCP server `youdede-repository-git-readonly` runs over stdio with `node ${CLAUDE_PLUGIN_ROOT}/.youdede/mcp/runtime.mjs --profile ${CLAUDE_PLUGIN_ROOT}/.youdede/mcp/repository-git-readonly/server.json`. Its profile under `.youdede/mcp/` lists the only hosts it may reach (`egress`) and the secrets it may read (`secretAccess`).
 
-MCP server `youdede-workspace-files-readonly` runs locally over stdio. Its profile under `.youdede/mcp/` lists the only hosts it may reach (`egress`) and the secrets it may read (`secretAccess`).
+MCP server `youdede-workspace-files-readonly` runs over stdio with `node ${CLAUDE_PLUGIN_ROOT}/.youdede/mcp/runtime.mjs --profile ${CLAUDE_PLUGIN_ROOT}/.youdede/mcp/workspace-files-readonly/server.json`. Its profile under `.youdede/mcp/` lists the only hosts it may reach (`egress`) and the secrets it may read (`secretAccess`).
 
 Every member states what it refuses to do. Read each file before you install it.
 

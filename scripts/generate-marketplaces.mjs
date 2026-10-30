@@ -129,8 +129,8 @@ function packReadme(pack, records, servers) {
   lines.push('', '## What it runs', '');
   const hooks = records.filter((record) => record.manifest.kind === 'hook');
   if (hooks.length) lines.push('Hooks run local Node.js scripts from `hooks/youdede/` on the tool calls and session events they declare. They make no network requests. Some run local `git` commands to read repository state.', '');
-  for (const name of Object.keys(servers)) {
-    lines.push(`MCP server \`${name}\` runs locally over stdio. Its profile under \`.youdede/mcp/\` lists the only hosts it may reach (\`egress\`) and the secrets it may read (\`secretAccess\`).`, '');
+  for (const [name, server] of Object.entries(servers)) {
+    lines.push(`MCP server \`${name}\` runs over stdio with \`${[server.command, ...(server.args || [])].join(' ')}\`. Its profile under \`.youdede/mcp/\` lists the only hosts it may reach (\`egress\`) and the secrets it may read (\`secretAccess\`).`, '');
   }
   if (!hooks.length && !Object.keys(servers).length) lines.push('Skills, commands, and subagents are Markdown instructions. Nothing runs until the agent follows them.', '');
   lines.push('Every member states what it refuses to do. Read each file before you install it.', '', `Source and evidence: ${REPOSITORY}/blob/main/packs/${pack.slug}/pack.json`, '', 'License: MIT. See `LICENSE` and `NOTICE`.', '');
