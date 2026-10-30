@@ -2,6 +2,12 @@
 
 All notable changes are recorded here. Versions follow Semantic Versioning; release entries are derived from reviewed pull requests and verified against the corresponding Git tag.
 
+## Unreleased
+
+### Added
+
+- Every Claude Code plugin folder ships a `README.md` that lists its members and states what it runs, so each plugin can be submitted to the Claude plugin directory.
+
 ## 0.4.0 (2026-10-30)
 
 ### Added
