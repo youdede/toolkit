@@ -2,7 +2,7 @@
 
 All notable changes are recorded here. Versions follow Semantic Versioning; release entries are derived from reviewed pull requests and verified against the corresponding Git tag.
 
-## Unreleased
+## 0.4.0 (2026-10-30)
 
 ### Added
 
