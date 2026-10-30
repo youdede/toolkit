@@ -6,7 +6,10 @@ import v8 from 'node:v8';
 import vm from 'node:vm';
 
 // CPU time of this process in ms: load from other processes does not inflate it, unlike wall time.
-const cpuNow = () => { const { user, system } = process.cpuUsage(); return (user + system) / 1000; };
+// Main-thread CPU time where Node has it (older releases do not): process time also counts GC and compiler
+// helper threads, whose share grows with the heap and varies between CI runners.
+const threadCpu = process.threadCpuUsage?.bind(process) ?? process.cpuUsage.bind(process);
+const cpuNow = () => { const { user, system } = threadCpu(); return (user + system) / 1000; };
 // A full garbage collection before each timed run, so a collection triggered by an earlier run is not
 // charged to the next one.
 v8.setFlagsFromString('--expose-gc');
@@ -91,10 +94,12 @@ test('T2: limits for size and syntax, and a function map for the dynamic-call ru
 
 // T3: four times the input (48 KB then 192 KB) takes at most twelve times the CPU time. Linear work
 // measures about 4 to 11, because collections inside a run grow with the heap; quadratic work measures
-// about 16. Each run starts after a forced garbage collection, CPU time (not wall time) is measured, the
+// about 16. Each run starts after a forced garbage collection, main-thread CPU time (not wall time) is measured, the
 // two sizes alternate and the fastest run of each counts, and a unit gets up to three attempts, so load
 // from other processes does not fail the test. The absolute budget is scripts/bench-shared-hook.mjs.
-test('T3: parseShell scales linearly on adversarial input', () => {
+test('T3: parseShell scales linearly on adversarial input', (t) => {
+  const procNow = () => { const { user, system } = process.cpuUsage(); return (user + system) / 1000; };
+  const diag = [];
   const time = (text) => {
     collect();
     const started = cpuNow();
@@ -114,11 +119,13 @@ test('T3: parseShell scales linearly on adversarial input', () => {
         fastSmall = Math.min(fastSmall, time(small));
         fastLarge = Math.min(fastLarge, time(large));
       }
+      { let [ps, pl] = [Infinity, Infinity]; for (let r = 0; r < 5; r += 1) { collect(); let x = procNow(); parseShell(small); ps = Math.min(ps, procNow() - x); collect(); x = procNow(); parseShell(large); pl = Math.min(pl, procNow() - x); } diag.push(`${JSON.stringify(unit)} thread ${(fastLarge / fastSmall).toFixed(1)} process ${(pl / ps).toFixed(1)}`); }
       message = fastLarge <= Math.max(fastSmall * 12, 5) ? '' : `${JSON.stringify(unit)}: ${fastSmall.toFixed(1)} ms then ${fastLarge.toFixed(1)} ms`;
       if (!message) break;
     }
     assert.equal(message, '');
   }
+  t.diagnostic(`DIAG ${process.version} ${diag.join(' | ')}`);
 });
 
 // Inputs that once made a shell analysis slow or unbounded: each ends within the time limit.
