@@ -8,6 +8,10 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 
 - Every Claude Code plugin folder ships a `README.md` that lists its members and states what it runs, so each plugin can be submitted to the Claude plugin directory.
 
+### Fixed
+
+- Claude Code plugins no longer list `hooks/hooks.json` and `.mcp.json` in `plugin.json`. Claude Code loads both files by default and reported a duplicate hooks file.
+
 ## 0.4.0 (2026-10-30)
 
 ### Added

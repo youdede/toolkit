@@ -160,8 +160,6 @@ function claudePackOutputs(outputs, pack, records) {
     repository: REPOSITORY,
     license: 'MIT',
     keywords: [...pack.outcomes, ...evidenceBadges(pack)],
-    ...(Object.keys(hooks).length ? { hooks: './hooks/hooks.json' } : {}),
-    ...(Object.keys(servers).length ? { mcpServers: './.mcp.json' } : {}),
     metadata: {
       catalogId: pack.id,
       memberArtifactIds: records.map((record) => record.manifest.id),
