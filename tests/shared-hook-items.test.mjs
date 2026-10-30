@@ -93,7 +93,8 @@ test('T2: limits for size and syntax, and a function map for the dynamic-call ru
 // measures about 4 to 11, because collections inside a run grow with the heap; quadratic work measures
 // about 16. Each run starts after a forced garbage collection, CPU time (not wall time) is measured, the
 // two sizes alternate and the fastest run of each counts, and a unit gets up to three attempts, so load
-// from other processes does not fail the test. The absolute budget is scripts/bench-shared-hook.mjs.
+// from other processes does not fail the test. Both sizes run once untimed first, so the heap has grown
+// to the large input and no timed run pays for that growth with a full collection. The absolute budget is scripts/bench-shared-hook.mjs.
 test('T3: parseShell scales linearly on adversarial input', () => {
   const time = (text) => {
     collect();
@@ -107,6 +108,7 @@ test('T3: parseShell scales linearly on adversarial input', () => {
     const count = Math.floor(49152 / unit.length);
     const [small, large] = [unit.repeat(count), unit.repeat(count * 4)];
     time(small);
+    time(large);
     let message = '';
     for (let attempt = 0; attempt < 3; attempt += 1) {
       let [fastSmall, fastLarge] = [Infinity, Infinity];
