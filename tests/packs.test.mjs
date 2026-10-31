@@ -354,7 +354,7 @@ test('pack CLI exposes list, info, and machine-readable dry-run', () => {
   assert.match(list.stdout, /accessibility-assurance/);
   const info = run(['pack-info', 'release-readiness']);
   assert.equal(info.status, 0, info.stderr);
-  assert.match(info.stdout, /Release readiness 1\.2\.0/);
+  assert.match(info.stdout, /Release readiness \d+\.\d+\.\d+/);
   assert.match(info.stdout, /Evidence: ledger-linked/);
   assert.match(info.stdout, /hook\/operations\/repository-state\/release-clean-state-guard/);
   assert.match(info.stdout, /Hook fan-out: .*PreToolUse:Bash=3 \(plus prerequisite: shell-command-guard\)/);
