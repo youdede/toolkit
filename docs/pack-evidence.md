@@ -19,8 +19,6 @@ bind the claim to the evidence material retained by the workflow.
 
 Validate a report without changing the workspace:
 
-> The package is not on npm yet. Until the first publication, run the same command from a checkout with `node bin/youdede-toolkit.mjs` in place of `npx @youdede/toolkit`.
-
 ```bash
 npx @youdede/toolkit verify-pack-evidence daily-driver \
   --report .youdede/evidence/daily-driver.json

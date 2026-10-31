@@ -30,8 +30,6 @@ Every artifact is MIT-licensed plain text, inspectable before install.
 
 ## Try one in thirty seconds
 
-> The package is not on npm yet. Until the first publication, run the same commands from a checkout with `node bin/youdede-toolkit.mjs` in place of `npx @youdede/toolkit`.
-
 ```bash
 npx @youdede/toolkit add commit-guard --target claude-code --scope project
 ```

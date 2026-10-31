@@ -17,6 +17,15 @@
     "ledger-linked-evidence",
     "behaviorally-evaluated"
   ],
+  "userConfig": {
+    "github_personal_access_token": {
+      "type": "string",
+      "title": "GITHUB_PERSONAL_ACCESS_TOKEN",
+      "description": "Passed to MCP server 'youdede-github-readonly' as GITHUB_PERSONAL_ACCESS_TOKEN.",
+      "sensitive": true,
+      "required": true
+    }
+  },
   "metadata": {
     "catalogId": "pack/remote-review-evidence",
     "memberArtifactIds": [
