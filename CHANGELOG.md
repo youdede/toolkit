@@ -2,7 +2,7 @@
 
 All notable changes are recorded here. Versions follow Semantic Versioning; release entries are derived from reviewed pull requests and verified against the corresponding Git tag.
 
-## Unreleased
+## 0.5.0 (2026-10-31)
 
 ### Added
 
@@ -11,6 +11,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 
 ### Changed
 
+- Every pack moves up one patch version, so Claude Code plugins installed from 0.4.0 pick up these changes.
 - The `remote-review-evidence` plugin asks for the GitHub token as a sensitive plugin option, kept in the system keychain, instead of reading `GITHUB_PERSONAL_ACCESS_TOKEN` from the environment. The npm package homepage is https://youdede.studio/en/toolkit.
 - Commands no longer pre-approve `Bash` in `allowed-tools`. Claude Code now asks before each shell command a command runs.
 
