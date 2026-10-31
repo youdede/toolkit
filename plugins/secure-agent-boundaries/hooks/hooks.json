@@ -3,7 +3,6 @@
     "PreToolUse": [
       {
         "matcher": "Bash|PowerShell",
-        "description": "[youdede:outbound-data-guard] Reject explicit local-data uploads and transfers",
         "hooks": [
           {
             "type": "command",
@@ -14,7 +13,6 @@
       },
       {
         "matcher": "Read|Write|Edit|MultiEdit|NotebookEdit|Grep|Bash|PowerShell",
-        "description": "[youdede:sensitive-file-access-guard] Protect high-confidence local secret paths",
         "hooks": [
           {
             "type": "command",
@@ -25,7 +23,6 @@
       },
       {
         "matcher": "^mcp__.+__.+$",
-        "description": "[youdede:mcp-capability-drift-guard] Require pinned MCP capabilities",
         "hooks": [
           {
             "type": "command",
@@ -36,7 +33,6 @@
       },
       {
         "matcher": "^mcp__.+__.+$",
-        "description": "[youdede:mcp-egress-guard] Keep MCP arguments inside declared egress",
         "hooks": [
           {
             "type": "command",
@@ -47,7 +43,6 @@
       },
       {
         "matcher": "Bash",
-        "description": "[youdede:shell-command-guard] Reject catastrophic shell commands",
         "hooks": [
           {
             "type": "command",

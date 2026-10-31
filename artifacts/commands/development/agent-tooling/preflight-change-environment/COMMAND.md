@@ -1,6 +1,6 @@
 ---
 description: Collect a deterministic redacted environment snapshot before a repository change begins. Use when the named bounded workflow is requested.
-allowed-tools: Bash, Read
+allowed-tools: Read
 ---
 
 # Preflight Change Environment

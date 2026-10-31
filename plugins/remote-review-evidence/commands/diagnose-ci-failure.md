@@ -1,6 +1,6 @@
 ---
 description: Diagnose a failing CI run from supplied logs and repository evidence without mutating workflows or rerunning jobs. Use when the named bounded workflow is requested.
-allowed-tools: Read, Grep, Glob, Bash
+allowed-tools: Read, Grep, Glob
 ---
 
 # Diagnose CI Failure

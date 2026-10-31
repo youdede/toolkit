@@ -1,6 +1,5 @@
 ---
 description: Append a redacted, hash-chained work checkpoint to the session ledger. Use when reaching a meaningful point worth resuming from.
-allowed-tools: Bash
 ---
 
 # Record Work Checkpoint

@@ -1,6 +1,6 @@
 ---
 description: Draft an ordered implementation plan where every step cites concrete files and its verification command. Use when the user asks for a plan before implementation.
-allowed-tools: Read, Grep, Glob, Bash
+allowed-tools: Read, Grep, Glob
 ---
 
 # Draft Evidenced Plan

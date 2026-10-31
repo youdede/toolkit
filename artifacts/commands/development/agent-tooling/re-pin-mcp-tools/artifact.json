@@ -27,7 +27,7 @@
   "execution": {"mode": "hybrid", "entrypoints": [{"path": "scripts/check-preconditions.mjs", "runtime": "node", "purpose": "Require a clean toolkit source worktree and the MCP verification inputs before review begins.", "sideEffects": "none"}, {"path": "scripts/propose-repin.mjs", "runtime": "node", "purpose": "Compare a bounded observed tool inventory with pins and produce a deterministic confirmation digest.", "sideEffects": "read-only"}]},
   "command": {
     "invocation": "re-pin-mcp-tools",
-    "toolAuthority": ["Bash", "Edit", "Glob", "Grep", "Read", "Write"],
+    "toolAuthority": ["Edit", "Glob", "Grep", "Read", "Write"],
     "produces": ["an explicitly confirmed MCP pin change with a deterministic proposal digest, durable review evidence, and a hash-chained ledger citation"],
     "requires": ["a clean Youdede toolkit source worktree and a bounded JSON tools/list observation"],
     "flags": [

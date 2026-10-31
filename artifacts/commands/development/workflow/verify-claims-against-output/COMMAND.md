@@ -1,6 +1,6 @@
 ---
 description: Re-run declared verification commands and compare every completion claim against fresh output. Use before accepting a change as done.
-allowed-tools: Read, Grep, Glob, Bash
+allowed-tools: Read, Grep, Glob
 ---
 
 # Verify Claims Against Output

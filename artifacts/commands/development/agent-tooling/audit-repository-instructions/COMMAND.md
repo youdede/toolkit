@@ -1,6 +1,6 @@
 ---
 description: Audit repository and folder instruction files for drift, precedence conflicts, and missing operational boundaries. Use when the named bounded workflow is requested.
-allowed-tools: Read, Grep, Glob, Bash
+allowed-tools: Read, Grep, Glob
 ---
 
 # Audit Repository Instructions

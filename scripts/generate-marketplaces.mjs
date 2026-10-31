@@ -91,7 +91,8 @@ function mergeClaudeHooks(records) {
     for (const [event, entries] of Object.entries(patch)) {
       hooks[event] ||= [];
       for (const entry of entries) {
-        const rendered = JSON.parse(JSON.stringify(entry).replaceAll('{claudeRoot}', '${CLAUDE_PLUGIN_ROOT}'));
+        // A hooks file entry takes only matcher and hooks; Claude Code ignores the catalog's description.
+        const { description, ...rendered } = JSON.parse(JSON.stringify(entry).replaceAll('{claudeRoot}', '${CLAUDE_PLUGIN_ROOT}'));
         hooks[event].push(rendered);
       }
     }
@@ -160,7 +161,6 @@ function claudePackOutputs(outputs, pack, records) {
     homepage: `${REPOSITORY}/blob/main/packs/${pack.slug}/pack.json`,
     repository: REPOSITORY,
     license: 'MIT',
-    icon: './.claude-plugin/icon.png',
     keywords: [...pack.outcomes, ...evidenceBadges(pack)],
     metadata: {
       catalogId: pack.id,

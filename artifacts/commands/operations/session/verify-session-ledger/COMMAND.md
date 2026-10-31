@@ -1,6 +1,6 @@
 ---
 description: Verify the session ledger chain and explain exactly what the result means for trust. Use when resuming work or when ledger integrity is in doubt.
-allowed-tools: Read, Bash
+allowed-tools: Read
 ---
 
 # Verify Session Ledger

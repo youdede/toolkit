@@ -3,7 +3,6 @@
     "PreToolUse": [
       {
         "matcher": "Bash",
-        "description": "[youdede:large-diff-review-guard] Bound staged commit review size",
         "hooks": [
           {
             "type": "command",
@@ -14,7 +13,6 @@
       },
       {
         "matcher": "Bash",
-        "description": "[youdede:shell-command-guard] Reject catastrophic shell commands",
         "hooks": [
           {
             "type": "command",

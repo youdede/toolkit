@@ -3,7 +3,6 @@
     "PreToolUse": [
       {
         "matcher": "Bash",
-        "description": "[youdede:release-clean-state-guard] Require a clean Git release state",
         "hooks": [
           {
             "type": "command",
@@ -14,7 +13,6 @@
       },
       {
         "matcher": "Bash",
-        "description": "[youdede:release-version-consistency-guard] Verify package release version consistency",
         "hooks": [
           {
             "type": "command",
@@ -25,7 +23,6 @@
       },
       {
         "matcher": "Bash",
-        "description": "[youdede:shell-command-guard] Reject catastrophic shell commands",
         "hooks": [
           {
             "type": "command",

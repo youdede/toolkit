@@ -3,7 +3,6 @@
     "PreToolUse": [
       {
         "matcher": "Bash|Write|Edit",
-        "description": "[youdede:migration-safety-guard] Gate destructive migration actions",
         "hooks": [
           {
             "type": "command",
@@ -14,7 +13,6 @@
       },
       {
         "matcher": "Bash",
-        "description": "[youdede:shell-command-guard] Reject catastrophic shell commands",
         "hooks": [
           {
             "type": "command",
