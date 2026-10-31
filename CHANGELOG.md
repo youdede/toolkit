@@ -2,6 +2,12 @@
 
 All notable changes are recorded here. Versions follow Semantic Versioning; release entries are derived from reviewed pull requests and verified against the corresponding Git tag.
 
+## Unreleased
+
+### Added
+
+- `PRIVACY.md` states that the toolkit collects no data and lists what stays on your computer and what leaves it. Claude Code plugins link it, `SUPPORT.md`, and the toolkit page for their directory listing.
+
 ## 0.5.0 (2026-10-31)
 
 ### Added
