@@ -147,6 +147,7 @@ function claudePackOutputs(outputs, pack, records) {
   addOutput(outputs, path.join(packageRoot, 'LICENSE'), readFileSync(path.join(ROOT, 'LICENSE')));
   addOutput(outputs, path.join(packageRoot, 'NOTICE'), readFileSync(path.join(ROOT, 'NOTICE')));
   addOutput(outputs, path.join(packageRoot, 'README.md'), packReadme(pack, records, servers));
+  addOutput(outputs, path.join(packageRoot, '.claude-plugin/icon.png'), readFileSync(path.join(ROOT, 'docs/assets/plugin-icon.png')));
 
   const refusalCount = records.reduce((total, record) => total + record.manifest.refuses.length, 0);
   const manifest = {
@@ -159,6 +160,7 @@ function claudePackOutputs(outputs, pack, records) {
     homepage: `${REPOSITORY}/blob/main/packs/${pack.slug}/pack.json`,
     repository: REPOSITORY,
     license: 'MIT',
+    icon: './.claude-plugin/icon.png',
     keywords: [...pack.outcomes, ...evidenceBadges(pack)],
     metadata: {
       catalogId: pack.id,

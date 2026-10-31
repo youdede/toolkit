@@ -7,6 +7,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 ### Added
 
 - Every Claude Code plugin folder ships a `README.md` that lists its members and states what it runs, so each plugin can be submitted to the Claude plugin directory.
+- Every Claude Code plugin carries the Youdede icon for its directory listing.
 
 ### Fixed
 
