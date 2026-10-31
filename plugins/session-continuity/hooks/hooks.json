@@ -3,7 +3,6 @@
     "PreCompact": [
       {
         "matcher": "manual|auto",
-        "description": "[youdede:compact-readiness-guard] Warn before compaction hides unverified state",
         "hooks": [
           {
             "type": "command",
@@ -16,7 +15,6 @@
     "SessionEnd": [
       {
         "matcher": ".*",
-        "description": "[youdede:session-checkpoint-guard] Record a hash-chained session-end receipt",
         "hooks": [
           {
             "type": "command",
@@ -29,7 +27,6 @@
     "SessionStart": [
       {
         "matcher": "startup|resume|clear",
-        "description": "[youdede:session-restore-guard] Surface a bounded verified ledger summary",
         "hooks": [
           {
             "type": "command",

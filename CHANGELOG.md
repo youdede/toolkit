@@ -9,8 +9,14 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 - Every Claude Code plugin folder ships a `README.md` that lists its members and states what it runs, so each plugin can be submitted to the Claude plugin directory.
 - Every Claude Code plugin carries the Youdede icon for its directory listing.
 
+### Changed
+
+- The `remote-review-evidence` plugin asks for the GitHub token as a sensitive plugin option, kept in the system keychain, instead of reading `GITHUB_PERSONAL_ACCESS_TOKEN` from the environment. The npm package homepage is https://youdede.studio/en/toolkit.
+- Commands no longer pre-approve `Bash` in `allowed-tools`. Claude Code now asks before each shell command a command runs.
+
 ### Fixed
 
+- Claude Code plugin hook files no longer carry a `description` key that Claude Code ignores, and `plugin.json` no longer names the icon that the plugin directory finds by default.
 - Claude Code plugins no longer list `hooks/hooks.json` and `.mcp.json` in `plugin.json`. Claude Code loads both files by default and reported a duplicate hooks file.
 
 ## 0.4.0 (2026-10-30)

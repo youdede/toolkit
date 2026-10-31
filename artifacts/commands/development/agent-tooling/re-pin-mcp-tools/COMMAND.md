@@ -1,6 +1,6 @@
 ---
 description: Review and re-pin one curated MCP tool inventory with exact human confirmation. Use when a toolkit maintainer intentionally changes a curated server tool contract.
-allowed-tools: Bash, Edit, Glob, Grep, Read, Write
+allowed-tools: Edit, Glob, Grep, Read, Write
 ---
 
 # Re-pin MCP Tools

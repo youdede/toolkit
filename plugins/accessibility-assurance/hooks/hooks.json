@@ -3,7 +3,6 @@
     "PreToolUse": [
       {
         "matcher": "Write|Edit|MultiEdit",
-        "description": "[youdede:authentication-accessibility-guard] Block edits that stop a password manager filling an authentication field or stop the user pasting into it",
         "hooks": [
           {
             "type": "command",
@@ -14,7 +13,6 @@
       },
       {
         "matcher": "Write|Edit|MultiEdit",
-        "description": "[youdede:focus-style-regression-guard] Block newly invisible CSS focus states that have no visible replacement",
         "hooks": [
           {
             "type": "command",
@@ -25,7 +23,6 @@
       },
       {
         "matcher": "Write|Edit|MultiEdit",
-        "description": "[youdede:accessibility-attribute-regression-guard] Block net removal of explicit accessibility relationships from markup changes",
         "hooks": [
           {
             "type": "command",

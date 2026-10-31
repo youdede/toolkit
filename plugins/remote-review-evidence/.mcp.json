@@ -13,7 +13,10 @@
         "--read-only",
         "--toolsets",
         "repos,pull_requests,issues,actions"
-      ]
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${user_config.github_personal_access_token}"
+      }
     }
   }
 }

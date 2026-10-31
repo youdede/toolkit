@@ -91,7 +91,8 @@ function mergeClaudeHooks(records) {
     for (const [event, entries] of Object.entries(patch)) {
       hooks[event] ||= [];
       for (const entry of entries) {
-        const rendered = JSON.parse(JSON.stringify(entry).replaceAll('{claudeRoot}', '${CLAUDE_PLUGIN_ROOT}'));
+        // A hooks file entry takes only matcher and hooks; Claude Code ignores the catalog's description.
+        const { description, ...rendered } = JSON.parse(JSON.stringify(entry).replaceAll('{claudeRoot}', '${CLAUDE_PLUGIN_ROOT}'));
         hooks[event].push(rendered);
       }
     }
@@ -99,7 +100,7 @@ function mergeClaudeHooks(records) {
   return Object.fromEntries(Object.entries(hooks).sort(([left], [right]) => left.localeCompare(right)));
 }
 
-function mergeClaudeMcp(records) {
+function mergeClaudeMcp(records, userConfig) {
   const servers = {};
   for (const record of records) {
     const entries = record.adapters['claude-code']?.data.mcpPatch?.servers || {};
@@ -109,6 +110,14 @@ function mergeClaudeMcp(records) {
       rendered.args = (rendered.args || []).map((argument) => typeof argument === 'string' && argument.startsWith('.youdede/')
         ? `\${CLAUDE_PLUGIN_ROOT}/${argument}`
         : argument);
+      // A `-e NAME` secret comes from a sensitive plugin option, not from the installer's environment.
+      for (const [index, argument] of rendered.args.entries()) {
+        const secret = rendered.args[index + 1];
+        if (argument !== '-e' || typeof secret !== 'string' || secret.includes('=')) continue;
+        const key = secret.toLowerCase();
+        rendered.env = { ...rendered.env, [secret]: `\${user_config.${key}}` };
+        userConfig[key] = { type: 'string', title: secret, description: `Passed to MCP server '${name}' as ${secret}.`, sensitive: true, required: true };
+      }
       servers[name] = rendered;
     }
   }
@@ -141,7 +150,8 @@ function claudePackOutputs(outputs, pack, records) {
   const packageRoot = path.join('plugins', pack.slug);
   for (const record of records) copyAdapter(outputs, record, record.adapters['claude-code'].data, packageRoot, 'claude-code');
   const hooks = mergeClaudeHooks(records);
-  const servers = mergeClaudeMcp(records);
+  const userConfig = {};
+  const servers = mergeClaudeMcp(records, userConfig);
   if (Object.keys(hooks).length) addOutput(outputs, path.join(packageRoot, 'hooks/hooks.json'), json({ hooks }));
   if (Object.keys(servers).length) addOutput(outputs, path.join(packageRoot, '.mcp.json'), json({ mcpServers: servers }));
   addOutput(outputs, path.join(packageRoot, 'LICENSE'), readFileSync(path.join(ROOT, 'LICENSE')));
@@ -160,8 +170,8 @@ function claudePackOutputs(outputs, pack, records) {
     homepage: `${REPOSITORY}/blob/main/packs/${pack.slug}/pack.json`,
     repository: REPOSITORY,
     license: 'MIT',
-    icon: './.claude-plugin/icon.png',
     keywords: [...pack.outcomes, ...evidenceBadges(pack)],
+    ...(Object.keys(userConfig).length ? { userConfig } : {}),
     metadata: {
       catalogId: pack.id,
       memberArtifactIds: records.map((record) => record.manifest.id),

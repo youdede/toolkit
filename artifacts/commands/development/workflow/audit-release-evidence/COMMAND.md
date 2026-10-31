@@ -1,6 +1,6 @@
 ---
 description: Audit release evidence for the current version and emit a machine-readable verdict report. Use before proposing a release.
-allowed-tools: Read, Grep, Glob, Bash
+allowed-tools: Read, Grep, Glob
 ---
 
 # Audit Release Evidence

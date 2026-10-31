@@ -11,13 +11,21 @@
   "homepage": "https://github.com/youdede/toolkit/blob/main/packs/remote-review-evidence/pack.json",
   "repository": "https://github.com/youdede/toolkit",
   "license": "MIT",
-  "icon": "./.claude-plugin/icon.png",
   "keywords": [
     "remote-review-evidence",
     "ci-failure-diagnosis",
     "ledger-linked-evidence",
     "behaviorally-evaluated"
   ],
+  "userConfig": {
+    "github_personal_access_token": {
+      "type": "string",
+      "title": "GITHUB_PERSONAL_ACCESS_TOKEN",
+      "description": "Passed to MCP server 'youdede-github-readonly' as GITHUB_PERSONAL_ACCESS_TOKEN.",
+      "sensitive": true,
+      "required": true
+    }
+  },
   "metadata": {
     "catalogId": "pack/remote-review-evidence",
     "memberArtifactIds": [

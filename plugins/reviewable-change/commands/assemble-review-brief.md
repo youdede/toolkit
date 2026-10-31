@@ -1,6 +1,6 @@
 ---
 description: Assemble a review brief from the real diff with scope, risks, and test evidence. Use when preparing a change for human review.
-allowed-tools: Read, Grep, Glob, Bash
+allowed-tools: Read, Grep, Glob
 ---
 
 # Assemble Review Brief
