@@ -170,6 +170,9 @@ function claudePackOutputs(outputs, pack, records) {
     homepage: `${REPOSITORY}/blob/main/packs/${pack.slug}/pack.json`,
     repository: REPOSITORY,
     license: 'MIT',
+    documentationUrl: 'https://youdede.studio/en/toolkit',
+    supportUrl: `${REPOSITORY}/blob/main/SUPPORT.md`,
+    privacyPolicyUrl: `${REPOSITORY}/blob/main/PRIVACY.md`,
     keywords: [...pack.outcomes, ...evidenceBadges(pack)],
     ...(Object.keys(userConfig).length ? { userConfig } : {}),
     metadata: {
