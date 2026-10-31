@@ -122,6 +122,21 @@ function evidenceBadges(pack) {
   return badges;
 }
 
+// The Claude plugin directory lists a plugin from the README in its own folder and asks it to disclose what runs.
+function packReadme(pack, records, servers) {
+  const lines = [`# ${pack.name}`, '', pack.summary, '', '## What it contains', ''];
+  for (const record of records) lines.push(`- **${record.manifest.name}** (${record.manifest.kind}): ${record.manifest.summary}`);
+  lines.push('', '## What it runs', '');
+  const hooks = records.filter((record) => record.manifest.kind === 'hook');
+  if (hooks.length) lines.push('Hooks run local Node.js scripts from `hooks/youdede/` on the tool calls and session events they declare. They make no network requests. Some run local `git` commands to read repository state.', '');
+  for (const [name, server] of Object.entries(servers)) {
+    lines.push(`MCP server \`${name}\` runs over stdio with \`${[server.command, ...(server.args || [])].join(' ')}\`. Its profile under \`.youdede/mcp/\` lists the only hosts it may reach (\`egress\`) and the secrets it may read (\`secretAccess\`).`, '');
+  }
+  if (!hooks.length && !Object.keys(servers).length) lines.push('Skills, commands, and subagents are Markdown instructions. Nothing runs until the agent follows them.', '');
+  lines.push('Every member states what it refuses to do. Read each file before you install it.', '', `Source and evidence: ${REPOSITORY}/blob/main/packs/${pack.slug}/pack.json`, '', 'License: MIT. See `LICENSE` and `NOTICE`.', '');
+  return lines.join('\n');
+}
+
 function claudePackOutputs(outputs, pack, records) {
   const packageRoot = path.join('plugins', pack.slug);
   for (const record of records) copyAdapter(outputs, record, record.adapters['claude-code'].data, packageRoot, 'claude-code');
@@ -131,6 +146,8 @@ function claudePackOutputs(outputs, pack, records) {
   if (Object.keys(servers).length) addOutput(outputs, path.join(packageRoot, '.mcp.json'), json({ mcpServers: servers }));
   addOutput(outputs, path.join(packageRoot, 'LICENSE'), readFileSync(path.join(ROOT, 'LICENSE')));
   addOutput(outputs, path.join(packageRoot, 'NOTICE'), readFileSync(path.join(ROOT, 'NOTICE')));
+  addOutput(outputs, path.join(packageRoot, 'README.md'), packReadme(pack, records, servers));
+  addOutput(outputs, path.join(packageRoot, '.claude-plugin/icon.png'), readFileSync(path.join(ROOT, 'docs/assets/plugin-icon.png')));
 
   const refusalCount = records.reduce((total, record) => total + record.manifest.refuses.length, 0);
   const manifest = {
@@ -143,9 +160,8 @@ function claudePackOutputs(outputs, pack, records) {
     homepage: `${REPOSITORY}/blob/main/packs/${pack.slug}/pack.json`,
     repository: REPOSITORY,
     license: 'MIT',
+    icon: './.claude-plugin/icon.png',
     keywords: [...pack.outcomes, ...evidenceBadges(pack)],
-    ...(Object.keys(hooks).length ? { hooks: './hooks/hooks.json' } : {}),
-    ...(Object.keys(servers).length ? { mcpServers: './.mcp.json' } : {}),
     metadata: {
       catalogId: pack.id,
       memberArtifactIds: records.map((record) => record.manifest.id),
