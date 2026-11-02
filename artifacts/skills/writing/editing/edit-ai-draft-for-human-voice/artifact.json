@@ -1,0 +1,78 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/writing/editing/edit-ai-draft-for-human-voice",
+  "slug": "edit-ai-draft-for-human-voice",
+  "name": "Edit AI Draft For Human Voice",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Revise any AI-assisted text, from a paragraph to a story, toward a human voice without adding facts.",
+  "description": "Revise an AI-assisted text, from a single paragraph to a full story, essay, email, or post, in English or Italian, so it reads less like default model prose without adding any fact, changing structural choices first and surface style second, then verify the change with a bundled signal measurement and a closed-option structural rubric. Use when a writer owns a draft and wants it to sound like a person, not to conceal required AI disclosure or pass a detector.",
+  "domain": "writing",
+  "category": "editing",
+  "problems": [
+    "copy-editing"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "implementation",
+    "review"
+  ],
+  "risk": "low",
+  "risk_reason": "This skill edits a draft the author supplies and runs a local helper that reads given files and, on request, fetches one public web page; it does not publish text or claim detector results.",
+  "license": "MIT",
+  "authors": [
+    "Youdede"
+  ],
+  "refuses": [
+    "It does not promise or test that a text will pass an AI detector, and it never calls the result undetectable.",
+    "It does not rewrite text to conceal AI use where the author states, or the context shows, that disclosure is required.",
+    "It does not invent names, places, works, quotes, numbers, or anecdotes to make a draft look specific.",
+    "It does not change plot, claims, or required wording without the author's authorization."
+  ],
+  "execution": {
+    "mode": "hybrid",
+    "entrypoints": [
+      {
+        "path": "scripts/measure-voice-signals.mjs",
+        "runtime": "node",
+        "purpose": "Measure surface and narrative-proxy signals in a text or web page, compare a revision with its draft, validate a structural rubric, and write JSON or HTML reports.",
+        "sideEffects": "external"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "author",
+    "verify"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/writing/editing/assess-story-narrative-provenance",
+      "skill/writing/editing/audit-published-content-defects"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "latency_reason": "The skill runs a bounded local measurement before and after a revision in sequential steps, with input capped at 512 KiB.",
+    "dataRetention": "runtime-managed"
+  }
+}

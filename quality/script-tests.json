@@ -469,6 +469,51 @@
         "malformed": "assert.match(malformed.stdout, /\"code\":-32700/)",
         "boundary": "confines file reads"
       }
+    },
+    {
+      "id": "helper-voice-signals",
+      "artifactIds": [
+        "skill/writing/editing/edit-ai-draft-for-human-voice"
+      ],
+      "testFiles": [
+        "tests/voice-signals.test.mjs"
+      ],
+      "coverage": {
+        "positive": "voice helper flags AI-default surface and narrative signals",
+        "negative": "voice helper finds no flags in a plain, specific revision",
+        "malformed": "voice helper rejects malformed and oversized input",
+        "boundary": "voice comparison fails when a revision invents a number or a name"
+      }
+    },
+    {
+      "id": "helper-story-provenance",
+      "artifactIds": [
+        "skill/writing/editing/assess-story-narrative-provenance"
+      ],
+      "testFiles": [
+        "tests/story-provenance.test.mjs"
+      ],
+      "coverage": {
+        "positive": "story provenance scores a human story as human-like, matching the paper pipeline",
+        "negative": "story provenance scores an AI story as ai-like, including fuzzy annotator values",
+        "malformed": "story provenance rejects malformed and oversized input",
+        "boundary": "story provenance reports disagreeing runs as uncertain and flags texts outside the validated range"
+      }
+    },
+    {
+      "id": "helper-content-defects",
+      "artifactIds": [
+        "skill/writing/editing/audit-published-content-defects"
+      ],
+      "testFiles": [
+        "tests/content-defects.test.mjs"
+      ],
+      "coverage": {
+        "positive": "content defects finds visible markdown, placeholders, entities, abbreviation cuts and duplicates",
+        "negative": "content defects stays quiet on clean prose and on ordinary sentence ends",
+        "malformed": "content defects CLI audits a folder, rejects bad arguments and non-http sources",
+        "boundary": "content defects stops after repeated bot checks instead of hammering the site"
+      }
     }
   ]
 }

@@ -1,0 +1,75 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/writing/editing/audit-published-content-defects",
+  "slug": "audit-published-content-defects",
+  "name": "Audit Published Content Defects",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Find visible markdown, placeholders, and broken text on published pages, grouped by kind.",
+  "description": "Find the defects a reader can see on published web pages, such as markdown left visible, unresolved placeholders, double-escaped entities, paragraphs cut after an abbreviation, repeated paragraphs, and passages left untranslated, across one page, a sitemap, or saved HTML, and report them grouped by kind with examples as JSON, Markdown, or HTML. Use when generated, templated, or translated content needs a check before readers notice, not to judge style or rewrite pages.",
+  "domain": "writing",
+  "category": "editing",
+  "problems": [
+    "copy-editing"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review",
+    "operations"
+  ],
+  "risk": "low",
+  "risk_reason": "This skill reads public pages or saved HTML one at a time with a pause and a named user agent, stops when a site blocks it, and writes only a local report.",
+  "license": "MIT",
+  "authors": [
+    "Youdede"
+  ],
+  "refuses": [
+    "It does not judge writing quality, tone, or whether a text was written with AI.",
+    "It does not edit pages, content, or code; it reports what it finds.",
+    "It does not evade bot protection or rate limits, or audit sites the user cannot authorize."
+  ],
+  "execution": {
+    "mode": "hybrid",
+    "entrypoints": [
+      {
+        "path": "scripts/audit-content-defects.mjs",
+        "runtime": "node",
+        "purpose": "Fetch a page, a sitemap, or saved HTML, find visible rendering defects, and write JSON, Markdown, or HTML reports.",
+        "sideEffects": "external"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "verify"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/writing/editing/edit-ai-draft-for-human-voice"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "latency_reason": "The helper fetches pages sequentially with a fixed pause, caps a run at 5,000 pages, and stops after three bot checks in a row.",
+    "dataRetention": "runtime-managed"
+  }
+}

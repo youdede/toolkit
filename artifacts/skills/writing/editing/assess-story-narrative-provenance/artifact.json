@@ -1,0 +1,75 @@
+{
+  "$schema": "../../../../../schema/artifact.schema.json",
+  "schemaVersion": 1,
+  "id": "skill/writing/editing/assess-story-narrative-provenance",
+  "slug": "assess-story-narrative-provenance",
+  "name": "Assess Story Narrative Provenance",
+  "version": "1.0.0",
+  "kind": "skill",
+  "summary": "Score a full English story with a narrative classifier: human-like, AI-like, or uncertain.",
+  "description": "Measure whether a full English short story, from a file or a public web page, reads as human-written or AI-generated at the level of narrative choices, using a 304-feature narrative annotation and a classifier trained on human and AI fiction, and report the probability with its uncertainty and validation limits as JSON or a self-contained HTML report. Use when a writer wants to know how a story's narrative choices score, not to prove who wrote a text or to accuse anyone.",
+  "domain": "writing",
+  "category": "editing",
+  "problems": [
+    "copy-editing"
+  ],
+  "frameworks": [
+    "agnostic"
+  ],
+  "languages": [
+    "agnostic"
+  ],
+  "lifecycle": [
+    "review"
+  ],
+  "risk": "medium",
+  "risk_reason": "With the user's consent the skill sends the story text to the TypeSafe API and may fetch a public web page; a misread score could be used to accuse a writer, which the skill refuses and qualifies with validation limits.",
+  "license": "MIT",
+  "authors": [
+    "Youdede"
+  ],
+  "refuses": [
+    "It does not prove or disprove that a person used AI, and it is not evidence for an academic, contractual, or employment accusation.",
+    "It does not score private text the user has no right to analyse, and a public page's score is still a measurement of the text, not a claim about its author.",
+    "It does not call any story undetectable or promise that it will pass another detector.",
+    "It does not report a single annotation, or turn an uncertain result into a verdict."
+  ],
+  "execution": {
+    "mode": "hybrid",
+    "entrypoints": [
+      {
+        "path": "scripts/score-story-provenance.mjs",
+        "runtime": "node",
+        "purpose": "Read a story from a file or web page, annotate it with TypeSafe Jev or score supplied annotations, and report the classifier's P(human) and verdict as JSON or HTML.",
+        "sideEffects": "external"
+      }
+    ]
+  },
+  "adapters": {
+    "claude-code": "adapters/claude-code.json",
+    "codex": "adapters/codex.json",
+    "gemini-cli": "adapters/gemini-cli.json",
+    "github-copilot": "adapters/github-copilot.json",
+    "cursor": "adapters/cursor.json",
+    "opencode": "adapters/opencode.json"
+  },
+  "capabilities": [
+    "verify"
+  ],
+  "relationships": {
+    "composesWith": [
+      "skill/writing/editing/edit-ai-draft-for-human-voice"
+    ],
+    "conflictsWith": [],
+    "supersedes": [],
+    "prerequisites": [],
+    "packIds": []
+  },
+  "operational": {
+    "behavior": "advisory",
+    "failurePolicy": "stop-and-report",
+    "latencyClass": "bounded",
+    "latency_reason": "Each TypeSafe run is ten parallel requests of about one second; agent annotation takes ten model calls per run. Input is capped at 512 KiB.",
+    "dataRetention": "runtime-managed"
+  }
+}

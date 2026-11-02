@@ -1,5 +1,5 @@
 {
-  "sourceHash": "74339ca3cd137648bd6bd11c90458d22d82357c8dd9d99c58b3cc6632611ac31",
+  "sourceHash": "03f986913bee1f99eb8915157b7d2291a58c0ce0cf1ab9334f8cd5af1d651924",
   "narratives": {
     "abuse-resistance-analyst": {
       "summary": "Analyseert één handeling op kostenversterking die een aanvaller kan sturen, fan-out en het omzeilen van quota.",
@@ -3447,6 +3447,44 @@
         "Hij verzint geen vereisten, overeenstemming van belanghebbenden, datums of systeemgaranties.",
         "Hij vervangt geen ontwerpbeslissingen door vage bijvoeglijke naamwoorden zoals schaalbaar of robuust.",
         "Hij begint niet met implementeren en presenteert een onopgeloste reikwijdte niet als goedgekeurd."
+      ]
+    },
+    "edit-ai-draft-for-human-voice": {
+      "summary": "Herzie elke met AI geschreven tekst, van een alinea tot een verhaal, richting een menselijke stem zonder feiten toe te voegen.",
+      "description": "Herzie een met AI-hulp geschreven tekst, van een enkele alinea tot een volledig verhaal, essay, e-mail of bericht, in het Engels of Italiaans, zodat het minder klinkt als standaard modelproza zonder een feit toe te voegen: wijzig eerst de structurele keuzes en daarna de stijl, en controleer de wijziging met een meegeleverde signaalmeting en een structurele rubriek met gesloten opties. Gebruik dit wanneer een schrijver het concept bezit en wil dat het klinkt als een mens, niet om een verplichte AI-vermelding te verbergen of een detector te omzeilen.",
+      "purposes": [
+        "Meet oppervlaktesignalen en verhaalindicatoren in een tekst of webpagina, vergelijkt een revisie met het concept, valideert een structurele rubric en schrijft JSON- of HTML-rapporten."
+      ],
+      "refuses": [
+        "Het belooft of test niet dat een tekst een AI-detector passeert, en noemt het resultaat nooit ondetecteerbaar.",
+        "Het herschrijft geen tekst om AI-gebruik te verbergen wanneer de auteur aangeeft, of de context laat zien, dat vermelding verplicht is.",
+        "Het verzint geen namen, plaatsen, werken, citaten, getallen of anekdotes om een concept specifiek te laten lijken.",
+        "Het wijzigt geen plot, beweringen of verplichte formuleringen zonder toestemming van de auteur."
+      ]
+    },
+    "assess-story-narrative-provenance": {
+      "summary": "Beoordeel een volledig Engels verhaal met een verhaalclassifier: menselijk, AI of onzeker.",
+      "description": "Meet of een volledig kort verhaal in het Engels, uit een bestand of van een openbare webpagina, op het niveau van verhaalkeuzes leest als door een mens geschreven of door AI gegenereerd, met een verhaalannotatie van 304 kenmerken en een classifier die is getraind op menselijke en door AI gegenereerde fictie, en rapporteer de waarschijnlijkheid met de onzekerheid en de validatiegrenzen als JSON of als zelfstandig HTML-rapport. Gebruik dit wanneer een schrijver wil weten hoe de verhaalkeuzes van een verhaal scoren, niet om te bewijzen wie een tekst schreef of om iemand te beschuldigen.",
+      "purposes": [
+        "Leest een verhaal uit een bestand of van een webpagina, annoteert het met TypeSafe Jev of beoordeelt aangeleverde annotaties, en rapporteert P(mens) en oordeel van de classifier als JSON of HTML."
+      ],
+      "refuses": [
+        "Het bewijst of weerlegt niet dat iemand AI heeft gebruikt, en het is geen bewijs voor een academische, contractuele of arbeidsrechtelijke beschuldiging.",
+        "Het beoordeelt geen privétekst die de gebruiker niet mag analyseren, en de score van een openbare pagina blijft een meting van de tekst, geen uitspraak over de auteur.",
+        "Het noemt een verhaal nooit ondetecteerbaar en belooft niet dat het een andere detector doorstaat.",
+        "Het rapporteert geen enkele annotatie op zich en maakt van een onzeker resultaat geen oordeel."
+      ]
+    },
+    "audit-published-content-defects": {
+      "summary": "Vind zichtbare markdown, placeholders en kapotte tekst op gepubliceerde pagina's, gegroepeerd per soort.",
+      "description": "Vind de fouten die een lezer ziet op gepubliceerde webpagina's, zoals zichtbaar gebleven markdown, niet ingevulde placeholders, dubbel geëscapete entiteiten, alinea's die na een afkorting zijn afgebroken, herhaalde alinea's en onvertaalde passages, op één pagina, een sitemap of opgeslagen HTML, en rapporteer ze per soort met voorbeelden als JSON, Markdown of HTML. Gebruik dit wanneer gegenereerde, getemplate of vertaalde inhoud gecontroleerd moet worden voordat lezers het merken, niet om stijl te beoordelen of pagina's te herschrijven.",
+      "purposes": [
+        "Haalt een pagina, een sitemap of opgeslagen HTML op, vindt zichtbare weergavefouten en schrijft rapporten als JSON, Markdown of HTML."
+      ],
+      "refuses": [
+        "Het beoordeelt geen schrijfkwaliteit, toon of de vraag of een tekst met AI is geschreven.",
+        "Het wijzigt geen pagina's, inhoud of code; het rapporteert wat het vindt.",
+        "Het omzeilt geen botbescherming of snelheidslimieten en controleert geen sites die de gebruiker niet mag laten controleren."
       ]
     }
   }

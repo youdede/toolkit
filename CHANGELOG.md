@@ -6,6 +6,10 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 
 ### Added
 
+- `edit-ai-draft-for-human-voice` skill: revises an AI-assisted draft toward a human voice, narrative structure first and style second, following the StoryScope study of AI fiction. A bundled script measures the draft before and after, flags numbers or names the revision added or dropped, and scores a closed-option structural rubric.
+- `assess-story-narrative-provenance` skill: scores a full English story with a narrative classifier (human-like, AI-like, or uncertain), preferring TypeSafe Jev as annotator with an agent-model fallback, and writes a JSON or HTML report with the choices that pulled the score.
+- `audit-published-content-defects` skill: finds the defects readers can see on published pages (visible markdown, unresolved placeholders, double-escaped entities, paragraphs cut after an abbreviation, repeated or untranslated passages) across a page, a sitemap, or saved HTML, fetching politely and stopping when a site blocks, and reports them grouped by kind as JSON, Markdown, or HTML.
+- `edit-ai-draft-for-human-voice` can also write an editorial review: passage-by-passage edits whose quotes are checked against the text and whose suggestions cannot add numbers or names, with a checklist of review questions for any genre.
 - `PRIVACY.md` states that the toolkit collects no data and lists what stays on your computer and what leaves it. Claude Code plugins link it, `SUPPORT.md`, and the toolkit page for their directory listing.
 
 ## 0.5.0 (2026-10-31)
