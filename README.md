@@ -76,13 +76,16 @@ Those pages are generated from the catalog and checked by the build, so they can
 ## Find what you need
 
 ```bash
+npx @youdede/toolkit search secret                 # name, slug, summary and refusals
 npx @youdede/toolkit list --problem commit-safety
 npx @youdede/toolkit list --domain security --risk high
-npx @youdede/toolkit list --kind hook
+npx @youdede/toolkit list --kind hook --json       # every read command takes --json
 npx @youdede/toolkit packs
 npx @youdede/toolkit pack-info daily-driver
 npx @youdede/toolkit verify-pack-evidence daily-driver --report .youdede/evidence/daily-driver.json
 ```
+
+`search` matches what an artifact refuses to do as well as what it does, so you can find a gate by the thing you want prevented. A filter value the taxonomy does not carry is refused rather than answered with an empty list, and every read command can answer in JSON. [docs/install.md](docs/install.md) describes the full command surface, the removal dry run, shell completion, and the exit codes.
 
 The [artifact catalog](catalog/artifacts.json), [pack catalog](catalog/packs.json), and [taxonomy](catalog/taxonomy.json) are generated, stable, and suitable for a search index or an API of your own. The [catalog format](docs/catalog-format.md) describes their fields, including the links between artifacts. The [pack evidence contract](docs/pack-evidence.md) explains what a verified report proves and what it does not.
 

@@ -3,17 +3,21 @@
 ## Commands
 
 ```bash
-youdede-toolkit list [--kind skill|hook|subagent|command|context|mcp-server] [--target value] [--domain|--category|--capability|--problem|--framework|--language|--lifecycle|--risk|--execution value]
-youdede-toolkit info <id-or-slug>
+youdede-toolkit list [--kind skill|hook|subagent|command|context|mcp-server] [--target value] [--domain|--category|--capability|--problem|--framework|--language|--lifecycle|--risk|--execution value] [--json]
+youdede-toolkit search <term...> [the same filters as list] [--json]
+youdede-toolkit info <id-or-slug> [--json]
 youdede-toolkit packs
 youdede-toolkit pack-info <id-or-slug> [--target claude-code|codex|gemini-cli|github-copilot|cursor|opencode]
 youdede-toolkit verify-pack-evidence <id-or-slug> --report path [--json]
 youdede-toolkit add <id-or-slug> [--target claude-code|codex|gemini-cli|github-copilot|cursor|opencode] [--scope project|user] [--cwd path] [--dry-run] [--json] [--force] [--no-prerequisites]
 youdede-toolkit add-pack <id-or-slug> [--target <target>] [--scope project|user] [--cwd path] [--dry-run] [--json] [--force] [--no-prerequisites]
-youdede-toolkit remove <id-or-slug> [--target <target>] [--scope project|user] [--cwd path] [--force]
-youdede-toolkit remove-pack <id-or-slug> [--target <target>] [--scope project|user] [--cwd path] [--force]
-youdede-toolkit doctor [--target <target>] [--scope project|user] [--cwd path]
+youdede-toolkit remove <id-or-slug> [--target <target>] [--scope project|user] [--cwd path] [--dry-run] [--json] [--force]
+youdede-toolkit remove-pack <id-or-slug> [--target <target>] [--scope project|user] [--cwd path] [--dry-run] [--json] [--force]
+youdede-toolkit installed [--target <target>] [--scope project|user] [--cwd path] [--json]
+youdede-toolkit doctor [--target <target>] [--scope project|user] [--cwd path] [--json]
 youdede-toolkit verify-integrity [id-or-slug] [--json]
+youdede-toolkit completion bash|zsh
+youdede-toolkit version [--json]
 youdede-toolkit validate
 ```
 
@@ -31,6 +35,56 @@ question, and `0 artifact(s).` with exit 0 is its answer.
 Packs compose procedures, specialists, and lifecycle gates without changing the independent install contract of any member. Required members must share the requested target and scope, and installation plans every member before the first write. Ownership and rollback guarantees are described in [architecture.md](architecture.md).
 
 Use `--dry-run` before installation to resolve the adapter, validate collisions, and list file and settings mutations without writing anything. Combine it with `--json` to receive stable structured output including payload sizes and SHA-256 digests.
+
+`remove` and `remove-pack` take `--dry-run` as well, and it is the same promise in the other
+direction: the plan names every file it would delete, every file it would keep because another
+install also records it, every displaced file it would put back, and whether the target settings,
+the MCP configuration, the installation state, and the generated notice would be rewritten or
+removed. The plan is produced by the removal itself, stopped before its first write, so it cannot
+describe something other than what would happen; it does not take the installation lock, so it
+writes nothing at all, and a plan taken while an install is running may be stale. A dry run also
+reports the installed artifacts that still need what you are removing, instead of refusing over
+them, because the point of it is to show the whole consequence before you commit to it.
+
+## Searching and inspecting
+
+`search` takes one or more terms and matches them, case-insensitively, as substrings of an
+artifact's name, slug, summary, and refusals. Every term must match somewhere, so each term you
+add narrows the result. Results are ranked by how many of those four fields a term hit, then by
+id, so an artifact named after your term comes before one that only mentions it in a refusal.
+Searching refusals is the point: it finds an artifact by the thing you want prevented. The long
+`description` is deliberately not searched, because a common word in it would match most of the
+catalog. Every `list` filter also applies to a search.
+
+`installed` lists what the installation state records for a target and scope, including
+prerequisites that were pulled in and artifacts no longer in the catalog. It answers "what is
+installed"; `doctor` answers "does what is installed still match what was recorded", and exits 1
+when it does not.
+
+`--json` on `list`, `search`, `info`, `installed`, `doctor`, `version`, `verify-integrity`,
+`verify-pack-evidence`, `add`, `add-pack`, `remove`, and `remove-pack` prints the result, and only
+the result, to stdout; notices and questions go to stderr and no question is asked. The records
+`list` and `search` emit are a stable summary rather than the whole manifest, because
+[catalog/artifacts.json](../catalog/artifacts.json) already carries every field.
+
+## Shell completion
+
+```bash
+eval "$(youdede-toolkit completion bash)"   # or: completion zsh
+```
+
+The script is generated from the same tables the parser uses and from the catalog itself, so it
+cannot offer a command, a flag, or a value the CLI would then refuse. zsh loads the same
+definition through `bashcompinit`, so there is one definition rather than two that could disagree.
+
+## Exit codes
+
+A command exits `0` when it answered and `1` when it refused or failed. There is no third code.
+Exit `1` covers an unknown command, flag, filter value, or shell; a flag a command does not read;
+a word beyond the arguments a command takes; an artifact or pack that does not resolve; an adapter
+that does not support the requested target or scope; drift found by `doctor`; drift found by
+`verify-integrity`; pack evidence that does not verify; and a removal blocked by an installed
+artifact that still needs the one being removed.
 
 ## Prerequisites and suggestions
 

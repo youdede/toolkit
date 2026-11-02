@@ -4,6 +4,22 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 
 ## Unreleased
 
+### Added
+
+- `youdede-toolkit search <term...>` matches terms against an artifact's name, slug, summary, and refusals, and ranks a result by how many of those fields a term hit. Searching refusals finds an artifact by the thing you want prevented. Every term must match, so each one narrows the result, and every `list` filter applies to a search as well.
+- `youdede-toolkit installed` lists what the installation state records for a target and scope, including prerequisites that were pulled in and artifacts no longer in the catalog. It answers what is installed, where `doctor` answers whether what is installed still matches what was recorded.
+- `youdede-toolkit completion bash|zsh` prints a shell completion generated from the same tables the parser uses and from the catalog, so it cannot offer a command, flag, or value the CLI would then refuse. zsh loads the same definition through `bashcompinit`.
+- `youdede-toolkit version`, and the `--version` spelling, report the package name and version. `--version` was previously read as an option expecting a value and exited 1.
+- `--json` on `list`, `search`, `info`, `installed`, and `doctor`. The records `list` and `search` emit are a stable summary rather than the whole manifest, because `catalog/artifacts.json` already carries every field.
+- `--dry-run` and `--json` on `remove` and `remove-pack`. The plan names every file that would be deleted, kept because another install also records it, or put back, and whether the settings, MCP configuration, state, and generated notice would be rewritten or removed. It is produced by the removal itself, stopped before its first write, so it cannot describe something other than what would happen, and it takes no installation lock, so it writes nothing at all. It reports the installed artifacts that still need the one being removed instead of refusing over them.
+- `docs/install.md` states the exit codes: `0` when a command answered, `1` when it refused or failed, and what falls under each.
+
+### Changed
+
+- `doctor` accepts `--json` and keeps exiting 1 when it finds drift. It previously refused the flag, and that refusal was asserted by a test; a drift check that CI runs is the one diagnostic that most needs machine-readable output.
+- `npm run validate` refuses a taxonomy value that no artifact carries. A declared value makes a filter a legitimate question whose answer is always none, which reads as an empty catalog rather than an absent dimension. What the installer and the adapters support — kinds, risk levels, targets, scopes — is not checked against the catalog's contents.
+- `catalog/taxonomy.json` no longer declares the `express`, `fastapi`, `flask`, `nestjs`, and `spring` frameworks, which no artifact carried. `list --framework express` answered `0 artifact(s).` with exit 0; it is now refused with the frameworks the catalog does carry.
+
 ### Fixed
 
 - Secret history scanning reads the `git rev-list --objects` output that Git actually produced. Git accepts `-z` and ignores it before 2.47, so on the Git that Debian 12 and Ubuntu 24.04 LTS ship, `npm run check:secrets:history` stopped with `malformed object metadata` and the release gate could not run at all.
