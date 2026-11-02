@@ -6,6 +6,7 @@ import path from 'node:path';
 import test from 'node:test';
 import {
   isSensitivePath,
+  parseObjectListing,
   scanGitHistory,
   scanSecretText,
   scanWorkspacePaths
@@ -110,6 +111,33 @@ test('workspace scanning fails closed on symlinks and redacts content', (context
   ]);
   assert.deepEqual(result.findings.map(({ ruleId }) => ruleId).sort(), ['NPM_TOKEN', 'SYMLINK_UNSCANNED']);
   assert.doesNotMatch(JSON.stringify(result), new RegExp(secret));
+});
+
+// Only one `rev-list --objects` shape can be produced by the git installed beside this suite, so
+// both are asserted from fixed listings: the NUL-delimited records of Git 2.47 and later, and the
+// lines every earlier version prints when it accepts `-z` and ignores it.
+const TREE_ID = 'b4ed918248039b78f24383523fa4e51f80994fac';
+const BLOB_ID = 'ce013625030ba8dba906f756967f9e9ca394464a';
+
+test('object listings parse in both documented rev-list shapes', () => {
+  const delimited = `${TREE_ID}\0${BLOB_ID}\0path=f.txt\0`;
+  const lines = `${TREE_ID} \n${BLOB_ID} f.txt\n`;
+  const expected = [[TREE_ID, []], [BLOB_ID, ['f.txt']]];
+
+  for (const [label, listing] of [['delimited', delimited], ['lines', lines]]) {
+    const parsed = [...parseObjectListing(listing)].map(([id, paths]) => [id, [...paths]]);
+    assert.deepEqual(parsed, expected, `${label} listing`);
+  }
+  assert.deepEqual([...parseObjectListing('')], []);
+});
+
+test('object listings refuse metadata they cannot account for', () => {
+  // A path holding a newline splits the pre-2.47 shape, which must stop the scan rather than
+  // attribute the blob to half a path.
+  assert.throws(() => parseObjectListing(`${BLOB_ID} two\nlines.txt\n`), /malformed object metadata/);
+  assert.throws(() => parseObjectListing('not-an-object-id\n'), /malformed object metadata/);
+  assert.throws(() => parseObjectListing('not-an-object-id\0'), /malformed object metadata/);
+  assert.throws(() => parseObjectListing('path=orphan.txt\0'), /path without an object/);
 });
 
 test('history scanning detects a secret removed from the current tree', (context) => {
