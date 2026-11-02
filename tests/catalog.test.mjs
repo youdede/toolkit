@@ -9,6 +9,7 @@ import {
   publicPackCatalog,
   ROOT,
   subagentBodyDrift,
+  taxonomyCoverageErrors,
   unknownClaudeCodeSubagentTools,
   validateArtifact,
   validatePack,
@@ -324,4 +325,29 @@ test('every relative $schema reference in artifacts and packs resolves to a file
   walk(path.join(ROOT, 'artifacts'));
   walk(path.join(ROOT, 'packs'));
   assert.deepEqual(broken, []);
+});
+
+
+test('the taxonomy carries no value the catalog cannot answer for', () => {
+  const { taxonomy, artifacts, repositoryErrors } = validateRepository();
+  // A declared value no artifact carries makes `list --framework <value>` a legitimate question
+  // whose answer is always none, which reads as an empty catalog rather than an absent dimension.
+  assert.deepEqual(repositoryErrors, []);
+
+  // The gate has to be able to fail, so it is shown an orphan in each dimension it covers.
+  const orphaned = {
+    ...taxonomy,
+    frameworks: [...taxonomy.frameworks, 'nothing-uses-this'],
+    problems: [...taxonomy.problems, 'nobody-has-this-problem'],
+    domains: { ...taxonomy.domains, security: [...taxonomy.domains.security, 'no-such-category'] }
+  };
+  const errors = taxonomyCoverageErrors(orphaned, artifacts);
+  assert.deepEqual(errors.sort(), [
+    "taxonomy domain 'security' declares category 'no-such-category', which no artifact carries",
+    "taxonomy frameworks declares 'nothing-uses-this', which no artifact carries",
+    "taxonomy problems declares 'nobody-has-this-problem', which no artifact carries"
+  ].sort());
+
+  // What the installer and the adapters support is not checked against the catalog's contents.
+  assert.deepEqual(taxonomyCoverageErrors({ ...taxonomy, targets: [...taxonomy.targets, 'future-runtime'] }, artifacts), []);
 });
