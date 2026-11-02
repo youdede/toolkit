@@ -2,7 +2,7 @@
 
 import path from 'node:path';
 import { createInterface } from 'node:readline/promises';
-import { hookBindings, loadArtifacts, loadPacks, prerequisiteMembers, resolvePack, ROOT, validateRepository } from '../scripts/lib/catalog.mjs';
+import { hookBindings, loadArtifacts, loadPacks, loadTaxonomy, prerequisiteMembers, readJson, resolvePack, ROOT, validateRepository } from '../scripts/lib/catalog.mjs';
 import { doctor, installArtifact, installedDependentsOf, installPack, planArtifactInstall, planPackInstall, removeArtifact, neededByMessage, removePack, resolveArtifact, suggestionsFor } from '../scripts/lib/install.mjs';
 import { confirmRemoval, decidePrerequisites, parseAnswer, skippedNotice, suggestionHint } from '../scripts/lib/prerequisite-consent.mjs';
 import { readIntegrityManifest, verifyArtifactAttestation, verifyIntegrityManifest } from '../scripts/lib/integrity.mjs';
@@ -16,6 +16,12 @@ function parse(argv) {
   for (let index = 0; index < argv.length; index += 1) {
     const value = argv[index];
     if (!value.startsWith('--')) {
+      // A one-dash spelling reaches no flag check at all: `-target codex` used to land among the
+      // positionals, where no command reads it, so the install wrote to the default target and
+      // exited 0. A lone `-` is left to the artifact lookup, which reports it as not found.
+      if (value.length > 1 && value.startsWith('-')) {
+        throw new Error(`unknown option '${value}'; options are spelled with two dashes`);
+      }
       positional.push(value);
       continue;
     }
@@ -44,9 +50,12 @@ const INSTALL_FLAGS = ['target', 'scope', 'cwd', 'force', 'dry-run', 'json', 'no
 const COMMAND_FLAGS = {
   help: [],
   list: ['kind', 'domain', 'category', 'capability', 'problem', 'framework', 'language', 'lifecycle', 'risk', 'target', 'execution'],
-  info: ['target', 'scope', 'cwd'],
+  // `info` reads the catalog and nothing else. It accepted --target, --scope and --cwd and used
+  // none of them, so a reader who named a target was answered about every target instead.
+  info: [],
   packs: [],
-  'pack-info': ['target', 'scope', 'cwd'],
+  // `pack-info` reads --target for the hook fan-out; --scope and --cwd were accepted and ignored.
+  'pack-info': ['target'],
   'verify-pack-evidence': ['report', 'json'],
   add: INSTALL_FLAGS,
   'add-pack': INSTALL_FLAGS,
@@ -56,6 +65,37 @@ const COMMAND_FLAGS = {
   'verify-integrity': ['json'],
   validate: []
 };
+
+// The arguments each command reads, the command word excluded. A word beyond them is a typo or a
+// quote that split, and reading none of it while exiting 0 is the same silent fallback a
+// misspelled flag was: `info commit-guard garbage` described commit-guard and ignored the rest.
+const COMMAND_ARGUMENTS = {
+  help: 0,
+  list: 0,
+  packs: 0,
+  validate: 0,
+  doctor: 0,
+  info: 1,
+  'pack-info': 1,
+  'verify-pack-evidence': 1,
+  add: 1,
+  'add-pack': 1,
+  remove: 1,
+  'remove-pack': 1,
+  'verify-integrity': 1
+};
+
+function assertKnownArguments(command, positional) {
+  const allowed = COMMAND_ARGUMENTS[command];
+  // A command added to COMMAND_FLAGS and not to this table would otherwise accept any number of
+  // words, so a missing entry is reported rather than read as 'no limit'.
+  if (allowed === undefined) throw new Error(`unknown command '${command}'`);
+  const extra = positional.slice(1 + allowed);
+  if (extra.length) {
+    const expected = allowed === 0 ? 'takes no argument' : `takes ${allowed} argument`;
+    throw new Error(`${command} ${expected}; unexpected: ${extra.join(', ')}`);
+  }
+}
 
 // An unrecognised flag is a typo, and the flags that decide where bytes land must never fall
 // back to a default silently: `--scop user` used to install to project scope and exit 0.
@@ -67,6 +107,38 @@ function assertKnownFlags(command, options) {
     const list = unknown.map((name) => `--${name}`).join(', ');
     const supported = allowed.length ? allowed.map((name) => `--${name}`).join(', ') : 'none';
     throw new Error(`${command} does not accept ${list}; supported flags: ${supported}`);
+  }
+}
+
+// A filter value that matches nothing reads exactly like a filter value that does not exist:
+// `list --kind hooks` printed `0 artifact(s).` and exited 0, so a typo in a script reported an
+// empty catalog instead of refusing. Values are checked against the same taxonomy every artifact
+// is validated against, so a value this accepts is one the catalog could carry.
+function assertKnownFilters(options) {
+  const taxonomy = loadTaxonomy(ROOT);
+  const TAXONOMY = 'catalog/taxonomy.json';
+  const schemaFile = 'schema/artifact.schema.json';
+  const executionModes = readJson(path.join(ROOT, ...schemaFile.split('/'))).properties.execution.properties.mode.enum;
+  const known = {
+    kind: ['kinds', taxonomy.kinds, TAXONOMY],
+    domain: ['domains', Object.keys(taxonomy.domains), TAXONOMY],
+    category: ['categories', [...new Set(Object.values(taxonomy.domains).flat())], TAXONOMY],
+    capability: ['capabilities', taxonomy.capabilities, TAXONOMY],
+    problem: ['problems', taxonomy.problems, TAXONOMY],
+    framework: ['frameworks', taxonomy.frameworks, TAXONOMY],
+    language: ['languages', taxonomy.languages, TAXONOMY],
+    lifecycle: ['lifecycle stages', taxonomy.lifecycle, TAXONOMY],
+    risk: ['risk levels', taxonomy.risk, TAXONOMY],
+    target: ['targets', taxonomy.targets, TAXONOMY],
+    execution: ['execution modes', executionModes, schemaFile]
+  };
+  for (const [flag, [label, values, source]] of Object.entries(known)) {
+    const value = options[flag];
+    if (value === undefined || values.includes(value)) continue;
+    const detail = values.length <= 12
+      ? `known ${label}: ${[...values].sort().join(', ')}`
+      : `the ${values.length} known ${label} are listed in ${source}`;
+    throw new Error(`unknown ${flag} '${value}'; ${detail}`);
   }
 }
 
@@ -95,7 +167,7 @@ function help() {
   process.stdout.write(`       [--framework value] [--language value] [--lifecycle value] [--risk value] [--target value] [--execution value]\n`);
   process.stdout.write(`  info <id-or-slug>\n`);
   process.stdout.write(`  packs\n`);
-  process.stdout.write(`  pack-info <id-or-slug>\n`);
+  process.stdout.write(`  pack-info <id-or-slug> [--target ${targets}]\n`);
   process.stdout.write(`  verify-pack-evidence <id-or-slug> --report path [--json]\n`);
   process.stdout.write(`  add <id-or-slug> [--target ${targets}] [--scope project|user] [--cwd path] [--dry-run] [--json] [--force] [--no-prerequisites]\n`);
   process.stdout.write(`  add-pack <id-or-slug> [--target ${targets}] [--scope project|user] [--cwd path] [--dry-run] [--json] [--force] [--no-prerequisites]\n`);
@@ -125,8 +197,10 @@ async function main() {
   const command = positional[0];
   if (!command || options.help || command === 'help') return help();
   assertKnownFlags(command, options);
+  assertKnownArguments(command, positional);
 
   if (command === 'list') {
+    assertKnownFilters(options);
     let records = loadArtifacts(ROOT);
     if (options.kind) records = records.filter(({ manifest }) => manifest.kind === options.kind);
     if (options.domain) records = records.filter(({ manifest }) => manifest.domain === options.domain);
