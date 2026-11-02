@@ -8,7 +8,7 @@ import test from 'node:test';
 import { bestMatch, dimensionPrompt, encode, extractText, normalizeAnswers, renderHtml, typesafeKey, scoreAnswers, typesafeQuestions, verdict } from '../artifacts/skills/writing/editing/assess-story-narrative-provenance/scripts/score-story-provenance.mjs';
 
 const script = 'artifacts/skills/writing/editing/assess-story-narrative-provenance/scripts/score-story-provenance.mjs';
-const taxonomy = JSON.parse(readFileSync('artifacts/skills/writing/editing/assess-story-narrative-provenance/scripts/storyscope-taxonomy.json', 'utf8')).dimensions;
+const taxonomy = JSON.parse(readFileSync('artifacts/skills/writing/editing/assess-story-narrative-provenance/data/narrative-features.json', 'utf8')).dimensions;
 // P(human) for each fixture comes from the paper's Python pipeline; the port must reproduce it.
 const { cases } = JSON.parse(readFileSync('tests/fixtures/storyscope-answers.json', 'utf8'));
 const run = (...args) => spawnSync(process.execPath, [script, ...args], { encoding: 'utf8', env: { ...process.env, TYPESAFE_API_KEY: '' } });

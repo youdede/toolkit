@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // The StoryScope measure (Russell et al., COLM 2026, arXiv 2604.03136): a story is annotated on the paper's
 // 304 narrative features, then the paper's own binary XGBoost classifier gives P(human). Data and model: MIT,
-// see STORYSCOPE-LICENSE.txt. Encoding and value matching port storyscope/utils/feature_encoder.py exactly.
+// see ../data/narrative-classifier-license.txt. Encoding and value matching port storyscope/utils/feature_encoder.py exactly.
 import { readFileSync, realpathSync, statSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -13,10 +13,10 @@ const MAX_PAGE_BYTES = 4 * 1024 * 1024;
 const TYPESAFE_URL = 'https://api.typesafe.ai/v1/systemone';
 // The paper's stories run from about 1,000 to 6,000 words; outside that range the result is unvalidated.
 const VALIDATED_WORDS = [1000, 6000];
-const TAXONOMY = JSON.parse(readFileSync(join(HERE, 'storyscope-taxonomy.json'), 'utf8')).dimensions;
+const TAXONOMY = JSON.parse(readFileSync(join(HERE, '..', 'data', 'narrative-features.json'), 'utf8')).dimensions;
 const FEATURES = TAXONOMY.flatMap((dim) => dim.features);
 let model;
-const loadModel = () => (model ??= JSON.parse(readFileSync(join(HERE, 'storyscope-model.json'), 'utf8')));
+const loadModel = () => (model ??= JSON.parse(readFileSync(join(HERE, '..', 'data', 'narrative-classifier.json'), 'utf8')));
 
 // ---------- value matching (feature_encoder.py `_normalize_str`, `_best_match`) ----------
 export const normalizeStr = (s) => String(s).trim().toLowerCase().replace(/\s*\([^)]*\)/g, '').replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');

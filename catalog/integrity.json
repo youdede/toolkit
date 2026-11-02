@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "algorithm": "sha256",
   "claim": "Checksums bind published bytes to a reviewed release; they do not prove authorship, originality, license compliance, endorsement, or control downstream copying.",
-  "rootDigest": "030303a9ac5ea737acb920ed179acf58927aa44de2e595b8b971ad8654e23b15",
+  "rootDigest": "f525ef52caa89c8c033504e7f0f4c62a349d96ba0a8778831191ce470ef10eeb",
   "artifacts": [
     {
       "artifactId": "command/development/agent-tooling/audit-repository-instructions",
@@ -13903,8 +13903,8 @@
     {
       "artifactId": "skill/writing/editing/assess-story-narrative-provenance",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:68e8bde38f1c14bc6e3605c73f9a77fd73e3eeaa26330259530b962c457644b8",
-      "digest": "68e8bde38f1c14bc6e3605c73f9a77fd73e3eeaa26330259530b962c457644b8",
+      "integrityId": "urn:youdede:artifact:sha256:d7ecfff7d4213eb47ba6453fed52c0b71d14c06b483b485ffa8bea618a6564f3",
+      "digest": "d7ecfff7d4213eb47ba6453fed52c0b71d14c06b483b485ffa8bea618a6564f3",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -13912,33 +13912,33 @@
       "files": [
         {
           "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/adapters/claude-code.json",
-          "bytes": 236,
-          "sha256": "a962b905732024526576f9a7844e14d9b5fe62fe3f7c2700d50ea9984687074f"
+          "bytes": 278,
+          "sha256": "7ca2a235ecda8643b7676c90a61433a92c18af0c4cefbcda0f2345589e36ee1a"
         },
         {
           "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/adapters/codex.json",
-          "bytes": 391,
-          "sha256": "db18c55feeab909c3308e1e4e3fc1b4295ce837082e62f54919226d0946af8c8"
+          "bytes": 459,
+          "sha256": "f8040ca927dc4d108f03b4a696e8f26ad6a0e31302716ded757c08112066c2f4"
         },
         {
           "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/adapters/cursor.json",
-          "bytes": 366,
-          "sha256": "74716f780e7fca3af1af0947a291a330ce2296335f67e19fcced6057ade0b5ed"
+          "bytes": 434,
+          "sha256": "7ea6d6b6fac93382d2b73f7c7ab6ef999ed49b61210a23de58117761ba6b7696"
         },
         {
           "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/adapters/gemini-cli.json",
-          "bytes": 614,
-          "sha256": "f32e256566e0cdea2382facc30e1a17b5b72ed72fc07bf37f853ffdb17ba4b24"
+          "bytes": 682,
+          "sha256": "3e22a7601d50dd5c4127180fee4a60c8f048b8612262e2235cf87cf9dc6d025c"
         },
         {
           "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/adapters/github-copilot.json",
-          "bytes": 557,
-          "sha256": "95e59838402f256e8f2e4b68d0985240290668ec145af00090dcf6364484948e"
+          "bytes": 625,
+          "sha256": "ec35d575c79807135a3f07f64f04553929b751f5907b85fa43ccc9f721b025ae"
         },
         {
           "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/adapters/opencode.json",
-          "bytes": 368,
-          "sha256": "909ce59cb929b5febd91adb374654d98355659782d9811b89623ece4d7f9a45a"
+          "bytes": 436,
+          "sha256": "7bce7a453a9cfe6414b2e7e0b4f66231b4dd2902cb48ecb8d64966a915fd66c3"
         },
         {
           "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/agents/openai.yaml",
@@ -13951,34 +13951,34 @@
           "sha256": "fb9328a976279fb13a927faa5715c9a200cc1690d83081976414f99be182baa5"
         },
         {
+          "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/data/narrative-classifier-license.txt",
+          "bytes": 1070,
+          "sha256": "4ae015c1203e464ad613c6f35faefa82c0703d9ef538871662d6256511023229"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/data/narrative-classifier.json",
+          "bytes": 1244992,
+          "sha256": "b25eecbaa98a7d2afd835f83f4fa5e444dad6ad8f8a1daa5fb4228d6b0b17187"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/data/narrative-features.json",
+          "bytes": 104559,
+          "sha256": "d5d03aed9e38185c32146dc6bb01275868ff8904309eda5afd13f37f44af5cad"
+        },
+        {
           "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/evaluations/behavioral.json",
           "bytes": 5033,
           "sha256": "6ad4703833107b942f5d44063d5b0ce5d7cd71c5614f3bc61772fa2a889183e4"
         },
         {
           "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/scripts/score-story-provenance.mjs",
-          "bytes": 38654,
-          "sha256": "f8b21c2d68f2a35aea0dba1edd7f62e23a97224c9fe03d54b29d4c5c950868ab"
-        },
-        {
-          "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/scripts/STORYSCOPE-LICENSE.txt",
-          "bytes": 1070,
-          "sha256": "4ae015c1203e464ad613c6f35faefa82c0703d9ef538871662d6256511023229"
-        },
-        {
-          "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/scripts/storyscope-model.json",
-          "bytes": 1244992,
-          "sha256": "b25eecbaa98a7d2afd835f83f4fa5e444dad6ad8f8a1daa5fb4228d6b0b17187"
-        },
-        {
-          "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/scripts/storyscope-taxonomy.json",
-          "bytes": 104559,
-          "sha256": "d5d03aed9e38185c32146dc6bb01275868ff8904309eda5afd13f37f44af5cad"
+          "bytes": 38703,
+          "sha256": "2785e0ea4309fcbd1bc2052a3748ecceaadcb132ced7da497f2e50862163b30e"
         },
         {
           "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/SKILL.md",
-          "bytes": 10111,
-          "sha256": "cfe3133a1d0357033cf7f8125d130bfa3cc8c2b27dc54c5e6fcfab6f64c12413"
+          "bytes": 10118,
+          "sha256": "440426735a31cccac0bb4605afbc3db04afdd037198bb29e3efcc3f96428c44c"
         }
       ]
     },
