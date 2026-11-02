@@ -947,6 +947,43 @@ export function contextInstallWarnings(manifest, now = new Date()) {
     : [];
 }
 
+// A plan only reads, so it deliberately does not take the installation lock: a dry run then
+// writes nothing at all, not even a lock file. A plan taken while an install is running may
+// therefore be stale, which is the same caveat `add --dry-run` carries.
+// What the recorded state says is installed for one target and scope, read without the lock and
+// without resolving the catalog: an artifact removed from the catalog is still installed on disk,
+// and an inventory that hid it would hide the thing a reader most needs to see.
+export function listInstalled(options = {}) {
+  const target = options.target || DEFAULT_TARGET;
+  const scope = options.scope || DEFAULT_SCOPE;
+  const cwd = options.cwd || process.cwd();
+  const configRoots = resolveConfigRoots(target, scope, cwd);
+  const installs = [];
+  for (const configRoot of configRoots) {
+    if (!existsSync(statePath(configRoot))) continue;
+    for (const install of Object.values(loadState(configRoot).installs)) {
+      if (install.target !== target || install.scope !== scope) continue;
+      installs.push({
+        artifactId: install.artifactId,
+        slug: install.slug ?? null,
+        version: install.version ?? null,
+        kind: install.kind || String(install.artifactId || '').split('/')[0] || null,
+        owners: recordedOwners(install),
+        files: (install.files || []).length,
+        hooks: (install.hooks || []).length,
+        mcpServers: (install.mcpServers || []).map(({ name }) => name),
+        configRoot
+      });
+    }
+  }
+  installs.sort((left, right) => String(left.artifactId).localeCompare(String(right.artifactId)));
+  return { target, scope, configRoots, installs };
+}
+
+export function planArtifactRemoval(query, options = {}) {
+  return removeArtifactLocked(query, { ...options, plan: true });
+}
+
 export function removeArtifact(query, options = {}) {
   // Resolve the owning root read-only, then redo the search under the lock so the state the
   // removal acts on is the state it recorded its decisions from.
@@ -1025,6 +1062,23 @@ function removeArtifactLocked(query, options = {}) {
   const owners = recordedOwners(installed);
   if (!owners.includes(owner)) throw new Error(`${artifact.id} is not owned by '${owner}' for ${target}/${scope}`);
   if (owners.length > 1) {
+    // Another owner still holds it, so the removal only releases this one's claim and touches no
+    // payload. A plan says exactly that, and writes nothing.
+    if (options.plan) {
+      return {
+        artifact,
+        target,
+        scope,
+        configRoot,
+        ownershipReleased: owner,
+        removes: [],
+        settings: null,
+        mcpConfig: null,
+        state: { path: path.relative(configRoot, statePath(configRoot)), action: 'update' },
+        notice: null,
+        dependents: []
+      };
+    }
     installed.owners = owners.filter((candidate) => candidate !== owner);
     writeState(configRoot, state);
     return { artifact, configRoot, removed: [], ownershipReleased: owner };
@@ -1139,12 +1193,58 @@ function removeArtifactLocked(query, options = {}) {
 
   const fileBackups = new Map();
   const sharedPaths = new Set();
+  // `planIgnoreKeys` are installs a pack plan is about to remove as well. Without it each member
+  // would be planned as if its siblings stayed, so a file two members record would be reported as
+  // kept by both while the real removal deletes it with the last of them.
+  const ignoredKeys = options.planIgnoreKeys instanceof Set ? options.planIgnoreKeys : new Set();
   for (const [candidateKey, candidate] of Object.entries(state.installs)) {
-    if (candidateKey === key) continue;
+    if (candidateKey === key || ignoredKeys.has(candidateKey)) continue;
     for (const file of candidate.files || []) {
       if ((installed.files || []).some((ownedFile) => ownedFile.path === file.path)) sharedPaths.add(file.path);
     }
   }
+  // Everything above is resolution and drift checking, which only reads. A plan returns here, so
+  // what it reports is what this same function would then do, rather than a second description of
+  // it that could drift. The refusals above apply to a plan as well: a dry run that cannot say
+  // what would happen must say so instead of printing a removal that would not succeed.
+  if (options.plan) {
+    const remainingInstalls = Object.fromEntries(Object.entries(state.installs).filter(([candidate]) => candidate !== key));
+    const notice = noticePath(configRoot);
+    const noticeAfter = renderNotice({ ...state, installs: remainingInstalls }, ROOT);
+    return {
+      artifact,
+      target,
+      scope,
+      configRoot,
+      ownershipReleased: null,
+      removes: (installed.files || []).map((file) => ({
+        path: file.path,
+        action: sharedPaths.has(file.path)
+          ? 'keep-shared'
+          : (displacedByPath.has(file.path) ? 'restore-displaced' : 'delete')
+      })),
+      settings: settingsAfter
+        ? { path: path.relative(configRoot, settingsFile), action: deleteSettingsFile ? 'delete' : 'update' }
+        : null,
+      mcpConfig: mcpAfter
+        ? {
+          path: path.relative(configRoot, mcpFile),
+          action: deleteMcpFile ? 'delete' : 'update',
+          servers: (installed.mcpServers || []).map(({ name }) => name)
+        }
+        : null,
+      state: {
+        path: path.relative(configRoot, statePath(configRoot)),
+        action: Object.keys(remainingInstalls).length === 0 ? 'delete' : 'update'
+      },
+      notice: {
+        path: path.relative(configRoot, notice),
+        action: noticeAfter ? 'update' : (existsSync(notice) ? 'delete' : 'none')
+      },
+      dependents
+    };
+  }
+
   const previousState = {
     data: readFileSync(statePath(configRoot)),
     mode: statSync(statePath(configRoot)).mode & 0o777
@@ -1282,6 +1382,10 @@ export function installPack(query, options = {}) {
   return { pack: planned.pack, target: planned.target, scope: planned.scope, installed, skipped: planned.members.filter((item) => item.skipped) };
 }
 
+export function planPackRemoval(query, options = {}) {
+  return removePack(query, { ...options, plan: true });
+}
+
 export function removePack(query, options = {}) {
   const root = options.root || ROOT;
   let pack;
@@ -1312,6 +1416,59 @@ export function removePack(query, options = {}) {
   if (drift.length > 0 && !options.force) {
     throw new Error(`${pack.id}: installed members have drift; use --force after review (${drift.map((item) => `${item.status}:${item.path}`).join(', ')})`);
   }
+  // A plan stops here, with the drift refusal above already applied. Each member plan is taken
+  // against the state as it stands now, so the per-member file actions are exact; the state and
+  // notice actions are computed once for the whole set, because an intermediate member would
+  // otherwise report keeping a file that the last member removes.
+  if (options.plan) {
+    // The real removal takes members in reverse recorded order, so a member that is a
+    // prerequisite of another member is removed after it and is never blocked by it. Planning a
+    // member on its own cannot see that, so the per-member dependent check is bypassed here and
+    // the dependents that genuinely block are computed once, against what the pack does not own.
+    const ownedIds = new Set(removable.map(({ installed }) => installed.artifactId));
+    const ownedSlugs = new Set(removable.map(({ installed }) => installed.slug).filter(Boolean));
+    const installs = installsOf(target, scope, cwd);
+    const members = removable.map(({ installed }) => {
+      const plan = removeArtifactLocked(installed.artifactId, {
+        ...options,
+        owner,
+        plan: true,
+        confirmedDependents: true,
+        planIgnoreKeys: removableKeys
+      });
+      const outside = installedDependents(installed.artifactId, installs, root)
+        .map(({ slug }) => slug)
+        .filter((slug) => !ownedSlugs.has(slug) && !ownedIds.has(slug));
+      return {
+        artifact: plan.artifact.id,
+        ownershipReleased: plan.ownershipReleased,
+        removes: plan.removes,
+        settings: plan.settings,
+        mcpConfig: plan.mcpConfig,
+        dependents: outside
+      };
+    });
+    const configRoots = [...new Set(removable.map(({ configRoot }) => configRoot))];
+    const roots = configRoots.map((configRoot) => {
+      const state = loadState(configRoot);
+      const remainingInstalls = Object.fromEntries(Object.entries(state.installs).filter(([key]) => !removableKeys.has(key)));
+      const notice = noticePath(configRoot);
+      const noticeAfter = renderNotice({ ...state, installs: remainingInstalls }, ROOT);
+      return {
+        configRoot,
+        state: {
+          path: path.relative(configRoot, statePath(configRoot)),
+          action: Object.keys(remainingInstalls).length === 0 ? 'delete' : 'update'
+        },
+        notice: {
+          path: path.relative(configRoot, notice),
+          action: noticeAfter ? 'update' : (existsSync(notice) ? 'delete' : 'none')
+        }
+      };
+    });
+    return { pack, target, scope, members, roots, dependents: [...new Set(members.flatMap(({ dependents }) => dependents))] };
+  }
+
   // Every file a member removal may rewrite: state, the generated notice, payloads, hook settings,
   // and MCP configuration, so a failed pack removal restores each one byte for byte.
   const mutationFiles = new Set(removable.flatMap(({ configRoot }) => [statePath(configRoot), noticePath(configRoot)]));

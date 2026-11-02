@@ -1087,6 +1087,32 @@ export function orderContextRecords(records) {
       || left.manifest.id.localeCompare(right.manifest.id));
 }
 
+// A taxonomy value no artifact carries is a filter that can only ever answer nothing.
+// `list --framework express` is a legitimate question, because the vocabulary declares the value,
+// and its answer is always `0 artifact(s).` — which reads as "the catalog has nothing for
+// Express" rather than "Express was never a dimension here". The vocabulary is a public promise,
+// so a value in it has to be backed by an artifact that carries it.
+// `kinds`, `risk`, `targets` and `scopes` are deliberately not checked: they describe what the
+// installer and the adapters support, not what the catalog happens to contain today.
+export function taxonomyCoverageErrors(taxonomy, artifacts) {
+  const errors = [];
+  for (const dimension of ['problems', 'capabilities', 'frameworks', 'languages', 'lifecycle']) {
+    const used = new Set(artifacts.flatMap(({ manifest }) => manifest[dimension] || []));
+    for (const value of taxonomy[dimension] || []) {
+      if (!used.has(value)) errors.push(`taxonomy ${dimension} declares '${value}', which no artifact carries`);
+    }
+  }
+  const usedCategories = new Set(artifacts.map(({ manifest }) => `${manifest.domain}/${manifest.category}`));
+  for (const [domain, categories] of Object.entries(taxonomy.domains || {})) {
+    for (const category of categories) {
+      if (!usedCategories.has(`${domain}/${category}`)) {
+        errors.push(`taxonomy domain '${domain}' declares category '${category}', which no artifact carries`);
+      }
+    }
+  }
+  return errors;
+}
+
 export function validateRepository(root = ROOT) {
   const taxonomy = loadTaxonomy(root);
   const artifacts = loadArtifacts(root);
@@ -1111,7 +1137,7 @@ export function validateRepository(root = ROOT) {
     if (seenPacks.has(id)) result.errors.push(`duplicate pack id '${id}'`);
     seenPacks.add(id);
   }
-  return { taxonomy, artifacts, results, packs, packResults };
+  return { taxonomy, artifacts, results, packs, packResults, repositoryErrors: taxonomyCoverageErrors(taxonomy, artifacts) };
 }
 
 export function validatePack(record, knownIds, artifacts, root = ROOT) {

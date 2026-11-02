@@ -2,7 +2,7 @@
 
 import { validateRepository } from './lib/catalog.mjs';
 
-const { artifacts, results, packs, packResults } = validateRepository();
+const { artifacts, results, packs, packResults, repositoryErrors } = validateRepository();
 let failures = 0;
 for (const { record, errors } of results) {
   if (errors.length === 0) {
@@ -21,6 +21,12 @@ for (const { record, errors } of packResults) {
   failures += errors.length;
   process.stderr.write(`✗ ${record.manifest.id || record.manifestPath}\n`);
   for (const error of errors) process.stderr.write(`  - ${error}\n`);
+}
+
+if (repositoryErrors.length) {
+  failures += repositoryErrors.length;
+  process.stderr.write('✗ repository\n');
+  for (const error of repositoryErrors) process.stderr.write(`  - ${error}\n`);
 }
 
 if (artifacts.length === 0) {
