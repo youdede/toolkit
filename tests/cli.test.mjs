@@ -32,6 +32,52 @@ test('unrecognised flags and commands fail loudly instead of falling back to a d
   const wrongCommandFlag = cliRaw(['doctor', '--json']);
   assert.equal(wrongCommandFlag.status, 1);
   assert.match(wrongCommandFlag.stderr, /doctor does not accept --json/);
+
+  // A one-dash spelling reaches no flag check: it used to sit unread among the positionals while
+  // the install chose the default target and exited 0.
+  const oneDash = cliRaw(['add', 'debug-systematically', '-target', 'codex', '--dry-run']);
+  assert.equal(oneDash.status, 1);
+  assert.match(oneDash.stderr, /unknown option '-target'/);
+  assert.doesNotMatch(oneDash.stdout, /Would install/);
+
+  const extraWord = cliRaw(['info', 'debug-systematically', 'commit-guard']);
+  assert.equal(extraWord.status, 1);
+  assert.match(extraWord.stderr, /info takes 1 argument; unexpected: commit-guard/);
+
+  const noArgument = cliRaw(['list', 'skill']);
+  assert.equal(noArgument.status, 1);
+  assert.match(noArgument.stderr, /list takes no argument; unexpected: skill/);
+
+  // `info` answers from the catalog alone. It accepted these three and read none of them.
+  for (const flag of [['--target', 'codex'], ['--scope', 'user'], ['--cwd', '/nonexistent']]) {
+    const dead = cliRaw(['info', 'debug-systematically', ...flag]);
+    assert.equal(dead.status, 1, `info ${flag[0]}`);
+    assert.match(dead.stderr, new RegExp(`info does not accept ${flag[0]}`));
+  }
+});
+
+test('a filter value the taxonomy does not carry is refused, not answered with an empty catalog', () => {
+  const plural = cliRaw(['list', '--kind', 'hooks']);
+  assert.equal(plural.status, 1);
+  assert.match(plural.stderr, /unknown kind 'hooks'; known kinds: command, context, hook, mcp-server, skill, subagent/);
+
+  const target = cliRaw(['list', '--target', 'claude']);
+  assert.equal(target.status, 1);
+  assert.match(target.stderr, /unknown target 'claude'; known targets: .*claude-code/);
+
+  // A set too long to print names the file that carries it instead.
+  const problem = cliRaw(['list', '--problem', 'commit-safty']);
+  assert.equal(problem.status, 1);
+  assert.match(problem.stderr, /unknown problem 'commit-safty'; the \d+ known problems are listed in catalog\/taxonomy\.json/);
+
+  const mode = cliRaw(['list', '--execution', 'determinstic']);
+  assert.equal(mode.status, 1);
+  assert.match(mode.stderr, /unknown execution 'determinstic'; known execution modes: deterministic, hybrid, prompt/);
+
+  // A value the taxonomy carries is a valid question, and no match is a valid answer to it.
+  const empty = cliRaw(['list', '--kind', 'hook', '--domain', 'writing']);
+  assert.equal(empty.status, 0, empty.stderr);
+  assert.match(empty.stdout, /0 artifact\(s\)\./);
 });
 
 test('a failing command exits non-zero and reports the reason on stderr', () => {

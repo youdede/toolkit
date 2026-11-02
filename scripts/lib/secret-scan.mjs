@@ -131,7 +131,17 @@ export function scanWorkspacePaths(root, records) {
   return { files: normalized.length, textFiles, binaryFiles, findings: sortFindings(findings) };
 }
 
-function parseObjectListing(listing) {
+// `rev-list --objects -z` emits NUL-delimited records carrying a `path=` prefix only from Git
+// 2.47 on. Earlier versions accept `-z` and ignore it, printing `<object-id>[ <path>]` lines
+// instead (verified on git 2.43.0, which Debian 12 and Ubuntu 24.04 LTS still ship), so the
+// listing is read by the shape Git actually produced rather than the shape it was asked for.
+// Both readers refuse what they do not recognise: an object a history scan cannot account for
+// must stop the scan, never be skipped quietly.
+export function parseObjectListing(listing) {
+  return listing.includes('\0') ? parseDelimitedObjectListing(listing) : parseLineObjectListing(listing);
+}
+
+function parseDelimitedObjectListing(listing) {
   const objects = new Map();
   let previousObjectId = null;
   for (const entry of listing.split('\0')) {
@@ -144,6 +154,23 @@ function parseObjectListing(listing) {
     if (!/^[0-9a-f]{40,64}$/.test(entry)) throw new Error('git rev-list returned malformed object metadata');
     previousObjectId = entry;
     if (!objects.has(entry)) objects.set(entry, new Set());
+  }
+  return objects;
+}
+
+// The pre-2.47 shape. A path holding a newline splits into a continuation line that matches no
+// object id, which fails the scan closed instead of mapping a blob to the wrong path. Root trees
+// are printed with a trailing space and no path, so an empty path is never recorded.
+function parseLineObjectListing(listing) {
+  const objects = new Map();
+  for (const line of listing.split('\n')) {
+    if (!line) continue;
+    const separator = line.indexOf(' ');
+    const objectId = separator === -1 ? line : line.slice(0, separator);
+    if (!/^[0-9a-f]{40,64}$/.test(objectId)) throw new Error('git rev-list returned malformed object metadata');
+    if (!objects.has(objectId)) objects.set(objectId, new Set());
+    const objectPath = separator === -1 ? '' : line.slice(separator + 1);
+    if (objectPath) objects.get(objectId).add(normalizeRelative(objectPath));
   }
   return objects;
 }

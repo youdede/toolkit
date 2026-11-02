@@ -2,6 +2,17 @@
 
 All notable changes are recorded here. Versions follow Semantic Versioning; release entries are derived from reviewed pull requests and verified against the corresponding Git tag.
 
+## Unreleased
+
+### Fixed
+
+- Secret history scanning reads the `git rev-list --objects` output that Git actually produced. Git accepts `-z` and ignores it before 2.47, so on the Git that Debian 12 and Ubuntu 24.04 LTS ship, `npm run check:secrets:history` stopped with `malformed object metadata` and the release gate could not run at all.
+- A one-dash option is refused instead of being read as a positional word and ignored. `add <artifact> -target codex` reported installing to Codex' default and wrote to `claude-code`.
+- A word beyond the arguments a command takes is refused. `info <artifact> <other-artifact>` described the first and ignored the second.
+- `list` refuses a filter value the taxonomy does not carry. `list --kind hooks` printed `0 artifact(s).` and exited 0, so a typo in a script reported an empty catalog.
+- `info` no longer accepts `--target`, `--scope`, and `--cwd`, and `pack-info` no longer accepts `--scope` and `--cwd`. Each was accepted and read by nothing, so naming a target asked a question the answer ignored.
+- The multi-file install rollback test states the privilege it needs instead of failing as root, where a directory mode cannot block a write. The case still runs on the runners that gate the suite.
+
 ## 0.6.0 (2026-11-02)
 
 ### Added
