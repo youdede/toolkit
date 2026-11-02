@@ -3,7 +3,7 @@
 import path from 'node:path';
 import { createInterface } from 'node:readline/promises';
 import { hookBindings, loadArtifacts, loadPacks, loadTaxonomy, prerequisiteMembers, readJson, resolvePack, ROOT, validateRepository } from '../scripts/lib/catalog.mjs';
-import { doctor, installArtifact, installedDependentsOf, installPack, planArtifactInstall, planPackInstall, removeArtifact, neededByMessage, removePack, resolveArtifact, suggestionsFor } from '../scripts/lib/install.mjs';
+import { doctor, installArtifact, installedDependentsOf, installPack, listInstalled, planArtifactInstall, planArtifactRemoval, planPackInstall, planPackRemoval, removeArtifact, neededByMessage, removePack, resolveArtifact, suggestionsFor } from '../scripts/lib/install.mjs';
 import { confirmRemoval, decidePrerequisites, parseAnswer, skippedNotice, suggestionHint } from '../scripts/lib/prerequisite-consent.mjs';
 import { readIntegrityManifest, verifyArtifactAttestation, verifyIntegrityManifest } from '../scripts/lib/integrity.mjs';
 import { validateBehavioralEvaluations } from '../scripts/validate-evaluations.mjs';
@@ -25,7 +25,7 @@ function parse(argv) {
       positional.push(value);
       continue;
     }
-    const boolean = ['dry-run', 'force', 'help', 'json', 'no-prerequisites'];
+    const boolean = ['dry-run', 'force', 'help', 'json', 'no-prerequisites', 'version'];
     const equals = value.indexOf('=');
     if (equals > 2) {
       const name = value.slice(2, equals);
@@ -47,22 +47,30 @@ function parse(argv) {
 }
 
 const INSTALL_FLAGS = ['target', 'scope', 'cwd', 'force', 'dry-run', 'json', 'no-prerequisites'];
+const REMOVE_FLAGS = ['target', 'scope', 'cwd', 'force', 'dry-run', 'json'];
+// The dimensions `list` and `search` filter on, each a key of the taxonomy the catalog is
+// validated against.
+const FILTER_FLAGS = ['kind', 'domain', 'category', 'capability', 'problem', 'framework', 'language', 'lifecycle', 'risk', 'target', 'execution'];
 const COMMAND_FLAGS = {
   help: [],
-  list: ['kind', 'domain', 'category', 'capability', 'problem', 'framework', 'language', 'lifecycle', 'risk', 'target', 'execution'],
+  version: ['json'],
+  list: [...FILTER_FLAGS, 'json'],
+  search: [...FILTER_FLAGS, 'json'],
   // `info` reads the catalog and nothing else. It accepted --target, --scope and --cwd and used
   // none of them, so a reader who named a target was answered about every target instead.
-  info: [],
+  info: ['json'],
   packs: [],
   // `pack-info` reads --target for the hook fan-out; --scope and --cwd were accepted and ignored.
   'pack-info': ['target'],
   'verify-pack-evidence': ['report', 'json'],
   add: INSTALL_FLAGS,
   'add-pack': INSTALL_FLAGS,
-  remove: ['target', 'scope', 'cwd', 'force'],
-  'remove-pack': ['target', 'scope', 'cwd', 'force'],
-  doctor: ['target', 'scope', 'cwd'],
+  remove: REMOVE_FLAGS,
+  'remove-pack': REMOVE_FLAGS,
+  installed: ['target', 'scope', 'cwd', 'json'],
+  doctor: ['target', 'scope', 'cwd', 'json'],
   'verify-integrity': ['json'],
+  completion: [],
   validate: []
 };
 
@@ -71,10 +79,12 @@ const COMMAND_FLAGS = {
 // misspelled flag was: `info commit-guard garbage` described commit-guard and ignored the rest.
 const COMMAND_ARGUMENTS = {
   help: 0,
+  version: 0,
   list: 0,
   packs: 0,
   validate: 0,
   doctor: 0,
+  installed: 0,
   info: 1,
   'pack-info': 1,
   'verify-pack-evidence': 1,
@@ -82,7 +92,10 @@ const COMMAND_ARGUMENTS = {
   'add-pack': 1,
   remove: 1,
   'remove-pack': 1,
-  'verify-integrity': 1
+  'verify-integrity': 1,
+  completion: 1,
+  // `search` takes the terms themselves, so it is the one command with no fixed count.
+  search: null
 };
 
 function assertKnownArguments(command, positional) {
@@ -90,6 +103,7 @@ function assertKnownArguments(command, positional) {
   // A command added to COMMAND_FLAGS and not to this table would otherwise accept any number of
   // words, so a missing entry is reported rather than read as 'no limit'.
   if (allowed === undefined) throw new Error(`unknown command '${command}'`);
+  if (allowed === null) return;
   const extra = positional.slice(1 + allowed);
   if (extra.length) {
     const expected = allowed === 0 ? 'takes no argument' : `takes ${allowed} argument`;
@@ -108,6 +122,172 @@ function assertKnownFlags(command, options) {
     const supported = allowed.length ? allowed.map((name) => `--${name}`).join(', ') : 'none';
     throw new Error(`${command} does not accept ${list}; supported flags: ${supported}`);
   }
+}
+
+// What each command's one argument names, for the generated shell completion and for nothing
+// else: the completion cannot offer pack slugs where an artifact is expected unless it is told.
+const ARGUMENT_COMPLETIONS = {
+  add: 'artifacts',
+  info: 'artifacts',
+  remove: 'artifacts',
+  'verify-integrity': 'artifacts',
+  'add-pack': 'packs',
+  'pack-info': 'packs',
+  'remove-pack': 'packs',
+  'verify-pack-evidence': 'packs',
+  completion: 'shells'
+};
+
+// The fields `search` reads. The description is deliberately not among them: it is long enough
+// that a common word would match most of the catalog, which is the same as matching nothing.
+const SEARCH_FIELDS = ['name', 'slug', 'summary', 'refuses'];
+
+// The subset `list`, `search` and `installed` emit with --json. It is a stable summary, not the
+// manifest: catalog/artifacts.json carries every field, and this stays small enough to pipe.
+function listRecord(manifest) {
+  return {
+    id: manifest.id,
+    slug: manifest.slug,
+    name: manifest.name,
+    version: manifest.version,
+    kind: manifest.kind,
+    domain: manifest.domain,
+    category: manifest.category,
+    summary: manifest.summary,
+    risk: manifest.risk,
+    execution: manifest.execution.mode,
+    lifecycle: manifest.lifecycle,
+    targets: Object.keys(manifest.adapters).sort()
+  };
+}
+
+function printListRow(manifest, suffix = '') {
+  write(`${manifest.slug.padEnd(28)} ${manifest.kind.padEnd(9)} ${manifest.domain}/${manifest.category}${suffix}`);
+  write(`  ${manifest.summary}`);
+}
+
+function applyFilters(records, options) {
+  let kept = records;
+  if (options.kind) kept = kept.filter(({ manifest }) => manifest.kind === options.kind);
+  if (options.domain) kept = kept.filter(({ manifest }) => manifest.domain === options.domain);
+  if (options.category) kept = kept.filter(({ manifest }) => manifest.category === options.category);
+  if (options.capability) kept = kept.filter(({ manifest }) => manifest.capabilities.includes(options.capability));
+  if (options.problem) kept = kept.filter(({ manifest }) => manifest.problems.includes(options.problem));
+  if (options.framework) kept = kept.filter(({ manifest }) => manifest.frameworks.includes(options.framework));
+  if (options.language) kept = kept.filter(({ manifest }) => manifest.languages.includes(options.language));
+  if (options.lifecycle) kept = kept.filter(({ manifest }) => manifest.lifecycle.includes(options.lifecycle));
+  if (options.risk) kept = kept.filter(({ manifest }) => manifest.risk === options.risk);
+  if (options.target) kept = kept.filter(({ manifest }) => Object.hasOwn(manifest.adapters, options.target));
+  if (options.execution) kept = kept.filter(({ manifest }) => manifest.execution.mode === options.execution);
+  return kept;
+}
+
+// Every term must appear somewhere, and the rank is the number of distinct fields any term hit,
+// so an artifact named after the term outranks one that only mentions it in a refusal.
+function searchRecords(records, terms) {
+  const needles = terms.map((term) => term.toLowerCase());
+  const scored = [];
+  for (const record of records) {
+    const { manifest } = record;
+    const haystack = {
+      name: String(manifest.name).toLowerCase(),
+      slug: String(manifest.slug).toLowerCase(),
+      summary: String(manifest.summary).toLowerCase(),
+      refuses: manifest.refuses.join('\n').toLowerCase()
+    };
+    if (!needles.every((needle) => SEARCH_FIELDS.some((field) => haystack[field].includes(needle)))) continue;
+    const matched = SEARCH_FIELDS.filter((field) => needles.some((needle) => haystack[field].includes(needle)));
+    scored.push({ record, matched });
+  }
+  return scored.sort((left, right) => right.matched.length - left.matched.length
+    || left.record.manifest.id.localeCompare(right.record.manifest.id));
+}
+
+const COMPLETION_SHELLS = ['bash', 'zsh'];
+// Flags that consume the next word. A completion that does not know them reads that word as the
+// command: `--target codex add` would complete as if the command were `codex`.
+const VALUE_FLAGS = [...new Set(['target', 'scope', 'cwd', 'report', ...FILTER_FLAGS])];
+
+// The completion is generated from the same tables the parser uses, and from the catalog itself,
+// so it cannot offer a command, a flag or a value the CLI would then refuse. zsh runs the bash
+// definition through bashcompinit, so one definition serves both shells rather than two that
+// could disagree.
+function completionScript(shell) {
+  if (!COMPLETION_SHELLS.includes(shell)) {
+    throw new Error(`unknown shell '${shell}'; known shells: ${COMPLETION_SHELLS.join(', ')}`);
+  }
+  const taxonomy = loadTaxonomy(ROOT);
+  const schemaFile = path.join(ROOT, 'schema', 'artifact.schema.json');
+  const values = {
+    target: taxonomy.targets,
+    scope: taxonomy.scopes,
+    kind: taxonomy.kinds,
+    domain: Object.keys(taxonomy.domains),
+    category: [...new Set(Object.values(taxonomy.domains).flat())].sort(),
+    capability: taxonomy.capabilities,
+    problem: taxonomy.problems,
+    framework: taxonomy.frameworks,
+    language: taxonomy.languages,
+    lifecycle: taxonomy.lifecycle,
+    risk: taxonomy.risk,
+    execution: readJson(schemaFile).properties.execution.properties.mode.enum
+  };
+  const commands = Object.keys(COMMAND_FLAGS).sort();
+  const artifacts = loadArtifacts(ROOT).map(({ manifest }) => manifest.slug).sort();
+  const packs = loadPacks(ROOT).map(({ manifest }) => manifest.slug).sort();
+  const words = (list) => [...list].join(' ');
+  const lines = [];
+  lines.push(`# youdede-toolkit completion for ${shell}, generated by \`youdede-toolkit completion ${shell}\`.`);
+  lines.push(`# Load it with:  eval "$(youdede-toolkit completion ${shell})"`);
+  if (shell === 'zsh') {
+    lines.push('# zsh runs the bash definition below through bashcompinit.');
+    lines.push('autoload -U +X bashcompinit && bashcompinit');
+  }
+  lines.push('_youdede_toolkit() {');
+  lines.push('  local cur prev command skip i word');
+  lines.push('  cur="${COMP_WORDS[COMP_CWORD]}"');
+  lines.push('  prev="${COMP_WORDS[COMP_CWORD-1]}"');
+  lines.push('  case "$prev" in');
+  lines.push('    --cwd) COMPREPLY=($(compgen -d -- "$cur")); return;;');
+  lines.push('    --report) COMPREPLY=($(compgen -f -- "$cur")); return;;');
+  for (const flag of VALUE_FLAGS) {
+    if (flag === 'cwd' || flag === 'report') continue;
+    lines.push(`    --${flag}) COMPREPLY=($(compgen -W "${words(values[flag])}" -- "$cur")); return;;`);
+  }
+  lines.push('  esac');
+  lines.push('  command=""');
+  lines.push('  skip=0');
+  lines.push('  for ((i=1; i<COMP_CWORD; i++)); do');
+  lines.push('    word="${COMP_WORDS[i]}"');
+  lines.push('    if [ "$skip" = "1" ]; then skip=0; continue; fi');
+  lines.push('    case "$word" in');
+  lines.push(`      ${VALUE_FLAGS.map((flag) => `--${flag}`).join('|')}) skip=1;;`);
+  lines.push('      --*) ;;');
+  lines.push('      *) if [ -z "$command" ]; then command="$word"; fi;;');
+  lines.push('    esac');
+  lines.push('  done');
+  lines.push(`  if [ -z "$command" ]; then COMPREPLY=($(compgen -W "${words(commands)}" -- "$cur")); return; fi`);
+  lines.push('  if [[ "$cur" == -* ]]; then');
+  lines.push('    case "$command" in');
+  for (const command of commands) {
+    const flags = COMMAND_FLAGS[command].map((flag) => `--${flag}`);
+    if (!flags.length) continue;
+    lines.push(`      ${command}) COMPREPLY=($(compgen -W "${words(flags)}" -- "$cur"));;`);
+  }
+  lines.push('    esac');
+  lines.push('    return');
+  lines.push('  fi');
+  lines.push('  case "$command" in');
+  const byArgument = { artifacts, packs, shells: COMPLETION_SHELLS };
+  for (const [name, list] of Object.entries(byArgument)) {
+    const matching = Object.entries(ARGUMENT_COMPLETIONS).filter(([, kind]) => kind === name).map(([command]) => command);
+    if (!matching.length) continue;
+    lines.push(`    ${matching.sort().join('|')}) COMPREPLY=($(compgen -W "${words(list)}" -- "$cur"));;`);
+  }
+  lines.push('  esac');
+  lines.push('}');
+  lines.push('complete -F _youdede_toolkit youdede-toolkit');
+  return `${lines.join('\n')}\n`;
 }
 
 // A filter value that matches nothing reads exactly like a filter value that does not exist:
@@ -162,20 +342,34 @@ const notify = (line) => process.stderr.write(`${line}\n`);
 
 function help() {
   const targets = SUPPORTED_TARGETS.join('|');
+  const placement = `[--target ${targets}] [--scope project|user] [--cwd path]`;
+  const filters = '[--kind value] [--domain value] [--category value] [--capability value] [--problem value]';
+  const moreFilters = '[--framework value] [--language value] [--lifecycle value] [--risk value] [--target value] [--execution value]';
   process.stdout.write(`youdede-toolkit\n\n`);
-  process.stdout.write(`  list [--kind value] [--domain value] [--category value] [--capability value] [--problem value]\n`);
-  process.stdout.write(`       [--framework value] [--language value] [--lifecycle value] [--risk value] [--target value] [--execution value]\n`);
-  process.stdout.write(`  info <id-or-slug>\n`);
+  process.stdout.write(`  list ${filters} [--json]\n`);
+  process.stdout.write(`       ${moreFilters}\n`);
+  process.stdout.write(`  search <term...> [the same filters as list] [--json]\n`);
+  process.stdout.write(`  info <id-or-slug> [--json]\n`);
   process.stdout.write(`  packs\n`);
   process.stdout.write(`  pack-info <id-or-slug> [--target ${targets}]\n`);
   process.stdout.write(`  verify-pack-evidence <id-or-slug> --report path [--json]\n`);
-  process.stdout.write(`  add <id-or-slug> [--target ${targets}] [--scope project|user] [--cwd path] [--dry-run] [--json] [--force] [--no-prerequisites]\n`);
-  process.stdout.write(`  add-pack <id-or-slug> [--target ${targets}] [--scope project|user] [--cwd path] [--dry-run] [--json] [--force] [--no-prerequisites]\n`);
-  process.stdout.write(`  remove <id-or-slug> [--target ${targets}] [--scope project|user] [--cwd path] [--force]\n`);
-  process.stdout.write(`  remove-pack <id-or-slug> [--target ${targets}] [--scope project|user] [--cwd path] [--force]\n`);
-  process.stdout.write(`  doctor [--target ${targets}] [--scope project|user] [--cwd path]\n`);
+  process.stdout.write(`  add <id-or-slug> ${placement} [--dry-run] [--json] [--force] [--no-prerequisites]\n`);
+  process.stdout.write(`  add-pack <id-or-slug> ${placement} [--dry-run] [--json] [--force] [--no-prerequisites]\n`);
+  process.stdout.write(`  remove <id-or-slug> ${placement} [--dry-run] [--json] [--force]\n`);
+  process.stdout.write(`  remove-pack <id-or-slug> ${placement} [--dry-run] [--json] [--force]\n`);
+  process.stdout.write(`  installed ${placement} [--json]\n`);
+  process.stdout.write(`  doctor ${placement} [--json]\n`);
   process.stdout.write(`  verify-integrity [id-or-slug] [--json]\n`);
+  process.stdout.write(`  completion ${COMPLETION_SHELLS.join('|')}\n`);
+  process.stdout.write(`  version [--json]\n`);
   process.stdout.write(`  validate\n`);
+  process.stdout.write(`\nEvery command exits 0 when it answered and 1 when it refused or failed.\n`);
+}
+
+function printVersion(options) {
+  const { name, version } = readJson(path.join(ROOT, 'package.json'));
+  if (options.json) write(JSON.stringify({ name, version }, null, 2));
+  else write(`${name} ${version}`);
 }
 
 function printRuntimeDisclosure(runtime) {
@@ -195,29 +389,47 @@ function requireQuery(positional) {
 async function main() {
   const { positional, options } = parse(process.argv.slice(2));
   const command = positional[0];
+  // `--version` with no command used to be read as an option expecting a value and exited 1.
+  if (options.version) return printVersion(options);
   if (!command || options.help || command === 'help') return help();
   assertKnownFlags(command, options);
   assertKnownArguments(command, positional);
 
+  if (command === 'version') return printVersion(options);
+
+  if (command === 'completion') {
+    process.stdout.write(completionScript(requireQuery(positional)));
+    return;
+  }
+
   if (command === 'list') {
     assertKnownFilters(options);
-    let records = loadArtifacts(ROOT);
-    if (options.kind) records = records.filter(({ manifest }) => manifest.kind === options.kind);
-    if (options.domain) records = records.filter(({ manifest }) => manifest.domain === options.domain);
-    if (options.category) records = records.filter(({ manifest }) => manifest.category === options.category);
-    if (options.capability) records = records.filter(({ manifest }) => manifest.capabilities.includes(options.capability));
-    if (options.problem) records = records.filter(({ manifest }) => manifest.problems.includes(options.problem));
-    if (options.framework) records = records.filter(({ manifest }) => manifest.frameworks.includes(options.framework));
-    if (options.language) records = records.filter(({ manifest }) => manifest.languages.includes(options.language));
-    if (options.lifecycle) records = records.filter(({ manifest }) => manifest.lifecycle.includes(options.lifecycle));
-    if (options.risk) records = records.filter(({ manifest }) => manifest.risk === options.risk);
-    if (options.target) records = records.filter(({ manifest }) => Object.hasOwn(manifest.adapters, options.target));
-    if (options.execution) records = records.filter(({ manifest }) => manifest.execution.mode === options.execution);
-    for (const { manifest } of records.sort((a, b) => a.manifest.id.localeCompare(b.manifest.id))) {
-      process.stdout.write(`${manifest.slug.padEnd(28)} ${manifest.kind.padEnd(9)} ${manifest.domain}/${manifest.category}\n`);
-      process.stdout.write(`  ${manifest.summary}\n`);
+    const records = applyFilters(loadArtifacts(ROOT), options)
+      .sort((left, right) => left.manifest.id.localeCompare(right.manifest.id));
+    if (options.json) {
+      write(JSON.stringify({ count: records.length, artifacts: records.map(({ manifest }) => listRecord(manifest)) }, null, 2));
+      return;
     }
-    process.stdout.write(`\n${records.length} artifact(s).\n`);
+    for (const { manifest } of records) printListRow(manifest);
+    write(`\n${records.length} artifact(s).`);
+    return;
+  }
+
+  if (command === 'search') {
+    const terms = positional.slice(1).filter((term) => term.length > 0);
+    if (terms.length === 0) throw new Error('search requires at least one term');
+    assertKnownFilters(options);
+    const results = searchRecords(applyFilters(loadArtifacts(ROOT), options), terms);
+    if (options.json) {
+      write(JSON.stringify({
+        terms,
+        count: results.length,
+        results: results.map(({ record, matched }) => ({ ...listRecord(record.manifest), matchedFields: matched }))
+      }, null, 2));
+      return;
+    }
+    for (const { record, matched } of results) printListRow(record.manifest, `  [${matched.join(', ')}]`);
+    write(`\n${results.length} artifact(s) matching ${terms.map((term) => `'${term}'`).join(' and ')}.`);
     return;
   }
 
@@ -225,6 +437,31 @@ async function main() {
     const { manifest, directory, adapters } = resolveArtifact(requireQuery(positional));
     const integrityCatalog = readIntegrityManifest(ROOT);
     const integrity = integrityCatalog.artifacts.find(({ artifactId }) => artifactId === manifest.id);
+    const compatibility = Object.keys(adapters).sort().map((target) => ({
+      target,
+      stability: adapters[target].data.stability || 'stable',
+      scopes: adapters[target].data.scopes,
+      limitations: adapters[target].data.limitations || []
+    }));
+    if (options.json) {
+      write(JSON.stringify({
+        ...listRecord(manifest),
+        description: manifest.description,
+        authors: manifest.authors,
+        integrity: integrity ? integrity.integrityId : null,
+        problems: manifest.problems,
+        capabilities: manifest.capabilities,
+        frameworks: manifest.frameworks,
+        languages: manifest.languages,
+        risk_reason: manifest.risk_reason,
+        operational: manifest.operational,
+        refuses: manifest.refuses,
+        packs: manifest.relationships.packIds,
+        targetCompatibility: compatibility,
+        sourceDirectory: path.relative(ROOT, directory)
+      }, null, 2));
+      return;
+    }
     process.stdout.write(`${manifest.name} ${manifest.version}\n${manifest.id}\n\n${manifest.description}\n\n`);
     process.stdout.write(`Authors of this toolkit artifact: ${manifest.authors.join(', ')}\n`);
     if (integrity) process.stdout.write(`Integrity: ${integrity.integrityId}\n`);
@@ -235,10 +472,9 @@ async function main() {
     process.stdout.write(`Lifecycle: ${manifest.lifecycle.join(', ')}\n`);
     process.stdout.write(`Targets: ${Object.keys(manifest.adapters).join(', ')}\n`);
     process.stdout.write(`Target compatibility:\n`);
-    for (const target of Object.keys(adapters).sort()) {
-      const adapter = adapters[target].data;
-      const limitations = adapter.limitations?.length ? `; limitations: ${adapter.limitations.join(' | ')}` : '';
-      process.stdout.write(`- ${target} (${adapter.stability || 'stable'}; scopes: ${adapter.scopes.join(', ')})${limitations}\n`);
+    for (const entry of compatibility) {
+      const limitations = entry.limitations.length ? `; limitations: ${entry.limitations.join(' | ')}` : '';
+      process.stdout.write(`- ${entry.target} (${entry.stability}; scopes: ${entry.scopes.join(', ')})${limitations}\n`);
     }
     process.stdout.write(`Risk: ${manifest.risk}\n`);
     process.stdout.write(`Risk reason: ${manifest.risk_reason}\n`);
@@ -434,11 +670,37 @@ async function main() {
   if (command === 'remove') {
     const query = requireQuery(positional);
     const placement = { target: options.target, scope: options.scope, cwd: options.cwd, force: options.force };
+    // A dry run reports the dependents instead of refusing over them: the point of it is to show
+    // the whole consequence, including that the real removal would ask first, or refuse outside a
+    // terminal. Every other refusal above it still applies, so a plan it cannot produce is an error.
+    if (options['dry-run']) {
+      const dependents = options.force ? [] : installedDependentsOf(query, placement);
+      const plan = planArtifactRemoval(query, { ...placement, confirmedDependents: true });
+      if (options.json) {
+        write(JSON.stringify({ ...plan, artifact: plan.artifact.id, dependents: dependents.map(({ slug }) => slug) }, null, 2));
+        return;
+      }
+      if (plan.ownershipReleased) {
+        write(`Would release the '${plan.ownershipReleased}' claim on ${plan.artifact.id} in ${plan.configRoot}, removing no files`);
+      } else {
+        write(`Would remove ${plan.artifact.id} from ${plan.configRoot}`);
+      }
+      for (const file of plan.removes) write(`- ${file.action} ${file.path}`);
+      if (plan.settings) write(`- ${plan.settings.action} ${plan.settings.path}`);
+      if (plan.mcpConfig) write(`- ${plan.mcpConfig.action} ${plan.mcpConfig.path}: ${plan.mcpConfig.servers.join(', ')}`);
+      write(`- ${plan.state.action} ${plan.state.path}`);
+      if (plan.notice && plan.notice.action !== 'none') write(`- ${plan.notice.action} ${plan.notice.path}`);
+      if (dependents.length) {
+        write(neededByMessage(slugOf(plan.artifact.id), dependents.map(({ slug }) => slug)));
+      }
+      return;
+    }
     // Removing a prerequisite that installed artifacts require: asked in a terminal (default no);
     // elsewhere the removal refuses unless --force. Suggested and related links never block.
     let confirmedDependents = false;
     const dependents = options.force ? [] : installedDependentsOf(query, placement);
-    if (dependents.length && !interactive()) {
+    const prompting = interactive() && !options.json;
+    if (dependents.length && !prompting) {
       process.stderr.write(`${neededByMessage(slugOf(resolveArtifact(query).manifest.id), dependents.map(({ slug }) => slug))}\n`);
       process.exitCode = 1;
       return;
@@ -451,23 +713,78 @@ async function main() {
       }
     }
     const result = removeArtifact(query, { ...placement, confirmedDependents });
+    if (options.json) {
+      write(JSON.stringify({
+        artifact: result.artifact.id,
+        configRoot: result.configRoot,
+        removed: result.removed,
+        ownershipReleased: result.ownershipReleased ?? null
+      }, null, 2));
+      return;
+    }
     process.stdout.write(`Removed ${result.artifact.id} from ${result.configRoot}\n`);
     return;
   }
 
   if (command === 'remove-pack') {
-    const result = removePack(requireQuery(positional), {
-      target: options.target,
-      scope: options.scope,
-      cwd: options.cwd,
-      force: options.force
-    });
+    const query = requireQuery(positional);
+    const placement = { target: options.target, scope: options.scope, cwd: options.cwd, force: options.force };
+    if (options['dry-run']) {
+      const plan = planPackRemoval(query, placement);
+      if (options.json) {
+        write(JSON.stringify({ ...plan, pack: plan.pack.id }, null, 2));
+        return;
+      }
+      write(`Would remove ${plan.pack.id} for ${plan.target}/${plan.scope}`);
+      for (const member of plan.members) {
+        write(`- ${member.artifact}${member.ownershipReleased ? ' (release claim only)' : ''}`);
+        for (const file of member.removes) write(`  - ${file.action} ${file.path}`);
+        if (member.settings) write(`  - ${member.settings.action} ${member.settings.path}`);
+        if (member.mcpConfig) write(`  - ${member.mcpConfig.action} ${member.mcpConfig.path}: ${member.mcpConfig.servers.join(', ')}`);
+      }
+      for (const root of plan.roots) {
+        write(`- ${root.state.action} ${root.state.path}`);
+        if (root.notice.action !== 'none') write(`- ${root.notice.action} ${root.notice.path}`);
+      }
+      if (plan.dependents.length) write(`Blocked: still needed by ${plan.dependents.join(', ')}. Remove those first, or use --force.`);
+      return;
+    }
+    const result = removePack(query, placement);
+    if (options.json) {
+      write(JSON.stringify({
+        pack: result.pack.id,
+        target: result.target,
+        scope: result.scope,
+        removed: result.removed.map((item) => ({ artifact: item.artifact.id, removed: item.removed }))
+      }, null, 2));
+      return;
+    }
     process.stdout.write(`Removed ${result.pack.id} for ${result.target}/${result.scope}\n`);
+    return;
+  }
+
+  if (command === 'installed') {
+    const result = listInstalled({ target: options.target, scope: options.scope, cwd: options.cwd });
+    if (options.json) {
+      write(JSON.stringify(result, null, 2));
+      return;
+    }
+    for (const install of result.installs) {
+      const owners = install.owners.join(', ');
+      write(`${String(install.slug || install.artifactId).padEnd(28)} ${String(install.kind).padEnd(9)} ${install.version || 'unknown'}  [${owners}]`);
+      write(`  ${install.artifactId}`);
+    }
+    write(`\n${result.installs.length} installed for ${result.target}/${result.scope}.`);
     return;
   }
 
   if (command === 'doctor') {
     const result = doctor({ target: options.target, scope: options.scope, cwd: options.cwd });
+    if (options.json) {
+      write(JSON.stringify(result, null, 2));
+      if (result.findings.length) process.exitCode = 1;
+      return;
+    }
     if (result.configRoots) {
       process.stdout.write(`Install roots:\n`);
       for (const root of result.configRoots) process.stdout.write(`- ${root}\n`);
@@ -510,9 +827,10 @@ async function main() {
   }
 
   if (command === 'validate') {
-    const { artifacts, results, packs, packResults } = validateRepository();
+    const { artifacts, results, packs, packResults, repositoryErrors } = validateRepository();
     const errors = results.flatMap(({ record, errors: found }) => found.map((error) => `${record.manifest.id}: ${error}`));
     errors.push(...packResults.flatMap(({ record, errors: found }) => found.map((error) => `${record.manifest.id}: ${error}`)));
+    errors.push(...repositoryErrors);
     const evaluations = validateBehavioralEvaluations();
     errors.push(...evaluations.errors);
     if (errors.length) throw new Error(errors.join('\n'));
