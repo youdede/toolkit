@@ -506,7 +506,14 @@ test('a lock that is a dangling symbolic link is refused at once (PR38-CODEX8-3)
   assert.equal(lstatSync(lock).isSymbolicLink(), true);
 });
 
-test('a failed multi-file install rolls back every file it had already written', { skip: process.platform === 'win32' }, (context) => {
+// A directory mode does not restrain uid 0, so as root the second payload file lands as well and
+// the partial write this test exists to provoke never happens. Container images and agent sessions
+// commonly run as root; the runners this suite gates on do not, so the case still runs in CI.
+const ROOT_USER = typeof process.getuid === 'function' && process.getuid() === 0;
+
+test('a failed multi-file install rolls back every file it had already written', {
+  skip: process.platform === 'win32' || (ROOT_USER && 'an unwritable directory cannot block uid 0')
+}, (context) => {
   const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-install-rollback-'));
   context.after(() => rmSync(directory, { recursive: true, force: true }));
   const skillRoot = path.join(directory, '.claude', 'skills', 'debug-systematically');
