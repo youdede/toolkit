@@ -4,7 +4,7 @@
 
 A procedure an agent loads when a task matches. Each states the evidence it needs, the scope it will not widen into, and what it refuses to do.
 
-167 of them. Install one with `npx @youdede/toolkit add <slug> --target <runtime> --scope project`, or read what it refuses first with `npx @youdede/toolkit info <slug>`.
+170 of them. Install one with `npx @youdede/toolkit add <slug> --target <runtime> --scope project`, or read what it refuses first with `npx @youdede/toolkit info <slug>`.
 
 
 ## data
@@ -207,6 +207,9 @@ A procedure an agent loads when a task matches. Each states the evidence it need
 | `load-architecture-decisions` | Load every applicable architecture decision and report conflicts or missing context. | low | all six |
 | `write-learning-postmortem` | Write a blameless incident record that ties impact, timeline, contributing conditions, and actions to evidence. | medium | all six |
 | `write-session-handoff` | Capture verified working state so another agent can resume without reconstruction. | low | all six |
+| `assess-story-narrative-provenance` | Score a full English story with a narrative classifier: human-like, AI-like, or uncertain. | medium | all six |
+| `audit-published-content-defects` | Find visible markdown, placeholders, and broken text on published pages, grouped by kind. | low | all six |
+| `edit-ai-draft-for-human-voice` | Revise any AI-assisted text, from a paragraph to a story, toward a human voice without adding facts. | low | all six |
 | `assess-learning-gaps` | Run an adaptive assessment and turn evidenced gaps into a learning plan. | low | all six |
 | `build-progressive-learning-exercises` | Build sequenced learning exercises with explicit objectives, prerequisites, variants, and validation. | low | all six |
 | `teach-with-retrieval-practice` | Teach toward a real mission using short lessons, retrieval, feedback, and records. | low | all six |

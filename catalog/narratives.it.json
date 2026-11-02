@@ -1,5 +1,5 @@
 {
-  "sourceHash": "74339ca3cd137648bd6bd11c90458d22d82357c8dd9d99c58b3cc6632611ac31",
+  "sourceHash": "03f986913bee1f99eb8915157b7d2291a58c0ce0cf1ab9334f8cd5af1d651924",
   "narratives": {
     "abuse-resistance-analyst": {
       "summary": "Analizza una singola operazione per individuare costi moltiplicati da input controllati da un attaccante, richieste a cascata ed elusione delle quote.",
@@ -3447,6 +3447,44 @@
         "Non fabbrica requisiti, accordi tra stakeholder, date o garanzie di sistema.",
         "Non sostituisce le decisioni di progettazione con aggettivi vaghi come scalabile o robusto.",
         "Non avvia l'implementazione né presenta un ambito irrisolto come approvato."
+      ]
+    },
+    "edit-ai-draft-for-human-voice": {
+      "summary": "Rivede qualsiasi testo scritto con l'AI, da un paragrafo a un racconto, verso una voce umana senza aggiungere fatti.",
+      "description": "Rivede un testo scritto con l'aiuto dell'AI, da un singolo paragrafo a un racconto completo, un saggio, una mail o un post, in inglese o in italiano, perché suoni meno come la prosa predefinita di un modello senza aggiungere alcun fatto: cambia prima le scelte strutturali e poi lo stile, e verifica la modifica con una misurazione dei segnali inclusa e una rubrica strutturale a opzioni chiuse. Da usare quando chi scrive possiede la bozza e vuole che suoni come una persona, non per nascondere una dichiarazione d'uso dell'AI obbligatoria o per superare un rilevatore.",
+      "purposes": [
+        "Misura segnali di superficie e indicatori narrativi in un testo o in una pagina web, confronta una revisione con la bozza, convalida una rubrica strutturale e scrive report JSON o HTML."
+      ],
+      "refuses": [
+        "Non promette né verifica che un testo superi un rilevatore di AI, e non definisce mai il risultato non rilevabile.",
+        "Non riscrive un testo per nascondere l'uso dell'AI quando l'autore dichiara, o il contesto mostra, che la dichiarazione è obbligatoria.",
+        "Non inventa nomi, luoghi, opere, citazioni, numeri o aneddoti per far sembrare specifica una bozza.",
+        "Non cambia trama, affermazioni o formulazioni obbligatorie senza l'autorizzazione dell'autore."
+      ]
+    },
+    "assess-story-narrative-provenance": {
+      "summary": "Valuta un racconto completo in inglese con un classificatore narrativo: umano, AI o incerto.",
+      "description": "Misura se un racconto breve completo in inglese, da un file o da una pagina web pubblica, sembra scritto da una persona o generato dall'AI a livello di scelte narrative, usando un'annotazione narrativa a 304 caratteristiche e un classificatore addestrato su narrativa umana e generata dall'AI, e riporta la probabilità con la sua incertezza e i limiti di validazione in JSON o in un report HTML autonomo. Da usare quando chi scrive vuole sapere come risultano le scelte narrative di un racconto, non per dimostrare chi ha scritto un testo né per accusare qualcuno.",
+      "purposes": [
+        "Legge un racconto da un file o da una pagina web, lo annota con TypeSafe Jev o valuta annotazioni fornite, e riporta P(umano) e verdetto del classificatore in JSON o HTML."
+      ],
+      "refuses": [
+        "Non dimostra né esclude che una persona abbia usato l'AI, e non costituisce prova per un'accusa accademica, contrattuale o lavorativa.",
+        "Non valuta testi privati che l'utente non ha diritto di analizzare, e il punteggio di una pagina pubblica resta una misura del testo, non un'affermazione sul suo autore.",
+        "Non definisce mai un racconto non rilevabile e non promette che superi un altro rilevatore.",
+        "Non riporta una singola annotazione e non trasforma un risultato incerto in un verdetto."
+      ]
+    },
+    "audit-published-content-defects": {
+      "summary": "Trova markdown visibile, segnaposto e testo rotto nelle pagine pubblicate, raggruppati per tipo.",
+      "description": "Trova i difetti che un lettore vede nelle pagine web pubblicate, come markdown rimasto visibile, segnaposto non sostituiti, entità HTML doppie, paragrafi tagliati dopo un'abbreviazione, paragrafi ripetuti e passaggi non tradotti, su una pagina, una sitemap o HTML salvato, e li riporta raggruppati per tipo con esempi in JSON, Markdown o HTML. Da usare quando contenuti generati, da template o tradotti vanno controllati prima che se ne accorgano i lettori, non per giudicare lo stile o riscrivere le pagine.",
+      "purposes": [
+        "Scarica una pagina, una sitemap o HTML salvato, trova i difetti di resa visibili e scrive report in JSON, Markdown o HTML."
+      ],
+      "refuses": [
+        "Non giudica la qualità della scrittura, il tono o se un testo è stato scritto con l'AI.",
+        "Non modifica pagine, contenuti o codice; riporta ciò che trova.",
+        "Non aggira protezioni anti-bot o limiti di frequenza, e non controlla siti che l'utente non può autorizzare."
       ]
     }
   }

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "opencode",
+  "scopes": [
+    "project",
+    "user"
+  ],
+  "files": [
+    {
+      "from": "SKILL.md",
+      "to": "skills/{slug}/SKILL.md"
+    },
+    {
+      "from": "scripts",
+      "to": "skills/{slug}/scripts"
+    }
+  ],
+  "stability": "stable",
+  "limitations": []
+}

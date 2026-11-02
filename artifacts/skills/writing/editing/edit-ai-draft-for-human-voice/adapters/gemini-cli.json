@@ -1,0 +1,27 @@
+{
+  "$schema": "../../../../../../schema/adapter.schema.json",
+  "schemaVersion": 1,
+  "target": "gemini-cli",
+  "scopes": [
+    "project",
+    "user"
+  ],
+  "files": [
+    {
+      "from": "SKILL.md",
+      "to": "skills/{slug}/SKILL.md"
+    },
+    {
+      "from": "scripts",
+      "to": "skills/{slug}/scripts"
+    },
+    {
+      "from": "references",
+      "to": "skills/{slug}/references"
+    }
+  ],
+  "stability": "stable",
+  "limitations": [
+    "Google stopped serving Gemini CLI on 2026-06-18 for free use and Google AI Pro and Ultra; it remains available with Gemini Code Assist Standard or Enterprise licenses and paid API keys. Antigravity CLI is not a target of this adapter."
+  ]
+}

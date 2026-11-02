@@ -1,23 +1,23 @@
 {
   "schemaVersion": 2,
   "counts": {
-    "total": 316,
-    "skills": 167,
+    "total": 319,
+    "skills": 170,
     "hooks": 64,
     "subagents": 62
   },
   "relationshipGraph": {
     "counts": {
-      "artifactNodes": 316,
+      "artifactNodes": 319,
       "directedEdges": {
-        "composesWith": 382,
+        "composesWith": 386,
         "conflictsWith": 0,
         "supersedes": 0,
         "prerequisites": 31,
         "suggests": 15,
         "packIds": 80
       },
-      "compositionEdges": 191,
+      "compositionEdges": 193,
       "conflictEdges": 0,
       "crossKindCompositionEdges": 112,
       "orphanArtifacts": 155
@@ -190,7 +190,7 @@
     "linkCounts": {
       "required": 31,
       "suggested": 15,
-      "related": 191,
+      "related": 193,
       "conflicts": 0,
       "supersedes": 0
     }
@@ -2656,6 +2656,32 @@
     {
       "from": "skill/writing/decision-support/design-stakeholder-questionnaire",
       "to": "skill/writing/documentation/document-project-vision",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/writing/editing/assess-story-narrative-provenance",
+      "to": "skill/writing/editing/edit-ai-draft-for-human-voice",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/writing/editing/audit-published-content-defects",
+      "to": "skill/writing/editing/edit-ai-draft-for-human-voice",
       "kind": "related",
       "targets": [
         "claude-code",
@@ -32536,6 +32562,411 @@
         {
           "target": "opencode",
           "command": "npx @youdede/toolkit add write-session-handoff --target opencode --scope project"
+        }
+      ]
+    },
+    {
+      "id": "skill/writing/editing/assess-story-narrative-provenance",
+      "slug": "assess-story-narrative-provenance",
+      "name": "Assess Story Narrative Provenance",
+      "version": "1.0.0",
+      "kind": "skill",
+      "summary": "Score a full English story with a narrative classifier: human-like, AI-like, or uncertain.",
+      "description": "Measure whether a full English short story, from a file or a public web page, reads as human-written or AI-generated at the level of narrative choices, using a 304-feature narrative annotation and a classifier trained on human and AI fiction, and report the probability with its uncertainty and validation limits as JSON or a self-contained HTML report. Use when a writer wants to know how a story's narrative choices score, not to prove who wrote a text or to accuse anyone.",
+      "domain": "writing",
+      "category": "editing",
+      "capabilities": [
+        "verify"
+      ],
+      "problems": [
+        "copy-editing"
+      ],
+      "frameworks": [
+        "agnostic"
+      ],
+      "languages": [
+        "agnostic"
+      ],
+      "lifecycle": [
+        "review"
+      ],
+      "risk": "medium",
+      "risk_reason": "With the user's consent the skill sends the story text to the TypeSafe API and may fetch a public web page; a misread score could be used to accuse a writer, which the skill refuses and qualifies with validation limits.",
+      "license": "MIT",
+      "execution": {
+        "mode": "hybrid",
+        "entrypoints": [
+          {
+            "path": "scripts/score-story-provenance.mjs",
+            "runtime": "node",
+            "purpose": "Read a story from a file or web page, annotate it with TypeSafe Jev or score supplied annotations, and report the classifier's P(human) and verdict as JSON or HTML.",
+            "sideEffects": "external"
+          }
+        ]
+      },
+      "relationships": {
+        "composesWith": [
+          "skill/writing/editing/edit-ai-draft-for-human-voice"
+        ],
+        "conflictsWith": [],
+        "supersedes": [],
+        "prerequisites": [],
+        "suggests": [],
+        "linkReasons": {},
+        "packIds": []
+      },
+      "operational": {
+        "behavior": "advisory",
+        "failurePolicy": "stop-and-report",
+        "latencyClass": "bounded",
+        "latency_reason": "Each TypeSafe run is ten parallel requests of about one second; agent annotation takes ten model calls per run. Input is capped at 512 KiB.",
+        "dataRetention": "runtime-managed"
+      },
+      "refuses": [
+        "It does not prove or disprove that a person used AI, and it is not evidence for an academic, contractual, or employment accusation.",
+        "It does not score private text the user has no right to analyse, and a public page's score is still a measurement of the text, not a claim about its author.",
+        "It does not call any story undetectable or promise that it will pass another detector.",
+        "It does not report a single annotation, or turn an uncertain result into a verdict."
+      ],
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        },
+        "codex": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        },
+        "cursor": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        },
+        "gemini-cli": {
+          "stability": "stable",
+          "limitations": [
+            "Google stopped serving Gemini CLI on 2026-06-18 for free use and Google AI Pro and Ultra; it remains available with Gemini Code Assist Standard or Enterprise licenses and paid API keys. Antigravity CLI is not a target of this adapter."
+          ],
+          "bindings": []
+        },
+        "github-copilot": {
+          "stability": "stable",
+          "limitations": [
+            "GitHub documents Agent Skills for Copilot cloud agent, Copilot code review, the Copilot CLI, the GitHub Copilot app, and agent mode in Visual Studio Code and JetBrains IDEs."
+          ],
+          "bindings": []
+        },
+        "opencode": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        }
+      },
+      "install": [
+        {
+          "target": "claude-code",
+          "command": "npx @youdede/toolkit add assess-story-narrative-provenance --target claude-code --scope project"
+        },
+        {
+          "target": "codex",
+          "command": "npx @youdede/toolkit add assess-story-narrative-provenance --target codex --scope project"
+        },
+        {
+          "target": "cursor",
+          "command": "npx @youdede/toolkit add assess-story-narrative-provenance --target cursor --scope project"
+        },
+        {
+          "target": "gemini-cli",
+          "command": "npx @youdede/toolkit add assess-story-narrative-provenance --target gemini-cli --scope project"
+        },
+        {
+          "target": "github-copilot",
+          "command": "npx @youdede/toolkit add assess-story-narrative-provenance --target github-copilot --scope project"
+        },
+        {
+          "target": "opencode",
+          "command": "npx @youdede/toolkit add assess-story-narrative-provenance --target opencode --scope project"
+        }
+      ]
+    },
+    {
+      "id": "skill/writing/editing/audit-published-content-defects",
+      "slug": "audit-published-content-defects",
+      "name": "Audit Published Content Defects",
+      "version": "1.0.0",
+      "kind": "skill",
+      "summary": "Find visible markdown, placeholders, and broken text on published pages, grouped by kind.",
+      "description": "Find the defects a reader can see on published web pages, such as markdown left visible, unresolved placeholders, double-escaped entities, paragraphs cut after an abbreviation, repeated paragraphs, and passages left untranslated, across one page, a sitemap, or saved HTML, and report them grouped by kind with examples as JSON, Markdown, or HTML. Use when generated, templated, or translated content needs a check before readers notice, not to judge style or rewrite pages.",
+      "domain": "writing",
+      "category": "editing",
+      "capabilities": [
+        "verify"
+      ],
+      "problems": [
+        "copy-editing"
+      ],
+      "frameworks": [
+        "agnostic"
+      ],
+      "languages": [
+        "agnostic"
+      ],
+      "lifecycle": [
+        "review",
+        "operations"
+      ],
+      "risk": "low",
+      "risk_reason": "This skill reads public pages or saved HTML one at a time with a pause and a named user agent, stops when a site blocks it, and writes only a local report.",
+      "license": "MIT",
+      "execution": {
+        "mode": "hybrid",
+        "entrypoints": [
+          {
+            "path": "scripts/audit-content-defects.mjs",
+            "runtime": "node",
+            "purpose": "Fetch a page, a sitemap, or saved HTML, find visible rendering defects, and write JSON, Markdown, or HTML reports.",
+            "sideEffects": "external"
+          }
+        ]
+      },
+      "relationships": {
+        "composesWith": [
+          "skill/writing/editing/edit-ai-draft-for-human-voice"
+        ],
+        "conflictsWith": [],
+        "supersedes": [],
+        "prerequisites": [],
+        "suggests": [],
+        "linkReasons": {},
+        "packIds": []
+      },
+      "operational": {
+        "behavior": "advisory",
+        "failurePolicy": "stop-and-report",
+        "latencyClass": "bounded",
+        "latency_reason": "The helper fetches pages sequentially with a fixed pause, caps a run at 5,000 pages, and stops after three bot checks in a row.",
+        "dataRetention": "runtime-managed"
+      },
+      "refuses": [
+        "It does not judge writing quality, tone, or whether a text was written with AI.",
+        "It does not edit pages, content, or code; it reports what it finds.",
+        "It does not evade bot protection or rate limits, or audit sites the user cannot authorize."
+      ],
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        },
+        "codex": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        },
+        "cursor": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        },
+        "gemini-cli": {
+          "stability": "stable",
+          "limitations": [
+            "Google stopped serving Gemini CLI on 2026-06-18 for free use and Google AI Pro and Ultra; it remains available with Gemini Code Assist Standard or Enterprise licenses and paid API keys. Antigravity CLI is not a target of this adapter."
+          ],
+          "bindings": []
+        },
+        "github-copilot": {
+          "stability": "stable",
+          "limitations": [
+            "GitHub documents Agent Skills for Copilot cloud agent, Copilot code review, the Copilot CLI, the GitHub Copilot app, and agent mode in Visual Studio Code and JetBrains IDEs."
+          ],
+          "bindings": []
+        },
+        "opencode": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        }
+      },
+      "install": [
+        {
+          "target": "claude-code",
+          "command": "npx @youdede/toolkit add audit-published-content-defects --target claude-code --scope project"
+        },
+        {
+          "target": "codex",
+          "command": "npx @youdede/toolkit add audit-published-content-defects --target codex --scope project"
+        },
+        {
+          "target": "cursor",
+          "command": "npx @youdede/toolkit add audit-published-content-defects --target cursor --scope project"
+        },
+        {
+          "target": "gemini-cli",
+          "command": "npx @youdede/toolkit add audit-published-content-defects --target gemini-cli --scope project"
+        },
+        {
+          "target": "github-copilot",
+          "command": "npx @youdede/toolkit add audit-published-content-defects --target github-copilot --scope project"
+        },
+        {
+          "target": "opencode",
+          "command": "npx @youdede/toolkit add audit-published-content-defects --target opencode --scope project"
+        }
+      ]
+    },
+    {
+      "id": "skill/writing/editing/edit-ai-draft-for-human-voice",
+      "slug": "edit-ai-draft-for-human-voice",
+      "name": "Edit AI Draft For Human Voice",
+      "version": "1.0.0",
+      "kind": "skill",
+      "summary": "Revise any AI-assisted text, from a paragraph to a story, toward a human voice without adding facts.",
+      "description": "Revise an AI-assisted text, from a single paragraph to a full story, essay, email, or post, in English or Italian, so it reads less like default model prose without adding any fact, changing structural choices first and surface style second, then verify the change with a bundled signal measurement and a closed-option structural rubric. Use when a writer owns a draft and wants it to sound like a person, not to conceal required AI disclosure or pass a detector.",
+      "domain": "writing",
+      "category": "editing",
+      "capabilities": [
+        "author",
+        "verify"
+      ],
+      "problems": [
+        "copy-editing"
+      ],
+      "frameworks": [
+        "agnostic"
+      ],
+      "languages": [
+        "agnostic"
+      ],
+      "lifecycle": [
+        "implementation",
+        "review"
+      ],
+      "risk": "low",
+      "risk_reason": "This skill edits a draft the author supplies and runs a local helper that reads given files and, on request, fetches one public web page; it does not publish text or claim detector results.",
+      "license": "MIT",
+      "execution": {
+        "mode": "hybrid",
+        "entrypoints": [
+          {
+            "path": "scripts/measure-voice-signals.mjs",
+            "runtime": "node",
+            "purpose": "Measure surface and narrative-proxy signals in a text or web page, compare a revision with its draft, validate a structural rubric, and write JSON or HTML reports.",
+            "sideEffects": "external"
+          }
+        ]
+      },
+      "relationships": {
+        "composesWith": [
+          "skill/writing/editing/assess-story-narrative-provenance",
+          "skill/writing/editing/audit-published-content-defects"
+        ],
+        "conflictsWith": [],
+        "supersedes": [],
+        "prerequisites": [],
+        "suggests": [],
+        "linkReasons": {},
+        "packIds": []
+      },
+      "operational": {
+        "behavior": "advisory",
+        "failurePolicy": "stop-and-report",
+        "latencyClass": "bounded",
+        "latency_reason": "The skill runs a bounded local measurement before and after a revision in sequential steps, with input capped at 512 KiB.",
+        "dataRetention": "runtime-managed"
+      },
+      "refuses": [
+        "It does not promise or test that a text will pass an AI detector, and it never calls the result undetectable.",
+        "It does not rewrite text to conceal AI use where the author states, or the context shows, that disclosure is required.",
+        "It does not invent names, places, works, quotes, numbers, or anecdotes to make a draft look specific.",
+        "It does not change plot, claims, or required wording without the author's authorization."
+      ],
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ],
+      "targetCompatibility": {
+        "claude-code": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        },
+        "codex": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        },
+        "cursor": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        },
+        "gemini-cli": {
+          "stability": "stable",
+          "limitations": [
+            "Google stopped serving Gemini CLI on 2026-06-18 for free use and Google AI Pro and Ultra; it remains available with Gemini Code Assist Standard or Enterprise licenses and paid API keys. Antigravity CLI is not a target of this adapter."
+          ],
+          "bindings": []
+        },
+        "github-copilot": {
+          "stability": "stable",
+          "limitations": [
+            "GitHub documents Agent Skills for Copilot cloud agent, Copilot code review, the Copilot CLI, the GitHub Copilot app, and agent mode in Visual Studio Code and JetBrains IDEs."
+          ],
+          "bindings": []
+        },
+        "opencode": {
+          "stability": "stable",
+          "limitations": [],
+          "bindings": []
+        }
+      },
+      "install": [
+        {
+          "target": "claude-code",
+          "command": "npx @youdede/toolkit add edit-ai-draft-for-human-voice --target claude-code --scope project"
+        },
+        {
+          "target": "codex",
+          "command": "npx @youdede/toolkit add edit-ai-draft-for-human-voice --target codex --scope project"
+        },
+        {
+          "target": "cursor",
+          "command": "npx @youdede/toolkit add edit-ai-draft-for-human-voice --target cursor --scope project"
+        },
+        {
+          "target": "gemini-cli",
+          "command": "npx @youdede/toolkit add edit-ai-draft-for-human-voice --target gemini-cli --scope project"
+        },
+        {
+          "target": "github-copilot",
+          "command": "npx @youdede/toolkit add edit-ai-draft-for-human-voice --target github-copilot --scope project"
+        },
+        {
+          "target": "opencode",
+          "command": "npx @youdede/toolkit add edit-ai-draft-for-human-voice --target opencode --scope project"
         }
       ]
     },

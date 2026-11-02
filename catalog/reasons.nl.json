@@ -1263,6 +1263,18 @@
     "procedural-documentation-tester": {
       "risk": "Deze alleen-lezen specialist doorloopt een procedure op papier en controleert voorwaarden, toestand, waarneembare uitkomsten, nieuwe pogingen en herstelpaden; de bevindingen kunnen een beslissing beïnvloeden, maar de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
       "latency": "De specialist doorloopt een procedure op papier en controleert voorwaarden, toestand, waarneembare uitkomsten, nieuwe pogingen en herstelpaden, via opeenvolgende stappen voor bewijsgaring en verificatie."
+    },
+    "edit-ai-draft-for-human-voice": {
+      "risk": "Deze skill bewerkt een concept dat de auteur aanlevert en draait een lokale helper die aangeleverde bestanden leest en op verzoek één openbare webpagina ophaalt; hij publiceert geen tekst en claimt geen detectorresultaten.",
+      "latency": "De skill voert voor en na een herziening een begrensde lokale meting uit in opeenvolgende stappen, met invoer van maximaal 512 KiB."
+    },
+    "assess-story-narrative-provenance": {
+      "risk": "Met toestemming van de gebruiker stuurt de skill de tekst van het verhaal naar de TypeSafe-API en kan het een openbare webpagina ophalen; een verkeerd gelezen score kan worden gebruikt om een schrijver te beschuldigen, wat de skill weigert en met validatiegrenzen afbakent.",
+      "latency": "Elke TypeSafe-run bestaat uit tien parallelle verzoeken van ongeveer een seconde; annotatie door de agent kost tien modelaanroepen per run. De invoer is beperkt tot 512 KiB."
+    },
+    "audit-published-content-defects": {
+      "risk": "Deze skill leest openbare pagina's of opgeslagen HTML één voor één, met een pauze en een user agent die zichzelf noemt, stopt wanneer een site blokkeert en schrijft alleen een lokaal rapport.",
+      "latency": "Het script haalt pagina's na elkaar op met een vaste pauze, beperkt een run tot 5.000 pagina's en stopt na drie botcontroles op rij."
     }
   },
   "links": {
@@ -1395,5 +1407,5 @@
       "mcp-egress-guard": "om de argumenten van de MCP-tools van deze server te toetsen aan het opgegeven uitgaande verkeer"
     }
   },
-  "sourceHash": "cca0de90172a1d81a4a4a58555186d81e339451e557fa2d0ba51d4156f00445c"
+  "sourceHash": "e91e1dacb4ed46e6d8a7337b059c2b17d0ab787429cb02a9a943a1dfc39f7cca"
 }

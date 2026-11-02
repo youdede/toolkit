@@ -1263,6 +1263,18 @@
     "procedural-documentation-tester": {
       "risk": "Questo specialista di sola lettura segue staticamente una procedura per prerequisiti, stato, risultati osservabili, nuovi tentativi e rami di ripristino; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
       "latency": "Lo specialista segue staticamente una procedura per prerequisiti, stato, risultati osservabili, nuovi tentativi e rami di ripristino, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+    },
+    "edit-ai-draft-for-human-voice": {
+      "risk": "Questa skill modifica una bozza fornita dall'autore ed esegue un helper locale che legge i file ricevuti e, su richiesta, scarica una pagina web pubblica; non pubblica testi e non dichiara risultati di rilevatori.",
+      "latency": "La skill esegue una misurazione locale limitata prima e dopo una revisione, in passaggi successivi, con un input massimo di 512 KiB."
+    },
+    "assess-story-narrative-provenance": {
+      "risk": "Con il consenso dell'utente la skill invia il testo del racconto all'API di TypeSafe e può scaricare una pagina web pubblica; un punteggio frainteso potrebbe servire ad accusare chi scrive, cosa che la skill rifiuta e circoscrive con i limiti di validazione.",
+      "latency": "Ogni esecuzione con TypeSafe consiste in dieci richieste parallele di circa un secondo; l'annotazione con l'agente richiede dieci chiamate al modello per esecuzione. L'input massimo è di 512 KiB."
+    },
+    "audit-published-content-defects": {
+      "risk": "La skill legge pagine pubbliche o HTML salvato una alla volta, con una pausa e uno user agent che la identifica, si ferma quando un sito la blocca e scrive solo un report locale.",
+      "latency": "Lo script scarica le pagine in sequenza con una pausa fissa, limita una esecuzione a 5.000 pagine e si ferma dopo tre controlli anti-bot consecutivi."
     }
   },
   "links": {
@@ -1395,5 +1407,5 @@
       "mcp-egress-guard": "per confrontare gli argomenti degli strumenti MCP di questo server con la sua uscita dichiarata"
     }
   },
-  "sourceHash": "cca0de90172a1d81a4a4a58555186d81e339451e557fa2d0ba51d4156f00445c"
+  "sourceHash": "e91e1dacb4ed46e6d8a7337b059c2b17d0ab787429cb02a9a943a1dfc39f7cca"
 }

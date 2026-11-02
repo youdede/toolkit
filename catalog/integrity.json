@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "algorithm": "sha256",
   "claim": "Checksums bind published bytes to a reviewed release; they do not prove authorship, originality, license compliance, endorsement, or control downstream copying.",
-  "rootDigest": "0a733dc2cd42045da7ca34e1a3049450c0cfbb95db8bc013f05be8b5ffdb1180",
+  "rootDigest": "f525ef52caa89c8c033504e7f0f4c62a349d96ba0a8778831191ce470ef10eeb",
   "artifacts": [
     {
       "artifactId": "command/development/agent-tooling/audit-repository-instructions",
@@ -13897,6 +13897,227 @@
           "path": "artifacts/skills/writing/documentation/write-session-handoff/SKILL.md",
           "bytes": 4504,
           "sha256": "d256881a70400df737c384dc0cc878ba8decbe03eb706d1e4bd12d8e34549e41"
+        }
+      ]
+    },
+    {
+      "artifactId": "skill/writing/editing/assess-story-narrative-provenance",
+      "version": "1.0.0",
+      "integrityId": "urn:youdede:artifact:sha256:d7ecfff7d4213eb47ba6453fed52c0b71d14c06b483b485ffa8bea618a6564f3",
+      "digest": "d7ecfff7d4213eb47ba6453fed52c0b71d14c06b483b485ffa8bea618a6564f3",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/adapters/claude-code.json",
+          "bytes": 278,
+          "sha256": "7ca2a235ecda8643b7676c90a61433a92c18af0c4cefbcda0f2345589e36ee1a"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/adapters/codex.json",
+          "bytes": 459,
+          "sha256": "f8040ca927dc4d108f03b4a696e8f26ad6a0e31302716ded757c08112066c2f4"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/adapters/cursor.json",
+          "bytes": 434,
+          "sha256": "7ea6d6b6fac93382d2b73f7c7ab6ef999ed49b61210a23de58117761ba6b7696"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/adapters/gemini-cli.json",
+          "bytes": 682,
+          "sha256": "3e22a7601d50dd5c4127180fee4a60c8f048b8612262e2235cf87cf9dc6d025c"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/adapters/github-copilot.json",
+          "bytes": 625,
+          "sha256": "ec35d575c79807135a3f07f64f04553929b751f5907b85fa43ccc9f721b025ae"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/adapters/opencode.json",
+          "bytes": 436,
+          "sha256": "7bce7a453a9cfe6414b2e7e0b4f66231b4dd2902cb48ecb8d64966a915fd66c3"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/agents/openai.yaml",
+          "bytes": 265,
+          "sha256": "9ab6d5efefbedc0bf97cd5dfaf7f782ed1320b8ee07033ea8046e32094dd744e"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/artifact.json",
+          "bytes": 3151,
+          "sha256": "fb9328a976279fb13a927faa5715c9a200cc1690d83081976414f99be182baa5"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/data/narrative-classifier-license.txt",
+          "bytes": 1070,
+          "sha256": "4ae015c1203e464ad613c6f35faefa82c0703d9ef538871662d6256511023229"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/data/narrative-classifier.json",
+          "bytes": 1244992,
+          "sha256": "b25eecbaa98a7d2afd835f83f4fa5e444dad6ad8f8a1daa5fb4228d6b0b17187"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/data/narrative-features.json",
+          "bytes": 104559,
+          "sha256": "d5d03aed9e38185c32146dc6bb01275868ff8904309eda5afd13f37f44af5cad"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/evaluations/behavioral.json",
+          "bytes": 5033,
+          "sha256": "6ad4703833107b942f5d44063d5b0ce5d7cd71c5614f3bc61772fa2a889183e4"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/scripts/score-story-provenance.mjs",
+          "bytes": 38703,
+          "sha256": "2785e0ea4309fcbd1bc2052a3748ecceaadcb132ced7da497f2e50862163b30e"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/assess-story-narrative-provenance/SKILL.md",
+          "bytes": 10118,
+          "sha256": "440426735a31cccac0bb4605afbc3db04afdd037198bb29e3efcc3f96428c44c"
+        }
+      ]
+    },
+    {
+      "artifactId": "skill/writing/editing/audit-published-content-defects",
+      "version": "1.0.0",
+      "integrityId": "urn:youdede:artifact:sha256:9f0e7cc32a7daadaaffdb3099e460c5465fb47c02e14998a740acfd6bd2af6c4",
+      "digest": "9f0e7cc32a7daadaaffdb3099e460c5465fb47c02e14998a740acfd6bd2af6c4",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/skills/writing/editing/audit-published-content-defects/adapters/claude-code.json",
+          "bytes": 236,
+          "sha256": "a962b905732024526576f9a7844e14d9b5fe62fe3f7c2700d50ea9984687074f"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/audit-published-content-defects/adapters/codex.json",
+          "bytes": 391,
+          "sha256": "db18c55feeab909c3308e1e4e3fc1b4295ce837082e62f54919226d0946af8c8"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/audit-published-content-defects/adapters/cursor.json",
+          "bytes": 366,
+          "sha256": "74716f780e7fca3af1af0947a291a330ce2296335f67e19fcced6057ade0b5ed"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/audit-published-content-defects/adapters/gemini-cli.json",
+          "bytes": 614,
+          "sha256": "f32e256566e0cdea2382facc30e1a17b5b72ed72fc07bf37f853ffdb17ba4b24"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/audit-published-content-defects/adapters/github-copilot.json",
+          "bytes": 557,
+          "sha256": "95e59838402f256e8f2e4b68d0985240290668ec145af00090dcf6364484948e"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/audit-published-content-defects/adapters/opencode.json",
+          "bytes": 368,
+          "sha256": "909ce59cb929b5febd91adb374654d98355659782d9811b89623ece4d7f9a45a"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/audit-published-content-defects/agents/openai.yaml",
+          "bytes": 279,
+          "sha256": "78649ff3938519e4aa79eb2b21107e6db839a37413dca20384119f0d62bb16c9"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/audit-published-content-defects/artifact.json",
+          "bytes": 2802,
+          "sha256": "53d4d820b5d07f15e3e5a4f75b9791564d7662330cf9e417379beaacc675f881"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/audit-published-content-defects/evaluations/behavioral.json",
+          "bytes": 4299,
+          "sha256": "02d323fdc6e38b5f402f58ad4e69f6e47d8082cdda117c2ded7172b7c31d3b4b"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/audit-published-content-defects/scripts/audit-content-defects.mjs",
+          "bytes": 19173,
+          "sha256": "b41821d1641581093427d46285e8d424de3670a5b0fde73bd25f41a9bc011949"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/audit-published-content-defects/SKILL.md",
+          "bytes": 7170,
+          "sha256": "ed6ea0e15b46c6312c46d466ffca5077b2c37d060c82efaf63f7dcc056b23b5e"
+        }
+      ]
+    },
+    {
+      "artifactId": "skill/writing/editing/edit-ai-draft-for-human-voice",
+      "version": "1.0.0",
+      "integrityId": "urn:youdede:artifact:sha256:f1e56eb2b512248c38cf732acd0c7936473b1818989cc7b3e632d9d39075e863",
+      "digest": "f1e56eb2b512248c38cf732acd0c7936473b1818989cc7b3e632d9d39075e863",
+      "license": "MIT",
+      "authors": [
+        "Youdede"
+      ],
+      "files": [
+        {
+          "path": "artifacts/skills/writing/editing/edit-ai-draft-for-human-voice/adapters/claude-code.json",
+          "bytes": 290,
+          "sha256": "a314b67bdcd678a414e7562e6c80ca9c647479677579f215faf82d3c43a2442c"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/edit-ai-draft-for-human-voice/adapters/codex.json",
+          "bytes": 471,
+          "sha256": "e59eb5376770b4d580081a5a5fbc69700f3a7a89a2ff31f4bf8532ba06c9a851"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/edit-ai-draft-for-human-voice/adapters/cursor.json",
+          "bytes": 446,
+          "sha256": "bbd5574fd0ad0d740606ff428b85eafc9a0734294553e8344c5d67faa978a4f7"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/edit-ai-draft-for-human-voice/adapters/gemini-cli.json",
+          "bytes": 694,
+          "sha256": "268f8d5e628b569679ab887663b20eaffa4f7f76badd1ce2a40791bb6caad21f"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/edit-ai-draft-for-human-voice/adapters/github-copilot.json",
+          "bytes": 637,
+          "sha256": "a0463ccded46db9b3ba3f5be90952c072753a0443f03c5a4d6c3eb799840b0f4"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/edit-ai-draft-for-human-voice/adapters/opencode.json",
+          "bytes": 448,
+          "sha256": "737a0ec6ec2994554036bc2d1746e407bd9723e6fdbb14229f4cd43f1dbf3b66"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/edit-ai-draft-for-human-voice/agents/openai.yaml",
+          "bytes": 271,
+          "sha256": "90781bf90676cb10a5f590fccd70deefe36066487ab2de2d82794ad24c4864e3"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/edit-ai-draft-for-human-voice/artifact.json",
+          "bytes": 3147,
+          "sha256": "07d2697e43868341fc4ba7da6ddb28bcba2b0297da104d9b2308dcfef2d97e8c"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/edit-ai-draft-for-human-voice/evaluations/behavioral.json",
+          "bytes": 5783,
+          "sha256": "5f9c7ac3613787d950d3f1e85bfc1059272573a32d4072bbab9c5c414693e06f"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/edit-ai-draft-for-human-voice/references/review-checks.md",
+          "bytes": 3587,
+          "sha256": "ba7dbf9a381c6dce4039a2ce580b1afe7729ca8946e1f8b6bdb42287a0a0b159"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/edit-ai-draft-for-human-voice/scripts/measure-voice-signals.mjs",
+          "bytes": 67197,
+          "sha256": "37cf1f82b3882a4d39fea4f9b8648aac3b0fcb276ba70755b4bb93bbaa8fba86"
+        },
+        {
+          "path": "artifacts/skills/writing/editing/edit-ai-draft-for-human-voice/SKILL.md",
+          "bytes": 20473,
+          "sha256": "5f780c6b7cdc3235daf71321a890b9a1cdd50c0e666e22fa2a2d8f76add62bd5"
         }
       ]
     },
