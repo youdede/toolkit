@@ -7,6 +7,10 @@ allowed-tools: Read, Grep, Glob
 
 Accept no completion claim that fresh command output does not prove.
 
+## Tool permissions
+
+`allowed-tools` pre-approves only Read, Grep, and Glob, and this command never pre-approves the verification commands it runs. The `node` command in Step 0 and every declared verification command in Step 2 go through the normal permission prompt, so each one needs the user's approval. If the user denies Step 0, stop and report that the preconditions were not checked. If the user denies a verification command, do not run a substitute: mark every claim that depends on it **unverifiable** and list it under **Not verified**.
+
 ## Step 0 — Preconditions (mandatory, deterministic)
 
 ```bash

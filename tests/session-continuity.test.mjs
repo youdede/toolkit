@@ -144,18 +144,31 @@ test('oversized: observing hook wrappers remain fail-open without reflecting ove
   assert.ok(run.stdout.length < 500, 'oversized input is never reflected into context');
 }));
 
-test('positive: installed session commands execute their shared deterministic precondition bridge', () => withTempRoot((root) => {
+test('positive: verify-session-ledger stops without a ledger and passes once one exists', () => withTempRoot((root) => {
   const project = path.join(root, 'project');
   mkdirSync(project, { recursive: true });
   initRepo(project);
-  for (const slug of ['record-work-checkpoint', 'verify-session-ledger']) {
-    installArtifact(slug, { root: ROOT, target: 'claude-code', scope: 'project', cwd: project });
-    const preconditions = path.join(project, '.claude', 'commands', 'youdede', slug, 'check-preconditions.mjs');
-    const run = spawnSync(process.execPath, [preconditions, '--workspace', project], { encoding: 'utf8', cwd: project });
-    assert.equal(run.status, 0, `${slug}: ${run.stderr}`);
-    assert.equal(JSON.parse(run.stdout).ok, true);
-  }
-  for (const slug of ['record-work-checkpoint', 'verify-session-ledger']) {
-    removeArtifact(slug, { root: ROOT, target: 'claude-code', scope: 'project', cwd: project });
-  }
+  installArtifact('verify-session-ledger', { root: ROOT, target: 'claude-code', scope: 'project', cwd: project });
+  const preconditions = path.join(project, '.claude', 'commands', 'youdede', 'verify-session-ledger', 'check-preconditions.mjs');
+  const missing = spawnSync(process.execPath, [preconditions], { encoding: 'utf8', cwd: project });
+  assert.equal(missing.status, 1, 'a missing ledger is not a verified empty ledger');
+  assert.match(missing.stdout, /missing: \.youdede\/session-ledger\.jsonl/);
+  const bridge = path.join(project, '.claude', 'hooks', 'youdede', 'lib', 'session-ledger.mjs');
+  const appended = spawnSync(process.execPath, [bridge, 'append', '--workspace', project], { input: JSON.stringify({ goal: 'seed the ledger' }), encoding: 'utf8', cwd: project });
+  assert.equal(appended.status, 0, appended.stderr);
+  const present = spawnSync(process.execPath, [preconditions], { encoding: 'utf8', cwd: project });
+  assert.equal(present.status, 0, present.stdout);
+  assert.equal(JSON.parse(present.stdout).ok, true);
+  removeArtifact('verify-session-ledger', { root: ROOT, target: 'claude-code', scope: 'project', cwd: project });
+}));
+
+test('boundary: record-work-checkpoint installs no precondition wrapper because it declares no checks', () => withTempRoot((root) => {
+  const project = path.join(root, 'project');
+  mkdirSync(project, { recursive: true });
+  initRepo(project);
+  installArtifact('record-work-checkpoint', { root: ROOT, target: 'claude-code', scope: 'project', cwd: project });
+  assert.ok(!existsSync(path.join(project, '.claude', 'commands', 'youdede', 'record-work-checkpoint', 'check-preconditions.mjs')));
+  assert.doesNotMatch(readFileSync(path.join(project, '.claude', 'commands', 'record-work-checkpoint.md'), 'utf8'), /Step 0/);
+  assert.ok(existsSync(path.join(project, '.claude', 'hooks', 'youdede', 'lib', 'session-ledger.mjs')));
+  removeArtifact('record-work-checkpoint', { root: ROOT, target: 'claude-code', scope: 'project', cwd: project });
 }));

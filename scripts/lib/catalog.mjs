@@ -1288,7 +1288,10 @@ export function publicCatalog(artifacts) {
       total: items.length,
       skills: items.filter((item) => item.kind === 'skill').length,
       hooks: items.filter((item) => item.kind === 'hook').length,
-      subagents: items.filter((item) => item.kind === 'subagent').length
+      subagents: items.filter((item) => item.kind === 'subagent').length,
+      commands: items.filter((item) => item.kind === 'command').length,
+      contexts: items.filter((item) => item.kind === 'context').length,
+      mcpServers: items.filter((item) => item.kind === 'mcp-server').length
     },
     relationshipGraph: {
       ...analyzeRelationshipGraph(artifacts),

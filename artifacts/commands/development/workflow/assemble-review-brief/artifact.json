@@ -37,15 +37,8 @@
     "It does not omit areas it could not verify; it lists them as unverified."
   ],
   "execution": {
-    "mode": "hybrid",
-    "entrypoints": [
-      {
-        "path": "scripts/check-preconditions.mjs",
-        "runtime": "node",
-        "purpose": "Evaluate the declared preconditions deterministically before the workflow may begin.",
-        "sideEffects": "none"
-      }
-    ]
+    "mode": "prompt",
+    "entrypoints": []
   },
   "command": {
     "invocation": "assemble-review-brief",
@@ -57,7 +50,10 @@
     "produces": [
       "a review brief mapping each changed area to its risk, evidence, and explicitly unverified claims"
     ],
-    "requires": [],
+    "requires": [
+      "staged changes or a named commit range in a git repository, or diff output the user supplies",
+      "user approval at the permission prompt for every process it runs, because toolAuthority pre-approves none"
+    ],
     "flags": [
       {
         "name": "scope",
@@ -82,7 +78,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
-    "latency_reason": "The command follows a precondition check and multiple workflow steps while it assembles a review brief from the real diff: scope, risk notes, and test evidence a reviewer can check line by line.",
+    "latency_reason": "The command follows multiple workflow steps while it assembles a review brief from the real diff: scope, risk notes, and test evidence a reviewer can check line by line.",
     "dataRetention": "none"
   },
   "adapters": {

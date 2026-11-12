@@ -38,15 +38,8 @@
     "It does not modify or delete existing ledger entries; the ledger is append-only."
   ],
   "execution": {
-    "mode": "hybrid",
-    "entrypoints": [
-      {
-        "path": "scripts/check-preconditions.mjs",
-        "runtime": "node",
-        "purpose": "Evaluate the declared preconditions deterministically before the workflow may begin.",
-        "sideEffects": "none"
-      }
-    ]
+    "mode": "prompt",
+    "entrypoints": []
   },
   "command": {
     "invocation": "record-work-checkpoint",
@@ -54,7 +47,9 @@
     "produces": [
       "a ledger entry whose hash, sequence, and git anchor are reported back for citation"
     ],
-    "requires": [],
+    "requires": [
+      "user approval at the permission prompt for every process it runs, because toolAuthority pre-approves none"
+    ],
     "flags": []
   },
   "relationships": {
@@ -74,7 +69,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
-    "latency_reason": "The command follows a precondition check and multiple workflow steps while it appends a redacted, hash-chained work checkpoint to the session ledger with a verified git anchor.",
+    "latency_reason": "The command follows multiple workflow steps while it appends a redacted, hash-chained work checkpoint to the session ledger with a verified git anchor.",
     "dataRetention": "local-bounded"
   },
   "adapters": {

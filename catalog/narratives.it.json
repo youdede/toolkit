@@ -1,5 +1,5 @@
 {
-  "sourceHash": "03f986913bee1f99eb8915157b7d2291a58c0ce0cf1ab9334f8cd5af1d651924",
+  "sourceHash": "0d3f6f03c800022dc0330385fefc98b8649067d058f1f42fdf258e790a6f19cc",
   "narratives": {
     "abuse-resistance-analyst": {
       "summary": "Analizza una singola operazione per individuare costi moltiplicati da input controllati da un attaccante, richieste a cascata ed elusione delle quote.",
@@ -135,9 +135,7 @@
     "assemble-review-brief": {
       "summary": "Assembla un brief di revisione dal diff reale: ambito, note sui rischi e prove di test che un revisore può controllare riga per riga.",
       "description": "Invocato come comando slash, raccoglie il diff delimitato, mappa ogni area modificata al suo rischio e alla sua prova di test, ed emette un brief di revisione strutturato con aree esplicitamente non verificate. Prepara la revisione; non esegue mai l'approvazione.",
-      "purposes": [
-        "Valuta i prerequisiti dichiarati in modo deterministico prima che il flusso di lavoro possa iniziare."
-      ],
+      "purposes": [],
       "refuses": [
         "Non approva, non richiede modifiche e non esegue il merge; il brief informa un revisore umano.",
         "Non descrive file che non ha letto né intervalli diff che non ha ispezionato.",
@@ -259,9 +257,7 @@
     "audit-repository-instructions": {
       "summary": "Verifica i file di istruzioni del repository e della cartella per rilevare deviazioni, conflitti di precedenza e confini operativi mancanti.",
       "description": "Combina le procedure esistenti di audit e di redazione delle istruzioni per l'agente in un report di sola lettura che traccia la precedenza delle istruzioni e identifica deviazioni concrete senza riscrivere i file di policy.",
-      "purposes": [
-        "Valuta i prerequisiti locali dichiarati del comando prima che il flusso di lavoro del prompt possa continuare."
-      ],
+      "purposes": [],
       "refuses": [
         "Non modifica, crea, elimina né normalizza i file di istruzioni.",
         "Non risolve i conflitti di precedenza indovinando l'intento dell'autore.",
@@ -711,7 +707,7 @@
       "description": "È uno specialista ristretto e di sola lettura il cui risultato è ricostruire il valore selezionato ed esporre un significato modificato per uno stato di configurazione esplicito. Segnala evidenze e incertezza senza modificare il repository o rivendicare approvazione.",
       "purposes": [],
       "refuses": [
-        "Non confronta ambienti in esercizio senza snapshot con timestamp.",
+        "Non giudica se un valore selezionato sia l'impostazione operativa corretta.",
         "Non legge o rivela valori segreti di configurazione.",
         "Non modifica file, non esegue azioni operative e non approva l'integrazione o il rilascio."
       ]
@@ -1299,9 +1295,7 @@
     "diagnose-ci-failure": {
       "summary": "Diagnostica un fallimento di CI dai log forniti e dalle prove del repository senza modificare i workflow né rieseguire i job.",
       "description": "Un wrapper di comando delimitato attorno alla procedura e allo specialista per i fallimenti di CI. Raccoglie il passaggio fallito, classifica ipotesi supportate da prove e restituisce controlli discriminanti senza modificare lo stato di CI.",
-      "purposes": [
-        "Valuta i prerequisiti locali dichiarati del comando prima che il flusso di lavoro del prompt possa continuare."
-      ],
+      "purposes": [],
       "refuses": [
         "Non riesegue, annulla, approva né modifica alcun job o workflow di CI.",
         "Non dichiara una causa principale da un errore a valle senza prove causali.",
@@ -2248,7 +2242,6 @@
       "summary": "Raccoglie un’istantanea deterministica dell’ambiente, con i dati sensibili oscurati, prima di una modifica del repository.",
       "description": "Esegue uno strumento locale di raccolta con limiti definiti che riporta il runtime, i marcatori del gestore di pacchetti e lo stato Git con i dati sensibili oscurati, senza mostrare percorsi, valori delle variabili d’ambiente, contenuti dei file o URL remoti.",
       "purposes": [
-        "Valuta i prerequisiti locali dichiarati del comando prima che il flusso di lavoro del prompt possa continuare.",
         "Raccoglie un’istantanea dell’ambiente con limiti definiti e dati sensibili oscurati, senza leggere i valori delle variabili d’ambiente né i contenuti dei file."
       ],
       "refuses": [
@@ -2441,9 +2434,7 @@
     "record-work-checkpoint": {
       "summary": "Aggiunge un checkpoint di lavoro oscurato, concatenato tramite hash, al registro della sessione con un ancoraggio git verificato.",
       "description": "Invocato come comando slash, aggiunge un checkpoint strutturato (obiettivo, affermazioni in sospeso, decisioni, file toccati) a .youdede/session-ledger.jsonl. Il deterministic ledger bridge oscura il contenuto che corrisponde a forme tipiche di segreti, ne limita la dimensione e lo concatena alla catena del registro.",
-      "purposes": [
-        "Valuta i prerequisiti dichiarati in modo deterministico prima che il flusso di lavoro possa iniziare."
-      ],
+      "purposes": [],
       "refuses": [
         "Non memorizza segreti, token o credenziali; il contenuto che corrisponde a forme tipiche di segreti viene oscurato prima dell'aggiunta.",
         "Non memorizza percorsi di file assoluti o che escono dal repository, né contenuti di file oltre i campi dichiarati.",

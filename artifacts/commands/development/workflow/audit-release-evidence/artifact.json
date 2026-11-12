@@ -58,7 +58,8 @@
       "a machine-readable release evidence report naming every check, its output, and its verdict"
     ],
     "requires": [
-      "a clean git worktree so evidence attributes to the release candidate"
+      "a clean git worktree so evidence attributes to the release candidate",
+      "user approval at the permission prompt for every process it runs, because toolAuthority pre-approves none"
     ],
     "flags": [
       {

@@ -81,6 +81,20 @@ function writeRollbackPack(root, members) {
   });
 }
 
+// The schema is documentation nothing executes, so it once forbade the very value the validator
+// requires of every pack. This reads the constraint from the schema file and applies it.
+test('every pack evidence.reportSchema satisfies the constraint pack.schema.json states', () => {
+  const rule = JSON.parse(readFileSync(path.join(ROOT, 'schema', 'pack.schema.json'), 'utf8')).properties.evidence.properties.reportSchema;
+  assert.ok(Object.hasOwn(rule, 'const') || Object.hasOwn(rule, 'pattern'), 'reportSchema states a const or a pattern');
+  const packs = loadPacks();
+  assert.ok(packs.length > 0);
+  for (const { manifest } of packs) {
+    const value = manifest.evidence.reportSchema;
+    if (Object.hasOwn(rule, 'const')) assert.equal(value, rule.const, manifest.id);
+    if (Object.hasOwn(rule, 'pattern')) assert.match(value, new RegExp(rule.pattern), manifest.id);
+  }
+});
+
 test('composition packs resolve valid cross-kind members and common targets', () => {
   const { packs, packResults } = validateRepository();
   assert.ok(packs.length >= 5);

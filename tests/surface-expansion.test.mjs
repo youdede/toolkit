@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, mkdirSync, readFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, mkdirSync, readFileSync, rmSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { ROOT, validateRepository } from '../scripts/lib/catalog.mjs';
@@ -49,16 +49,14 @@ test('the environment collector emits bounded redacted JSON', () => {
   assert.equal(Object.hasOwn(result, 'env'), false);
 });
 
-test('positive command wrappers run check-preconditions.mjs before bounded work', (context) => {
+test('commands without declared preconditions install no wrapper and promise no Step 0', (context) => {
   const project = mkdtempSync(path.join(os.tmpdir(), 'youdede-expanded-commands-'));
   context.after(() => rmSync(project, { recursive: true, force: true }));
   mkdirSync(path.join(project, '.claude'), { recursive: true });
   for (const slug of ['audit-repository-instructions', 'preflight-change-environment', 'diagnose-ci-failure']) {
     installArtifact(slug, { root: ROOT, target: 'claude-code', scope: 'project', cwd: project });
-    const relative = `.claude/commands/youdede/${slug}/check-preconditions.mjs`;
-    const run = spawnSync(process.execPath, [path.join(project, relative)], { cwd: project, encoding: 'utf8' });
-    assert.equal(run.status, 0, `${relative}: ${run.stdout}${run.stderr}`);
-    assert.equal(JSON.parse(run.stdout).ok, true);
+    assert.ok(!existsSync(path.join(project, `.claude/commands/youdede/${slug}/check-preconditions.mjs`)), slug);
+    assert.doesNotMatch(readFileSync(path.join(project, `.claude/commands/${slug}.md`), 'utf8'), /Step 0/, slug);
   }
 });
 

@@ -1,4 +1,4 @@
 interface:
   display_name: "Query Production Readonly"
-  short_description: "Answer a bounded question from production data without mutating"
+  short_description: "Run a bounded read-only production query, report aggregates"
   default_prompt: "Use $query-production-readonly for this task and follow its validation and refusal boundaries."

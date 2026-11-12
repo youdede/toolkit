@@ -7,14 +7,9 @@ allowed-tools: Read, Grep, Glob
 
 Prepare a brief that lets a reviewer check every claim against the actual change.
 
-## Step 0 — Preconditions (mandatory, deterministic)
+## Tool permissions
 
-```bash
-node "${CLAUDE_PLUGIN_ROOT}/commands/youdede/assemble-review-brief/check-preconditions.mjs"
-```
-
-- Exit 0: continue.
-- Exit non-zero: stop and report the failed check verbatim.
+`allowed-tools` pre-approves only Read, Grep, and Glob. Reading the diff takes read-only git commands (for example `git diff --stat` and `git diff` over the staged changes or the named range); each goes through the normal permission prompt. If the user denies them, work only from diff output the user supplies and say so under *Scope*; with no diff at all, stop as Step 1 says.
 
 ## Step 1 — Bound the change
 

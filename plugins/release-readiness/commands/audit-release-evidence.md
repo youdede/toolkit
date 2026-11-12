@@ -7,6 +7,10 @@ allowed-tools: Read, Grep, Glob
 
 Verify that the release evidence chain supports the candidate version — nothing more.
 
+## Tool permissions
+
+`allowed-tools` pre-approves only Read, Grep, and Glob, and this command never pre-approves the release checks it runs. The `node` command in Step 0, every release-readiness check in Step 1, and the git commands that read HEAD and tags in Step 2 go through the normal permission prompt, so each one needs the user's approval. If the user denies Step 0, stop and report that the preconditions were not checked. If the user denies a check or an identity check, record it as **unknown**, which keeps `ready` false.
+
 ## Step 0 — Preconditions (mandatory, deterministic)
 
 ```bash

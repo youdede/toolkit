@@ -5,10 +5,6 @@ allowed-tools: Read, Grep, Glob
 
 # Diagnose CI Failure
 
-## Step 0 — Preconditions (mandatory, deterministic)
-
-Run `node "${CLAUDE_PLUGIN_ROOT}/commands/youdede/diagnose-ci-failure/check-preconditions.mjs"`. On non-zero exit, report the JSON failures and stop. This is the first prompt action, not a pre-invocation parser.
-
 ## Step 1 — Complete the bounded workflow
 
 1. Read only the supplied run evidence and the workflow/configuration that defines the failing step.

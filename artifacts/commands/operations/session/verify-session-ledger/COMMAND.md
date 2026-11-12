@@ -7,13 +7,17 @@ allowed-tools: Read
 
 Prove or disprove the integrity of `.youdede/session-ledger.jsonl` before trusting anything in it.
 
+## Tool permissions
+
+`allowed-tools` pre-approves only Read. It does not pre-approve the `node` commands in Step 0 and Step 1, so each goes through the normal permission prompt. If the user denies either one, stop and report that the ledger was not verified; never report a verdict you did not get from the bridge.
+
 ## Step 0 — Preconditions (mandatory, deterministic)
 
 ```bash
 node "${CLAUDE_PROJECT_DIR}/.claude/commands/youdede/verify-session-ledger/check-preconditions.mjs"
 ```
 
-Exit non-zero: stop and report the failed check verbatim.
+The check requires `.youdede/session-ledger.jsonl` to exist. Exit non-zero: stop and report the failed check verbatim; a missing ledger means there is nothing to verify, not a verified empty ledger.
 
 ## Step 1 — Run the deterministic verification
 

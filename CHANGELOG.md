@@ -2,6 +2,26 @@
 
 All notable changes are recorded here. Versions follow Semantic Versioning; release entries are derived from reviewed pull requests and verified against the corresponding Git tag.
 
+## Unreleased
+
+### Changed
+
+- Commands state which steps ask for your permission and what happens when you deny one. The tools a command declares are pre-approved for the turn that invokes it; they never limited what the command could run, and the catalog no longer describes them as an allowlist.
+- `/re-pin-mcp-tools` no longer pre-approves file edits. The pre-approval covered only the turn before you confirm the digest, which is the one turn where the command forbids edits.
+- Five commands (`/preflight-change-environment`, `/audit-repository-instructions`, `/assemble-review-brief`, `/diagnose-ci-failure`, `/record-work-checkpoint`) no longer open with a precondition step that checked nothing.
+
+### Fixed
+
+- `packs --json` and `pack-info --json` print JSON instead of refusing the flag. With `--target`, `pack-info --json` reports `installable` and `blockingMembers`.
+- `pack-info` refuses an unknown `--target`, and says when a pack cannot be installed on the chosen target and which required members block it. `pack-info <pack> --target codex` previously printed the pack as if it were installable.
+- A `--cwd` that does not exist or is not a directory is refused. `doctor --cwd <missing path>` answered `No state drift found.` and `add --dry-run` answered `Would install`.
+- `/verify-session-ledger` stops with a clear message when no ledger exists, instead of reporting an empty ledger as verified.
+- The `counts` in `catalog/artifacts.json` include commands, contexts, and MCP servers, so the per-kind counts add up to the total.
+- Subagent profiles for Claude Code, Gemini CLI, and OpenCode carry the turn budget instruction that only the Copilot profiles had, so a specialist that runs out of turns returns partial evidence instead of being cut off.
+- `application-security-reviewer` names the six narrow specialists it routes to by their catalog slug, so the parent agent can dispatch them.
+- `configuration-semantics-reviewer` no longer lists a refusal that described `configuration-drift-analyst`.
+- 34 skills no longer show a one-line description cut off mid-phrase in the Codex skill list.
+
 ## 0.7.0 (2026-11-02)
 
 ### Added
