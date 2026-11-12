@@ -2,11 +2,11 @@
   "reasons": {
     "audit-repository-instructions": {
       "risk": "Questo comando controlla i file di istruzioni del repository e delle cartelle per individuare derive, conflitti di precedenza e limiti operativi mancanti; non modifica, crea, elimina né normalizza i file di istruzioni.",
-      "latency": "Il comando segue un controllo delle precondizioni e più passaggi del flusso di lavoro mentre controlla i file di istruzioni del repository e delle cartelle per individuare eventuali deviazioni, conflitti di precedenza e limiti operativi mancanti."
+      "latency": "Il comando segue più passaggi del flusso di lavoro mentre controlla i file di istruzioni del repository e delle cartelle per individuare eventuali deviazioni, conflitti di precedenza e limiti operativi mancanti."
     },
     "preflight-change-environment": {
       "risk": "Questo comando raccoglie uno snapshot deterministico dell'ambiente, con i dati sensibili oscurati, prima che inizi una modifica al repository; non rivendica la parità con CI o la produzione sulla base di uno snapshot locale.",
-      "latency": "Il comando segue un controllo delle precondizioni e più passaggi del flusso di lavoro mentre raccoglie uno snapshot deterministico dell'ambiente, con i dati sensibili oscurati, prima che inizi una modifica del repository."
+      "latency": "Il comando segue più passaggi del flusso di lavoro mentre raccoglie uno snapshot deterministico dell'ambiente, con i dati sensibili oscurati, prima che inizi una modifica del repository."
     },
     "re-pin-mcp-tools": {
       "risk": "Aggiorna i riferimenti fissati degli strumenti MCP solo dopo la conferma umana dell'impronta esatta; questo cambia le future decisioni di fiducia negli strumenti.",
@@ -14,7 +14,7 @@
     },
     "assemble-review-brief": {
       "risk": "Questo comando assembla un brief di revisione a partire dal diff reale: ambito, note sui rischi e prove di test che un revisore può verificare riga per riga; non omette le aree che non ha potuto verificare, ma le elenca come non verificate.",
-      "latency": "Il comando segue un controllo delle precondizioni e più passaggi del flusso di lavoro mentre assembla un brief di revisione dal diff reale: ambito, note sui rischi e prove di test che un revisore può verificare riga per riga."
+      "latency": "Il comando segue più passaggi del flusso di lavoro mentre assembla un brief di revisione dal diff reale: ambito, note sui rischi e prove di test che un revisore può verificare riga per riga."
     },
     "audit-release-evidence": {
       "risk": "Questo comando controlla la catena delle prove di rilascio per la versione corrente ed emette un rapporto di verdetto leggibile dalla macchina; non pubblica, non crea tag, non esegue il bump di versioni né aggira alcuna protezione di rilascio.",
@@ -30,11 +30,11 @@
     },
     "diagnose-ci-failure": {
       "risk": "Questo comando analizza un'esecuzione CI fallita usando i log forniti e le evidenze del repository, senza modificare i workflow né rieseguire i job. Non riesegue, annulla, approva né modifica alcun job o workflow di CI.",
-      "latency": "Il comando esegue un controllo delle precondizioni e più passaggi del flusso di lavoro mentre diagnostica un'esecuzione CI fallita dai log forniti e dalle evidenze del repository, senza modificare i workflow né rieseguire i job."
+      "latency": "Il comando esegue più passaggi del flusso di lavoro mentre diagnostica un'esecuzione CI fallita dai log forniti e dalle evidenze del repository, senza modificare i workflow né rieseguire i job."
     },
     "record-work-checkpoint": {
       "risk": "Questo comando aggiunge un checkpoint di lavoro oscurato e concatenato tramite hash al registro della sessione con un ancoraggio git verificato; non modifica né cancella le voci esistenti del registro; il registro è di sola aggiunta.",
-      "latency": "Il comando segue un controllo delle precondizioni e più passaggi del flusso di lavoro mentre aggiunge un checkpoint di lavoro oscurato e concatenato tramite hash al registro della sessione con un ancoraggio git verificato."
+      "latency": "Il comando segue più passaggi del flusso di lavoro mentre aggiunge un checkpoint di lavoro oscurato e concatenato tramite hash al registro della sessione con un ancoraggio git verificato."
     },
     "verify-session-ledger": {
       "risk": "Questo comando verifica il registro della sessione concatenato con hash e segnala esattamente quali voci, se presenti, non mantengono l'integrità; non trasmette il contenuto del registro; il verdetto contiene solo conteggi e hash.",
@@ -1407,5 +1407,5 @@
       "mcp-egress-guard": "per confrontare gli argomenti degli strumenti MCP di questo server con la sua uscita dichiarata"
     }
   },
-  "sourceHash": "e91e1dacb4ed46e6d8a7337b059c2b17d0ab787429cb02a9a943a1dfc39f7cca"
+  "sourceHash": "5ef78a4802c4ad354f11ef7b9551c14fbc240c84d61bc7b60c19a7ac4eb17e8d"
 }

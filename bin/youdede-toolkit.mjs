@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
+import { statSync } from 'node:fs';
 import path from 'node:path';
 import { createInterface } from 'node:readline/promises';
-import { hookBindings, loadArtifacts, loadPacks, loadTaxonomy, prerequisiteMembers, readJson, resolvePack, ROOT, validateRepository } from '../scripts/lib/catalog.mjs';
+import { analyzePackWorkflow, hookBindings, loadArtifacts, loadPacks, loadTaxonomy, prerequisiteMembers, readJson, resolvePack, ROOT, validateRepository } from '../scripts/lib/catalog.mjs';
 import { doctor, installArtifact, installedDependentsOf, installPack, listInstalled, planArtifactInstall, planArtifactRemoval, planPackInstall, planPackRemoval, removeArtifact, neededByMessage, removePack, resolveArtifact, suggestionsFor } from '../scripts/lib/install.mjs';
 import { confirmRemoval, decidePrerequisites, parseAnswer, skippedNotice, suggestionHint } from '../scripts/lib/prerequisite-consent.mjs';
 import { readIntegrityManifest, verifyArtifactAttestation, verifyIntegrityManifest } from '../scripts/lib/integrity.mjs';
@@ -59,9 +60,9 @@ const COMMAND_FLAGS = {
   // `info` reads the catalog and nothing else. It accepted --target, --scope and --cwd and used
   // none of them, so a reader who named a target was answered about every target instead.
   info: ['json'],
-  packs: [],
+  packs: ['json'],
   // `pack-info` reads --target for the hook fan-out; --scope and --cwd were accepted and ignored.
-  'pack-info': ['target'],
+  'pack-info': ['target', 'json'],
   'verify-pack-evidence': ['report', 'json'],
   add: INSTALL_FLAGS,
   'add-pack': INSTALL_FLAGS,
@@ -350,8 +351,8 @@ function help() {
   process.stdout.write(`       ${moreFilters}\n`);
   process.stdout.write(`  search <term...> [the same filters as list] [--json]\n`);
   process.stdout.write(`  info <id-or-slug> [--json]\n`);
-  process.stdout.write(`  packs\n`);
-  process.stdout.write(`  pack-info <id-or-slug> [--target ${targets}]\n`);
+  process.stdout.write(`  packs [--json]\n`);
+  process.stdout.write(`  pack-info <id-or-slug> [--target ${targets}] [--json]\n`);
   process.stdout.write(`  verify-pack-evidence <id-or-slug> --report path [--json]\n`);
   process.stdout.write(`  add <id-or-slug> ${placement} [--dry-run] [--json] [--force] [--no-prerequisites]\n`);
   process.stdout.write(`  add-pack <id-or-slug> ${placement} [--dry-run] [--json] [--force] [--no-prerequisites]\n`);
@@ -394,6 +395,14 @@ async function main() {
   if (!command || options.help || command === 'help') return help();
   assertKnownFlags(command, options);
   assertKnownArguments(command, positional);
+  // A --cwd that is not a directory used to be answered as an empty workspace: `doctor` found no
+  // drift and `add --dry-run` planned writes under a path that does not exist.
+  if (options.cwd !== undefined) {
+    let stats = null;
+    try { stats = statSync(options.cwd); } catch {}
+    if (!stats) throw new Error(`--cwd '${options.cwd}' does not exist`);
+    if (!stats.isDirectory()) throw new Error(`--cwd '${options.cwd}' is not a directory`);
+  }
 
   if (command === 'version') return printVersion(options);
 
@@ -489,8 +498,22 @@ async function main() {
   }
 
   if (command === 'packs') {
-    const packs = loadPacks(ROOT);
-    for (const { manifest } of packs.sort((a, b) => a.manifest.id.localeCompare(b.manifest.id))) {
+    const packs = loadPacks(ROOT).sort((a, b) => a.manifest.id.localeCompare(b.manifest.id));
+    if (options.json) {
+      write(JSON.stringify({
+        count: packs.length,
+        packs: packs.map(({ manifest }) => ({
+          id: manifest.id,
+          slug: manifest.slug,
+          name: manifest.name,
+          version: manifest.version,
+          summary: manifest.summary,
+          memberCount: manifest.members.length
+        }))
+      }, null, 2));
+      return;
+    }
+    for (const { manifest } of packs) {
       process.stdout.write(`${manifest.slug.padEnd(32)} ${manifest.members.length} members\n  ${manifest.summary}\n`);
     }
     process.stdout.write(`\n${packs.length} pack(s).\n`);
@@ -498,13 +521,37 @@ async function main() {
   }
 
   if (command === 'pack-info') {
+    // An unknown --target was answered as if it named no hook adapter at all, and exited 0.
+    assertKnownFilters(options);
     const { manifest } = resolvePack(requireQuery(positional));
+    const target = options.target || DEFAULT_TARGET;
+    // A required member without an adapter for the target makes `add-pack` refuse there, so the
+    // answer says so instead of reading as installable. Catalog data only, like the fan-out.
+    const blockers = manifest.members.filter((member) => {
+      if (!member.required) return false;
+      try { return !resolveArtifact(member.artifactId).adapters[target]; } catch { return true; }
+    }).map((member) => member.artifactId);
+    if (options.json) {
+      const result = {
+        id: manifest.id,
+        slug: manifest.slug,
+        name: manifest.name,
+        version: manifest.version,
+        summary: manifest.summary,
+        outcomes: manifest.outcomes,
+        members: manifest.members.map(({ artifactId, role, required }) => ({ artifactId, role, required })),
+        // The same targets catalog/packs.json lists for the pack.
+        targets: analyzePackWorkflow(manifest, loadArtifacts(ROOT)).compatibility.map((entry) => entry.target)
+      };
+      if (options.target) Object.assign(result, { target, installable: blockers.length === 0, blockingMembers: blockers });
+      write(JSON.stringify(result, null, 2));
+      return;
+    }
     process.stdout.write(`${manifest.name} ${manifest.version}\n${manifest.id}\n\n${manifest.summary}\n\nOutcomes: ${manifest.outcomes.join(', ')}\nEvidence: ledger-linked; schema ${manifest.evidence.reportSchema}\nMembers:\n`);
     for (const member of manifest.members) process.stdout.write(`- ${member.artifactId} (${member.role}${member.required ? ', required' : ', optional'})\n`);
     // Fan-out is catalog data. Deriving it from an install plan made a read-only query depend on
     // the working directory and fail on unrelated workspace state, and made `pack-info` stat and
     // hash files under the user's config root as a side effect.
-    const target = options.target || DEFAULT_TARGET;
     const fanout = new Map();
     const prerequisites = prerequisiteMembers(manifest, (id) => { try { return resolveArtifact(id); } catch { return null; } });
     for (const member of manifest.members) {
@@ -520,6 +567,7 @@ async function main() {
     }
     const extra = prerequisites.size ? ` (plus ${prerequisites.size === 1 ? 'prerequisite' : 'prerequisites'}: ${[...prerequisites].map((id) => id.split('/').at(-1)).join(', ')})` : '';
     if (fanout.size) process.stdout.write(`Hook fan-out: ${[...fanout].sort((a, b) => b[1] - a[1]).map(([boundary, count]) => `${boundary}=${count}`).join(', ')}${extra}\n`);
+    if (blockers.length) process.stdout.write(`Not installable on ${target}: required ${blockers.length === 1 ? 'member' : 'members'} without a ${target} adapter: ${blockers.join(', ')}\n`);
     return;
   }
 

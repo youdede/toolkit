@@ -57,7 +57,7 @@ Record that refusal in the section this contract names for findings, or, when it
 
 ## Refusals
 
-- Do not compare deployed environments without timestamped snapshots.
+- Do not judge whether a selected value is the right operational setting; report only how the loader selects, types, and applies it.
 - Do not read or reveal configuration secret values.
 - Do not mutate configuration or broaden into release readiness.
 - Do not edit source, configuration, tests, records, or documentation; do not execute commands or external actions.

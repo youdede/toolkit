@@ -313,7 +313,6 @@
     {
       "id": "command-workflows",
       "artifactIds": [
-        "command/development/workflow/assemble-review-brief",
         "command/development/workflow/audit-release-evidence",
         "command/development/workflow/verify-claims-against-output"
       ],
@@ -371,15 +370,13 @@
     {
       "id": "command-surface-expansion",
       "artifactIds": [
-        "command/development/agent-tooling/audit-repository-instructions",
-        "command/development/agent-tooling/preflight-change-environment",
-        "command/operations/ci-cd/diagnose-ci-failure"
+        "command/development/agent-tooling/preflight-change-environment"
       ],
       "testFiles": [
         "tests/surface-expansion.test.mjs"
       ],
       "coverage": {
-        "positive": "positive command wrappers run check-preconditions.mjs before bounded work",
+        "positive": "the environment collector emits bounded redacted JSON",
         "negative": "negative collection never enumerates process environment values",
         "malformed": "malformed extra collector input cannot widen the snapshot",
         "boundary": "boundary snapshot contains no absolute workspace path or remote URL"
@@ -388,7 +385,6 @@
     {
       "id": "command-session-continuity",
       "artifactIds": [
-        "command/operations/session/record-work-checkpoint",
         "command/operations/session/verify-session-ledger"
       ],
       "testFiles": [
@@ -396,7 +392,7 @@
         "tests/session-ledger.test.mjs"
       ],
       "coverage": {
-        "positive": "positive: installed session commands execute their shared deterministic precondition bridge",
+        "positive": "positive: verify-session-ledger stops without a ledger and passes once one exists",
         "negative": "negative: tampering with any entry breaks verification at that line",
         "malformed": "malformed: invalid fields, oversized input, and corrupt tails are refused",
         "boundary": "boundary: portable absolute and traversal paths are refused"

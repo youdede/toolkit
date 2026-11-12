@@ -58,7 +58,8 @@
       "a verification report whose every claim cites the fresh command output hash that proves or refutes it"
     ],
     "requires": [
-      "a clean git worktree so results attribute to committed state"
+      "a clean git worktree so results attribute to committed state",
+      "user approval at the permission prompt for every process it runs, because toolAuthority pre-approves none"
     ],
     "flags": [
       {

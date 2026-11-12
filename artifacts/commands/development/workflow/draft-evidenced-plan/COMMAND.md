@@ -9,6 +9,10 @@ Produce an implementation plan whose claims are anchored to code you have actual
 
 The generated coding-style baseline must already exist at `.claude/rules/youdede/0100-coding-style-baseline.md`.
 
+## Tool permissions
+
+`allowed-tools` pre-approves only Read, Grep, and Glob. It does not pre-approve the `node` command in Step 0, so that run goes through the normal permission prompt. If the user denies it, stop and report that the preconditions were not checked; do not plan as if they had passed.
+
 ## Step 0 — Preconditions (mandatory, deterministic)
 
 Before anything else, run:

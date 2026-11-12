@@ -11,20 +11,6 @@
       "to": "commands/record-work-checkpoint.md"
     },
     {
-      "from": "scripts/check-preconditions.mjs",
-      "to": "commands/youdede/record-work-checkpoint/check-preconditions.mjs",
-      "executable": true
-    },
-    {
-      "from": "preconditions.json",
-      "to": "commands/youdede/record-work-checkpoint/preconditions.json"
-    },
-    {
-      "root": "package",
-      "from": "scripts/runtime/command-precondition.mjs",
-      "to": "commands/youdede/lib/command-precondition.mjs"
-    },
-    {
       "root": "package",
       "from": "scripts/runtime/session-ledger.mjs",
       "to": "hooks/youdede/lib/session-ledger.mjs"

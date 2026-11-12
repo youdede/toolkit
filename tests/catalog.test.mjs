@@ -184,9 +184,15 @@ test('public catalog is sorted and exposes individual install commands', () => {
     total: artifacts.length,
     skills: artifacts.filter(({ manifest }) => manifest.kind === 'skill').length,
     hooks: artifacts.filter(({ manifest }) => manifest.kind === 'hook').length,
-    subagents: artifacts.filter(({ manifest }) => manifest.kind === 'subagent').length
+    subagents: artifacts.filter(({ manifest }) => manifest.kind === 'subagent').length,
+    commands: artifacts.filter(({ manifest }) => manifest.kind === 'command').length,
+    contexts: artifacts.filter(({ manifest }) => manifest.kind === 'context').length,
+    mcpServers: artifacts.filter(({ manifest }) => manifest.kind === 'mcp-server').length
   };
   assert.deepEqual(catalog.counts, expectedCounts);
+  // Every kind is counted, so the per-kind counts add up to the total.
+  const { total, ...perKind } = catalog.counts;
+  assert.equal(Object.values(perKind).reduce((sum, count) => sum + count, 0), total);
   assert.equal(catalog.relationshipGraph.counts.artifactNodes, artifacts.length);
   assert.equal(catalog.relationshipGraph.orphanArtifactIds.length, catalog.relationshipGraph.counts.orphanArtifacts);
   assert.deepEqual(catalog.relationshipGraph.orphanArtifactIds, [...catalog.relationshipGraph.orphanArtifactIds].sort());

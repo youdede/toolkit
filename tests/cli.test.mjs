@@ -106,6 +106,62 @@ test('pack-info is read-only and independent of the working directory state', (c
   assert.deepEqual(readdirSync(path.join(directory, '.claude')), ['settings.json']);
 });
 
+test('packs answers in JSON like the other read commands', () => {
+  const result = JSON.parse(cli(['packs', '--json']));
+  assert.equal(result.count, result.packs.length);
+  assert.ok(result.count > 0);
+  const pack = result.packs.find(({ slug }) => slug === 'daily-driver');
+  assert.equal(pack.id, 'pack/daily-driver');
+  assert.ok(pack.memberCount > 0);
+  assert.deepEqual(result.packs.map(({ id }) => id), result.packs.map(({ id }) => id).sort((a, b) => a.localeCompare(b)));
+});
+
+test('pack-info refuses an unknown target and names what blocks a known one', () => {
+  const bogus = cliRaw(['pack-info', 'daily-driver', '--target', 'bogus']);
+  assert.equal(bogus.status, 1);
+  assert.match(bogus.stderr, /unknown target 'bogus'; known targets: .*claude-code/);
+  assert.equal(bogus.stdout, '');
+
+  // A valid target the pack cannot install on is information, not an error.
+  const codex = cliRaw(['pack-info', 'daily-driver', '--target', 'codex']);
+  assert.equal(codex.status, 0, codex.stderr);
+  assert.match(codex.stdout, /Not installable on codex: required members without a codex adapter: .*refactor-equivalence-reviewer/);
+
+  const supported = cliRaw(['pack-info', 'daily-driver']);
+  assert.equal(supported.status, 0, supported.stderr);
+  assert.doesNotMatch(supported.stdout, /Not installable/);
+});
+
+test('pack-info answers in JSON, with installability only when a target is named', () => {
+  const plain = JSON.parse(cli(['pack-info', 'daily-driver', '--json']));
+  assert.equal(plain.id, 'pack/daily-driver');
+  assert.ok(plain.outcomes.length > 0);
+  assert.ok(plain.members.every((member) => Object.keys(member).sort().join() === 'artifactId,required,role'));
+  assert.ok(plain.targets.includes('claude-code'));
+  assert.equal(Object.hasOwn(plain, 'installable'), false);
+
+  const codex = JSON.parse(cli(['pack-info', 'daily-driver', '--target', 'codex', '--json']));
+  assert.equal(codex.target, 'codex');
+  assert.equal(codex.installable, false);
+  assert.ok(codex.blockingMembers.includes('subagent/development/code-quality/refactor-equivalence-reviewer'));
+
+  const supported = JSON.parse(cli(['pack-info', 'daily-driver', '--target', 'claude-code', '--json']));
+  assert.equal(supported.installable, true);
+  assert.deepEqual(supported.blockingMembers, []);
+});
+
+test('a --cwd that is not an existing directory is refused before any command reads it', () => {
+  for (const args of [['doctor'], ['installed'], ['add', 'commit-guard', '--dry-run']]) {
+    const missing = cliRaw([...args, '--cwd', path.join(tmpdir(), 'youdede-no-such-directory-anywhere')]);
+    assert.equal(missing.status, 1, args.join(' '));
+    assert.match(missing.stderr, /--cwd '.*youdede-no-such-directory-anywhere' does not exist/);
+    assert.doesNotMatch(missing.stdout, /Would install|No state drift/);
+  }
+  const file = cliRaw(['doctor', '--cwd', path.join(ROOT, 'package.json')]);
+  assert.equal(file.status, 1);
+  assert.match(file.stderr, /is not a directory/);
+});
+
 test('list composes granular taxonomy filters', () => {
   const output = cli(['list', '--kind', 'skill', '--domain', 'operations', '--category', 'release', '--lifecycle', 'release', '--risk', 'high']);
   const expected = loadArtifacts().filter(({ manifest }) => manifest.kind === 'skill'

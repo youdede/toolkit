@@ -43,12 +43,6 @@
     "mode": "hybrid",
     "entrypoints": [
       {
-        "path": "scripts/check-preconditions.mjs",
-        "runtime": "node",
-        "purpose": "Evaluate declared local command preconditions before the prompt workflow may continue.",
-        "sideEffects": "none"
-      },
-      {
         "path": "scripts/collect-environment.mjs",
         "runtime": "node",
         "purpose": "Collect a bounded redacted environment snapshot without reading environment values or file contents.",
@@ -64,7 +58,9 @@
     "produces": [
       "a redacted JSON environment snapshot and an explicit list of missing prerequisites"
     ],
-    "requires": [],
+    "requires": [
+      "user approval at the permission prompt for every process it runs, because toolAuthority pre-approves none"
+    ],
     "flags": [
       {
         "name": "scope",
@@ -90,7 +86,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
-    "latency_reason": "The command follows a precondition check and multiple workflow steps while it collects a deterministic redacted environment snapshot before a repository change begins.",
+    "latency_reason": "The command follows multiple workflow steps while it collects a deterministic redacted environment snapshot before a repository change begins.",
     "dataRetention": "none"
   },
   "adapters": {

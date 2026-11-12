@@ -1,11 +1,15 @@
 ---
 description: Review and re-pin one curated MCP tool inventory with exact human confirmation. Use when a toolkit maintainer intentionally changes a curated server tool contract.
-allowed-tools: Edit, Glob, Grep, Read, Write
+allowed-tools: Glob, Grep, Read
 ---
 
 # Re-pin MCP Tools
 
 Update one curated MCP tool contract without silently accepting capability drift.
+
+## Tool permissions
+
+`allowed-tools` pre-approves only Glob, Grep, and Read. Every `node` and `npm` run and every file edit or write in this command goes through the normal permission prompt, so each needs the user's approval. Approving a prompt is not the digest confirmation of Step 2: nothing is edited before the exact digest is repeated. If the user denies any action, stop and report which one; when it is a Step 3 action, the re-pin is not complete.
 
 ## Step 0 — Preconditions
 

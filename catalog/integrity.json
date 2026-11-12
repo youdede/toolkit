@@ -2,13 +2,13 @@
   "schemaVersion": 1,
   "algorithm": "sha256",
   "claim": "Checksums bind published bytes to a reviewed release; they do not prove authorship, originality, license compliance, endorsement, or control downstream copying.",
-  "rootDigest": "f525ef52caa89c8c033504e7f0f4c62a349d96ba0a8778831191ce470ef10eeb",
+  "rootDigest": "b0279ff3c445cddc0abc9a749bb9782af6d8667d0f8b3f2579ad83b86bf3026d",
   "artifacts": [
     {
       "artifactId": "command/development/agent-tooling/audit-repository-instructions",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:f2122b0244782626d0b0d46b9ffc222de15261476d052c41e24d13c3ce91c6cc",
-      "digest": "f2122b0244782626d0b0d46b9ffc222de15261476d052c41e24d13c3ce91c6cc",
+      "integrityId": "urn:youdede:artifact:sha256:df289457d98cfd026a8bcbb14e9496f687ec9f863ee33612b1820f9ac8b63a22",
+      "digest": "df289457d98cfd026a8bcbb14e9496f687ec9f863ee33612b1820f9ac8b63a22",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -16,18 +16,18 @@
       "files": [
         {
           "path": "artifacts/commands/development/agent-tooling/audit-repository-instructions/adapters/claude-code.json",
-          "bytes": 718,
-          "sha256": "bc0fe26d47bc6735619c9fd7428764c9207cd1e939fcee0f2d5cda1b9b75b672"
+          "bytes": 260,
+          "sha256": "44e55a07c48833ad870ecf3be8e71895d5a2565d93a84597d6319352e7221b1e"
         },
         {
           "path": "artifacts/commands/development/agent-tooling/audit-repository-instructions/artifact.json",
-          "bytes": 3727,
-          "sha256": "28f2fb355b6e63732516566412d4c28ec009d992ff4f39983ba02fe315f1a19d"
+          "bytes": 3464,
+          "sha256": "051d60d4382af396091a0166d2ab8787f9b01abdeac6f00c5ffa7a8bb74f268a"
         },
         {
           "path": "artifacts/commands/development/agent-tooling/audit-repository-instructions/COMMAND.md",
-          "bytes": 3704,
-          "sha256": "d1a1a2d4906d10d441bdc528120e691b478429e822f477cdb9129c931703c587"
+          "bytes": 3417,
+          "sha256": "99a06530087745c9d08c7fa29fa2b2d65b56c2bddb8ca5ea11d6190a9a7913ef"
         },
         {
           "path": "artifacts/commands/development/agent-tooling/audit-repository-instructions/evaluations/behavioral.json",
@@ -38,24 +38,14 @@
           "path": "artifacts/commands/development/agent-tooling/audit-repository-instructions/preconditions.json",
           "bytes": 19,
           "sha256": "caff5752efd7abaac4289dfac6160ab254513e4c8a5476916398d755ab4949dc"
-        },
-        {
-          "path": "artifacts/commands/development/agent-tooling/audit-repository-instructions/scripts/check-preconditions.mjs",
-          "bytes": 413,
-          "sha256": "679625d273bd9817aff8a93011f32c8de1e3972f09c1ff1bce67ed9871c0f5be"
-        },
-        {
-          "path": "scripts/runtime/command-precondition.mjs",
-          "bytes": 6987,
-          "sha256": "c296bf58408145a44cd26b81a05c86e6ef7e9558ccb4fbde66425195ed33b2e3"
         }
       ]
     },
     {
       "artifactId": "command/development/agent-tooling/preflight-change-environment",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:85515b63de119df32423936b4452c645e5e7a02061f595f9ad3b1469cf80b300",
-      "digest": "85515b63de119df32423936b4452c645e5e7a02061f595f9ad3b1469cf80b300",
+      "integrityId": "urn:youdede:artifact:sha256:1725dca67defdaaf6411084d0736182a46cfe3fd489a9c1525a4ad6c17ad8aeb",
+      "digest": "1725dca67defdaaf6411084d0736182a46cfe3fd489a9c1525a4ad6c17ad8aeb",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -63,23 +53,23 @@
       "files": [
         {
           "path": "artifacts/commands/development/agent-tooling/preflight-change-environment/adapters/claude-code.json",
-          "bytes": 887,
-          "sha256": "86b481f6b83692ba0789c0020c8ec2739cc8fd037b054aabcfb9288bad57dc2c"
+          "bytes": 431,
+          "sha256": "981800cff1549bf5d6c6054ec11f832cc72637ca9783aa07ed2ad48dc8ba7eca"
         },
         {
           "path": "artifacts/commands/development/agent-tooling/preflight-change-environment/artifact.json",
-          "bytes": 3219,
-          "sha256": "bc0e383ebb3ac48e6a681fea445ae4bf6ceab3aa22661a8636060cb8017d85a6"
+          "bytes": 3079,
+          "sha256": "c9ec9b56f7768cd33e983b5bfab8e59aabd4e6aa3d8da43ff49dccda8bdf46f8"
         },
         {
           "path": "artifacts/commands/development/agent-tooling/preflight-change-environment/COMMAND.md",
-          "bytes": 3905,
-          "sha256": "a31d5684b584df80349bb337e648ea32629c1ce896b4ae1b7f712cc538ee5c61"
+          "bytes": 3936,
+          "sha256": "d389443e35bf7b465da21f20674901cd3da7d3e820b7425832f4099ea411c07e"
         },
         {
           "path": "artifacts/commands/development/agent-tooling/preflight-change-environment/evaluations/behavioral.json",
-          "bytes": 6003,
-          "sha256": "8375b3e69c16ef95bc4c6b721590c11fd79eadb75a7ef0036a33929d7cfc4ec8"
+          "bytes": 5995,
+          "sha256": "27278ad8e593af6d2fa85208609b4e780d839681169f60bb311320d2dcfecffd"
         },
         {
           "path": "artifacts/commands/development/agent-tooling/preflight-change-environment/preconditions.json",
@@ -87,27 +77,17 @@
           "sha256": "caff5752efd7abaac4289dfac6160ab254513e4c8a5476916398d755ab4949dc"
         },
         {
-          "path": "artifacts/commands/development/agent-tooling/preflight-change-environment/scripts/check-preconditions.mjs",
-          "bytes": 413,
-          "sha256": "679625d273bd9817aff8a93011f32c8de1e3972f09c1ff1bce67ed9871c0f5be"
-        },
-        {
           "path": "artifacts/commands/development/agent-tooling/preflight-change-environment/scripts/collect-environment.mjs",
           "bytes": 1197,
           "sha256": "79bdd94e3c0db430cb67b00390a0e238b4a02a79c0528a4730289ea572ec65f1"
-        },
-        {
-          "path": "scripts/runtime/command-precondition.mjs",
-          "bytes": 6987,
-          "sha256": "c296bf58408145a44cd26b81a05c86e6ef7e9558ccb4fbde66425195ed33b2e3"
         }
       ]
     },
     {
       "artifactId": "command/development/agent-tooling/re-pin-mcp-tools",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:c2c9131d01f2ac66a753aaaeb608a49bc909aa1ac7f7ba8fae37e4a73825b5c5",
-      "digest": "c2c9131d01f2ac66a753aaaeb608a49bc909aa1ac7f7ba8fae37e4a73825b5c5",
+      "integrityId": "urn:youdede:artifact:sha256:a6ae0628c85bdc5b982cbceaafbf5b78384f113626bfb365a9d2bf9b99520e21",
+      "digest": "a6ae0628c85bdc5b982cbceaafbf5b78384f113626bfb365a9d2bf9b99520e21",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -120,13 +100,13 @@
         },
         {
           "path": "artifacts/commands/development/agent-tooling/re-pin-mcp-tools/artifact.json",
-          "bytes": 3225,
-          "sha256": "12c45a6afd545cdc270a362863e2ac577eb29f40a1560fd1f592e130d0da1f42"
+          "bytes": 3317,
+          "sha256": "7ee20874910e4f601f22f73e04923ddd72889ef7aa5ace0d355e8a73275078f1"
         },
         {
           "path": "artifacts/commands/development/agent-tooling/re-pin-mcp-tools/COMMAND.md",
-          "bytes": 4968,
-          "sha256": "ef99cfcc6b688feec173c4009de866d98ebe20ddd38783bfe5c68062c580274a"
+          "bytes": 5413,
+          "sha256": "b713968219e2b9544b7b895f52d078aefbf1bce70997f027dcc66df6b6831ff7"
         },
         {
           "path": "artifacts/commands/development/agent-tooling/re-pin-mcp-tools/evaluations/behavioral.json",
@@ -163,8 +143,8 @@
     {
       "artifactId": "command/development/workflow/assemble-review-brief",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:22f40242f7a85982d52cc4d5686ae2c6ddfe7f31ead7594acfd53a99d3536b61",
-      "digest": "22f40242f7a85982d52cc4d5686ae2c6ddfe7f31ead7594acfd53a99d3536b61",
+      "integrityId": "urn:youdede:artifact:sha256:8fc62e8d3e977c3d4af3ad5ed732cde150d4ef596b5ba3234b6d729b9ece7026",
+      "digest": "8fc62e8d3e977c3d4af3ad5ed732cde150d4ef596b5ba3234b6d729b9ece7026",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -172,18 +152,18 @@
       "files": [
         {
           "path": "artifacts/commands/development/workflow/assemble-review-brief/adapters/claude-code.json",
-          "bytes": 694,
-          "sha256": "0356e402179bbd37542c8dc6a958d559b2d57c2119d8f572eaead3131a5e53df"
+          "bytes": 252,
+          "sha256": "6c61f488facef41efa1d698d7fa43b50fbee775a741a531fc2fdd69d1a437b59"
         },
         {
           "path": "artifacts/commands/development/workflow/assemble-review-brief/artifact.json",
-          "bytes": 2948,
-          "sha256": "0289ff71fd94724f92173b2d726b9448c5c66394977f2c62458f7afdb4662ec7"
+          "bytes": 2908,
+          "sha256": "05810ace8de0d7793cc2f9b7d088625174a88105618088e2137cf093a449e855"
         },
         {
           "path": "artifacts/commands/development/workflow/assemble-review-brief/COMMAND.md",
-          "bytes": 4209,
-          "sha256": "7a784f75729ee07c66395af1cd198a03bf80ac336f7523c8720cbe60d7c5e9af"
+          "bytes": 4360,
+          "sha256": "77161e398b4532dacaa7f87b8b32138b1523d5e5affafb73b5999b91256d2243"
         },
         {
           "path": "artifacts/commands/development/workflow/assemble-review-brief/evaluations/behavioral.json",
@@ -194,24 +174,14 @@
           "path": "artifacts/commands/development/workflow/assemble-review-brief/preconditions.json",
           "bytes": 19,
           "sha256": "caff5752efd7abaac4289dfac6160ab254513e4c8a5476916398d755ab4949dc"
-        },
-        {
-          "path": "artifacts/commands/development/workflow/assemble-review-brief/scripts/check-preconditions.mjs",
-          "bytes": 818,
-          "sha256": "99e4dd76e0c13f3ba63dc6beee61633dbe00735d2c98256251c249cc5c0f7c36"
-        },
-        {
-          "path": "scripts/runtime/command-precondition.mjs",
-          "bytes": 6987,
-          "sha256": "c296bf58408145a44cd26b81a05c86e6ef7e9558ccb4fbde66425195ed33b2e3"
         }
       ]
     },
     {
       "artifactId": "command/development/workflow/audit-release-evidence",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:bdd0db47ce7e353bee9e7f975b36b370777bb26df36ded2ab67b16dc37818cc4",
-      "digest": "bdd0db47ce7e353bee9e7f975b36b370777bb26df36ded2ab67b16dc37818cc4",
+      "integrityId": "urn:youdede:artifact:sha256:8dc52bd8b32de3d0574973b64b8aa3caeb26691b38608d1bc8eeb76df3be1005",
+      "digest": "8dc52bd8b32de3d0574973b64b8aa3caeb26691b38608d1bc8eeb76df3be1005",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -224,13 +194,13 @@
         },
         {
           "path": "artifacts/commands/development/workflow/audit-release-evidence/artifact.json",
-          "bytes": 2974,
-          "sha256": "7856527a0112aeda015807cee1e992db3eecb86547a1fa7a68927b1eafff9d6e"
+          "bytes": 3089,
+          "sha256": "d0d761a6427d14070545f66fe619d56bfe4142bd99011fc0914caab9b6a8bc87"
         },
         {
           "path": "artifacts/commands/development/workflow/audit-release-evidence/COMMAND.md",
-          "bytes": 4593,
-          "sha256": "8ba3f96c7fb1b9c53354c6f4e4f946f5800c1f4b5eedc24d2a81ca5178e0bb4b"
+          "bytes": 5127,
+          "sha256": "ba6eae36ebf22d480f1af77159b85660500384dbf5c27cf5f5c213dddfbf9f1c"
         },
         {
           "path": "artifacts/commands/development/workflow/audit-release-evidence/evaluations/behavioral.json",
@@ -257,8 +227,8 @@
     {
       "artifactId": "command/development/workflow/draft-evidenced-plan",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:6ad9726ca6bd63c26a6343b4a788efda97327213684ff8235827e74e6f705906",
-      "digest": "6ad9726ca6bd63c26a6343b4a788efda97327213684ff8235827e74e6f705906",
+      "integrityId": "urn:youdede:artifact:sha256:9dbf190f358c588c15fb86130c7dff55f617d141a75b8ca0dc5530eb3cf18b47",
+      "digest": "9dbf190f358c588c15fb86130c7dff55f617d141a75b8ca0dc5530eb3cf18b47",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -271,13 +241,13 @@
         },
         {
           "path": "artifacts/commands/development/workflow/draft-evidenced-plan/artifact.json",
-          "bytes": 3482,
-          "sha256": "04b909f35c30e390e89f5d9ad1106f1d8e3d3d923caf05f4ab2edf7638b1b9a4"
+          "bytes": 3597,
+          "sha256": "98fc73efbf145d4f12c3ba0b5c576cd9f78422ef69fafe0e5662fd95009f4cbe"
         },
         {
           "path": "artifacts/commands/development/workflow/draft-evidenced-plan/COMMAND.md",
-          "bytes": 4470,
-          "sha256": "0b5d86ddd9054106aca2341afa0d9ee3866b814a20c1bd10c47d83098b51eb0d"
+          "bytes": 4772,
+          "sha256": "36b8555edbb03eace32b5bf36e16572eb6bae2a08e5ffb736d4007217e2c1d50"
         },
         {
           "path": "artifacts/commands/development/workflow/draft-evidenced-plan/evaluations/behavioral.json",
@@ -304,8 +274,8 @@
     {
       "artifactId": "command/development/workflow/verify-claims-against-output",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:fde47807fff02f4d14de4d3bfd73d141750047ae72384ddb08a94290841ab801",
-      "digest": "fde47807fff02f4d14de4d3bfd73d141750047ae72384ddb08a94290841ab801",
+      "integrityId": "urn:youdede:artifact:sha256:c5d6fd697bff5c93688328dfdcc0d57aafb543c1eeab7c4517285cda3a751ab9",
+      "digest": "c5d6fd697bff5c93688328dfdcc0d57aafb543c1eeab7c4517285cda3a751ab9",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -318,13 +288,13 @@
         },
         {
           "path": "artifacts/commands/development/workflow/verify-claims-against-output/artifact.json",
-          "bytes": 3101,
-          "sha256": "0779ac1c7d90977e7e07b6767e25f8279ae7fe385f83f72a9daed91bd04b2596"
+          "bytes": 3216,
+          "sha256": "363f03261edf428dd7c8a2258b1e882bdcc2e1a4555af7663f8419f72bd91d2b"
         },
         {
           "path": "artifacts/commands/development/workflow/verify-claims-against-output/COMMAND.md",
-          "bytes": 4574,
-          "sha256": "5e8be8999dde2c180ebc0a408ec2d993a63c350a08add7e96d396ddacc096f8c"
+          "bytes": 5123,
+          "sha256": "9424d8c4a017fe9b95072bab74be68d9eca39144975d515ca35acb3d05f67ba3"
         },
         {
           "path": "artifacts/commands/development/workflow/verify-claims-against-output/evaluations/behavioral.json",
@@ -351,8 +321,8 @@
     {
       "artifactId": "command/operations/ci-cd/diagnose-ci-failure",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:e1460220ffab36fbd338ba8d2cceec1ec8d49be7aae57b91e2ad8f341147a517",
-      "digest": "e1460220ffab36fbd338ba8d2cceec1ec8d49be7aae57b91e2ad8f341147a517",
+      "integrityId": "urn:youdede:artifact:sha256:3b255ec1193bda4010e9dfa1245cb51aea4d8c57172dd5a73a61547ec0285b76",
+      "digest": "3b255ec1193bda4010e9dfa1245cb51aea4d8c57172dd5a73a61547ec0285b76",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -360,18 +330,18 @@
       "files": [
         {
           "path": "artifacts/commands/operations/ci-cd/diagnose-ci-failure/adapters/claude-code.json",
-          "bytes": 688,
-          "sha256": "2b2d76d19ceb433495c6b4152cdf69671493ba2d1a933b5586f089de4ea56db9"
+          "bytes": 250,
+          "sha256": "9422f0fad52a6781d864602ca2236cbb41134cef56aefe6da2aa3c3c5ddd250e"
         },
         {
           "path": "artifacts/commands/operations/ci-cd/diagnose-ci-failure/artifact.json",
-          "bytes": 3325,
-          "sha256": "11bc2bd7e7c3bd148f7f883071566b66de7edc4fb1f2fe2a599ab7ae3295d5cc"
+          "bytes": 3062,
+          "sha256": "8ba4749d542cea08d6011c6bb86f3f13bf6b19ebe68405c9ce74fa9d8b32b815"
         },
         {
           "path": "artifacts/commands/operations/ci-cd/diagnose-ci-failure/COMMAND.md",
-          "bytes": 3813,
-          "sha256": "c79bf4343e5d27ffab19d9acc7e608ddd9569fbce6cc2244ff14d53861c04b6b"
+          "bytes": 3536,
+          "sha256": "f2e5d1660d3e8e1e79ec2fd52466511d2ed5ac43e4c96f4e39eecfa85968971c"
         },
         {
           "path": "artifacts/commands/operations/ci-cd/diagnose-ci-failure/evaluations/behavioral.json",
@@ -382,24 +352,14 @@
           "path": "artifacts/commands/operations/ci-cd/diagnose-ci-failure/preconditions.json",
           "bytes": 19,
           "sha256": "caff5752efd7abaac4289dfac6160ab254513e4c8a5476916398d755ab4949dc"
-        },
-        {
-          "path": "artifacts/commands/operations/ci-cd/diagnose-ci-failure/scripts/check-preconditions.mjs",
-          "bytes": 413,
-          "sha256": "679625d273bd9817aff8a93011f32c8de1e3972f09c1ff1bce67ed9871c0f5be"
-        },
-        {
-          "path": "scripts/runtime/command-precondition.mjs",
-          "bytes": 6987,
-          "sha256": "c296bf58408145a44cd26b81a05c86e6ef7e9558ccb4fbde66425195ed33b2e3"
         }
       ]
     },
     {
       "artifactId": "command/operations/session/record-work-checkpoint",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:c4017c9329c6e8da34854065653918a2e836c842047cb54b893aee9cd1905306",
-      "digest": "c4017c9329c6e8da34854065653918a2e836c842047cb54b893aee9cd1905306",
+      "integrityId": "urn:youdede:artifact:sha256:b1a5685dc9e61125a9a45372a14d178a0204148c5682c23b96cfd812d52127c7",
+      "digest": "b1a5685dc9e61125a9a45372a14d178a0204148c5682c23b96cfd812d52127c7",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -407,38 +367,28 @@
       "files": [
         {
           "path": "artifacts/commands/operations/session/record-work-checkpoint/adapters/claude-code.json",
-          "bytes": 838,
-          "sha256": "92914ec3ff5bb9222dc45f5af72ea269c24ec8ff981b553cd789149141afddb4"
+          "bytes": 394,
+          "sha256": "1efccca9060dd45a9a0ce0b3c699704a6c4a43f30a36fea9707847e15db88c3d"
         },
         {
           "path": "artifacts/commands/operations/session/record-work-checkpoint/artifact.json",
-          "bytes": 2832,
-          "sha256": "de255841d12fd61937a56822a308a6941ecd7e2108588623dfde0b5cbe59280d"
+          "bytes": 2690,
+          "sha256": "16cce1397dbc465f7f1428a5e87157aff0a31aac0e534da5545ac109daa18f8c"
         },
         {
           "path": "artifacts/commands/operations/session/record-work-checkpoint/COMMAND.md",
-          "bytes": 4546,
-          "sha256": "bb8f303509e89cb3b8688cdad1797d605482332954ae815530127f1ddf7284f2"
+          "bytes": 4628,
+          "sha256": "ab1b4f5a8a345cc1cc0ab87f036b8859342079dbe2862b288aa7d236be93fcd8"
         },
         {
           "path": "artifacts/commands/operations/session/record-work-checkpoint/evaluations/behavioral.json",
-          "bytes": 5017,
-          "sha256": "bc7be2352c4c048990f4643e76f1a34de7656dc426187370a143c57cf0085aa1"
+          "bytes": 4997,
+          "sha256": "bcf0e8818ecdaf0b938b2962169b68a56c795e72ebb7b33477e5417429789fb2"
         },
         {
           "path": "artifacts/commands/operations/session/record-work-checkpoint/preconditions.json",
           "bytes": 19,
           "sha256": "caff5752efd7abaac4289dfac6160ab254513e4c8a5476916398d755ab4949dc"
-        },
-        {
-          "path": "artifacts/commands/operations/session/record-work-checkpoint/scripts/check-preconditions.mjs",
-          "bytes": 818,
-          "sha256": "99e4dd76e0c13f3ba63dc6beee61633dbe00735d2c98256251c249cc5c0f7c36"
-        },
-        {
-          "path": "scripts/runtime/command-precondition.mjs",
-          "bytes": 6987,
-          "sha256": "c296bf58408145a44cd26b81a05c86e6ef7e9558ccb4fbde66425195ed33b2e3"
         },
         {
           "path": "scripts/runtime/session-ledger.mjs",
@@ -450,8 +400,8 @@
     {
       "artifactId": "command/operations/session/verify-session-ledger",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:d8a3461504c1dcd13868a3555e30bf2ac78945bb9a4219c5de61d50444e009fb",
-      "digest": "d8a3461504c1dcd13868a3555e30bf2ac78945bb9a4219c5de61d50444e009fb",
+      "integrityId": "urn:youdede:artifact:sha256:5609125ecc0df8bc666658a38cf6e9f7f4762a685bb6828721c896e4f0a3b7ef",
+      "digest": "5609125ecc0df8bc666658a38cf6e9f7f4762a685bb6828721c896e4f0a3b7ef",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -464,13 +414,13 @@
         },
         {
           "path": "artifacts/commands/operations/session/verify-session-ledger/artifact.json",
-          "bytes": 2927,
-          "sha256": "b5d29cca00e603e073ce6ae2349ef69ee4d3d8412068b352e71fc7cee67d75c6"
+          "bytes": 3140,
+          "sha256": "5fdee23d438ee107934629b6e2b8aee770a43628c8b8999512bfdf1ac4972f74"
         },
         {
           "path": "artifacts/commands/operations/session/verify-session-ledger/COMMAND.md",
-          "bytes": 4337,
-          "sha256": "99cbec06288db1a701385ea624c56c6766c2015d1690dc9c8064e54523c6e104"
+          "bytes": 4794,
+          "sha256": "73baa7eec911a67ae12d5d84b1ed26e0d45354a05e644c05aa16127834397bc2"
         },
         {
           "path": "artifacts/commands/operations/session/verify-session-ledger/evaluations/behavioral.json",
@@ -479,8 +429,8 @@
         },
         {
           "path": "artifacts/commands/operations/session/verify-session-ledger/preconditions.json",
-          "bytes": 19,
-          "sha256": "caff5752efd7abaac4289dfac6160ab254513e4c8a5476916398d755ab4949dc"
+          "bytes": 128,
+          "sha256": "6e8aa4a1f54818d1d1077d8a4ce9e14d52af5d62ed13e8e13b076819d72dfa3e"
         },
         {
           "path": "artifacts/commands/operations/session/verify-session-ledger/scripts/check-preconditions.mjs",
@@ -3938,8 +3888,8 @@
     {
       "artifactId": "skill/data/databases/provision-postgres-readonly-role",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:fa245b27406235c1941f45676426b8f184688114219b1d02f10e26a94d98c3c6",
-      "digest": "fa245b27406235c1941f45676426b8f184688114219b1d02f10e26a94d98c3c6",
+      "integrityId": "urn:youdede:artifact:sha256:6a4338983e64011e5134ddd292c4d00492a39d80e323d9d327e8d69df55cbc8c",
+      "digest": "6a4338983e64011e5134ddd292c4d00492a39d80e323d9d327e8d69df55cbc8c",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -3977,8 +3927,8 @@
         },
         {
           "path": "artifacts/skills/data/databases/provision-postgres-readonly-role/agents/openai.yaml",
-          "bytes": 271,
-          "sha256": "fc054db5fdfb246ed1daa133b2e37a476ce816b04bb8b48a806f8c592f1bb507"
+          "bytes": 267,
+          "sha256": "3fa77857af2ef630bfa140d70c6c4d33a9965ebc237210fd9c2e06a771f50573"
         },
         {
           "path": "artifacts/skills/data/databases/provision-postgres-readonly-role/artifact.json",
@@ -4000,8 +3950,8 @@
     {
       "artifactId": "skill/data/databases/query-production-readonly",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:00ec1bf36ad62d11a781df9f2741dba1066cba8cc60fe90509155d615efbc91b",
-      "digest": "00ec1bf36ad62d11a781df9f2741dba1066cba8cc60fe90509155d615efbc91b",
+      "integrityId": "urn:youdede:artifact:sha256:54f2445d772c427302837da679eb9c59639c1261caba9597f47bc61a2d00a055",
+      "digest": "54f2445d772c427302837da679eb9c59639c1261caba9597f47bc61a2d00a055",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -4039,8 +3989,8 @@
         },
         {
           "path": "artifacts/skills/data/databases/query-production-readonly/agents/openai.yaml",
-          "bytes": 257,
-          "sha256": "00e941b867e1db40eab7cdd69fd57653a095b3f0cbaa78017908415823f17fb5"
+          "bytes": 253,
+          "sha256": "d96203387131915b1f8241beddd3f0c6460e821d8d8a112dfc332d624fe8f980"
         },
         {
           "path": "artifacts/skills/data/databases/query-production-readonly/artifact.json",
@@ -4816,8 +4766,8 @@
     {
       "artifactId": "skill/design/frontend/review-frontend-quality",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:c86aed76489139d92e7d4238372d44d03bff9349384f863c7182832597dee4c8",
-      "digest": "c86aed76489139d92e7d4238372d44d03bff9349384f863c7182832597dee4c8",
+      "integrityId": "urn:youdede:artifact:sha256:a17e529333d246b1eabd0a24de7cea90c5f2ed9c28cf5e874d5d712faf1b267f",
+      "digest": "a17e529333d246b1eabd0a24de7cea90c5f2ed9c28cf5e874d5d712faf1b267f",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -4855,8 +4805,8 @@
         },
         {
           "path": "artifacts/skills/design/frontend/review-frontend-quality/agents/openai.yaml",
-          "bytes": 241,
-          "sha256": "7d309d61e21ecfac42ce165d639506b24c7de066a86f97683d5192e2b4b1075c"
+          "bytes": 249,
+          "sha256": "f5feee5fc1105aed40434a5dc0db64ff9f9be59a50b8e1df8cc5087c353e7c12"
         },
         {
           "path": "artifacts/skills/design/frontend/review-frontend-quality/artifact.json",
@@ -5875,8 +5825,8 @@
     {
       "artifactId": "skill/development/agent-tooling/audit-agent-guidance-drift",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:64217fc648ca0db53f8cdc70e681111cd1f3d3e8a5231eeee176a7c223cdeb9a",
-      "digest": "64217fc648ca0db53f8cdc70e681111cd1f3d3e8a5231eeee176a7c223cdeb9a",
+      "integrityId": "urn:youdede:artifact:sha256:d9a5ab83a2afadd5abfc5082edbb060ec6043a084d792737e27819e84c04707b",
+      "digest": "d9a5ab83a2afadd5abfc5082edbb060ec6043a084d792737e27819e84c04707b",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -5914,8 +5864,8 @@
         },
         {
           "path": "artifacts/skills/development/agent-tooling/audit-agent-guidance-drift/agents/openai.yaml",
-          "bytes": 260,
-          "sha256": "d4ab27d215becd92297ff4c804d759ebb4828d8a30bf90c34d33537da072b94c"
+          "bytes": 258,
+          "sha256": "b7c85f8d94f697992af23bfe935f65dcc7af667fa938be2bcba400af9bd256ed"
         },
         {
           "path": "artifacts/skills/development/agent-tooling/audit-agent-guidance-drift/artifact.json",
@@ -5937,8 +5887,8 @@
     {
       "artifactId": "skill/development/agent-tooling/author-deterministic-agent-hook",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:cd8c06a31cf82127f3eea02941e42b722e677615ccb4572abda503cf1ae50307",
-      "digest": "cd8c06a31cf82127f3eea02941e42b722e677615ccb4572abda503cf1ae50307",
+      "integrityId": "urn:youdede:artifact:sha256:f864aa37b53974218cc01d5883e2b020085c676d642084716818e20304606b39",
+      "digest": "f864aa37b53974218cc01d5883e2b020085c676d642084716818e20304606b39",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -5976,8 +5926,8 @@
         },
         {
           "path": "artifacts/skills/development/agent-tooling/author-deterministic-agent-hook/agents/openai.yaml",
-          "bytes": 270,
-          "sha256": "0b0c85b222b1f471217989109786bea4ce045f63ad6f3b7d5089dd2d03695af7"
+          "bytes": 263,
+          "sha256": "c44b5a2fc9225f6779758e0c0c852243ed3fd0646620ab0c18a2dcf3c82e26bb"
         },
         {
           "path": "artifacts/skills/development/agent-tooling/author-deterministic-agent-hook/artifact.json",
@@ -5999,8 +5949,8 @@
     {
       "artifactId": "skill/development/agent-tooling/author-effective-agent-skill",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:fa56f6f49026ab065ab24ccb591d203c96b394af460b5f375e47342cbd3a1be7",
-      "digest": "fa56f6f49026ab065ab24ccb591d203c96b394af460b5f375e47342cbd3a1be7",
+      "integrityId": "urn:youdede:artifact:sha256:7ae40b0bc5d1f7b2e5190172c1af85a9d3f6fce8a7ad9dd3cf4120ea2fafce5e",
+      "digest": "7ae40b0bc5d1f7b2e5190172c1af85a9d3f6fce8a7ad9dd3cf4120ea2fafce5e",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -6038,8 +5988,8 @@
         },
         {
           "path": "artifacts/skills/development/agent-tooling/author-effective-agent-skill/agents/openai.yaml",
-          "bytes": 263,
-          "sha256": "35ca11b0248acbece810715c87a1698922a60c28fc0208cf805a66126dfc17bb"
+          "bytes": 260,
+          "sha256": "02f2c619ad187d55c8437b0301dbd146a3233af1dedbbd56542180d852c0dc15"
         },
         {
           "path": "artifacts/skills/development/agent-tooling/author-effective-agent-skill/artifact.json",
@@ -6128,8 +6078,8 @@
     {
       "artifactId": "skill/development/agent-tooling/evaluate-agent-guidance-value",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:6cb9249ae0b68e1524f06e5d3126dc7e34fcaa3f942cc7c9103e31ea9557c08b",
-      "digest": "6cb9249ae0b68e1524f06e5d3126dc7e34fcaa3f942cc7c9103e31ea9557c08b",
+      "integrityId": "urn:youdede:artifact:sha256:789aa444e9bbe7ea6d2845081cc101b6b610d147d7579f15ad93acec24bf795c",
+      "digest": "789aa444e9bbe7ea6d2845081cc101b6b610d147d7579f15ad93acec24bf795c",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -6167,8 +6117,8 @@
         },
         {
           "path": "artifacts/skills/development/agent-tooling/evaluate-agent-guidance-value/agents/openai.yaml",
-          "bytes": 266,
-          "sha256": "f2dbac104423a609ed50e7273169f3661ae79734d462779af2d71a60a55e5940"
+          "bytes": 256,
+          "sha256": "da8e5d3cbf6ac6a3eac6fec16f9a138881e54e8a6b7b101a4151d603dda0ac77"
         },
         {
           "path": "artifacts/skills/development/agent-tooling/evaluate-agent-guidance-value/artifact.json",
@@ -6190,8 +6140,8 @@
     {
       "artifactId": "skill/development/agent-tooling/publish-agent-skill",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:bb4b5bcb08bc0335bf1e9ea9f1bf13507857803fef54d18cfd62172d7729054c",
-      "digest": "bb4b5bcb08bc0335bf1e9ea9f1bf13507857803fef54d18cfd62172d7729054c",
+      "integrityId": "urn:youdede:artifact:sha256:34c7df8c7f1dbc730315e3629deec439dde66713062a51bc6c2be9d8e4b8aecb",
+      "digest": "34c7df8c7f1dbc730315e3629deec439dde66713062a51bc6c2be9d8e4b8aecb",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -6229,8 +6179,8 @@
         },
         {
           "path": "artifacts/skills/development/agent-tooling/publish-agent-skill/agents/openai.yaml",
-          "bytes": 246,
-          "sha256": "1b0e8b22b5674a039df160fdd8d486404cb70935aa76e9f231cf6450dc9a2011"
+          "bytes": 241,
+          "sha256": "75b95a1ae2feaadbf18721c69e97f08b0ba7a49d6198a9dd63b7f3eff3dc8dd9"
         },
         {
           "path": "artifacts/skills/development/agent-tooling/publish-agent-skill/artifact.json",
@@ -6314,8 +6264,8 @@
     {
       "artifactId": "skill/development/agent-tooling/write-folder-agent-guidance",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:487f35dc9fc7cf1d779e573997a36f194cf7e01308d137e9241330f3a9777372",
-      "digest": "487f35dc9fc7cf1d779e573997a36f194cf7e01308d137e9241330f3a9777372",
+      "integrityId": "urn:youdede:artifact:sha256:f9539857b94db33275c0ef206ff52aa449ba983034d097b35cd4862e06604eb7",
+      "digest": "f9539857b94db33275c0ef206ff52aa449ba983034d097b35cd4862e06604eb7",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -6353,8 +6303,8 @@
         },
         {
           "path": "artifacts/skills/development/agent-tooling/write-folder-agent-guidance/agents/openai.yaml",
-          "bytes": 262,
-          "sha256": "8f09a64c9ca21c2d3db10d6fb126f27bf90e92f7d4e0b6a1983bd7ebb481af8e"
+          "bytes": 254,
+          "sha256": "c5efd5b07fcabac7902b03f5a773d61bd8913486a7cce1828569f9663977d4a8"
         },
         {
           "path": "artifacts/skills/development/agent-tooling/write-folder-agent-guidance/artifact.json",
@@ -6376,8 +6326,8 @@
     {
       "artifactId": "skill/development/agent-tooling/write-project-agent-guidance",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:d5cb881098548a69d1afd94cf1aa5a0cc7fc42a91609285b5ff2b1931ddcbe17",
-      "digest": "d5cb881098548a69d1afd94cf1aa5a0cc7fc42a91609285b5ff2b1931ddcbe17",
+      "integrityId": "urn:youdede:artifact:sha256:aac9d154c585a3ca8fd44b3a3e7dbc523c5504304d5f7003394fa8b174f22a28",
+      "digest": "aac9d154c585a3ca8fd44b3a3e7dbc523c5504304d5f7003394fa8b174f22a28",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -6415,8 +6365,8 @@
         },
         {
           "path": "artifacts/skills/development/agent-tooling/write-project-agent-guidance/agents/openai.yaml",
-          "bytes": 264,
-          "sha256": "de8b103d4b4f8bb39aa40368523b59faa25587d11ba03434518cd237fcd8a752"
+          "bytes": 261,
+          "sha256": "886de40f30b3ddc030fe897ac412ffdc9f85d9b82ce962ed5742667ba29cc998"
         },
         {
           "path": "artifacts/skills/development/agent-tooling/write-project-agent-guidance/artifact.json",
@@ -7187,8 +7137,8 @@
     {
       "artifactId": "skill/development/code-quality/request-independent-code-review",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:41229c4ecf3ba43d7ceaedfaeea72f606a75c1c0b894d933b95d96c2d60b675c",
-      "digest": "41229c4ecf3ba43d7ceaedfaeea72f606a75c1c0b894d933b95d96c2d60b675c",
+      "integrityId": "urn:youdede:artifact:sha256:0a16f36070db6b2f65edf995bc48e13a7e4411bbc75ad663f65f406073cbd4ea",
+      "digest": "0a16f36070db6b2f65edf995bc48e13a7e4411bbc75ad663f65f406073cbd4ea",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -7226,8 +7176,8 @@
         },
         {
           "path": "artifacts/skills/development/code-quality/request-independent-code-review/agents/openai.yaml",
-          "bytes": 265,
-          "sha256": "1e5c1b17e3f54a94e0dde8ac76f9cdfeb1731b2aed09817b9fa416b707529475"
+          "bytes": 262,
+          "sha256": "915dbaa3ee2551d34b8d2d1d80598c738cf5e46908fdcf8b27163de12df526e8"
         },
         {
           "path": "artifacts/skills/development/code-quality/request-independent-code-review/artifact.json",
@@ -7311,8 +7261,8 @@
     {
       "artifactId": "skill/development/debugging/debug-systematically",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:2f87450641454ef75b871ad11237f56abffd22205eafc71b449ac5eaafa27c0d",
-      "digest": "2f87450641454ef75b871ad11237f56abffd22205eafc71b449ac5eaafa27c0d",
+      "integrityId": "urn:youdede:artifact:sha256:ff663dfb51f6426413ddcad1499c58ae0f38f3037929da036a610856a3181016",
+      "digest": "ff663dfb51f6426413ddcad1499c58ae0f38f3037929da036a610856a3181016",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -7350,8 +7300,8 @@
         },
         {
           "path": "artifacts/skills/development/debugging/debug-systematically/agents/openai.yaml",
-          "bytes": 241,
-          "sha256": "0464410a1b704a8dbfa15ad564f0d9695e567cd80f4e97df8fe78c09b4ac3d44"
+          "bytes": 248,
+          "sha256": "9387936d4ebfe632d14c316f01fea8f800f9cb5d98fbe8de92f5815d4568ef85"
         },
         {
           "path": "artifacts/skills/development/debugging/debug-systematically/artifact.json",
@@ -7445,8 +7395,8 @@
     {
       "artifactId": "skill/development/testing/deliver-test-first",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:6859aaf37ba1335c7ca8687c9241393ce26a3d2b8a25e6a9d549ad99d409753e",
-      "digest": "6859aaf37ba1335c7ca8687c9241393ce26a3d2b8a25e6a9d549ad99d409753e",
+      "integrityId": "urn:youdede:artifact:sha256:a2f6279385c282196b931ca824fc0db86a29a9683947a5542420aefb51671401",
+      "digest": "a2f6279385c282196b931ca824fc0db86a29a9683947a5542420aefb51671401",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -7484,8 +7434,8 @@
         },
         {
           "path": "artifacts/skills/development/testing/deliver-test-first/agents/openai.yaml",
-          "bytes": 242,
-          "sha256": "060102f009a0778b49b7b8d26c2ff650a5b08c20a656d92ed90c675b23fbae84"
+          "bytes": 238,
+          "sha256": "788e068552067fdcc47fa4922a9bcca98dfb0bcbf5349ba324b4861f5f674d72"
         },
         {
           "path": "artifacts/skills/development/testing/deliver-test-first/artifact.json",
@@ -8132,8 +8082,8 @@
     {
       "artifactId": "skill/marketing/content/capture-content-idea",
       "version": "1.4.0",
-      "integrityId": "urn:youdede:artifact:sha256:204b609499c1f338dc55e938103c70025e87a98f2706ed39abf033b1397fdb61",
-      "digest": "204b609499c1f338dc55e938103c70025e87a98f2706ed39abf033b1397fdb61",
+      "integrityId": "urn:youdede:artifact:sha256:c8a46dbb2a3258283bb9c96ca19a90dd95619e5f8a22dd794ae475498900d4f7",
+      "digest": "c8a46dbb2a3258283bb9c96ca19a90dd95619e5f8a22dd794ae475498900d4f7",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -8171,8 +8121,8 @@
         },
         {
           "path": "artifacts/skills/marketing/content/capture-content-idea/agents/openai.yaml",
-          "bytes": 248,
-          "sha256": "41696fc96f2951a0337362fdd0337fb82f70848a28f026823a262bf97b6405df"
+          "bytes": 243,
+          "sha256": "8e57b5553710f389a488aff0d95825220403c7a48dc1c1b00b90bf04b89e1410"
         },
         {
           "path": "artifacts/skills/marketing/content/capture-content-idea/artifact.json",
@@ -10860,8 +10810,8 @@
     {
       "artifactId": "skill/operations/agent-orchestration/delegate-bounded-subtasks",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:60548df475a0f1a94977278607affb7116d19935b133abd58418a3a60db4a53c",
-      "digest": "60548df475a0f1a94977278607affb7116d19935b133abd58418a3a60db4a53c",
+      "integrityId": "urn:youdede:artifact:sha256:2bdb9d29148627267cfd8cdcbc7d570e907ed2d2f741508c01183924d9842556",
+      "digest": "2bdb9d29148627267cfd8cdcbc7d570e907ed2d2f741508c01183924d9842556",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -10899,8 +10849,8 @@
         },
         {
           "path": "artifacts/skills/operations/agent-orchestration/delegate-bounded-subtasks/agents/openai.yaml",
-          "bytes": 258,
-          "sha256": "dd8293c6b2b980c05c57fe47d61112e00bfe28e22f49dff56afdfa4a3b2cd607"
+          "bytes": 253,
+          "sha256": "1cbfa4e2039efec72e770b09a73d3f2cb09b9b4c8230db6130ac2d857364df51"
         },
         {
           "path": "artifacts/skills/operations/agent-orchestration/delegate-bounded-subtasks/artifact.json",
@@ -10922,8 +10872,8 @@
     {
       "artifactId": "skill/operations/agent-orchestration/delegate-to-codex-cli",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:b88ae00a8e0567ad6988e502ef8a5e8785cc01cbb13b3e5630f83040dfc253c7",
-      "digest": "b88ae00a8e0567ad6988e502ef8a5e8785cc01cbb13b3e5630f83040dfc253c7",
+      "integrityId": "urn:youdede:artifact:sha256:81afbadedf723e68e4d291c62f7e3536903acf82014a2d6a443772b40fbe5fb5",
+      "digest": "81afbadedf723e68e4d291c62f7e3536903acf82014a2d6a443772b40fbe5fb5",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -10961,8 +10911,8 @@
         },
         {
           "path": "artifacts/skills/operations/agent-orchestration/delegate-to-codex-cli/agents/openai.yaml",
-          "bytes": 249,
-          "sha256": "85ee3982764a96aa424a2f76f831e77f565662f4d6e6314fca7b3cf0f0516d7d"
+          "bytes": 246,
+          "sha256": "ab675058c5224a37d91692c7e73c05190ced90f768a84158d56f101d2bbbfd97"
         },
         {
           "path": "artifacts/skills/operations/agent-orchestration/delegate-to-codex-cli/artifact.json",
@@ -11423,8 +11373,8 @@
     {
       "artifactId": "skill/operations/git/isolate-work-with-worktrees",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:6ebba51c2546aae5f2334ba78ee34cc523db3286eb10ebc53bf0ed4cd6ec2cc3",
-      "digest": "6ebba51c2546aae5f2334ba78ee34cc523db3286eb10ebc53bf0ed4cd6ec2cc3",
+      "integrityId": "urn:youdede:artifact:sha256:62adb99286113d0ce4aaec993aa280da5779d2647c991038c29b5f45244834c5",
+      "digest": "62adb99286113d0ce4aaec993aa280da5779d2647c991038c29b5f45244834c5",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -11462,8 +11412,8 @@
         },
         {
           "path": "artifacts/skills/operations/git/isolate-work-with-worktrees/agents/openai.yaml",
-          "bytes": 253,
-          "sha256": "ace0398795d0d17e5cfc0a55866d3a3e2d5f27fb4a371989d2bd2d13c14e2a4c"
+          "bytes": 248,
+          "sha256": "0201cfb896387480e16cab669318da96a52e1cf1d51d42dbb0b55074aeb56ac8"
         },
         {
           "path": "artifacts/skills/operations/git/isolate-work-with-worktrees/artifact.json",
@@ -11671,8 +11621,8 @@
     {
       "artifactId": "skill/operations/observability/build-macos-metrics-collector",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:7c2de4aba6ab25bdbe84a9f826bd1a3e587428450564d57cf11db37d60d7511d",
-      "digest": "7c2de4aba6ab25bdbe84a9f826bd1a3e587428450564d57cf11db37d60d7511d",
+      "integrityId": "urn:youdede:artifact:sha256:f51de55cb848df0df113341eb407cccce19ff266bc62c848fc170a97e56a0a07",
+      "digest": "f51de55cb848df0df113341eb407cccce19ff266bc62c848fc170a97e56a0a07",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -11710,8 +11660,8 @@
         },
         {
           "path": "artifacts/skills/operations/observability/build-macos-metrics-collector/agents/openai.yaml",
-          "bytes": 257,
-          "sha256": "cb17e1d7aa05231ee7eb72af05553c7de09c3435452f61cd93e557d0955b3033"
+          "bytes": 252,
+          "sha256": "9760e16757717a4255fd5c4d1b08d2a0000ef73ede4ed6e442a281f81a418047"
         },
         {
           "path": "artifacts/skills/operations/observability/build-macos-metrics-collector/artifact.json",
@@ -12172,8 +12122,8 @@
     {
       "artifactId": "skill/operations/reviewability/review-plan-execution-divergence",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:e10db37cdbc3d5ffdabc101aa799ddff1e57acc4534b1c6f187d310a25dcdcc2",
-      "digest": "e10db37cdbc3d5ffdabc101aa799ddff1e57acc4534b1c6f187d310a25dcdcc2",
+      "integrityId": "urn:youdede:artifact:sha256:11ef0e4fc5e4abad9a706614ac2d24eab9cb3dc5a6a2840e11494d4d775c6363",
+      "digest": "11ef0e4fc5e4abad9a706614ac2d24eab9cb3dc5a6a2840e11494d4d775c6363",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -12211,8 +12161,8 @@
         },
         {
           "path": "artifacts/skills/operations/reviewability/review-plan-execution-divergence/agents/openai.yaml",
-          "bytes": 272,
-          "sha256": "f866c88c0af6b33b25517f1142d329f64ac114a38fb9ee1bf2ca1a61d570a68d"
+          "bytes": 269,
+          "sha256": "9ad8d1f9a4e85e1be15868fb0f7997ab0b09694c850c1090601522b2684778ef"
         },
         {
           "path": "artifacts/skills/operations/reviewability/review-plan-execution-divergence/artifact.json",
@@ -12296,8 +12246,8 @@
     {
       "artifactId": "skill/operations/session/resume-session-work",
       "version": "1.0.0",
-      "integrityId": "urn:youdede:artifact:sha256:1e623eddbd32a69e800ed49951915833da3c79b9ca2007316e8f239a427cc9ed",
-      "digest": "1e623eddbd32a69e800ed49951915833da3c79b9ca2007316e8f239a427cc9ed",
+      "integrityId": "urn:youdede:artifact:sha256:8eda69e901531d6a0366eb298a7d283d932d4e97eda7124d96170ccc450a419c",
+      "digest": "8eda69e901531d6a0366eb298a7d283d932d4e97eda7124d96170ccc450a419c",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -12310,8 +12260,8 @@
         },
         {
           "path": "artifacts/skills/operations/session/resume-session-work/agents/openai.yaml",
-          "bytes": 235,
-          "sha256": "bb2b6019c4decd3236214924439a589f92c31a5a4ffe5acc934af4ee3411f0bf"
+          "bytes": 247,
+          "sha256": "9508fad31c81f003f97019b2818be4f5a7dc2491a36326d85b6e8b2638099827"
         },
         {
           "path": "artifacts/skills/operations/session/resume-session-work/artifact.json",
@@ -12524,8 +12474,8 @@
     {
       "artifactId": "skill/operations/setup/keep-macos-awake",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:5ef333da11ac978dcc967836da2db5497957a6cf176e6ca63b88ffdc90bd4114",
-      "digest": "5ef333da11ac978dcc967836da2db5497957a6cf176e6ca63b88ffdc90bd4114",
+      "integrityId": "urn:youdede:artifact:sha256:55157e172902d2f806182c7b01d81856f0c986a3d686d529d69b52d45d8ecec0",
+      "digest": "55157e172902d2f806182c7b01d81856f0c986a3d686d529d69b52d45d8ecec0",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -12564,7 +12514,7 @@
         {
           "path": "artifacts/skills/operations/setup/keep-macos-awake/agents/openai.yaml",
           "bytes": 230,
-          "sha256": "504b7a1ff78752105dd53923b0a9dc80c0f0d4c00a7f61e720e6aa8e1d385cc2"
+          "sha256": "9091442955551d7406f3204ebd15e8ca8753415760cdada5de382000a3ba3588"
         },
         {
           "path": "artifacts/skills/operations/setup/keep-macos-awake/artifact.json",
@@ -12586,8 +12536,8 @@
     {
       "artifactId": "skill/research/consumer-research/research-online-purchase",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:968dc12535407160891c93e40f2b26d1fe36cc6ca00ac505107a11af01f7745a",
-      "digest": "968dc12535407160891c93e40f2b26d1fe36cc6ca00ac505107a11af01f7745a",
+      "integrityId": "urn:youdede:artifact:sha256:59ffd7d2bda34c5984991a04944ee9aa629d38c09eebb0bdc8b9abe2634978c5",
+      "digest": "59ffd7d2bda34c5984991a04944ee9aa629d38c09eebb0bdc8b9abe2634978c5",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -12625,8 +12575,8 @@
         },
         {
           "path": "artifacts/skills/research/consumer-research/research-online-purchase/agents/openai.yaml",
-          "bytes": 255,
-          "sha256": "dad320634264c2e55a92422f5186441d580c6eed982ce6ecc3d8e441525e8156"
+          "bytes": 249,
+          "sha256": "b89334d8a52d1c7a3d9c2f57812e6e877af7351e91d27f24358d9c6ab35c5cbd"
         },
         {
           "path": "artifacts/skills/research/consumer-research/research-online-purchase/artifact.json",
@@ -12648,8 +12598,8 @@
     {
       "artifactId": "skill/research/source-analysis/write-source-backed-research-brief",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:5930c3d3927c7dd08921394fb414854cd2589e1366d9fd4234f6660628490050",
-      "digest": "5930c3d3927c7dd08921394fb414854cd2589e1366d9fd4234f6660628490050",
+      "integrityId": "urn:youdede:artifact:sha256:309f02b3fda43ba725749081749ee94a085245834278878987580df7841bbb1c",
+      "digest": "309f02b3fda43ba725749081749ee94a085245834278878987580df7841bbb1c",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -12687,8 +12637,8 @@
         },
         {
           "path": "artifacts/skills/research/source-analysis/write-source-backed-research-brief/agents/openai.yaml",
-          "bytes": 260,
-          "sha256": "376c2eea166b0a5c2fa6eae5fba09aca43597f8ed3556b63bceb0c27b3c77771"
+          "bytes": 263,
+          "sha256": "0a1018f0b876625e478852c46d6d54bc448d1dc43f123477621568f6ee3b6636"
         },
         {
           "path": "artifacts/skills/research/source-analysis/write-source-backed-research-brief/artifact.json",
@@ -12710,8 +12660,8 @@
     {
       "artifactId": "skill/research/transcripts/extract-youtube-captions",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:82492b4a21259cc1e985037e5f819da6bd1462a45d1d23af8db2a40b791b5c51",
-      "digest": "82492b4a21259cc1e985037e5f819da6bd1462a45d1d23af8db2a40b791b5c51",
+      "integrityId": "urn:youdede:artifact:sha256:d0b624172e9b74e4fb12ce103dffd075ce74c475acfb438adda396ca09bb5268",
+      "digest": "d0b624172e9b74e4fb12ce103dffd075ce74c475acfb438adda396ca09bb5268",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -12749,8 +12699,8 @@
         },
         {
           "path": "artifacts/skills/research/transcripts/extract-youtube-captions/agents/openai.yaml",
-          "bytes": 250,
-          "sha256": "e449f82ab60d9d62c586ae5f70f7662c1a48390215dbfcb62b12df9760c4c7e4"
+          "bytes": 248,
+          "sha256": "70a027ed8c18265cac6b6637db1373b449e81b59b9ebc31287d209c761743ee8"
         },
         {
           "path": "artifacts/skills/research/transcripts/extract-youtube-captions/artifact.json",
@@ -13154,8 +13104,8 @@
     {
       "artifactId": "skill/writing/decision-support/audit-implicit-decisions",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:11a65d826db28aae36733f6a1a65450a8fa960b21941b01f10982de6d9a18b3d",
-      "digest": "11a65d826db28aae36733f6a1a65450a8fa960b21941b01f10982de6d9a18b3d",
+      "integrityId": "urn:youdede:artifact:sha256:9f386a61b3ba6f67ea0447cd47b0e13636f08469947a53a346e023c985277915",
+      "digest": "9f386a61b3ba6f67ea0447cd47b0e13636f08469947a53a346e023c985277915",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -13193,8 +13143,8 @@
         },
         {
           "path": "artifacts/skills/writing/decision-support/audit-implicit-decisions/agents/openai.yaml",
-          "bytes": 254,
-          "sha256": "f4d3d3ca5c8ac62f27594766a196d8ceed1120b5f573a9d3eb5298daa5e88f75"
+          "bytes": 256,
+          "sha256": "f49b6dafecc38ef819f69aa43f2d63228f05d4ae5d4d98acb2c4e5cda13c8d48"
         },
         {
           "path": "artifacts/skills/writing/decision-support/audit-implicit-decisions/artifact.json",
@@ -13278,8 +13228,8 @@
     {
       "artifactId": "skill/writing/decision-support/interview-for-priorities",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:84e4c9a9373aad5b0650e2bed51737cdcf5eb0db78f6ee100f71794b2362215b",
-      "digest": "84e4c9a9373aad5b0650e2bed51737cdcf5eb0db78f6ee100f71794b2362215b",
+      "integrityId": "urn:youdede:artifact:sha256:6e3fd4f7cf7716fbe6267555fd4c0397fe75a93db4405b0fbc7f7aca1e1bb818",
+      "digest": "6e3fd4f7cf7716fbe6267555fd4c0397fe75a93db4405b0fbc7f7aca1e1bb818",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -13317,8 +13267,8 @@
         },
         {
           "path": "artifacts/skills/writing/decision-support/interview-for-priorities/agents/openai.yaml",
-          "bytes": 255,
-          "sha256": "60259528fd59689d2cff3ebea7f357e464ec21bf59e9c398cdb1fda8655f1f80"
+          "bytes": 248,
+          "sha256": "a4fd66d405a81770d05717b50841113757dbcc36b7be724654b28fa2af4b0f8c"
         },
         {
           "path": "artifacts/skills/writing/decision-support/interview-for-priorities/artifact.json",
@@ -13340,8 +13290,8 @@
     {
       "artifactId": "skill/writing/decision-support/interview-to-build-brief",
       "version": "1.4.0",
-      "integrityId": "urn:youdede:artifact:sha256:3d2a1cf69c0042032ac01c02111192b304cd31a6ea927235655d5c3a7f868bf8",
-      "digest": "3d2a1cf69c0042032ac01c02111192b304cd31a6ea927235655d5c3a7f868bf8",
+      "integrityId": "urn:youdede:artifact:sha256:e3c2dcc059bdd7ec2588dfbb74e04e32bffcfdd54183e873c9a3b6e67705188a",
+      "digest": "e3c2dcc059bdd7ec2588dfbb74e04e32bffcfdd54183e873c9a3b6e67705188a",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -13379,8 +13329,8 @@
         },
         {
           "path": "artifacts/skills/writing/decision-support/interview-to-build-brief/agents/openai.yaml",
-          "bytes": 253,
-          "sha256": "d6a9bf494cff002b9b1ffe42fad8c8e6720f856563f4aadf19ba9653e39dafc8"
+          "bytes": 247,
+          "sha256": "204e0b832bf819a6fe936442fd86657ee5f404edb161377d6d211fa01a016f8e"
         },
         {
           "path": "artifacts/skills/writing/decision-support/interview-to-build-brief/artifact.json",
@@ -13402,8 +13352,8 @@
     {
       "artifactId": "skill/writing/decision-support/make-practical-decision",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:f508bed241a552c7cfad8a5179a677e0123f7aed5c7276891ac0cca670355a9a",
-      "digest": "f508bed241a552c7cfad8a5179a677e0123f7aed5c7276891ac0cca670355a9a",
+      "integrityId": "urn:youdede:artifact:sha256:3665f0bf4910041da33e7c76dbcd115ef14073920da09967ee076cec7efd0c9d",
+      "digest": "3665f0bf4910041da33e7c76dbcd115ef14073920da09967ee076cec7efd0c9d",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -13441,8 +13391,8 @@
         },
         {
           "path": "artifacts/skills/writing/decision-support/make-practical-decision/agents/openai.yaml",
-          "bytes": 249,
-          "sha256": "52168402aedb2dd58253a8eeb3cfea63780686dfd5e0065eb02b2c2ec6b672b7"
+          "bytes": 245,
+          "sha256": "f2a406924c23913629c96ed72e8547143c08d3fcd539c433fcde89ea6f8ce0a7"
         },
         {
           "path": "artifacts/skills/writing/decision-support/make-practical-decision/artifact.json",
@@ -13464,8 +13414,8 @@
     {
       "artifactId": "skill/writing/decision-support/resolve-next-decision",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:a94aabbed0a6b77c1b8fcfc8fd45d84e0c9b72d7ab71cc5ed28fcab746c3ea44",
-      "digest": "a94aabbed0a6b77c1b8fcfc8fd45d84e0c9b72d7ab71cc5ed28fcab746c3ea44",
+      "integrityId": "urn:youdede:artifact:sha256:794473e7dd914636ba8245a843960a549a90b368415bc67ca3c8d2bda520ac40",
+      "digest": "794473e7dd914636ba8245a843960a549a90b368415bc67ca3c8d2bda520ac40",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -13503,8 +13453,8 @@
         },
         {
           "path": "artifacts/skills/writing/decision-support/resolve-next-decision/agents/openai.yaml",
-          "bytes": 246,
-          "sha256": "d3926787b9a5814c93f81567c76804663f2f6c336ff024288f8e2dd17393a52a"
+          "bytes": 249,
+          "sha256": "96e63da76b35bf061e2324619d796c22e0610a12c1046b095d8d1f59fb062f86"
         },
         {
           "path": "artifacts/skills/writing/decision-support/resolve-next-decision/artifact.json",
@@ -13526,8 +13476,8 @@
     {
       "artifactId": "skill/writing/decision-support/surface-build-decisions",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:98710584150f3c1f249c5023f4ae3feafb049814ea9b8067cb467752800b6d4a",
-      "digest": "98710584150f3c1f249c5023f4ae3feafb049814ea9b8067cb467752800b6d4a",
+      "integrityId": "urn:youdede:artifact:sha256:016aea5efd7e9276f0bb9db1a8cbaaf6b3925ae11d8ad1b05bdd4024570ddf0b",
+      "digest": "016aea5efd7e9276f0bb9db1a8cbaaf6b3925ae11d8ad1b05bdd4024570ddf0b",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -13565,8 +13515,8 @@
         },
         {
           "path": "artifacts/skills/writing/decision-support/surface-build-decisions/agents/openai.yaml",
-          "bytes": 246,
-          "sha256": "bd8b18fd5f9d98628cdf16ec5992d172480585f105955ce36019b1c1e0dde5e9"
+          "bytes": 248,
+          "sha256": "9552c2ef3de9b1705c22e6f775c59c55f381cb72e287a34e7d5937029ff13d9f"
         },
         {
           "path": "artifacts/skills/writing/decision-support/surface-build-decisions/artifact.json",
@@ -13588,8 +13538,8 @@
     {
       "artifactId": "skill/writing/documentation/audit-knowledge-state-freshness",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:f64db21dcba50f9790b07e1ecf8baa9e26277596423487622ae5db585e143e5d",
-      "digest": "f64db21dcba50f9790b07e1ecf8baa9e26277596423487622ae5db585e143e5d",
+      "integrityId": "urn:youdede:artifact:sha256:bd2cf1f7a308172f49261d050bfc44cb8446c9ad18777a2c5206423de3a0c10b",
+      "digest": "bd2cf1f7a308172f49261d050bfc44cb8446c9ad18777a2c5206423de3a0c10b",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -13627,8 +13577,8 @@
         },
         {
           "path": "artifacts/skills/writing/documentation/audit-knowledge-state-freshness/agents/openai.yaml",
-          "bytes": 270,
-          "sha256": "efcac6c0e248b0d7e58b5ccbf34eb5161039c2cd1be6d3d2f236bce162c6614a"
+          "bytes": 267,
+          "sha256": "08281a0d28ab8329525ebad4cb29f9f29efc51a6f18c72637e86049fdd00e665"
         },
         {
           "path": "artifacts/skills/writing/documentation/audit-knowledge-state-freshness/artifact.json",
@@ -13650,8 +13600,8 @@
     {
       "artifactId": "skill/writing/documentation/document-project-vision",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:bd944d850e36360293198c587f98028df44c163dcb88d2ddce7cfb720ed74281",
-      "digest": "bd944d850e36360293198c587f98028df44c163dcb88d2ddce7cfb720ed74281",
+      "integrityId": "urn:youdede:artifact:sha256:bae2104271379aff2fa7b0597fef266bf434bcf97c09928a81005278072c9f7a",
+      "digest": "bae2104271379aff2fa7b0597fef266bf434bcf97c09928a81005278072c9f7a",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -13689,8 +13639,8 @@
         },
         {
           "path": "artifacts/skills/writing/documentation/document-project-vision/agents/openai.yaml",
-          "bytes": 252,
-          "sha256": "10fb96f8630ddea6406f5cca5a0fff32137b73bcc2b2bb23ac649651756a11b8"
+          "bytes": 247,
+          "sha256": "b15cbb96d6b72fe32b389a999e53ed27055d79096aa040fc1d222ce1cfc626cb"
         },
         {
           "path": "artifacts/skills/writing/documentation/document-project-vision/artifact.json",
@@ -14124,8 +14074,8 @@
     {
       "artifactId": "skill/writing/education/assess-learning-gaps",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:da42d306e6d46b55a458fa2941f13f6113622e077e0d2e457276d2c72f581a6e",
-      "digest": "da42d306e6d46b55a458fa2941f13f6113622e077e0d2e457276d2c72f581a6e",
+      "integrityId": "urn:youdede:artifact:sha256:f0e4b955287fdd5688cdf8ad7d14686321be7dad16f298ddaa8e6a625bd3a940",
+      "digest": "f0e4b955287fdd5688cdf8ad7d14686321be7dad16f298ddaa8e6a625bd3a940",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -14163,8 +14113,8 @@
         },
         {
           "path": "artifacts/skills/writing/education/assess-learning-gaps/agents/openai.yaml",
-          "bytes": 241,
-          "sha256": "dab213eff701f040e842da84c8a92e51cd73c316e2dbab226ec1987f1c577437"
+          "bytes": 239,
+          "sha256": "d01bc5d8d69a0eb2d33be2829397aa6a2856b3e5cda91b81ef3c9ce9293d19ca"
         },
         {
           "path": "artifacts/skills/writing/education/assess-learning-gaps/artifact.json",
@@ -14253,8 +14203,8 @@
     {
       "artifactId": "skill/writing/education/teach-with-retrieval-practice",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:692e4340f58add61f08a0f551705cecebb7c3b9c3aa4dbee39e5a00e84f4895e",
-      "digest": "692e4340f58add61f08a0f551705cecebb7c3b9c3aa4dbee39e5a00e84f4895e",
+      "integrityId": "urn:youdede:artifact:sha256:5fd6a944c88cc0c6c5d06c29458d5cf3055180ea4de12d700bae7fd6b61c0229",
+      "digest": "5fd6a944c88cc0c6c5d06c29458d5cf3055180ea4de12d700bae7fd6b61c0229",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -14292,8 +14242,8 @@
         },
         {
           "path": "artifacts/skills/writing/education/teach-with-retrieval-practice/agents/openai.yaml",
-          "bytes": 260,
-          "sha256": "8d45ee0718af18ca0de5bd88912ef2ea6a1769a809b0e3e4ee0ce3be87e2ed8a"
+          "bytes": 253,
+          "sha256": "f039848fd11980ed51fc12d7fc06fba85c720591b03d8ca2bcaa1c5f585cf252"
         },
         {
           "path": "artifacts/skills/writing/education/teach-with-retrieval-practice/artifact.json",
@@ -14506,8 +14456,8 @@
     {
       "artifactId": "subagent/data/analytics/metric-contract-reviewer",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:3ab41c34208d6b7c682aa5108f6e90c8cc05289f8ac9982358c87251d36be87a",
-      "digest": "3ab41c34208d6b7c682aa5108f6e90c8cc05289f8ac9982358c87251d36be87a",
+      "integrityId": "urn:youdede:artifact:sha256:861700e3704b14bc3a11f8cfe75743838f865671905edecbcde6789fcbf9f657",
+      "digest": "861700e3704b14bc3a11f8cfe75743838f865671905edecbcde6789fcbf9f657",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -14540,18 +14490,18 @@
         },
         {
           "path": "artifacts/subagents/data/analytics/metric-contract-reviewer/evaluations/behavioral.json",
-          "bytes": 6906,
-          "sha256": "a48cee1cf4feae06295b2591f5ce3f1195d96dadbe483c65cc62f8162cfdd6dd"
+          "bytes": 6954,
+          "sha256": "42de0c1bdb5ca9e1202efc78214ad52060beba4466f15172afebfb444fcb867b"
         },
         {
           "path": "artifacts/subagents/data/analytics/metric-contract-reviewer/targets/claude-code/metric-contract-reviewer.md",
-          "bytes": 6198,
-          "sha256": "149b9453ea6186cb495461dfb9a041a087dd162264a220df4857540648ebb238"
+          "bytes": 6330,
+          "sha256": "2934cea60e280c6fb85f0a7c241c94e185a194adeb0bacd1277303cd3fe80a7a"
         },
         {
           "path": "artifacts/subagents/data/analytics/metric-contract-reviewer/targets/gemini-cli/metric-contract-reviewer.md",
-          "bytes": 6252,
-          "sha256": "d4b9ed291a3903596414001d4fe2b4e054d41688f04db59bdc0bfc8ff79ddc10"
+          "bytes": 6384,
+          "sha256": "61b645d4c7932210408698f162b6ed64f8a65d6aa880426c3a1f8cef81f8cc59"
         },
         {
           "path": "artifacts/subagents/data/analytics/metric-contract-reviewer/targets/github-copilot/metric-contract-reviewer.agent.md",
@@ -14560,16 +14510,16 @@
         },
         {
           "path": "artifacts/subagents/data/analytics/metric-contract-reviewer/targets/opencode/metric-contract-reviewer.md",
-          "bytes": 6208,
-          "sha256": "4be9e426d91150c2f5c031c768f5ef9e2d7d8c81825c0855c7d4a7816e9bacbc"
+          "bytes": 6340,
+          "sha256": "a1e2944a95d08e8e7009620a847725d731f34cbe6de6ff1b924d490f9fc82824"
         }
       ]
     },
     {
       "artifactId": "subagent/data/databases/query-plan-analyst",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:fc3782a6fb705bb46789cbb4ca53a9d1d0288c4b60b2e7ae1627e6ed72d7ff52",
-      "digest": "fc3782a6fb705bb46789cbb4ca53a9d1d0288c4b60b2e7ae1627e6ed72d7ff52",
+      "integrityId": "urn:youdede:artifact:sha256:0982f42f92d6074f779b71532b8384d362e89f61a9b73a54f5158b6e492a0b6f",
+      "digest": "0982f42f92d6074f779b71532b8384d362e89f61a9b73a54f5158b6e492a0b6f",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -14602,18 +14552,18 @@
         },
         {
           "path": "artifacts/subagents/data/databases/query-plan-analyst/evaluations/behavioral.json",
-          "bytes": 7224,
-          "sha256": "3075e9101c6ead910e76896a78cc7523d5a33e58951c1351688790d99bc50b8b"
+          "bytes": 7263,
+          "sha256": "ad8ae61bee62904a47742b5287c2be40fb9f56c6ed92037ae8b982360162ad23"
         },
         {
           "path": "artifacts/subagents/data/databases/query-plan-analyst/targets/claude-code/query-plan-analyst.md",
-          "bytes": 6132,
-          "sha256": "d3c06a6fa52f022c6538dded3cf0a9ec727569d9e30448c13926394089872d2b"
+          "bytes": 6264,
+          "sha256": "ec7e16cda6f2137fb4500f11d5ce365be72fd991358702cb9843b46f8792bf80"
         },
         {
           "path": "artifacts/subagents/data/databases/query-plan-analyst/targets/gemini-cli/query-plan-analyst.md",
-          "bytes": 6186,
-          "sha256": "7331d8d883a3353305e7bb2d87f762ff27fdc37d2a6b3d9411a35e6e1c8bdf1e"
+          "bytes": 6318,
+          "sha256": "0b8c0aec22c53aa9bbf84a32897fa9e374323ccfae3bde50918065325e90ddb8"
         },
         {
           "path": "artifacts/subagents/data/databases/query-plan-analyst/targets/github-copilot/query-plan-analyst.agent.md",
@@ -14622,16 +14572,16 @@
         },
         {
           "path": "artifacts/subagents/data/databases/query-plan-analyst/targets/opencode/query-plan-analyst.md",
-          "bytes": 6148,
-          "sha256": "4b0de05a689db84e9f477afd8fb4bcbc9b2692ff3caa38d56297070d38ee2e92"
+          "bytes": 6280,
+          "sha256": "d2b8bbb48f1984893cb23be7ec24dc8136b904e80e89f8d3d33d8464e5aadcfe"
         }
       ]
     },
     {
       "artifactId": "subagent/data/experimentation/experiment-validity-reviewer",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:c1cb1a11a8996cfe39085452b1dbdde694e5b73814d8812263a1e1d2f689b05d",
-      "digest": "c1cb1a11a8996cfe39085452b1dbdde694e5b73814d8812263a1e1d2f689b05d",
+      "integrityId": "urn:youdede:artifact:sha256:4f6e8b18730a21acc9ac9562c1263444cea41bd1a3fa8efcf70a130745042c23",
+      "digest": "4f6e8b18730a21acc9ac9562c1263444cea41bd1a3fa8efcf70a130745042c23",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -14664,18 +14614,18 @@
         },
         {
           "path": "artifacts/subagents/data/experimentation/experiment-validity-reviewer/evaluations/behavioral.json",
-          "bytes": 6620,
-          "sha256": "a32b912b298b46f0c0fd9183301dea526b6c7e75de49293b6fdd31292760bda2"
+          "bytes": 6668,
+          "sha256": "e0078963cf43a47284148405b700694cb175285f692f9589da93d0a70334e9e1"
         },
         {
           "path": "artifacts/subagents/data/experimentation/experiment-validity-reviewer/targets/claude-code/experiment-validity-reviewer.md",
-          "bytes": 6179,
-          "sha256": "8c6d53c5b1f7ee0def2ba40ce0cceb17f489b231eb612c2419bcb84504236813"
+          "bytes": 6311,
+          "sha256": "7a7eb95674a72e6abc4c952bc4b0565d02e1e8336bde73e3daf5b7d171b74755"
         },
         {
           "path": "artifacts/subagents/data/experimentation/experiment-validity-reviewer/targets/gemini-cli/experiment-validity-reviewer.md",
-          "bytes": 6233,
-          "sha256": "406e0b39486a40fed426be1909d89816c32a3d8b37519cdf68dd8ae33180d0b4"
+          "bytes": 6365,
+          "sha256": "a6c3627b13a21693255dd3c986cf9826db1383126f20f15d2ec921e522134b7f"
         },
         {
           "path": "artifacts/subagents/data/experimentation/experiment-validity-reviewer/targets/github-copilot/experiment-validity-reviewer.agent.md",
@@ -14684,16 +14634,16 @@
         },
         {
           "path": "artifacts/subagents/data/experimentation/experiment-validity-reviewer/targets/opencode/experiment-validity-reviewer.md",
-          "bytes": 6185,
-          "sha256": "50fc61f8c6a78dccb71f6df8d220efbe3bfa8cd73cbaf10a6bf69c68bd57271c"
+          "bytes": 6317,
+          "sha256": "595c856645dd178d96344d58253836834f060acafc2148f1b99d8ced6c589ab4"
         }
       ]
     },
     {
       "artifactId": "subagent/data/governance/data-lineage-mapper",
       "version": "1.4.0",
-      "integrityId": "urn:youdede:artifact:sha256:28e03bc334bf77966fca5bed6e1f5cba2903ee22e97b20d50d8348ee57801b15",
-      "digest": "28e03bc334bf77966fca5bed6e1f5cba2903ee22e97b20d50d8348ee57801b15",
+      "integrityId": "urn:youdede:artifact:sha256:f16f25f756692075fede85521a3071fd83307d42963ba5d373f887fb52a182ad",
+      "digest": "f16f25f756692075fede85521a3071fd83307d42963ba5d373f887fb52a182ad",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -14726,18 +14676,18 @@
         },
         {
           "path": "artifacts/subagents/data/governance/data-lineage-mapper/evaluations/behavioral.json",
-          "bytes": 6689,
-          "sha256": "076a5f0452b6c8ee614786ea0c73f20d316f3c7c2feeca6eb6fb824d5eaf6d3f"
+          "bytes": 6728,
+          "sha256": "df9e5178afbd994ea0186a9af9e34745fdce1c37b6ab5f40ce372e47858a6de2"
         },
         {
           "path": "artifacts/subagents/data/governance/data-lineage-mapper/targets/claude-code/data-lineage-mapper.md",
-          "bytes": 6133,
-          "sha256": "6c745fa3852421da5f31a7d7f72766ea996e94f0755bd4822fde0d1f466c1bc0"
+          "bytes": 6265,
+          "sha256": "da666e34c6b8d79e168197a2c227c58b35f2d79eadab7016f7dde6d98399a328"
         },
         {
           "path": "artifacts/subagents/data/governance/data-lineage-mapper/targets/gemini-cli/data-lineage-mapper.md",
-          "bytes": 6187,
-          "sha256": "1bc7c26ffd31fd64c7885198fb8c906ae532b0d94717c5aef9437604d2677fd2"
+          "bytes": 6319,
+          "sha256": "586bc2d182d82440c2080dc48611143829b4dd542cc84e1522516ea87ed34498"
         },
         {
           "path": "artifacts/subagents/data/governance/data-lineage-mapper/targets/github-copilot/data-lineage-mapper.agent.md",
@@ -14746,16 +14696,16 @@
         },
         {
           "path": "artifacts/subagents/data/governance/data-lineage-mapper/targets/opencode/data-lineage-mapper.md",
-          "bytes": 6148,
-          "sha256": "380d5fefa343685f7d66ae96a4a1faa88ab8296b851c2bb7a39e00dec3b9d82a"
+          "bytes": 6280,
+          "sha256": "aeaedb9e5f296add998cf9d8b887493e9719d3442ca0ababceca3800b44cfc96"
         }
       ]
     },
     {
       "artifactId": "subagent/data/migrations/migration-risk-reviewer",
       "version": "1.4.0",
-      "integrityId": "urn:youdede:artifact:sha256:dc85be54383784971e9865b3d8dd56b146c06f8bcd43dc3b3b0e42b7450722dd",
-      "digest": "dc85be54383784971e9865b3d8dd56b146c06f8bcd43dc3b3b0e42b7450722dd",
+      "integrityId": "urn:youdede:artifact:sha256:90ab09b37130741028b9a87cb768a6f5ce28ec2ae01f6518bce8aa6d2be409b3",
+      "digest": "90ab09b37130741028b9a87cb768a6f5ce28ec2ae01f6518bce8aa6d2be409b3",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -14788,18 +14738,18 @@
         },
         {
           "path": "artifacts/subagents/data/migrations/migration-risk-reviewer/evaluations/behavioral.json",
-          "bytes": 5273,
-          "sha256": "0eb39cdbc090aeb51ddc64d9d3b4273a63d80d2a2d66e5b245f47d16395721f2"
+          "bytes": 5312,
+          "sha256": "713a198ba880bcd81e98e8e5f15028aea14d34950beb7f778fbbdaa0788fa3c4"
         },
         {
           "path": "artifacts/subagents/data/migrations/migration-risk-reviewer/targets/claude-code/migration-risk-reviewer.md",
-          "bytes": 6725,
-          "sha256": "ff8327915f0256ce440355ceaf60d8b49c5160f08c53b0a27260347436ad5b07"
+          "bytes": 6857,
+          "sha256": "ead7abc4282e1f379f3448f4e88aac65cff594048610b22f48055f3e3894531b"
         },
         {
           "path": "artifacts/subagents/data/migrations/migration-risk-reviewer/targets/gemini-cli/migration-risk-reviewer.md",
-          "bytes": 6779,
-          "sha256": "6755d2abf9516ecf5ab641ddf7a2fb57d4cd135d41111d047d8778fe1502c814"
+          "bytes": 6911,
+          "sha256": "713fc48b2221112fcbe5961e7a6d269de78da6be4671dbfd2f15de28345d1e72"
         },
         {
           "path": "artifacts/subagents/data/migrations/migration-risk-reviewer/targets/github-copilot/migration-risk-reviewer.agent.md",
@@ -14808,16 +14758,16 @@
         },
         {
           "path": "artifacts/subagents/data/migrations/migration-risk-reviewer/targets/opencode/migration-risk-reviewer.md",
-          "bytes": 6736,
-          "sha256": "2a71f78ea07582d3d281918a097acd693c222762fdd4c53e2edd9dddd2e1bd8b"
+          "bytes": 6868,
+          "sha256": "a38a47473fd57da1c7a522cf66f9fa8d2d030bf7e355e176536035d5533b0307"
         }
       ]
     },
     {
       "artifactId": "subagent/data/quality/data-quality-diagnostician",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:6feee8f16f90e2a087d6217da18f54758746fdd08ed88799f5e9c322c7d939bc",
-      "digest": "6feee8f16f90e2a087d6217da18f54758746fdd08ed88799f5e9c322c7d939bc",
+      "integrityId": "urn:youdede:artifact:sha256:039f8ad580bd79f4881127658885ba177caafded6a58c25abed77f049b1b7e25",
+      "digest": "039f8ad580bd79f4881127658885ba177caafded6a58c25abed77f049b1b7e25",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -14850,18 +14800,18 @@
         },
         {
           "path": "artifacts/subagents/data/quality/data-quality-diagnostician/evaluations/behavioral.json",
-          "bytes": 5728,
-          "sha256": "2e2724d9a0998d4ef30de8c94496ed87e89b4dfa5d97e314b2b88c73f2fefdbf"
+          "bytes": 5776,
+          "sha256": "b6f9faa1d27ad8a64bf7bdeb78c5f72d86bfc80b05d0a495c9f3743c0b4589a7"
         },
         {
           "path": "artifacts/subagents/data/quality/data-quality-diagnostician/targets/claude-code/data-quality-diagnostician.md",
-          "bytes": 6188,
-          "sha256": "bd1ff8ee2a3650032c464d06718bd9dad479385c929d3a7551004441de678ede"
+          "bytes": 6320,
+          "sha256": "1bd9c0f225eb3563d12a91144473cf34b31bd3d9d3c395b07a71aa07f8bad108"
         },
         {
           "path": "artifacts/subagents/data/quality/data-quality-diagnostician/targets/gemini-cli/data-quality-diagnostician.md",
-          "bytes": 6242,
-          "sha256": "71307eadbd26d7641790eeef2c4b3091992238354b89324c54004b2ca82e3678"
+          "bytes": 6374,
+          "sha256": "a41e6f8ecc5f2649dd8c1f570a8c1616c9dca6e03f62ec5ca2508d4a4ec11cc5"
         },
         {
           "path": "artifacts/subagents/data/quality/data-quality-diagnostician/targets/github-copilot/data-quality-diagnostician.agent.md",
@@ -14870,16 +14820,16 @@
         },
         {
           "path": "artifacts/subagents/data/quality/data-quality-diagnostician/targets/opencode/data-quality-diagnostician.md",
-          "bytes": 6196,
-          "sha256": "38d12b243b7709cdb44771df54ee2edebcecae8470b9c1dce821b1bbf9c900ca"
+          "bytes": 6328,
+          "sha256": "280d2175ad1c75adb1c80daa109bb326d7c92e24e24c110c9551d9c4e08abd0b"
         }
       ]
     },
     {
       "artifactId": "subagent/data/quality/rag-evaluation-reviewer",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:96fcbbcfc40d65bc7bcf7eca484ce745aaeffa968dba4662b1ad2f268216334e",
-      "digest": "96fcbbcfc40d65bc7bcf7eca484ce745aaeffa968dba4662b1ad2f268216334e",
+      "integrityId": "urn:youdede:artifact:sha256:9c6ef754d6fb08bc4a6a16ced957fd2f259f91cfdc6d73c35a9d2de6ead5856f",
+      "digest": "9c6ef754d6fb08bc4a6a16ced957fd2f259f91cfdc6d73c35a9d2de6ead5856f",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -14912,13 +14862,13 @@
         },
         {
           "path": "artifacts/subagents/data/quality/rag-evaluation-reviewer/targets/claude-code/rag-evaluation-reviewer.md",
-          "bytes": 8816,
-          "sha256": "1896940f8e6791d1a9fcef26b73cd2c73228066bc24249007891f0d7952098e0"
+          "bytes": 8948,
+          "sha256": "d4fce83b2a89214a7df5890bb2bf89d80589cadf0073e06f43cbbf8166de78fd"
         },
         {
           "path": "artifacts/subagents/data/quality/rag-evaluation-reviewer/targets/gemini-cli/rag-evaluation-reviewer.md",
-          "bytes": 8857,
-          "sha256": "4467451fce5e2d606228bfc41212062168ed519bf859dae4681bbf42a08bbae0"
+          "bytes": 8989,
+          "sha256": "2d423bbd7e7fc3973dc18b35c02cfee6d975fea02d04ea1937230449ca6ce3b7"
         },
         {
           "path": "artifacts/subagents/data/quality/rag-evaluation-reviewer/targets/github-copilot/rag-evaluation-reviewer.agent.md",
@@ -14930,8 +14880,8 @@
     {
       "artifactId": "subagent/design/accessibility/accessibility-conformance-reviewer",
       "version": "1.6.0",
-      "integrityId": "urn:youdede:artifact:sha256:ff12723c63a40ba55dc4584533d2e4140494aca8322123cafcf4ad8bff7a4312",
-      "digest": "ff12723c63a40ba55dc4584533d2e4140494aca8322123cafcf4ad8bff7a4312",
+      "integrityId": "urn:youdede:artifact:sha256:ef811cc5019098fdf3055a8819c55665c826b7f4b674927d33cebc7fa7b5e605",
+      "digest": "ef811cc5019098fdf3055a8819c55665c826b7f4b674927d33cebc7fa7b5e605",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -14969,13 +14919,13 @@
         },
         {
           "path": "artifacts/subagents/design/accessibility/accessibility-conformance-reviewer/targets/claude-code/accessibility-conformance-reviewer.md",
-          "bytes": 6806,
-          "sha256": "7c4bbb0fbbe25cd26bd5a8a86ad656a2869353a19ab92c8d3993a149ba804ec8"
+          "bytes": 6938,
+          "sha256": "74b84b55b12ccdb316f778b292498bd5f4b2eea5d967b4212827e75139e054ca"
         },
         {
           "path": "artifacts/subagents/design/accessibility/accessibility-conformance-reviewer/targets/gemini-cli/accessibility-conformance-reviewer.md",
-          "bytes": 6860,
-          "sha256": "0f5c0b99bcc95f64a4620487689d9302dc9d9a937e2ba2d6ce109d8acde7cca1"
+          "bytes": 6992,
+          "sha256": "8b35da62624673d58dcd225ac411b8def1f0b6f0d2f724e805bf366b1960e4bc"
         },
         {
           "path": "artifacts/subagents/design/accessibility/accessibility-conformance-reviewer/targets/github-copilot/accessibility-conformance-reviewer.agent.md",
@@ -14984,16 +14934,16 @@
         },
         {
           "path": "artifacts/subagents/design/accessibility/accessibility-conformance-reviewer/targets/opencode/accessibility-conformance-reviewer.md",
-          "bytes": 6806,
-          "sha256": "f49e57743e14f86f3e11f6a4437a4db4c14ed7ddefe142d711c06d02a573da33"
+          "bytes": 6938,
+          "sha256": "3a7aeebe470adf7e7fe1ebc0fc562f8601e31657295955c266a7e0f1a13a5dbd"
         }
       ]
     },
     {
       "artifactId": "subagent/design/accessibility/accessibility-journey-tester",
       "version": "1.5.0",
-      "integrityId": "urn:youdede:artifact:sha256:40c5fb9a81345bcf7486ecb6b3af8976c572f2c714eee5f4928a552c598f0fa3",
-      "digest": "40c5fb9a81345bcf7486ecb6b3af8976c572f2c714eee5f4928a552c598f0fa3",
+      "integrityId": "urn:youdede:artifact:sha256:e4d7d0c1ee0d3e479ddf4d497e0655c09e14f6e0b0bf07fb316984c41102d32a",
+      "digest": "e4d7d0c1ee0d3e479ddf4d497e0655c09e14f6e0b0bf07fb316984c41102d32a",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -15026,13 +14976,13 @@
         },
         {
           "path": "artifacts/subagents/design/accessibility/accessibility-journey-tester/targets/claude-code/accessibility-journey-tester.md",
-          "bytes": 8961,
-          "sha256": "aa2a67a8577ad318fd363b742abdd72200e6c3c5bf83e3acbed9a93db4906106"
+          "bytes": 9093,
+          "sha256": "b668849afe775a9a1b86b2598ff148d2433afd91a6130029c2fc2d8fc08ad2c6"
         },
         {
           "path": "artifacts/subagents/design/accessibility/accessibility-journey-tester/targets/gemini-cli/accessibility-journey-tester.md",
-          "bytes": 9002,
-          "sha256": "efd261c75a8b111d19176a43fd52faab6859cb00c163e1c40d053dd12d3f4990"
+          "bytes": 9134,
+          "sha256": "a38ce6364b94d3e3a95905ae58bed166c5e9e693e92dc3c086e743c0356149e8"
         },
         {
           "path": "artifacts/subagents/design/accessibility/accessibility-journey-tester/targets/github-copilot/accessibility-journey-tester.agent.md",
@@ -15044,8 +14994,8 @@
     {
       "artifactId": "subagent/design/design-systems/design-system-consistency-reviewer",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:82682f4388b1fbe78a168cd26b64990bfcfc1a96270019d29f2a663e5a5bb477",
-      "digest": "82682f4388b1fbe78a168cd26b64990bfcfc1a96270019d29f2a663e5a5bb477",
+      "integrityId": "urn:youdede:artifact:sha256:625b50272a0dd3c9a4513ebec81f692349b916bad2c56807bb8e9bf93c55a0b8",
+      "digest": "625b50272a0dd3c9a4513ebec81f692349b916bad2c56807bb8e9bf93c55a0b8",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -15083,13 +15033,13 @@
         },
         {
           "path": "artifacts/subagents/design/design-systems/design-system-consistency-reviewer/targets/claude-code/design-system-consistency-reviewer.md",
-          "bytes": 6187,
-          "sha256": "7fc00126b0fabf9399d2122f225c150594c940a8f165197441a15b36c15e83e2"
+          "bytes": 6319,
+          "sha256": "aa36cbcd9aca499f627297813da4bdb7a034e71481557105fcd444f69a684ad2"
         },
         {
           "path": "artifacts/subagents/design/design-systems/design-system-consistency-reviewer/targets/gemini-cli/design-system-consistency-reviewer.md",
-          "bytes": 6241,
-          "sha256": "d0484a9818f16c017b4c13810a3f1f7449bf74fd93ac296d6b8edbaf516cc8b5"
+          "bytes": 6373,
+          "sha256": "a7d521845af74c5dc5c11a3995ad8d4de993f7eba217223f59f515ed37911f5e"
         },
         {
           "path": "artifacts/subagents/design/design-systems/design-system-consistency-reviewer/targets/github-copilot/design-system-consistency-reviewer.agent.md",
@@ -15098,16 +15048,16 @@
         },
         {
           "path": "artifacts/subagents/design/design-systems/design-system-consistency-reviewer/targets/opencode/design-system-consistency-reviewer.md",
-          "bytes": 6187,
-          "sha256": "b5822fd8c59a34044918e2939cc39c0cb9742e9a14b6a099204979b9f011af06"
+          "bytes": 6319,
+          "sha256": "f7bbe19b9b6670a0b37fe45b7f9f7e63c933b17d443b4db8b72da969a91987c7"
         }
       ]
     },
     {
       "artifactId": "subagent/design/frontend/web-performance-reviewer",
       "version": "1.4.0",
-      "integrityId": "urn:youdede:artifact:sha256:8f14bf1848fff93cc3961529eb9368f9b9272b2f7535f582a13be73c78da4541",
-      "digest": "8f14bf1848fff93cc3961529eb9368f9b9272b2f7535f582a13be73c78da4541",
+      "integrityId": "urn:youdede:artifact:sha256:39f7523462a5b0b1317d6ec9f93aac8007a3f2d1eacb3b78893c72ff4fd8c067",
+      "digest": "39f7523462a5b0b1317d6ec9f93aac8007a3f2d1eacb3b78893c72ff4fd8c067",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -15145,13 +15095,13 @@
         },
         {
           "path": "artifacts/subagents/design/frontend/web-performance-reviewer/targets/claude-code/web-performance-reviewer.md",
-          "bytes": 5646,
-          "sha256": "d1fc77f36c4c2c7dbc80811040f7332ee32b9aee9df0541bc78a4664a5922b64"
+          "bytes": 5778,
+          "sha256": "5e044dc1a4cb6e89f1b318c6848f8ac5741aa521e210a971c61103af7222d987"
         },
         {
           "path": "artifacts/subagents/design/frontend/web-performance-reviewer/targets/gemini-cli/web-performance-reviewer.md",
-          "bytes": 5700,
-          "sha256": "77bff9156f2b310589da1e65f6f92744aaadd3d9ada69a5139ccd9405ba558a2"
+          "bytes": 5832,
+          "sha256": "08236af192963de94098a096044d8266111c759dc2b017aeade9ed74b791dcbf"
         },
         {
           "path": "artifacts/subagents/design/frontend/web-performance-reviewer/targets/github-copilot/web-performance-reviewer.agent.md",
@@ -15160,16 +15110,16 @@
         },
         {
           "path": "artifacts/subagents/design/frontend/web-performance-reviewer/targets/opencode/web-performance-reviewer.md",
-          "bytes": 5656,
-          "sha256": "ef96eb546fe7eb1700dca5a7aca5af0258b8d56c60cca34a732c3a8d82493c5a"
+          "bytes": 5788,
+          "sha256": "56337840d2176e8381e1630f939ab4d0be2e11c50cd726bef788771969ad6f57"
         }
       ]
     },
     {
       "artifactId": "subagent/design/interaction/interaction-state-reviewer",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:c1add37083dbe4981c805b3d1017317c1839148532c9b4548856eac57c519a2a",
-      "digest": "c1add37083dbe4981c805b3d1017317c1839148532c9b4548856eac57c519a2a",
+      "integrityId": "urn:youdede:artifact:sha256:15cca89a2b1affeb016d63c34cd7936ce8e5128dd05f2a0ece8410b6a75ca32c",
+      "digest": "15cca89a2b1affeb016d63c34cd7936ce8e5128dd05f2a0ece8410b6a75ca32c",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -15207,13 +15157,13 @@
         },
         {
           "path": "artifacts/subagents/design/interaction/interaction-state-reviewer/targets/claude-code/interaction-state-reviewer.md",
-          "bytes": 6207,
-          "sha256": "97687cc84c66a2ffa65b271901d5059fda5345d28608b4a28dcc876f7ff55d6e"
+          "bytes": 6339,
+          "sha256": "b1c4c61e3133fc247ce3ae4e4a6f078adf46607468187b51ae621b01124bf89b"
         },
         {
           "path": "artifacts/subagents/design/interaction/interaction-state-reviewer/targets/gemini-cli/interaction-state-reviewer.md",
-          "bytes": 6261,
-          "sha256": "0ad012156a6bdb5f61eb0483420047fc1c0f36a2852fadab7f2c98233dc602df"
+          "bytes": 6393,
+          "sha256": "aa5bf184f28db47008b9dd769fc917ed609be1a9d74c2f1196ffbe44996776a1"
         },
         {
           "path": "artifacts/subagents/design/interaction/interaction-state-reviewer/targets/github-copilot/interaction-state-reviewer.agent.md",
@@ -15222,16 +15172,16 @@
         },
         {
           "path": "artifacts/subagents/design/interaction/interaction-state-reviewer/targets/opencode/interaction-state-reviewer.md",
-          "bytes": 6215,
-          "sha256": "316c134288f98854da2f139bf725a95b0021d0f6b74b987b4ef1e7ef127a979c"
+          "bytes": 6347,
+          "sha256": "15ff853c09d28f425b468813b9d6935f2fce0279ac056935e269fdbe8ccf8d98"
         }
       ]
     },
     {
       "artifactId": "subagent/design/internationalization/localization-readiness-reviewer",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:b4c52eb9f15fde3c21599406004e7337e2c668c289707d12d20408e0969b5d2c",
-      "digest": "b4c52eb9f15fde3c21599406004e7337e2c668c289707d12d20408e0969b5d2c",
+      "integrityId": "urn:youdede:artifact:sha256:ed0666502d16b63e6c29654119e220ece7f6760510632a0c1df4640aee54b3aa",
+      "digest": "ed0666502d16b63e6c29654119e220ece7f6760510632a0c1df4640aee54b3aa",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -15269,13 +15219,13 @@
         },
         {
           "path": "artifacts/subagents/design/internationalization/localization-readiness-reviewer/targets/claude-code/localization-readiness-reviewer.md",
-          "bytes": 6281,
-          "sha256": "c6b1e4dd3e0a303e008fd3cc9c62a9bfadf5d9c3fa37c108d1e62fb71e21743d"
+          "bytes": 6413,
+          "sha256": "28d7a42c2059092b4bec5963d50f28313a11f907b7a1d91d8566810027d85f32"
         },
         {
           "path": "artifacts/subagents/design/internationalization/localization-readiness-reviewer/targets/gemini-cli/localization-readiness-reviewer.md",
-          "bytes": 6335,
-          "sha256": "bb7b48b89828f30864d8683d64280ee8c79dca8ef8298d2c61edcdd9d641470d"
+          "bytes": 6467,
+          "sha256": "f23daf2cf9b6033fce3ba98743ccc267ff355f803b48a99a3c61384d352415e3"
         },
         {
           "path": "artifacts/subagents/design/internationalization/localization-readiness-reviewer/targets/github-copilot/localization-readiness-reviewer.agent.md",
@@ -15284,16 +15234,16 @@
         },
         {
           "path": "artifacts/subagents/design/internationalization/localization-readiness-reviewer/targets/opencode/localization-readiness-reviewer.md",
-          "bytes": 6284,
-          "sha256": "8b564dbea088409bff96395ae8772da84a5643270bd2b93de5ac2cdc9c1bf3af"
+          "bytes": 6416,
+          "sha256": "bcbce26162b4b5df3cdf257ce81bc4192488425b88adc521c87ca6ec6f95cc5b"
         }
       ]
     },
     {
       "artifactId": "subagent/design/responsive/responsive-layout-reviewer",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:0bc5ec2bd202a73bd57865b2d9424724ba7472e91e892f2f0aef639981392978",
-      "digest": "0bc5ec2bd202a73bd57865b2d9424724ba7472e91e892f2f0aef639981392978",
+      "integrityId": "urn:youdede:artifact:sha256:120fbb692bb7a7265177960378c2488b1dd1f3494e6e1684f8c76eccffe8d4a4",
+      "digest": "120fbb692bb7a7265177960378c2488b1dd1f3494e6e1684f8c76eccffe8d4a4",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -15326,18 +15276,18 @@
         },
         {
           "path": "artifacts/subagents/design/responsive/responsive-layout-reviewer/evaluations/behavioral.json",
-          "bytes": 5971,
-          "sha256": "a0747a787c929b56ab3d0dafec508549345d91638118ffb31f1702dff423b8c7"
+          "bytes": 6010,
+          "sha256": "93841626899f9f56ed905082220eb78bb87c79bc4f1c2ab55a1b839ec603d0bd"
         },
         {
           "path": "artifacts/subagents/design/responsive/responsive-layout-reviewer/targets/claude-code/responsive-layout-reviewer.md",
-          "bytes": 6236,
-          "sha256": "465737e023e6d56468f848f7dfc27c5c2f9b7b4c3b59d94889e57a6637ae54aa"
+          "bytes": 6368,
+          "sha256": "8ffa55cab13edb8e18d90e9af017a4fbc59286ffda03836220ecc0826436d162"
         },
         {
           "path": "artifacts/subagents/design/responsive/responsive-layout-reviewer/targets/gemini-cli/responsive-layout-reviewer.md",
-          "bytes": 6290,
-          "sha256": "965c81b322db697e1ae660c9de120f52101f4e0de7ab54e55fc42d36db93a4fb"
+          "bytes": 6422,
+          "sha256": "951cdea79e16cfe9b69522242a23ff4d05e0d4a79f1a2ee91956f2d1dce29b23"
         },
         {
           "path": "artifacts/subagents/design/responsive/responsive-layout-reviewer/targets/github-copilot/responsive-layout-reviewer.agent.md",
@@ -15346,16 +15296,16 @@
         },
         {
           "path": "artifacts/subagents/design/responsive/responsive-layout-reviewer/targets/opencode/responsive-layout-reviewer.md",
-          "bytes": 6244,
-          "sha256": "0e3b42fb78a20b1d03cf6e29ba27cf1473c64a003393f9e339d6ca56dc85c141"
+          "bytes": 6376,
+          "sha256": "494e006738450070a3c84ce1e8e0009822aeb6f4b7f6c967303fa85e5f2216af"
         }
       ]
     },
     {
       "artifactId": "subagent/development/algorithms/numerical-correctness-analyst",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:668602c16bea536cca5a8c2a9c8e044ef7233d921f17755894b51c4e65ef9fe5",
-      "digest": "668602c16bea536cca5a8c2a9c8e044ef7233d921f17755894b51c4e65ef9fe5",
+      "integrityId": "urn:youdede:artifact:sha256:9560f55c72a1d93982048812fd559743e530cdfdc6eb51779afea6caeb75cc68",
+      "digest": "9560f55c72a1d93982048812fd559743e530cdfdc6eb51779afea6caeb75cc68",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -15388,18 +15338,18 @@
         },
         {
           "path": "artifacts/subagents/development/algorithms/numerical-correctness-analyst/evaluations/behavioral.json",
-          "bytes": 6421,
-          "sha256": "3873cfb78bbb4bd95cf369be0f937c821d5fbcf1318b0d33a3cd321ec3bd4d74"
+          "bytes": 6460,
+          "sha256": "76f37c84ee19d35c8d132cf8017a6be1d6ddf27726525f46d484221b0a71589a"
         },
         {
           "path": "artifacts/subagents/development/algorithms/numerical-correctness-analyst/targets/claude-code/numerical-correctness-analyst.md",
-          "bytes": 6118,
-          "sha256": "cd80634a9fb60ec4f50678dced326a579591530e8d80b68982ebca084c372c61"
+          "bytes": 6250,
+          "sha256": "acbeead1f7f5ebdeacf8dc47a168d19358f8f8f9bbef269b83b74fe79ff88558"
         },
         {
           "path": "artifacts/subagents/development/algorithms/numerical-correctness-analyst/targets/gemini-cli/numerical-correctness-analyst.md",
-          "bytes": 6172,
-          "sha256": "11867b23d0d02e561860d50d25b5b8c6fa8333a1f445a4c544e9182fd0076e6a"
+          "bytes": 6304,
+          "sha256": "7feb82376797b24114d5dbe238ac96fd77ed32a4fa13a2d83bd649cfcfba5634"
         },
         {
           "path": "artifacts/subagents/development/algorithms/numerical-correctness-analyst/targets/github-copilot/numerical-correctness-analyst.agent.md",
@@ -15408,16 +15358,16 @@
         },
         {
           "path": "artifacts/subagents/development/algorithms/numerical-correctness-analyst/targets/opencode/numerical-correctness-analyst.md",
-          "bytes": 6123,
-          "sha256": "932180b452f7a84f89d8d3348e092349e9ee26d652534eb62ecc856df963785e"
+          "bytes": 6255,
+          "sha256": "3464d13b4a630c21a0cd23e6decb37f70030e1eb3f8ee8fba89141ebc87fea76"
         }
       ]
     },
     {
       "artifactId": "subagent/development/api/api-contract-compatibility-reviewer",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:bc3ac725bc1ed526d964e5f5907fbaff32f1e861632ec7a81209002661d7665a",
-      "digest": "bc3ac725bc1ed526d964e5f5907fbaff32f1e861632ec7a81209002661d7665a",
+      "integrityId": "urn:youdede:artifact:sha256:3a21176c5f346645492ffb03649694fe954d5b784467ba04afdb105398534802",
+      "digest": "3a21176c5f346645492ffb03649694fe954d5b784467ba04afdb105398534802",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -15450,18 +15400,18 @@
         },
         {
           "path": "artifacts/subagents/development/api/api-contract-compatibility-reviewer/evaluations/behavioral.json",
-          "bytes": 6509,
-          "sha256": "c4bf7eb0cb66d458be2b6ff664da8d153854a1a8aca6ec26c85d4b0f49bd182e"
+          "bytes": 6557,
+          "sha256": "4e3f3122543b72341556824f75b80bc9b76a9e6cee5c8fe36ffc902c2fc5b84a"
         },
         {
           "path": "artifacts/subagents/development/api/api-contract-compatibility-reviewer/targets/claude-code/api-contract-compatibility-reviewer.md",
-          "bytes": 6282,
-          "sha256": "dfff6cb0a9b4ed072e7705ce8b13d03e446839270c75822627bb16383c431a69"
+          "bytes": 6414,
+          "sha256": "57b1b71b3c95f5c8d8aaa6648ae49e6fcd9fe31ac9a2321ac891e00d980b1583"
         },
         {
           "path": "artifacts/subagents/development/api/api-contract-compatibility-reviewer/targets/gemini-cli/api-contract-compatibility-reviewer.md",
-          "bytes": 6336,
-          "sha256": "e2f35fe1c52f9e95621ceb08e3078bf6ca74a27cca66abb900d4c96c2599814b"
+          "bytes": 6468,
+          "sha256": "f4c9ea7507792a8dc26771a54ea7b4a6dd6a236a6ab6b02099d62f06b5e36b11"
         },
         {
           "path": "artifacts/subagents/development/api/api-contract-compatibility-reviewer/targets/github-copilot/api-contract-compatibility-reviewer.agent.md",
@@ -15470,16 +15420,16 @@
         },
         {
           "path": "artifacts/subagents/development/api/api-contract-compatibility-reviewer/targets/opencode/api-contract-compatibility-reviewer.md",
-          "bytes": 6281,
-          "sha256": "34b39cbfa8cf6cd739b1a74c72925ce903b8c8f6c5318e32eea549d8e4d79055"
+          "bytes": 6413,
+          "sha256": "22ea9a12dbeced38b8a4ff0e68545c7de5788324d3148c2189e3c66d951ae232"
         }
       ]
     },
     {
       "artifactId": "subagent/development/architecture/repository-architecture-mapper",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:e4385502e90b377bae89dc0f2f3fa53354d1793c8254b9d52517957962ab694e",
-      "digest": "e4385502e90b377bae89dc0f2f3fa53354d1793c8254b9d52517957962ab694e",
+      "integrityId": "urn:youdede:artifact:sha256:0ee38249fa7a487d43b7493ddc91b3e1ae135dfab0e794c50a89460ff98d2b11",
+      "digest": "0ee38249fa7a487d43b7493ddc91b3e1ae135dfab0e794c50a89460ff98d2b11",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -15512,13 +15462,13 @@
         },
         {
           "path": "artifacts/subagents/development/architecture/repository-architecture-mapper/targets/claude-code/repository-architecture-mapper.md",
-          "bytes": 8011,
-          "sha256": "74764d8822f4202130de5be8fcc697c737d91ba60274aac7d14e0157fab1fdb3"
+          "bytes": 8143,
+          "sha256": "9ebb1bab73b323b0e19c7ed647c7e8cebf41dfe3e11099b0e1d36de8b1ea5d45"
         },
         {
           "path": "artifacts/subagents/development/architecture/repository-architecture-mapper/targets/gemini-cli/repository-architecture-mapper.md",
-          "bytes": 8050,
-          "sha256": "ebaf51adf85b0de725eea6d145ae1a2bbbec97a8fa626ddf0a8ff70a645fe9ba"
+          "bytes": 8182,
+          "sha256": "e1098704d7267e0556c266b82f982b0f3ee9de34cecbef5ea9be1cc79befc91f"
         },
         {
           "path": "artifacts/subagents/development/architecture/repository-architecture-mapper/targets/github-copilot/repository-architecture-mapper.agent.md",
@@ -15530,8 +15480,8 @@
     {
       "artifactId": "subagent/development/cli/cli-contract-reviewer",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:70393f08fc93d509a50062dc735f484558d3e48aa44589cb2dda7c5022378ba4",
-      "digest": "70393f08fc93d509a50062dc735f484558d3e48aa44589cb2dda7c5022378ba4",
+      "integrityId": "urn:youdede:artifact:sha256:9e80632af8ae3e4c4a4126371bdb485c8617c4f3ece461df4e847ffa37db54e4",
+      "digest": "9e80632af8ae3e4c4a4126371bdb485c8617c4f3ece461df4e847ffa37db54e4",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -15569,13 +15519,13 @@
         },
         {
           "path": "artifacts/subagents/development/cli/cli-contract-reviewer/targets/claude-code/cli-contract-reviewer.md",
-          "bytes": 6069,
-          "sha256": "c8dd3e32bd9aa909c205643db7ccd485cd9249ae9f75c9ab9c1cb111045512e9"
+          "bytes": 6201,
+          "sha256": "3797b7442e636c57c12f08821c37c8d50d4e07f5d6be2b61d0364c23c6c20c96"
         },
         {
           "path": "artifacts/subagents/development/cli/cli-contract-reviewer/targets/gemini-cli/cli-contract-reviewer.md",
-          "bytes": 6123,
-          "sha256": "b93d2e579da96f5fb9a4668ee58d798782a0caf5f2296e6b037061e58c8e28fd"
+          "bytes": 6255,
+          "sha256": "1e2f58b9c22562c31c8df4510884d120b7fd7409a51e2c632eda6af6387d1317"
         },
         {
           "path": "artifacts/subagents/development/cli/cli-contract-reviewer/targets/github-copilot/cli-contract-reviewer.agent.md",
@@ -15584,16 +15534,16 @@
         },
         {
           "path": "artifacts/subagents/development/cli/cli-contract-reviewer/targets/opencode/cli-contract-reviewer.md",
-          "bytes": 6082,
-          "sha256": "bc344ef2a97f722ff92a5306a6d24d36d4962a8573dbaf37ea530cad8618be5b"
+          "bytes": 6214,
+          "sha256": "b2c8f62611813126309c5f25ef9b70a16c88e5c8075fd2c075b3a0a26f048b42"
         }
       ]
     },
     {
       "artifactId": "subagent/development/code-quality/refactor-equivalence-reviewer",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:583336e9bbb0ddaf783f5a7409e407d3d3e84cef70c53da8b1e716d6c628758d",
-      "digest": "583336e9bbb0ddaf783f5a7409e407d3d3e84cef70c53da8b1e716d6c628758d",
+      "integrityId": "urn:youdede:artifact:sha256:fab67abf030d8f9b5055e1f5610d4198902a84d9851a4e7e516be20f5dda4627",
+      "digest": "fab67abf030d8f9b5055e1f5610d4198902a84d9851a4e7e516be20f5dda4627",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -15626,18 +15576,18 @@
         },
         {
           "path": "artifacts/subagents/development/code-quality/refactor-equivalence-reviewer/evaluations/behavioral.json",
-          "bytes": 6552,
-          "sha256": "c3ab1d3124fb712ad58d42344aff3eb801e8cad4be8ba5610030c56e0c1224a3"
+          "bytes": 6591,
+          "sha256": "c4743022c18ec39a36099a33d5ea4855595f3096cec524954504737ed4decf60"
         },
         {
           "path": "artifacts/subagents/development/code-quality/refactor-equivalence-reviewer/targets/claude-code/refactor-equivalence-reviewer.md",
-          "bytes": 6170,
-          "sha256": "e75d95f28a82990abc512a61a7a6dccac1ad81791cfc08bdfe1a3394a292a6d1"
+          "bytes": 6302,
+          "sha256": "17f3ebd923e987583d85f495d166a15f53ea8e12219fce24712daf425a442145"
         },
         {
           "path": "artifacts/subagents/development/code-quality/refactor-equivalence-reviewer/targets/gemini-cli/refactor-equivalence-reviewer.md",
-          "bytes": 6224,
-          "sha256": "153295ce52930088fe0b20423027f9accbbf83a8e77d6b4f1762dca2d8cdac7c"
+          "bytes": 6356,
+          "sha256": "6bc02aaeb01c41567851ea33e105f2d498da42c7afa4ccb4d8adca3afc47688b"
         },
         {
           "path": "artifacts/subagents/development/code-quality/refactor-equivalence-reviewer/targets/github-copilot/refactor-equivalence-reviewer.agent.md",
@@ -15646,16 +15596,16 @@
         },
         {
           "path": "artifacts/subagents/development/code-quality/refactor-equivalence-reviewer/targets/opencode/refactor-equivalence-reviewer.md",
-          "bytes": 6175,
-          "sha256": "fd9ed1dbb5b33990eba4876f7e16b0510215666fe1ed783278d616c9f559f110"
+          "bytes": 6307,
+          "sha256": "dcf2117d64be88cf5c8f39cd1d421da5e9d688a230610fb7bd2c364e1db780f3"
         }
       ]
     },
     {
       "artifactId": "subagent/development/concurrency/concurrency-hazard-analyst",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:7f955d7d6390dd9f3a579aa855172685c72d9a07ebe48538bf33ab021ab89a3f",
-      "digest": "7f955d7d6390dd9f3a579aa855172685c72d9a07ebe48538bf33ab021ab89a3f",
+      "integrityId": "urn:youdede:artifact:sha256:cfd70216be8e0c9c7eafc5176d19f2c504114b873b793c5b263922c7005dc2f0",
+      "digest": "cfd70216be8e0c9c7eafc5176d19f2c504114b873b793c5b263922c7005dc2f0",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -15688,18 +15638,18 @@
         },
         {
           "path": "artifacts/subagents/development/concurrency/concurrency-hazard-analyst/evaluations/behavioral.json",
-          "bytes": 5988,
-          "sha256": "0980b6e773e89c7ef2585b32f0b7a844fa9f50dd071b05877ed9b4d07d5dfbd2"
+          "bytes": 6036,
+          "sha256": "97e2b3007d11d3791a0b695cd98f7997e2788a23c5e31bd82f901959b102053d"
         },
         {
           "path": "artifacts/subagents/development/concurrency/concurrency-hazard-analyst/targets/claude-code/concurrency-hazard-analyst.md",
-          "bytes": 6153,
-          "sha256": "671fe7ec586a13ed991ae4bb6a044c22ff6ca1ca53e78cfd8ca524f302fb0a55"
+          "bytes": 6285,
+          "sha256": "b21f9fcda4f7f6c9b8bd47ca3394e2e0063adb49678ec29f691bcb23f7625323"
         },
         {
           "path": "artifacts/subagents/development/concurrency/concurrency-hazard-analyst/targets/gemini-cli/concurrency-hazard-analyst.md",
-          "bytes": 6207,
-          "sha256": "ad99d552498921abc2b9b1351aec04c574b125665b0477d3a30446f5c8617224"
+          "bytes": 6339,
+          "sha256": "06aaeb2b1ae60050ca306d266698851c430fb095f113bebea804d7ed570f70e8"
         },
         {
           "path": "artifacts/subagents/development/concurrency/concurrency-hazard-analyst/targets/github-copilot/concurrency-hazard-analyst.agent.md",
@@ -15708,16 +15658,16 @@
         },
         {
           "path": "artifacts/subagents/development/concurrency/concurrency-hazard-analyst/targets/opencode/concurrency-hazard-analyst.md",
-          "bytes": 6161,
-          "sha256": "1310db192ab3bd4c4a515aac2c728b3a97717612fb560a21c445a22435c659ac"
+          "bytes": 6293,
+          "sha256": "e4ad40fea47d094a71140d2ba9bb41202f04c527d1b73df886438a45ed8fc878"
         }
       ]
     },
     {
       "artifactId": "subagent/development/configuration/configuration-semantics-reviewer",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:6bdc96ee9562e5a29c044efeef71716507e46a7e0f2cc6bbec380319b6b03406",
-      "digest": "6bdc96ee9562e5a29c044efeef71716507e46a7e0f2cc6bbec380319b6b03406",
+      "integrityId": "urn:youdede:artifact:sha256:30beedd000e000f757cd475c2722cc734e23134e57159f0d198ecfdf3bc54039",
+      "digest": "30beedd000e000f757cd475c2722cc734e23134e57159f0d198ecfdf3bc54039",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -15745,8 +15695,8 @@
         },
         {
           "path": "artifacts/subagents/development/configuration/configuration-semantics-reviewer/artifact.json",
-          "bytes": 2232,
-          "sha256": "358190adde23275cd4d5a4d0e29df40bf671a062af56fffb124ba652c2892c13"
+          "bytes": 2236,
+          "sha256": "f4d97d417a86b8ce38d4aee837f02eacb8c021098823361e7a292a3e54ed0bb2"
         },
         {
           "path": "artifacts/subagents/development/configuration/configuration-semantics-reviewer/evaluations/behavioral.json",
@@ -15755,31 +15705,31 @@
         },
         {
           "path": "artifacts/subagents/development/configuration/configuration-semantics-reviewer/targets/claude-code/configuration-semantics-reviewer.md",
-          "bytes": 6100,
-          "sha256": "be4c165e453814bfa1f6d3ec8887b3ad464383d644a463f9b4d81658c4f7e581"
+          "bytes": 6295,
+          "sha256": "c276f2736b62ec2acf468b0658d4c45d3b70d2c5332c87880c561c4c2fd46a9a"
         },
         {
           "path": "artifacts/subagents/development/configuration/configuration-semantics-reviewer/targets/gemini-cli/configuration-semantics-reviewer.md",
-          "bytes": 6154,
-          "sha256": "121ec6b234ddd8f84b3d7cf86a8bd7209d4e4af91ec03b840abb35eedb9b9af8"
+          "bytes": 6349,
+          "sha256": "2a562e448a928c25b5a21c49f1e60f26f6ae3741bf350376190266b84c4f127b"
         },
         {
           "path": "artifacts/subagents/development/configuration/configuration-semantics-reviewer/targets/github-copilot/configuration-semantics-reviewer.agent.md",
-          "bytes": 6207,
-          "sha256": "b1e3391f20102cb3b7f53a8c3daaa3a7caeb5efdd09e5291e8aa027233cab3e0"
+          "bytes": 6270,
+          "sha256": "a45edfa479259a427b1a8d7fd7e58348286ad3db2f3f11403e6b9d5427392d78"
         },
         {
           "path": "artifacts/subagents/development/configuration/configuration-semantics-reviewer/targets/opencode/configuration-semantics-reviewer.md",
-          "bytes": 6102,
-          "sha256": "4e930341cbb4fe73a86b1b7fbdab0cf8e9f54019aab36950efc1f3279596fdbe"
+          "bytes": 6297,
+          "sha256": "6a1f3ddac46a5989f34ed3f0d1b06782a0c420ea58596ed3cb28556c0ae9053b"
         }
       ]
     },
     {
       "artifactId": "subagent/development/reliability/error-recovery-path-reviewer",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:f173d692feb20cda7450b3b107a76f38568a9a59002c59e249b1bd3e0ea3b159",
-      "digest": "f173d692feb20cda7450b3b107a76f38568a9a59002c59e249b1bd3e0ea3b159",
+      "integrityId": "urn:youdede:artifact:sha256:28194aa074de19587a2baa7e7bd71e2bbd98f7bfa91069f04a9f8c48c98731c4",
+      "digest": "28194aa074de19587a2baa7e7bd71e2bbd98f7bfa91069f04a9f8c48c98731c4",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -15817,13 +15767,13 @@
         },
         {
           "path": "artifacts/subagents/development/reliability/error-recovery-path-reviewer/targets/claude-code/error-recovery-path-reviewer.md",
-          "bytes": 6191,
-          "sha256": "d7427cd38ded8ca9b45cf10d8eb10e6aa1689926d4b12fcdcac8c73c13f2d670"
+          "bytes": 6323,
+          "sha256": "3e70a63fc16e71980f080a51549021f99bfbacad1dbaf3b195e5edb522c3110e"
         },
         {
           "path": "artifacts/subagents/development/reliability/error-recovery-path-reviewer/targets/gemini-cli/error-recovery-path-reviewer.md",
-          "bytes": 6245,
-          "sha256": "f11fbdd012b7c2367009f0b8a7d19a00609e7d239d996e60c0f8b02fcb93a646"
+          "bytes": 6377,
+          "sha256": "a5869174fe7fd166c314d7ecc373199be4e3acab194d10cadb638af2bf1804d5"
         },
         {
           "path": "artifacts/subagents/development/reliability/error-recovery-path-reviewer/targets/github-copilot/error-recovery-path-reviewer.agent.md",
@@ -15832,16 +15782,16 @@
         },
         {
           "path": "artifacts/subagents/development/reliability/error-recovery-path-reviewer/targets/opencode/error-recovery-path-reviewer.md",
-          "bytes": 6197,
-          "sha256": "d77b30e3a446429e67700c1136bc62447d95b2dbdcf7bc1e46ee31ab3b4ef89d"
+          "bytes": 6329,
+          "sha256": "95751f10757dd7bc8eaa4fdc84fdfa503954e33cdd7058b523185280143daa28"
         }
       ]
     },
     {
       "artifactId": "subagent/development/resource-management/resource-lifecycle-reviewer",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:e4dda5db8fcfc0a3a194139d423df4452e72fa499f30c27257b41a6c49f066ee",
-      "digest": "e4dda5db8fcfc0a3a194139d423df4452e72fa499f30c27257b41a6c49f066ee",
+      "integrityId": "urn:youdede:artifact:sha256:faef8221bf597790fc6dc161d30025ebc0bf7127ba47651fa55e451fcb9884aa",
+      "digest": "faef8221bf597790fc6dc161d30025ebc0bf7127ba47651fa55e451fcb9884aa",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -15874,18 +15824,18 @@
         },
         {
           "path": "artifacts/subagents/development/resource-management/resource-lifecycle-reviewer/evaluations/behavioral.json",
-          "bytes": 6642,
-          "sha256": "57e095b243bc41fedb37b7fbcc268bae232cea325bda58cfc5311cec1b7171fc"
+          "bytes": 6681,
+          "sha256": "03313b873fe144f17a05e95ed3a36359e2c91ee293066b1d36972c51be2318d3"
         },
         {
           "path": "artifacts/subagents/development/resource-management/resource-lifecycle-reviewer/targets/claude-code/resource-lifecycle-reviewer.md",
-          "bytes": 6146,
-          "sha256": "18d552c247f33fe992d09fcfe258b46d71c994d444df2f5d208f3cfcea6f762f"
+          "bytes": 6278,
+          "sha256": "6bd06be45e26d3aa37485b56ac9c3217042c6ec0a495dd60d1873479c0cf3a13"
         },
         {
           "path": "artifacts/subagents/development/resource-management/resource-lifecycle-reviewer/targets/gemini-cli/resource-lifecycle-reviewer.md",
-          "bytes": 6200,
-          "sha256": "035185df54e46f5176b07d931113ae8213f5a14bac497c71f0e68cdeb1c274b2"
+          "bytes": 6332,
+          "sha256": "e558fb0081b2d5370d4e1a2db96759c238aa0bdbbdf39ca45f409e41581f55ee"
         },
         {
           "path": "artifacts/subagents/development/resource-management/resource-lifecycle-reviewer/targets/github-copilot/resource-lifecycle-reviewer.agent.md",
@@ -15894,16 +15844,16 @@
         },
         {
           "path": "artifacts/subagents/development/resource-management/resource-lifecycle-reviewer/targets/opencode/resource-lifecycle-reviewer.md",
-          "bytes": 6153,
-          "sha256": "23d242629da4ce268cfa33af6bea1110947295299d1f0219bdfd594e6e6ebc7c"
+          "bytes": 6285,
+          "sha256": "25d34be1ff24f2befe96bb3662847e09842ea45064ff98fac4cad1bab1059ea1"
         }
       ]
     },
     {
       "artifactId": "subagent/development/serialization/serialization-contract-reviewer",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:8edccdb7e70d88734ec5bad425a05f079a3755c75472abbfd318c07a88bd7ceb",
-      "digest": "8edccdb7e70d88734ec5bad425a05f079a3755c75472abbfd318c07a88bd7ceb",
+      "integrityId": "urn:youdede:artifact:sha256:49912ce0f6278d15d0fa45e449f794be747690c015f621dfe4b888c317873adf",
+      "digest": "49912ce0f6278d15d0fa45e449f794be747690c015f621dfe4b888c317873adf",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -15936,18 +15886,18 @@
         },
         {
           "path": "artifacts/subagents/development/serialization/serialization-contract-reviewer/evaluations/behavioral.json",
-          "bytes": 6528,
-          "sha256": "c25b010a6ac0f5152655f37e374a731b68adee3e8a0e23c3f5d1948c4f17bc4c"
+          "bytes": 6567,
+          "sha256": "0ad79959790e785ade23959539ba5faa36cb69e147faee17d1edf48e7101ff97"
         },
         {
           "path": "artifacts/subagents/development/serialization/serialization-contract-reviewer/targets/claude-code/serialization-contract-reviewer.md",
-          "bytes": 6090,
-          "sha256": "871b1f4488c9c9d59230e530d5856942eea7a0f82480492482e5098d40f7d073"
+          "bytes": 6222,
+          "sha256": "2edbd9e3da3fe0532dd2ffdc9daae68e12900e3ba44440fa298ee0458d92bf4f"
         },
         {
           "path": "artifacts/subagents/development/serialization/serialization-contract-reviewer/targets/gemini-cli/serialization-contract-reviewer.md",
-          "bytes": 6144,
-          "sha256": "6b94c7c788582925b2f359d1032934e0e4ff211565eae7ae7e0443164969aa80"
+          "bytes": 6276,
+          "sha256": "e743351a261c6e426a36ed71e0cd72226424d1c8d094ace22ad5e416ba2a818c"
         },
         {
           "path": "artifacts/subagents/development/serialization/serialization-contract-reviewer/targets/github-copilot/serialization-contract-reviewer.agent.md",
@@ -15956,16 +15906,16 @@
         },
         {
           "path": "artifacts/subagents/development/serialization/serialization-contract-reviewer/targets/opencode/serialization-contract-reviewer.md",
-          "bytes": 6093,
-          "sha256": "1ac3ffd4749bb78c6b7a63e6b98ead5cd8bdb40bd7d3c6f5bee2f37bf1527a6f"
+          "bytes": 6225,
+          "sha256": "cc75428e677b61b09374b29d874a805c06f9e0ee9762a77ad27eba51cce38cd6"
         }
       ]
     },
     {
       "artifactId": "subagent/development/state-management/state-machine-invariant-analyst",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:bf78e34d2fcd12e81c23a30c88c4b46a089f9c2aa6af4cfd6e68a6a053cdf2af",
-      "digest": "bf78e34d2fcd12e81c23a30c88c4b46a089f9c2aa6af4cfd6e68a6a053cdf2af",
+      "integrityId": "urn:youdede:artifact:sha256:519df4daf3209b6013f2356aa474128fd2f66567e68a34b34ef6d6ffde348e1a",
+      "digest": "519df4daf3209b6013f2356aa474128fd2f66567e68a34b34ef6d6ffde348e1a",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -16003,13 +15953,13 @@
         },
         {
           "path": "artifacts/subagents/development/state-management/state-machine-invariant-analyst/targets/claude-code/state-machine-invariant-analyst.md",
-          "bytes": 6054,
-          "sha256": "36c6deab811e7da1840464a1e244b35a403d920077c5d1c47912e5986c0cff3b"
+          "bytes": 6186,
+          "sha256": "8b79cc4bb39318e927384f922f5c333b7ba2a1dd29ba3411fceb08d8321edbf5"
         },
         {
           "path": "artifacts/subagents/development/state-management/state-machine-invariant-analyst/targets/gemini-cli/state-machine-invariant-analyst.md",
-          "bytes": 6108,
-          "sha256": "ef15d9febdc2dcb252dc748a47acbb69345057c4063a59a7b1e6f967157c05ba"
+          "bytes": 6240,
+          "sha256": "17f30ae232974b817d798df23be1f7dc795bd522cdf31a46aba293cffe185241"
         },
         {
           "path": "artifacts/subagents/development/state-management/state-machine-invariant-analyst/targets/github-copilot/state-machine-invariant-analyst.agent.md",
@@ -16018,16 +15968,16 @@
         },
         {
           "path": "artifacts/subagents/development/state-management/state-machine-invariant-analyst/targets/opencode/state-machine-invariant-analyst.md",
-          "bytes": 6057,
-          "sha256": "d1440dd799aeb16a7a5a1b3f6352a353003b69702ad8ba7dec3eb541929011b8"
+          "bytes": 6189,
+          "sha256": "8c8b0d9fe7a4a87ca52e3a89234174b4eeb81ca6cdad839d2a3e3942165fb4f5"
         }
       ]
     },
     {
       "artifactId": "subagent/development/testing/flaky-test-diagnostician",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:7268373893247e7e18df11a005a288f83d9bb58937782a9086aeb353f1e261d0",
-      "digest": "7268373893247e7e18df11a005a288f83d9bb58937782a9086aeb353f1e261d0",
+      "integrityId": "urn:youdede:artifact:sha256:ac9725e0e4a59721c2fd66c05ffc6cd40e5dba8ab63a9749c42331c5717612fd",
+      "digest": "ac9725e0e4a59721c2fd66c05ffc6cd40e5dba8ab63a9749c42331c5717612fd",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -16060,13 +16010,13 @@
         },
         {
           "path": "artifacts/subagents/development/testing/flaky-test-diagnostician/targets/claude-code/flaky-test-diagnostician.md",
-          "bytes": 8240,
-          "sha256": "c7d8315a3e851103092bbed90aeae2a727425d396f49b5a47a55f3c06724e272"
+          "bytes": 8372,
+          "sha256": "e7caa7b22b8d8689af98d2e9554487984188ab3a983e5d6be01ed82df497eb92"
         },
         {
           "path": "artifacts/subagents/development/testing/flaky-test-diagnostician/targets/gemini-cli/flaky-test-diagnostician.md",
-          "bytes": 8278,
-          "sha256": "772b6a09d56f8ccae06ad43c45e31688b287eade7355e44968862f3e2c342bc9"
+          "bytes": 8410,
+          "sha256": "9096a1c20c3e9b4934d561cc0cd6a9c4693eedf0c62f5569b0289bfda0fdf525"
         },
         {
           "path": "artifacts/subagents/development/testing/flaky-test-diagnostician/targets/github-copilot/flaky-test-diagnostician.agent.md",
@@ -16078,8 +16028,8 @@
     {
       "artifactId": "subagent/development/testing/mobile-reliability-accessibility-reviewer",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:ebade45f49585fdefebe7c83c5eea2e0a2f2c4d29a44961bbb259b2a0b95ea90",
-      "digest": "ebade45f49585fdefebe7c83c5eea2e0a2f2c4d29a44961bbb259b2a0b95ea90",
+      "integrityId": "urn:youdede:artifact:sha256:5e4f414f17778cebdc6ac13ef1c48de4a1090c82912c64b292bd9e7cfb2c9645",
+      "digest": "5e4f414f17778cebdc6ac13ef1c48de4a1090c82912c64b292bd9e7cfb2c9645",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -16112,13 +16062,13 @@
         },
         {
           "path": "artifacts/subagents/development/testing/mobile-reliability-accessibility-reviewer/targets/claude-code/mobile-reliability-accessibility-reviewer.md",
-          "bytes": 8949,
-          "sha256": "f677aa54544487c68e0a929eec24d8bcd2e13e3210a0a0307877a8e0a5b3ca2d"
+          "bytes": 9081,
+          "sha256": "c386615a8941e42d01ed567c5e18048dc0f7b41224946e736352578f213f07f0"
         },
         {
           "path": "artifacts/subagents/development/testing/mobile-reliability-accessibility-reviewer/targets/gemini-cli/mobile-reliability-accessibility-reviewer.md",
-          "bytes": 8990,
-          "sha256": "24fc1b9e8f4bf91ed02fe89c977a4a9fcfa8d42a955e0142cd4f5691dc76ceb1"
+          "bytes": 9122,
+          "sha256": "9abbe6cb223326e897e600cb4944b8bc40eef924bb3dc59c2c86a33234feb708"
         },
         {
           "path": "artifacts/subagents/development/testing/mobile-reliability-accessibility-reviewer/targets/github-copilot/mobile-reliability-accessibility-reviewer.agent.md",
@@ -16130,8 +16080,8 @@
     {
       "artifactId": "subagent/development/testing/performance-benchmark-analyst",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:3d53c3bdbd3ef991d2ae40d9d63ff9d092244a41717cebda146742d116fbb29f",
-      "digest": "3d53c3bdbd3ef991d2ae40d9d63ff9d092244a41717cebda146742d116fbb29f",
+      "integrityId": "urn:youdede:artifact:sha256:48aca7426dddfd53737b8439399cfb369c058ad0289c90d4c2afefeca67300aa",
+      "digest": "48aca7426dddfd53737b8439399cfb369c058ad0289c90d4c2afefeca67300aa",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -16164,13 +16114,13 @@
         },
         {
           "path": "artifacts/subagents/development/testing/performance-benchmark-analyst/targets/claude-code/performance-benchmark-analyst.md",
-          "bytes": 8303,
-          "sha256": "7505fb68eb0e787e951b6e409f20599e856a2b04c16ec9a959379d345c6786e5"
+          "bytes": 8435,
+          "sha256": "04318efedb5a8e207d1195a7bbbfa30ffc45b3b05ffb72472639977b560542c3"
         },
         {
           "path": "artifacts/subagents/development/testing/performance-benchmark-analyst/targets/gemini-cli/performance-benchmark-analyst.md",
-          "bytes": 8341,
-          "sha256": "e894b83dcc3aae478c8faeccda056cc872849e1f1254782e8a05a09a694956cd"
+          "bytes": 8473,
+          "sha256": "2acddf2832dbf5aab9f647b075a145261039163bd955cfe88058e77829a80405"
         },
         {
           "path": "artifacts/subagents/development/testing/performance-benchmark-analyst/targets/github-copilot/performance-benchmark-analyst.agent.md",
@@ -16182,8 +16132,8 @@
     {
       "artifactId": "subagent/development/testing/test-gap-reviewer",
       "version": "1.4.0",
-      "integrityId": "urn:youdede:artifact:sha256:145d952b60899dabd61cb30882e25e12036c36ea85e5dead2fe88242f576ace6",
-      "digest": "145d952b60899dabd61cb30882e25e12036c36ea85e5dead2fe88242f576ace6",
+      "integrityId": "urn:youdede:artifact:sha256:96dbeb1480fc79625cca4c05f98b2b20341ba8e771a1ace447b67d9beab4e16f",
+      "digest": "96dbeb1480fc79625cca4c05f98b2b20341ba8e771a1ace447b67d9beab4e16f",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -16221,13 +16171,13 @@
         },
         {
           "path": "artifacts/subagents/development/testing/test-gap-reviewer/targets/claude-code/test-gap-reviewer.md",
-          "bytes": 6107,
-          "sha256": "a882cf295b702d74e0871a37fe3502ca7fe8782e977b29361fff2ab9b9b632db"
+          "bytes": 6239,
+          "sha256": "4c30ea5158595ab607d7eacb02373ea81e8f6dce90ac93b868ba243aa21471a5"
         },
         {
           "path": "artifacts/subagents/development/testing/test-gap-reviewer/targets/gemini-cli/test-gap-reviewer.md",
-          "bytes": 6161,
-          "sha256": "cd2d69dd369f09ac1160accc766968047d3d301c55fda753acec3dfb0d6e6576"
+          "bytes": 6293,
+          "sha256": "b1824f482a1872d52c47116ccd3332b1622cd3b07dd498007ac41d93157d7f93"
         },
         {
           "path": "artifacts/subagents/development/testing/test-gap-reviewer/targets/github-copilot/test-gap-reviewer.agent.md",
@@ -16236,16 +16186,16 @@
         },
         {
           "path": "artifacts/subagents/development/testing/test-gap-reviewer/targets/opencode/test-gap-reviewer.md",
-          "bytes": 6124,
-          "sha256": "3fe6f1bd23c90165eb18ac094e987406e69a2f66a40791e1a9c2c38296a19fcb"
+          "bytes": 6256,
+          "sha256": "eb75ef5ce75fe75c00f055f50ed2a8a5ae690d6cb1e5cea5d7158a3173755a0f"
         }
       ]
     },
     {
       "artifactId": "subagent/marketing/analytics/campaign-attribution-integrity-reviewer",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:cc4a141e1034184b0fa5a6162d09a8d9cb8cef09e03a40928eecad74e3628a93",
-      "digest": "cc4a141e1034184b0fa5a6162d09a8d9cb8cef09e03a40928eecad74e3628a93",
+      "integrityId": "urn:youdede:artifact:sha256:8a7907b327f756fe6889467fe3a5da2d979441e7d3365751cde9eb0ed452addd",
+      "digest": "8a7907b327f756fe6889467fe3a5da2d979441e7d3365751cde9eb0ed452addd",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -16278,18 +16228,18 @@
         },
         {
           "path": "artifacts/subagents/marketing/analytics/campaign-attribution-integrity-reviewer/evaluations/behavioral.json",
-          "bytes": 5919,
-          "sha256": "76f2b50794e8e2da5e949fbb07f322516a28845f1aea788e9138e1aeead72c9b"
+          "bytes": 5967,
+          "sha256": "22376f7e6ff43d16bf752471adc40548681607368dde2fb02719d01d1817f91b"
         },
         {
           "path": "artifacts/subagents/marketing/analytics/campaign-attribution-integrity-reviewer/targets/claude-code/campaign-attribution-integrity-reviewer.md",
-          "bytes": 6304,
-          "sha256": "ba22b695b90be5765cb3c60d23a6585c00795e5b735384d6e95fcd482c277602"
+          "bytes": 6436,
+          "sha256": "ada7eeb20288a77877904bd7ebd80077b860a21015de985ef0059545a283e446"
         },
         {
           "path": "artifacts/subagents/marketing/analytics/campaign-attribution-integrity-reviewer/targets/gemini-cli/campaign-attribution-integrity-reviewer.md",
-          "bytes": 6358,
-          "sha256": "689090f059112ee5da9210fc62b1868c461a9c0d8aba310debee744c755bdb2b"
+          "bytes": 6490,
+          "sha256": "56022cd52e79a6bab27fd9e7611e459df612fb637c317309f491330632889b3d"
         },
         {
           "path": "artifacts/subagents/marketing/analytics/campaign-attribution-integrity-reviewer/targets/github-copilot/campaign-attribution-integrity-reviewer.agent.md",
@@ -16298,16 +16248,16 @@
         },
         {
           "path": "artifacts/subagents/marketing/analytics/campaign-attribution-integrity-reviewer/targets/opencode/campaign-attribution-integrity-reviewer.md",
-          "bytes": 6299,
-          "sha256": "760fabb3cedb7e1f70e9436f1090c628ada14c7509ab9689c7d68711df00a97d"
+          "bytes": 6431,
+          "sha256": "6386c7e3998f9810afa8a45b9637b596ab3161e05cecf24449fda883883bd45b"
         }
       ]
     },
     {
       "artifactId": "subagent/marketing/launch/launch-message-consistency-reviewer",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:e3ca49bc91329e9f677dd77789ee80256920afc0fdc726a02ddcba0cb59daba2",
-      "digest": "e3ca49bc91329e9f677dd77789ee80256920afc0fdc726a02ddcba0cb59daba2",
+      "integrityId": "urn:youdede:artifact:sha256:932a215bc916df5ba039b6d88a1d611d56a13472c855cf628597720332d77376",
+      "digest": "932a215bc916df5ba039b6d88a1d611d56a13472c855cf628597720332d77376",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -16340,18 +16290,18 @@
         },
         {
           "path": "artifacts/subagents/marketing/launch/launch-message-consistency-reviewer/evaluations/behavioral.json",
-          "bytes": 6147,
-          "sha256": "55fd571cc11730dcb89bc574c819a99faee44ec7857e2bed539fb1d2156f33a8"
+          "bytes": 6186,
+          "sha256": "2bb689568831976931d31e8c626c8765869f4eb433baeb7bec32a2f06f9d8ea1"
         },
         {
           "path": "artifacts/subagents/marketing/launch/launch-message-consistency-reviewer/targets/claude-code/launch-message-consistency-reviewer.md",
-          "bytes": 6250,
-          "sha256": "55e6317ff9b4ac4d92cd56052082f90d098da5b3d1c0526fe0665ff1c916d2c3"
+          "bytes": 6382,
+          "sha256": "56a5ddb07be567b0aa27474c8dab01cce1b057a2883a89f7fde0695d93e6a92f"
         },
         {
           "path": "artifacts/subagents/marketing/launch/launch-message-consistency-reviewer/targets/gemini-cli/launch-message-consistency-reviewer.md",
-          "bytes": 6304,
-          "sha256": "7e8501b83bf4b2f896d64bed7b8ecc9a7419381d9d8a3251d90f045a1712431a"
+          "bytes": 6436,
+          "sha256": "6295459126edcc44fae5f749118c5212f2411f8113fb978867f7afc9583318cd"
         },
         {
           "path": "artifacts/subagents/marketing/launch/launch-message-consistency-reviewer/targets/github-copilot/launch-message-consistency-reviewer.agent.md",
@@ -16360,16 +16310,16 @@
         },
         {
           "path": "artifacts/subagents/marketing/launch/launch-message-consistency-reviewer/targets/opencode/launch-message-consistency-reviewer.md",
-          "bytes": 6249,
-          "sha256": "c5b7ba0e3d7b1ab15f933796ae949039598f0755943aa57005ab75584c0af6c3"
+          "bytes": 6381,
+          "sha256": "8bde32b1804b3c37811a9dbd04bc132144a726a9792fb10a8cee89d1865dcf42"
         }
       ]
     },
     {
       "artifactId": "subagent/marketing/positioning/positioning-evidence-analyst",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:37cb40df533aa07e01535af529818eb73249435d13558c9bee4203d59e956cae",
-      "digest": "37cb40df533aa07e01535af529818eb73249435d13558c9bee4203d59e956cae",
+      "integrityId": "urn:youdede:artifact:sha256:89998556c609e6278f610abad206cd16e89612d839f65f50ea5545af4a7f1418",
+      "digest": "89998556c609e6278f610abad206cd16e89612d839f65f50ea5545af4a7f1418",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -16402,18 +16352,18 @@
         },
         {
           "path": "artifacts/subagents/marketing/positioning/positioning-evidence-analyst/evaluations/behavioral.json",
-          "bytes": 6494,
-          "sha256": "6a6584a1e1d3251fc62d5b28f46ba8b4b5f85602a0773d28398821a72f9a1770"
+          "bytes": 6542,
+          "sha256": "015050024a256affd1c6b1ea10205369f92ad3599cb7ab7fc45d2a1d36b93ef6"
         },
         {
           "path": "artifacts/subagents/marketing/positioning/positioning-evidence-analyst/targets/claude-code/positioning-evidence-analyst.md",
-          "bytes": 6181,
-          "sha256": "7ab54d8cb993d6dd583dec941ef86f501aff945406962a3d7a6646366c7efd7b"
+          "bytes": 6313,
+          "sha256": "5fa3f68e4a3f33a61747ba69fe6ba7a561104d28510b488ff3d048b710e84715"
         },
         {
           "path": "artifacts/subagents/marketing/positioning/positioning-evidence-analyst/targets/gemini-cli/positioning-evidence-analyst.md",
-          "bytes": 6235,
-          "sha256": "0f9b0ef81b026b532118405da537b7adb54a043d88509377f1bfd02eac993a17"
+          "bytes": 6367,
+          "sha256": "98bed2221417cc26be615a235eef731bbbed4fee9b2410e30b959f4825534c81"
         },
         {
           "path": "artifacts/subagents/marketing/positioning/positioning-evidence-analyst/targets/github-copilot/positioning-evidence-analyst.agent.md",
@@ -16422,16 +16372,16 @@
         },
         {
           "path": "artifacts/subagents/marketing/positioning/positioning-evidence-analyst/targets/opencode/positioning-evidence-analyst.md",
-          "bytes": 6187,
-          "sha256": "251b2feb37466bc21597b515bdf2f6244858a0e3b76abf12eece87014b965616"
+          "bytes": 6319,
+          "sha256": "1e4f385099fb18920053a794ad47e9c9d1e215f8e37f7ee5ad4a228c0729ba1b"
         }
       ]
     },
     {
       "artifactId": "subagent/operations/capacity/capacity-risk-analyst",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:3406c5cf0ae83f952eca8870a39aa6104ceab84ae263812f5ef83ed375f8f570",
-      "digest": "3406c5cf0ae83f952eca8870a39aa6104ceab84ae263812f5ef83ed375f8f570",
+      "integrityId": "urn:youdede:artifact:sha256:e3ab04dc8a61ed3f25b5bdc07e0159d441e7bff51085e4addcd93135ad7b47e8",
+      "digest": "e3ab04dc8a61ed3f25b5bdc07e0159d441e7bff51085e4addcd93135ad7b47e8",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -16464,18 +16414,18 @@
         },
         {
           "path": "artifacts/subagents/operations/capacity/capacity-risk-analyst/evaluations/behavioral.json",
-          "bytes": 6588,
-          "sha256": "7f78e9d890534d9bb4a61bbcd1bafd31415ed7809927cc5d62e9001e2e123a4c"
+          "bytes": 6627,
+          "sha256": "9b05e38f8b5d48ae13f6448f8c609193ae06dd118e9bf228b730872ebc3f91a7"
         },
         {
           "path": "artifacts/subagents/operations/capacity/capacity-risk-analyst/targets/claude-code/capacity-risk-analyst.md",
-          "bytes": 6115,
-          "sha256": "d9b6a6bb2aada092644dd445917432abbd46ba91af192ff08606944a7664dc9f"
+          "bytes": 6247,
+          "sha256": "3503688c00a9d4bb6bd305f27b508b8d1fe72ec3b5f3e2c093e832b91717860d"
         },
         {
           "path": "artifacts/subagents/operations/capacity/capacity-risk-analyst/targets/gemini-cli/capacity-risk-analyst.md",
-          "bytes": 6169,
-          "sha256": "581a0326ea8f5abced1388f9d849395740358efeaa4da73fc6282ecfca539ed1"
+          "bytes": 6301,
+          "sha256": "7ad3d24d71b64fff8d75452927857e6be4f860f48913d584f3858974b7867bde"
         },
         {
           "path": "artifacts/subagents/operations/capacity/capacity-risk-analyst/targets/github-copilot/capacity-risk-analyst.agent.md",
@@ -16484,16 +16434,16 @@
         },
         {
           "path": "artifacts/subagents/operations/capacity/capacity-risk-analyst/targets/opencode/capacity-risk-analyst.md",
-          "bytes": 6128,
-          "sha256": "fda378b9722956667a7661516a5792c3c16279c15ddac1207b0c3137139c9ab7"
+          "bytes": 6260,
+          "sha256": "d708520228cbe72a6489bd2be6eb2f2f374ddb7bf743a7dc4be558aa914a92c3"
         }
       ]
     },
     {
       "artifactId": "subagent/operations/ci-cd/ci-failure-analyst",
       "version": "1.4.0",
-      "integrityId": "urn:youdede:artifact:sha256:0c73f7d8e3a8b629b4e72f9fea55a71045117a39c0d9aa874a9ff610306e81d8",
-      "digest": "0c73f7d8e3a8b629b4e72f9fea55a71045117a39c0d9aa874a9ff610306e81d8",
+      "integrityId": "urn:youdede:artifact:sha256:e88c27a907d58b2c36353dfeeaf4c3648c879b59287cf2036ccf705a2e07f45e",
+      "digest": "e88c27a907d58b2c36353dfeeaf4c3648c879b59287cf2036ccf705a2e07f45e",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -16531,13 +16481,13 @@
         },
         {
           "path": "artifacts/subagents/operations/ci-cd/ci-failure-analyst/targets/claude-code/ci-failure-analyst.md",
-          "bytes": 6699,
-          "sha256": "d4ca192b7584a305f180dbb7ff1c7dd58f87f0ec6544d13aadc44913eeba7788"
+          "bytes": 6831,
+          "sha256": "65287a78a3f8f3944874f14d8785b98368ea14031ad3a4e2e810f8fd9591d07b"
         },
         {
           "path": "artifacts/subagents/operations/ci-cd/ci-failure-analyst/targets/gemini-cli/ci-failure-analyst.md",
-          "bytes": 6753,
-          "sha256": "116811624cb02495b119857a7adc1e3e3b51befd6d9ee31164000ab606880e8c"
+          "bytes": 6885,
+          "sha256": "c277ae5f2fe71e04d3ff368057440f1d2ecc2f1c5f32313876d154bf0b9918e9"
         },
         {
           "path": "artifacts/subagents/operations/ci-cd/ci-failure-analyst/targets/github-copilot/ci-failure-analyst.agent.md",
@@ -16546,16 +16496,16 @@
         },
         {
           "path": "artifacts/subagents/operations/ci-cd/ci-failure-analyst/targets/opencode/ci-failure-analyst.md",
-          "bytes": 6715,
-          "sha256": "3858d0c35bb4a881bc850695212f83d10ac7a74225dde74be350436135358b3b"
+          "bytes": 6847,
+          "sha256": "b2a7a7ab7a9a6e6a8ea0eea345317b1f7567225f186b71cf54a21a509cc82b96"
         }
       ]
     },
     {
       "artifactId": "subagent/operations/cloud-resources/cloud-cost-finops-analyst",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:5db9cfcf65f51f5c09beab80a5de9d29146a1e73490de3e0af5baa61fe16b397",
-      "digest": "5db9cfcf65f51f5c09beab80a5de9d29146a1e73490de3e0af5baa61fe16b397",
+      "integrityId": "urn:youdede:artifact:sha256:8452428033b84811b7237fc5ad9fbc5b304d5b0b76b0bb2c5bb9ed5e2d03d3f0",
+      "digest": "8452428033b84811b7237fc5ad9fbc5b304d5b0b76b0bb2c5bb9ed5e2d03d3f0",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -16588,13 +16538,13 @@
         },
         {
           "path": "artifacts/subagents/operations/cloud-resources/cloud-cost-finops-analyst/targets/claude-code/cloud-cost-finops-analyst.md",
-          "bytes": 8760,
-          "sha256": "02f680ceb753ee0577276dc86a7e94b73bb7345983e6b384e63cab5c13eb4fa0"
+          "bytes": 8892,
+          "sha256": "25f166ea4b83c7f9a74406d4c1734f4162c388355e076f132c2afbe3645cf838"
         },
         {
           "path": "artifacts/subagents/operations/cloud-resources/cloud-cost-finops-analyst/targets/gemini-cli/cloud-cost-finops-analyst.md",
-          "bytes": 8798,
-          "sha256": "16eea00bb6072374366258fe00dd26be7e31e75ab1fa838783446a72e991d640"
+          "bytes": 8930,
+          "sha256": "80af54cfd7f4d1b7401b9cf732e0d3253dcffa657c97aa78d30006f9cfd2f1cc"
         },
         {
           "path": "artifacts/subagents/operations/cloud-resources/cloud-cost-finops-analyst/targets/github-copilot/cloud-cost-finops-analyst.agent.md",
@@ -16606,8 +16556,8 @@
     {
       "artifactId": "subagent/operations/configuration/configuration-drift-analyst",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:01e4d0f401f15cbb8102ecf9e503d6968661f4fa71735c6c46733b964058782d",
-      "digest": "01e4d0f401f15cbb8102ecf9e503d6968661f4fa71735c6c46733b964058782d",
+      "integrityId": "urn:youdede:artifact:sha256:24817820ba5019be920d0eb723372405b248a0f0e6579ab1c1a577b802b48680",
+      "digest": "24817820ba5019be920d0eb723372405b248a0f0e6579ab1c1a577b802b48680",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -16640,18 +16590,18 @@
         },
         {
           "path": "artifacts/subagents/operations/configuration/configuration-drift-analyst/evaluations/behavioral.json",
-          "bytes": 6270,
-          "sha256": "77722c7601b962d876c3b32743cd06340930b42f3b926ce960a4b58bf76136d8"
+          "bytes": 6318,
+          "sha256": "5f39d1bb6ac931d6ecaedb237264cb009f7f46ebb352f7995c13035427b5bae9"
         },
         {
           "path": "artifacts/subagents/operations/configuration/configuration-drift-analyst/targets/claude-code/configuration-drift-analyst.md",
-          "bytes": 6214,
-          "sha256": "b89a33a5e56cccd18ab3d6b7455efe928a9c5deec577b0d075db119cb825b0b1"
+          "bytes": 6346,
+          "sha256": "817adc4764881a18425ba45fe6fe6651bd10927e9781f349efda37c23f131a0f"
         },
         {
           "path": "artifacts/subagents/operations/configuration/configuration-drift-analyst/targets/gemini-cli/configuration-drift-analyst.md",
-          "bytes": 6268,
-          "sha256": "5131f344ddf25806c7eb74c03420f47a91f629d3fc76a3caab30237ee20e84b9"
+          "bytes": 6400,
+          "sha256": "d8435e363817702f7eaef50c043c94aadbe38ceb25b138226860cc789df5b94e"
         },
         {
           "path": "artifacts/subagents/operations/configuration/configuration-drift-analyst/targets/github-copilot/configuration-drift-analyst.agent.md",
@@ -16660,16 +16610,16 @@
         },
         {
           "path": "artifacts/subagents/operations/configuration/configuration-drift-analyst/targets/opencode/configuration-drift-analyst.md",
-          "bytes": 6221,
-          "sha256": "6ff0db8f5f48b6cad196073f4612386bddfe2ed2c52c1c7383255f44b19c3947"
+          "bytes": 6353,
+          "sha256": "df2b763f889bbcc49f0a0f620821de28f5901393f0c2f18cb0f6b0c13e87d104"
         }
       ]
     },
     {
       "artifactId": "subagent/operations/incidents/incident-timeline-analyst",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:8005f2312dbe62873e3edaf8c8200a8b1df3b88e90e48edcacc1603880391c65",
-      "digest": "8005f2312dbe62873e3edaf8c8200a8b1df3b88e90e48edcacc1603880391c65",
+      "integrityId": "urn:youdede:artifact:sha256:6a7c15863441b6fd959135010cd6fc19ee0dc7bf5fee8326a86af7a237fcebda",
+      "digest": "6a7c15863441b6fd959135010cd6fc19ee0dc7bf5fee8326a86af7a237fcebda",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -16702,18 +16652,18 @@
         },
         {
           "path": "artifacts/subagents/operations/incidents/incident-timeline-analyst/evaluations/behavioral.json",
-          "bytes": 6678,
-          "sha256": "9815675fc99314972e0f6bc49187f385054b70c4c002edb5e82da04237a15fc9"
+          "bytes": 6717,
+          "sha256": "4f887851ec48f72e9c8cd621673189080b86f1bb4af4fa19392a3010991cd7b1"
         },
         {
           "path": "artifacts/subagents/operations/incidents/incident-timeline-analyst/targets/claude-code/incident-timeline-analyst.md",
-          "bytes": 6239,
-          "sha256": "983bf077fe39da8c6d47b37bc5bc81611a3e27dc4f55a35b97dde79a3b28a0f9"
+          "bytes": 6371,
+          "sha256": "e2a3ee826ca3ec4fb3333635901316e1d17d2866dfa3f60406ceb6fa91f84f68"
         },
         {
           "path": "artifacts/subagents/operations/incidents/incident-timeline-analyst/targets/gemini-cli/incident-timeline-analyst.md",
-          "bytes": 6293,
-          "sha256": "b59fbe1e5be71626f2b525fd4b081ef72948693db24c4c1c49329146f50bc12b"
+          "bytes": 6425,
+          "sha256": "56f10a7df6654c0ffbdec166993fc50079f56cb5b049de8dc49306550d71f40f"
         },
         {
           "path": "artifacts/subagents/operations/incidents/incident-timeline-analyst/targets/github-copilot/incident-timeline-analyst.agent.md",
@@ -16722,16 +16672,16 @@
         },
         {
           "path": "artifacts/subagents/operations/incidents/incident-timeline-analyst/targets/opencode/incident-timeline-analyst.md",
-          "bytes": 6248,
-          "sha256": "1b5f8420f278856382eec00c1527d3c497f89c80352b7fdc2569b64a850726b4"
+          "bytes": 6380,
+          "sha256": "52fcf1848a38d8eb028e68016eeedae2652d10db3fca8cc1e8e08d858813fe3e"
         }
       ]
     },
     {
       "artifactId": "subagent/operations/infrastructure/cloud-iac-policy-reviewer",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:ac09000f0c2cdeefdf13207740d58e6abe60fc640f53668df04c8dda2e3bb222",
-      "digest": "ac09000f0c2cdeefdf13207740d58e6abe60fc640f53668df04c8dda2e3bb222",
+      "integrityId": "urn:youdede:artifact:sha256:915996ad3c0d61c0e55a9576e7004a76402ca4cc1446c9af714146c690a46321",
+      "digest": "915996ad3c0d61c0e55a9576e7004a76402ca4cc1446c9af714146c690a46321",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -16764,13 +16714,13 @@
         },
         {
           "path": "artifacts/subagents/operations/infrastructure/cloud-iac-policy-reviewer/targets/claude-code/cloud-iac-policy-reviewer.md",
-          "bytes": 8885,
-          "sha256": "ebbf32d4c036d3ea910a894d6d09eb61707995d35e633f0d9de1fab577e330f5"
+          "bytes": 9017,
+          "sha256": "52ac97022431e5313d37b6756c354534e6555d4d2b8cae74d741fa832856fdbf"
         },
         {
           "path": "artifacts/subagents/operations/infrastructure/cloud-iac-policy-reviewer/targets/gemini-cli/cloud-iac-policy-reviewer.md",
-          "bytes": 8926,
-          "sha256": "a60723aea8370360cbdd862a2054b87e5d0f1435f04ccb26ec3070289bb18ab8"
+          "bytes": 9058,
+          "sha256": "b0178338db80e9e03139e2a8234ef0d30868fb42aaa92ac54a4f6dbbd8a50cbf"
         },
         {
           "path": "artifacts/subagents/operations/infrastructure/cloud-iac-policy-reviewer/targets/github-copilot/cloud-iac-policy-reviewer.agent.md",
@@ -16782,8 +16732,8 @@
     {
       "artifactId": "subagent/operations/infrastructure/infrastructure-change-reviewer",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:82dae219fbdbcf92af33e1cc9b00f570a98332d62f646c3583eded66d5a82656",
-      "digest": "82dae219fbdbcf92af33e1cc9b00f570a98332d62f646c3583eded66d5a82656",
+      "integrityId": "urn:youdede:artifact:sha256:c8f32d588037d4de3c03b59c9a9cd3808d3f514643c2030dbd74c6214e10ce4d",
+      "digest": "c8f32d588037d4de3c03b59c9a9cd3808d3f514643c2030dbd74c6214e10ce4d",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -16821,13 +16771,13 @@
         },
         {
           "path": "artifacts/subagents/operations/infrastructure/infrastructure-change-reviewer/targets/claude-code/infrastructure-change-reviewer.md",
-          "bytes": 6223,
-          "sha256": "060c72d5c912661b4c0f927da777fa7cff6332177f88377c55bc7d04fd7c3026"
+          "bytes": 6355,
+          "sha256": "f3e8c8ce54cd8bab1bf1df562e6a8d3910d49acc0b9a6e8ccbdb120b8ed68133"
         },
         {
           "path": "artifacts/subagents/operations/infrastructure/infrastructure-change-reviewer/targets/gemini-cli/infrastructure-change-reviewer.md",
-          "bytes": 6277,
-          "sha256": "380287a7fe5c4713378173f88f2ee572d4d1c2b24ee5bbec9d5f019196700239"
+          "bytes": 6409,
+          "sha256": "d15f8e91b8f6e688856812c32d0139dc163474a146a7099ab4f5af584ae4cbcf"
         },
         {
           "path": "artifacts/subagents/operations/infrastructure/infrastructure-change-reviewer/targets/github-copilot/infrastructure-change-reviewer.agent.md",
@@ -16836,16 +16786,16 @@
         },
         {
           "path": "artifacts/subagents/operations/infrastructure/infrastructure-change-reviewer/targets/opencode/infrastructure-change-reviewer.md",
-          "bytes": 6227,
-          "sha256": "e2afb18662761a3ae437173c9dfd440b52dc6a3f1e912862b5816652ef8632e6"
+          "bytes": 6359,
+          "sha256": "1dee99f3e79614ca2026c66dad6b8a744400a3f159e312a74c3368f0146c3323"
         }
       ]
     },
     {
       "artifactId": "subagent/operations/observability/observability-instrumentation-reviewer",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:73768375f2c0268656147c578dc0a03d5ddc94f7f2ec3bb859f63719ee433547",
-      "digest": "73768375f2c0268656147c578dc0a03d5ddc94f7f2ec3bb859f63719ee433547",
+      "integrityId": "urn:youdede:artifact:sha256:8fd957f19944bf564c90d64f701eadfb3c104c6b5e0fcbed26bf3614f965f27c",
+      "digest": "8fd957f19944bf564c90d64f701eadfb3c104c6b5e0fcbed26bf3614f965f27c",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -16878,13 +16828,13 @@
         },
         {
           "path": "artifacts/subagents/operations/observability/observability-instrumentation-reviewer/targets/claude-code/observability-instrumentation-reviewer.md",
-          "bytes": 8369,
-          "sha256": "c738ebc7dd653c67018cf7be28f1c584f01f1e0e53a09df768a9fadc3bfce5d9"
+          "bytes": 8501,
+          "sha256": "95e05150c7d1fe3b9b8169503ac28640e91fc4533d63c48d5a71b96cd59db9a5"
         },
         {
           "path": "artifacts/subagents/operations/observability/observability-instrumentation-reviewer/targets/gemini-cli/observability-instrumentation-reviewer.md",
-          "bytes": 8410,
-          "sha256": "71992a2d57f47dacc03520f7c29ba443b6d0427fb67830723dbaf45d88b648c5"
+          "bytes": 8542,
+          "sha256": "065809fdaad14e852836ab85f460538f3aa7e6f364529c8ae3063418a09cec7e"
         },
         {
           "path": "artifacts/subagents/operations/observability/observability-instrumentation-reviewer/targets/github-copilot/observability-instrumentation-reviewer.agent.md",
@@ -16896,8 +16846,8 @@
     {
       "artifactId": "subagent/operations/release/release-evidence-verifier",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:e0717814cddb8b1b65e1945f6a01e7b006ab85373a589b2137fc21ff6106c5b8",
-      "digest": "e0717814cddb8b1b65e1945f6a01e7b006ab85373a589b2137fc21ff6106c5b8",
+      "integrityId": "urn:youdede:artifact:sha256:7a02e765398dba448925ed0990d3212ce3585f2357fc770a32de0cd863b1afe2",
+      "digest": "7a02e765398dba448925ed0990d3212ce3585f2357fc770a32de0cd863b1afe2",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -16930,13 +16880,13 @@
         },
         {
           "path": "artifacts/subagents/operations/release/release-evidence-verifier/targets/claude-code/release-evidence-verifier.md",
-          "bytes": 8411,
-          "sha256": "cac39b4d65f97c7cc3692202ddd022fadc5946735d67cbb592a132444893a1af"
+          "bytes": 8543,
+          "sha256": "0c7528ce5558a83bff9b6495256ea9b31554cf124c2d56d13c7969add7eb8a0c"
         },
         {
           "path": "artifacts/subagents/operations/release/release-evidence-verifier/targets/gemini-cli/release-evidence-verifier.md",
-          "bytes": 8437,
-          "sha256": "f3069c99a7ba954c3d53c3d0769c4dd9583695e4f67c1b9e3251ba42f503fe9e"
+          "bytes": 8569,
+          "sha256": "0ef421a2a2e5bd578f15ea13c5490e9f0ce0c886d6829a0ea8aff3356dc49fd9"
         },
         {
           "path": "artifacts/subagents/operations/release/release-evidence-verifier/targets/github-copilot/release-evidence-verifier.agent.md",
@@ -16948,8 +16898,8 @@
     {
       "artifactId": "subagent/operations/release/release-risk-reviewer",
       "version": "1.4.0",
-      "integrityId": "urn:youdede:artifact:sha256:7da358a299b830da858e4af3140948055e0b2eae7a443c1b87c57d234a7bfe9e",
-      "digest": "7da358a299b830da858e4af3140948055e0b2eae7a443c1b87c57d234a7bfe9e",
+      "integrityId": "urn:youdede:artifact:sha256:ce852bd4893c0a8fdd7352863a5a630d9f57179edee286cc28eba3cf0f7004fa",
+      "digest": "ce852bd4893c0a8fdd7352863a5a630d9f57179edee286cc28eba3cf0f7004fa",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -16987,13 +16937,13 @@
         },
         {
           "path": "artifacts/subagents/operations/release/release-risk-reviewer/targets/claude-code/release-risk-reviewer.md",
-          "bytes": 6780,
-          "sha256": "21dab7a72bc50c4f34c748794f51ed506c084a65bf36371d8795f46c60e69eef"
+          "bytes": 6912,
+          "sha256": "83c0315b15cb07c616d6eb000d797984e91599eff1fdcd21ebc1500505fa2113"
         },
         {
           "path": "artifacts/subagents/operations/release/release-risk-reviewer/targets/gemini-cli/release-risk-reviewer.md",
-          "bytes": 6834,
-          "sha256": "c380abae6e0580979f78e4c88a2df51a2f40d90db38dca0e74501778fcc84a29"
+          "bytes": 6966,
+          "sha256": "77adf3611deb2c9bd1837acc7380d1cbdfd445d4cf2a1d58cfb9f4631df68304"
         },
         {
           "path": "artifacts/subagents/operations/release/release-risk-reviewer/targets/github-copilot/release-risk-reviewer.agent.md",
@@ -17002,16 +16952,16 @@
         },
         {
           "path": "artifacts/subagents/operations/release/release-risk-reviewer/targets/opencode/release-risk-reviewer.md",
-          "bytes": 6793,
-          "sha256": "c0bf527e059399f410e4bc8464b610e37322b43ba33444e23f44efaafa06ad5d"
+          "bytes": 6925,
+          "sha256": "5a5a41c032a66867a14d41f32d89d9242f2e7c8a1fce01d1523618b33c1499d3"
         }
       ]
     },
     {
       "artifactId": "subagent/operations/reliability/slo-error-budget-analyst",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:47c8abc553bc63c07159776a225f19c325bf9edab91064a97e678ce37f0c142a",
-      "digest": "47c8abc553bc63c07159776a225f19c325bf9edab91064a97e678ce37f0c142a",
+      "integrityId": "urn:youdede:artifact:sha256:463fdaadd086a9fe055bd3e5200146ae92cda3dfb5bb088454e2bfca9334408e",
+      "digest": "463fdaadd086a9fe055bd3e5200146ae92cda3dfb5bb088454e2bfca9334408e",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -17049,13 +16999,13 @@
         },
         {
           "path": "artifacts/subagents/operations/reliability/slo-error-budget-analyst/targets/claude-code/slo-error-budget-analyst.md",
-          "bytes": 6136,
-          "sha256": "0f0e65e20227763899e76581f956f02bfcb771307970cb622ac4a94dc33a6c5d"
+          "bytes": 6268,
+          "sha256": "2e935e50715f97f8d0ce80590541ce290944362d6a7398faa3a78380c8733cd2"
         },
         {
           "path": "artifacts/subagents/operations/reliability/slo-error-budget-analyst/targets/gemini-cli/slo-error-budget-analyst.md",
-          "bytes": 6190,
-          "sha256": "5ee0ab6aa1de198d26dc34dfaf1dd2bd08295f0da25835f9fb1023e8c989bee2"
+          "bytes": 6322,
+          "sha256": "4cc3017ca1da52d1f08d5c72f28bda78ae836fad123162586df01ce7b84f81dd"
         },
         {
           "path": "artifacts/subagents/operations/reliability/slo-error-budget-analyst/targets/github-copilot/slo-error-budget-analyst.agent.md",
@@ -17064,16 +17014,16 @@
         },
         {
           "path": "artifacts/subagents/operations/reliability/slo-error-budget-analyst/targets/opencode/slo-error-budget-analyst.md",
-          "bytes": 6146,
-          "sha256": "cfd76dcac7e8a66a0ad5cb0c5b472694dceb30ef4962864efe3473a7ddc5d7f3"
+          "bytes": 6278,
+          "sha256": "688877471b4058e9cb99812a9118c24e97f3c86f0d4041d15e980aac8c3db818"
         }
       ]
     },
     {
       "artifactId": "subagent/operations/resilience/disaster-recovery-readiness-auditor",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:69255b9125af21eae728e1a1cf6fb57822edb5388a59081f64bf7b6b688c325a",
-      "digest": "69255b9125af21eae728e1a1cf6fb57822edb5388a59081f64bf7b6b688c325a",
+      "integrityId": "urn:youdede:artifact:sha256:ed246c0bdb098c38b63c6bdf96cb399f51a4b5da2f53abfd27c33f4a122d71a7",
+      "digest": "ed246c0bdb098c38b63c6bdf96cb399f51a4b5da2f53abfd27c33f4a122d71a7",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -17106,18 +17056,18 @@
         },
         {
           "path": "artifacts/subagents/operations/resilience/disaster-recovery-readiness-auditor/evaluations/behavioral.json",
-          "bytes": 6371,
-          "sha256": "fbc344b4bd3880ef89535a3fdf913e13cbb8a2170be97bc778b336db3dc9dd6e"
+          "bytes": 6419,
+          "sha256": "2db812ba561d111e654ef9b0e7df32742278c5fe17acc04d59a20179facade47"
         },
         {
           "path": "artifacts/subagents/operations/resilience/disaster-recovery-readiness-auditor/targets/claude-code/disaster-recovery-readiness-auditor.md",
-          "bytes": 6286,
-          "sha256": "bfa8ca33c95cd3978a51f4dd2f9c9d59b8af16625b4c27a61518a30053f46b99"
+          "bytes": 6418,
+          "sha256": "a33ca5c295b4e3e7a009c123888ec35eb0f1e7e348fedd5bba504eab369c6615"
         },
         {
           "path": "artifacts/subagents/operations/resilience/disaster-recovery-readiness-auditor/targets/gemini-cli/disaster-recovery-readiness-auditor.md",
-          "bytes": 6340,
-          "sha256": "39bb8cb942dac9255a3ad76046b677bfac8e5e8c55de996b88be138e0f5c08f0"
+          "bytes": 6472,
+          "sha256": "7125f08682accc02b9aca35c99b7786a4178bfa8ccf2a7ca27ae1e8b48bf1c54"
         },
         {
           "path": "artifacts/subagents/operations/resilience/disaster-recovery-readiness-auditor/targets/github-copilot/disaster-recovery-readiness-auditor.agent.md",
@@ -17126,16 +17076,16 @@
         },
         {
           "path": "artifacts/subagents/operations/resilience/disaster-recovery-readiness-auditor/targets/opencode/disaster-recovery-readiness-auditor.md",
-          "bytes": 6285,
-          "sha256": "c6f336c2fcb8fcd37c8494e3fef51a3b3242ee4dadfa30ee1bf01a95d66eaa67"
+          "bytes": 6417,
+          "sha256": "5f0e7cf25b29477ef5cee4005df585b2daaa20b75bde3fcaff1ab977a746e35a"
         }
       ]
     },
     {
       "artifactId": "subagent/operations/runbooks/runbook-readiness-reviewer",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:316c52234f5da0656eb897d43ba363a03d99a7b3422077b5d4053d65d90baaf3",
-      "digest": "316c52234f5da0656eb897d43ba363a03d99a7b3422077b5d4053d65d90baaf3",
+      "integrityId": "urn:youdede:artifact:sha256:6678879e11eb39da2e35855f7b51a8795e8679df4b4da67c7a76a98398c31e29",
+      "digest": "6678879e11eb39da2e35855f7b51a8795e8679df4b4da67c7a76a98398c31e29",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -17173,13 +17123,13 @@
         },
         {
           "path": "artifacts/subagents/operations/runbooks/runbook-readiness-reviewer/targets/claude-code/runbook-readiness-reviewer.md",
-          "bytes": 7317,
-          "sha256": "68d574af633c9e04d09ea3b1ba07500627c4a91c2e66975a1d1322b03b2a0c4e"
+          "bytes": 7449,
+          "sha256": "a1df1b0cea67e434a7ecdc1255be0b20a2d0cb387257fdb07f81c8336ec3537a"
         },
         {
           "path": "artifacts/subagents/operations/runbooks/runbook-readiness-reviewer/targets/gemini-cli/runbook-readiness-reviewer.md",
-          "bytes": 7371,
-          "sha256": "49b34dea5c8ac5fd164ef1a54f0f182fce6f2ca67aacff2458788d5541e47161"
+          "bytes": 7503,
+          "sha256": "84a003f665dee960b02fd6f4d5c33b8846beb9f6b804da9f366e32af399e72c0"
         },
         {
           "path": "artifacts/subagents/operations/runbooks/runbook-readiness-reviewer/targets/github-copilot/runbook-readiness-reviewer.agent.md",
@@ -17188,16 +17138,16 @@
         },
         {
           "path": "artifacts/subagents/operations/runbooks/runbook-readiness-reviewer/targets/opencode/runbook-readiness-reviewer.md",
-          "bytes": 7325,
-          "sha256": "f1fb42b18cd52798f399ca22dd6e1a737c452828da003148fd157d4d57e89d12"
+          "bytes": 7457,
+          "sha256": "f652cdaf1c797e3688144a9c64b3841b5caba954dbd56a6676b86cd9803517e0"
         }
       ]
     },
     {
       "artifactId": "subagent/research/evidence-synthesis/evidence-synthesis-analyst",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:c66e9906ecf33ecac924219ed96698ae605f10b5080afa0e18d8bc3b819f942e",
-      "digest": "c66e9906ecf33ecac924219ed96698ae605f10b5080afa0e18d8bc3b819f942e",
+      "integrityId": "urn:youdede:artifact:sha256:090837f66177dd266ff401181690dd46b5503b6533e58efd58965a60ac3a01fc",
+      "digest": "090837f66177dd266ff401181690dd46b5503b6533e58efd58965a60ac3a01fc",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -17230,18 +17180,18 @@
         },
         {
           "path": "artifacts/subagents/research/evidence-synthesis/evidence-synthesis-analyst/evaluations/behavioral.json",
-          "bytes": 6913,
-          "sha256": "3fde4fe1cb01c40cbee5b71b45ea57e32d9d10f9bb6e8aa3e4de842da240d953"
+          "bytes": 6952,
+          "sha256": "4d15bb7a1557df5cc50a5696254e8ba1e536a6cd85413be602a441fe74c2af4f"
         },
         {
           "path": "artifacts/subagents/research/evidence-synthesis/evidence-synthesis-analyst/targets/claude-code/evidence-synthesis-analyst.md",
-          "bytes": 7401,
-          "sha256": "55d3ab51de85a8f92e9817aed374c71497b158b4e8ac86af57cd184d6ee380a7"
+          "bytes": 7533,
+          "sha256": "6d04a1558157b99a6d045f4c5bbb2a0ff49abe73a279806d42d5cf6ff79a238e"
         },
         {
           "path": "artifacts/subagents/research/evidence-synthesis/evidence-synthesis-analyst/targets/gemini-cli/evidence-synthesis-analyst.md",
-          "bytes": 7455,
-          "sha256": "ce4e98625b5050261b3d57ed79bb16c8ace759e17fd80d03e8e0061f225c019b"
+          "bytes": 7587,
+          "sha256": "192808332a752d19c1ffee2678533f8c7807ecf9f99a407a00be4977e5d533a2"
         },
         {
           "path": "artifacts/subagents/research/evidence-synthesis/evidence-synthesis-analyst/targets/github-copilot/evidence-synthesis-analyst.agent.md",
@@ -17250,16 +17200,16 @@
         },
         {
           "path": "artifacts/subagents/research/evidence-synthesis/evidence-synthesis-analyst/targets/opencode/evidence-synthesis-analyst.md",
-          "bytes": 7409,
-          "sha256": "107a6de21f60cf5a07688828240c0c36216db33e732346b39c9d227b0665c3ee"
+          "bytes": 7541,
+          "sha256": "71baee4db8e13097af8250af24153da9c84c8dc3c96a5382fdbcde3c29ad81a9"
         }
       ]
     },
     {
       "artifactId": "subagent/research/research-planning/research-gap-mapper",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:cd68666948b9f3b0dd6b753db27d94f889742b76e383bf29fc239839ba552af2",
-      "digest": "cd68666948b9f3b0dd6b753db27d94f889742b76e383bf29fc239839ba552af2",
+      "integrityId": "urn:youdede:artifact:sha256:ccd886328a5d9331b748d843c73bfef97f5caace2b86d9af92c351c02e88494a",
+      "digest": "ccd886328a5d9331b748d843c73bfef97f5caace2b86d9af92c351c02e88494a",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -17292,18 +17242,18 @@
         },
         {
           "path": "artifacts/subagents/research/research-planning/research-gap-mapper/evaluations/behavioral.json",
-          "bytes": 6859,
-          "sha256": "e772a135274dd5a8d3d26e015565136020c3d00b887031b9e36e27ff717e183d"
+          "bytes": 6907,
+          "sha256": "db86b0aea7a370a8900ff04f0d6b3409f8484a3e868ce0269d6ee690ecc30181"
         },
         {
           "path": "artifacts/subagents/research/research-planning/research-gap-mapper/targets/claude-code/research-gap-mapper.md",
-          "bytes": 7810,
-          "sha256": "bba90b9a66eb8b4887b006d04fb0e857970d7c4cc736d038deb7c4a85b40dbdd"
+          "bytes": 7942,
+          "sha256": "dfe872a6f1ba020331fb577337ce472006ec4901bfdc376c176f178a6a0d8edd"
         },
         {
           "path": "artifacts/subagents/research/research-planning/research-gap-mapper/targets/gemini-cli/research-gap-mapper.md",
-          "bytes": 7864,
-          "sha256": "51d86a42d446f6162553ded54f836d7f6dab4e19e67be6091081d638c5c416e6"
+          "bytes": 7996,
+          "sha256": "e6ac3c5eb3c8cd9902d39d18819ae9e9f6a84a54be76a3c40e996a291d78c485"
         },
         {
           "path": "artifacts/subagents/research/research-planning/research-gap-mapper/targets/github-copilot/research-gap-mapper.agent.md",
@@ -17312,16 +17262,16 @@
         },
         {
           "path": "artifacts/subagents/research/research-planning/research-gap-mapper/targets/opencode/research-gap-mapper.md",
-          "bytes": 7825,
-          "sha256": "f7a1d51d43baa5ab0f26f8c4f800fed250d4fcb806f614b088a79f19b0510b0f"
+          "bytes": 7957,
+          "sha256": "d1b2f0d633936961c924e1244739cf09e91a79def891d41398a2f7c88a6a068b"
         }
       ]
     },
     {
       "artifactId": "subagent/research/source-analysis/source-credibility-auditor",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:ed264c02400820df9e0b38214e878c80c106dfcd9b793e0c813daa62ed53195e",
-      "digest": "ed264c02400820df9e0b38214e878c80c106dfcd9b793e0c813daa62ed53195e",
+      "integrityId": "urn:youdede:artifact:sha256:b2c5f3b310db59a44aadc78afa74a5f744f148ac26b930100352211db253e7e1",
+      "digest": "b2c5f3b310db59a44aadc78afa74a5f744f148ac26b930100352211db253e7e1",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -17354,18 +17304,18 @@
         },
         {
           "path": "artifacts/subagents/research/source-analysis/source-credibility-auditor/evaluations/behavioral.json",
-          "bytes": 6567,
-          "sha256": "d613a555d8cfd5385a551001fab84aa704e09694420d5117d4dca2025c1adf67"
+          "bytes": 6606,
+          "sha256": "cb70216881fd2a45b8caaf843ef0bc775a81e2f6306f7f584ff5fd3adbd45c38"
         },
         {
           "path": "artifacts/subagents/research/source-analysis/source-credibility-auditor/targets/claude-code/source-credibility-auditor.md",
-          "bytes": 7528,
-          "sha256": "6ae50183a494d3893ddac3501a1b8158f39a331cb2bf8d0304d1d8b35937f46d"
+          "bytes": 7660,
+          "sha256": "238cf5041179f6396fbea9e90283465e4c8985bdbd9330bdbbc071f8b23dd633"
         },
         {
           "path": "artifacts/subagents/research/source-analysis/source-credibility-auditor/targets/gemini-cli/source-credibility-auditor.md",
-          "bytes": 7582,
-          "sha256": "41eee0ac9f1007b676356a18be9e5b1b41f3a0423fa787d3529f632cc190fcea"
+          "bytes": 7714,
+          "sha256": "5df8a29d3a3fc0ad1817f4172aed2c791af85b978ed02543b8c69e4ad8827c40"
         },
         {
           "path": "artifacts/subagents/research/source-analysis/source-credibility-auditor/targets/github-copilot/source-credibility-auditor.agent.md",
@@ -17374,16 +17324,16 @@
         },
         {
           "path": "artifacts/subagents/research/source-analysis/source-credibility-auditor/targets/opencode/source-credibility-auditor.md",
-          "bytes": 7536,
-          "sha256": "213ebae9720039c87ab8c264945f160e41ebd72d9809bdc5bca8d6aa8830adb1"
+          "bytes": 7668,
+          "sha256": "1912c5bf6ba1556268fa75e99c958bf81cf2866200f7ce12845cc0275ae6833b"
         }
       ]
     },
     {
       "artifactId": "subagent/security/abuse-prevention/abuse-resistance-analyst",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:3b6cdab6ace86bab8689645476e238cf86eee23a86841cba4c6d51154e63e003",
-      "digest": "3b6cdab6ace86bab8689645476e238cf86eee23a86841cba4c6d51154e63e003",
+      "integrityId": "urn:youdede:artifact:sha256:f993f3d4bca321af2b07a31ff3b0ec52a3442fc6905b9512e8a21a1c9e3c16b4",
+      "digest": "f993f3d4bca321af2b07a31ff3b0ec52a3442fc6905b9512e8a21a1c9e3c16b4",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -17421,13 +17371,13 @@
         },
         {
           "path": "artifacts/subagents/security/abuse-prevention/abuse-resistance-analyst/targets/claude-code/abuse-resistance-analyst.md",
-          "bytes": 6096,
-          "sha256": "aa805d35a1e3865900b1cea50a79a3ca5829044c0a1ad74fa1c5852b2fe1c5f7"
+          "bytes": 6228,
+          "sha256": "6362d1502214f906eebf021c212c2d7afe9855b26cce56eff519e9463bb268b2"
         },
         {
           "path": "artifacts/subagents/security/abuse-prevention/abuse-resistance-analyst/targets/gemini-cli/abuse-resistance-analyst.md",
-          "bytes": 6150,
-          "sha256": "23b5b4cf22b1f9fe8bc1327682c1471870c5e1df8a723b2c56cf6a49aef73b4b"
+          "bytes": 6282,
+          "sha256": "cf49fff25c9f386ccfc8a8c6c99d56e6cc79cc6c98913251642d2731f46dfe3c"
         },
         {
           "path": "artifacts/subagents/security/abuse-prevention/abuse-resistance-analyst/targets/github-copilot/abuse-resistance-analyst.agent.md",
@@ -17436,16 +17386,16 @@
         },
         {
           "path": "artifacts/subagents/security/abuse-prevention/abuse-resistance-analyst/targets/opencode/abuse-resistance-analyst.md",
-          "bytes": 6106,
-          "sha256": "77c25844860a32ba947e8a0ad1fe1ad058726e2b81ba0d49e7292bb038bedb2e"
+          "bytes": 6238,
+          "sha256": "b77712408ef91890ff67a1f2a79b26c7295c8986eb01c06eb357271388c41962"
         }
       ]
     },
     {
       "artifactId": "subagent/security/application-security/application-security-reviewer",
       "version": "1.4.0",
-      "integrityId": "urn:youdede:artifact:sha256:477dc8b5b38fb48bc365fa7118c600421fb1b7fd6dc015ebed6ec9cafa43f8ef",
-      "digest": "477dc8b5b38fb48bc365fa7118c600421fb1b7fd6dc015ebed6ec9cafa43f8ef",
+      "integrityId": "urn:youdede:artifact:sha256:7abbb908ade3567354f54c30b314c7aeff9bec445d9f4544da2f433e0f4687e8",
+      "digest": "7abbb908ade3567354f54c30b314c7aeff9bec445d9f4544da2f433e0f4687e8",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -17483,31 +17433,31 @@
         },
         {
           "path": "artifacts/subagents/security/application-security/application-security-reviewer/targets/claude-code/application-security-reviewer.md",
-          "bytes": 6902,
-          "sha256": "ae15e14792f473090447cefce04e05784961c2d3249f5e6b1a95885585129f26"
+          "bytes": 7406,
+          "sha256": "50aef8f2f3e9c1aa377d617cba10eb7320d8dcf9a00d66aab52e08a4c8df2264"
         },
         {
           "path": "artifacts/subagents/security/application-security/application-security-reviewer/targets/gemini-cli/application-security-reviewer.md",
-          "bytes": 6956,
-          "sha256": "d6ecfb12ba535846dc9b0c5bd9dec43b4c16d588108558f6563f2c2e1dfe5f16"
+          "bytes": 7460,
+          "sha256": "a5999698fadb8db4032daa6afe89bac92ca5aa0ee611dd8a351281e532d9ffef"
         },
         {
           "path": "artifacts/subagents/security/application-security/application-security-reviewer/targets/github-copilot/application-security-reviewer.agent.md",
-          "bytes": 7009,
-          "sha256": "05ef2ce38c913a012716f8e85a4850d7279cede324cfd8eecefefc7592086030"
+          "bytes": 7381,
+          "sha256": "025682e1db79b304b80f885695d0e688fe7011198773141e1be9e359c1391031"
         },
         {
           "path": "artifacts/subagents/security/application-security/application-security-reviewer/targets/opencode/application-security-reviewer.md",
-          "bytes": 6907,
-          "sha256": "be36a4bfe89f8d4f27e61c781e4c1e3b289b7c2a7d0ebd88070f210f7958e5e1"
+          "bytes": 7411,
+          "sha256": "9b08e19c11224d54e4022a84c3e4f7c191d12a85e7ec925899f592088cb66343"
         }
       ]
     },
     {
       "artifactId": "subagent/security/authorization/access-control-matrix-auditor",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:9b9d56d0a3016e8905b574252bac0a73b2414725f4f9ab6f90aca74ebd5bd081",
-      "digest": "9b9d56d0a3016e8905b574252bac0a73b2414725f4f9ab6f90aca74ebd5bd081",
+      "integrityId": "urn:youdede:artifact:sha256:5012760cc189d9df8c94c6c48e368f20f3f7ecee8c444a077acf052b29ecb319",
+      "digest": "5012760cc189d9df8c94c6c48e368f20f3f7ecee8c444a077acf052b29ecb319",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -17540,18 +17490,18 @@
         },
         {
           "path": "artifacts/subagents/security/authorization/access-control-matrix-auditor/evaluations/behavioral.json",
-          "bytes": 5661,
-          "sha256": "b76b1d850b5fcd7ed08717aaae4df1a4d4b0de97ce67c2aab5fc1fc5aee43979"
+          "bytes": 5709,
+          "sha256": "b3d3c16e3276e1ab7e6577b6a626a73f8eeed03c0dcf5f7bed8d7bd3c3d67ebb"
         },
         {
           "path": "artifacts/subagents/security/authorization/access-control-matrix-auditor/targets/claude-code/access-control-matrix-auditor.md",
-          "bytes": 6131,
-          "sha256": "2c67a1e673f834832460ced2b082bfa3cf0e13c70c4b9cab863ccd98625763fc"
+          "bytes": 6263,
+          "sha256": "09561fabe5a51dfdca77297961999aeb4ed6d45f56eaa2d14265f7dddaea01cf"
         },
         {
           "path": "artifacts/subagents/security/authorization/access-control-matrix-auditor/targets/gemini-cli/access-control-matrix-auditor.md",
-          "bytes": 6185,
-          "sha256": "bb4c32ff58c1cd16dedda80ed50314e52d33d07565d2e19fd0ceb332db97e309"
+          "bytes": 6317,
+          "sha256": "9f8afa2661d3c2b3640aa3d99abe1eca95deb4aa36e5f66ab22b03e585fc45f8"
         },
         {
           "path": "artifacts/subagents/security/authorization/access-control-matrix-auditor/targets/github-copilot/access-control-matrix-auditor.agent.md",
@@ -17560,16 +17510,16 @@
         },
         {
           "path": "artifacts/subagents/security/authorization/access-control-matrix-auditor/targets/opencode/access-control-matrix-auditor.md",
-          "bytes": 6136,
-          "sha256": "e31862af18d411faf7f4da1e2645f69abbabd43dfa6683cea98f683cd5f8d9a7"
+          "bytes": 6268,
+          "sha256": "78866541b33c987d863943af3c2a34fffc57cf2628ac54e3045df817c4a51ee9"
         }
       ]
     },
     {
       "artifactId": "subagent/security/cryptography/cryptographic-usage-reviewer",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:08c206e84bca750d4f64905b24c7d0cf0b61414c32365fe6cd16660589924ca3",
-      "digest": "08c206e84bca750d4f64905b24c7d0cf0b61414c32365fe6cd16660589924ca3",
+      "integrityId": "urn:youdede:artifact:sha256:dafedd43169ad5212e6b871cfc175c4a5d9a636278d27e292143b14d995dfbc9",
+      "digest": "dafedd43169ad5212e6b871cfc175c4a5d9a636278d27e292143b14d995dfbc9",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -17602,18 +17552,18 @@
         },
         {
           "path": "artifacts/subagents/security/cryptography/cryptographic-usage-reviewer/evaluations/behavioral.json",
-          "bytes": 6151,
-          "sha256": "e71af71b13e01a1443eceac640abcc92240ec7e1cdb59565362f5c50566d08fb"
+          "bytes": 6190,
+          "sha256": "08edfe625f7f63c5a7ccc5a245cd7890beaa262fcd502d6d0440d0933bc18d3c"
         },
         {
           "path": "artifacts/subagents/security/cryptography/cryptographic-usage-reviewer/targets/claude-code/cryptographic-usage-reviewer.md",
-          "bytes": 6225,
-          "sha256": "522cad8faed0423d1eb8b8e7e781d7ef1c1487ef8bd51ce4339356f6582d60b0"
+          "bytes": 6357,
+          "sha256": "9fe7fa7f831eb6971300aa804a95ad3bb939bc34c9bf7eb9301c62edff7bea67"
         },
         {
           "path": "artifacts/subagents/security/cryptography/cryptographic-usage-reviewer/targets/gemini-cli/cryptographic-usage-reviewer.md",
-          "bytes": 6279,
-          "sha256": "0a1225783d9b273cd2dba260e780eac3a11a7d1dfbe8ece9805011f2cf1a3367"
+          "bytes": 6411,
+          "sha256": "ec7d2ae4594dce7ba2ec559847860b7d543cbc8928e431d0d3d188adfed58c41"
         },
         {
           "path": "artifacts/subagents/security/cryptography/cryptographic-usage-reviewer/targets/github-copilot/cryptographic-usage-reviewer.agent.md",
@@ -17622,16 +17572,16 @@
         },
         {
           "path": "artifacts/subagents/security/cryptography/cryptographic-usage-reviewer/targets/opencode/cryptographic-usage-reviewer.md",
-          "bytes": 6231,
-          "sha256": "947f6249bc2166109b9572d832d7e3814bf1500104c4092d10cecbfced3551c5"
+          "bytes": 6363,
+          "sha256": "a3ef8714f8137f6b776902182f8fd9bd7ea006fcc1f8ccfdf9a9435f090d526b"
         }
       ]
     },
     {
       "artifactId": "subagent/security/dependencies/dependency-risk-reviewer",
       "version": "1.4.0",
-      "integrityId": "urn:youdede:artifact:sha256:43552f44e41ea0aca609c1ba21f897a499c74d69a24ed131c12f85e6522a96da",
-      "digest": "43552f44e41ea0aca609c1ba21f897a499c74d69a24ed131c12f85e6522a96da",
+      "integrityId": "urn:youdede:artifact:sha256:43cc399e948c64eb21fd0524904500fecc5f387986d6be769270c73184a23638",
+      "digest": "43cc399e948c64eb21fd0524904500fecc5f387986d6be769270c73184a23638",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -17669,13 +17619,13 @@
         },
         {
           "path": "artifacts/subagents/security/dependencies/dependency-risk-reviewer/targets/claude-code/dependency-risk-reviewer.md",
-          "bytes": 6374,
-          "sha256": "f74043e70146dd5102b0db569e2f0e07b1596b75be49961f6c4cebacf15b5cfd"
+          "bytes": 6506,
+          "sha256": "362af6c86fa1a6a297dc8727397d3c2df28ccd42a2d415c69b436ffc304b338f"
         },
         {
           "path": "artifacts/subagents/security/dependencies/dependency-risk-reviewer/targets/gemini-cli/dependency-risk-reviewer.md",
-          "bytes": 6428,
-          "sha256": "4ce11d1c64477372e2c15606649bb8750a03ac87e32aee8ae239f5c9cb8548a5"
+          "bytes": 6560,
+          "sha256": "ea830e1f6f3455e237e3aedb6aa550b6004ca44a4972511c01f7cde7706b04ae"
         },
         {
           "path": "artifacts/subagents/security/dependencies/dependency-risk-reviewer/targets/github-copilot/dependency-risk-reviewer.agent.md",
@@ -17684,16 +17634,16 @@
         },
         {
           "path": "artifacts/subagents/security/dependencies/dependency-risk-reviewer/targets/opencode/dependency-risk-reviewer.md",
-          "bytes": 6384,
-          "sha256": "69d231dc2330fcdf6c8a52c34cae502f5157191f39713493626e0dcfe5661198"
+          "bytes": 6516,
+          "sha256": "b3b73c857c968ab7fc0f4f1e59f4c5cfb765109e17cbd64b018f9d5ca7349350"
         }
       ]
     },
     {
       "artifactId": "subagent/security/multi-tenancy/tenant-isolation-analyst",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:ed9ec639966b6e51cccde582b9b85bfee0c85520e8efe289b4f71ec7058f79d9",
-      "digest": "ed9ec639966b6e51cccde582b9b85bfee0c85520e8efe289b4f71ec7058f79d9",
+      "integrityId": "urn:youdede:artifact:sha256:68782e29f7c293015ee43080e9585948a254c573ff239d2f44407d6e7164a369",
+      "digest": "68782e29f7c293015ee43080e9585948a254c573ff239d2f44407d6e7164a369",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -17726,18 +17676,18 @@
         },
         {
           "path": "artifacts/subagents/security/multi-tenancy/tenant-isolation-analyst/evaluations/behavioral.json",
-          "bytes": 5668,
-          "sha256": "d47313de77499d0688399430a2b9d4c0d790f819361c1f2885037ce24dd31e73"
+          "bytes": 5716,
+          "sha256": "6900acc67634c0e8ab2581a87ec191f94fcf3f0875b6b6c3d5e683bb01bd3ceb"
         },
         {
           "path": "artifacts/subagents/security/multi-tenancy/tenant-isolation-analyst/targets/claude-code/tenant-isolation-analyst.md",
-          "bytes": 6163,
-          "sha256": "c904a37f7f327eaae039e7dc3a16129a86f0ca8e42ff441219dc969d64d031e5"
+          "bytes": 6295,
+          "sha256": "5bc2340acb66c3ad55fb639127f6c029aa5aab676462b1def29e6e6d67f0828c"
         },
         {
           "path": "artifacts/subagents/security/multi-tenancy/tenant-isolation-analyst/targets/gemini-cli/tenant-isolation-analyst.md",
-          "bytes": 6217,
-          "sha256": "97b5cf8dc1e89c6a56294a925cbdd00216844c19166d8c6bf3e5e475dfb9726f"
+          "bytes": 6349,
+          "sha256": "e992caacdafea67866c02a7fa2d79cc457aea33bf740c9be2ada79cc4266d24b"
         },
         {
           "path": "artifacts/subagents/security/multi-tenancy/tenant-isolation-analyst/targets/github-copilot/tenant-isolation-analyst.agent.md",
@@ -17746,16 +17696,16 @@
         },
         {
           "path": "artifacts/subagents/security/multi-tenancy/tenant-isolation-analyst/targets/opencode/tenant-isolation-analyst.md",
-          "bytes": 6173,
-          "sha256": "287e419bd857843c9025777673f103424c296f4b7518e7da7699c1ec6e138a87"
+          "bytes": 6305,
+          "sha256": "91db291f9f8a112db3b70dc6b4ae6f3fcb567e902752f18265f37f2dc34496c2"
         }
       ]
     },
     {
       "artifactId": "subagent/security/supply-chain/build-provenance-reviewer",
       "version": "1.4.0",
-      "integrityId": "urn:youdede:artifact:sha256:b440f56572e8edeffb4cb035d46fc66225de9f1ef5bed4532dc8e78e2fcd1a1f",
-      "digest": "b440f56572e8edeffb4cb035d46fc66225de9f1ef5bed4532dc8e78e2fcd1a1f",
+      "integrityId": "urn:youdede:artifact:sha256:de87ff7d80fd40dff789c456738f6f2f0ac64ecd52028c06d1f767f4effafb1f",
+      "digest": "de87ff7d80fd40dff789c456738f6f2f0ac64ecd52028c06d1f767f4effafb1f",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -17788,18 +17738,18 @@
         },
         {
           "path": "artifacts/subagents/security/supply-chain/build-provenance-reviewer/evaluations/behavioral.json",
-          "bytes": 5953,
-          "sha256": "bb075bb45aa68e8c2990230d8fb525b459b6e4a0e847439862f325570e592f2e"
+          "bytes": 5992,
+          "sha256": "e3492ae1a01ed0bd90d5921daeecfb01ef18f0fe1f472abecead2c10c8ddb602"
         },
         {
           "path": "artifacts/subagents/security/supply-chain/build-provenance-reviewer/targets/claude-code/build-provenance-reviewer.md",
-          "bytes": 7746,
-          "sha256": "4e9d06f256ef9387b3983dec588efff7a1386f89f963c8574339eae1793ef01d"
+          "bytes": 7878,
+          "sha256": "df6d8aeb6a3e664f8c40b173c2b1acc9c314afc8ee1f2ef8ddd523b11a849282"
         },
         {
           "path": "artifacts/subagents/security/supply-chain/build-provenance-reviewer/targets/gemini-cli/build-provenance-reviewer.md",
-          "bytes": 7800,
-          "sha256": "994ad712b3e497dcca4b732042d9efd0939179c6a09e3317ddfff68564b34b02"
+          "bytes": 7932,
+          "sha256": "34817984c1cae47ed228644a1323cf31b762fddb4f77c6cd54de650a866ed38d"
         },
         {
           "path": "artifacts/subagents/security/supply-chain/build-provenance-reviewer/targets/github-copilot/build-provenance-reviewer.agent.md",
@@ -17808,16 +17758,16 @@
         },
         {
           "path": "artifacts/subagents/security/supply-chain/build-provenance-reviewer/targets/opencode/build-provenance-reviewer.md",
-          "bytes": 7755,
-          "sha256": "2b3ae2476aa95aa77e2b775cec5dc3446d2153b7e614347bf26e98c4d1f0d631"
+          "bytes": 7887,
+          "sha256": "bf72335e209c2e57f639aa90ba32605f427be63e7ebad1d5d3c346fac28a28ce"
         }
       ]
     },
     {
       "artifactId": "subagent/security/telemetry/privacy-data-handling-auditor",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:2b91a3c406f3b03eed221abb5e1d2eb04496dd58401f71c4fbe46800cf6e8147",
-      "digest": "2b91a3c406f3b03eed221abb5e1d2eb04496dd58401f71c4fbe46800cf6e8147",
+      "integrityId": "urn:youdede:artifact:sha256:e1777e6bce191edd8456435fbfc22587d1cbe033ef87292bd099e038d1d2000b",
+      "digest": "e1777e6bce191edd8456435fbfc22587d1cbe033ef87292bd099e038d1d2000b",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -17850,13 +17800,13 @@
         },
         {
           "path": "artifacts/subagents/security/telemetry/privacy-data-handling-auditor/targets/claude-code/privacy-data-handling-auditor.md",
-          "bytes": 8318,
-          "sha256": "833c5a9b25957d8fd5274637995dc63dc28212b10b110ab58aa5b53f2219155f"
+          "bytes": 8450,
+          "sha256": "6a389341b6806d03b24f0a111c35329087b0f2b2ae55a4b7194c7f1d5571a726"
         },
         {
           "path": "artifacts/subagents/security/telemetry/privacy-data-handling-auditor/targets/gemini-cli/privacy-data-handling-auditor.md",
-          "bytes": 8359,
-          "sha256": "1c3aa9319b6b9e00390026f80563458bc54d0ed8e312a370ecdc29f12e6cc89e"
+          "bytes": 8491,
+          "sha256": "12889ab6e278eff3154f5f965135f53aab789829d86f84d267ab679e0d51d3be"
         },
         {
           "path": "artifacts/subagents/security/telemetry/privacy-data-handling-auditor/targets/github-copilot/privacy-data-handling-auditor.agent.md",
@@ -17868,8 +17818,8 @@
     {
       "artifactId": "subagent/security/telemetry/sensitive-logging-reviewer",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:620c126970e8d0dd04931706af70ae6ae80e2627d0f3b13614e5e3f64fdfb484",
-      "digest": "620c126970e8d0dd04931706af70ae6ae80e2627d0f3b13614e5e3f64fdfb484",
+      "integrityId": "urn:youdede:artifact:sha256:6f8eb50a2c7c55cc709dedee0a58bc40b9257423ae341de1cad5156f72a7ff8b",
+      "digest": "6f8eb50a2c7c55cc709dedee0a58bc40b9257423ae341de1cad5156f72a7ff8b",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -17902,18 +17852,18 @@
         },
         {
           "path": "artifacts/subagents/security/telemetry/sensitive-logging-reviewer/evaluations/behavioral.json",
-          "bytes": 5993,
-          "sha256": "75a31560f95a89ff27c57194a6be05f5bd75770a4599fbd24fab7aa8dab302c8"
+          "bytes": 6032,
+          "sha256": "9fbb659965d1e8f6fc95d81ccab68411457f3ac0737b5f5748042becadd91f2f"
         },
         {
           "path": "artifacts/subagents/security/telemetry/sensitive-logging-reviewer/targets/claude-code/sensitive-logging-reviewer.md",
-          "bytes": 6128,
-          "sha256": "ce76fef383f5f45e6cbb44192f50479b07aabf959570c4b228ebc5264c0ac594"
+          "bytes": 6260,
+          "sha256": "2d0040db8ce03aacdd0f41e5c200bb428a478fe14880b8453f2359392473535b"
         },
         {
           "path": "artifacts/subagents/security/telemetry/sensitive-logging-reviewer/targets/gemini-cli/sensitive-logging-reviewer.md",
-          "bytes": 6182,
-          "sha256": "a423ec6e2a867f7f23d268722b64edd7734c9a76abe31f7d6abc59ea324fdb88"
+          "bytes": 6314,
+          "sha256": "f19a51054854ad9ebb969790cde0ae7c739d02effdfad09c873233adab1cbb21"
         },
         {
           "path": "artifacts/subagents/security/telemetry/sensitive-logging-reviewer/targets/github-copilot/sensitive-logging-reviewer.agent.md",
@@ -17922,16 +17872,16 @@
         },
         {
           "path": "artifacts/subagents/security/telemetry/sensitive-logging-reviewer/targets/opencode/sensitive-logging-reviewer.md",
-          "bytes": 6136,
-          "sha256": "ed0cb10d689bb38b64bc45b6a393635b20738ce71bad0ce53d79b0bf5cf98a49"
+          "bytes": 6268,
+          "sha256": "02c9a2a00b3c6eb7fee51e482739200be4d3a43f4fe044f72b4b7c8b1c30ba12"
         }
       ]
     },
     {
       "artifactId": "subagent/security/threat-modeling/mcp-trust-boundary-reviewer",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:d409f92018d88e6ffbbe8ab32f5070bc7603c0ecab7329b1fc048ea9734b2954",
-      "digest": "d409f92018d88e6ffbbe8ab32f5070bc7603c0ecab7329b1fc048ea9734b2954",
+      "integrityId": "urn:youdede:artifact:sha256:bf68102e9f46dd03b831ba3fdd1814999d46d22e133fe44821d0ae2dac8a3a46",
+      "digest": "bf68102e9f46dd03b831ba3fdd1814999d46d22e133fe44821d0ae2dac8a3a46",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -17964,13 +17914,13 @@
         },
         {
           "path": "artifacts/subagents/security/threat-modeling/mcp-trust-boundary-reviewer/targets/claude-code/mcp-trust-boundary-reviewer.md",
-          "bytes": 8438,
-          "sha256": "ed4e6d3fa4edf8851ab12cc5a93479664c2020809f7a6525ae1791b69652da89"
+          "bytes": 8570,
+          "sha256": "d42ed88bbdddcad6408161614d180acffd53ec0ede50c45b0e783b9cfb2c197d"
         },
         {
           "path": "artifacts/subagents/security/threat-modeling/mcp-trust-boundary-reviewer/targets/gemini-cli/mcp-trust-boundary-reviewer.md",
-          "bytes": 8476,
-          "sha256": "ff00686074290ed2f0523b631c4b0b4524d5f0fe7e27f6f6211f27a8514d0606"
+          "bytes": 8608,
+          "sha256": "a256ef331565d6068864faa198c0e2385b4d5723b8824528a69eedb6d65773e0"
         },
         {
           "path": "artifacts/subagents/security/threat-modeling/mcp-trust-boundary-reviewer/targets/github-copilot/mcp-trust-boundary-reviewer.agent.md",
@@ -17982,8 +17932,8 @@
     {
       "artifactId": "subagent/security/threat-modeling/threat-model-mapper",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:986b092df2e5ddd0c0c45b8e2fd1b84e246bf6d4f3912e84b471b5b553e133f6",
-      "digest": "986b092df2e5ddd0c0c45b8e2fd1b84e246bf6d4f3912e84b471b5b553e133f6",
+      "integrityId": "urn:youdede:artifact:sha256:fde26c6decdbc99d4ba3cbaa4c459f35527e04abbfecd77f33efc5fba1feb915",
+      "digest": "fde26c6decdbc99d4ba3cbaa4c459f35527e04abbfecd77f33efc5fba1feb915",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -18021,13 +17971,13 @@
         },
         {
           "path": "artifacts/subagents/security/threat-modeling/threat-model-mapper/targets/claude-code/threat-model-mapper.md",
-          "bytes": 6118,
-          "sha256": "722ae206fc6a9622f8f644aaaf2822369598c94caa9a63e68b1ce07c41276d03"
+          "bytes": 6250,
+          "sha256": "7d6c18b82dc6a29c16103e9dffa0dcfba424d41ee481d2ca4c2535e47d931f32"
         },
         {
           "path": "artifacts/subagents/security/threat-modeling/threat-model-mapper/targets/gemini-cli/threat-model-mapper.md",
-          "bytes": 6172,
-          "sha256": "7e002b807009c93b1ae0e1c8fba79436dd63388a1452c985682390ee66fa15ac"
+          "bytes": 6304,
+          "sha256": "c1474eb79a42de986cf698f6c03df96e395c7d729a02faba7096b7950aee811d"
         },
         {
           "path": "artifacts/subagents/security/threat-modeling/threat-model-mapper/targets/github-copilot/threat-model-mapper.agent.md",
@@ -18036,16 +17986,16 @@
         },
         {
           "path": "artifacts/subagents/security/threat-modeling/threat-model-mapper/targets/opencode/threat-model-mapper.md",
-          "bytes": 6133,
-          "sha256": "60a4120b01dab08014e6905cb22a17b4d6922d70f2cfa0c5fb71e74de85cdbbf"
+          "bytes": 6265,
+          "sha256": "7d14da94c415f552e5515997e93cf66fa6992648b22e5134acef9df6ad96b8a7"
         }
       ]
     },
     {
       "artifactId": "subagent/writing/decision-support/decision-record-reviewer",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:904dc2ca2e1e1399a246141bd7e62c2e5ff11a1d6bcfac707f7b9ebed588f296",
-      "digest": "904dc2ca2e1e1399a246141bd7e62c2e5ff11a1d6bcfac707f7b9ebed588f296",
+      "integrityId": "urn:youdede:artifact:sha256:9a577921618958cea302f630aa8a5f429711d750752f072b09d57e052d1ff3fb",
+      "digest": "9a577921618958cea302f630aa8a5f429711d750752f072b09d57e052d1ff3fb",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -18078,18 +18028,18 @@
         },
         {
           "path": "artifacts/subagents/writing/decision-support/decision-record-reviewer/evaluations/behavioral.json",
-          "bytes": 6752,
-          "sha256": "a73f2a1c65ba77a80c1109e88d215e346fa33b07e726eb9896cdf2579cfd664f"
+          "bytes": 6800,
+          "sha256": "d7163c2eadb872396f45ff66dc9fb0a4c92467006d8e2de9410adb388cf8e690"
         },
         {
           "path": "artifacts/subagents/writing/decision-support/decision-record-reviewer/targets/claude-code/decision-record-reviewer.md",
-          "bytes": 7439,
-          "sha256": "31c650464debc96fa093d704dbc45544f5e44c86a31cb4c130bfb48cd82104e3"
+          "bytes": 7571,
+          "sha256": "d198367473cbbe47df83482b16063d597b0fa50111f49cc9c5a5cea5fe7d87a4"
         },
         {
           "path": "artifacts/subagents/writing/decision-support/decision-record-reviewer/targets/gemini-cli/decision-record-reviewer.md",
-          "bytes": 7493,
-          "sha256": "cdec117d2f2d2370b349ef1f9b26a412bb8033772f966794932df4b627932016"
+          "bytes": 7625,
+          "sha256": "e4019d9401344b6b8b44eb48c354f6a164a4506e62d46bf56bfc759e2e12cc6f"
         },
         {
           "path": "artifacts/subagents/writing/decision-support/decision-record-reviewer/targets/github-copilot/decision-record-reviewer.agent.md",
@@ -18098,16 +18048,16 @@
         },
         {
           "path": "artifacts/subagents/writing/decision-support/decision-record-reviewer/targets/opencode/decision-record-reviewer.md",
-          "bytes": 7449,
-          "sha256": "cf6a89c7ea68e71f30361c0320235c0a287cc70478d349edf2b377226d4122f1"
+          "bytes": 7581,
+          "sha256": "a8ff86322ad1f088915a96a3e785f041e6e0fbc43a553c05371fe8f7e7f2d578"
         }
       ]
     },
     {
       "artifactId": "subagent/writing/documentation/api-documentation-verifier",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:01b5ae7d77f07a195e60f373c48ef1107d377ffe765016a1824836cafa593925",
-      "digest": "01b5ae7d77f07a195e60f373c48ef1107d377ffe765016a1824836cafa593925",
+      "integrityId": "urn:youdede:artifact:sha256:835c7188e3556ede2b8858c3ccf16b7eb5760b2153f8d40ca96183e8fa6f6ee9",
+      "digest": "835c7188e3556ede2b8858c3ccf16b7eb5760b2153f8d40ca96183e8fa6f6ee9",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -18140,18 +18090,18 @@
         },
         {
           "path": "artifacts/subagents/writing/documentation/api-documentation-verifier/evaluations/behavioral.json",
-          "bytes": 6757,
-          "sha256": "7490d91424aa43defd27f41bc5a8bdaf2aac88616b98d3c3aea4df7a117958e9"
+          "bytes": 6796,
+          "sha256": "90e507f5c1d56a62ba18b0f48be4c9367a3429629e19ffe0d140a29ddb6e3793"
         },
         {
           "path": "artifacts/subagents/writing/documentation/api-documentation-verifier/targets/claude-code/api-documentation-verifier.md",
-          "bytes": 6242,
-          "sha256": "cda6d53b305d49c913cd65e3940fd236c7223d7c72f0c47baa88002cf43fb2c9"
+          "bytes": 6374,
+          "sha256": "28ec239e162b76bdb35dc357708062551c04d99e6f4cb91b0a559e6003849f93"
         },
         {
           "path": "artifacts/subagents/writing/documentation/api-documentation-verifier/targets/gemini-cli/api-documentation-verifier.md",
-          "bytes": 6296,
-          "sha256": "0713e4d9fd859baa482a8d6c2b5768800ab041b6d329eaac783343eda5def176"
+          "bytes": 6428,
+          "sha256": "d89ed7ff146445a1cd964686ff84df50bcb69485b9f5b95d3a8a214cacb9cdf0"
         },
         {
           "path": "artifacts/subagents/writing/documentation/api-documentation-verifier/targets/github-copilot/api-documentation-verifier.agent.md",
@@ -18160,16 +18110,16 @@
         },
         {
           "path": "artifacts/subagents/writing/documentation/api-documentation-verifier/targets/opencode/api-documentation-verifier.md",
-          "bytes": 6250,
-          "sha256": "ea8c0ea04af2dd9ba48bfb0a3b27beb6af563e4b7d5d45d0b459b84b431994e3"
+          "bytes": 6382,
+          "sha256": "b3658d41e0955f4c0696748bacd757f730622eabbf49dd4b7ddbc593d790b5ff"
         }
       ]
     },
     {
       "artifactId": "subagent/writing/documentation/procedural-documentation-tester",
       "version": "1.3.0",
-      "integrityId": "urn:youdede:artifact:sha256:d115e626a7b5599fed8558eaf73fbd48824ecbdfd2f28a5c7f24c93d58e7c82d",
-      "digest": "d115e626a7b5599fed8558eaf73fbd48824ecbdfd2f28a5c7f24c93d58e7c82d",
+      "integrityId": "urn:youdede:artifact:sha256:9ca1ecb7f40763d31e30eab74d29e466a9e807a05bcb546bd64e9e41f51ca027",
+      "digest": "9ca1ecb7f40763d31e30eab74d29e466a9e807a05bcb546bd64e9e41f51ca027",
       "license": "MIT",
       "authors": [
         "Youdede"
@@ -18202,18 +18152,18 @@
         },
         {
           "path": "artifacts/subagents/writing/documentation/procedural-documentation-tester/evaluations/behavioral.json",
-          "bytes": 6874,
-          "sha256": "d09c0cba3e31ec86ad0395c08467d55c064b9d0a03400001ce65a7efdc6f01ce"
+          "bytes": 6922,
+          "sha256": "7469035a074da8deff398a7f03e20019e4c1d23c563d13ecf4865541e7edfdb6"
         },
         {
           "path": "artifacts/subagents/writing/documentation/procedural-documentation-tester/targets/claude-code/procedural-documentation-tester.md",
-          "bytes": 7413,
-          "sha256": "66829545ff086db6fbd4cb7b03b5a17bee05ea997e09bbd8a465b3414a4f5e1d"
+          "bytes": 7545,
+          "sha256": "43c9300e6660e160271099f9c45bc7dd6ea0f0c0d3c1887f0ed64b5f509c49d2"
         },
         {
           "path": "artifacts/subagents/writing/documentation/procedural-documentation-tester/targets/gemini-cli/procedural-documentation-tester.md",
-          "bytes": 7467,
-          "sha256": "a0be2e71a35bc578f4230ea3d3ab2509312ed6994ae1b64ba6d0ce7bfe8540ff"
+          "bytes": 7599,
+          "sha256": "3176ab18771081032bc231f4ae6b838973c185401dc2fb4e1211d96abbc383d4"
         },
         {
           "path": "artifacts/subagents/writing/documentation/procedural-documentation-tester/targets/github-copilot/procedural-documentation-tester.agent.md",
@@ -18222,8 +18172,8 @@
         },
         {
           "path": "artifacts/subagents/writing/documentation/procedural-documentation-tester/targets/opencode/procedural-documentation-tester.md",
-          "bytes": 7416,
-          "sha256": "20c9411daf8645dae0e6d983247f934b9e19e4d94ec36318640691328cde08a8"
+          "bytes": 7548,
+          "sha256": "8e47fc1074a96b893c9b6a442efa538c27b19e9d9f2151c7db87b480bdb854f7"
         }
       ]
     }

@@ -35,7 +35,7 @@
       "additionalProperties": false,
       "required": ["reportSchema", "ledgerLinkRequired", "outcomeEvidence"],
       "properties": {
-        "reportSchema": { "type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$" },
+        "reportSchema": { "const": "../../schema/pack-evidence.schema.json" },
         "ledgerLinkRequired": { "const": true },
         "outcomeEvidence": {
           "type": "array",

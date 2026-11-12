@@ -5,9 +5,9 @@ allowed-tools: Read
 
 # Preflight Change Environment
 
-## Step 0 — Preconditions (mandatory, deterministic)
+## Tool permissions
 
-Run `node "${CLAUDE_PROJECT_DIR}/.claude/commands/youdede/preflight-change-environment/check-preconditions.mjs"`. On non-zero exit, report the JSON failures and stop. This is the first prompt action, not a pre-invocation parser.
+`allowed-tools` pre-approves only Read. It does not pre-approve the `node` command in Step 1, so that run goes through the normal permission prompt. If the user denies it, stop and report that no snapshot was collected; do not substitute another command and do not describe the environment from memory.
 
 ## Step 1 — Collect the redacted snapshot
 
@@ -15,7 +15,7 @@ Run `node "${CLAUDE_PROJECT_DIR}/.claude/commands/youdede/preflight-change-envir
 
 ## Step 2 — Complete the bounded workflow
 
-1. Run the deterministic environment collector after Step 0 and preserve its JSON output verbatim.
+1. Run the deterministic environment collector once and preserve its JSON output verbatim.
 2. Compare only declared repository prerequisites with the snapshot; do not enumerate environment variables.
 3. Emit **Snapshot**, **Missing prerequisites**, and **Residual uncertainty**.
 

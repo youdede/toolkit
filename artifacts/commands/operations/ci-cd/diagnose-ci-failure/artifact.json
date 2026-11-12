@@ -39,15 +39,8 @@
     "Do not inspect unrelated logs, secrets, or repository areas outside the bounded failure."
   ],
   "execution": {
-    "mode": "hybrid",
-    "entrypoints": [
-      {
-        "path": "scripts/check-preconditions.mjs",
-        "runtime": "node",
-        "purpose": "Evaluate declared local command preconditions before the prompt workflow may continue.",
-        "sideEffects": "none"
-      }
-    ]
+    "mode": "prompt",
+    "entrypoints": []
   },
   "command": {
     "invocation": "diagnose-ci-failure",
@@ -93,7 +86,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
-    "latency_reason": "The command follows a precondition check and multiple workflow steps while it diagnoses a failing CI run from supplied logs and repository evidence without mutating workflows or rerunning jobs.",
+    "latency_reason": "The command follows multiple workflow steps while it diagnoses a failing CI run from supplied logs and repository evidence without mutating workflows or rerunning jobs.",
     "dataRetention": "none"
   },
   "adapters": {

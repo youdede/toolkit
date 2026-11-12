@@ -52,7 +52,7 @@ test('Claude marketplace publishes only complete native pack compositions', () =
 });
 
 test('Claude package bridges use the plugin root and never pretend context support', () => {
-  const command = readFileSync(path.join(ROOT, 'plugins/session-continuity/commands/record-work-checkpoint.md'), 'utf8');
+  const command = readFileSync(path.join(ROOT, 'plugins/session-continuity/commands/verify-session-ledger.md'), 'utf8');
   assert.match(command, /\$\{CLAUDE_PLUGIN_ROOT\}\/commands/);
   assert.doesNotMatch(command, /CLAUDE_PROJECT_DIR.*\.claude\/commands/);
 

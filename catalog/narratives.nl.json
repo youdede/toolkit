@@ -1,5 +1,5 @@
 {
-  "sourceHash": "03f986913bee1f99eb8915157b7d2291a58c0ce0cf1ab9334f8cd5af1d651924",
+  "sourceHash": "0d3f6f03c800022dc0330385fefc98b8649067d058f1f42fdf258e790a6f19cc",
   "narratives": {
     "abuse-resistance-analyst": {
       "summary": "Analyseert één handeling op kostenversterking die een aanvaller kan sturen, fan-out en het omzeilen van quota.",
@@ -135,9 +135,7 @@
     "assemble-review-brief": {
       "summary": "Stelt op basis van de daadwerkelijke diff een beoordelingsdocument samen met de reikwijdte, risico’s en testbewijs dat een beoordelaar regel voor regel kan controleren.",
       "description": "Verzamelt na aanroep als slashcommando de afgebakende diff, koppelt elk gewijzigd onderdeel aan het bijbehorende risico en testbewijs en levert een gestructureerd beoordelingsdocument waarin niet-geverifieerde onderdelen expliciet worden vermeld. Het bereidt de beoordeling voor; het verleent nooit goedkeuring.",
-      "purposes": [
-        "Evalueert de opgegeven voorwaarden deterministisch voordat de workflow mag beginnen."
-      ],
+      "purposes": [],
       "refuses": [
         "Keurt niet goed, vraagt geen wijzigingen aan en voert geen merge uit; het document informeert een menselijke beoordelaar.",
         "Beschrijft geen bestanden die het niet heeft gelezen of diffbereiken die het niet heeft geïnspecteerd.",
@@ -259,9 +257,7 @@
     "audit-repository-instructions": {
       "summary": "Controleert instructiebestanden op repository- en mapniveau op afwijkingen, conflicten in de voorrangsvolgorde en ontbrekende operationele grenzen.",
       "description": "Combineert de bestaande procedures voor het controleren en opstellen van agentinstructies tot een alleen-lezenrapport dat de voorrangsvolgorde van instructies in kaart brengt en concrete afwijkingen vaststelt zonder beleidsbestanden te herschrijven.",
-      "purposes": [
-        "Evalueert de opgegeven lokale commandovoorwaarden voordat de promptworkflow mag doorgaan."
-      ],
+      "purposes": [],
       "refuses": [
         "Bewerkt, maakt, verwijdert of normaliseert geen instructiebestanden.",
         "Lost conflicten in de voorrangsvolgorde niet op door te raden naar de bedoeling van de auteur.",
@@ -711,7 +707,7 @@
       "description": "Een specialist met een beperkte scope en alleen-lezen toegang die de geselecteerde waarde reconstrueert en voor een expliciete configuratietoestand een gewijzigde betekenis blootlegt. Rapporteert bewijs en onzekerheid zonder de repository te wijzigen of goedkeuring te claimen.",
       "purposes": [],
       "refuses": [
-        "Hij vergelijkt geen gedeployde omgevingen zonder snapshots met een tijdstempel.",
+        "Hij beoordeelt niet of een geselecteerde waarde de juiste operationele instelling is.",
         "Hij leest of onthult geen geheime configuratiewaarden.",
         "Hij bewerkt geen bestanden, voert geen operationele acties uit en keurt geen integratie of release goed."
       ]
@@ -1299,9 +1295,7 @@
     "diagnose-ci-failure": {
       "summary": "Diagnoseert een mislukte CI-run op basis van geleverde logs en repository-bewijs zonder workflows te wijzigen of taken opnieuw uit te voeren.",
       "description": "Een afgebakende commandowrapper rond de procedure en specialist voor CI-fouten. Het verzamelt gegevens over de mislukte stap, rangschikt door bewijs onderbouwde hypothesen en levert controles die onderscheid tussen die hypothesen maken, zonder de CI-status te wijzigen.",
-      "purposes": [
-        "Evalueert de opgegeven lokale commandovoorwaarden voordat de promptworkflow mag doorgaan."
-      ],
+      "purposes": [],
       "refuses": [
         "Voert geen CI-taak of -workflow opnieuw uit, annuleert deze niet, keurt deze niet goed en wijzigt deze niet.",
         "Leidt geen hoofdoorzaak af uit een vervolgfout zonder oorzakelijk bewijs.",
@@ -2248,7 +2242,6 @@
       "summary": "Verzamelt een deterministische momentopname van de omgeving waarin gevoelige gegevens zijn afgeschermd, voordat een repositorywijziging begint.",
       "description": "Voert een lokale, afgebakende verzamelroutine uit die de runtime, herkenningspunten van pakketbeheerders en de Git-status met afgeschermde gevoelige gegevens rapporteert, zonder paden, omgevingswaarden, bestandsinhoud of remote-URL’s weer te geven.",
       "purposes": [
-        "Evalueert de opgegeven lokale commandovoorwaarden voordat de promptworkflow mag doorgaan.",
         "Verzamelt een afgebakende momentopname van de omgeving met afgeschermde gevoelige gegevens, zonder omgevingswaarden of bestandsinhoud te lezen."
       ],
       "refuses": [
@@ -2441,9 +2434,7 @@
     "record-work-checkpoint": {
       "summary": "Voegt een werkcheckpoint met afgeschermde gegevens en een hashketen toe aan het sessielogboek, gekoppeld aan een geverifieerde Git-verwijzing.",
       "description": "Voegt na aanroep als slashcommando een gestructureerd controlepunt (doel, openstaande claims, beslissingen en betrokken bestanden) toe aan .youdede/session-ledger.jsonl. De deterministische logboekbrug schermt inhoud af die overeenkomt met patronen van geheimen, begrenst de omvang en koppelt het controlepunt aan de keten.",
-      "purposes": [
-        "Evalueert de opgegeven voorwaarden deterministisch voordat de workflow mag beginnen."
-      ],
+      "purposes": [],
       "refuses": [
         "Slaat geen geheimen, tokens of inloggegevens op; inhoud die overeenkomt met patronen van geheimen wordt vóór het toevoegen afgeschermd.",
         "Slaat geen absolute bestandspaden of bestandspaden die buiten het toegestane bereik treden op, en ook geen bestandsinhoud buiten de opgegeven velden.",

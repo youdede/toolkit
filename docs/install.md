@@ -6,8 +6,8 @@
 youdede-toolkit list [--kind skill|hook|subagent|command|context|mcp-server] [--target value] [--domain|--category|--capability|--problem|--framework|--language|--lifecycle|--risk|--execution value] [--json]
 youdede-toolkit search <term...> [the same filters as list] [--json]
 youdede-toolkit info <id-or-slug> [--json]
-youdede-toolkit packs
-youdede-toolkit pack-info <id-or-slug> [--target claude-code|codex|gemini-cli|github-copilot|cursor|opencode]
+youdede-toolkit packs [--json]
+youdede-toolkit pack-info <id-or-slug> [--target claude-code|codex|gemini-cli|github-copilot|cursor|opencode] [--json]
 youdede-toolkit verify-pack-evidence <id-or-slug> --report path [--json]
 youdede-toolkit add <id-or-slug> [--target claude-code|codex|gemini-cli|github-copilot|cursor|opencode] [--scope project|user] [--cwd path] [--dry-run] [--json] [--force] [--no-prerequisites]
 youdede-toolkit add-pack <id-or-slug> [--target <target>] [--scope project|user] [--cwd path] [--dry-run] [--json] [--force] [--no-prerequisites]
@@ -30,7 +30,11 @@ a flag a command does not read, a one-dash spelling such as `-target`, and a wor
 arguments a command takes all exit 1 and name the problem. `list` also refuses a filter value the
 [taxonomy](../catalog/taxonomy.json) does not carry, because an empty result and a typo would
 otherwise be the same answer; a value the taxonomy does carry and no artifact uses is a valid
-question, and `0 artifact(s).` with exit 0 is its answer.
+question, and `0 artifact(s).` with exit 0 is its answer. `pack-info` refuses an unknown
+`--target` the same way, and every command refuses a `--cwd` that is not an existing directory.
+On a known target where a required member has no adapter, `pack-info` exits 0 and names those
+members on a `Not installable on <target>` line. With `--json` and `--target`, the same answer is
+in `installable` and `blockingMembers`.
 
 Packs compose procedures, specialists, and lifecycle gates without changing the independent install contract of any member. Required members must share the requested target and scope, and installation plans every member before the first write. Ownership and rollback guarantees are described in [architecture.md](architecture.md).
 

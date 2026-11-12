@@ -39,7 +39,7 @@ export const KINDS = [
     kind: 'command',
     file: 'commands.md',
     title: 'Commands',
-    lead: 'A user-invoked workflow with a declared tool allowlist, a mandatory deterministic precondition check as its first action, and evidence it must produce to count as complete. Flags may only narrow its authority.'
+    lead: 'A user-invoked workflow that declares the tools it pre-approves, a deterministic precondition check as its first action where it depends on one, and evidence it must produce to count as complete. A step that runs a process asks for permission. Flags may only narrow its authority.'
   },
   {
     kind: 'context',

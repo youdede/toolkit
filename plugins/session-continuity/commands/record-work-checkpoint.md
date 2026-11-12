@@ -6,13 +6,9 @@ description: Append a redacted, hash-chained work checkpoint to the session ledg
 
 Persist what a future session needs to resume — redacted, bounded, and chain-linked.
 
-## Step 0 — Preconditions (mandatory, deterministic)
+## Tool permissions
 
-```bash
-node "${CLAUDE_PLUGIN_ROOT}/commands/youdede/record-work-checkpoint/check-preconditions.mjs"
-```
-
-Exit non-zero: stop and report the failed check verbatim.
+This command pre-approves no tool. The Step 2 append runs `node` and writes `.youdede/session-ledger.jsonl`, so it goes through the normal permission prompt. If the user denies it, nothing was recorded: say so and report no sequence number or hash.
 
 ## Step 1 — Compose the checkpoint
 
@@ -64,4 +60,4 @@ Record that refusal in the section this contract names for findings, or, when it
 
 - Do not store secrets or file contents; redaction is a backstop, not permission.
 - Do not modify or delete existing entries; the ledger is append-only.
-- Do not append when preconditions fail.
+- Do not report a sequence number or hash that the ledger bridge did not return.

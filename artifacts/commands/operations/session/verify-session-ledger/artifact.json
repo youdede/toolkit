@@ -57,7 +57,10 @@
     "produces": [
       "a ledger integrity verdict naming entry count, chain status, and the first failing line if any"
     ],
-    "requires": [],
+    "requires": [
+      "an existing session ledger at .youdede/session-ledger.jsonl in the project workspace",
+      "user approval at the permission prompt for every process it runs, because toolAuthority pre-approves none"
+    ],
     "flags": []
   },
   "relationships": {

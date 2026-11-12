@@ -4,7 +4,10 @@
     "total": 319,
     "skills": 170,
     "hooks": 64,
-    "subagents": 62
+    "subagents": 62,
+    "commands": 10,
+    "contexts": 8,
+    "mcpServers": 5
   },
   "relationshipGraph": {
     "counts": {
@@ -2783,15 +2786,8 @@
       "risk_reason": "This command audits repository and folder instruction files for drift, precedence conflicts, and missing operational boundaries; it does not edit, create, delete, or normalize instruction files.",
       "license": "MIT",
       "execution": {
-        "mode": "hybrid",
-        "entrypoints": [
-          {
-            "path": "scripts/check-preconditions.mjs",
-            "runtime": "node",
-            "purpose": "Evaluate declared local command preconditions before the prompt workflow may continue.",
-            "sideEffects": "none"
-          }
-        ]
+        "mode": "prompt",
+        "entrypoints": []
       },
       "relationships": {
         "composesWith": [],
@@ -2816,7 +2812,7 @@
         "behavior": "advisory",
         "failurePolicy": "stop-and-report",
         "latencyClass": "bounded",
-        "latency_reason": "The command follows a precondition check and multiple workflow steps while it audits repository and folder instruction files for drift, precedence conflicts, and missing operational boundaries.",
+        "latency_reason": "The command follows multiple workflow steps while it audits repository and folder instruction files for drift, precedence conflicts, and missing operational boundaries.",
         "dataRetention": "none"
       },
       "refuses": [
@@ -2876,12 +2872,6 @@
         "mode": "hybrid",
         "entrypoints": [
           {
-            "path": "scripts/check-preconditions.mjs",
-            "runtime": "node",
-            "purpose": "Evaluate declared local command preconditions before the prompt workflow may continue.",
-            "sideEffects": "none"
-          },
-          {
             "path": "scripts/collect-environment.mjs",
             "runtime": "node",
             "purpose": "Collect a bounded redacted environment snapshot without reading environment values or file contents.",
@@ -2906,7 +2896,7 @@
         "behavior": "advisory",
         "failurePolicy": "stop-and-report",
         "latencyClass": "bounded",
-        "latency_reason": "The command follows a precondition check and multiple workflow steps while it collects a deterministic redacted environment snapshot before a repository change begins.",
+        "latency_reason": "The command follows multiple workflow steps while it collects a deterministic redacted environment snapshot before a repository change begins.",
         "dataRetention": "none"
       },
       "refuses": [
@@ -3047,15 +3037,8 @@
       "risk_reason": "This command assembles a review brief from the real diff: scope, risk notes, and test evidence a reviewer can check line by line; it does not omit areas it could not verify; it lists them as unverified.",
       "license": "MIT",
       "execution": {
-        "mode": "hybrid",
-        "entrypoints": [
-          {
-            "path": "scripts/check-preconditions.mjs",
-            "runtime": "node",
-            "purpose": "Evaluate the declared preconditions deterministically before the workflow may begin.",
-            "sideEffects": "none"
-          }
-        ]
+        "mode": "prompt",
+        "entrypoints": []
       },
       "relationships": {
         "composesWith": [
@@ -3075,7 +3058,7 @@
         "behavior": "advisory",
         "failurePolicy": "stop-and-report",
         "latencyClass": "bounded",
-        "latency_reason": "The command follows a precondition check and multiple workflow steps while it assembles a review brief from the real diff: scope, risk notes, and test evidence a reviewer can check line by line.",
+        "latency_reason": "The command follows multiple workflow steps while it assembles a review brief from the real diff: scope, risk notes, and test evidence a reviewer can check line by line.",
         "dataRetention": "none"
       },
       "refuses": [
@@ -3381,15 +3364,8 @@
       "risk_reason": "This command diagnoses a failing CI run from supplied logs and repository evidence without mutating workflows or rerunning jobs; it does not rerun, cancel, approve, or mutate any CI job or workflow.",
       "license": "MIT",
       "execution": {
-        "mode": "hybrid",
-        "entrypoints": [
-          {
-            "path": "scripts/check-preconditions.mjs",
-            "runtime": "node",
-            "purpose": "Evaluate declared local command preconditions before the prompt workflow may continue.",
-            "sideEffects": "none"
-          }
-        ]
+        "mode": "prompt",
+        "entrypoints": []
       },
       "relationships": {
         "composesWith": [
@@ -3414,7 +3390,7 @@
         "behavior": "advisory",
         "failurePolicy": "stop-and-report",
         "latencyClass": "bounded",
-        "latency_reason": "The command follows a precondition check and multiple workflow steps while it diagnoses a failing CI run from supplied logs and repository evidence without mutating workflows or rerunning jobs.",
+        "latency_reason": "The command follows multiple workflow steps while it diagnoses a failing CI run from supplied logs and repository evidence without mutating workflows or rerunning jobs.",
         "dataRetention": "none"
       },
       "refuses": [
@@ -3469,15 +3445,8 @@
       "risk_reason": "This command appends a redacted, hash-chained work checkpoint to the session ledger with a verified git anchor; it does not modify or delete existing ledger entries; the ledger is append-only.",
       "license": "MIT",
       "execution": {
-        "mode": "hybrid",
-        "entrypoints": [
-          {
-            "path": "scripts/check-preconditions.mjs",
-            "runtime": "node",
-            "purpose": "Evaluate the declared preconditions deterministically before the workflow may begin.",
-            "sideEffects": "none"
-          }
-        ]
+        "mode": "prompt",
+        "entrypoints": []
       },
       "relationships": {
         "composesWith": [
@@ -3498,7 +3467,7 @@
         "behavior": "advisory",
         "failurePolicy": "stop-and-report",
         "latencyClass": "bounded",
-        "latency_reason": "The command follows a precondition check and multiple workflow steps while it appends a redacted, hash-chained work checkpoint to the session ledger with a verified git anchor.",
+        "latency_reason": "The command follows multiple workflow steps while it appends a redacted, hash-chained work checkpoint to the session ledger with a verified git anchor.",
         "dataRetention": "local-bounded"
       },
       "refuses": [
@@ -35947,7 +35916,7 @@
         "dataRetention": "runtime-managed"
       },
       "refuses": [
-        "It does not compare deployed environments without timestamped snapshots.",
+        "It does not judge whether a selected value is the right operational setting.",
         "It does not read or reveal configuration secret values.",
         "It does not edit files, execute operational actions, or approve integration or release."
       ],

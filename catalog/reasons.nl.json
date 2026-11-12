@@ -2,11 +2,11 @@
   "reasons": {
     "audit-repository-instructions": {
       "risk": "Dit commando controleert instructiebestanden op repository- en mapniveau op afwijkingen, conflicten in de voorrangsvolgorde en ontbrekende operationele grenzen; het bewerkt, maakt, verwijdert of normaliseert geen instructiebestanden.",
-      "latency": "Het commando voert een controle van de voorwaarden en meerdere workflowstappen uit terwijl het instructiebestanden op repository- en mapniveau controleert op afwijkingen, conflicten in de voorrangsvolgorde en ontbrekende operationele grenzen."
+      "latency": "Het commando voert meerdere workflowstappen uit terwijl het instructiebestanden op repository- en mapniveau controleert op afwijkingen, conflicten in de voorrangsvolgorde en ontbrekende operationele grenzen."
     },
     "preflight-change-environment": {
       "risk": "Dit commando verzamelt een deterministische momentopname van de omgeving met afgeschermde gevoelige gegevens voordat een repositorywijziging begint; het claimt op basis van een lokale momentopname geen gelijkwaardigheid met CI of productie.",
-      "latency": "Het commando doorloopt een controle van de voorwaarden en meerdere workflowstappen terwijl het een deterministische momentopname van de omgeving met afgeschermde gevoelige gegevens verzamelt voordat een repositorywijziging begint."
+      "latency": "Het commando doorloopt meerdere workflowstappen terwijl het een deterministische momentopname van de omgeving met afgeschermde gevoelige gegevens verzamelt voordat een repositorywijziging begint."
     },
     "re-pin-mcp-tools": {
       "risk": "Het past vastgepinde MCP-toolreferenties pas aan na menselijke bevestiging van de exacte digest; daarmee veranderen toekomstige beslissingen over het vertrouwen in tools.",
@@ -14,7 +14,7 @@
     },
     "assemble-review-brief": {
       "risk": "Deze opdracht stelt op basis van de daadwerkelijke diff een beoordelingsdocument samen met de reikwijdte, risico-aantekeningen en testbewijs dat een beoordelaar regel voor regel kan controleren; hij laat geen onderdelen weg die hij niet kon verifiëren, maar vermeldt ze als niet-geverifieerd.",
-      "latency": "De opdracht voert een controle op de randvoorwaarden en meerdere workflowstappen uit terwijl deze op basis van de daadwerkelijke diff een beoordelingsdocument samenstelt met de reikwijdte, risico-aantekeningen en testbewijs dat een beoordelaar regel voor regel kan controleren."
+      "latency": "De opdracht voert meerdere workflowstappen uit terwijl deze op basis van de daadwerkelijke diff een beoordelingsdocument samenstelt met de reikwijdte, risico-aantekeningen en testbewijs dat een beoordelaar regel voor regel kan controleren."
     },
     "audit-release-evidence": {
       "risk": "Dit commando controleert de bewijsketen voor de release van de huidige versie en levert een machineleesbaar rapport met een oordeel; het publiceert niet, maakt geen tags, verhoogt geen versienummers en omzeilt geen enkele releasebeveiliging.",
@@ -30,11 +30,11 @@
     },
     "diagnose-ci-failure": {
       "risk": "Dit commando diagnosticeert een mislukte CI-run op basis van aangeleverde logs en repository-bewijs zonder workflows te wijzigen of taken opnieuw uit te voeren; het voert geen CI-taak of -workflow opnieuw uit, annuleert deze niet, keurt deze niet goed en wijzigt deze niet.",
-      "latency": "Het commando voert een controle van de voorwaarden en meerdere workflowstappen uit terwijl het een mislukte CI-run diagnosticeert op basis van aangeleverde logs en repository-bewijs, zonder workflows te wijzigen of taken opnieuw uit te voeren."
+      "latency": "Het commando voert meerdere workflowstappen uit terwijl het een mislukte CI-run diagnosticeert op basis van aangeleverde logs en repository-bewijs, zonder workflows te wijzigen of taken opnieuw uit te voeren."
     },
     "record-work-checkpoint": {
       "risk": "Dit commando voegt een werkcheckpoint met afgeschermde gegevens en een hashketen toe aan het sessielogboek, gekoppeld aan een geverifieerde Git-verwijzing; het wijzigt of verwijdert geen bestaande logboekitems, want aan het logboek kunnen alleen items worden toegevoegd.",
-      "latency": "Het commando voert een controle van de voorwaarden en meerdere workflowstappen uit terwijl het een werkcheckpoint met afgeschermde gegevens en een hashketen toevoegt aan het sessielogboek, gekoppeld aan een geverifieerde Git-verwijzing."
+      "latency": "Het commando voert meerdere workflowstappen uit terwijl het een werkcheckpoint met afgeschermde gegevens en een hashketen toevoegt aan het sessielogboek, gekoppeld aan een geverifieerde Git-verwijzing."
     },
     "verify-session-ledger": {
       "risk": "Dit commando verifieert het sessielogboek met hashketen en rapporteert precies welke items, indien van toepassing, de integriteitscontrole niet doorstaan; het verzendt geen logboekinhoud; het oordeel bevat uitsluitend aantallen en hashes.",
@@ -1407,5 +1407,5 @@
       "mcp-egress-guard": "om de argumenten van de MCP-tools van deze server te toetsen aan het opgegeven uitgaande verkeer"
     }
   },
-  "sourceHash": "e91e1dacb4ed46e6d8a7337b059c2b17d0ab787429cb02a9a943a1dfc39f7cca"
+  "sourceHash": "5ef78a4802c4ad354f11ef7b9551c14fbc240c84d61bc7b60c19a7ac4eb17e8d"
 }
