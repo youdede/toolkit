@@ -93,3 +93,4 @@ Confidence is how much of the claim the evidence shows. `Demonstrated`: cited li
 - Do not audit whether a past decision record captured its rationale; route that task to `decision-record-reviewer`.
 - Do not edit source, configuration, tests, records, or documentation; do not execute commands or external actions.
 - Do not approve merge, deployment, policy, launch, or release; the parent and human owner retain those decisions.
+- Do not take writing the brief a researcher will follow; tell the parent it belongs to `write-source-backed-research-brief` and stop.

@@ -6,7 +6,7 @@
     {
       "id": "positive-accessibility-journey",
       "type": "positive",
-      "prompt": "Verify our checkout-error journey with these build-linked observations from build 2026.10.28-3. Step 1, submit with an invalid postcode. Keyboard (Chrome): focus moved to the error summary, pass. VoiceOver with Safari 18: announced \"Error, postcode is not valid\", pass. NVDA 2024.4 with Firefox: nothing announced, focus log shows focus stayed on Submit. 400% zoom: the error summary overlaps the postcode field, screenshot zoom-400-step1.png. Reduced motion: shake animation still plays. High contrast (Windows): the error border disappears; text remains. Touch (iPhone 15): not run. Accessibility tree: the postcode input has aria-invalid=\"true\" but no aria-describedby.",
+      "prompt": "Verify our checkout-error journey with build-linked observations from build 2026.10.28-3. Step 1, submit with an invalid postcode. Keyboard (Chrome): focus moved to the error summary, pass. VoiceOver with Safari 18: announced \"Error, postcode is not valid\", pass. NVDA 2024.4 with Firefox: nothing announced; evidence/2026.10.28-3/nvda-firefox-focus.log:14 reads `focus: button#submit (unchanged)`. 400% zoom: the error summary overlaps the postcode field, screenshot zoom-400-step1.png. Reduced motion: shake animation still plays. High contrast (Windows): the error border disappears; text remains. Touch (iPhone 15): not run. Accessibility tree, evidence/2026.10.28-3/a11y-tree-step1.json:88: `{\"role\": \"textbox\", \"name\": \"Postcode\", \"aria-invalid\": \"true\"}`, with no aria-describedby.",
       "sourceAnchors": [
         "Replay the supplied journey record",
         "Record every matrix cell"
@@ -109,6 +109,34 @@
         ],
         "forbiddenClaims": [
           "the automated scan certifies accessibility"
+        ],
+        "forbiddenActions": [
+          "edited the components"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Run NVDA 2024.4 with Firefox through the sign-up journey on our staging build and record what is announced at each step of src/signup/SignupForm.tsx, especially the password-rules live region and focus on the error summary. We have no recordings yet.",
+      "sourceAnchors": [
+        "Do not drive a live screen reader session; tell the parent it belongs to `test-screen-reader-journey` and stop.",
+        "Do not claim to run a browser, accessibility scanner, keyboard session, screen reader, or device"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Disposition",
+          "Findings",
+          "Journey evidence matrix",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "test-screen-reader-journey",
+          "live screen reader session"
+        ],
+        "forbiddenClaims": [
+          "NVDA announced the error summary"
         ],
         "forbiddenActions": [
           "edited the components"

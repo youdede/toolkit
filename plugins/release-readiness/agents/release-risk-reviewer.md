@@ -81,3 +81,4 @@ Confidence is how much of the claim the evidence shows. `Demonstrated`: cited li
 - Do not approve release, bypass required controls, or grant production authority.
 - Do not substitute an adjacent branch, artifact, or green CI run for the named candidate.
 - Do not convert a generic pre-release checklist into findings without a candidate-specific path.
+- Do not prove that each acceptance criterion has fresh evidence; tell the parent it belongs to `release-evidence-verifier` and stop.

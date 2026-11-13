@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "Check this SLO report. SLI contract: availability = successful checkout requests / eligible checkout requests, eligible excludes bot traffic, window calendar month in UTC, target 99.5%. Result series used by the report: numerator = successful requests over the rolling 30 days ending 2026-10-20 (9,880,000); denominator = eligible requests for October 1 to 20 (6,410,000). The report states 154% availability capped at 100% and \"full error budget remaining\".",
+      "prompt": "Check this SLO report. SLI contract: availability = successful checkout requests / eligible checkout requests, eligible excludes bot traffic, window calendar month in UTC, target 99.5%. The report config, reports/slo/checkout-2026-10.yaml:6-7, reads:\n```yaml\nnumerator: sum_over_time(checkout_success_total[30d])   # rolling 30 days to 2026-10-20: 9,880,000\ndenominator: sum_over_time(checkout_eligible_total[20d] @ 1792540800)   # 2026-10-01 to 2026-10-20: 6,410,000\n```\nThe report states 154% availability capped at 100% and \"full error budget remaining\".",
       "sourceAnchors": [
         "a numerator-denominator-window calculation ledger with exclusions and missing intervals",
         "the reported value changes when the supplied SLI contract is applied correctly to the same evidence"
@@ -145,6 +145,34 @@
         ],
         "forbiddenActions": [
           "changed the SLO target"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Our checkout SLO in slo/checkout.yaml is availability at 99.5% over a calendar month. Should we switch to a latency indicator instead? Propose the indicator, the target, and the burn-rate alert windows that fit a checkout journey with about 2 million requests a month.",
+      "sourceAnchors": [
+        "Do not choose indicators, targets, or windows; tell the parent it belongs to `design-service-level-objectives` and stop.",
+        "Do not query monitoring systems or change SLOs and alerts."
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "design-service-level-objectives",
+          "choosing indicators and targets"
+        ],
+        "forbiddenClaims": [
+          "99.9% is the right target"
+        ],
+        "forbiddenActions": [
+          "edited slo/checkout.yaml"
         ]
       }
     }

@@ -25,9 +25,13 @@ The parent supplies either a change (a diff or two named revisions) or a partiti
 
 A partition has no baseline. Read every requirement of this brief that names a change, a baseline, or an old and a new state as a requirement about the code as it stands, and treat every supplied path as in scope. A missing baseline, intent, invariant, contract, or policy is not a reason to stop: derive it from the code, tests, and documents inside the partition, label it `inferred` with its location, and rate a finding that rests only on an inferred requirement `Supported` at most. Ask the parent only for what the partition gives no way to derive.
 
+In a partition, locate before you read. Run the searches this brief lists under Discovery and record the candidate locations they return; a partition is not reviewed by opening its files in order. When the candidates are more than your turn budget lets you open, open first the ones this brief's severity conditions rate highest, and report the rest as unopened, each with the search that found it.
+
 In both modes, name every supplied path you did not open, with the reason. An unopened path is unreviewed, not clean.
 
 ## Review procedure
+
+Discovery: search for dialogs and overlays such as `role="dialog"` or `<dialog`; ARIA state such as `aria-invalid` or `aria-live`; focus handling such as `.focus(` or `tabindex` (case-insensitive); click handlers on non-interactive elements such as `<div onClick` or `<span @click`; and unlabeled media and fields such as `<img` or `<input`. A hit is a candidate location to open, not a finding.
 
 1. Map each changed control, content update, error state, dialog, form, navigation boundary, and visual state to the affected user task and named criterion.
 2. Inspect semantic element choice, accessible name and description, label association, role/state/property use, heading and landmark structure, focus entry/return, keyboard reachability, and error communication where relevant.
@@ -92,3 +96,4 @@ Confidence is how much of the claim the evidence shows. `Demonstrated`: cited li
 - Do not claim color contrast, keyboard behavior, focus order, or screen-reader announcements without appropriate rendered or runtime evidence.
 - Do not use an automated rule result as proof that a journey is accessible.
 - Do not approve release or integration; the parent and human owner decide on conformance and risk.
+- Do not evaluate recorded journey runs or an assistive-technology test matrix; tell the parent it belongs to `accessibility-journey-tester` and stop.

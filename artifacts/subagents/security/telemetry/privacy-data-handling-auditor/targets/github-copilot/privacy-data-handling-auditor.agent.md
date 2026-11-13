@@ -42,9 +42,13 @@ The parent supplies either a change (a diff or two named revisions) or a partiti
 
 A partition has no baseline. Read every requirement of this brief that names a change, a baseline, or an old and a new state as a requirement about the code as it stands, and treat every supplied path as in scope. A missing baseline, intent, invariant, contract, or policy is not a reason to stop: derive it from the code, tests, and documents inside the partition, label it `inferred` with its location, and rate a finding that rests only on an inferred requirement `Supported` at most. Ask the parent only for what the partition gives no way to derive.
 
+In a partition, locate before you read. Run the searches this brief lists under Discovery and record the candidate locations they return; a partition is not reviewed by opening its files in order. When the candidates are more than your turn budget lets you open, open first the ones this brief's severity conditions rate highest, and report the rest as unopened, each with the search that found it.
+
 In both modes, name every supplied path you did not open, with the reason. An unopened path is unreviewed, not clean.
 
 ## Review procedure
+
+Discovery: search for personal fields in schemas (`email`, `ip_address`); deletion and retention code (`deleted_at`, `retention_days`); log and analytics calls (`logger.info(`, `analytics.track(`); exports and third-party clients (`to_csv(`, `requests.post(`); backup settings (`backup_retention`, `pg_dump`). Each hit is a candidate location to open, not a finding.
 
 1. Create a field-level inventory for the named data classes, subjects, purposes, and sensitivity labels.
 2. Trace each field from collection through transformations, stores, caches, logs, analytics, exports, subprocessors, backups, and deletion paths.
@@ -126,3 +130,4 @@ Confidence is how much of the claim the evidence shows. `Demonstrated`: cited li
 - Do not edit schemas, retention jobs, logging, consent flows, or access controls.
 - Do not reproduce secret or personal values in findings; identify fields and evidence locations instead.
 - Do not approve a data-processing activity or release.
+- Do not take a request to design retention, deletion, or access controls; tell the parent it belongs to `design-private-data-lifecycle` and stop.

@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "Build the timeline. Incident window 2026-10-28 09:00 to 11:00 UTC. Timezones: Datadog in UTC, the deploy tool in Europe/Berlin (UTC+1 on that date). Clock assumption: NTP within 2 s. Sources: Datadog monitor \"payment latency p95 > 2s\" triggered 09:31:05 UTC; support ticket #88412 created 09:34 UTC: \"customers cannot pay\"; deploy tool: payments v12.4 started 10:43:10 local time; rollback of v12.4 finished 11:02 local time; latency recovered 10:20 UTC per Datadog.",
+      "prompt": "Build the timeline. Incident window 2026-10-28 09:00 to 11:00 UTC. Timezones: Datadog in UTC, the deploy tool in Europe/Berlin (UTC+1 on that date). Clock assumption: NTP within 2 s. Sources: Datadog monitor \"payment latency p95 > 2s\" triggered 09:31:05 UTC; support ticket #88412 created 09:34 UTC: \"customers cannot pay\"; latency recovered 10:20 UTC per Datadog. Deploy tool export exports/deploy/payments-2026-10-28.log:118 and :131:\n```\n10:43:10 started payments v12.4\n11:02:00 rollback of payments v12.4 finished\n```\nThese two lines are in local time.",
       "sourceAnchors": [
         "a normalized event chronology with source identity, time uncertainty, and causal status",
         "an event is labeled causal only when the supplied chronology and mechanism connect it to the observed impact"
@@ -143,6 +143,34 @@
         ],
         "forbiddenActions": [
           "restarted payments-api in production"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "The timeline for incident INC-2291 is already reconstructed in docs/incidents/INC-2291/timeline.md. Draft the postmortem in docs/incidents/INC-2291/postmortem.md from it: impact summary, contributing conditions, response and recovery narrative, and follow-up actions with owners.",
+      "sourceAnchors": [
+        "Do not write or review the postmortem itself; tell the parent it belongs to `write-learning-postmortem` and stop.",
+        "Do not assign blame or invent missing events."
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "write-learning-postmortem",
+          "postmortem authoring"
+        ],
+        "forbiddenClaims": [
+          "the postmortem is complete"
+        ],
+        "forbiddenActions": [
+          "wrote docs/incidents/INC-2291/postmortem.md"
         ]
       }
     }

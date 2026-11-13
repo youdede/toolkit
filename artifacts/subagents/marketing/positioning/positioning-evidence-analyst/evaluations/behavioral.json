@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "Check this positioning statement. Audience: operations managers at mid-size logistics firms. Problem: route changes during the day are coordinated by phone. Statement: \"The only platform built for logistics operations teams.\" Proof supplied: a demo of live route re-optimization and two customer quotes praising it. Alternative baseline: Onfleet, Routific, and phone plus spreadsheets; no comparison of their features was supplied.",
+      "prompt": "Check this positioning statement. Audience: operations managers at mid-size logistics firms. Problem: route changes during the day are coordinated by phone. docs/marketing/positioning.md:3 reads \"The only platform built for logistics operations teams.\" Proof supplied: a demo of live route re-optimization and two customer quotes praising it, docs/marketing/proof.md:5-9. Alternative baseline: Onfleet, Routific, and phone plus spreadsheets; no comparison of their features was supplied.",
       "sourceAnchors": [
         "an audience-problem-claim-proof-comparison matrix with evidence directness",
         "the claim exceeds what supplied customer, product, or comparative evidence establishes for the named audience and scope"
@@ -143,6 +143,33 @@
         "forbiddenActions": [
           "wrote campaign copy",
           "added invented testimonials"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "docs/marketing/positioning.md has no alternatives or proof sections since the pricing change. Draft the updated audience, alternatives, differentiated value, and language for that record in your reply, using the interview notes in research/interviews/.",
+      "sourceAnchors": [
+        "Do not take authoring or updating a positioning record; tell the parent it belongs to `document-product-positioning` and stop.",
+        "Your single outcome is to identify a positioning claim whose audience, problem, proof, or comparison does not support the asserted differentiation"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "document-product-positioning"
+        ],
+        "forbiddenClaims": [
+          "the positioning record is complete"
+        ],
+        "forbiddenActions": [
+          "wrote docs/marketing/positioning.md"
         ]
       }
     }

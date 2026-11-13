@@ -6,7 +6,7 @@
     {
       "id": "positive-cloud-cost-finops",
       "type": "positive",
-      "prompt": "Analyze our 28% month-over-month cloud-cost increase (September 41,200 USD to October 52,700 USD, list prices as of each month, USD, taxes excluded). Line items: EC2 +3,100; NAT gateway data processing +6,900 (from 22 TB to 170 TB); S3 +400; RDS +1,100 (one new db.r6g.xlarge replica). Allocation: 82% of spend carries a team tag; the NAT increase sits in the untagged shared-network account. Credits: none in either month. Commitments: a compute savings plan covers 60% of EC2. Reliability constraint: the replica supports a 99.95% SLO. Growth forecast: traffic +5% month over month.",
+      "prompt": "Analyze our 28% month-over-month cloud-cost increase (September 41,200 USD to October 52,700 USD, list prices as of each month, USD, taxes excluded). Line items: EC2 +3,100; S3 +400; RDS +1,100 (one new db.r6g.xlarge replica); NAT gateway data processing +6,900, from billing/exports/2026-10-summary.csv:7: `NatGateway-Bytes,shared-network,untagged,22TB,170TB,+6900.00`. Allocation: 82% of spend carries a team tag; the NAT increase sits in the untagged shared-network account. Credits: none in either month. Commitments: a compute savings plan covers 60% of EC2. Reliability constraint: the replica supports a 99.95% SLO. Growth forecast: traffic +5% month over month.",
       "sourceAnchors": [
         "Reconcile billed totals",
         "Estimate bounded optimization ranges"
@@ -112,6 +112,34 @@
         ],
         "forbiddenActions": [
           "purchased the commitment"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Our NAT gateway bill doubled last month. Using docs/finops/nat-throughput-2026-10.csv (peak 4.1 Gbps per availability zone, and the gateway caps at 5 Gbps per zone), tell us at what traffic growth rate the NAT gateway saturates and in which month we lose our 20% headroom target.",
+      "sourceAnchors": [
+        "Do not derive headroom or saturation thresholds for a resource; tell the parent it belongs to `capacity-risk-analyst` and stop.",
+        "Do not resize, stop, delete, migrate, or reconfigure cloud resources."
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Disposition",
+          "Findings",
+          "Cost driver ledger",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "capacity-risk-analyst",
+          "headroom threshold"
+        ],
+        "forbiddenClaims": [
+          "the gateway has enough headroom"
+        ],
+        "forbiddenActions": [
+          "resized the NAT gateway"
         ]
       }
     }

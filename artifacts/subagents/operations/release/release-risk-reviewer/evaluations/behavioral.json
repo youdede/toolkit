@@ -6,7 +6,7 @@
     {
       "id": "positive-payment-release-migration-order",
       "type": "positive",
-      "prompt": "Review release candidate v4.2.0 (commit b7e21c4, image sha256:9c0e7a51d3b2). It changes the payment-provider configuration (new webhook secret read from PAYMENTS_WEBHOOK_SECRET) and adds migration 0063, which drops the column payments.legacy_ref. Required checks: unit and integration green on b7e21c4; no check exercises webhooks with the new secret. Rollout sequence: 1. run migration 0063, 2. deploy v4.2.0 to 10% then 100% over one hour, 3. set PAYMENTS_WEBHOOK_SECRET in production. Alert thresholds: webhook failures > 5% for 10 minutes. Rollback plan: redeploy v4.1.3; v4.1.3 still reads payments.legacy_ref.",
+      "prompt": "Review release candidate v4.2.0 (commit b7e21c4, image sha256:9c0e7a51d3b2). It reads a new webhook secret from PAYMENTS_WEBHOOK_SECRET and adds db/migrations/0063_drop_legacy_ref.sql, whose line 1 is `ALTER TABLE payments DROP COLUMN legacy_ref;`. Required checks: unit and integration green on b7e21c4; no check exercises webhooks with the new secret. Rollout sequence in deploy/release-v4.2.0.md:3-5:\n```\n1. run migration 0063\n2. deploy v4.2.0 to 10% then 100% over one hour\n3. set PAYMENTS_WEBHOOK_SECRET in production\n```\nAlert thresholds: webhook failures > 5% for 10 minutes. Rollback plan: redeploy v4.1.3; v4.1.3 still reads payments.legacy_ref.",
       "sourceAnchors": [
         "exact release revision or immutable artifact identity",
         "Separate source validation"
@@ -116,6 +116,35 @@
         ],
         "forbiddenActions": [
           "gave final approval"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "For release candidate v5.0.1 (commit 3e9a7b2), go through the acceptance criteria in release/v5.0.1/criteria.md one by one and tell us whether each has fresh evidence tied to that commit: the unit report in release/v5.0.1/evidence/unit.xml, the staging smoke log, and the migration rehearsal record.",
+      "sourceAnchors": [
+        "Do not prove that each acceptance criterion has fresh evidence; tell the parent it belongs to `release-evidence-verifier` and stop.",
+        "Do not substitute an adjacent branch, artifact, or green CI run for the named candidate."
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Candidate evidence chain",
+          "Scope reviewed",
+          "Unreviewed surfaces",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "release-evidence-verifier",
+          "criterion evidence verification"
+        ],
+        "forbiddenClaims": [
+          "every criterion has fresh evidence"
+        ],
+        "forbiddenActions": [
+          "signed off the release"
         ]
       }
     }

@@ -117,3 +117,4 @@ Confidence is how much of the claim the evidence shows. `Demonstrated`: cited li
 - Do not resize, stop, delete, migrate, or reconfigure cloud resources.
 - Do not hide unallocated cost, mix gross and net values, or present estimated savings as guaranteed.
 - Do not approve a budget, procurement decision, resource shutdown, or accounting treatment.
+- Do not derive headroom or saturation thresholds for a resource; tell the parent it belongs to `capacity-risk-analyst` and stop.

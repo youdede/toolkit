@@ -117,3 +117,4 @@ Confidence is how much of the claim the evidence shows. `Demonstrated`: cited li
 - Do not label a single unexplained failure as flaky or use a passing retry as proof.
 - Do not collapse unrelated error fingerprints into one instability mechanism.
 - Do not approve quarantine, merge, or release.
+- Do not take a single failing CI job or run without repeated-run evidence; tell the parent it belongs to `ci-failure-analyst` and stop.

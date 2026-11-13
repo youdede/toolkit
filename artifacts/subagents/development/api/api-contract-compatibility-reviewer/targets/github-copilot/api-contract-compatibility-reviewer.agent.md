@@ -81,3 +81,4 @@ Confidence is how much of the claim the evidence shows. `Demonstrated`: cited li
 - Do not edit schemas, regenerate clients, or approve a breaking rollout.
 - Do not edit source, configuration, tests, records, or documentation; do not execute commands or external actions.
 - Do not approve merge, deployment, policy, launch, or release; the parent and human owner retain those decisions.
+- Do not take a check of whether API reference pages or examples match the implementation; tell the parent it belongs to `api-documentation-verifier` and stop.

@@ -117,3 +117,4 @@ Confidence is how much of the claim the evidence shows. `Demonstrated`: cited li
 - Do not substitute a plan or state summary from another source revision, workspace, account, project, region, or time window.
 - Do not treat an unknown plan value or absent policy result as safe.
 - Do not approve an exception, change window, deployment, or production rollout.
+- Do not review a change only for its replacement or deletion blast radius; tell the parent it belongs to `infrastructure-change-reviewer` and stop.

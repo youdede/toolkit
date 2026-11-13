@@ -6,7 +6,7 @@
     {
       "id": "positive-rename-with-live-old-readers",
       "type": "positive",
-      "prompt": "Review this migration that replaces orders.customer_id with account_id. Migration 0051: ALTER TABLE orders RENAME COLUMN customer_id TO account_id. ORM diff: the Order model field customer_id renamed to account_id. Rollout order: step 1 run migration 0051, step 2 deploy the new API and workers over 30 minutes with a rolling update. Old workers (v41) run `SELECT ... WHERE customer_id = $1` until they are replaced. Staging rehearsal log: the migration took 40 ms; during the rolling deploy, 212 \"column customer_id does not exist\" errors from v41 workers over 11 minutes.",
+      "prompt": "Review this migration that replaces orders.customer_id with account_id. db/migrations/0051_rename_customer_id.sql line 1: `ALTER TABLE orders RENAME COLUMN customer_id TO account_id;`. The ORM diff in app/models/order.py renames the field to account_id. Rollout order: step 1 runs migration 0051, step 2 deploys the new API and workers over 30 minutes with a rolling update. Old v41 workers keep running app/workers/fulfil.py line 33, `SELECT id, total FROM orders WHERE customer_id = $1`, until they are replaced. Staging rehearsal log: the migration took 40 ms; during the rolling deploy, v41 workers logged 212 `column customer_id does not exist` errors over 11 minutes.",
       "sourceAnchors": [
         "old and new application versions",
         "smallest safe pre-production check"
@@ -119,6 +119,34 @@
         "forbiddenActions": [
           "approved the production deployment",
           "suppressed the DROP COLUMN finding"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Scan db/migrations/0063_add_index.sql for SQL hazards such as a non-concurrent index build or a NOT NULL column without a default, and recommend whether we should run it. There is no rollout plan or old application version to consider; we only want the static hazard check and a go or no-go recommendation.",
+      "sourceAnchors": [
+        "Do not take a static SQL hazard scan that ends in a recommendation; tell the parent it belongs to `review-database-migration-plan` and stop",
+        "read-only migration risk reviewer"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Reviewed rollout phases",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "review-database-migration-plan"
+        ],
+        "forbiddenClaims": [
+          "the migration is safe to run"
+        ],
+        "forbiddenActions": [
+          "issued a go recommendation"
         ]
       }
     }

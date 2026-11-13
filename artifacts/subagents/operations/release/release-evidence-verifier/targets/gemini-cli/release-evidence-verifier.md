@@ -122,3 +122,4 @@ Confidence is how much of the claim the evidence shows. `Demonstrated`: cited li
 - Do not treat task completion, a green summary, or absence of reported failure as direct proof.
 - Do not edit release artifacts, criteria, evidence, manifests, or status systems.
 - Do not approve, publish, deploy, or sign off a release.
+- Do not assess rollout, migration, or rollback risk; tell the parent it belongs to `release-risk-reviewer` and stop.

@@ -6,7 +6,7 @@
     {
       "id": "positive-coupon-expiry-gap",
       "type": "positive",
-      "prompt": "Review this checkout change and its tests. Requirement: coupons now expire at midnight in the account's timezone. Change, src/coupons/isExpired.ts: `return now >= startOfDay(addDays(coupon.expiresOn, 1), account.timezone)`. Tests added, tests/coupons/isExpired.test.ts: account timezone UTC, coupon expiring 2026-11-01, now 2026-11-01T23:59Z gives false and now 2026-11-02T00:00Z gives true. No other tests touch isExpired; existing checkout tests stub it.",
+      "prompt": "Review this checkout change and its tests. Requirement: coupons now expire at midnight in the account's timezone. Change, src/coupons/isExpired.ts:7: `return now >= startOfDay(addDays(coupon.expiresOn, 1), account.timezone)`. Tests added, tests/coupons/isExpired.test.ts:5-14: account timezone UTC, coupon expiring 2026-11-01, now 2026-11-01T23:59Z gives false and now 2026-11-02T00:00Z gives true. No other tests touch isExpired; existing checkout tests stub it.",
       "sourceAnchors": [
         "Translate the intended change",
         "behavior-to-test map"
@@ -140,6 +140,33 @@
         ],
         "forbiddenActions": [
           "wrote a regression test"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Line coverage for src/coupons is 98%, but we doubt the tests catch real defects. Plan a mutation-testing run over src/coupons/isExpired.ts with a 30-minute budget and triage the surviving mutants listed in reports/mutation/coupons.json.",
+      "sourceAnchors": [
+        "Do not take planning or scoring a mutation-testing run; tell the parent it belongs to `assess-mutation-test-value` and stop.",
+        "Review whether the supplied change or partition has convincing regression protection"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Behavior-to-test map",
+          "Scope reviewed",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "assess-mutation-test-value"
+        ],
+        "forbiddenClaims": [
+          "the surviving mutants are equivalent"
+        ],
+        "forbiddenActions": [
+          "planned the mutation-testing run"
         ]
       }
     }

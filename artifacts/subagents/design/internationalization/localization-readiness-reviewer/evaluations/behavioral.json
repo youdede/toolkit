@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "The message is assembled from English fragments and a singular suffix, producing the wrong plural order for a supported locale and breaking RTL icon direction.",
+      "prompt": "Supported locales come from config/i18n.ts:3: `locales: ['en', 'pl', 'ar'], fallbackLocale: 'en'`. src/cart/CartSummary.tsx:57 builds the cart label as `{count + ' ' + t('item') + (count > 1 ? 's' : '') + ' ' + t('in_cart')}`, assembling the message from English fragments and a singular suffix, so Polish, which needs few and many plural forms and its own word order, renders the wrong plural order. Line 61 of the same file renders `<ArrowRightIcon className=\"ml-2\" />` beside the checkout label with a fixed left margin and no direction handling, so under ar the arrow points against the reading direction.",
       "sourceAnchors": [
         "a locale-key-value-context matrix across selection, interpolation, formatting, and fallback",
         "a supported locale and input value reach incorrect grammar, direction, format, timezone, or untranslated fallback"
@@ -168,6 +168,34 @@
         ],
         "forbiddenActions": [
           "edited the implementation"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "We plan to launch Arabic and Japanese next quarter. Before any code exists, specify how the checkout screens described in design/checkout-spec.md should handle text growth, right-to-left mirroring, and locale date and address formats, written as layout constraints for the designers.",
+      "sourceAnchors": [
+        "Do not design how a new locale should be supported; tell the parent it belongs to `design-for-localization` and stop.",
+        "Do not certify translation quality in a language not evidenced."
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "design-for-localization",
+          "new-locale design"
+        ],
+        "forbiddenClaims": [
+          "the checkout is ready for Arabic"
+        ],
+        "forbiddenActions": [
+          "edited source files"
         ]
       }
     }

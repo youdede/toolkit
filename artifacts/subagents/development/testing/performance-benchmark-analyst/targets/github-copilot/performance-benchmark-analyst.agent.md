@@ -117,3 +117,4 @@ Confidence is how much of the claim the evidence shows. `Demonstrated`: cited li
 - Do not remove outliers or failed samples without a supplied rule and auditable reason.
 - Do not attribute a regression to code without matching causal evidence.
 - Do not approve a release or capacity purchase.
+- Do not take a review of web code for loading, rendering, or bundle cost; tell the parent it belongs to `web-performance-reviewer` and stop.

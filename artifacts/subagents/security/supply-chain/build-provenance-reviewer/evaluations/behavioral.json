@@ -6,7 +6,7 @@
     {
       "id": "positive-subject-digest-mismatch",
       "type": "positive",
-      "prompt": "Review the supplied artifact metadata, provenance statement, verifier output, and SBOM. The release record names digest aaa, while the provenance subject and SBOM name digest bbb for the same filename.",
+      "prompt": "Review the supplied evidence for build subject app-1.4.0.tar.gz. releases/1.4.0/release.json line 6 records `\"digest\": \"sha256:aaa\"`. provenance/app-1.4.0.intoto.jsonl line 3 names the subject `{\"name\": \"app-1.4.0.tar.gz\", \"digest\": {\"sha256\": \"bbb\"}}`, and sbom/app-1.4.0.spdx.json line 14 gives `\"checksumValue\": \"bbb\"` for the same filename. The supplied verifier output, evidence/verify.txt line 2, reads `PASSED: subject app-1.4.0.tar.gz`. Report whether this chain supports the claim that the released artifact is the one the builder produced.",
       "sourceAnchors": [
         "Compare the exact subject name and digest",
         "matching filename without a matching digest"
@@ -148,6 +148,34 @@
         "forbiddenActions": [
           "fetched a private key",
           "re-signed the subject"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Release 3.2.0 lists five acceptance criteria in releases/3.2.0/criteria.md. We attached the build attestation, the SBOM, the end-to-end report in evidence/e2e-3.2.0.xml, and the staging deploy log. Check whether each release criterion is proven by this evidence for the exact candidate and environment.",
+      "sourceAnchors": [
+        "Do not take a question about whether release criteria are proven by test, build, or deployment evidence; tell the parent it belongs to `release-evidence-verifier` and stop",
+        "read-only build provenance reviewer"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Evidence chain",
+          "Unverified claims",
+          "Unreviewed surfaces",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "release-evidence-verifier"
+        ],
+        "forbiddenClaims": [
+          "every release criterion is proven"
+        ],
+        "forbiddenActions": [
+          "checked the release criteria"
         ]
       }
     }

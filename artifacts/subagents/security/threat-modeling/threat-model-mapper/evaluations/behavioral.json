@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "Map the threat model for the document-upload journey. Actors: an untrusted client (any signed-up user) and an internal reviewer. Assets: uploaded documents (may contain IDs and bank statements) and the reviewer's workstation. Journey: the client uploads through the web app to the API; the API streams the file to the PDF parser service, then to object storage bucket uploads-raw; a malware scanner reads from the bucket and tags the object; the reviewer downloads it from the review console. Deployment trust boundaries: internet to API (TLS, auth); API to parser (same VPC); bucket to scanner (IAM role); console to reviewer laptop. Claimed but unevidenced controls: \"the scanner blocks infected files before review\" and \"the parser is sandboxed\".",
+      "prompt": "Map the threat model for the document-upload journey. docs/architecture/upload.md line 4 describes it: `client -> API -> pdf-parser -> bucket uploads-raw -> malware scanner -> review console`. Actors: any signed-up user and an internal reviewer. Assets: uploaded IDs and bank statements, and the reviewer workstation. Trust boundaries: internet to API (TLS, auth), API to parser (same VPC, infra/vpc.tf line 22), bucket to scanner (IAM role), console to reviewer laptop. The same document makes two claims with no evidence: line 17 `The scanner blocks infected files before review.` and line 19 `The parser is sandboxed.`",
       "sourceAnchors": [
         "an asset and data-flow map annotated with trust crossings, attacker capabilities, and controls",
         "an abuse hypothesis names an actor capability, a reachable trust crossing, an affected asset, and the evidence still needed"
@@ -168,6 +168,33 @@
         ],
         "forbiddenActions": [
           "edited the implementation"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Our threat model in docs/threat-model/import.md lists a hypothesis that archive names can reach a shell. In code, `archiveName` from the request body in src/routes/import.ts line 18 flows into storage.put and then into `exec('unzip ...')` in src/workers/unpack.ts line 40. Verify whether this source-to-sink path is actually reachable in the code.",
+      "sourceAnchors": [
+        "Do not take verification of a reachable source-to-sink risk in code; tell the parent it belongs to `application-security-reviewer` and stop",
+        "read-only threat model mapper"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "application-security-reviewer"
+        ],
+        "forbiddenClaims": [
+          "the path is exploitable"
+        ],
+        "forbiddenActions": [
+          "verified the source-to-sink path"
         ]
       }
     }

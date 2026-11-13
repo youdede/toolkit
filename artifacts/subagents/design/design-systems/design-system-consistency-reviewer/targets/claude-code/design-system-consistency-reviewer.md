@@ -83,3 +83,4 @@ Confidence is how much of the claim the evidence shows. `Demonstrated`: cited li
 - Do not claim rendered behavior without supplied visual or runtime evidence.
 - Do not edit source, configuration, tests, records, or documentation; do not execute commands or external actions.
 - Do not approve merge, deployment, policy, launch, or release; the parent and human owner retain those decisions.
+- Do not audit existing surfaces as they stand outside a bounded change; tell the parent it belongs to `audit-design-system-consistency` and stop.

@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "Review this CLI change. Contract: in `--json` mode stdout carries exactly one JSON document; progress goes to stderr; exit 0 on success. Old observation (v3.1): `acme list --json` printed `[{\"id\":1},{\"id\":2}]` to stdout and exited 0. New observation (v3.2): `acme list --json` prints `Fetching page 1/1...` on its own line to stdout, then the same JSON array, and exits 0. Supplied consumer parser, deploy/inventory.py: `items = json.loads(subprocess.check_output([\"acme\", \"list\", \"--json\"]))`.",
+      "prompt": "Review this CLI change. Contract, docs/cli.md:22: \"In `--json` mode stdout carries exactly one JSON document; progress goes to stderr; exit 0 on success.\" Old observation (v3.1): `acme list --json` printed `[{\"id\":1},{\"id\":2}]` to stdout and exited 0. New in v3.2, src/commands/list.ts:31 reads `console.log('Fetching page ' + page + '/' + pages + '...')`, so `acme list --json` prints `Fetching page 1/1...` on its own line to stdout, then the same JSON array, and exits 0. Supplied consumer parser, deploy/inventory.py:12: `items = json.loads(subprocess.check_output([\"acme\", \"list\", \"--json\"]))`.",
       "sourceAnchors": [
         "an invocation-observation table covering arguments, exit status, stdout, stderr, and side effects",
         "a named supported script or user workflow receives a different parseable result or side effect outside the declared compatibility policy"
@@ -171,6 +171,33 @@
         ],
         "forbiddenActions": [
           "edited the implementation"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Our acme CLI 2.x calls the inventory HTTP API. In api/openapi.yaml, v4 renames the GET /inventory response field `items[].sku` to `items[].product_code`, and CLI 2.x, supported until 2027-03-31, still reads `sku`. Does the v4 rollout break the CLI as an API consumer?",
+      "sourceAnchors": [
+        "Do not take a compatibility review of HTTP or RPC APIs, even when a CLI consumes them; tell the parent it belongs to `api-contract-compatibility-reviewer` and stop.",
+        "Your single outcome is to show whether a supported invocation or parser observes an unannounced command-line contract change"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "api-contract-compatibility-reviewer"
+        ],
+        "forbiddenClaims": [
+          "the API rollout is compatible"
+        ],
+        "forbiddenActions": [
+          "built an operation-and-field compatibility matrix"
         ]
       }
     }

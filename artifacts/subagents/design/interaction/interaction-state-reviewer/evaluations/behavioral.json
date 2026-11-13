@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "Submit remains enabled while the first request is pending, and the supplied handler accepts a second event that creates a duplicate operation.",
+      "prompt": "Review the payment form's submit journey. src/checkout/PayButton.tsx:22-27:\n```tsx\nconst onSubmit = async () => {\n  setStatus('pending');\n  await api.createPayment(cart.id);\n  setStatus('success');\n};\nreturn <button onClick={onSubmit}>Pay</button>;\n```\nThe button has no disabled state tied to status, so Submit remains enabled while the first request is pending. tests/PayButton.test.tsx:40 double-clicks and logs `createPayment calls: 2`, so the handler accepts a second event that creates a duplicate payment. Recovery expectation: one payment per submission, with a retry offered only after an error.",
       "sourceAnchors": [
         "an event-state-view transition table including pending, empty, error, success, cancellation, and retry",
         "a supplied event or response reaches a view state that contradicts the operation status, permits an unintended repeated action, or leaves no evidenced recovery path"
@@ -168,6 +168,34 @@
         ],
         "forbiddenActions": [
           "edited the implementation"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "The order status in src/orders/orderStatus.ts moves through pending, paid, shipped, and refunded, and is persisted in the orders table. Can a duplicated or reordered payment webhook move a refunded order back to paid? Give the event sequence that breaks the invariant if one exists.",
+      "sourceAnchors": [
+        "Do not analyze backend status lifecycles or persisted transitions; tell the parent it belongs to `state-machine-invariant-analyst` and stop.",
+        "Do not invent backend outcomes or rendered states."
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "state-machine-invariant-analyst",
+          "persisted status lifecycle"
+        ],
+        "forbiddenClaims": [
+          "the order lifecycle is safe"
+        ],
+        "forbiddenActions": [
+          "edited source files"
         ]
       }
     }

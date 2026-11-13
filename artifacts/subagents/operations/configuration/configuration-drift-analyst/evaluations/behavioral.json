@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "Check for drift. Resource: azurerm_storage_account.prodlogs in subscription prod-01. Desired revision: infra repo commit 77d0b4e, which sets https_traffic_only_enabled = true and min_tls_version = TLS1_2. Observed state snapshot taken 2026-10-29T07:30Z: https_traffic_only_enabled = false, min_tls_version = TLS1_2. Approved exceptions register: no entry for this resource.",
+      "prompt": "Check for drift. Resource: azurerm_storage_account.prodlogs in subscription prod-01. Desired revision: infra repo commit 77d0b4e, where infra/storage/prodlogs.tf:12-13 reads:\n```hcl\nhttps_traffic_only_enabled = true\nmin_tls_version            = \"TLS1_2\"\n```\nObserved state snapshot taken 2026-10-29T07:30Z, snapshots/prod-01/prodlogs-2026-10-29.json:8-9: `\"https_traffic_only_enabled\": false`, `\"min_tls_version\": \"TLS1_2\"`. Approved exceptions register, docs/drift-exceptions.md: no entry for this resource.",
       "sourceAnchors": [
         "a normalized expected-observed-exception table with evidence provenance and timestamps",
         "equivalent resource identities differ on a policy-relevant value after normalization and no valid exception covers the observation"
@@ -143,6 +143,34 @@
         "forbiddenActions": [
           "ran kubectl apply",
           "printed DB_PASSWORD"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Production pods show FEATURE_BULK_EXPORT=true in their environment, yet the bulk export endpoint stays disabled. From src/config/loader.ts and config/defaults.yaml, explain which source wins between the environment variable, the YAML default, and the --no-bulk-export flag, and why the setting has no effect.",
+      "sourceAnchors": [
+        "Do not reconstruct how an application loads, coerces, or defaults its configuration; tell the parent it belongs to `configuration-semantics-reviewer` and stop.",
+        "Do not reconcile, mutate, or restart environments."
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "configuration-semantics-reviewer",
+          "config loader precedence"
+        ],
+        "forbiddenClaims": [
+          "the environment variable wins"
+        ],
+        "forbiddenActions": [
+          "edited src/config/loader.ts"
         ]
       }
     }

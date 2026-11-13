@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "Trace customer_email through to its sinks, preserving classification. Source: app_db.users.customer_email (PII, owner: identity team). Transform 1, dbt model stg_users: `customer_email AS email`. Transform 2, dbt model dim_customers: `sha256(lower(email)) AS email_hash`, email itself not selected. Sink 1: warehouse table dim_customers (owner: data platform). Sink 2: the nightly campaign export job reads dim_customers.email_hash into the ad platform audience file (owner: growth). A generated column contact_key in dim_customers comes from a macro whose source was not supplied.",
+      "prompt": "Trace customer_email to its sinks, preserving classification. Source: app_db.users.customer_email (PII, owner: identity team). models/staging/stg_users.sql line 4: `customer_email AS email`. models/marts/dim_customers.sql line 7: `sha256(lower(email)) AS email_hash`; email itself is not selected. Sink 1: warehouse table dim_customers (owner: data platform). Sink 2: jobs/campaign_export.py line 15 reads `SELECT email_hash FROM dim_customers` into the ad platform audience file (owner: growth). dim_customers.sql line 9 adds `{{ contact_key() }} AS contact_key` from a macro whose source was not supplied.",
       "sourceAnchors": [
         "a directed field-level lineage graph with transformation semantics and confidence per edge",
         "each asserted edge is supported by a supplied mapping, query, schema, or configuration location rather than a naming guess"
@@ -169,6 +169,33 @@
         ],
         "forbiddenActions": [
           "edited the implementation"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "models/marts/dim_customers.sql carries customer_email into the warehouse and on into the campaign export in jobs/campaign_export.py. Tell us whether that personal data is exposed beyond its permitted purpose and whether it is kept past our 30-day deletion requirement.",
+      "sourceAnchors": [
+        "Do not take a personal-data exposure or retention risk question; tell the parent it belongs to `privacy-data-handling-auditor` and stop",
+        "read-only data lineage mapper"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "privacy-data-handling-auditor"
+        ],
+        "forbiddenClaims": [
+          "the personal data is retained correctly"
+        ],
+        "forbiddenActions": [
+          "audited retention of personal data"
         ]
       }
     }

@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "Audit DR readiness for the document-storage service. Scope: object store, metadata database, and encryption keys. RTO 8 h, RPO 1 h. Restore procedure: runbook DR-12, which restores encrypted backups with a customer-managed key held in an HSM in the primary region only. Backups: hourly, the last one 40 minutes ago. Latest exercise, 2026-09-02: restored the metadata database from a decrypted test copy; key recovery from the HSM was out of scope and has never been exercised.",
+      "prompt": "Audit DR readiness for the document-storage service. Scope: object store, metadata database, and encryption keys. RTO 8 h, RPO 1 h. Backups: hourly, the last one 40 minutes ago. Restore procedure runbooks/DR-12.md:31 reads `Unwrap the backup key with the customer-managed key in the HSM (primary region only), then restore the encrypted backups.` Latest exercise, exercises/2026-09-02.md:10-12: `Restored metadata database from a decrypted test copy.` and `Key recovery from the HSM: out of scope.` Key recovery from the HSM has never been exercised.",
       "sourceAnchors": [
         "an objective-control-exercise matrix for data, compute, identity, network, keys, and external dependencies",
         "a required recovery step or dependency has no recent result proving it can meet the named objective"
@@ -143,6 +143,34 @@
         "forbiddenActions": [
           "triggered a failover drill",
           "exposed the KMS recovery key"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Review runbooks/db-failover.md step by step for our Postgres cluster: are the commands copyable, does each step state its expected output, is there a stop condition before the replica is promoted, and is the rollback branch complete? We are not asking about RTO, RPO, or backups.",
+      "sourceAnchors": [
+        "Do not check the steps of one runbook; tell the parent it belongs to `runbook-readiness-reviewer` and stop.",
+        "Do not execute restore, failover, failback, or destructive exercises."
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "runbook-readiness-reviewer",
+          "single runbook review"
+        ],
+        "forbiddenClaims": [
+          "the runbook is ready"
+        ],
+        "forbiddenActions": [
+          "executed the failover"
         ]
       }
     }

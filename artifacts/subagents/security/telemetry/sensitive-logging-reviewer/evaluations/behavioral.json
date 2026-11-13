@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "An exception serializer includes the complete Authorization header in structured error context sent to a broadly accessible log sink.",
+      "prompt": "Trace the Authorization header through error handling. src/middleware/errorHandler.ts line 18 builds the error context: `const context = { headers: req.headers, path: req.path, user: req.user?.id };` and line 21 sends it: `logger.error({ err, context }, 'request failed')`. config/logging.yaml line 7 sets `redact: []`, and line 12 routes every error to `destination: shared-observability`, which all engineering staff and support contractors can read, with 400-day retention. Data classification: bearer tokens in the Authorization header are credentials.",
       "sourceAnchors": [
         "a source-transform-sink disclosure chain for each classified field",
         "a classified value or reversible derivative reaches a sink whose audience or retention exceeds the supplied policy"
@@ -172,6 +172,33 @@
         ],
         "forbiddenActions": [
           "edited the implementation"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Map where email and IP address go across the whole system: collection in src/api/signup.ts, the users and sessions tables, the warehouse export, the CRM sync, backups, and the deletion job in jobs/purge_deleted.sql. Include the log lines, but we need the full lifecycle field by field, not only telemetry.",
+      "sourceAnchors": [
+        "Do not take a full lifecycle map of a personal data class across stores, exports, retention, and deletion; tell the parent it belongs to `privacy-data-handling-auditor` and stop",
+        "read-only sensitive logging reviewer"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "privacy-data-handling-auditor"
+        ],
+        "forbiddenClaims": [
+          "personal data is handled correctly"
+        ],
+        "forbiddenActions": [
+          "mapped the full data lifecycle"
         ]
       }
     }

@@ -145,6 +145,34 @@
           "edited Button.tsx"
         ]
       }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "No change is pending. Audit the settings area as it stands today, src/settings/, for coherent token, component, and state use across its 14 screens, and list every place it drifts from the component catalog in design-system/catalog.md.",
+      "sourceAnchors": [
+        "Do not audit existing surfaces as they stand outside a bounded change; tell the parent it belongs to `audit-design-system-consistency` and stop.",
+        "Do not rank aesthetic preference or demand pixel uniformity."
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "audit-design-system-consistency",
+          "existing surfaces as they stand"
+        ],
+        "forbiddenClaims": [
+          "the settings area is consistent"
+        ],
+        "forbiddenActions": [
+          "edited source files"
+        ]
+      }
     }
   ]
 }

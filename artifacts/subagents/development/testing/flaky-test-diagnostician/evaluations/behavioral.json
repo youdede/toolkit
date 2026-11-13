@@ -6,7 +6,7 @@
     {
       "id": "positive-flaky-test",
       "type": "positive",
-      "prompt": "Diagnose why payment-timeout.spec alternates between a timeout and a pass. Twelve CI runs: runs 4101 to 4106 used 2 workers and all passed (1.8 to 2.2 s); runs 4107 to 4112 used 8 workers, and 4107, 4109, 4110 and 4112 timed out at 5 s while the others passed in 4.6 to 4.9 s. Seeds differ per run and show no pattern. Log on failures: \"waiting for mock payment server on :4010\". Test code: `beforeAll(() => startMockServer(4010))` and `it('times out after 3s', ..., 5000)`. Fixture setup: every spec file that needs payments starts its own mock on port 4010.",
+      "prompt": "Diagnose why tests/payments/payment-timeout.spec.ts alternates between a timeout and a pass. Twelve CI runs: 4101 to 4106 used 2 workers and all passed (1.8 to 2.2 s); 4107 to 4112 used 8 workers, and 4107, 4109, 4110, and 4112 timed out at 5 s while the others passed in 4.6 to 4.9 s. Seeds differ per run with no pattern. Failure log: \"waiting for mock payment server on :4010\". payment-timeout.spec.ts:3 reads `beforeAll(() => startMockServer(4010))` and line 9 reads `it('times out after 3s', ..., 5000)`. Every spec file that needs payments starts its own mock on port 4010.",
       "sourceAnchors": [
         "Build a run signature table",
         "bounded discriminating experiment"
@@ -112,6 +112,33 @@
         ],
         "forbiddenActions": [
           "quarantined the test"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "CI run 5521, job `test-unit` on main, failed once after commit 9f2c1e touched src/payments/timeout.ts; the attached log shows `payment-timeout.spec: Timeout of 5000ms exceeded`. There is no other run of this commit. Why did this job fail?",
+      "sourceAnchors": [
+        "Do not take a single failing CI job or run without repeated-run evidence; tell the parent it belongs to `ci-failure-analyst` and stop.",
+        "Determine whether a named failing test has an evidence-supported instability mechanism"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Disposition",
+          "Findings",
+          "Run classification",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "ci-failure-analyst"
+        ],
+        "forbiddenClaims": [
+          "the test is flaky"
+        ],
+        "forbiddenActions": [
+          "diagnosed the single failed run"
         ]
       }
     }

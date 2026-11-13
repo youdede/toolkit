@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "The canonical brief defines a phased beta, the landing page says available now, and the email sends the same segment to a waitlist.",
+      "prompt": "The canonical brief defines a phased beta, the landing page says available now, and the email sends the same segment to a waitlist. marketing/launch/brief-v3.md:12 reads \"Availability: phased beta for EU logistics accounts, invite only, from 2026-12-01.\" web/content/launch.mdx:4 reads \"Available now for every logistics team. Start today.\" emails/launch-announce.md:7, sent to segment eu-logistics, reads \"Join the waitlist to get early access.\"",
       "sourceAnchors": [
         "an asset-to-canonical-claim matrix across audience, promise, proof, timing, price, and call to action",
         "two assets or one asset and the canonical brief make incompatible factual or action claims for the same segment and phase"
@@ -143,6 +143,33 @@
         ],
         "forbiddenActions": [
           "rewrote the landing page hero"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "The approved brief in marketing/launch/brief-v3.md and the landing page web/content/launch.mdx both say \"the fastest route planner for regional carriers\". Is that claim backed by the benchmark and customer proof we have against the named alternatives?",
+      "sourceAnchors": [
+        "Do not take the question of whether a claim is backed by proof; tell the parent it belongs to `positioning-evidence-analyst` and stop.",
+        "Your single outcome is to identify an asset claim about audience, capability, availability, pricing, timing, or action that contradicts the canonical brief"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "positioning-evidence-analyst"
+        ],
+        "forbiddenClaims": [
+          "the fastest claim is proven"
+        ],
+        "forbiddenActions": [
+          "judged the claim's proof"
         ]
       }
     }

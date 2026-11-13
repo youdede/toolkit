@@ -142,6 +142,33 @@
           "moved the packages"
         ]
       }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Map where the `customer_email` column in warehouse/models/marts/dim_customer.sql comes from, through the staging models and the ingestion jobs under pipelines/ingest, and list every dashboard that consumes it after the rename to `contact_email`.",
+      "sourceAnchors": [
+        "Do not take field-level data flow through pipelines, jobs, or stores; tell the parent it belongs to `data-lineage-mapper` and stop.",
+        "Build the smallest architecture map that answers a named engineering question"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Disposition",
+          "Findings",
+          "Architecture map",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "data-lineage-mapper"
+        ],
+        "forbiddenClaims": [
+          "the field lineage is complete"
+        ],
+        "forbiddenActions": [
+          "traced field-level lineage through the warehouse"
+        ]
+      }
     }
   ]
 }

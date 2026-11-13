@@ -83,3 +83,4 @@ Confidence is how much of the claim the evidence shows. `Demonstrated`: cited li
 - Do not claim root cause from temporal correlation alone.
 - Do not edit source, configuration, tests, records, or documentation; do not execute commands or external actions.
 - Do not approve merge, deployment, policy, launch, or release; the parent and human owner retain those decisions.
+- Do not take the design of ongoing quality checks, thresholds, or ownership; tell the parent it belongs to `design-data-quality-controls` and stop.

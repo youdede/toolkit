@@ -6,7 +6,7 @@
     {
       "id": "positive-mobile-reliability-accessibility",
       "type": "positive",
-      "prompt": "Review the interrupted bank-transfer journey for candidate build 8.4.0 (412). Declared matrix: iPhone 13 iOS 17, iPhone 15 iOS 18, Pixel 7 Android 14, Galaxy A13 Android 12. Evidence: on Pixel 7, backgrounding the app during the confirm step and returning after 6 minutes shows the transfer form empty, and the lifecycle log shows the activity was recreated without saved state; iOS devices restore the form. Offline test, Galaxy A13: tapping Confirm offline shows a spinner forever; no crash. Crash records: none for 412. TalkBack on Pixel 7: the amount field is announced as \"edit text\" with no label; VoiceOver reads \"Amount, euros\". Font scale 200% on iPhone 15: the Confirm button is clipped. Implementation path: TransferFormFragment.kt keeps state in a plain field, not a ViewModel.",
+      "prompt": "Review the interrupted bank-transfer journey for build 8.4.0 (412). Matrix: iPhone 13 iOS 17, iPhone 15 iOS 18, Pixel 7 Android 14, Galaxy A13 Android 12. Pixel 7: backgrounding at the confirm step for 6 minutes returns an empty form; the log shows the activity recreated without saved state. iOS restores the form. Galaxy A13 offline: Confirm spins forever, no crash. No crashes for 412. TalkBack on Pixel 7 reads the amount field as \"edit text\"; VoiceOver reads \"Amount, euros\". iPhone 15 at 200% font: Confirm is clipped. app/src/main/java/bank/transfer/TransferFormFragment.kt:24 reads `private var amount: String = \"\"`, a plain field, not a ViewModel.",
       "sourceAnchors": [
         "Trace state ownership",
         "Separate platform-specific proof"
@@ -112,6 +112,33 @@
         ],
         "forbiddenActions": [
           "launched the simulator"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Build 8.4.0 (412) is ready for App Store submission and a 10% Play staged rollout. Check the privacy declarations in ios/App/PrivacyInfo.xcprivacy, the signing evidence, the store listing, and the rollback plan in docs/release/8.4.0.md before we submit.",
+      "sourceAnchors": [
+        "Do not take release signing, store configuration, or staged rollout readiness; tell the parent it belongs to `verify-mobile-release-readiness` and stop.",
+        "Determine whether a named iOS or Android journey preserves user state"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Disposition",
+          "Findings",
+          "Mobile journey matrix",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "verify-mobile-release-readiness"
+        ],
+        "forbiddenClaims": [
+          "the build is ready for release"
+        ],
+        "forbiddenActions": [
+          "assessed signing and store readiness"
         ]
       }
     }

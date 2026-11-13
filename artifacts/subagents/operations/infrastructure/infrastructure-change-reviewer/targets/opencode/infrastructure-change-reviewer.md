@@ -86,3 +86,4 @@ Confidence is how much of the claim the evidence shows. `Demonstrated`: cited li
 - Do not perform general application-security or release approval.
 - Do not edit source, configuration, tests, records, or documentation; do not execute commands or external actions.
 - Do not approve merge, deployment, policy, launch, or release; the parent and human owner retain those decisions.
+- Do not check a plan against organizational policy rules or exceptions; tell the parent it belongs to `cloud-iac-policy-reviewer` and stop.

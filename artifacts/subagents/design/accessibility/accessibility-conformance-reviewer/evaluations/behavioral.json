@@ -6,7 +6,7 @@
     {
       "id": "positive-checkout-dialog-focus-loss",
       "type": "positive",
-      "prompt": "Review this checkout-dialog change against WCAG 2.1 AA. The dialog opens after an address validation error. Changed React code:\n```tsx\n{error && <div className=\"modal\" role=\"dialog\">\n  <p>{error.message}</p>\n  <button onClick={close}>OK</button>\n</div>}\n```\nThe close handler only sets error to null. Keyboard test output: after submitting the form with Tab and Enter, focus stays on the Submit button behind the dialog; Tab moves through the page underneath; after OK, focus goes to the document body. The address field has no aria-describedby or aria-invalid.",
+      "prompt": "Review this checkout-dialog change against WCAG 2.1 AA. The dialog opens after an address validation error. Changed code in src/checkout/AddressDialog.tsx:42-45:\n```tsx\n{error && <div className=\"modal\" role=\"dialog\">\n  <p>{error.message}</p>\n  <button onClick={close}>OK</button>\n</div>}\n```\nThe close handler only sets error to null. Keyboard test output: after submitting the form with Tab and Enter, focus stays on the Submit button behind the dialog; Tab moves through the page underneath; after OK, focus goes to the document body. The address field has no aria-describedby or aria-invalid.",
       "sourceAnchors": [
         "named criterion",
         "smallest verification or remediation step"
@@ -145,6 +145,35 @@
         ],
         "forbiddenActions": [
           "edited the dialog component"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Attached is the recorded run of the checkout journey on build 2026.11.02-1, docs/a11y/runs/checkout-2026-11-02.json: NVDA with Firefox, VoiceOver with Safari, keyboard only, and 400% zoom. Fill in the journey evidence matrix with pass, fail, or not-assessed per cell and name the smallest reproducible step for each failure.",
+      "sourceAnchors": [
+        "Do not evaluate recorded journey runs or an assistive-technology test matrix; tell the parent it belongs to `accessibility-journey-tester` and stop.",
+        "Do not certify WCAG, legal compliance, or a complete accessibility audit from a bounded review."
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Reviewed criteria",
+          "Scope reviewed",
+          "Evidence not available",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "accessibility-journey-tester",
+          "recorded journey runs"
+        ],
+        "forbiddenClaims": [
+          "the checkout journey passes"
+        ],
+        "forbiddenActions": [
+          "rewrote all components"
         ]
       }
     }

@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "A redirect drops every campaign parameter before the landing event, so conversions enter the supplied last-touch model as Direct.",
+      "prompt": "A redirect drops every campaign parameter before the landing event, so conversions enter the supplied last-touch model as Direct. edge/redirects.yaml:14 reads `- { from: /go/spring, to: /spring, preserve_query: false }`. Campaign link: `/go/spring?utm_source=newsletter&utm_medium=email&utm_campaign=spring26`. The landing event, web/analytics/events.ts:31, reads `track('landing', { source: params.get('utm_source') ?? 'direct' })`. Model: last-touch with a 30-day window, docs/analytics/attribution.md:5.",
       "sourceAnchors": [
         "a touchpoint-identifier-event-conversion propagation chain through the attribution model",
         "a supported journey deterministically loses, duplicates, or reassigns attribution under the supplied identifier and window rules"
@@ -143,6 +143,33 @@
         "forbiddenActions": [
           "rewrote the redirect rule",
           "retrieved subscriber emails"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "For October, our analytics credits paid social with 420 conversions, the ad platform reports 610, and the CRM export in data/exports/crm-october.csv tags 380 deals as paid social. Reconcile these numbers and explain the gaps between the three sources.",
+      "sourceAnchors": [
+        "Do not take reconciling channel credit across analytics, ad platforms, and CRM; tell the parent it belongs to `reconcile-marketing-attribution` and stop.",
+        "Your single outcome is to identify where a campaign touchpoint loses or duplicates identity"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "reconcile-marketing-attribution"
+        ],
+        "forbiddenClaims": [
+          "paid social deserves more budget"
+        ],
+        "forbiddenActions": [
+          "reconciled channel credit across sources"
         ]
       }
     }

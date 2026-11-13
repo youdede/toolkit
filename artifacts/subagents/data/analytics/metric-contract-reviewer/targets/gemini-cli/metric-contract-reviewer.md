@@ -85,3 +85,4 @@ Confidence is how much of the claim the evidence shows. `Demonstrated`: cited li
 - Do not approve a metric definition on behalf of its owner.
 - Do not edit source, configuration, tests, records, or documentation; do not execute commands or external actions.
 - Do not approve merge, deployment, policy, launch, or release; the parent and human owner retain those decisions.
+- Do not take an unexplained anomaly in a metric's values; tell the parent it belongs to `data-quality-diagnostician` and stop.

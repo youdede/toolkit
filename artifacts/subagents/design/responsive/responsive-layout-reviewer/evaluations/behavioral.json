@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "At the supplied 320-pixel render, a long localized label cannot wrap because of a fixed width and clips the primary action outside the dialog.",
+      "prompt": "Review the confirm dialog at the narrow end of its range. src/components/ConfirmDialog.module.css:14-15:\n```css\n.actions button { width: 180px; white-space: nowrap; }\n.dialog { max-width: 100vw; overflow: hidden; }\n```\nTarget viewports: 320 to 1440 px. Content bound: the German label at locales/de/common.json:22, `\"confirm\": \"Bestellung jetzt verbindlich bestätigen\"`. The supplied 320-pixel render, renders/confirm-dialog-de-320.png, shows the long localized label unable to wrap because of the fixed width, and the primary action clipped outside the dialog's right edge.",
       "sourceAnchors": [
         "a viewport-content-constraint matrix for required elements and reading order",
         "supplied layout rules or renders show a required element exceeding, overlapping, or leaving its intended containing boundary"
@@ -170,6 +170,34 @@
         ],
         "forbiddenActions": [
           "edited the implementation"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "We are redesigning the dashboard described in design/dashboard-spec.md. Propose the breakpoints and reflow rules: where the sidebar should collapse, whether the card grid should respond to its container or the viewport, and the touch target minimums for tablets.",
+      "sourceAnchors": [
+        "Do not specify new breakpoints, reflow rules, or touch target minimums for a design; tell the parent it belongs to `design-responsive-behavior` and stop.",
+        "Do not generate screenshots or edit CSS."
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "design-responsive-behavior",
+          "breakpoint design"
+        ],
+        "forbiddenClaims": [
+          "the breakpoints are approved"
+        ],
+        "forbiddenActions": [
+          "edited source files"
         ]
       }
     }

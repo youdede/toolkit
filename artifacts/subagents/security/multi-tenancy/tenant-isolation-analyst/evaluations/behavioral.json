@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "The job accepts tenant_id and object_id but reloads the object by object_id alone before exporting it to the requesting tenant.",
+      "prompt": "Trace tenant scope through the export job. jobs/export_object.py line 11 receives the payload: `def run(tenant_id: str, object_id: str):`. Line 15 reloads the object without a tenant predicate: `obj = Document.objects.get(pk=object_id)`, and line 22 delivers it: `upload_to_tenant_bucket(tenant_id, serialize(obj))`. object_id comes from the request body of POST /exports in api/exports.py line 30, where only tenant_id is taken from the authenticated session. Documents for all tenants share one table keyed by a global primary key.",
       "sourceAnchors": [
         "a tenant-label propagation path from authenticated context to every named data sink",
         "attacker-controlled or stale resource identity can select data without the required tenant predicate or partition"
@@ -171,6 +171,33 @@
         ],
         "forbiddenActions": [
           "edited the implementation"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Every query in src/routes/projects.ts already filters by `org_id` from the session, so cross-tenant reach is not the question. docs/roles.md line 9 says billing-admin may archive a project and member may not. Check whether the archive route on line 52 of src/routes/projects.ts enforces that role rule.",
+      "sourceAnchors": [
+        "Do not take a role-based permission check; tell the parent it belongs to `access-control-matrix-auditor` and stop",
+        "read-only tenant isolation analyst"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "access-control-matrix-auditor"
+        ],
+        "forbiddenClaims": [
+          "the archive route enforces the role rule"
+        ],
+        "forbiddenActions": [
+          "audited the archive permission"
         ]
       }
     }
