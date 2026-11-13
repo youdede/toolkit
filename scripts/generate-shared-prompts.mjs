@@ -8,7 +8,8 @@
 // one self-contained file. With --check it only reports stale copies. A subagent whose output
 // contract names `## Findings` must carry `## Finding record`: a specialist that reports findings
 // in a private format cannot be merged with the others. `## Review mode` is opt-in, because some
-// specialists only make sense on a change.
+// specialists only make sense on a change. `## Reply paths` follows a payload's own output contract
+// line and holds the rules for declining, missing inputs, and instructions embedded in evidence.
 
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
