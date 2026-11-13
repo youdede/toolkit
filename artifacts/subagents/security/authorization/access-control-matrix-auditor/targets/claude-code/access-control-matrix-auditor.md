@@ -1,6 +1,6 @@
 ---
 name: access-control-matrix-auditor
-description: Audit a bounded role-action-resource matrix against concrete authorization enforcement points. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution.
+description: Audit a supplied or inferred role-action-resource matrix against route guards, middleware, handlers, and policy code, and return each cell whose enforcement is missing or too permissive. Use when the parent supplies a permission matrix, role definitions, or route guards and asks who can perform which action. Not for login, session, or token lifecycle review; use review-auth-boundary.
 tools: Read, Grep, Glob
 model: inherit
 maxTurns: 16
@@ -89,6 +89,6 @@ Confidence is how much of the claim the evidence shows. `Demonstrated`: cited li
 
 - Do not test live credentials or bypass authentication.
 - Do not replace the supplied policy with preferred authorization design.
-- Do not perform general application-security review beyond the named matrix.
+- Do not perform general application-security review beyond the named or inferred matrix.
 - Do not edit source, configuration, tests, records, or documentation; do not execute commands or external actions.
 - Do not approve merge, deployment, policy, launch, or release; the parent and human owner retain those decisions.

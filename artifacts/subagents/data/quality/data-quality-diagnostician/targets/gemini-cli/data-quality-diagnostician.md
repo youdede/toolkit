@@ -1,6 +1,6 @@
 ---
 name: data-quality-diagnostician
-description: "Diagnose a bounded data anomaly with ranked causes and discriminating evidence checks. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution."
+description: "Diagnose a measured data anomaly by ranking lineage-stage causes and naming the smallest aggregate check that separates them. Use when the parent reports nulls, duplicates, dropped rows, late data, or a distribution shift in a named slice and time window and asks why. Not for designing ongoing quality checks and ownership; use design-data-quality-controls."
 kind: local
 tools:
   - read_file

@@ -1,6 +1,6 @@
 ---
 name: flaky-test-diagnostician
-description: "A narrow read-only specialist that separates deterministic defects from order, timing, resource, randomness, and environment-sensitive test failures using repeated-run evidence. Use proactively when the parent supplies the bounded evidence named below."
+description: "Separate deterministic defects from order, timing, resource, randomness, and environment-sensitive test failures using repeated-run evidence, and name one discriminating experiment. Use when a named test passes and fails across runs, retries, seeds, or worker counts and the parent asks whether it is flaky or hiding a real bug. Not for a single failing CI job; use ci-failure-analyst."
 tools: ["read","search"]
 ---
 

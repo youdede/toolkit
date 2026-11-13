@@ -1,6 +1,6 @@
 ---
 name: release-evidence-verifier
-description: "A read-only release specialist that checks artifact identity, provenance, environment, freshness, completeness, and acceptance-criterion coverage without deploying or approving. Use proactively when the parent supplies the bounded evidence named below."
+description: "Checks whether supplied test, build, and deployment evidence proves each named release criterion for the exact candidate, environment, and time window, rejecting stale or mismatched proof. Use when the parent supplies acceptance criteria plus result files or reports and asks whether a release claim is backed. Not for rollout, migration, or rollback risk; use release-risk-reviewer."
 tools: ["read"]
 ---
 

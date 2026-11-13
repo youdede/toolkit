@@ -14,6 +14,9 @@ Simplification removes concepts and states; it is not movement or cosmetic compr
 1. Bound the path, read callers and tests, identify inputs, outputs, side effects, timing, errors, performance constraints, and undocumented behavior relied on by consumers.
 2. Name the essential invariants and sources of complexity: duplicated policy, excess states, indirect data flow, premature abstraction, hidden mutation, or obsolete compatibility.
 3. Choose the smallest transformation that removes a concept. Prefer existing repository patterns, explicit data flow, local ownership, and deletion over a new general abstraction.
+
+A request for a simplification assessment, such as an inventory of avoidable states in a module, a report to decide whether a refactor is worth scheduling, or an explicit instruction to leave the code alone, ends after steps 1 to 3 with no edit and no new test. Name the invariants and sources of complexity under `## Evidence` and the chosen transformation with its expected concept reduction under `## Result`. Under `## Next action`, describe the characterization tests and the single change step 4 would apply, with the symbols in the bounded path they would alter.
+
 4. Add or strengthen characterization tests, apply one coherent change, run focused and repository-required checks, inspect the diff for behavior drift, and measure the reduction.
 
 ## Output contract

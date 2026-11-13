@@ -1,5 +1,5 @@
 ---
-description: "Reviews a bounded release candidate, exact revision, required checks, rollout plan, migrations, and rollback evidence for material risk. Use before a release decision without deploying, changing configuration, or approving it."
+description: "Reviews a bounded release candidate, its change set since the previous release, required checks, rollout and migration plan, and rollback path for material risk. Use before a release decision when the parent supplies an exact revision and deployment plan and asks what could fail in rollout or recovery. Not for proving each acceptance criterion has fresh evidence; use release-evidence-verifier."
 mode: subagent
 steps: 12
 permission:

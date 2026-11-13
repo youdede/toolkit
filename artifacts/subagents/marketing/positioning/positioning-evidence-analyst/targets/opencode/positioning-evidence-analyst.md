@@ -1,5 +1,5 @@
 ---
-description: "Analyze product positioning claims for audience fit, proof directness, and defensible differentiation. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution."
+description: "Analyze product positioning claims for audience fit, proof directness, and defensible differentiation against a named alternative, returning claims that outrun their evidence. Use when the parent supplies a positioning statement or key claims with proof and asks whether a superiority, uniqueness, or outcome claim holds. Not for authoring a positioning record; use document-product-positioning."
 mode: subagent
 steps: 10
 permission:

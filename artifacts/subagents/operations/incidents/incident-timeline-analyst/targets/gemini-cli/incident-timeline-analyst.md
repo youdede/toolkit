@@ -1,6 +1,6 @@
 ---
 name: incident-timeline-analyst
-description: "Reconstruct a bounded incident chronology while separating observations, contradictions, and causal hypotheses. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution."
+description: "Reconstruct a bounded incident chronology from timestamped alerts, logs, deploy records, and status updates, separating observations, contradictions, clock uncertainty, and causal hypotheses. Use when the parent supplies an incident window with mixed-source records and asks what happened when. Not for writing the postmortem itself; use write-learning-postmortem."
 kind: local
 tools:
   - read_file

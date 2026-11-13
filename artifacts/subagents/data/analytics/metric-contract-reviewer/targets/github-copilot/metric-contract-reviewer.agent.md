@@ -1,6 +1,6 @@
 ---
 name: metric-contract-reviewer
-description: "Review a metric implementation for grain, cohort, window, timezone, deduplication, and denominator drift. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution."
+description: "Review a metric query or model for grain, cohort, window, timezone, deduplication, and denominator drift, returning a contract-diff table from definition to dashboard consumers. Use when the parent supplies baseline and candidate SQL or models for a named KPI and asks whether the number still counts the same population and window. Not for an unexplained anomaly; use data-quality-diagnostician."
 tools: ["read","search"]
 ---
 

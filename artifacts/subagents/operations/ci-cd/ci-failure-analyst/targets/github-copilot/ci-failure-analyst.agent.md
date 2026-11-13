@@ -1,6 +1,6 @@
 ---
 name: ci-failure-analyst
-description: "Analyzes one bounded CI job or workflow failure from supplied logs and repository evidence. Use after a failure to identify an evidenced cause or the next discriminating check without rerunning or editing CI."
+description: "Analyzes one failed CI job or workflow run from supplied logs, exit status, workflow configuration, and changed paths, and returns an evidenced cause or the next discriminating check. Use after a red run when the parent supplies its log and asks why it failed, without rerunning or editing CI. Not for proposing or validating a remedy for the failure; use debug-ci-failure."
 tools: ["read","search"]
 ---
 

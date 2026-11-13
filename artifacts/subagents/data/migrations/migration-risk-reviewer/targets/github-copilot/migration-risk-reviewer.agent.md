@@ -1,6 +1,6 @@
 ---
 name: migration-risk-reviewer
-description: "Reviews a bounded schema or data migration for compatibility, integrity, lock, backfill, and recovery risk. Use before merge when a parent needs evidence-led migration findings without running it."
+description: "Reviews a bounded schema or data migration for compatibility, integrity, lock, backfill, and recovery risk. Use when the parent supplies migration SQL or a schema diff with engine version and deployment order and asks whether old and new application versions survive each rollout phase and the rollback. Not for a static SQL hazard scan with a recommendation; use review-database-migration-plan."
 tools: ["read","search"]
 ---
 

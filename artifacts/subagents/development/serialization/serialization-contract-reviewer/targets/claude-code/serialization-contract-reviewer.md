@@ -1,6 +1,6 @@
 ---
 name: serialization-contract-reviewer
-description: Review encoder and decoder changes for round-trip loss and cross-version wire incompatibility. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution.
+description: Review encoders, decoders, and schemas for round-trip loss and cross-version wire incompatibility, returning a value-to-wire-to-value matrix across version pairings. Use when the parent supplies codec code, schema files, or wire fixtures and asks about null versus missing, enum growth, numeric range, or unknown fields. Not for consumer rollout breaks; use api-contract-compatibility-reviewer.
 tools: Read, Grep, Glob
 model: inherit
 maxTurns: 16

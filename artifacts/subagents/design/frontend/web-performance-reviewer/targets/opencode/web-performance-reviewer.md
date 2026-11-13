@@ -1,5 +1,5 @@
 ---
-description: "Reviews a bounded web change for evidenced loading, rendering, network, asset, and interaction regressions. Use after implementation; reports findings without editing."
+description: "Review web code, as a change or a set of paths as they stand, for loading, rendering, hydration, network, asset, and interaction costs, separating measured regressions from static risks. Use when the parent supplies routes or components with a budget, trace, or bundle report and asks which code hurts Core Web Vitals or bundle size. Not for raw benchmark samples; use performance-benchmark-analyst."
 mode: subagent
 steps: 16
 permission:

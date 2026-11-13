@@ -1,6 +1,6 @@
 ---
 name: mcp-trust-boundary-reviewer
-description: "A read-only MCP security specialist that maps tools, resources, prompts, transports, credentials, and downstream effects without invoking the server or attempting exploitation. Use proactively when the parent supplies the bounded evidence named below."
+description: "Map an MCP server's tools, resources, prompts, transports, and credentials against their handler code and return paths where untrusted input reaches a capability or sensitive sink without adequate control. Use when the parent supplies MCP server source files, tool schemas, or transport and credential configuration. Not for deciding what tool access an agent gets; use review-agent-tool-boundaries."
 kind: local
 tools:
   - read_file

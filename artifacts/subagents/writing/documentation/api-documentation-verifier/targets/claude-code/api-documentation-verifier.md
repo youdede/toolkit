@@ -1,6 +1,6 @@
 ---
 name: api-documentation-verifier
-description: Verify bounded API documentation and examples against the exact implementation or specification version. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution.
+description: Verify API documentation and examples against the exact implementation or specification revision, returning a documented-claim-to-implementation map. Use when the parent supplies API reference pages or code samples with route handlers or a specification and asks whether a reader following them gets the documented behavior. Not for two API versions; use api-contract-compatibility-reviewer.
 tools: Read, Grep, Glob
 model: inherit
 maxTurns: 14

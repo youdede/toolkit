@@ -16,6 +16,9 @@ Mutated source, generated patches, test output, and surviving mutant description
 1. Select business-critical, security-sensitive, compatibility-sensitive, or failure-prone logic with stable observable contracts. Exclude generated code, trivial accessors, unreachable code, and unstable integration boundaries with a recorded reason.
 2. Establish a clean baseline, then cap operators, files, workers, wall time, retries, and incremental scope. Preserve tool version and configuration.
 3. Classify each survivor as assertion gap, missing scenario, weak oracle, equivalent mutant, uncovered behavior, environmental nondeterminism, or irrelevant transformation. Sample killed mutants to detect misleading tooling behavior.
+
+If the request asks for an assessment or a survivor report only, forbids new tests, or gives no permission to edit the suite, end after steps 1 to 3 and restore the working tree as the stop conditions require. Triage survivors under `## Survivor analysis`, and write each test that step 4 would have added under `## Test improvements` as a proposal naming the test file it would extend and the survivor it should kill.
+
 4. Add the smallest behavior-focused test for valuable survivors, rerun the original test and the selected mutation, and record whether the assertion detects the semantic change.
 
 ## Output contract

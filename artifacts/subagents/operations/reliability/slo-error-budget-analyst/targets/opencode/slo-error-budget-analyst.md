@@ -1,5 +1,5 @@
 ---
-description: "Analyze supplied SLI and error-budget evidence for eligibility, window, exclusion, and burn-rate errors. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution."
+description: "Recompute a reported SLO, error budget, or burn rate from supplied SLI definitions, queries, windows, exclusions, and result series, and show where the value departs from the indicator contract. Use when the parent supplies an SLO report or burn-rate alert with its query and asks whether the number is right. Not for choosing indicators or targets; use design-service-level-objectives."
 mode: subagent
 steps: 10
 permission:

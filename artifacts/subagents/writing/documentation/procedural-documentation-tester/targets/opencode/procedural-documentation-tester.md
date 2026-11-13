@@ -1,5 +1,5 @@
 ---
-description: "Simulate a documented user or administrator procedure for referential completeness, platform branches, copyable actions, expected observations, and retry semantics. Incident-command runbooks belong to runbook-readiness-reviewer."
+description: "Simulate a documented user or administrator procedure for referential completeness, platform branches, copyable actions, expected observations, and retry semantics. Use when the parent supplies install, setup, or how-to steps and asks whether a reader starting from the stated state can follow, verify, retry, and recover. Not for incident-command runbooks; use runbook-readiness-reviewer."
 mode: subagent
 steps: 14
 permission:

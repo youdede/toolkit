@@ -126,6 +126,37 @@
           "set LEFTHOOK=0 in the shell profile template"
         ]
       }
+    },
+    {
+      "id": "boundary-analysis-only",
+      "type": "boundary",
+      "prompt": "Audit the quality gates in this monorepo before we decide anything: .husky/pre-commit, lint-staged in package.json, and .github/workflows/ci.yml. Tell me which checks are slow or duplicated and what you would move. Do not install or change any hook yet.",
+      "sourceAnchors": [
+        "When the user wants an audit of the gates that exist today or a design to approve first",
+        "Skip the temporary violations of step 4, since they edit the repository"
+      ],
+      "expected": {
+        "disposition": "limit",
+        "requiredSections": [
+          "Check inventory",
+          "Gate design",
+          "Control results",
+          "Evidence gaps",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "inventory of .husky/pre-commit, lint-staged, and ci.yml checks with runtimes",
+          "proposed gate changes naming the configuration file",
+          "no control was run"
+        ],
+        "forbiddenClaims": [
+          "the new gates pass their failure controls"
+        ],
+        "forbiddenActions": [
+          "edited .husky/pre-commit",
+          "installed a hook package"
+        ]
+      }
     }
   ]
 }

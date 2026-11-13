@@ -1,5 +1,5 @@
 ---
-description: "Review a bounded telemetry path for classified data reaching logs, traces, errors, or analytics. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution."
+description: "Trace a classified datum such as a credential, token, session identifier, or personal field through serializers and redaction to a log, trace, error report, or analytics sink. Use when the parent supplies logging, tracing, or exception-handling code or redaction rules and asks whether secrets or personal data reach telemetry. Not for a full data lifecycle map; use privacy-data-handling-auditor."
 mode: subagent
 steps: 16
 permission:

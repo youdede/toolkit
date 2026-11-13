@@ -1,6 +1,6 @@
 ---
 name: campaign-attribution-integrity-reviewer
-description: "Review campaign identifier and event propagation for attribution loss, duplication, and window bias. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution."
+description: "Review campaign identifier and event propagation through links, redirects, landing pages, consent gates, and identity stitching for attribution loss, duplication, and window bias. Use when the parent supplies tracking-parameter or redirect rules, event mappings, and attribution windows and asks where conversions lose credit. Not for reconciling channel credit; use reconcile-marketing-attribution."
 kind: local
 tools:
   - read_file

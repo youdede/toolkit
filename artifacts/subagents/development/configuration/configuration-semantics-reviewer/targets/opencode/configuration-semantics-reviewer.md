@@ -1,5 +1,5 @@
 ---
-description: "Review configuration loading for precedence, default, coercion, and fallback semantic changes. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution."
+description: "Reconstruct how a config loader selects, coerces, and defaults each key across flags, environment, and files, reporting values ignored, retyped, or shadowed against the baseline or declared meaning. Use when the parent supplies a config loader, schema, or defaults file and asks which value wins or why a setting has no effect. Not for live environment drift; use configuration-drift-analyst."
 mode: subagent
 steps: 14
 permission:

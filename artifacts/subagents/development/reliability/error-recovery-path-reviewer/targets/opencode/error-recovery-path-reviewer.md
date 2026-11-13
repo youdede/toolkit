@@ -1,5 +1,5 @@
 ---
-description: "Review one failure path for partial state, retry, idempotency, compensation, and cleanup defects. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution."
+description: "Review one failure path for partial durable state, retry, idempotency, compensation, and cleanup defects, returning a failure-state transition ledger. Use when an operation writes durable state or calls an external service and retries, and the parent asks what survives a crash, timeout, or cancellation midway. Not for leaked handles or use-after-close; use resource-lifecycle-reviewer."
 mode: subagent
 steps: 16
 permission:

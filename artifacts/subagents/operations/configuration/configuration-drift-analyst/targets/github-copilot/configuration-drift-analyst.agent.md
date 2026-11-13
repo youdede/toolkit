@@ -1,6 +1,6 @@
 ---
 name: configuration-drift-analyst
-description: "Compare desired state with timestamped environment snapshots and classify meaningful configuration drift. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution."
+description: "Compare a desired configuration revision with timestamped environment snapshots and classify each difference as approved exception, stale observation, unexplained drift, or desired-state change. Use when the parent supplies desired state plus exported live settings and asks whether an environment has drifted. Not for how an application loads its configuration; use configuration-semantics-reviewer."
 tools: ["read","search"]
 ---
 

@@ -1,5 +1,5 @@
 ---
-description: "Analyze measured demand, service rate, queues, and limits to expose a bounded saturation threshold. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution."
+description: "Analyze measured demand, service rate, queues, and limits to derive the load or date at which a named resource breaks required headroom or queue stability. Use when the parent supplies utilization or traffic measurements, quotas or concurrency caps, and growth figures and asks when a resource will saturate. Not for designing a load experiment; use plan-load-test."
 mode: subagent
 steps: 10
 permission:

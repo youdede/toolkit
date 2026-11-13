@@ -1,6 +1,6 @@
 ---
 name: privacy-data-handling-auditor
-description: "A read-only privacy engineering auditor that maps declared data classes through code and configuration without issuing legal conclusions or changing controls. Use proactively when the parent supplies the bounded evidence named below."
+description: "Maps declared or inferred personal data classes field by field through collection, stores, logs, exports, third parties, retention, and deletion, and returns evidenced handling gaps without legal conclusions. Use when the parent supplies schemas, retention or deletion code, or a privacy policy and asks where personal data goes. Not for designing controls; use design-private-data-lifecycle."
 kind: local
 tools:
   - read_file

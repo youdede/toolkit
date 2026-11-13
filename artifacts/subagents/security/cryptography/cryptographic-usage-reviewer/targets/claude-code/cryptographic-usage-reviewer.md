@@ -1,6 +1,6 @@
 ---
 name: cryptographic-usage-reviewer
-description: Review bounded cryptographic API use against a supplied security property and protocol contract. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution.
+description: Review cryptographic API use, key handling, nonces or IVs, modes, token algorithms, and verification order against a supplied or inferred security property, and return concrete misuse. Use when the parent supplies code calling encryption, hashing, signing, or randomness APIs and asks whether it is used safely. Not for build signatures or attestations; use build-provenance-reviewer.
 tools: Read, Grep, Glob
 model: inherit
 maxTurns: 16

@@ -1,5 +1,5 @@
 ---
-description: "Plan future evidence collection by decision sensitivity, answer bands, collection cost, sequencing, and stop conditions. Reviewing the historical completeness of an ADR belongs to decision-record-reviewer."
+description: "Plan future evidence collection by decision sensitivity, answer bands, collection cost, sequencing, and stop conditions. Use when the parent supplies a pending decision with its branches, constraints, and current evidence and asks what to investigate next or when to stop researching. Not for writing the brief a researcher will follow; use write-source-backed-research-brief."
 mode: subagent
 steps: 10
 permission:

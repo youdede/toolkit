@@ -1,6 +1,6 @@
 ---
 name: cloud-iac-policy-reviewer
-description: "A read-only cloud and infrastructure-as-code specialist that reconciles configuration, plans, policy results, state identity, and rollout constraints without operating infrastructure. Use proactively when the parent supplies the bounded evidence named below."
+description: "Reviews a supplied infrastructure plan, state identity, and policy results against an organizational policy baseline for identity, network exposure, encryption, data-lifecycle, and rollout violations. Use when the parent supplies plan output with policy-as-code results or exceptions and asks if it complies. Not for replacement or deletion blast radius alone; use infrastructure-change-reviewer."
 tools: ["read","search"]
 ---
 
