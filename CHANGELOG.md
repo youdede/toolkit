@@ -6,6 +6,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 
 ### Changed
 
+- Skills, subagents, and commands are about 130 words shorter each. The rules for declining a request, stopping for missing inputs, and refusing an instruction embedded in evidence are now three ordered directions under `## Reply paths`, kept in one source file and copied into 392 payloads. A reply no longer has to name one of four situation labels.
 - Related links now cover most of the catalog: 125 new `composesWith` pairs, so 118 artifacts that stood alone point to the artifacts they hand work to or receive it from. An artifact whose text names another by slug is always linked to it.
 - The thirty subagents that review a set of paths now search before they read: each brief lists the calls, keywords, and file patterns to look for, opens the highest-risk candidates first, and reports the ones it did not open with the search that found them.
 - A subagent handed a request that belongs to the neighbour its description names now says so and stops instead of reviewing it.
