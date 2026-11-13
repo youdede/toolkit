@@ -6,6 +6,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 
 ### Changed
 
+- Every subagent reports findings in one format: an id, a category, a severity, a confidence, the claim, each cited file as `path:start-end`, the quoted evidence, what would prove the claim wrong, the impact, and the smallest next action. Severity is one scale (`Critical`, `High`, `Medium`, `Low`) and confidence is one scale (`Demonstrated`, `Supported`, `Suspected`), so results from several specialists can be merged and sorted. `Blocking` is no longer a severity, and missing evidence lowers confidence instead of severity.
 - Commands state which steps ask for your permission and what happens when you deny one. The tools a command declares are pre-approved for the turn that invokes it; they never limited what the command could run, and the catalog no longer describes them as an allowlist.
 - `/re-pin-mcp-tools` no longer pre-approves file edits. The pre-approval covered only the turn before you confirm the digest, which is the one turn where the command forbids edits.
 - Five commands (`/preflight-change-environment`, `/audit-repository-instructions`, `/assemble-review-brief`, `/diagnose-ci-failure`, `/record-work-checkpoint`) no longer open with a precondition step that checked nothing.
