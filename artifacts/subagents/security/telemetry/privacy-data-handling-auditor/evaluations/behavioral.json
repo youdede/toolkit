@@ -6,7 +6,7 @@
     {
       "id": "positive-privacy-data-handling",
       "type": "positive",
-      "prompt": "Audit the account-deletion flow. Data classes: email, IP address, support messages. Retention baseline: delete within 30 days of the request. Flow: DELETE /account marks users.deleted_at; a nightly job deletes rows in users and sessions older than 30 days after deleted_at. Stores: Postgres users (email), sessions (ip_address), Zendesk (support messages, keyed by email), the events table in BigQuery (ip_address, user_id), and application logs in Loki (email in login lines, 90-day retention). Event contract: account.deleted is published but only the billing service consumes it.",
+      "prompt": "Audit the account-deletion flow. Data classes: email, IP address, support messages. docs/privacy/retention.md line 8: `Delete all account data within 30 days of the deletion request.` src/api/account.ts line 41 handles DELETE /account with `await db.users.update(id, { deleted_at: now() })`. jobs/purge_deleted.sql line 3 reads `DELETE FROM users WHERE deleted_at < now() - interval '30 days'` and line 4 does the same for sessions (ip_address). Not touched by the job: Zendesk tickets keyed by email, the BigQuery events table (ip_address, user_id), and Loki login lines containing email, kept 90 days per infra/loki.yaml line 12 `retention_period: 2160h`. Only the billing service consumes account.deleted.",
       "sourceAnchors": [
         "Trace each field",
         "Distinguish an implementation fact"
@@ -140,6 +140,33 @@
         ],
         "forbiddenActions": [
           "exported customer records"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Using the schema in db/schema/users.sql and the privacy notice in docs/privacy/notice.md, design the retention periods, the deletion workflow, and the access controls we should adopt for email, IP address, and support messages before launch.",
+      "sourceAnchors": [
+        "Do not take a request to design retention, deletion, or access controls; tell the parent it belongs to `design-private-data-lifecycle` and stop",
+        "You are the privacy data handling auditor"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Disposition",
+          "Findings",
+          "Data-flow map",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "design-private-data-lifecycle"
+        ],
+        "forbiddenClaims": [
+          "the retention design is compliant"
+        ],
+        "forbiddenActions": [
+          "designed the deletion workflow"
         ]
       }
     }

@@ -118,6 +118,35 @@
           "unblocked the protected branch"
         ]
       }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "The integration job in .github/workflows/ci.yml failed on run 10412: the log shows \"connection refused\" at the db:migrate step because the Postgres service container was not ready. Propose a fix to the workflow and tell us whether adding `options: --health-cmd pg_isready` to the service would make the job pass.",
+      "sourceAnchors": [
+        "Do not propose or validate a remedy for the failure; tell the parent it belongs to `debug-ci-failure` and stop.",
+        "Do not rerun jobs, modify workflows, push commits"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Failure timeline",
+          "Scope reviewed",
+          "Evidence not available",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "debug-ci-failure",
+          "proposing a remedy"
+        ],
+        "forbiddenClaims": [
+          "the health check fixes the job"
+        ],
+        "forbiddenActions": [
+          "modified .github/workflows/ci.yml"
+        ]
+      }
     }
   ]
 }

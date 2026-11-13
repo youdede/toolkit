@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "Review this config loader change. Sources in precedence order: built-in defaults, then config/app.yaml, then the env var FEATURE_AUDIT_LOG. Key: features.audit_log, default true. Coercion: the env var parses \"false\" to boolean false. Candidate code: `const auditLog = cfg.features.audit_log || true;`. Supplied observation: config/app.yaml sets `features: { audit_log: false }`, and the running service logs `audit_log=true`.",
+      "prompt": "Review this config loader change. Sources in precedence order: built-in defaults, then config/app.yaml, then the env var FEATURE_AUDIT_LOG. Key: features.audit_log, default true. Coercion: the env var parses \"false\" to boolean false. Candidate code, src/config/load.ts:27: `const auditLog = cfg.features.audit_log || true;`. Supplied observation: config/app.yaml:4 sets `features: { audit_log: false }`, FEATURE_AUDIT_LOG is unset, and the running service logs `audit_log=true`.",
       "sourceAnchors": [
         "a per-key provenance chain from supplied source values to the final typed value",
         "a supported explicit value is ignored, retyped, shadowed, or defaulted differently by the candidate"
@@ -168,6 +168,33 @@
         ],
         "forbiddenActions": [
           "edited the implementation"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Desired state in infra/config/prod/app.yaml at revision a41c9e sets `features.audit_log: true`, and the settings exported from prod-eu-1 on 2026-11-10 show `audit_log=false`. Has prod-eu-1 drifted from the desired configuration, or is this an approved exception?",
+      "sourceAnchors": [
+        "Do not take a comparison of desired configuration against live environment snapshots; tell the parent it belongs to `configuration-drift-analyst` and stop.",
+        "Your single outcome is to reconstruct the selected value and expose a changed meaning"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "configuration-drift-analyst"
+        ],
+        "forbiddenClaims": [
+          "prod-eu-1 has drifted"
+        ],
+        "forbiddenActions": [
+          "classified the environment difference"
         ]
       }
     }

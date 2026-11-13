@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "Two workers execute the same check-then-create path without a unique constraint. Build the smallest schedule that can allocate the resource twice.",
+      "prompt": "Two workers execute the same check-then-create path without a unique constraint. src/allocations/allocate.py:21 reads `existing = session.query(Allocation).filter_by(resource_id=rid).first()`, line 23 reads `if existing is None: session.add(Allocation(resource_id=rid, worker=wid))`, and line 24 reads `session.commit()`, all under READ COMMITTED isolation with no lock. migrations/0007_allocations.sql:3 declares `resource_id BIGINT NOT NULL` with no UNIQUE index. Build the smallest schedule that can allocate the resource twice.",
       "sourceAnchors": [
         "a numbered actor interleaving from initial state to observable failure",
         "each step is reachable under the stated scheduler or consistency model and the final state violates a named invariant"
@@ -172,6 +172,33 @@
         ],
         "forbiddenActions": [
           "edited the implementation"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "tests/orders/allocate.spec.ts 'allocates once under contention' passed in 17 of 20 CI runs this week and failed in runs 812, 815, and 819 with `expected 1 allocation, got 2`; logs with seeds and worker counts for all 20 runs are attached. Is this test flaky or hiding a real bug?",
+      "sourceAnchors": [
+        "Do not take a test that passes and fails intermittently across runs; tell the parent it belongs to `flaky-test-diagnostician` and stop.",
+        "Your single outcome is to construct or reject a minimal interleaving"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "flaky-test-diagnostician"
+        ],
+        "forbiddenClaims": [
+          "the test is flaky"
+        ],
+        "forbiddenActions": [
+          "classified the repeated runs"
         ]
       }
     }

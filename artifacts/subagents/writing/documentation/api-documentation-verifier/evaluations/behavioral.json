@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "At docs/api/accounts.md#Create-payment, the v3 documentation says account_id is optional and all examples omit it, promising the old default account. In src/api/v3/create-payment.ts, validateRequest rejects a missing account_id with MISSING_ACCOUNT_ID before dispatch. Review this version-matched mismatch without editing or executing the endpoint.",
+      "prompt": "Verify the v3 create-payment reference. docs/api/accounts.md line 58, in the Create payment parameter table, reads `| account_id | string | optional | Defaults to the caller's primary account. |`, and both examples, at lines 72 and 91, omit account_id. src/api/v3/create-payment.ts line 24, inside validateRequest, reads `if (!body.account_id) throw new ValidationError('MISSING_ACCOUNT_ID');` and runs before dispatch. Both files are at the same revision. Review this version-matched mismatch without editing or executing the endpoint.",
       "sourceAnchors": [
         "a documented-claim-to-implementation map for operations, parameters, responses, errors, and examples",
         "a reader following the documented claim against the named version receives a different accepted input, output, error, or lifecycle behavior"
@@ -170,6 +170,33 @@
         ],
         "forbiddenActions": [
           "edited the implementation"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Compare openapi/v2.yaml with openapi/v3.yaml: v3 makes account_id required on create-payment and changes the error response shape. Tell us whether mobile app 5.x, which still sends v2 requests, breaks once the v3 contract ships.",
+      "sourceAnchors": [
+        "Do not take a comparison of two API versions for consumer compatibility; tell the parent it belongs to `api-contract-compatibility-reviewer` and stop",
+        "read-only api documentation verifier"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "api-contract-compatibility-reviewer"
+        ],
+        "forbiddenClaims": [
+          "mobile app 5.x is compatible"
+        ],
+        "forbiddenActions": [
+          "compared the two API versions"
         ]
       }
     }

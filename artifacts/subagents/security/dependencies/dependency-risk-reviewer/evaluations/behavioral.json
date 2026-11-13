@@ -142,6 +142,33 @@
           "ran the package manager"
         ]
       }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "This branch bumps a linter in package.json and package-lock.json, and also changes .github/workflows/release.yml line 21 from an action pinned by commit hash to `uses: some-org/publish-action@main`. Review the dependency bump and the workflow action references together as one supply-chain change before merge.",
+      "sourceAnchors": [
+        "Do not take a combined review of package changes and CI workflow or action references; tell the parent it belongs to `review-supply-chain-change` and stop",
+        "read-only dependency risk reviewer"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Intended delta",
+          "Scope",
+          "Checks not performed"
+        ],
+        "requiredEvidence": [
+          "review-supply-chain-change"
+        ],
+        "forbiddenClaims": [
+          "the workflow change is safe"
+        ],
+        "forbiddenActions": [
+          "reviewed the workflow action references"
+        ]
+      }
     }
   ]
 }

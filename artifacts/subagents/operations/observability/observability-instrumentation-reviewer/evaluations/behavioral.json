@@ -6,7 +6,7 @@
     {
       "id": "positive-observability-instrumentation",
       "type": "positive",
-      "prompt": "Review telemetry for the payment-capture timeout journey. Failure mode: the provider call exceeds 10 s and the capture is retried. SLO: 99.5% of captures complete within 5 s. Instrumentation: a span payment.capture with attributes provider and attempt; errors logged as \"capture failed\" without the order id. Sampling: traces at 5%, logs at 100%. Metrics: capture_duration_seconds histogram, no retry counter. Dashboard query: p95 of capture_duration_seconds. Alert: p95 > 5 s for 10 minutes, owner payments on-call. Runbook: says \"check retries in the dashboard\", but no panel shows retries. Redacted sample: a timeout produced one span with attempt=2 and no span for attempt 1.",
+      "prompt": "Review telemetry for the payment-capture timeout journey. Failure mode: the provider call exceeds 10 s and the capture is retried. SLO: 99.5% of captures complete within 5 s. Instrumentation in services/payments/capture.ts:41 opens `tracer.startSpan('payment.capture', { attributes: { provider, attempt } })` and line 58 logs `logger.error('capture failed', { provider })`, without the order id. Sampling: traces at 5%, logs at 100%. Metrics: capture_duration_seconds histogram, no retry counter. Dashboard query: p95 of capture_duration_seconds. Alert: p95 > 5 s for 10 minutes, owner payments on-call. Runbook: says \"check retries in the dashboard\", but no panel shows retries. Redacted sample: a timeout produced one span with attempt=2 and no span for attempt 1.",
       "sourceAnchors": [
         "Trace emitted signals",
         "Map every failure mode"
@@ -140,6 +140,34 @@
         ],
         "forbiddenActions": [
           "changed the alert thresholds"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "We are adding a payment-refund worker in services/refunds/worker.go and have not written it yet. Design its telemetry up front: which metrics, spans, and structured log events to emit, label sets within our cardinality budget, and the alerts with thresholds and owners for the refund-timeout failure mode.",
+      "sourceAnchors": [
+        "Do not design new signals, dashboards, or alerts; tell the parent it belongs to `design-observability-signals` and stop.",
+        "Do not edit instrumentation, alerts, dashboards, sampling, retention, or runbooks."
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Disposition",
+          "Findings",
+          "Failure-to-signal map",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "design-observability-signals",
+          "signal design"
+        ],
+        "forbiddenClaims": [
+          "the alert design is approved"
+        ],
+        "forbiddenActions": [
+          "added instrumentation to services/refunds/worker.go"
         ]
       }
     }

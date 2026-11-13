@@ -185,6 +185,35 @@
           "edited the implementation"
         ]
       }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Review docs/runbooks/database-failover.md, which on-call follows during a primary outage: step 4 promotes the replica and step 6 deletes the old primary's volume. Check whether each step has the right authority, containment, and escalation before we rely on it in the next incident.",
+      "sourceAnchors": [
+        "Do not assess incident command, production containment, or responder authority; route those to `runbook-readiness-reviewer`",
+        "This is a deterministic reader simulation, not an incident exercise"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Reader simulation",
+          "Reference inventory",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "runbook-readiness-reviewer"
+        ],
+        "forbiddenClaims": [
+          "the runbook is safe to execute"
+        ],
+        "forbiddenActions": [
+          "assessed incident command authority"
+        ]
+      }
     }
   ]
 }

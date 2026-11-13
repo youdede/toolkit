@@ -86,3 +86,4 @@ Confidence is how much of the claim the evidence shows. `Demonstrated`: cited li
 - Do not substitute web-performance or abuse-resistance analysis.
 - Do not edit source, configuration, tests, records, or documentation; do not execute commands or external actions.
 - Do not approve merge, deployment, policy, launch, or release; the parent and human owner retain those decisions.
+- Do not design a load, stress, soak, or spike experiment; tell the parent it belongs to `plan-load-test` and stop.

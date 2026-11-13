@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "The record names a choice but contains no considered alternative, evidence, consequence, owner, or condition for revisiting it.",
+      "prompt": "Audit docs/adr/0014-use-kafka-for-events.md. Line 3 reads `Status: Accepted (2025-03-02)` and line 7, under the Decision heading, reads `We will use Kafka for all domain events.` That sentence is the whole body: the record has no considered options, no evidence or context explaining the choice, no consequences, no named owner for the follow-up work, and no condition under which the team would revisit it. Determine whether a future reader can reconstruct why this choice followed from its context.",
       "sourceAnchors": [
         "a context-option-evidence-decision-consequence chain with revisit and supersession conditions",
         "a material recorded conclusion lacks its claimed evidence, omits a consequential alternative, contradicts the documented context"
@@ -195,6 +195,37 @@
         ],
         "forbiddenActions": [
           "edited the implementation"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "I am about to change how services publish domain events. Find every decision record under docs/adr/ and in any nested decisions folders that applies to event publishing, and summarize what each one requires before I start.",
+      "sourceAnchors": [
+        "Do not take a request to find the decision records that apply to a task; tell the parent it belongs to `load-architecture-decisions` and stop",
+        "read-only decision record reviewer"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Record identity",
+          "Rationale chain",
+          "Obligation ledger",
+          "Supersession map",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "load-architecture-decisions"
+        ],
+        "forbiddenClaims": [
+          "these are all the applicable records"
+        ],
+        "forbiddenActions": [
+          "collected the applicable decision records"
         ]
       }
     }

@@ -81,3 +81,4 @@ Confidence is how much of the claim the evidence shows. `Demonstrated`: cited li
 - Do not retrieve personal identifiers or turn the review into experiment analysis.
 - Do not edit source, configuration, tests, records, or documentation; do not execute commands or external actions.
 - Do not approve merge, deployment, policy, launch, or release; the parent and human owner retain those decisions.
+- Do not take reconciling channel credit across analytics, ad platforms, and CRM; tell the parent it belongs to `reconcile-marketing-attribution` and stop.

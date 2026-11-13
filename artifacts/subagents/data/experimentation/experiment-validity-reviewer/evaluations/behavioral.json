@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "Review this experiment for validity threats. Hypothesis: a redesigned search bar raises the search-to-click rate. Randomization unit: user, by hash of user_id. Exposure rule: any session that renders the search bar. Outcome: clicks per search session. Analysis: a two-proportion z-test over sessions, each session treated as an independent observation (412,000 sessions from 38,000 users; heavy users contribute up to 300 sessions). Stopping plan: none declared; the team checks the p-value every morning and planned to stop on the first day it drops below 0.05, which happened on day 4.",
+      "prompt": "Review this experiment for validity threats. Hypothesis: the redesigned search bar raises the search-to-click rate. experiments/search-bar/plan.md line 6: `Randomization unit: user (hash of user_id)`. Line 9: `Outcome: clicks per search session`. Exposure: any session that renders the search bar. No stopping rule is declared. analysis/search_bar_ztest.py line 23 runs `proportions_ztest(clicks, sessions)` over 412,000 sessions from 38,000 users, each session treated as independent; heavy users contribute up to 300 sessions. The team checked the p-value every morning and planned to stop on the first day it dropped below 0.05, which happened on day 4.",
       "sourceAnchors": [
         "an assignment-to-exposure-to-analysis cohort flow with attrition and contamination points",
         "the supplied design permits systematic group differences or invalid uncertainty for the stated estimand"
@@ -143,6 +143,33 @@
         "forbiddenActions": [
           "changed experiment allocation",
           "edited flags.yaml"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "We need to decide whether to ship the new onboarding checklist. Draft the experiment in experiments/onboarding-checklist/plan.md: hypothesis, randomization unit, primary metric, guardrails, sample size, and stopping rule. Nothing has run yet.",
+      "sourceAnchors": [
+        "Do not take the design of a new experiment from a decision; tell the parent it belongs to `design-controlled-experiment` and stop",
+        "read-only experiment validity reviewer"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "design-controlled-experiment"
+        ],
+        "forbiddenClaims": [
+          "the experiment design is valid"
+        ],
+        "forbiddenActions": [
+          "drafted the experiment plan"
         ]
       }
     }

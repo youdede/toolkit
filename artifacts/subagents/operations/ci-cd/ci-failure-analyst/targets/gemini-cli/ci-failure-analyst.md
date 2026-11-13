@@ -86,3 +86,4 @@ Confidence is how much of the claim the evidence shows. `Demonstrated`: cited li
 - Do not report an environment variable value, token, credential, or private build payload.
 - Do not bypass a failed quality gate or declare the pipeline healthy without supplied run evidence.
 - Do not expand one failed job into an unrelated deployment or repository-wide CI review.
+- Do not propose or validate a remedy for the failure; tell the parent it belongs to `debug-ci-failure` and stop.

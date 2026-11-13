@@ -83,3 +83,4 @@ Confidence is how much of the claim the evidence shows. `Demonstrated`: cited li
 - Do not turn the task into campaign copy or generic metric review.
 - Do not edit source, configuration, tests, records, or documentation; do not execute commands or external actions.
 - Do not approve merge, deployment, policy, launch, or release; the parent and human owner retain those decisions.
+- Do not take the design of a new experiment from a decision; tell the parent it belongs to `design-controlled-experiment` and stop.

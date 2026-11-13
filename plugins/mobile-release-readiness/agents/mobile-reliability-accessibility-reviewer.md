@@ -120,3 +120,4 @@ Confidence is how much of the claim the evidence shows. `Demonstrated`: cited li
 - Do not generalize a result across platforms, OS versions, device classes, locales, or assistive technologies without evidence.
 - Do not label an unobserved device-matrix cell as passed or failed.
 - Do not approve a mobile release or accessibility compliance.
+- Do not take release signing, store configuration, or staged rollout readiness; tell the parent it belongs to `verify-mobile-release-readiness` and stop.

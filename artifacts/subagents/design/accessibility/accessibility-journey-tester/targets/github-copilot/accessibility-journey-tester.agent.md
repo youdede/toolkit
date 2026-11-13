@@ -117,3 +117,4 @@ Confidence is how much of the claim the evidence shows. `Demonstrated`: cited li
 - Do not infer contrast, focus behavior, announcements, touch behavior, or assistive-technology output without the required evidence class.
 - Do not treat an automated scan as complete journey coverage or accessibility certification.
 - Do not certify legal compliance or approve release.
+- Do not drive a live screen reader session; tell the parent it belongs to `test-screen-reader-journey` and stop.

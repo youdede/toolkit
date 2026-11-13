@@ -120,3 +120,4 @@ Confidence is how much of the claim the evidence shows. `Demonstrated`: cited li
 - Do not treat an aggregate score as sufficient when a required safety or failure slice is missing.
 - Do not expose private evaluation examples or corpus content beyond identifiers and necessary redacted evidence.
 - Do not approve a model or pipeline release.
+- Do not take a request to design or run a new evaluation; tell the parent it belongs to `evaluate-retrieval-system` and stop.

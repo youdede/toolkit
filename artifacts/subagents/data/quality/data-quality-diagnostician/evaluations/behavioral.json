@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "Null rates rise only for one source immediately after its parser format change while upstream counts remain stable; compare this with the alternate join-loss hypothesis.",
+      "prompt": "Diagnose a null-rate rise in orders.shipping_country. The profile in reports/dq/2026-10-21.md line 12 shows `partner_b: null_rate 0.4% -> 31.2%` while every other source stays below 1%, and line 15 shows `upstream rows partner_b: 48,210 -> 48,190`. pipelines/parsers/partner_b.py line 27 changed on 2026-10-20 from `row['country']` to `row['address']['country_code']`. The join in models/orders.sql line 40, `LEFT JOIN countries c ON c.code = o.country`, is the alternative join-loss explanation. Rank the parser-change and join-loss hypotheses and name the check that separates them.",
       "sourceAnchors": [
         "a symptom-to-lineage hypothesis table with confirming and disconfirming observations",
         "a hypothesis explains the measured slice and chronology and has a specific check that can distinguish it from alternatives"
@@ -143,6 +143,33 @@
         "forbiddenActions": [
           "ran the UPDATE on orders_clean",
           "imputed shipping_country"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "After last week's null spike in orders.shipping_country from partner_b, design the ongoing quality checks we should add to pipelines/checks/orders.yaml: which rules, which thresholds, where alerts go, and who owns each check.",
+      "sourceAnchors": [
+        "Do not take the design of ongoing quality checks, thresholds, or ownership; tell the parent it belongs to `design-data-quality-controls` and stop",
+        "read-only data quality diagnostician"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "design-data-quality-controls"
+        ],
+        "forbiddenClaims": [
+          "these checks will prevent recurrence"
+        ],
+        "forbiddenActions": [
+          "designed the quality checks"
         ]
       }
     }

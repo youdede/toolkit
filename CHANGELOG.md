@@ -6,6 +6,8 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 
 ### Changed
 
+- The thirty subagents that review a set of paths now search before they read: each brief lists the calls, keywords, and file patterns to look for, opens the highest-risk candidates first, and reports the ones it did not open with the search that found them.
+- A subagent handed a request that belongs to the neighbour its description names now says so and stops instead of reviewing it.
 - Every subagent description now says what sets it apart: the signals in a request that should select it, and the neighbour to use instead (`Not for X; use <slug>`). Before, 35 of 62 ended with the same sentence, so an agent choosing a specialist had nothing to go on.
 - Nine skills that analyze and then change the repository (`define-domain-language`, `debug-systematically`, `assess-mutation-test-value`, `build-repository-quality-gates`, `simplify-code-with-invariants`, `enforce-typescript-module-boundaries`, `request-independent-code-review`, `evaluate-code-review-feedback`, `verify-completion-evidence`) can be asked for the analysis alone: they report, change nothing, and list the changes they would have made as proposals.
 - Thirty subagents can review a set of paths as they stand, not only a diff. Without a baseline they derive the missing invariant, contract, or policy from the code, label it inferred, and list every supplied path they did not open, instead of stopping for missing inputs. Their turn budget is up to four turns higher, capped at sixteen.

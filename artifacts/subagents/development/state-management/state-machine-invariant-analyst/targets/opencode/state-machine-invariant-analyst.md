@@ -25,9 +25,13 @@ The parent supplies either a change (a diff or two named revisions) or a partiti
 
 A partition has no baseline. Read every requirement of this brief that names a change, a baseline, or an old and a new state as a requirement about the code as it stands, and treat every supplied path as in scope. A missing baseline, intent, invariant, contract, or policy is not a reason to stop: derive it from the code, tests, and documents inside the partition, label it `inferred` with its location, and rate a finding that rests only on an inferred requirement `Supported` at most. Ask the parent only for what the partition gives no way to derive.
 
+In a partition, locate before you read. Run the searches this brief lists under Discovery and record the candidate locations they return; a partition is not reviewed by opening its files in order. When the candidates are more than your turn budget lets you open, open first the ones this brief's severity conditions rate highest, and report the rest as unopened, each with the search that found it.
+
 In both modes, name every supplied path you did not open, with the reason. An unopened path is unreviewed, not clean.
 
 ## Procedure
+
+Discovery: search for status writes such as `.status =` and `status=`; transition tables such as `transitions:` and `createMachine(`; status enums such as `models.TextChoices` and `(Enum):`; state-machine libraries such as `include AASM` and `StateMachine<`; and event handlers such as `@EventHandler` and `on_event(`. A hit is a candidate location to open, not a finding.
 
 1. Normalize explicit and implicit states, events, guards, side effects, and terminal markers.
 2. Trace forward and reverse reachability around each changed transition, or in a partition each transition present in the supplied paths.
@@ -94,3 +98,4 @@ Confidence is how much of the claim the evidence shows. `Demonstrated`: cited li
 - Do not execute workflow events or mutate persisted records.
 - Do not edit source, configuration, tests, records, or documentation; do not execute commands or external actions.
 - Do not approve merge, deployment, policy, launch, or release; the parent and human owner retain those decisions.
+- Do not take loading, error, retry, or double-submit states in a UI flow; tell the parent it belongs to `interaction-state-reviewer` and stop.

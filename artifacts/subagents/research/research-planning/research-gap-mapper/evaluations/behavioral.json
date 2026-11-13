@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "Map research gaps for this retention decision. Branches: if monthly churn of accounts in their first 90 days exceeds 6%, invest in onboarding; if churn concentrates in accounts older than a year, invest in account management; otherwise do neither. Available evidence: blended monthly churn 4.8% across all accounts, no breakdown by account age. Constraints: decision at the Q1 planning meeting in 5 weeks; analytics team has 2 days free. Acceptable uncertainty: plus or minus 1 point per cohort.",
+      "prompt": "Map research gaps for this retention decision. docs/decisions/retention-q1.md:9-11 reads \"If monthly churn of accounts in their first 90 days exceeds 6%, invest in onboarding. If churn concentrates in accounts older than a year, invest in account management. Otherwise do neither.\" Available evidence, analytics/churn-summary.md:4: \"Blended monthly churn: 4.8% (all accounts)\", with no breakdown by account age. Constraints: decision at the Q1 planning meeting in 5 weeks; analytics team has 2 days free. Acceptable uncertainty: plus or minus 1 point per cohort.",
       "sourceAnchors": [
         "a gap-to-decision-impact map with evidence method, cost class, and stop condition",
         "the unanswered question has at least two plausible answers that lead to different named decision branches"
@@ -158,6 +158,36 @@
         "forbiddenActions": [
           "emailed the German trial users",
           "sent a survey to participants"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Based on docs/decisions/retention-q1.md, we already chose the next question for the retention decision: monthly churn by account age. Write the brief the analytics researcher will follow, with context, coverage questions, source hierarchy, and completion bar, and return it in your reply.",
+      "sourceAnchors": [
+        "Do not take writing the brief a researcher will follow; tell the parent it belongs to `write-source-backed-research-brief` and stop.",
+        "Your single outcome is to rank missing evidence by whether it can change a named decision branch"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Decision branches",
+          "Evidence portfolio",
+          "Deferred questions",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "write-source-backed-research-brief"
+        ],
+        "forbiddenClaims": [
+          "the research brief is complete"
+        ],
+        "forbiddenActions": [
+          "wrote the research brief"
         ]
       }
     }

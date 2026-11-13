@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "One unauthenticated export request fans out across every account and enqueues unbounded third-party fetches without a caller quota.",
+      "prompt": "Review the export entry point for cost amplification. src/routes/export.ts line 14 registers the route with no authentication middleware: `router.post('/export', exportHandler)`. Line 22 of the handler loops over every account: `for (const account of await Account.findAll()) {` and line 24 enqueues one job per linked integration: `await queue.enqueue('fetch-third-party', { accountId: account.id, integration })`. config/limits.yaml has no rate limit or quota entry for /export, and src/jobs/queue.ts line 8 creates the queue with no length bound: `new Queue('fetch-third-party')`. One anonymous request starts a third-party fetch for every account.",
       "sourceAnchors": [
         "an attacker-input-to-resource amplification chain with limiting controls at each hop",
         "the named caller can repeat or magnify work past a supplied resource bound without an effective admission control"
@@ -168,6 +168,33 @@
         ],
         "forbiddenActions": [
           "edited the implementation"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Our export queue in config/queues/export.yaml caps workers at `concurrency: 40`, and p95 queue depth is already at 70% of `maxDepth: 5000`. Sign-ups from paying customers grow 12% a month and no abuse is suspected. Using these quotas and growth figures, tell us in which month the export queue loses its headroom.",
+      "sourceAnchors": [
+        "Do not take an organic demand, growth, or headroom question; tell the parent it belongs to `capacity-risk-analyst` and stop",
+        "read-only abuse resistance analyst"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "capacity-risk-analyst"
+        ],
+        "forbiddenClaims": [
+          "the export queue saturates in month"
+        ],
+        "forbiddenActions": [
+          "computed a saturation date"
         ]
       }
     }

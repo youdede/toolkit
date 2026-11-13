@@ -6,7 +6,7 @@
     {
       "id": "positive-performance-benchmark",
       "type": "positive",
-      "prompt": "Compare these checkout benchmarks against the 200 ms p95 budget. Baseline: build 7.1.0, 5 runs of 2,000 requests each on c6i.xlarge, dataset seed-2026-09, 60 s warmup; p95 per run 168, 171, 165, 170, 169 ms. Candidate: build 7.2.0, 5 runs of 2,000 requests on c6i.xlarge, same dataset and warmup; p95 per run 186, 191, 183, 189, 188 ms. Harness: k6 0.51, constant arrival 50 rps for both. A sixth candidate run on a laptop gave 240 ms and is included in the team's chart. Profile for the candidate: 14 ms more in JSON schema validation added in 7.2.0.",
+      "prompt": "Compare these checkout benchmarks against the 200 ms p95 budget. Both files have the header `host,p95_ms`; build 7.1.0 vs 7.2.0, 5 runs of 2,000 requests each, dataset seed-2026-09, 60 s warmup, k6 0.51 at a constant 50 rps. bench/results/baseline-7.1.0.csv:2-6 read `c6i.xlarge,168`, `c6i.xlarge,171`, `c6i.xlarge,165`, `c6i.xlarge,170`, `c6i.xlarge,169`. bench/results/candidate-7.2.0.csv:2-6 read `c6i.xlarge,186`, `c6i.xlarge,191`, `c6i.xlarge,183`, `c6i.xlarge,189`, `c6i.xlarge,188`. Line 7 of the candidate file, `laptop,240`, is a sixth run on a laptop that the team's chart includes. Candidate profile: 14 ms more in JSON schema validation added in 7.2.0.",
       "sourceAnchors": [
         "Normalize units",
         "Compare the observed interval"
@@ -112,6 +112,33 @@
         ],
         "forbiddenActions": [
           "ran the load test"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "web/src/routes/checkout/page.tsx now imports all of lodash and a 300 KB chart bundle, and the attached Lighthouse trace shows LCP at 3.4 s against a 2.5 s budget. Which code in this route hurts LCP and bundle size?",
+      "sourceAnchors": [
+        "Do not take a review of web code for loading, rendering, or bundle cost; tell the parent it belongs to `web-performance-reviewer` and stop.",
+        "Determine whether a candidate benchmark differs materially from its baseline"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Disposition",
+          "Findings",
+          "Metric comparison",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "web-performance-reviewer"
+        ],
+        "forbiddenClaims": [
+          "the chart bundle causes the LCP regression"
+        ],
+        "forbiddenActions": [
+          "reviewed the route code for loading cost"
         ]
       }
     }

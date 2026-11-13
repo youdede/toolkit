@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "Check this state machine. States: created, paid, cancelled, shipped. Events: pay, cancel, fulfillment_shipped. Guards: cancel from created or paid; fulfillment_shipped from paid. Terminal rule: cancelled accepts no further events. Implementation of the fulfillment handler: `if (order.status !== 'shipped') order.status = 'shipped'`, with no check of the current state or the event version. Events come from a queue with at-least-once delivery that can reorder.",
+      "prompt": "Check this state machine. src/orders/machine.ts:3 declares states created, paid, cancelled, shipped and events pay, cancel, fulfillment_shipped. Guards: cancel from created or paid; fulfillment_shipped from paid. Terminal rule: cancelled accepts no further events. The fulfillment handler, src/orders/fulfillment.ts:40, reads `if (order.status !== 'shipped') order.status = 'shipped';`, with no check of the current state or the event version. Events come from a queue with at-least-once delivery that can reorder.",
       "sourceAnchors": [
         "a state-event-transition path with guard evaluations and persisted outcomes",
         "every event is accepted by the supplied implementation and the resulting state contradicts a named machine invariant"
@@ -168,6 +168,33 @@
         ],
         "forbiddenActions": [
           "edited the implementation"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "In web/src/checkout/PayButton.tsx the button stays enabled while the payment request is pending, and a second click shows a stale 'Payment failed' banner after the first request succeeded. Review the loading, error, and retry states of this checkout flow for duplicate or contradictory states.",
+      "sourceAnchors": [
+        "Do not take loading, error, retry, or double-submit states in a UI flow; tell the parent it belongs to `interaction-state-reviewer` and stop.",
+        "Your single outcome is to produce a reachable event sequence that violates a terminal-state"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "interaction-state-reviewer"
+        ],
+        "forbiddenClaims": [
+          "the checkout UI states are complete"
+        ],
+        "forbiddenActions": [
+          "built an event-state-view transition table"
         ]
       }
     }

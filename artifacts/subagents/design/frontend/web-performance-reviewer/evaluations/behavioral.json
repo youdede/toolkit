@@ -6,7 +6,7 @@
     {
       "id": "positive-checkout-image-regression",
       "type": "positive",
-      "prompt": "Review this checkout-page diff. It adds <ProductCarousel /> to src/checkout/Summary.tsx, a client-side component that loads 8 remote images from cdn.partner-img.com at 1600px width, without width/height attributes or lazy loading, above the order summary. Budget: mobile LCP under 2.5 s and CLS under 0.1 on the checkout journey (Moto G Power, slow 4G). Supplied mobile lab trace before the change: LCP 2.1 s (element: order total), CLS 0.02. No trace after the change was supplied.",
+      "prompt": "Review this checkout-page diff. src/checkout/Summary.tsx:31 adds `<ProductCarousel />` above the order summary. It is a client-side component, and src/components/ProductCarousel.tsx:18 renders `<img src={partnerImageUrl(id, 1600)} />` for 8 remote images from cdn.partner-img.com at 1600px width, without width or height attributes or lazy loading. Budget: mobile LCP under 2.5 s and CLS under 0.1 on the checkout journey (Moto G Power, slow 4G). Supplied mobile lab trace before the change: LCP 2.1 s (element: order total), CLS 0.02. No trace after the change was supplied.",
       "sourceAnchors": [
         "Map the change to loading",
         "List findings first"
@@ -140,6 +140,34 @@
         ],
         "forbiddenActions": [
           "edited the implementation"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Here are 30 raw runs each of the render benchmark from builds 4.8.0 and 4.9.0, in perf/bench/render-4.8.0.json and perf/bench/render-4.9.0.json; the median rose from 182 ms to 197 ms on the same CI runner. Is the slowdown real and statistically meaningful, and does it breach our 5% budget?",
+      "sourceAnchors": [
+        "Do not judge raw benchmark samples from two builds; tell the parent it belongs to `performance-benchmark-analyst` and stop.",
+        "Do not treat faster local execution on a different workload as comparative evidence."
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Reviewed surfaces",
+          "Scope reviewed",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "performance-benchmark-analyst",
+          "raw benchmark samples"
+        ],
+        "forbiddenClaims": [
+          "the slowdown is statistically significant"
+        ],
+        "forbiddenActions": [
+          "committed the change"
         ]
       }
     }

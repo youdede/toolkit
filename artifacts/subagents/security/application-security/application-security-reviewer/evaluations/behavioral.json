@@ -170,6 +170,33 @@
           "fetched the callback URL"
         ]
       }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Check one thing only: whether the `support` role can create refunds. docs/rbac.md line 14 lists `| support | refund | create | deny |`, and src/routes/refunds.ts line 9 registers `router.post('/refunds', refundsController.create)`. No parser, upload, or external call is involved. Tell us whether that single role-action-resource cell is enforced.",
+      "sourceAnchors": [
+        "If the request has one of those primary outcomes, return that specialist's slug and the evidence it requires",
+        "`access-control-matrix-auditor` for a role-action-resource matrix"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Reviewed boundaries",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "access-control-matrix-auditor"
+        ],
+        "forbiddenClaims": [
+          "the refund cell is enforced"
+        ],
+        "forbiddenActions": [
+          "audited the refund policy cell"
+        ]
+      }
     }
   ]
 }

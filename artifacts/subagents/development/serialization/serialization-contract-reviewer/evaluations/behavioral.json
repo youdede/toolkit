@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "Review this wire change. Encoder: settings-service v2.0 now omits boolean fields whose value is false. Decoder: mobile app 4.x, which sets `notifications_enabled = json[\"notifications_enabled\"] ?? true`. Canonical fixtures: v1.9 encodes {\"user\":\"u1\",\"notifications_enabled\":false}; v2.0 encodes {\"user\":\"u1\"} for the same settings.",
+      "prompt": "Review this wire change. Encoder: settings-service v2.0 now omits boolean fields whose value is false; settings-service/internal/settings/model.go:12 reads NotificationsEnabled bool `json:\"notifications_enabled,omitempty\"`. Decoder: mobile app 4.x, mobile/src/settings/decode.ts:9 reads `notifications_enabled = json[\"notifications_enabled\"] ?? true`. Canonical fixtures: testdata/v1.9/settings.json encodes {\"user\":\"u1\",\"notifications_enabled\":false}; testdata/v2.0/settings.json encodes {\"user\":\"u1\"} for the same settings.",
       "sourceAnchors": [
         "a value-to-wire-to-value matrix across every supported version pairing",
         "a supported value fails round trip or a supported reader interprets the candidate encoding"
@@ -170,6 +170,33 @@
         ],
         "forbiddenActions": [
           "edited the implementation"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "openapi/settings.yaml v2.0 makes `notifications_enabled` a required property of the PATCH /settings request body, and mobile app 4.x, supported until 2027-01-31, never sends it. Does the v2.0 rollout break requests from mobile 4.x?",
+      "sourceAnchors": [
+        "Do not take a consumer rollout break in an API contract, such as a new required request field; tell the parent it belongs to `api-contract-compatibility-reviewer` and stop.",
+        "Your single outcome is to find a value or version pairing that loses information or changes meaning"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "api-contract-compatibility-reviewer"
+        ],
+        "forbiddenClaims": [
+          "the rollout breaks mobile 4.x"
+        ],
+        "forbiddenActions": [
+          "built an operation-and-field compatibility matrix"
         ]
       }
     }

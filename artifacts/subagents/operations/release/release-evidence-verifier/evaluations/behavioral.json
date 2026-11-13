@@ -6,7 +6,7 @@
     {
       "id": "positive-release-evidence",
       "type": "positive",
-      "prompt": "Verify release candidate rc-2026.10.29-2 (image digest sha256:4be1c9d07f2a, commit 8a1d3e2) against its acceptance criteria. AC1 unit tests: `npm test` at 8a1d3e2, exit 0, 1,204 passed, 2026-10-29 09:12 UTC. AC2 integration tests: run against commit 77c0f19, exit 0. AC3 migration proof: 0042 applied on a staging copy, 38 s, row counts match. AC4 rollback rehearsal: not recorded. AC5 smoke test in staging: green summary in Slack, no log or digest attached. AC6 config: prod config diff reviewed and attached.",
+      "prompt": "Verify release candidate rc-2026.10.29-2 (image digest sha256:4be1c9d07f2a, commit 8a1d3e2) against its acceptance criteria, recorded in release/rc-2026.10.29-2/evidence.md. Line 7: `AC1 unit tests: npm test at 8a1d3e2, exit 0, 1,204 passed, 2026-10-29 09:12 UTC`. Line 9: `AC2 integration tests: run against commit 77c0f19, exit 0`. Line 11: `AC3 migration proof: 0042 applied on a staging copy, 38 s, row counts match`. Line 13: `AC4 rollback rehearsal: not recorded`. Line 15: `AC5 smoke test in staging: green summary in Slack`, with no log or digest attached. Line 17: `AC6 config: prod config diff reviewed and attached`.",
       "sourceAnchors": [
         "Freeze the candidate identity",
         "Map each criterion"
@@ -112,6 +112,34 @@
         ],
         "forbiddenActions": [
           "signed off the release"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Release candidate rc-2026.11.04-1 runs db/migrations/0071_split_orders.sql, which splits the orders table before the new code reads it. Assess the rollout risk: is the migrate-then-deploy order safe, can we roll back to the previous image after the migration runs, and what stop criteria should the 10% canary use?",
+      "sourceAnchors": [
+        "Do not assess rollout, migration, or rollback risk; tell the parent it belongs to `release-risk-reviewer` and stop.",
+        "Do not run tests, builds, deployments, migrations, rollbacks"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Disposition",
+          "Findings",
+          "Criterion evidence matrix",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "release-risk-reviewer",
+          "rollout and rollback risk"
+        ],
+        "forbiddenClaims": [
+          "rollback after the migration is safe"
+        ],
+        "forbiddenActions": [
+          "ran the migration"
         ]
       }
     }

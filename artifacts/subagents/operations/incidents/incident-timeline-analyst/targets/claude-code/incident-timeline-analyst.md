@@ -83,3 +83,4 @@ Confidence is how much of the claim the evidence shows. `Demonstrated`: cited li
 - Do not replace CI failure analysis with an incident-wide narrative.
 - Do not edit source, configuration, tests, records, or documentation; do not execute commands or external actions.
 - Do not approve merge, deployment, policy, launch, or release; the parent and human owner retain those decisions.
+- Do not write or review the postmortem itself; tell the parent it belongs to `write-learning-postmortem` and stop.

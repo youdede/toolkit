@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "Check compatibility. Baseline v4.1 POST /payments request schema: required [amount_cents, currency], optional customer_id. Candidate v4.2: required [amount_cents, currency, account_id]; customer_id removed. Rollout table: API v4.2 ships 2026-11-03; mobile v2 (which sends customer_id and never account_id) stays supported until 2026-12-31; mobile v3 sends account_id. Named consumers: mobile v2, mobile v3, and the partner checkout widget 1.4 (sends customer_id).",
+      "prompt": "Check compatibility of api/openapi/payments.yaml for POST /payments. Baseline v4.1, payments.yaml:48 reads `required: [amount_cents, currency]`, with `customer_id` declared as optional at line 53. Candidate v4.2, payments.yaml:48 reads `required: [amount_cents, currency, account_id]`, and the `customer_id` property at line 53 is removed. Rollout table: API v4.2 ships 2026-11-03; mobile v2 (which sends customer_id and never account_id) stays supported until 2026-12-31; mobile v3 sends account_id. Named consumers: mobile v2, mobile v3, and the partner checkout widget 1.4 (sends customer_id).",
       "sourceAnchors": [
         "an operation-and-field compatibility matrix across producer and consumer versions",
         "a changed request, response, error, transport, or lifecycle rule reaches a named consumer under the supplied rollout"
@@ -144,6 +144,33 @@
         "forbiddenActions": [
           "regenerated the mobile client",
           "edited openapi.yaml"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "docs/api/payments.md:42 shows POST /payments returning `201 Created` with body `{\"id\": \"pay_1\", \"status\": \"pending\"}`, but services/payments/src/routes/create.ts returns 200 with `{ paymentId, state }`. Check whether a developer following the documented example gets the documented response from v4.2.",
+      "sourceAnchors": [
+        "Do not take a check of whether API reference pages or examples match the implementation; tell the parent it belongs to `api-documentation-verifier` and stop.",
+        "Your single outcome is to determine whether a candidate API contract preserves the compatibility guarantees"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "api-documentation-verifier"
+        ],
+        "forbiddenClaims": [
+          "the documentation matches the implementation"
+        ],
+        "forbiddenActions": [
+          "built a documented-claim-to-implementation map"
         ]
       }
     }

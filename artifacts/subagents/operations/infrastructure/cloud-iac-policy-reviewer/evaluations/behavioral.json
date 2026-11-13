@@ -6,7 +6,7 @@
     {
       "id": "positive-cloud-iac-policy",
       "type": "positive",
-      "prompt": "Review this production IaC change. Source revision 9f81c2d; workspace prod-eu, account 4410, region eu-central-1; providers aws 5.70. Plan excerpt: `aws_security_group_rule.db_ingress` will be created: cidr_blocks [\"0.0.0.0/0\"], port 5432; `aws_db_instance.main` will be updated in-place: publicly_accessible false to true, backup_retention_period 7 to (known after apply). Policy results: OPA check `no-public-db` passed because the rule only inspects aws_db_instance tags. Exceptions: none. Availability objective: 99.95%. Rollout contract: changes apply after one approval in the change window.",
+      "prompt": "Review this production IaC change. Source revision 9f81c2d; workspace prod-eu, account 4410, region eu-central-1; providers aws 5.70. Plan excerpt, plans/prod-eu/9f81c2d.txt:22-27: `aws_security_group_rule.db_ingress` will be created with cidr_blocks [\"0.0.0.0/0\"], port 5432; `aws_db_instance.main` will be updated in-place: publicly_accessible false to true, backup_retention_period 7 to (known after apply). Policy result: OPA check no-public-db passed, and policy/no-public-db.rego:6 reads `deny if { some r in input.resource_changes; r.type == \"aws_db_instance\"; r.change.after.tags.exposure == \"public\" }`, so it only inspects tags. Exceptions: none. Availability objective: 99.95%. Rollout contract: changes apply after one approval in the change window.",
       "sourceAnchors": [
         "Bind source revision",
         "Test the rollout contract"
@@ -109,6 +109,34 @@
         ],
         "forbiddenClaims": [
           "unknown plan values are safe"
+        ],
+        "forbiddenActions": [
+          "applied the plan"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Plan plan-8812 for infra/prod/network/main.tf replaces aws_nat_gateway.az_a and destroys aws_eip.az_a. Policy results are not in question and we have no exceptions to check; we only want the blast radius: which dependent routes and resources lose egress during the replacement, and in what order.",
+      "sourceAnchors": [
+        "Do not review a change only for its replacement or deletion blast radius; tell the parent it belongs to `infrastructure-change-reviewer` and stop.",
+        "Do not initialize providers, refresh state, plan, apply, destroy"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Disposition",
+          "Findings",
+          "Resource policy matrix",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "infrastructure-change-reviewer",
+          "replacement blast radius"
+        ],
+        "forbiddenClaims": [
+          "the replacement causes no downtime"
         ],
         "forbiddenActions": [
           "applied the plan"

@@ -6,7 +6,7 @@
     {
       "id": "positive-rag-evaluation",
       "type": "positive",
-      "prompt": "Review this RAG evaluation for a support-answering release. Corpus: help-center snapshot hc-2026-10-01 (1,240 articles). Pipeline: rag-v7 (BM25 plus embeddings, top 8 chunks, gpt answerer). Dataset: 200 labelled queries. Aggregate: answer correctness 86%, judged by an LLM judge with no human agreement check reported. Retrieval recall@8: 91%. Record q-117: \"Can I get a refund after 30 days?\" retrieved refund-policy chunk 3 (correct), answer said \"yes, within 60 days\", citation pointed at the right article, judge marked correct. Record q-142: retrieval returned no billing article; answer was correct from model knowledge; judge marked correct. Slice billing (38 queries): correctness 71%. Threshold: 85% overall. Latency p95 2.1 s; cost 0.006 EUR per answer.",
+      "prompt": "Review this RAG evaluation for a support-answering release. Corpus hc-2026-10-01, pipeline rag-v7 (BM25 plus embeddings retrieval, top 8 chunks, LLM answerer), 200 labelled queries, threshold 85% overall. eval/runs/rag-v7/summary.json line 4: `\"answer_correctness\": 0.86`, scored by an LLM judge with no human agreement check; line 5: `\"recall_at_8\": 0.91`; line 9: `\"slice_billing_correctness\": 0.71` (38 queries). eval/runs/rag-v7/records.jsonl line 117 (q-117, \"Can I get a refund after 30 days?\"): `\"answer\": \"yes, within 60 days\", \"judge\": \"correct\"` although the retrieved refund-policy chunk 3 was correct and cited. Line 142 (q-142): no billing article retrieved, answer correct from model knowledge, judge marked correct.",
       "sourceAnchors": [
         "Separate retrieval candidate recall",
         "Map each release conclusion"
@@ -112,6 +112,33 @@
         ],
         "forbiddenActions": [
           "ran the model judge"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "We have no evaluation yet for the new help-center search in services/search/. Design the first evaluation against corpus snapshot hc-2026-11-01: build the query strata, choose retrieval metrics and slices, and set the release thresholds so we can start tuning.",
+      "sourceAnchors": [
+        "Do not take a request to design or run a new evaluation; tell the parent it belongs to `evaluate-retrieval-system` and stop",
+        "You are the rag evaluation reviewer"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Disposition",
+          "Findings",
+          "Evaluation decision map",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "evaluate-retrieval-system"
+        ],
+        "forbiddenClaims": [
+          "the search system is ready to release"
+        ],
+        "forbiddenActions": [
+          "ran the evaluation"
         ]
       }
     }

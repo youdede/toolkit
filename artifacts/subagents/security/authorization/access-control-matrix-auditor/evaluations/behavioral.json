@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "The viewer role is denied delete in the matrix, but the mapped DELETE handler calls the service without any role or ownership decision.",
+      "prompt": "Audit the delete cell of the document permission matrix. docs/permissions.md line 12 states `| viewer | document | delete | deny |`. src/routes/documents.ts line 31 maps the action with no guard: `router.delete('/documents/:id', documentsController.remove)`, while the update route on line 29 uses `requireRole('editor')`. In src/controllers/documents.ts line 47, `remove` calls `await documentService.delete(req.params.id)` without checking the caller's role or ownership of the document. Report which identities can reach this action.",
       "sourceAnchors": [
         "a policy-cell-to-decision-point table with allow, deny, and ownership predicates",
         "a named identity can reach an action-resource pair that policy denies or constrains more narrowly"
@@ -171,6 +171,33 @@
         ],
         "forbiddenActions": [
           "edited the implementation"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "This branch changes src/auth/session.ts: refresh tokens now live 90 days instead of 7, are no longer rotated on use, and the session cookie stays valid after a password reset. The role definitions and which role can do what are unchanged. Before we merge, check whether the login, session, and token lifecycle is still sound.",
+      "sourceAnchors": [
+        "Do not take a login, session, or token lifecycle review; tell the parent it belongs to `review-auth-boundary` and stop",
+        "read-only access control matrix auditor"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "review-auth-boundary"
+        ],
+        "forbiddenClaims": [
+          "the session lifecycle is sound"
+        ],
+        "forbiddenActions": [
+          "reviewed the token refresh flow"
         ]
       }
     }

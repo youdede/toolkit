@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "The payment charge succeeds, the order write fails, and the retry creates a new charge because the idempotency key is allocated after charging.",
+      "prompt": "The payment charge succeeds, the order write fails, and the retry creates a new charge because the idempotency key is allocated after charging. src/checkout/placeOrder.ts:18 reads `const charge = await gateway.charge(card, total);`, line 19 reads `const key = randomUUID();`, and line 20 reads `await orders.insert({ key, chargeId: charge.id });`. The job runner retries the whole call on any error, src/jobs/runner.ts:44: `await retry(() => placeOrder(input), { attempts: 3 });`. The gateway charge call accepts no idempotency key.",
       "sourceAnchors": [
         "a failure-state transition ledger covering first attempt, partial completion, retry, and terminal recovery",
         "the code permits an observable duplicate, orphan, leak, silent loss, or unrecoverable partial state for the named failure"
@@ -168,6 +168,33 @@
         ],
         "forbiddenActions": [
           "edited the implementation"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "In src/net/socketPool.ts, `acquire()` at line 31 hands out a socket and the success path of `sendBatch()` in src/net/batch.ts:58 never calls `release()`; after two hours the pool reports 0 free sockets, and `shutdown()` also calls `socket.close()` on sockets already closed by `sendBatch()`. Which exit path loses ownership, and is any socket closed twice?",
+      "sourceAnchors": [
+        "Do not take leaked handles, double release, or use-after-close; tell the parent it belongs to `resource-lifecycle-reviewer` and stop.",
+        "Your single outcome is to show how a specified failure changes durable state"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "resource-lifecycle-reviewer"
+        ],
+        "forbiddenClaims": [
+          "the retry loop leaks connections"
+        ],
+        "forbiddenActions": [
+          "built an ownership ledger for the connection"
         ]
       }
     }

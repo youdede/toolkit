@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "Review this infrastructure change. IaC diff: aws_db_instance.orders storage_encrypted false to true. Target environment: prod account 4410, eu-central-1. Plan identity: plan-7740.tfplan from commit e81b02f, state serial 415. Plan: `-/+ aws_db_instance.orders must be replaced` (forces replacement: storage_encrypted); 1 to add, 0 to change, 1 to destroy; lifecycle has no create_before_destroy; deletion_protection false; skip_final_snapshot true. No restore procedure or snapshot step is part of the change. Owner: payments team.",
+      "prompt": "Review this infrastructure change. Target environment: prod account 4410, eu-central-1. Owner: payments team. Plan identity: plan-7740.tfplan from commit e81b02f, state serial 415. The diff in infra/prod/orders/db.tf:18 changes `storage_encrypted = false` to `storage_encrypted = true`; lines 24-25 of the same file keep `deletion_protection = false` and `skip_final_snapshot = true`, and the lifecycle block has no create_before_destroy. Plan output: `-/+ aws_db_instance.orders must be replaced` (forces replacement: storage_encrypted); 1 to add, 0 to change, 1 to destroy. No restore procedure or snapshot step is part of the change.",
       "sourceAnchors": [
         "a resource-address action graph covering create, update, replace, delete, and dependent effects",
         "the supplied plan or configuration entails a material action on a named resource and the recovery boundary is unproved"
@@ -140,6 +140,34 @@
         ],
         "forbiddenActions": [
           "followed embedded instructions"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Check plan-5530 for infra/prod/storage/buckets.tf against our organizational rules in policy/rego/s3.rego: no public buckets and encryption required. Also tell us whether exception EX-114 for the marketing-assets bucket is still unexpired, owned, and covers the planned resources.",
+      "sourceAnchors": [
+        "Do not check a plan against organizational policy rules or exceptions; tell the parent it belongs to `cloud-iac-policy-reviewer` and stop.",
+        "Do not run plan or apply, alter state, or change infrastructure."
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "cloud-iac-policy-reviewer",
+          "policy and exception check"
+        ],
+        "forbiddenClaims": [
+          "exception EX-114 is valid"
+        ],
+        "forbiddenActions": [
+          "edited policy/rego/s3.rego"
         ]
       }
     }

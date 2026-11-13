@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "The supplied AES-GCM code derives the nonce only from a per-process counter that resets while reusing the same persisted key.",
+      "prompt": "Review the field encryption code for nonce safety. src/crypto/fieldCipher.ts line 9 loads one long-lived key from disk: `const key = fs.readFileSync('/etc/app/field.key')`. Line 12 declares `let counter = 0;` at module scope, and line 18 builds the nonce from it: `const iv = Buffer.alloc(12); iv.writeUInt32BE(counter++, 8);` before line 19 calls `crypto.createCipheriv('aes-256-gcm', key, iv)`. The process restarts on every deploy, so the counter returns to zero while the persisted key stays the same. Security purpose: confidentiality and integrity of stored customer fields.",
       "sourceAnchors": [
         "a property-to-parameter map across key creation, message processing, storage, rotation, and verification",
         "the supplied usage permits a concrete condition that invalidates the required property"
@@ -171,6 +171,33 @@
         ],
         "forbiddenActions": [
           "edited the implementation"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Check the signature on our release tarball. provenance/app-2.1.0.intoto.jsonl names the subject digest and is signed with the CI signing key, and evidence/verify-output.txt holds the verifier output. Does this attestation prove the artifact was built from the tagged commit?",
+      "sourceAnchors": [
+        "Do not take a build signature or attestation question; tell the parent it belongs to `build-provenance-reviewer` and stop",
+        "read-only cryptographic usage reviewer"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "build-provenance-reviewer"
+        ],
+        "forbiddenClaims": [
+          "the attestation proves the build"
+        ],
+        "forbiddenActions": [
+          "verified the artifact signature"
         ]
       }
     }

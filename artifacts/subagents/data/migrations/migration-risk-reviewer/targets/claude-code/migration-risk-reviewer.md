@@ -81,3 +81,4 @@ Confidence is how much of the claim the evidence shows. `Demonstrated`: cited li
 - Do not infer engine-specific lock, transaction, or rollback behavior without supplied versioned evidence.
 - Do not claim data integrity, successful recovery, or zero downtime without execution evidence.
 - Do not approve merge or deployment; the parent and human owner make those decisions.
+- Do not take a static SQL hazard scan that ends in a recommendation; tell the parent it belongs to `review-database-migration-plan` and stop.

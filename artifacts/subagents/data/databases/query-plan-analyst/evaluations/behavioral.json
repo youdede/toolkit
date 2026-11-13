@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "Review this query plan. Engine: PostgreSQL 16.2. Query: SELECT id FROM events WHERE date(created_at) = '2026-10-20'. Index: events_created_at_idx ON events (created_at). Cardinalities: events 310M rows, about 1.1M per day. Supplied EXPLAIN ANALYZE: Gather (actual rows=1,104,220) -> Parallel Seq Scan on events (estimated rows=1,550,000, actual rows=368,073 loops=3), Filter: (date(created_at) = '2026-10-20'), Rows Removed by Filter: 103,210,000, Execution Time: 48,912 ms. Parameter shape: one calendar day per call. Budget: the daily report must scan at most 2M rows and finish under 2 s.",
+      "prompt": "Review the plan for the daily report query, reports/daily_events.sql line 3: `SELECT id FROM events WHERE date(created_at) = '2026-10-20'`. Engine: PostgreSQL 16.2. migrations/0042_events_index.sql line 1: `CREATE INDEX events_created_at_idx ON events (created_at);`. Cardinalities: 310M rows, about 1.1M per day. Supplied EXPLAIN ANALYZE in evidence/daily_events_plan.txt: line 2 `Parallel Seq Scan on events (rows=1550000) (actual rows=368073 loops=3)`, line 3 `Filter: (date(created_at) = '2026-10-20')`, line 4 `Rows Removed by Filter: 103210000`, line 9 `Execution Time: 48912 ms`. Parameter shape: one calendar day per call. Budget: at most 2M rows scanned and under 2 s.",
       "sourceAnchors": [
         "an operator-by-operator flow of rows, predicates, access paths, joins, sorts, and spills",
         "the supplied plan and workload show a concrete operator exceeding a stated cardinality, memory, scan, or latency boundary"
@@ -143,6 +143,33 @@
         "forbiddenActions": [
           "ran ANALYZE orders",
           "executed CREATE INDEX CONCURRENTLY"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "The EXPLAIN output for reports/daily_events.sql shows a sequential scan on events. Rewrite the query, add whatever index fixes it, and measure the before-and-after latency on our staging workload so we can ship the faster version.",
+      "sourceAnchors": [
+        "Do not take a request to change queries, indexes, or code to fix a bottleneck; tell the parent it belongs to `optimize-with-performance-profile` and stop",
+        "read-only query plan analyst"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "optimize-with-performance-profile"
+        ],
+        "forbiddenClaims": [
+          "the rewritten query is faster"
+        ],
+        "forbiddenActions": [
+          "rewrote the query"
         ]
       }
     }

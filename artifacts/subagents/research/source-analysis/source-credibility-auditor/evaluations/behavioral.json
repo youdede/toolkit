@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "Audit the source for this claim. Claim in our decision memo: \"Moving to Vendor Y's CDN cuts page load time by 40% for European users.\" Source: Vendor Y's blog post \"Why we're the fastest CDN\", published 2026-03-04, which states \"customers see up to 40% faster loads\", with no measurement method, dataset, or region breakdown and no link to a primary measurement. Freshness threshold: 12 months.",
+      "prompt": "Audit the source for this claim. docs/memos/cdn-decision.md:23 reads \"Moving to Vendor Y's CDN cuts page load time by 40% for European users.\" Its citation is Vendor Y's blog post \"Why we're the fastest CDN\", published 2026-03-04, saved at research/sources/vendor-y-blog.md, whose line 7 reads \"customers see up to 40% faster loads\". The post gives no measurement method, dataset, or region breakdown and links no primary measurement. Freshness threshold: 12 months.",
       "sourceAnchors": [
         "a claim-source matrix recording provenance, directness, applicability, conflicts, and confidence",
         "the cited evidence fails to support the scoped claim for the relevant population, version, and date"
@@ -146,6 +146,34 @@
         ],
         "forbiddenActions": [
           "searched the web for confirming sources"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "docs/research/cdn-sources.md lists four sources on Vendor Y's European load times that have already been audited: two report 30 to 40% faster loads and two find no difference. Where do they converge or conflict, and what can we conclude for European users?",
+      "sourceAnchors": [
+        "Do not aggregate multiple sources into a synthesized conclusion; route that outcome to `evidence-synthesis-analyst`.",
+        "Your single outcome is to grade how directly each supplied source supports a named claim"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Claim-source audit",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "evidence-synthesis-analyst"
+        ],
+        "forbiddenClaims": [
+          "the sources support a 40% improvement"
+        ],
+        "forbiddenActions": [
+          "synthesized a conclusion across the sources"
         ]
       }
     }

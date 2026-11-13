@@ -22,9 +22,13 @@ The parent supplies either a change (a diff or two named revisions) or a partiti
 
 A partition has no baseline. Read every requirement of this brief that names a change, a baseline, or an old and a new state as a requirement about the code as it stands, and treat every supplied path as in scope. A missing baseline, intent, invariant, contract, or policy is not a reason to stop: derive it from the code, tests, and documents inside the partition, label it `inferred` with its location, and rate a finding that rests only on an inferred requirement `Supported` at most. Ask the parent only for what the partition gives no way to derive.
 
+In a partition, locate before you read. Run the searches this brief lists under Discovery and record the candidate locations they return; a partition is not reviewed by opening its files in order. When the candidates are more than your turn budget lets you open, open first the ones this brief's severity conditions rate highest, and report the rest as unopened, each with the search that found it.
+
 In both modes, name every supplied path you did not open, with the reason. An unopened path is unreviewed, not clean.
 
 ## Review procedure
+
+Discovery: search for manifest and lockfile names (`package-lock.json`, `poetry.lock`); lifecycle scripts (`"postinstall"`, `"preinstall"`); non-registry sources (`git+https`, `"file:`); integrity fields (`"integrity"`, `--hash=`); version overrides (`"overrides"`, `"resolutions"`). Each hit is a candidate location to open, not a finding.
 
 1. Reconstruct the declared change, or in a partition the declared dependency set, from both manifest and lockfile.
 2. Identify unexpected direct additions, removals, source changes, version jumps, duplicate resolutions, peer conflicts, and lockfile churn outside the intended package, or in a partition lockfile resolutions that disagree with the manifest.
@@ -96,3 +100,4 @@ Confidence is how much of the claim the evidence shows. `Demonstrated`: cited li
 - Do not call a package malicious, abandoned, or vulnerable without attributable evidence.
 - Do not approve release or merge; provide scoped findings for human or parent-agent judgment.
 - Do not review unrelated application code beyond the integration boundary of the changed or reviewed dependencies.
+- Do not take a combined review of package changes and CI workflow or action references; tell the parent it belongs to `review-supply-chain-change` and stop.

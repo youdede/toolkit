@@ -6,7 +6,7 @@
     {
       "id": "positive-evidenced-specialist-case",
       "type": "positive",
-      "prompt": "Synthesize the evidence. Question: does a 14-day trial convert better than a 30-day trial? Inclusion: randomized or quasi-experimental studies from 2020 or later. Population: self-serve SaaS. Source packet: Study 1 (2023, randomized, 12,000 SMB signups): 14-day trial converted 4.1% vs 3.6% for 30-day, measured at day 45. Study 2 (2024, quasi-experimental, 2,300 mid-market signups): 30-day converted 9.8% vs 8.9% for 14-day, measured at day 90.",
+      "prompt": "Synthesize the evidence in research/packets/trial-length.md. Question: does a 14-day trial convert better than a 30-day trial? Inclusion: randomized or quasi-experimental studies from 2020 or later. Population: self-serve SaaS. trial-length.md:12 reads \"Study 1 (2023, randomized, 12,000 SMB signups): 14-day trial converted 4.1% vs 3.6% for 30-day, measured at day 45.\" trial-length.md:18 reads \"Study 2 (2024, quasi-experimental, 2,300 mid-market signups): 30-day converted 9.8% vs 8.9% for 14-day, measured at day 90.\"",
       "sourceAnchors": [
         "a proposition-evidence table separating support, contradiction, population, method, and applicability",
         "a synthesis statement preserves the conditions and limitations shared by the evidence used to support it"
@@ -147,6 +147,34 @@
         ],
         "forbiddenActions": [
           "omitted S2 from the synthesis"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Our memo docs/research/trial-length.md:8 claims \"a 14-day trial converts 14% better than a 30-day trial\", citing one Vendor Z blog post from 2025 with no method section. Is that post a firsthand, method-fit source for this exact claim?",
+      "sourceAnchors": [
+        "Do not perform the claim-by-claim pedigree audit owned by `source-credibility-auditor`.",
+        "Your single outcome is to produce propositions showing where supplied evidence converges"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Findings",
+          "Synthesis map",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "source-credibility-auditor"
+        ],
+        "forbiddenClaims": [
+          "the blog post is a credible source"
+        ],
+        "forbiddenActions": [
+          "graded the source's provenance"
         ]
       }
     }
