@@ -36,7 +36,7 @@
       {"name": "evidence", "effect": "narrow", "description": "Write the accepted proposal receipt to one explicit repository-relative JSON path."}
     ]
   },
-  "relationships": {"composesWith": ["hook/security/network-control/mcp-capability-drift-guard"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": []},
+  "relationships": {"composesWith": ["hook/security/network-control/mcp-capability-drift-guard", "mcp-server/development/agent-tooling/github-readonly"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": []},
   "operational": {"behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "bounded", "latency_reason": "The command follows a precondition check and multiple workflow steps while it reviews an observed MCP tool inventory and updates source pins only after exact human confirmation.", "dataRetention": "local-bounded"},
   "adapters": {"claude-code": "adapters/claude-code.json"}
 }

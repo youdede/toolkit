@@ -50,7 +50,8 @@
   "relationships": {
     "composesWith": [
       "command/operations/ci-cd/diagnose-ci-failure",
-      "skill/operations/ci-cd/debug-ci-failure"
+      "skill/operations/ci-cd/debug-ci-failure",
+      "subagent/development/testing/flaky-test-diagnostician"
     ],
     "conflictsWith": [],
     "supersedes": [],

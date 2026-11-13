@@ -48,7 +48,11 @@
     "assess"
   ],
   "relationships": {
-    "composesWith": [],
+    "composesWith": [
+      "subagent/development/cli/cli-contract-reviewer",
+      "subagent/development/serialization/serialization-contract-reviewer",
+      "subagent/writing/documentation/api-documentation-verifier"
+    ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],

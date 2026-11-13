@@ -48,7 +48,11 @@
     "assess"
   ],
   "relationships": {
-    "composesWith": [],
+    "composesWith": [
+      "skill/operations/observability/write-incident-runbook",
+      "subagent/operations/resilience/disaster-recovery-readiness-auditor",
+      "subagent/writing/documentation/procedural-documentation-tester"
+    ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],

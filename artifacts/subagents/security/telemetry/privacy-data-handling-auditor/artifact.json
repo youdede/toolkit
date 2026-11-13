@@ -46,7 +46,11 @@
     "entrypoints": []
   },
   "relationships": {
-    "composesWith": [],
+    "composesWith": [
+      "skill/data/governance/design-private-data-lifecycle",
+      "subagent/data/governance/data-lineage-mapper",
+      "subagent/security/telemetry/sensitive-logging-reviewer"
+    ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],

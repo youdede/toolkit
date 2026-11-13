@@ -42,7 +42,7 @@
       { "id": "do-not-bypass-secret-guard", "effect": "forbid", "action": "bypass-commit-secret-guard", "sourceArtifactId": "hook/security/secrets/commit-guard", "sourceField": "refuses", "sourceIndex": 3, "text": "Do not bypass, suppress, or allowlist the commit secret guard; remove the secret from the commit instead." }
     ]
   },
-  "relationships": { "composesWith": [], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": [] },
+  "relationships": { "composesWith": ["hook/operations/git/protected-branch-guard", "hook/security/secrets/commit-guard", "skill/operations/git/isolate-work-with-worktrees", "skill/operations/git/prepare-branch-integration"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": [] },
   "operational": { "behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "immediate", "latency_reason": "The runtime loads static guidance to keep branch integration recoverable, explicit, and backed by fresh repository evidence in the matching file scope.", "dataRetention": "none" },
   "adapters": {
     "claude-code": "adapters/claude-code.json",

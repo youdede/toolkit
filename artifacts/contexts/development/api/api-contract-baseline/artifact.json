@@ -86,7 +86,11 @@
     ]
   },
   "relationships": {
-    "composesWith": [],
+    "composesWith": [
+      "hook/development/contract-compatibility/api-contract-compatibility-guard",
+      "skill/development/api/build-openapi-contract",
+      "skill/development/api/design-stable-api-contract"
+    ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],

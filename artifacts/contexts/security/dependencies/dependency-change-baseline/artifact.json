@@ -90,7 +90,11 @@
     ]
   },
   "relationships": {
-    "composesWith": [],
+    "composesWith": [
+      "hook/security/dependencies/dependency-change-guard",
+      "skill/security/dependencies/plan-dependency-upgrade",
+      "skill/security/supply-chain/review-supply-chain-change"
+    ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],

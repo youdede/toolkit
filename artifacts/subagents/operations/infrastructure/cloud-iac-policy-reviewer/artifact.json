@@ -47,7 +47,9 @@
     "entrypoints": []
   },
   "relationships": {
-    "composesWith": [],
+    "composesWith": [
+      "subagent/operations/infrastructure/infrastructure-change-reviewer"
+    ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],

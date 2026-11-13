@@ -45,7 +45,10 @@
     "entrypoints": []
   },
   "relationships": {
-    "composesWith": [],
+    "composesWith": [
+      "subagent/development/concurrency/concurrency-hazard-analyst",
+      "subagent/operations/ci-cd/ci-failure-analyst"
+    ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],

@@ -47,7 +47,10 @@
     "diagnose"
   ],
   "relationships": {
-    "composesWith": [],
+    "composesWith": [
+      "subagent/security/application-security/application-security-reviewer",
+      "subagent/security/authorization/access-control-matrix-auditor"
+    ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],

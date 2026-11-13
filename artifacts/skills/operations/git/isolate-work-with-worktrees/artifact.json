@@ -51,7 +51,10 @@
     "diagnose"
   ],
   "relationships": {
-    "composesWith": [],
+    "composesWith": [
+      "context/operations/git/git-workflow-baseline",
+      "skill/operations/agent-orchestration/delegate-to-codex-cli"
+    ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],

@@ -49,7 +49,10 @@
     "assess"
   ],
   "relationships": {
-    "composesWith": [],
+    "composesWith": [
+      "subagent/operations/release/release-evidence-verifier",
+      "subagent/security/cryptography/cryptographic-usage-reviewer"
+    ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],

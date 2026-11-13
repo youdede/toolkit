@@ -59,7 +59,12 @@
     "assess"
   ],
   "relationships": {
-    "composesWith": [],
+    "composesWith": [
+      "context/security/dependencies/dependency-change-baseline",
+      "hook/security/ci-references/ci-reference-pinning-guard",
+      "hook/security/dependency-origins/dependency-source-guard",
+      "subagent/security/dependencies/dependency-risk-reviewer"
+    ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],

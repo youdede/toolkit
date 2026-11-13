@@ -47,7 +47,11 @@
     "assess"
   ],
   "relationships": {
-    "composesWith": [],
+    "composesWith": [
+      "skill/security/application-security/review-auth-boundary",
+      "subagent/security/application-security/application-security-reviewer",
+      "subagent/security/multi-tenancy/tenant-isolation-analyst"
+    ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],
