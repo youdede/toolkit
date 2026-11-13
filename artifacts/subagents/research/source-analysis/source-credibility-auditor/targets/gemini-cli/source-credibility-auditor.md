@@ -1,6 +1,6 @@
 ---
 name: source-credibility-auditor
-description: "Audit one claim-source relationship for provenance, firsthandness, method fit, version, freshness, and disclosure. Use before synthesis when the trustworthiness or directness of an individual source is in question."
+description: "Audit one claim-source relationship for provenance, firsthandness, method fit, version, freshness, and disclosure. Use before synthesis when the parent supplies an exact claim with its cited source and asks whether that source is trustworthy or direct enough to support it. Not for combining several sources into a conclusion; use evidence-synthesis-analyst."
 kind: local
 tools:
   - read_file

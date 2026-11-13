@@ -1,5 +1,5 @@
 ---
-description: "Reviews a named build subject and supplied provenance, attestation, SBOM, builder, and verification evidence for identity-chain gaps. Use when a parent needs a read-only review of whether build evidence supports specific provenance claims, not cryptographic verification or release approval."
+description: "Reviews one build subject digest against supplied provenance, attestation, SBOM, builder, and verifier output for identity-chain gaps between source revision, builder, and artifact. Use when the parent supplies an attestation or SBOM and asks whether it supports a specific provenance claim, short of signature verification. Not for release criterion coverage; use release-evidence-verifier."
 mode: subagent
 steps: 10
 permission:

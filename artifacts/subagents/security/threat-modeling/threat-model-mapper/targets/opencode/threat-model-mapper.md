@@ -1,5 +1,5 @@
 ---
-description: "Map assets, actors, trust boundaries, controls, and reachable abuse hypotheses for one journey. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution."
+description: "Map assets, actors, trust boundaries, controls, and reachable abuse hypotheses for one journey, separating observed controls from hypotheses that still need verification. Use when the parent supplies architecture notes, routes, or deployment configuration for a named journey and asks for a threat model. Not for verifying a reachable source-to-sink risk in code; use application-security-reviewer."
 mode: subagent
 steps: 14
 permission:

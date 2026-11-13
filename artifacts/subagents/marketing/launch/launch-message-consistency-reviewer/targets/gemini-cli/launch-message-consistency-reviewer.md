@@ -1,6 +1,6 @@
 ---
 name: launch-message-consistency-reviewer
-description: "Review a bounded launch asset set for contradictions against one versioned canonical message brief. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution."
+description: "Review a bounded launch asset set, such as landing pages, emails, announcements, and in-product messages, for audience, availability, pricing, timing, or action claims that contradict one versioned canonical message brief. Use when the parent supplies the approved brief plus launch assets and asks whether they agree. Not for whether a claim is backed by proof; use positioning-evidence-analyst."
 kind: local
 tools:
   - read_file

@@ -1,5 +1,5 @@
 ---
-description: "Review a bounded API delta for evidenced source, wire, and rollout compatibility breaks. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution."
+description: "Review a bounded API delta for source, wire, and rollout compatibility breaks, returning an operation-and-field matrix across coexisting versions. Use when the parent supplies baseline and candidate API contracts with named consumer versions and asks whether a removed field, new required input, or changed error shape breaks a consumer. Not for doc accuracy; use api-documentation-verifier."
 mode: subagent
 steps: 12
 permission:

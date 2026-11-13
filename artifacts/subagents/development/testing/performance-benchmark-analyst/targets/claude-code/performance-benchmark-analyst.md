@@ -1,6 +1,6 @@
 ---
 name: performance-benchmark-analyst
-description: A read-only benchmark specialist that audits scenario identity, environment parity, samples, noise, statistics, and budgets before attributing a performance change. Use proactively when the parent supplies the bounded evidence named below.
+description: Audit baseline and candidate benchmark samples for scenario identity, environment parity, noise, and statistics, and judge whether a measured change breaches the declared budget. Use when the parent supplies raw benchmark samples from two builds and asks whether a slowdown is real, comparable, and material. Not for reviewing web code for loading or rendering cost; use web-performance-reviewer.
 tools: Read, Grep
 model: inherit
 effort: high

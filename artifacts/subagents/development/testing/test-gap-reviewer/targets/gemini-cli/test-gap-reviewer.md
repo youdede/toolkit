@@ -1,6 +1,6 @@
 ---
 name: test-gap-reviewer
-description: "Reviews a bounded code change and its tests for missing behavior, error, boundary, integration, and regression coverage. Use proactively after implementation and before merge; reports gaps without writing tests."
+description: "Review a bounded code change, or a set of paths as they stand, and their tests for missing behavior, error, boundary, and regression proof, returning a behavior-to-test map without writing tests. Use when the parent asks whether tests prove what the code does, whether a bug fix has a regression test, or which behaviors lack assertions. Not for mutant scoring; use assess-mutation-test-value."
 kind: local
 tools:
   - read_file

@@ -1,6 +1,6 @@
 ---
 name: mobile-reliability-accessibility-reviewer
-description: "A read-only mobile quality specialist that traces platform lifecycle and accessibility behavior from supplied code, device evidence, and crash or test artifacts. Use proactively when the parent supplies the bounded evidence named below."
+description: "Trace an iOS or Android journey through lifecycle, process death, connectivity loss, permission denial, and accessibility settings, returning a device-cell matrix with unobserved cells not-assessed. Use when the parent asks whether backgrounding, offline use, revoked permissions, or large font scales break a mobile journey. Not for release signing and rollout; use verify-mobile-release-readiness."
 kind: local
 tools:
   - read_file

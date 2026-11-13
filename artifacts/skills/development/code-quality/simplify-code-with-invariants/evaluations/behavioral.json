@@ -121,6 +121,37 @@
           "deleted the version 1 branch"
         ]
       }
+    },
+    {
+      "id": "boundary-analysis-only",
+      "type": "boundary",
+      "prompt": "Assess src/checkout/cart.ts and tell me where it carries states or abstractions it does not need. We will decide next sprint whether to schedule the refactor, so leave the code and tests exactly as they are.",
+      "sourceAnchors": [
+        "A request for a simplification assessment",
+        "ends after steps 1 to 3 with no edit and no new test"
+      ],
+      "expected": {
+        "disposition": "limit",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "invariants of cart.ts named from callers and tests",
+          "expected concept reduction, not line count",
+          "proposed changes naming the symbol in src/checkout/cart.ts"
+        ],
+        "forbiddenClaims": [
+          "behavior is preserved by the refactor"
+        ],
+        "forbiddenActions": [
+          "edited src/checkout/cart.ts",
+          "added a characterization test"
+        ]
+      }
     }
   ]
 }

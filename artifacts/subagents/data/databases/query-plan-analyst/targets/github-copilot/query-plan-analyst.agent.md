@@ -1,6 +1,6 @@
 ---
 name: query-plan-analyst
-description: "Analyze a supplied database plan for evidenced cardinality, access-path, join, and sort risk. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution."
+description: "Analyze a supplied database plan for cardinality misestimates and access-path, join, sort, and spill risk, naming the first operator behind the stated query problem. Use when the parent supplies a slow SQL query with its EXPLAIN output, indexes, and row counts and asks why it scans, spills, or picks the wrong join. Not for changing code to fix a bottleneck; use optimize-with-performance-profile."
 tools: ["read","search"]
 ---
 

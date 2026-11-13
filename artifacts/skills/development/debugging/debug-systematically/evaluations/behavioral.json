@@ -126,6 +126,37 @@
           "logged the full request body"
         ]
       }
+    },
+    {
+      "id": "boundary-analysis-only",
+      "type": "boundary",
+      "prompt": "Requests to /api/orders time out about one time in twenty since Tuesday. The handler is src/orders/handler.ts and it calls src/db/pool.ts. Find the root cause and write it up for the team. Do not change any code: the fix will be planned separately.",
+      "sourceAnchors": [
+        "When the user asks for a diagnosis or root-cause report alone, says not to touch the code",
+        "finish after phases 1 to 3, delete every probe, reproduction script, focused test, and temporary instrumentation"
+      ],
+      "expected": {
+        "disposition": "limit",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "timeout frequency and the reproduction attempted",
+          "earliest evidenced cause or the competing hypotheses still open",
+          "proposed regression test and repair naming src/orders/handler.ts or src/db/pool.ts"
+        ],
+        "forbiddenClaims": [
+          "the timeout is fixed"
+        ],
+        "forbiddenActions": [
+          "edited src/db/pool.ts",
+          "added a regression test"
+        ]
+      }
     }
   ]
 }

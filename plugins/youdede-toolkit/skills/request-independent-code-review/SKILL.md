@@ -14,6 +14,9 @@ Use a second reviewer to create independent evidence, not borrowed confidence. P
 1. Define the review boundary: exact diff or files, intended behavior, constraints, test evidence, and risk areas. Do not seed the reviewer with the parent conclusion.
 2. Select any available independent reviewer with suitable context capacity. Do not hardcode a vendor or model; verify the invocation interface before use.
 3. Ask for findings ordered by severity with file and line evidence, reproduction or failure path, and explicitly requested missing tests. Require the reviewer to distinguish defects from optional improvements.
+
+When the user wants only the second opinion, for example a review report on a branch before merge, a request not to touch that branch, or no write permission, perform steps 1 to 3 and the checking and recording in step 4, then stop before any fix. Report accepted, rejected, and uncertain findings under `## Result`, and give each accepted defect under `## Next action` as a proposed fix citing the file and line it would change.
+
 4. Check each finding against source, requirements, and runtime evidence. Record accepted, rejected, and uncertain items with reasons, then fix only accepted in-scope defects.
 
 ## Output contract

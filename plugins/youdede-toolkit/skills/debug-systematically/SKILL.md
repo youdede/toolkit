@@ -47,6 +47,8 @@ Design the smallest discriminating test. Change one variable. Prefer a probe, fo
 
 ## 4. Repair and prove
 
+Enter this phase only when the request covers a fix. When the user asks for a diagnosis or root-cause report alone, says not to touch the code, or has granted no write access, finish after phases 1 to 3, delete every probe, reproduction script, focused test, and temporary instrumentation added along the way, and leave the working tree as you found it. Report the trace under `## Evidence` and the supported hypothesis under `## Result`, then give the regression test and the repair this phase would have made under `## Next action` as proposals, each naming the file and function it would touch.
+
 1. Add a failing regression test or executable reproduction.
 2. Verify it fails for the expected reason.
 3. Make one root-cause repair without adjacent cleanup.

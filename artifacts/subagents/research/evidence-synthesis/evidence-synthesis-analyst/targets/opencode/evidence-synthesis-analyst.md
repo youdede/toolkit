@@ -1,5 +1,5 @@
 ---
-description: "Reconcile a bounded evidence set into qualified propositions, dependency clusters, and explicit non-combinability decisions. Use after individual sources are available; source pedigree auditing belongs to source-credibility-auditor."
+description: "Reconcile a bounded evidence set into qualified propositions, dependency clusters, and explicit non-combinability decisions. Use after individual sources are available, when the parent supplies a source packet with a fixed population and outcome and asks where studies or reports converge or conflict. Not for auditing one source's provenance; use source-credibility-auditor."
 mode: subagent
 steps: 10
 permission:

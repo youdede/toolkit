@@ -1,6 +1,6 @@
 ---
 name: cli-contract-reviewer
-description: "Review a CLI delta for automation-breaking grammar, stream, exit-code, and output changes. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution."
+description: "Review command-line grammar, option defaults, exit codes, stream placement, and machine-readable output for automation-breaking changes or departures from the declared CLI contract. Use when the parent supplies command definitions, help text, or a CLI diff and asks whether scripts parsing output or exit status will break. Not for HTTP or RPC APIs; use api-contract-compatibility-reviewer."
 kind: local
 tools:
   - read_file

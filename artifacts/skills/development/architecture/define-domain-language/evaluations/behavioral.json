@@ -116,6 +116,36 @@
           "wrote an approved definition to GLOSSARY.md"
         ]
       }
+    },
+    {
+      "id": "boundary-analysis-only",
+      "type": "boundary",
+      "prompt": "Audit how our code and docs use the words 'account', 'customer', and 'tenant'. Start from docs/glossary.md and src/billing/. I only want a ledger of conflicting uses so the product owner can decide next week; do not edit the glossary or write any decision records yet.",
+      "sourceAnchors": [
+        "When the request asks only for a terminology audit or a ledger to read before anyone decides",
+        "stop after steps 1 and 2 and edit nothing"
+      ],
+      "expected": {
+        "disposition": "limit",
+        "requiredSections": [
+          "Term ledger",
+          "Decision records",
+          "Open decisions",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "conflicting uses of account, customer, and tenant with examples",
+          "glossary edits listed as proposals naming docs/glossary.md",
+          "no decision record written"
+        ],
+        "forbiddenClaims": [
+          "the product owner approved these definitions"
+        ],
+        "forbiddenActions": [
+          "edited docs/glossary.md",
+          "wrote a decision record"
+        ]
+      }
     }
   ]
 }

@@ -16,6 +16,8 @@ Completion is a statement about current observable state. Every material claim n
 3. Run checks after the last relevant change, inspect their exit status and complete failure summary, review the final diff and untracked files, and verify negative or cleanup conditions.
 4. Classify each criterion as proven, failed, not run, or externally blocked. Correct failures within scope and report commands, results, artifacts, and residual uncertainty without rounding up.
 
+A request to audit whether work is finished, for example a pre-merge check by someone other than the implementer, an explicit read-only instruction, or no authority to edit, stops at classification: run steps 1 to 3, classify each criterion as step 4 describes, and correct nothing. Mark each criterion proven, failed, not run, or externally blocked under `## Result`, cite the command and exit status behind each mark under `## Evidence`, and under `## Next action` name each failing check with the file a correction would edit, as a proposal rather than a change.
+
 ## Output contract
 
 Return every one of these headings in your reply, in this order, on every path: `## Evidence`, `## Result`, `## Next action`, `## Boundary`, `## Missing inputs`.

@@ -1,6 +1,6 @@
 ---
 name: concurrency-hazard-analyst
-description: "Analyze a bounded concurrent path for a concrete race, deadlock, lost update, or ordering failure. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution."
+description: "Analyze a bounded concurrent path for a race, deadlock, lost update, or ordering failure, returning a numbered actor interleaving that reaches it or a reasoned rejection. Use when code coordinates locks, transactions, async tasks, or queues over shared state and the parent asks whether two actors can corrupt it. Not for a test failing intermittently across runs; use flaky-test-diagnostician."
 kind: local
 tools:
   - read_file

@@ -1,6 +1,6 @@
 ---
 name: disaster-recovery-readiness-auditor
-description: Audit recovery objectives against backup, restore, failover, dependency, and exercise evidence. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution.
+description: Audit stated RTO and RPO against backup, restore, failover, key, DNS, dependency, and exercise evidence, and return each recovery claim that lacks a tested chain. Use when the parent supplies recovery objectives with backup policy and restore or failover drill results and asks whether a service can be recovered in time. Not for checking the steps of one runbook; use runbook-readiness-reviewer.
 tools: Read, Grep, Glob
 model: inherit
 maxTurns: 12

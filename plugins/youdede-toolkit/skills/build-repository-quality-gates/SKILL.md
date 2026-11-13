@@ -13,6 +13,9 @@ Use the repository's current package managers, task runners, policies, and CI as
 
 1. Inventory languages, lockfiles, existing hooks, formatters, linters, type checks, tests, generated checks, secret scans, commit policy, CI commands, and measured runtimes. Detect rather than defaulting to one framework.
 2. Classify checks as staged and fast, repository-wide and bounded, or slow/environmental. Put only deterministic low-latency checks before commit; move broader proof to pre-push or CI and document equivalent manual commands.
+
+When the user wants an audit of the gates that exist today or a design to approve first, asks that no hook or configuration be installed, or has not authorized installation, carry out the inventory of step 1 and the classification of step 2 only, measuring runtimes with check-only or dry-run invocations and never running a formatter or fixer in write mode. Skip the temporary violations of step 4, since they edit the repository, and state under `## Control results` that no control was run. Put every placement move from step 2 and every hook, configuration merge, and document from steps 3 to 5 under `## Gate design` as a proposal, naming the configuration file it would touch.
+
 3. Select the least intrusive hook mechanism already used by the repository. Merge configuration without overwriting user rules, pin new tooling consistently with project policy, and make bypass behavior visible and auditable.
 4. Prove a clean path, then introduce one temporary violation for each gate and observe the expected failure. Restore the repository and repeat the clean path. Verify CI invokes the same underlying commands where equivalence is intended.
 5. Document purpose, scope, runtime budget, failure remediation, bypass policy, removal, and ownership. Report skipped checks and why.

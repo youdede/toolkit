@@ -1,6 +1,6 @@
 ---
 name: infrastructure-change-reviewer
-description: "Review a bounded infrastructure-as-code delta for replacement, deletion, dependency, and blast-radius risk. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution."
+description: "Review a bounded infrastructure-as-code diff and its plan for force-replacement, deletion, dependency ordering, and blast-radius risk to named state or availability. Use when the parent supplies an IaC diff with its plan output and asks whether a resource will be destroyed, replaced, or taken down. Not for checking a plan against policy rules; use cloud-iac-policy-reviewer."
 tools: ["read","search"]
 ---
 

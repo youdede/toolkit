@@ -1,5 +1,5 @@
 ---
-description: "Review a bounded experiment for randomization, exposure, contamination, stopping, and analysis validity. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution."
+description: "Review a bounded experiment for randomization, exposure, contamination, sample-ratio, peeking, and stopping threats, returning an assignment-to-exposure-to-analysis cohort flow. Use when the parent supplies an A/B test plan, assignment logic, or analysis and asks whether the treatment comparison can be trusted. Not for designing a new experiment from a decision; use design-controlled-experiment."
 mode: subagent
 steps: 12
 permission:

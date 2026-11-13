@@ -1,6 +1,6 @@
 ---
 name: responsive-layout-reviewer
-description: "Review a bounded layout for viewport, content-length, zoom, and reflow resilience using supplied evidence. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution."
+description: "Review a bounded layout for viewport, content-length, zoom, and reflow conditions that clip, overlap, hide, or reorder a required element, returning a viewport-content-constraint matrix. Use when the parent supplies CSS, breakpoints, or screenshots and asks whether long strings, narrow screens, or zoom break the layout. Not for designing breakpoints; use design-responsive-behavior."
 tools: ["read","search"]
 ---
 

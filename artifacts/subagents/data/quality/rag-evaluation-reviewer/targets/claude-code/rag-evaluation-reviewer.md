@@ -1,6 +1,6 @@
 ---
 name: rag-evaluation-reviewer
-description: A read-only AI evaluation specialist that separates retrieval and generation quality, audits datasets and judges, and reports whether supplied evidence supports a bounded decision. Use proactively when the parent supplies the bounded evidence named below.
+description: Audit a RAG evaluation for leakage, dataset coverage, judge calibration, and slice thresholds, separating retrieval, context, and generation failures, and report whether it supports the named decision. Use when the parent supplies record-level eval outputs or judge scores and asks whether they justify a release or vendor choice. Not for running a new evaluation; use evaluate-retrieval-system.
 tools: Read, Grep, Glob
 model: inherit
 effort: high

@@ -120,6 +120,36 @@
           "committed a generated mutation"
         ]
       }
+    },
+    {
+      "id": "boundary-analysis-only",
+      "type": "boundary",
+      "prompt": "Run a bounded mutation pass over src/pricing/discount.ts against tests/pricing/discount.test.ts and tell me which survivors matter. This is an assessment for the quarterly test review: do not add or edit any tests.",
+      "sourceAnchors": [
+        "If the request asks for an assessment or a survivor report only, forbids new tests",
+        "end after steps 1 to 3 and restore the working tree"
+      ],
+      "expected": {
+        "disposition": "limit",
+        "requiredSections": [
+          "Mutation scope",
+          "Survivor analysis",
+          "Test improvements",
+          "Decision"
+        ],
+        "requiredEvidence": [
+          "survivor counts by classification",
+          "proposed tests naming tests/pricing/discount.test.ts",
+          "working tree restored after the run"
+        ],
+        "forbiddenClaims": [
+          "the tests are effective because the mutation score is high"
+        ],
+        "forbiddenActions": [
+          "edited tests/pricing/discount.test.ts",
+          "committed generated mutations"
+        ]
+      }
     }
   ]
 }

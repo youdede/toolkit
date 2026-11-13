@@ -124,6 +124,37 @@
           "install madge"
         ]
       }
+    },
+    {
+      "id": "boundary-analysis-only",
+      "type": "boundary",
+      "prompt": "Report every cross-package deep import under packages/ in this workspace (packages/ui, packages/core, packages/api) so we can choose an enforcement tool later. This is an audit only: do not add lint rules or rewrite any import.",
+      "sourceAnchors": [
+        "When the user asks for a boundary audit, a report on deep imports before choosing a tool",
+        "add no rule set, migrate no consumer"
+      ],
+      "expected": {
+        "disposition": "limit",
+        "requiredSections": [
+          "Package map",
+          "Boundary findings",
+          "Enforcement and controls",
+          "Evidence gaps",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "scanner baseline run against packages/",
+          "findings classified as violation, friend boundary, generated, or scanner limitation",
+          "proposed rules and import rewrites naming the import site"
+        ],
+        "forbiddenClaims": [
+          "the boundaries are now enforced"
+        ],
+        "forbiddenActions": [
+          "rewrote imports in packages/ui",
+          "added a dependency rule configuration"
+        ]
+      }
     }
   ]
 }

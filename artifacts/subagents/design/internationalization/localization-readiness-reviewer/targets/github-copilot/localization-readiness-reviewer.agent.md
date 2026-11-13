@@ -1,6 +1,6 @@
 ---
 name: localization-readiness-reviewer
-description: "Review locale-sensitive code for message, plural, format, timezone, fallback, and bidirectional defects. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution."
+description: "Review locale-sensitive code and message catalogs for plural, interpolation, date, number, currency, timezone, fallback, and bidirectional defects, returning a locale-key-value matrix. Use when the parent supplies i18n configuration, catalogs, or formatter calls and asks whether a supported locale renders wrong grammar, format, or direction. Not for new-locale design; use design-for-localization."
 tools: ["read","search"]
 ---
 

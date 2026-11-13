@@ -1,5 +1,5 @@
 ---
-description: "Review one user journey for complete, coherent, and recoverable interaction-state transitions. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution."
+description: "Review one user journey for missing, contradictory, duplicate, or unrecoverable interface states, returning an event-state-view transition table. Use when the parent asks about loading, empty, error, offline, cancel, and retry states, double submission, or stale responses in a UI flow. Not for backend status lifecycles and persisted transitions; use state-machine-invariant-analyst."
 mode: subagent
 steps: 14
 permission:

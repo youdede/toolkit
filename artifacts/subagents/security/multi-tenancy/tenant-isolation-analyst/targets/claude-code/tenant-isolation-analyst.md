@@ -1,6 +1,6 @@
 ---
 name: tenant-isolation-analyst
-description: Trace a tenant identity through storage, cache, job, and query boundaries for isolation failures. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution.
+description: Trace a tenant identity through request, query, cache, queue, job, and export boundaries and return a path where the tenant predicate is dropped, substituted, or unenforced. Use when the parent supplies multi-tenant queries, cache keys, background jobs, or storage schemas and asks whether one tenant can reach another's data. Not for role-based permission checks; use access-control-matrix-auditor.
 tools: Read, Grep, Glob
 model: inherit
 maxTurns: 16

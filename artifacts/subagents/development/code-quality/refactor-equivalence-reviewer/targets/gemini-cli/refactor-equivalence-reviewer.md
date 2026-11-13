@@ -1,6 +1,6 @@
 ---
 name: refactor-equivalence-reviewer
-description: "Compare a bounded before-and-after refactor for unintended observable behavior changes. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution."
+description: "Compare a bounded before-and-after refactor for unintended changes in returns, errors, ordering, or side effects, returning a witness table of inputs and observations. Use when a rename, extraction, or restructuring is presented as behavior-preserving and the parent asks whether any supported input now behaves differently. Not for whether tests catch a regression; use test-gap-reviewer."
 kind: local
 tools:
   - read_file

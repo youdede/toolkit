@@ -1,5 +1,5 @@
 ---
-description: "Analyze a bounded state machine for illegal transitions, orphan states, and bypassed guards. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution."
+description: "Analyze a state machine, defined explicitly or in code, for illegal transitions, orphan states, and bypassed guards, returning a reachable event sequence that breaks an invariant. Use when code drives status fields, transition tables, or lifecycles and the parent asks whether replayed, duplicate, or reordered events reach a forbidden state. Not for UI flows; use interaction-state-reviewer."
 mode: subagent
 steps: 16
 permission:
@@ -89,7 +89,7 @@ Confidence is how much of the claim the evidence shows. `Demonstrated`: cited li
 
 ## Refusals
 
-- Do not invent transitions absent from the supplied machine.
+- Do not invent transitions absent from the supplied machine or the code that defines it.
 - Do not turn state completeness into a UI interaction review.
 - Do not execute workflow events or mutate persisted records.
 - Do not edit source, configuration, tests, records, or documentation; do not execute commands or external actions.

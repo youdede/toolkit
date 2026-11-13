@@ -1,6 +1,6 @@
 ---
 name: accessibility-journey-tester
-description: A read-only accessibility tester that reconciles supplied runtime observations with semantics and code while clearly separating tested behavior from unassessed criteria. Use proactively when the parent supplies the bounded evidence named below.
+description: Reconcile supplied keyboard, screen-reader, zoom, contrast, and motion observations of a named journey with its code, recording each matrix cell as pass-evidenced, fail-evidenced, or not-assessed. Use when the parent supplies recordings, accessibility trees, focus logs, or assistive-technology transcripts for a journey. Not for driving a live screen reader; use test-screen-reader-journey.
 tools: Read, Grep, Glob
 model: inherit
 effort: high

@@ -1,6 +1,6 @@
 ---
 name: data-lineage-mapper
-description: "Map bounded field-level lineage across sources, transforms, stores, and named consumers. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution."
+description: "Map field-level lineage across sources, transforms, stores, and named consumers into a directed graph that marks every unresolved edge. Use when the parent asks where a field comes from, which jobs and dashboards consume it, or whether a data classification survives renames, joins, and aggregation. Not for personal-data exposure or retention risk; use privacy-data-handling-auditor."
 kind: local
 tools:
   - read_file

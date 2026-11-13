@@ -1,6 +1,6 @@
 ---
 name: design-system-consistency-reviewer
-description: Review a bounded interface delta for component, token, variant, and exception consistency. Use when the parent supplies the named evidence boundary and needs a specialist result without edits or execution.
+description: Review a bounded interface delta for components, tokens, and variants that bypass or misuse the documented design system, returning an element-to-primitive map. Use when the parent supplies changed UI code with a component catalog, token contract, or exception policy and asks whether it uses the system or forks it. Not for existing surfaces as they stand; use audit-design-system-consistency.
 tools: Read, Grep, Glob
 model: inherit
 maxTurns: 10

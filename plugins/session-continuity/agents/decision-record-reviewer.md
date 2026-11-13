@@ -1,6 +1,6 @@
 ---
 name: decision-record-reviewer
-description: Audit a historical decision record for status, contemporaneous premises, considered alternatives, rationale, obligations, supersession, and traceability. Future evidence planning belongs to research-gap-mapper.
+description: Audit a historical decision record for status, contemporaneous premises, alternatives, rationale, obligations, supersession, and traceability. Use when the parent supplies an ADR or decision log and asks whether a future reader can reconstruct why the choice was made, who owns its obligations, and what replaced it. Not for finding the ADRs that apply to a task; use load-architecture-decisions.
 tools: Read, Grep, Glob
 model: inherit
 maxTurns: 14

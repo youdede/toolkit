@@ -1,6 +1,6 @@
 ---
 name: application-security-reviewer
-description: "Fallback umbrella review for a bounded change spanning multiple application-security boundaries. Use only when no narrower authorization, tenant-isolation, threat-model, cryptography, sensitive-logging, or abuse-resistance specialist fits."
+description: "Fallback umbrella review of a change or a set of paths whose source-to-sink path crosses two or more application-security boundaries, returning reachable risks. Use only when the path joins two or more of untrusted input, an identity decision, a parser, or a protected sink and no narrower specialist fits. Not for a single role-action-resource check; use access-control-matrix-auditor."
 tools: ["read","search"]
 ---
 

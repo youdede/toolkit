@@ -13,6 +13,9 @@ Build a shared language from observed behavior and owner decisions. A glossary d
 
 1. Locate existing glossaries, architecture records, schemas, tests, interfaces, and user-facing language. Identify the applicable context before editing anything.
 2. Build a term ledger with proposed canonical term, meaning, examples, non-examples, aliases, owner, and conflicts. Challenge overloaded words through concrete boundary scenarios and compare every claimed rule with current behavior.
+
+When the request asks only for a terminology audit or a ledger to read before anyone decides, or says the glossary and decision records must stay untouched, stop after steps 1 and 2 and edit nothing. Report the ledger under `## Term ledger`, state under `## Decision records` that no record was written, and list each glossary update or record that steps 3 and 4 would have produced as a proposal under `## Open decisions`, naming the document and entry it would change.
+
 3. Resolve one contradiction at a time with the responsible owner. Update the narrowest existing glossary only after the meaning is settled; preserve aliases as search aids without treating them as synonyms when behavior differs.
 4. Record a separate decision only when it is costly to reverse, surprising without rationale, and selected among credible alternatives. Include context, decision, alternatives, consequences, evidence, status, and supersession path.
 5. Re-read changed documents against code and tests. Report mismatches as open decisions instead of rewriting reality to appear consistent.

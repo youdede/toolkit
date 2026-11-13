@@ -1,5 +1,5 @@
 ---
-description: "Review an incident or production-control runbook for authority, containment, telemetry gates, destructive steps, escalation, and recovery. General end-user procedures belong to procedural-documentation-tester."
+description: "Review an incident or production-control runbook for authority, containment, telemetry gates, destructive steps, escalation, and recovery. Use when the parent supplies an operational runbook with its incident scenario, operator role, and exercise record and asks whether each step can be executed safely. Not for tutorials or end-user procedures; use procedural-documentation-tester."
 mode: subagent
 steps: 12
 permission:
