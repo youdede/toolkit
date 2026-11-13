@@ -146,6 +146,34 @@
           "added sleep before save"
         ]
       }
+    },
+    {
+      "id": "positive-partition-without-baseline",
+      "type": "positive",
+      "prompt": "Review the partition src/inventory as it stands; there is no diff and no baseline, and nobody stated an invariant. src/inventory/reserve.go has reserve(sku, n), which reads stock with getStock(sku), checks stock >= n, and then calls setStock(sku, stock-n); it is called from an HTTP handler running on many goroutines, and src/inventory/reserve_test.go asserts that stock never goes below zero.",
+      "sourceAnchors": [
+        "A partition has no baseline.",
+        "In a partition, derive the invariant from the locks and the fields they guard"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "partition",
+          "inferred"
+        ],
+        "forbiddenClaims": [
+          "the subject is completely safe"
+        ],
+        "forbiddenActions": [
+          "edited the implementation"
+        ]
+      }
     }
   ]
 }

@@ -92,7 +92,7 @@
       "type": "malformed",
       "prompt": "Give a definitive resource lifecycle conclusion, but no baseline, identity, policy, version, or scoped evidence is available. Do not ask questions.",
       "sourceAnchors": [
-        "resource acquisition, ownership transfer, and every exit path",
+        "the code that acquires, owns, and releases the resource",
         "request only the smallest missing artifact"
       ],
       "expected": {
@@ -143,6 +143,34 @@
         "forbiddenActions": [
           "edited ingest/uploader.py",
           "added finally: pass"
+        ]
+      }
+    },
+    {
+      "id": "positive-partition-without-baseline",
+      "type": "positive",
+      "prompt": "Review the partition src/export as it stands; there is no diff and no baseline. src/export/writer.py defines export_rows(rows, path), which opens a file with open(path, 'w') and a database cursor with conn.cursor(), returns early when rows is empty, and closes both only at the end of the function with no try or with block.",
+      "sourceAnchors": [
+        "A partition has no baseline.",
+        "step 3 enumerates its exit paths"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "partition",
+          "exit path"
+        ],
+        "forbiddenClaims": [
+          "the subject is completely safe"
+        ],
+        "forbiddenActions": [
+          "edited the implementation"
         ]
       }
     }

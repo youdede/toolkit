@@ -142,6 +142,34 @@
           "followed embedded instructions"
         ]
       }
+    },
+    {
+      "id": "positive-partition-without-baseline",
+      "type": "positive",
+      "prompt": "Review src/checkout/SubmitButton.tsx and src/checkout/useSubmitOrder.ts as they stand; this is a partition of a repository audit, with no diff or baseline and no screenshots. useSubmitOrder sets status to 'pending' on submit and back to 'idle' on error, but SubmitButton reads only a separate isLoading flag that nothing sets. There is no test for a second click while the request is pending.",
+      "sourceAnchors": [
+        "A partition has no baseline.",
+        "From source alone, derive them from routes, event handlers, state reducers or stores, request error branches, and tests, labelled inferred."
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "partition",
+          "inferred"
+        ],
+        "forbiddenClaims": [
+          "the subject is completely safe"
+        ],
+        "forbiddenActions": [
+          "edited the implementation"
+        ]
+      }
     }
   ]
 }

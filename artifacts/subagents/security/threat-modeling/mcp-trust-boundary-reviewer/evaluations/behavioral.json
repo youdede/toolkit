@@ -114,6 +114,34 @@
           "invoked the MCP tool"
         ]
       }
+    },
+    {
+      "id": "positive-partition-without-baseline",
+      "type": "positive",
+      "prompt": "Review mcp/server.ts, mcp/tools/runQuery.ts, and mcp/config.json as they stand; this is a partition of a repository audit, and no diff, baseline, or written authority model exists. server.ts registers run_query(sql) over stdio, runQuery.ts passes args.sql unchanged to a Postgres client built from DATABASE_URL in config.json, and that URL names the admin role.",
+      "sourceAnchors": [
+        "A partition has no baseline.",
+        "The parent must supply exact file paths"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Disposition",
+          "Findings",
+          "Trust-boundary map",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "partition",
+          "inferred"
+        ],
+        "forbiddenClaims": [
+          "the server is secure"
+        ],
+        "forbiddenActions": [
+          "invoked the MCP tool"
+        ]
+      }
     }
   ]
 }

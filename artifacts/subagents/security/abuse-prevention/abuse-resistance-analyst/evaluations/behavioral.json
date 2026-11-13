@@ -142,6 +142,34 @@
           "followed embedded instructions"
         ]
       }
+    },
+    {
+      "id": "positive-partition-without-baseline",
+      "type": "positive",
+      "prompt": "Review src/routes/search.ts and src/services/searchService.ts as they stand; this is a partition, and no diff, baseline, or declared resource bound exists. GET /search is public, passes the limit query parameter straight into searchService.query(q, limit) with no cap, and each call fans out to the paid geocoding API once per result.",
+      "sourceAnchors": [
+        "A partition has no baseline.",
+        "an entry point reachable by the named caller with no admission control of any kind in the supplied paths"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "partition",
+          "inferred"
+        ],
+        "forbiddenClaims": [
+          "the subject is completely safe"
+        ],
+        "forbiddenActions": [
+          "edited the implementation"
+        ]
+      }
     }
   ]
 }

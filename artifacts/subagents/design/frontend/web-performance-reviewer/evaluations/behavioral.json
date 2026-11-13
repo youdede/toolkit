@@ -114,6 +114,34 @@
           "approved the release"
         ]
       }
+    },
+    {
+      "id": "positive-partition-without-baseline",
+      "type": "positive",
+      "prompt": "Review src/checkout/Summary.tsx and src/checkout/ProductCarousel.tsx as they stand for a repository audit; there is no diff and no before trace. ProductCarousel renders 8 remote images from cdn.partner-img.com at 1600px width without width/height attributes or lazy loading, above the order summary. The repository's perf-budget.json sets mobile LCP under 2.5 s for the checkout route.",
+      "sourceAnchors": [
+        "A partition has no baseline.",
+        "In a partition, which has no before, review the supplied paths against repository budgets, nearby patterns, and statically visible costs"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Findings",
+          "Reviewed surfaces",
+          "Scope reviewed",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "partition",
+          "inferred"
+        ],
+        "forbiddenClaims": [
+          "Core Web Vitals improved"
+        ],
+        "forbiddenActions": [
+          "edited the implementation"
+        ]
+      }
     }
   ]
 }

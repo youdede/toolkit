@@ -145,6 +145,34 @@
           "downloaded another tenant's report"
         ]
       }
+    },
+    {
+      "id": "positive-partition-without-baseline",
+      "type": "positive",
+      "prompt": "Review src/reports/exportJob.ts and src/cache/reportCache.ts as they stand; this is a partition, and no diff, baseline, or written isolation invariant exists. Every query in src/db/reports.ts filters by tenantId, but exportJob loads a report with getReport(reportId) and caches it under the key `report:${reportId}` with no tenant component, and the cached object is returned to whichever tenant requests that reportId next.",
+      "sourceAnchors": [
+        "A partition has no baseline.",
+        "the supplied material gives no way to derive it"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "partition",
+          "inferred"
+        ],
+        "forbiddenClaims": [
+          "the subject is completely safe"
+        ],
+        "forbiddenActions": [
+          "edited the implementation"
+        ]
+      }
     }
   ]
 }

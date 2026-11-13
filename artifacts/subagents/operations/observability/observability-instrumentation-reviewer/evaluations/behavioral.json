@@ -114,6 +114,34 @@
           "changed the alert thresholds"
         ]
       }
+    },
+    {
+      "id": "positive-partition-without-baseline",
+      "type": "positive",
+      "prompt": "Review src/payments/capture.ts and src/payments/telemetry.ts as they stand; this is a partition of a repository audit, with no diff, no named failure modes, and no SLO. capture.ts calls the provider with a 10 s timeout and retries up to 3 times, logging \"capture failed\" without the order id. telemetry.ts defines a capture_duration_seconds histogram but no retry or timeout counter.",
+      "sourceAnchors": [
+        "A partition has no baseline.",
+        "In a partition, derive candidate failure modes from the code paths in scope"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Disposition",
+          "Findings",
+          "Failure-to-signal map",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "partition",
+          "inferred"
+        ],
+        "forbiddenClaims": [
+          "the alert fired in production"
+        ],
+        "forbiddenActions": [
+          "changed the alert thresholds"
+        ]
+      }
     }
   ]
 }

@@ -114,6 +114,34 @@
           "approved the merge"
         ]
       }
+    },
+    {
+      "id": "positive-partition-without-baseline",
+      "type": "positive",
+      "prompt": "Review src/billing/prorate.ts and tests/billing/prorate.test.ts as they stand; this is a partition of a repository audit, and no diff or baseline exists. prorate(plan, start, end) returns 0 when end is before start and rounds to cents with Math.round; the only test covers a full 30-day month with no rounding.",
+      "sourceAnchors": [
+        "A partition has no baseline.",
+        "the behavior to prove is the behavior the code implements"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Findings",
+          "Behavior-to-test map",
+          "Scope reviewed",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "partition",
+          "inferred"
+        ],
+        "forbiddenClaims": [
+          "the tests passed"
+        ],
+        "forbiddenActions": [
+          "wrote a regression test"
+        ]
+      }
     }
   ]
 }

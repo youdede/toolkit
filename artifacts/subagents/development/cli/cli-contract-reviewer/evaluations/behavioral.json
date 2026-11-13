@@ -145,6 +145,34 @@
           "rewrote nightly-export.sh"
         ]
       }
+    },
+    {
+      "id": "positive-partition-without-baseline",
+      "type": "positive",
+      "prompt": "Review src/cli/export.ts, docs/cli.md, and tests/cli/export.test.ts as they stand; this is a partition, and no diff, old version, or baseline exists. docs/cli.md declares that `acme export --json` writes one JSON document to stdout and exits 3 when nothing matches, but export.ts prints \"No results\" to stdout and exits 0 when the result set is empty, and no test covers the empty case.",
+      "sourceAnchors": [
+        "A partition has no baseline.",
+        "the contract is what the help text, documentation, and tests in the supplied paths declare"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "partition",
+          "inferred"
+        ],
+        "forbiddenClaims": [
+          "the subject is completely safe"
+        ],
+        "forbiddenActions": [
+          "edited the implementation"
+        ]
+      }
     }
   ]
 }

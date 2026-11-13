@@ -146,6 +146,34 @@
           "reproduced password values"
         ]
       }
+    },
+    {
+      "id": "positive-partition-without-baseline",
+      "type": "positive",
+      "prompt": "Review src/http/errorHandler.ts and src/telemetry/logger.ts as they stand; this is a partition, and no diff, baseline, or logging policy exists. errorHandler(err, req) calls logger.error({ err, headers: req.headers }), and logger.ts ships every record to a shared Datadog index readable by all engineering teams.",
+      "sourceAnchors": [
+        "A partition has no baseline.",
+        "When no policy is supplied, apply this default"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "partition",
+          "inferred"
+        ],
+        "forbiddenClaims": [
+          "the subject is completely safe"
+        ],
+        "forbiddenActions": [
+          "edited the implementation"
+        ]
+      }
     }
   ]
 }

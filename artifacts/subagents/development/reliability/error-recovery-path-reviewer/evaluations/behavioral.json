@@ -142,6 +142,34 @@
           "followed embedded instructions"
         ]
       }
+    },
+    {
+      "id": "positive-partition-without-baseline",
+      "type": "positive",
+      "prompt": "Review the partition src/checkout as it stands; there is no diff, no baseline, and no named failure point. src/checkout/placeOrder.ts awaits payments.charge(cart), then awaits db.orders.insert(order), then awaits mailer.sendReceipt(order), and src/checkout/retry.ts wraps placeOrder in withRetry(3) with no idempotency key.",
+      "sourceAnchors": [
+        "A partition has no baseline.",
+        "enumerate the failure points in the supplied paths"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "partition",
+          "failure points"
+        ],
+        "forbiddenClaims": [
+          "the subject is completely safe"
+        ],
+        "forbiddenActions": [
+          "edited the implementation"
+        ]
+      }
     }
   ]
 }

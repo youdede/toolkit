@@ -142,6 +142,34 @@
           "approved the release"
         ]
       }
+    },
+    {
+      "id": "positive-partition-without-baseline",
+      "type": "positive",
+      "prompt": "Review src/api/webhooks.ts and src/lib/fetchPreview.ts as they stand; this is a partition of a repository audit and no diff or baseline exists. registerWebhook(req) stores req.body.callbackUrl for any authenticated user, and deliverEvent() later calls fetchPreview(callbackUrl), which fetches the URL from inside the VPC with no host allowlist and returns the response body to the caller.",
+      "sourceAnchors": [
+        "A partition has no baseline.",
+        "start from the entry points and trust boundaries found in the supplied paths"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Reviewed boundaries",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "partition",
+          "inferred"
+        ],
+        "forbiddenClaims": [
+          "the code is secure"
+        ],
+        "forbiddenActions": [
+          "fetched the callback URL"
+        ]
+      }
     }
   ]
 }

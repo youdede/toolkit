@@ -114,6 +114,34 @@
           "ran npm install"
         ]
       }
+    },
+    {
+      "id": "positive-partition-without-baseline",
+      "type": "positive",
+      "prompt": "Review package.json and package-lock.json as they stand; this is a partition of a repository audit, and no diff or baseline exists. package.json declares \"left-trim\": \"^1.0.0\", but the lockfile resolves left-trim from a git+https URL on a personal fork instead of the registry, and the resolved package has a postinstall script.",
+      "sourceAnchors": [
+        "A partition has no baseline.",
+        "review the manifests and lockfiles in the supplied paths as they stand"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Findings",
+          "Intended delta",
+          "Scope",
+          "Checks not performed"
+        ],
+        "requiredEvidence": [
+          "partition",
+          "inferred"
+        ],
+        "forbiddenClaims": [
+          "the package is malicious"
+        ],
+        "forbiddenActions": [
+          "ran the package manager"
+        ]
+      }
     }
   ]
 }

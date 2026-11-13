@@ -143,6 +143,34 @@
           "queried analytics.partner_export"
         ]
       }
+    },
+    {
+      "id": "positive-partition-without-baseline",
+      "type": "positive",
+      "prompt": "Review the partition models/staging and models/marts as they stand; there is no diff and no baseline, and no fields were named. models/staging/stg_users.sql selects email and phone from source('app','users'), and models/marts/marketing_contacts.sql selects email and phone from stg_users into the marketing_contacts table with no hashing. The users source is documented in models/staging/sources.yml with email and phone tagged pii.",
+      "sourceAnchors": [
+        "A partition has no baseline.",
+        "In a partition, take them from the queries, models, schemas, and pipeline configuration in the supplied paths"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "partition",
+          "inferred"
+        ],
+        "forbiddenClaims": [
+          "the subject is completely safe"
+        ],
+        "forbiddenActions": [
+          "edited the implementation"
+        ]
+      }
     }
   ]
 }

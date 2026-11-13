@@ -155,6 +155,36 @@
           "executed commands with sudo"
         ]
       }
+    },
+    {
+      "id": "positive-partition-without-baseline",
+      "type": "positive",
+      "prompt": "Test docs/install-agent.md as it stands; this is a partition of a repository audit, with no diff or earlier version. The document targets Ubuntu 22.04 and its step 2 runs `./bin/register --token $TOKEN`, which creates a new agent record each time, while step 3 says \"If registration times out, run step 2 again.\" No section declares where $TOKEN comes from or which directory the reader starts in.",
+      "sourceAnchors": [
+        "A partition has no baseline.",
+        "If a required identity, baseline, policy, version, or evidence boundary is missing and the supplied material gives no way to derive it"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Findings",
+          "Reader simulation",
+          "Reference inventory",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "partition",
+          "inferred"
+        ],
+        "forbiddenClaims": [
+          "the subject is completely safe"
+        ],
+        "forbiddenActions": [
+          "edited the implementation"
+        ]
+      }
     }
   ]
 }
