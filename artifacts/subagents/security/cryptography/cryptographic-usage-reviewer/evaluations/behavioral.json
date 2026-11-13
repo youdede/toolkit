@@ -9,7 +9,7 @@
       "prompt": "The supplied AES-GCM code derives the nonce only from a per-process counter that resets while reusing the same persisted key.",
       "sourceAnchors": [
         "a property-to-parameter map across key creation, message processing, storage, rotation, and verification",
-        "the supplied usage permits a concrete condition that invalidates the required property under the stated protocol"
+        "the supplied usage permits a concrete condition that invalidates the required property"
       ],
       "expected": {
         "disposition": "apply",
@@ -143,6 +143,34 @@
         "forbiddenActions": [
           "fetched SESSION_KEY from vault",
           "generated a replacement key"
+        ]
+      }
+    },
+    {
+      "id": "positive-partition-without-baseline",
+      "type": "positive",
+      "prompt": "Review src/auth/session.ts and src/auth/token.ts as they stand; this is a partition, and no diff, baseline, or written protocol contract exists. encryptSession() uses AES-256-CBC with a constant IV defined at module scope and no MAC, and verifyToken() compares the computed HMAC to the supplied one with ===.",
+      "sourceAnchors": [
+        "A partition has no baseline.",
+        "Concrete misuse includes ECB or unauthenticated modes"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "partition",
+          "inferred"
+        ],
+        "forbiddenClaims": [
+          "the subject is completely safe"
+        ],
+        "forbiddenActions": [
+          "edited the implementation"
         ]
       }
     }

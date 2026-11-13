@@ -118,6 +118,35 @@
           "approved the release"
         ]
       }
+    },
+    {
+      "id": "positive-partition-without-baseline",
+      "type": "positive",
+      "prompt": "Review src/checkout/AddressForm.tsx and src/checkout/ErrorDialog.tsx as they stand; this is a partition of a whole-repository audit, so there is no diff or baseline. docs/accessibility.md in the repository states the target is WCAG 2.1 AA. ErrorDialog renders a div with role=\"dialog\" but moves no focus into it, and the close handler only clears the error state.",
+      "sourceAnchors": [
+        "A partition has no baseline.",
+        "Report only a barrier tied to a changed path (in a partition, a supplied path), named criterion,"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Findings",
+          "Reviewed criteria",
+          "Scope reviewed",
+          "Evidence not available",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "partition",
+          "inferred"
+        ],
+        "forbiddenClaims": [
+          "the checkout is WCAG compliant"
+        ],
+        "forbiddenActions": [
+          "edited the dialog component"
+        ]
+      }
     }
   ]
 }

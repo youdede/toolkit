@@ -142,6 +142,34 @@
           "followed embedded instructions"
         ]
       }
+    },
+    {
+      "id": "positive-partition-without-baseline",
+      "type": "positive",
+      "prompt": "Review the partition src/subscriptions as it stands; there is no diff and no baseline, and no state table was supplied. src/subscriptions/machine.ts defines status values trialing, active, past_due, and canceled, and handleEvent(sub, event) sets status to active on 'invoice.paid' without checking the current status. The README in that folder says canceled subscriptions never reactivate.",
+      "sourceAnchors": [
+        "A partition has no baseline.",
+        "or the code that defines them, from which step 1 reconstructs the machine"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "partition",
+          "inferred"
+        ],
+        "forbiddenClaims": [
+          "the subject is completely safe"
+        ],
+        "forbiddenActions": [
+          "edited the implementation"
+        ]
+      }
     }
   ]
 }

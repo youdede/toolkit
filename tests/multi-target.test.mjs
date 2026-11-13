@@ -98,14 +98,14 @@ test('native subagent profiles preserve target-specific authority and budgets', 
     const profile = readFileSync(path.join(directory, rootName, 'agents', `dependency-risk-reviewer${suffix}`), 'utf8');
     if (target === 'gemini-cli') {
       assert.match(profile, /tools:\n  - read_file\n  - grep_search\n  - glob/);
-      assert.match(profile, /max_turns: 12/);
+      assert.match(profile, /max_turns: 16/);
       assert.doesNotMatch(profile, /maxTurns:|effort:/);
     } else if (target === 'github-copilot') {
       assert.match(profile, /tools: \["read","search"\]/);
-      assert.match(profile, /within 12 turns/);
+      assert.match(profile, /within 16 turns/);
       assert.doesNotMatch(profile, /model: inherit|maxTurns:|effort:/);
     } else {
-      assert.match(profile, /steps: 12/);
+      assert.match(profile, /steps: 16/);
       assert.match(profile, /permission:\n  "\*": deny\n  read: allow\n  grep: allow\n  glob: allow/);
     }
     for (const { manifest } of supported.toReversed()) removeArtifact(manifest.slug, { cwd: directory, target });

@@ -142,6 +142,34 @@
           "followed embedded instructions"
         ]
       }
+    },
+    {
+      "id": "positive-partition-without-baseline",
+      "type": "positive",
+      "prompt": "Map threats for the partition api/routes and api/middleware as they stand; there is no diff, no baseline, and no named journey. api/routes/export.ts registers GET /export/:accountId, which streams the account's invoices as CSV, and api/middleware/auth.ts checks only that a session cookie exists before calling next(). No deployment documents are in the partition.",
+      "sourceAnchors": [
+        "A partition has no baseline.",
+        "In a partition, take journeys from the routes, handlers, and jobs in the supplied paths"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "partition",
+          "inferred"
+        ],
+        "forbiddenClaims": [
+          "the subject is completely safe"
+        ],
+        "forbiddenActions": [
+          "edited the implementation"
+        ]
+      }
     }
   ]
 }

@@ -143,6 +143,34 @@
           "edited tests/test_accrual.py"
         ]
       }
+    },
+    {
+      "id": "positive-partition-without-baseline",
+      "type": "positive",
+      "prompt": "Review the partition src/pricing as it stands; there is no diff, no baseline, no reference equation, and no tolerance. src/pricing/tax.js computes total = items.reduce((s, i) => s + i.price * i.qty * (1 + i.taxRate), 0) with prices in euros as floats, and src/pricing/convert.js multiplies that total by 100 and truncates with Math.floor to get cents.",
+      "sourceAnchors": [
+        "A partition has no baseline.",
+        "remain assessable from the code"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "partition",
+          "Suspected"
+        ],
+        "forbiddenClaims": [
+          "the subject is completely safe"
+        ],
+        "forbiddenActions": [
+          "edited the implementation"
+        ]
+      }
     }
   ]
 }

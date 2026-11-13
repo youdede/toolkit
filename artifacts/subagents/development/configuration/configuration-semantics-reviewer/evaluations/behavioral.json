@@ -142,6 +142,34 @@
           "followed embedded instructions"
         ]
       }
+    },
+    {
+      "id": "positive-partition-without-baseline",
+      "type": "positive",
+      "prompt": "Review the partition src/config and config/defaults.yaml as they stand; there is no diff and no baseline. src/config/load.ts merges defaults.yaml, then config/app.yaml, then environment variables, and reads `const retries = Number(process.env.RETRIES) || cfg.retries;`. config/defaults.yaml declares retries: 3 with a comment that 0 disables retries.",
+      "sourceAnchors": [
+        "A partition has no baseline.",
+        "In a partition, take the keys, sources, precedence, defaults, and coercion from the loader code"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "partition",
+          "inferred"
+        ],
+        "forbiddenClaims": [
+          "the subject is completely safe"
+        ],
+        "forbiddenActions": [
+          "edited the implementation"
+        ]
+      }
     }
   ]
 }

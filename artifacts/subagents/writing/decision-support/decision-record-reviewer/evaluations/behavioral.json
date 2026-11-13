@@ -165,6 +165,38 @@
           "added rationale to the record"
         ]
       }
+    },
+    {
+      "id": "positive-partition-without-baseline",
+      "type": "positive",
+      "prompt": "Review docs/adr/ADR-019-reporting-replica.md and docs/adr/ADR-027-warehouse-only.md as they stand; this is a partition of a repository audit, with no diff or earlier version. ADR-019 is marked Accepted and names logical replication with no rejected alternative or owner for its monitoring obligation. ADR-027 says it replaces the reporting replica, but ADR-019 carries no supersession link.",
+      "sourceAnchors": [
+        "A partition has no baseline.",
+        "If a required identity, baseline, policy, version, or evidence boundary is missing and the supplied material gives no way to derive it"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Findings",
+          "Record identity",
+          "Rationale chain",
+          "Obligation ledger",
+          "Supersession map",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "partition",
+          "inferred"
+        ],
+        "forbiddenClaims": [
+          "the subject is completely safe"
+        ],
+        "forbiddenActions": [
+          "edited the implementation"
+        ]
+      }
     }
   ]
 }

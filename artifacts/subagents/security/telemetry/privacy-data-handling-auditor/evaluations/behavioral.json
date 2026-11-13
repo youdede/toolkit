@@ -114,6 +114,34 @@
           "exported customer records"
         ]
       }
+    },
+    {
+      "id": "positive-partition-without-baseline",
+      "type": "positive",
+      "prompt": "Audit db/schema/users.sql, src/jobs/purgeDeletedUsers.ts, and docs/privacy.md as they stand; this is a partition of a repository audit, and no diff or supplied policy baseline exists. docs/privacy.md states that deleted accounts are erased within 30 days; purgeDeletedUsers() deletes rows from users but not from the login_events table, which stores email and ip_address keyed by user_id.",
+      "sourceAnchors": [
+        "A partition has no baseline.",
+        "cannot be derived from the schemas, retention or deletion code, privacy documents, and tests in the supplied paths"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Disposition",
+          "Findings",
+          "Data-flow map",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "partition",
+          "inferred"
+        ],
+        "forbiddenClaims": [
+          "the system is legally compliant"
+        ],
+        "forbiddenActions": [
+          "exported customer records"
+        ]
+      }
     }
   ]
 }

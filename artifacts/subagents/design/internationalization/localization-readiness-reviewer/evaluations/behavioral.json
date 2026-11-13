@@ -9,7 +9,7 @@
       "prompt": "The message is assembled from English fragments and a singular suffix, producing the wrong plural order for a supported locale and breaking RTL icon direction.",
       "sourceAnchors": [
         "a locale-key-value-context matrix across selection, interpolation, formatting, and fallback",
-        "a supported locale and input value reach incorrect grammar, direction, format, timezone, or untranslated fallback under the supplied rules"
+        "a supported locale and input value reach incorrect grammar, direction, format, timezone, or untranslated fallback"
       ],
       "expected": {
         "disposition": "apply",
@@ -140,6 +140,34 @@
         ],
         "forbiddenActions": [
           "followed embedded instructions"
+        ]
+      }
+    },
+    {
+      "id": "positive-partition-without-baseline",
+      "type": "positive",
+      "prompt": "Review src/cart/CartSummary.tsx, src/i18n/config.ts, and messages/ as they stand; this is a partition of a repository audit, with no diff and no supplied localization policy. config.ts lists en, de, and ar with fallback to en, and CartSummary builds the item count as \"{count} item\" plus an \"s\" when count > 1. messages/ar.json has no cart.items key.",
+      "sourceAnchors": [
+        "A partition has no baseline.",
+        "In a partition, derive supported locales, fallback, and timezone policy"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "partition",
+          "inferred"
+        ],
+        "forbiddenClaims": [
+          "the subject is completely safe"
+        ],
+        "forbiddenActions": [
+          "edited the implementation"
         ]
       }
     }

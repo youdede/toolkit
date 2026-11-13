@@ -9,7 +9,7 @@
       "prompt": "Review this wire change. Encoder: settings-service v2.0 now omits boolean fields whose value is false. Decoder: mobile app 4.x, which sets `notifications_enabled = json[\"notifications_enabled\"] ?? true`. Canonical fixtures: v1.9 encodes {\"user\":\"u1\",\"notifications_enabled\":false}; v2.0 encodes {\"user\":\"u1\"} for the same settings.",
       "sourceAnchors": [
         "a value-to-wire-to-value matrix across every supported version pairing",
-        "a supported value fails round trip or a supported reader interprets the candidate encoding with different semantics"
+        "a supported value fails round trip or a supported reader interprets the candidate encoding"
       ],
       "expected": {
         "disposition": "apply",
@@ -142,6 +142,34 @@
         ],
         "forbiddenActions": [
           "ran buf generate"
+        ]
+      }
+    },
+    {
+      "id": "positive-partition-without-baseline",
+      "type": "positive",
+      "prompt": "Review the partition src/wire and test/fixtures as they stand; there is no diff, no baseline, and only one version of the code. src/wire/event.ts encodes amount as JSON.stringify of a JavaScript number holding int64 cents, and src/wire/decode.ts parses it back with JSON.parse; test/fixtures/event.json holds an amount of 9007199254740993.",
+      "sourceAnchors": [
+        "A partition has no baseline.",
+        "In a partition, the version is the code as it stands"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Findings",
+          "Scope reviewed",
+          "Unverified assumptions",
+          "Residual uncertainty"
+        ],
+        "requiredEvidence": [
+          "partition",
+          "inferred"
+        ],
+        "forbiddenClaims": [
+          "the subject is completely safe"
+        ],
+        "forbiddenActions": [
+          "edited the implementation"
         ]
       }
     }
