@@ -43,7 +43,7 @@
       { "id": "isolate-evaluation-cases", "effect": "require", "action": "isolate-evaluation-cases", "sourceArtifactId": "skill/development/testing/design-agent-evaluation-harness", "sourceField": "summary" }
     ]
   },
-  "relationships": { "composesWith": ["hook/development/workflow/phase-gate-guard"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": ["pack/plan-and-verify-loop"] },
+  "relationships": { "composesWith": ["hook/development/assertion-integrity/test-assertion-removal-guard", "hook/development/testing/test-integrity-guard", "hook/development/workflow/phase-gate-guard", "skill/development/testing/deliver-test-first", "skill/development/testing/design-agent-evaluation-harness", "skill/development/testing/verify-completion-evidence"], "conflictsWith": [], "supersedes": [], "prerequisites": [], "packIds": ["pack/plan-and-verify-loop"] },
   "operational": { "behavior": "advisory", "failurePolicy": "stop-and-report", "latencyClass": "immediate", "latency_reason": "The runtime loads static guidance to apply test-first, evidence-backed, integrity-preserving guidance when working with test files in the matching file scope.", "dataRetention": "none" },
   "adapters": {
     "claude-code": "adapters/claude-code.json",

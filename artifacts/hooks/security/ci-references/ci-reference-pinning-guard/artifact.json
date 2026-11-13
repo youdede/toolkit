@@ -54,7 +54,10 @@
     "enforce"
   ],
   "relationships": {
-    "composesWith": [],
+    "composesWith": [
+      "skill/operations/ci-cd/review-ci-workflow-change",
+      "skill/security/supply-chain/review-supply-chain-change"
+    ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],

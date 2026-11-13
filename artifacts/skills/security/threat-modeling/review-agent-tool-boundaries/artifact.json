@@ -44,6 +44,7 @@
   },
   "relationships": {
     "composesWith": [
+      "context/security/threat-modeling/security-baseline",
       "hook/security/application-security/outbound-data-guard",
       "hook/security/network-control/mcp-capability-drift-guard",
       "hook/security/network-control/mcp-egress-guard",

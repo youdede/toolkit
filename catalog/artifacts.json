@@ -13,187 +13,69 @@
     "counts": {
       "artifactNodes": 319,
       "directedEdges": {
-        "composesWith": 386,
+        "composesWith": 636,
         "conflictsWith": 0,
         "supersedes": 0,
         "prerequisites": 31,
         "suggests": 15,
         "packIds": 80
       },
-      "compositionEdges": 193,
+      "compositionEdges": 318,
       "conflictEdges": 0,
-      "crossKindCompositionEdges": 112,
-      "orphanArtifacts": 155
+      "crossKindCompositionEdges": 169,
+      "orphanArtifacts": 37
     },
     "orphanCountsByKind": {
-      "skill": 91,
-      "hook": 17,
-      "subagent": 42,
+      "skill": 28,
+      "hook": 9,
+      "subagent": 0,
       "command": 0,
-      "context": 5,
+      "context": 0,
       "mcp-server": 0
     },
     "orphanArtifactIds": [
-      "context/development/api/api-contract-baseline",
-      "context/operations/ci-cd/ci-workflow-baseline",
-      "context/operations/git/git-workflow-baseline",
-      "context/security/dependencies/dependency-change-baseline",
-      "context/security/threat-modeling/security-baseline",
-      "hook/data/compatibility/schema-compatibility-guard",
-      "hook/development/assertion-integrity/test-assertion-removal-guard",
       "hook/development/binary-integrity/binary-mutation-guard",
-      "hook/development/code-quality/generated-file-guard",
-      "hook/development/contract-compatibility/api-contract-compatibility-guard",
       "hook/development/diagnostic-suppression/lint-suppression-guard",
       "hook/development/error-handling/exception-swallowing-guard",
       "hook/development/resource-management/tool-output-budget-guard",
-      "hook/operations/delegation-budget/subagent-fanout-guard",
       "hook/operations/path-portability/path-portability-guard",
       "hook/security/application-security/workspace-boundary-guard",
-      "hook/security/ci-references/ci-reference-pinning-guard",
       "hook/security/code-execution/dynamic-code-execution-guard",
-      "hook/security/dependency-origins/dependency-source-guard",
       "hook/security/deserialization/unsafe-deserialization-guard",
-      "hook/security/supply-chain/ci-trust-boundary-guard",
       "hook/security/transport-security/transport-security-regression-guard",
-      "skill/data/analytics/design-data-quality-controls",
-      "skill/data/databases/provision-postgres-readonly-role",
-      "skill/data/databases/query-production-readonly",
-      "skill/design/design-systems/audit-design-system-consistency",
-      "skill/design/frontend/review-frontend-quality",
-      "skill/design/research/plan-evidence-based-design-research",
-      "skill/design/visual-design/compose-visual-layout",
       "skill/design/visual-design/critique-ui-surface",
-      "skill/design/visual-design/establish-typography-system",
-      "skill/development/agent-tooling/audit-agent-guidance-drift",
-      "skill/development/agent-tooling/author-deterministic-agent-hook",
-      "skill/development/agent-tooling/author-effective-agent-skill",
-      "skill/development/agent-tooling/evaluate-agent-guidance-value",
-      "skill/development/agent-tooling/publish-agent-skill",
-      "skill/development/agent-tooling/sync-skills-across-agents",
-      "skill/development/agent-tooling/write-folder-agent-guidance",
-      "skill/development/agent-tooling/write-project-agent-guidance",
-      "skill/development/api/build-openapi-contract",
-      "skill/development/api/design-stable-api-contract",
-      "skill/development/architecture/plan-compatible-deprecation",
-      "skill/development/code-quality/simplify-code-with-invariants",
       "skill/development/debugging/debug-systematically",
-      "skill/marketing/analytics/design-controlled-experiment",
-      "skill/marketing/analytics/design-marketing-measurement",
-      "skill/marketing/analytics/reconcile-marketing-attribution",
       "skill/marketing/content/capture-content-idea",
-      "skill/marketing/content/document-brand-voice",
-      "skill/marketing/content/plan-channel-native-social-content",
-      "skill/marketing/content/plan-evidence-led-content",
-      "skill/marketing/content/write-conversion-copy",
-      "skill/marketing/conversion/audit-app-store-listing",
-      "skill/marketing/conversion/audit-ethical-persuasion",
       "skill/marketing/conversion/design-respectful-conversion-overlay",
-      "skill/marketing/conversion/reduce-signup-friction",
-      "skill/marketing/conversion/review-conversion-friction",
-      "skill/marketing/conversion/review-upgrade-moment",
       "skill/marketing/growth/design-community-growth-system",
       "skill/marketing/growth/design-measurable-growth-loop",
-      "skill/marketing/growth/design-qualified-lead-magnet",
       "skill/marketing/growth/design-referral-program",
       "skill/marketing/growth/evaluate-free-tool-growth",
-      "skill/marketing/launch/plan-product-launch",
       "skill/marketing/lifecycle/design-churn-interventions",
-      "skill/marketing/lifecycle/design-lifecycle-email-sequence",
-      "skill/marketing/lifecycle/improve-product-activation",
       "skill/marketing/partnerships/qualify-co-marketing-partner",
       "skill/marketing/partnerships/qualify-influencer-partnership",
-      "skill/marketing/performance/plan-paid-acquisition",
-      "skill/marketing/performance/produce-testable-ad-creative",
-      "skill/marketing/positioning/build-competitor-evidence-profile",
-      "skill/marketing/positioning/design-evidence-backed-offer",
-      "skill/marketing/positioning/design-pricing-and-packaging",
-      "skill/marketing/positioning/document-product-positioning",
-      "skill/marketing/positioning/write-honest-comparison-page",
       "skill/marketing/public-relations/plan-earned-media-outreach",
-      "skill/marketing/sales/build-compliant-prospect-list",
       "skill/marketing/sales/build-sales-enablement-asset",
       "skill/marketing/sales/define-revenue-lifecycle",
-      "skill/marketing/sales/write-compliant-cold-email",
       "skill/marketing/seo/audit-ai-search-visibility",
       "skill/marketing/seo/audit-technical-seo",
       "skill/marketing/seo/design-safe-programmatic-seo",
       "skill/marketing/seo/implement-valid-structured-data",
-      "skill/marketing/strategy/build-marketing-operating-plan",
-      "skill/marketing/strategy/generate-marketing-experiments",
       "skill/marketing/strategy/map-conversion-site-architecture",
-      "skill/marketing/strategy/synthesize-customer-language",
-      "skill/operations/agent-orchestration/audit-agent-workflow-opportunities",
-      "skill/operations/agent-orchestration/delegate-to-codex-cli",
-      "skill/operations/git/isolate-work-with-worktrees",
       "skill/operations/observability/build-macos-metrics-collector",
-      "skill/operations/observability/design-observability-signals",
-      "skill/operations/observability/design-service-level-objectives",
-      "skill/operations/observability/write-incident-runbook",
-      "skill/operations/reviewability/review-plan-execution-divergence",
       "skill/operations/setup/keep-macos-awake",
       "skill/research/consumer-research/research-online-purchase",
-      "skill/research/source-analysis/write-source-backed-research-brief",
       "skill/research/transcripts/extract-youtube-captions",
       "skill/security/application-security/audit-safe-browsing-readiness",
-      "skill/security/application-security/review-auth-boundary",
-      "skill/security/dependencies/plan-dependency-upgrade",
-      "skill/security/supply-chain/review-supply-chain-change",
-      "skill/writing/decision-support/audit-implicit-decisions",
       "skill/writing/decision-support/interview-for-priorities",
       "skill/writing/decision-support/make-practical-decision",
       "skill/writing/documentation/audit-knowledge-state-freshness",
-      "skill/writing/documentation/write-learning-postmortem",
-      "skill/writing/documentation/write-session-handoff",
-      "skill/writing/release-notes/write-release-notes-from-evidence",
-      "skill/writing/technical-writing/compress-response-with-context",
-      "subagent/data/analytics/metric-contract-reviewer",
-      "subagent/data/databases/query-plan-analyst",
-      "subagent/data/experimentation/experiment-validity-reviewer",
-      "subagent/data/quality/rag-evaluation-reviewer",
-      "subagent/design/design-systems/design-system-consistency-reviewer",
-      "subagent/design/interaction/interaction-state-reviewer",
-      "subagent/design/internationalization/localization-readiness-reviewer",
-      "subagent/design/responsive/responsive-layout-reviewer",
-      "subagent/development/algorithms/numerical-correctness-analyst",
-      "subagent/development/api/api-contract-compatibility-reviewer",
-      "subagent/development/architecture/repository-architecture-mapper",
-      "subagent/development/cli/cli-contract-reviewer",
-      "subagent/development/concurrency/concurrency-hazard-analyst",
-      "subagent/development/configuration/configuration-semantics-reviewer",
-      "subagent/development/reliability/error-recovery-path-reviewer",
-      "subagent/development/resource-management/resource-lifecycle-reviewer",
-      "subagent/development/serialization/serialization-contract-reviewer",
-      "subagent/development/state-management/state-machine-invariant-analyst",
-      "subagent/development/testing/flaky-test-diagnostician",
-      "subagent/development/testing/performance-benchmark-analyst",
-      "subagent/marketing/analytics/campaign-attribution-integrity-reviewer",
-      "subagent/marketing/launch/launch-message-consistency-reviewer",
-      "subagent/marketing/positioning/positioning-evidence-analyst",
-      "subagent/operations/cloud-resources/cloud-cost-finops-analyst",
-      "subagent/operations/configuration/configuration-drift-analyst",
-      "subagent/operations/incidents/incident-timeline-analyst",
-      "subagent/operations/infrastructure/cloud-iac-policy-reviewer",
-      "subagent/operations/observability/observability-instrumentation-reviewer",
-      "subagent/operations/reliability/slo-error-budget-analyst",
-      "subagent/operations/runbooks/runbook-readiness-reviewer",
-      "subagent/research/evidence-synthesis/evidence-synthesis-analyst",
-      "subagent/research/research-planning/research-gap-mapper",
-      "subagent/research/source-analysis/source-credibility-auditor",
-      "subagent/security/abuse-prevention/abuse-resistance-analyst",
-      "subagent/security/authorization/access-control-matrix-auditor",
-      "subagent/security/cryptography/cryptographic-usage-reviewer",
-      "subagent/security/dependencies/dependency-risk-reviewer",
-      "subagent/security/multi-tenancy/tenant-isolation-analyst",
-      "subagent/security/supply-chain/build-provenance-reviewer",
-      "subagent/security/telemetry/privacy-data-handling-auditor",
-      "subagent/writing/documentation/api-documentation-verifier",
-      "subagent/writing/documentation/procedural-documentation-tester"
+      "skill/writing/technical-writing/compress-response-with-context"
     ],
     "linkCounts": {
       "required": 31,
       "suggested": 15,
-      "related": 193,
+      "related": 318,
       "conflicts": 0,
       "supersedes": 0
     }
@@ -253,6 +135,14 @@
       ]
     },
     {
+      "from": "command/development/agent-tooling/re-pin-mcp-tools",
+      "to": "mcp-server/development/agent-tooling/github-readonly",
+      "kind": "related",
+      "targets": [
+        "claude-code"
+      ]
+    },
+    {
       "from": "command/development/workflow/assemble-review-brief",
       "to": "skill/operations/reviewability/prepare-reviewable-pull-request",
       "kind": "related",
@@ -263,6 +153,14 @@
     {
       "from": "command/development/workflow/audit-release-evidence",
       "to": "skill/operations/release/verify-production-release",
+      "kind": "related",
+      "targets": [
+        "claude-code"
+      ]
+    },
+    {
+      "from": "command/development/workflow/audit-release-evidence",
+      "to": "skill/writing/release-notes/write-release-notes-from-evidence",
       "kind": "related",
       "targets": [
         "claude-code"
@@ -430,8 +328,246 @@
       ]
     },
     {
+      "from": "context/development/api/api-contract-baseline",
+      "to": "hook/development/contract-compatibility/api-contract-compatibility-guard",
+      "kind": "related",
+      "targets": [
+        "claude-code"
+      ]
+    },
+    {
+      "from": "context/development/api/api-contract-baseline",
+      "to": "skill/development/api/build-openapi-contract",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "cursor",
+        "github-copilot"
+      ]
+    },
+    {
+      "from": "context/development/api/api-contract-baseline",
+      "to": "skill/development/api/design-stable-api-contract",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "cursor",
+        "github-copilot"
+      ]
+    },
+    {
+      "from": "context/development/code-quality/coding-style-baseline",
+      "to": "hook/development/code-quality/generated-file-guard",
+      "kind": "related",
+      "targets": [
+        "claude-code"
+      ]
+    },
+    {
+      "from": "context/development/code-quality/coding-style-baseline",
+      "to": "skill/development/architecture/enforce-typescript-module-boundaries",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "cursor",
+        "github-copilot"
+      ]
+    },
+    {
+      "from": "context/development/code-quality/coding-style-baseline",
+      "to": "skill/development/code-quality/simplify-code-with-invariants",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "cursor",
+        "github-copilot"
+      ]
+    },
+    {
+      "from": "context/development/testing/testing-baseline",
+      "to": "hook/development/assertion-integrity/test-assertion-removal-guard",
+      "kind": "related",
+      "targets": [
+        "claude-code"
+      ]
+    },
+    {
+      "from": "context/development/testing/testing-baseline",
+      "to": "hook/development/testing/test-integrity-guard",
+      "kind": "related",
+      "targets": [
+        "claude-code"
+      ]
+    },
+    {
       "from": "context/development/testing/testing-baseline",
       "to": "hook/development/workflow/phase-gate-guard",
+      "kind": "related",
+      "targets": [
+        "claude-code"
+      ]
+    },
+    {
+      "from": "context/development/testing/testing-baseline",
+      "to": "skill/development/testing/deliver-test-first",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "cursor",
+        "github-copilot"
+      ]
+    },
+    {
+      "from": "context/development/testing/testing-baseline",
+      "to": "skill/development/testing/design-agent-evaluation-harness",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "cursor",
+        "github-copilot"
+      ]
+    },
+    {
+      "from": "context/development/testing/testing-baseline",
+      "to": "skill/development/testing/verify-completion-evidence",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "cursor",
+        "github-copilot"
+      ]
+    },
+    {
+      "from": "context/operations/ci-cd/ci-workflow-baseline",
+      "to": "hook/security/supply-chain/ci-trust-boundary-guard",
+      "kind": "related",
+      "targets": [
+        "claude-code"
+      ]
+    },
+    {
+      "from": "context/operations/ci-cd/ci-workflow-baseline",
+      "to": "skill/operations/ci-cd/review-ci-workflow-change",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "cursor",
+        "github-copilot"
+      ]
+    },
+    {
+      "from": "context/operations/ci-cd/ci-workflow-baseline",
+      "to": "skill/operations/setup/build-repository-quality-gates",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "cursor",
+        "github-copilot"
+      ]
+    },
+    {
+      "from": "context/operations/git/git-workflow-baseline",
+      "to": "hook/operations/git/protected-branch-guard",
+      "kind": "related",
+      "targets": [
+        "claude-code"
+      ]
+    },
+    {
+      "from": "context/operations/git/git-workflow-baseline",
+      "to": "hook/security/secrets/commit-guard",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "cursor"
+      ]
+    },
+    {
+      "from": "context/operations/git/git-workflow-baseline",
+      "to": "skill/operations/git/isolate-work-with-worktrees",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "cursor",
+        "github-copilot"
+      ]
+    },
+    {
+      "from": "context/operations/git/git-workflow-baseline",
+      "to": "skill/operations/git/prepare-branch-integration",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "cursor",
+        "github-copilot"
+      ]
+    },
+    {
+      "from": "context/security/dependencies/dependency-change-baseline",
+      "to": "hook/security/dependencies/dependency-change-guard",
+      "kind": "related",
+      "targets": [
+        "claude-code"
+      ]
+    },
+    {
+      "from": "context/security/dependencies/dependency-change-baseline",
+      "to": "skill/security/dependencies/plan-dependency-upgrade",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "cursor",
+        "github-copilot"
+      ]
+    },
+    {
+      "from": "context/security/dependencies/dependency-change-baseline",
+      "to": "skill/security/supply-chain/review-supply-chain-change",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "cursor",
+        "github-copilot"
+      ]
+    },
+    {
+      "from": "context/security/threat-modeling/security-baseline",
+      "to": "hook/security/application-security/outbound-data-guard",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "cursor"
+      ]
+    },
+    {
+      "from": "context/security/threat-modeling/security-baseline",
+      "to": "hook/security/secrets/prompt-secret-guard",
+      "kind": "related",
+      "targets": [
+        "claude-code"
+      ]
+    },
+    {
+      "from": "context/security/threat-modeling/security-baseline",
+      "to": "hook/security/secrets/sensitive-file-access-guard",
+      "kind": "related",
+      "targets": [
+        "claude-code"
+      ]
+    },
+    {
+      "from": "context/security/threat-modeling/security-baseline",
+      "to": "skill/security/threat-modeling/review-agent-tool-boundaries",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "cursor",
+        "github-copilot"
+      ]
+    },
+    {
+      "from": "hook/data/compatibility/schema-compatibility-guard",
+      "to": "skill/data/schemas/review-schema-evolution",
       "kind": "related",
       "targets": [
         "claude-code"
@@ -442,6 +578,14 @@
       "to": "hook/security/application-security/shell-command-guard",
       "kind": "required",
       "reason": "database-query-mode-guard cannot see hidden commands (e.g. bash -c \"$X\"): shell-command-guard stops them.",
+      "targets": [
+        "claude-code"
+      ]
+    },
+    {
+      "from": "hook/data/live-query-safety/database-query-mode-guard",
+      "to": "skill/data/databases/query-production-readonly",
+      "kind": "related",
       "targets": [
         "claude-code"
       ]
@@ -522,6 +666,14 @@
     {
       "from": "hook/design/authentication-access/authentication-accessibility-guard",
       "to": "skill/design/accessibility/verify-cognitive-access-barriers",
+      "kind": "related",
+      "targets": [
+        "claude-code"
+      ]
+    },
+    {
+      "from": "hook/design/authentication-access/authentication-accessibility-guard",
+      "to": "skill/marketing/conversion/reduce-signup-friction",
       "kind": "related",
       "targets": [
         "claude-code"
@@ -656,6 +808,14 @@
       ]
     },
     {
+      "from": "hook/development/contract-compatibility/api-contract-compatibility-guard",
+      "to": "skill/development/architecture/plan-compatible-deprecation",
+      "kind": "related",
+      "targets": [
+        "claude-code"
+      ]
+    },
+    {
       "from": "hook/development/debugging/debug-artifact-guard",
       "to": "hook/security/application-security/shell-command-guard",
       "kind": "required",
@@ -712,6 +872,14 @@
         "cursor",
         "gemini-cli",
         "opencode"
+      ]
+    },
+    {
+      "from": "hook/operations/delegation-budget/subagent-fanout-guard",
+      "to": "skill/operations/agent-orchestration/delegate-bounded-subtasks",
+      "kind": "related",
+      "targets": [
+        "claude-code"
       ]
     },
     {
@@ -1180,6 +1348,22 @@
       ]
     },
     {
+      "from": "hook/security/ci-references/ci-reference-pinning-guard",
+      "to": "skill/operations/ci-cd/review-ci-workflow-change",
+      "kind": "related",
+      "targets": [
+        "claude-code"
+      ]
+    },
+    {
+      "from": "hook/security/ci-references/ci-reference-pinning-guard",
+      "to": "skill/security/supply-chain/review-supply-chain-change",
+      "kind": "related",
+      "targets": [
+        "claude-code"
+      ]
+    },
+    {
       "from": "hook/security/container-runtime/container-privilege-guard",
       "to": "hook/security/application-security/shell-command-guard",
       "kind": "required",
@@ -1193,6 +1377,14 @@
       "to": "hook/security/application-security/shell-command-guard",
       "kind": "required",
       "reason": "dependency-change-guard cannot see hidden commands (e.g. bash -c \"$X\"): shell-command-guard stops them.",
+      "targets": [
+        "claude-code"
+      ]
+    },
+    {
+      "from": "hook/security/dependency-origins/dependency-source-guard",
+      "to": "skill/security/supply-chain/review-supply-chain-change",
+      "kind": "related",
       "targets": [
         "claude-code"
       ]
@@ -1423,6 +1615,22 @@
     },
     {
       "from": "hook/security/secrets/sensitive-file-access-guard",
+      "to": "mcp-server/development/agent-tooling/repository-git-readonly",
+      "kind": "related",
+      "targets": [
+        "claude-code"
+      ]
+    },
+    {
+      "from": "hook/security/secrets/sensitive-file-access-guard",
+      "to": "mcp-server/development/agent-tooling/workspace-files-readonly",
+      "kind": "related",
+      "targets": [
+        "claude-code"
+      ]
+    },
+    {
+      "from": "hook/security/secrets/sensitive-file-access-guard",
       "to": "skill/development/agent-tooling/author-mcp-server-contract",
       "kind": "related",
       "targets": [
@@ -1513,6 +1721,30 @@
       ]
     },
     {
+      "from": "skill/data/analytics/design-data-quality-controls",
+      "to": "subagent/data/quality/data-quality-diagnostician",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/data/databases/provision-postgres-readonly-role",
+      "to": "skill/data/databases/query-production-readonly",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
       "from": "skill/data/governance/design-private-data-lifecycle",
       "to": "subagent/data/governance/data-lineage-mapper",
       "kind": "related",
@@ -1521,6 +1753,16 @@
         "gemini-cli",
         "github-copilot",
         "opencode"
+      ]
+    },
+    {
+      "from": "skill/data/governance/design-private-data-lifecycle",
+      "to": "subagent/security/telemetry/privacy-data-handling-auditor",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot"
       ]
     },
     {
@@ -1793,6 +2035,17 @@
       ]
     },
     {
+      "from": "skill/design/design-systems/audit-design-system-consistency",
+      "to": "subagent/design/design-systems/design-system-consistency-reviewer",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
       "from": "skill/design/design-systems/establish-design-tokens",
       "to": "skill/design/design-systems/govern-design-system-evolution",
       "kind": "related",
@@ -1834,6 +2087,19 @@
     {
       "from": "skill/design/design-systems/specify-component-contracts",
       "to": "skill/design/responsive/design-responsive-behavior",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/design/frontend/review-frontend-quality",
+      "to": "skill/development/testing/test-interface-in-browser",
       "kind": "related",
       "targets": [
         "claude-code",
@@ -1911,6 +2177,19 @@
     },
     {
       "from": "skill/design/interaction/design-navigation-and-search",
+      "to": "skill/design/responsive/design-responsive-behavior",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/design/interaction/design-navigation-and-search",
       "to": "skill/design/strategy/structure-information-architecture",
       "kind": "related",
       "targets": [
@@ -1923,7 +2202,31 @@
       ]
     },
     {
+      "from": "skill/design/internationalization/design-for-localization",
+      "to": "subagent/design/internationalization/localization-readiness-reviewer",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
       "from": "skill/design/research/map-experience-journeys",
+      "to": "skill/design/research/synthesize-user-research-evidence",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/design/research/plan-evidence-based-design-research",
       "to": "skill/design/research/synthesize-user-research-evidence",
       "kind": "related",
       "targets": [
@@ -1962,10 +2265,138 @@
       ]
     },
     {
+      "from": "skill/design/responsive/design-responsive-behavior",
+      "to": "skill/design/visual-design/compose-visual-layout",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/design/responsive/design-responsive-behavior",
+      "to": "subagent/design/responsive/responsive-layout-reviewer",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
       "from": "skill/design/strategy/frame-design-direction",
       "to": "skill/design/research/plan-evidence-based-design-research",
       "kind": "suggested",
       "reason": "to plan the research that tests the chosen direction",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/design/visual-design/compose-visual-layout",
+      "to": "skill/design/visual-design/establish-typography-system",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/development/agent-tooling/audit-agent-guidance-drift",
+      "to": "skill/development/agent-tooling/write-project-agent-guidance",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/development/agent-tooling/author-deterministic-agent-hook",
+      "to": "skill/development/agent-tooling/author-effective-agent-skill",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/development/agent-tooling/author-deterministic-agent-hook",
+      "to": "skill/development/agent-tooling/evaluate-agent-guidance-value",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/development/agent-tooling/author-deterministic-agent-hook",
+      "to": "skill/operations/agent-orchestration/audit-agent-workflow-opportunities",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/development/agent-tooling/author-effective-agent-skill",
+      "to": "skill/development/agent-tooling/publish-agent-skill",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/development/agent-tooling/author-effective-agent-skill",
+      "to": "skill/development/agent-tooling/sync-skills-across-agents",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/development/agent-tooling/author-effective-agent-skill",
+      "to": "skill/operations/agent-orchestration/audit-agent-workflow-opportunities",
+      "kind": "related",
       "targets": [
         "claude-code",
         "codex",
@@ -2007,6 +2438,19 @@
         "claude-code",
         "gemini-cli",
         "github-copilot"
+      ]
+    },
+    {
+      "from": "skill/development/agent-tooling/write-folder-agent-guidance",
+      "to": "skill/development/agent-tooling/write-project-agent-guidance",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
       ]
     },
     {
@@ -2203,6 +2647,17 @@
       ]
     },
     {
+      "from": "skill/development/code-quality/optimize-with-performance-profile",
+      "to": "subagent/data/databases/query-plan-analyst",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
       "from": "skill/development/code-quality/request-independent-code-review",
       "to": "skill/operations/reviewability/prepare-reviewable-pull-request",
       "kind": "related",
@@ -2288,6 +2743,16 @@
       ]
     },
     {
+      "from": "skill/development/testing/evaluate-retrieval-system",
+      "to": "subagent/data/quality/rag-evaluation-reviewer",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot"
+      ]
+    },
+    {
       "from": "skill/development/testing/plan-load-test",
       "to": "subagent/operations/capacity/capacity-risk-analyst",
       "kind": "related",
@@ -2336,8 +2801,297 @@
       ]
     },
     {
+      "from": "skill/marketing/analytics/design-controlled-experiment",
+      "to": "skill/marketing/conversion/audit-app-store-listing",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/marketing/analytics/design-controlled-experiment",
+      "to": "skill/marketing/conversion/review-conversion-friction",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/marketing/analytics/design-controlled-experiment",
+      "to": "skill/marketing/strategy/generate-marketing-experiments",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/marketing/analytics/design-controlled-experiment",
+      "to": "subagent/data/experimentation/experiment-validity-reviewer",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/marketing/analytics/design-marketing-measurement",
+      "to": "subagent/marketing/analytics/campaign-attribution-integrity-reviewer",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/marketing/analytics/reconcile-marketing-attribution",
+      "to": "subagent/marketing/analytics/campaign-attribution-integrity-reviewer",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/marketing/content/document-brand-voice",
+      "to": "skill/marketing/content/edit-marketing-copy",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/marketing/content/document-brand-voice",
+      "to": "skill/marketing/content/plan-channel-native-social-content",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
       "from": "skill/marketing/content/edit-marketing-copy",
       "to": "skill/writing/technical-writing/write-article-from-source-material",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/marketing/content/plan-evidence-led-content",
+      "to": "skill/marketing/strategy/synthesize-customer-language",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/marketing/content/write-conversion-copy",
+      "to": "skill/marketing/conversion/audit-ethical-persuasion",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/marketing/content/write-conversion-copy",
+      "to": "skill/marketing/positioning/design-evidence-backed-offer",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/marketing/content/write-conversion-copy",
+      "to": "skill/marketing/positioning/document-product-positioning",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/marketing/content/write-conversion-copy",
+      "to": "skill/marketing/strategy/synthesize-customer-language",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/marketing/conversion/reduce-signup-friction",
+      "to": "skill/marketing/lifecycle/improve-product-activation",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/marketing/conversion/review-upgrade-moment",
+      "to": "skill/marketing/positioning/design-pricing-and-packaging",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/marketing/growth/design-qualified-lead-magnet",
+      "to": "skill/marketing/lifecycle/design-lifecycle-email-sequence",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/marketing/launch/plan-product-launch",
+      "to": "subagent/marketing/launch/launch-message-consistency-reviewer",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/marketing/performance/plan-paid-acquisition",
+      "to": "skill/marketing/performance/produce-testable-ad-creative",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/marketing/positioning/build-competitor-evidence-profile",
+      "to": "skill/marketing/positioning/write-honest-comparison-page",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/marketing/positioning/document-product-positioning",
+      "to": "skill/marketing/strategy/synthesize-customer-language",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/marketing/positioning/document-product-positioning",
+      "to": "subagent/marketing/positioning/positioning-evidence-analyst",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/marketing/sales/build-compliant-prospect-list",
+      "to": "skill/marketing/sales/write-compliant-cold-email",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/marketing/strategy/build-marketing-operating-plan",
+      "to": "skill/marketing/strategy/generate-marketing-experiments",
       "kind": "related",
       "targets": [
         "claude-code",
@@ -2375,8 +3129,34 @@
       ]
     },
     {
+      "from": "skill/operations/agent-orchestration/delegate-to-codex-cli",
+      "to": "skill/operations/git/isolate-work-with-worktrees",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
       "from": "skill/operations/agent-orchestration/design-delegable-workflow",
       "to": "skill/operations/agent-orchestration/schedule-agent-runs",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/operations/agent-orchestration/execute-verifiable-plan",
+      "to": "skill/operations/reviewability/review-plan-execution-divergence",
       "kind": "related",
       "targets": [
         "claude-code",
@@ -2477,6 +3257,38 @@
     {
       "from": "skill/operations/infrastructure/plan-infrastructure-change",
       "to": "subagent/operations/resilience/disaster-recovery-readiness-auditor",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/operations/observability/design-observability-signals",
+      "to": "subagent/operations/observability/observability-instrumentation-reviewer",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot"
+      ]
+    },
+    {
+      "from": "skill/operations/observability/design-service-level-objectives",
+      "to": "subagent/operations/reliability/slo-error-budget-analyst",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/operations/observability/write-incident-runbook",
+      "to": "subagent/operations/runbooks/runbook-readiness-reviewer",
       "kind": "related",
       "targets": [
         "claude-code",
@@ -2599,6 +3411,17 @@
       ]
     },
     {
+      "from": "skill/research/source-analysis/write-source-backed-research-brief",
+      "to": "subagent/research/research-planning/research-gap-mapper",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
       "from": "skill/research/web-research/conduct-source-backed-research",
       "to": "skill/writing/technical-writing/write-article-from-source-material",
       "kind": "related",
@@ -2606,6 +3429,28 @@
         "claude-code",
         "codex",
         "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/security/application-security/review-auth-boundary",
+      "to": "subagent/security/authorization/access-control-matrix-auditor",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/security/supply-chain/review-supply-chain-change",
+      "to": "subagent/security/dependencies/dependency-risk-reviewer",
+      "kind": "related",
+      "targets": [
+        "claude-code",
         "gemini-cli",
         "github-copilot",
         "opencode"
@@ -2644,6 +3489,32 @@
       ]
     },
     {
+      "from": "skill/writing/decision-support/audit-implicit-decisions",
+      "to": "skill/writing/decision-support/resolve-next-decision",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/writing/decision-support/audit-implicit-decisions",
+      "to": "skill/writing/documentation/write-session-handoff",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "codex",
+        "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
       "from": "skill/writing/decision-support/design-stakeholder-questionnaire",
       "to": "skill/writing/decision-support/interview-to-build-brief",
       "kind": "related",
@@ -2664,6 +3535,28 @@
         "claude-code",
         "codex",
         "cursor",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/writing/documentation/load-architecture-decisions",
+      "to": "subagent/writing/decision-support/decision-record-reviewer",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "skill/writing/documentation/write-learning-postmortem",
+      "to": "subagent/operations/incidents/incident-timeline-analyst",
+      "kind": "related",
+      "targets": [
+        "claude-code",
         "gemini-cli",
         "github-copilot",
         "opencode"
@@ -2722,8 +3615,199 @@
       ]
     },
     {
+      "from": "subagent/data/analytics/metric-contract-reviewer",
+      "to": "subagent/data/quality/data-quality-diagnostician",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "subagent/data/governance/data-lineage-mapper",
+      "to": "subagent/development/architecture/repository-architecture-mapper",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot"
+      ]
+    },
+    {
+      "from": "subagent/data/governance/data-lineage-mapper",
+      "to": "subagent/security/telemetry/privacy-data-handling-auditor",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot"
+      ]
+    },
+    {
       "from": "subagent/design/accessibility/accessibility-conformance-reviewer",
       "to": "subagent/design/accessibility/accessibility-journey-tester",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot"
+      ]
+    },
+    {
+      "from": "subagent/design/frontend/web-performance-reviewer",
+      "to": "subagent/development/testing/performance-benchmark-analyst",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot"
+      ]
+    },
+    {
+      "from": "subagent/design/interaction/interaction-state-reviewer",
+      "to": "subagent/development/state-management/state-machine-invariant-analyst",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "subagent/development/algorithms/numerical-correctness-analyst",
+      "to": "subagent/development/serialization/serialization-contract-reviewer",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "subagent/development/api/api-contract-compatibility-reviewer",
+      "to": "subagent/development/cli/cli-contract-reviewer",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "subagent/development/api/api-contract-compatibility-reviewer",
+      "to": "subagent/development/serialization/serialization-contract-reviewer",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "subagent/development/api/api-contract-compatibility-reviewer",
+      "to": "subagent/writing/documentation/api-documentation-verifier",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "subagent/development/code-quality/refactor-equivalence-reviewer",
+      "to": "subagent/development/testing/test-gap-reviewer",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "subagent/development/concurrency/concurrency-hazard-analyst",
+      "to": "subagent/development/testing/flaky-test-diagnostician",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot"
+      ]
+    },
+    {
+      "from": "subagent/development/configuration/configuration-semantics-reviewer",
+      "to": "subagent/operations/configuration/configuration-drift-analyst",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "subagent/development/reliability/error-recovery-path-reviewer",
+      "to": "subagent/development/resource-management/resource-lifecycle-reviewer",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "subagent/development/testing/flaky-test-diagnostician",
+      "to": "subagent/operations/ci-cd/ci-failure-analyst",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot"
+      ]
+    },
+    {
+      "from": "subagent/marketing/launch/launch-message-consistency-reviewer",
+      "to": "subagent/marketing/positioning/positioning-evidence-analyst",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "subagent/operations/capacity/capacity-risk-analyst",
+      "to": "subagent/operations/cloud-resources/cloud-cost-finops-analyst",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot"
+      ]
+    },
+    {
+      "from": "subagent/operations/capacity/capacity-risk-analyst",
+      "to": "subagent/security/abuse-prevention/abuse-resistance-analyst",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "subagent/operations/infrastructure/cloud-iac-policy-reviewer",
+      "to": "subagent/operations/infrastructure/infrastructure-change-reviewer",
       "kind": "related",
       "targets": [
         "claude-code",
@@ -2742,8 +3826,160 @@
       ]
     },
     {
+      "from": "subagent/operations/release/release-evidence-verifier",
+      "to": "subagent/security/supply-chain/build-provenance-reviewer",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot"
+      ]
+    },
+    {
+      "from": "subagent/operations/resilience/disaster-recovery-readiness-auditor",
+      "to": "subagent/operations/runbooks/runbook-readiness-reviewer",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "subagent/operations/runbooks/runbook-readiness-reviewer",
+      "to": "subagent/writing/documentation/procedural-documentation-tester",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "subagent/research/evidence-synthesis/evidence-synthesis-analyst",
+      "to": "subagent/research/source-analysis/source-credibility-auditor",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "subagent/research/research-planning/research-gap-mapper",
+      "to": "subagent/writing/decision-support/decision-record-reviewer",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "subagent/security/abuse-prevention/abuse-resistance-analyst",
+      "to": "subagent/security/application-security/application-security-reviewer",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "subagent/security/application-security/application-security-reviewer",
+      "to": "subagent/security/authorization/access-control-matrix-auditor",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "subagent/security/application-security/application-security-reviewer",
+      "to": "subagent/security/cryptography/cryptographic-usage-reviewer",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "subagent/security/application-security/application-security-reviewer",
+      "to": "subagent/security/multi-tenancy/tenant-isolation-analyst",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "subagent/security/application-security/application-security-reviewer",
+      "to": "subagent/security/telemetry/sensitive-logging-reviewer",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
       "from": "subagent/security/application-security/application-security-reviewer",
       "to": "subagent/security/threat-modeling/mcp-trust-boundary-reviewer",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot"
+      ]
+    },
+    {
+      "from": "subagent/security/application-security/application-security-reviewer",
+      "to": "subagent/security/threat-modeling/threat-model-mapper",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "subagent/security/authorization/access-control-matrix-auditor",
+      "to": "subagent/security/multi-tenancy/tenant-isolation-analyst",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "subagent/security/cryptography/cryptographic-usage-reviewer",
+      "to": "subagent/security/supply-chain/build-provenance-reviewer",
+      "kind": "related",
+      "targets": [
+        "claude-code",
+        "gemini-cli",
+        "github-copilot",
+        "opencode"
+      ]
+    },
+    {
+      "from": "subagent/security/telemetry/privacy-data-handling-auditor",
+      "to": "subagent/security/telemetry/sensitive-logging-reviewer",
       "kind": "related",
       "targets": [
         "claude-code",
@@ -2970,7 +4206,8 @@
       },
       "relationships": {
         "composesWith": [
-          "hook/security/network-control/mcp-capability-drift-guard"
+          "hook/security/network-control/mcp-capability-drift-guard",
+          "mcp-server/development/agent-tooling/github-readonly"
         ],
         "conflictsWith": [],
         "supersedes": [],
@@ -3124,7 +4361,8 @@
       },
       "relationships": {
         "composesWith": [
-          "skill/operations/release/verify-production-release"
+          "skill/operations/release/verify-production-release",
+          "skill/writing/release-notes/write-release-notes-from-evidence"
         ],
         "conflictsWith": [],
         "supersedes": [],
@@ -3720,7 +4958,11 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "hook/development/contract-compatibility/api-contract-compatibility-guard",
+          "skill/development/api/build-openapi-contract",
+          "skill/development/api/design-stable-api-contract"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -3816,7 +5058,10 @@
       },
       "relationships": {
         "composesWith": [
-          "command/development/workflow/draft-evidenced-plan"
+          "command/development/workflow/draft-evidenced-plan",
+          "hook/development/code-quality/generated-file-guard",
+          "skill/development/architecture/enforce-typescript-module-boundaries",
+          "skill/development/code-quality/simplify-code-with-invariants"
         ],
         "conflictsWith": [],
         "supersedes": [],
@@ -3915,7 +5160,12 @@
       },
       "relationships": {
         "composesWith": [
-          "hook/development/workflow/phase-gate-guard"
+          "hook/development/assertion-integrity/test-assertion-removal-guard",
+          "hook/development/testing/test-integrity-guard",
+          "hook/development/workflow/phase-gate-guard",
+          "skill/development/testing/deliver-test-first",
+          "skill/development/testing/design-agent-evaluation-harness",
+          "skill/development/testing/verify-completion-evidence"
         ],
         "conflictsWith": [],
         "supersedes": [],
@@ -4016,7 +5266,11 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "hook/security/supply-chain/ci-trust-boundary-guard",
+          "skill/operations/ci-cd/review-ci-workflow-change",
+          "skill/operations/setup/build-repository-quality-gates"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -4111,7 +5365,12 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "hook/operations/git/protected-branch-guard",
+          "hook/security/secrets/commit-guard",
+          "skill/operations/git/isolate-work-with-worktrees",
+          "skill/operations/git/prepare-branch-integration"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -4209,7 +5468,11 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "hook/security/dependencies/dependency-change-guard",
+          "skill/security/dependencies/plan-dependency-upgrade",
+          "skill/security/supply-chain/review-supply-chain-change"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -4305,7 +5568,12 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "hook/security/application-security/outbound-data-guard",
+          "hook/security/secrets/prompt-secret-guard",
+          "hook/security/secrets/sensitive-file-access-guard",
+          "skill/security/threat-modeling/review-agent-tool-boundaries"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -4407,7 +5675,9 @@
         ]
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/data/schemas/review-schema-evolution"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -4485,7 +5755,9 @@
         ]
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/data/databases/query-production-readonly"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [
@@ -4671,6 +5943,7 @@
           "skill/design/accessibility/prepare-eaa-conformance-evidence",
           "skill/design/accessibility/test-screen-reader-journey",
           "skill/design/accessibility/verify-cognitive-access-barriers",
+          "skill/marketing/conversion/reduce-signup-friction",
           "subagent/design/accessibility/accessibility-conformance-reviewer",
           "subagent/design/accessibility/accessibility-journey-tester"
         ],
@@ -4934,7 +6207,9 @@
         ]
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "context/development/testing/testing-baseline"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -5090,7 +6365,9 @@
         ]
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "context/development/code-quality/coding-style-baseline"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -5252,7 +6529,10 @@
         ]
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "context/development/api/api-contract-baseline",
+          "skill/development/architecture/plan-compatible-deprecation"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -5734,7 +7014,9 @@
         ]
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "context/development/testing/testing-baseline"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [
@@ -6305,7 +7587,9 @@
         ]
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/operations/agent-orchestration/delegate-bounded-subtasks"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -6385,7 +7669,9 @@
         ]
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "context/operations/git/git-workflow-baseline"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [
@@ -8536,6 +9822,7 @@
       },
       "relationships": {
         "composesWith": [
+          "context/security/threat-modeling/security-baseline",
           "hook/security/secrets/sensitive-file-access-guard",
           "skill/development/agent-tooling/author-mcp-server-contract",
           "skill/security/threat-modeling/review-agent-tool-boundaries",
@@ -9080,7 +10367,10 @@
         ]
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/operations/ci-cd/review-ci-workflow-change",
+          "skill/security/supply-chain/review-supply-chain-change"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -9335,7 +10625,9 @@
         ]
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "context/security/dependencies/dependency-change-baseline"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [
@@ -9420,7 +10712,9 @@
         ]
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/security/supply-chain/review-supply-chain-change"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -10898,6 +12192,7 @@
       },
       "relationships": {
         "composesWith": [
+          "context/operations/git/git-workflow-baseline",
           "hook/security/secrets/prompt-secret-guard"
         ],
         "conflictsWith": [],
@@ -11052,6 +12347,7 @@
       },
       "relationships": {
         "composesWith": [
+          "context/security/threat-modeling/security-baseline",
           "hook/security/secrets/commit-guard",
           "hook/security/secrets/sensitive-file-access-guard"
         ],
@@ -11135,8 +12431,11 @@
       },
       "relationships": {
         "composesWith": [
+          "context/security/threat-modeling/security-baseline",
           "hook/security/application-security/outbound-data-guard",
           "hook/security/secrets/prompt-secret-guard",
+          "mcp-server/development/agent-tooling/repository-git-readonly",
+          "mcp-server/development/agent-tooling/workspace-files-readonly",
           "skill/development/agent-tooling/author-mcp-server-contract",
           "skill/security/threat-modeling/review-agent-tool-boundaries",
           "subagent/security/application-security/application-security-reviewer",
@@ -11226,7 +12525,9 @@
         ]
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "context/operations/ci-cd/ci-workflow-baseline"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -11484,6 +12785,7 @@
       },
       "relationships": {
         "composesWith": [
+          "command/development/agent-tooling/re-pin-mcp-tools",
           "command/operations/ci-cd/diagnose-ci-failure",
           "hook/security/network-control/mcp-egress-guard"
         ],
@@ -11588,7 +12890,8 @@
       "relationships": {
         "composesWith": [
           "hook/security/network-control/mcp-capability-drift-guard",
-          "hook/security/network-control/mcp-egress-guard"
+          "hook/security/network-control/mcp-egress-guard",
+          "hook/security/secrets/sensitive-file-access-guard"
         ],
         "conflictsWith": [],
         "supersedes": [],
@@ -11693,7 +12996,8 @@
       "relationships": {
         "composesWith": [
           "hook/security/network-control/mcp-capability-drift-guard",
-          "hook/security/network-control/mcp-egress-guard"
+          "hook/security/network-control/mcp-egress-guard",
+          "hook/security/secrets/sensitive-file-access-guard"
         ],
         "conflictsWith": [],
         "supersedes": [],
@@ -11880,7 +13184,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/data/quality/data-quality-diagnostician"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -12005,7 +13311,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/data/databases/query-production-readonly"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -12130,7 +13438,10 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "hook/data/live-query-safety/database-query-mode-guard",
+          "skill/data/databases/provision-postgres-readonly-role"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -12260,6 +13571,7 @@
       "relationships": {
         "composesWith": [
           "subagent/data/governance/data-lineage-mapper",
+          "subagent/security/telemetry/privacy-data-handling-auditor",
           "subagent/security/telemetry/sensitive-logging-reviewer"
         ],
         "conflictsWith": [],
@@ -12669,6 +13981,7 @@
       },
       "relationships": {
         "composesWith": [
+          "hook/data/compatibility/schema-compatibility-guard",
           "hook/data/migrations/migration-safety-guard",
           "skill/data/migrations/review-database-migration-plan",
           "skill/data/quality/design-data-pipeline-change",
@@ -13359,7 +14672,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/design/design-systems/design-system-consistency-reviewer"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -13892,7 +15207,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/development/testing/test-interface-in-browser"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -14419,6 +15736,7 @@
       "relationships": {
         "composesWith": [
           "skill/design/interaction/design-interface-feedback",
+          "skill/design/responsive/design-responsive-behavior",
           "skill/design/strategy/structure-information-architecture"
         ],
         "conflictsWith": [],
@@ -14680,7 +15998,8 @@
       },
       "relationships": {
         "composesWith": [
-          "skill/design/frontend/specify-engineering-handoff"
+          "skill/design/frontend/specify-engineering-handoff",
+          "subagent/design/internationalization/localization-readiness-reviewer"
         ],
         "conflictsWith": [],
         "supersedes": [],
@@ -14947,7 +16266,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/design/research/synthesize-user-research-evidence"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -15078,6 +16399,7 @@
       "relationships": {
         "composesWith": [
           "skill/design/research/map-experience-journeys",
+          "skill/design/research/plan-evidence-based-design-research",
           "skill/design/strategy/frame-design-direction",
           "skill/design/strategy/structure-information-architecture"
         ],
@@ -15210,7 +16532,10 @@
       "relationships": {
         "composesWith": [
           "skill/design/design-systems/specify-component-contracts",
-          "skill/design/frontend/specify-engineering-handoff"
+          "skill/design/frontend/specify-engineering-handoff",
+          "skill/design/interaction/design-navigation-and-search",
+          "skill/design/visual-design/compose-visual-layout",
+          "subagent/design/responsive/responsive-layout-reviewer"
         ],
         "conflictsWith": [],
         "supersedes": [],
@@ -15611,7 +16936,10 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/design/responsive/design-responsive-behavior",
+          "skill/design/visual-design/establish-typography-system"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -15995,7 +17323,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/design/visual-design/compose-visual-layout"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -16126,7 +17456,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/development/agent-tooling/write-project-agent-guidance"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -16256,7 +17588,11 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/development/agent-tooling/author-effective-agent-skill",
+          "skill/development/agent-tooling/evaluate-agent-guidance-value",
+          "skill/operations/agent-orchestration/audit-agent-workflow-opportunities"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -16389,7 +17725,12 @@
         ]
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/development/agent-tooling/author-deterministic-agent-hook",
+          "skill/development/agent-tooling/publish-agent-skill",
+          "skill/development/agent-tooling/sync-skills-across-agents",
+          "skill/operations/agent-orchestration/audit-agent-workflow-opportunities"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -16651,7 +17992,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/development/agent-tooling/author-deterministic-agent-hook"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -16775,7 +18118,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/development/agent-tooling/author-effective-agent-skill"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -16900,7 +18245,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/development/agent-tooling/author-effective-agent-skill"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -17025,7 +18372,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/development/agent-tooling/write-project-agent-guidance"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -17154,7 +18503,10 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/development/agent-tooling/audit-agent-guidance-drift",
+          "skill/development/agent-tooling/write-folder-agent-guidance"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -17280,7 +18632,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "context/development/api/api-contract-baseline"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -17406,7 +18760,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "context/development/api/api-contract-baseline"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -17931,6 +19287,7 @@
       },
       "relationships": {
         "composesWith": [
+          "context/development/code-quality/coding-style-baseline",
           "skill/development/architecture/design-deep-module-interface",
           "skill/development/testing/deliver-test-first"
         ],
@@ -18059,7 +19416,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "hook/development/contract-compatibility/api-contract-compatibility-guard"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -18706,7 +20065,8 @@
       },
       "relationships": {
         "composesWith": [
-          "skill/development/testing/plan-load-test"
+          "skill/development/testing/plan-load-test",
+          "subagent/data/databases/query-plan-analyst"
         ],
         "conflictsWith": [],
         "supersedes": [],
@@ -18964,7 +20324,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "context/development/code-quality/coding-style-baseline"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -19346,6 +20708,7 @@
       },
       "relationships": {
         "composesWith": [
+          "context/development/testing/testing-baseline",
           "skill/development/architecture/design-deep-module-interface",
           "skill/development/architecture/enforce-typescript-module-boundaries",
           "skill/development/testing/design-property-and-fuzz-tests"
@@ -19476,6 +20839,7 @@
       },
       "relationships": {
         "composesWith": [
+          "context/development/testing/testing-baseline",
           "skill/development/testing/evaluate-retrieval-system"
         ],
         "conflictsWith": [],
@@ -19865,7 +21229,8 @@
       "relationships": {
         "composesWith": [
           "skill/development/testing/design-agent-evaluation-harness",
-          "skill/development/testing/design-llm-evaluation"
+          "skill/development/testing/design-llm-evaluation",
+          "subagent/data/quality/rag-evaluation-reviewer"
         ],
         "conflictsWith": [],
         "supersedes": [],
@@ -20122,6 +21487,7 @@
       "relationships": {
         "composesWith": [
           "mcp-server/development/testing/playwright-local-isolated",
+          "skill/design/frontend/review-frontend-quality",
           "subagent/design/frontend/web-performance-reviewer"
         ],
         "conflictsWith": [],
@@ -20251,6 +21617,7 @@
       },
       "relationships": {
         "composesWith": [
+          "context/development/testing/testing-baseline",
           "skill/operations/git/resolve-merge-conflicts-by-intent",
           "skill/operations/setup/build-repository-quality-gates"
         ],
@@ -20379,7 +21746,12 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/marketing/conversion/audit-app-store-listing",
+          "skill/marketing/conversion/review-conversion-friction",
+          "skill/marketing/strategy/generate-marketing-experiments",
+          "subagent/data/experimentation/experiment-validity-reviewer"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -20505,7 +21877,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/marketing/analytics/campaign-attribution-integrity-reviewer"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -20631,7 +22005,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/marketing/analytics/campaign-attribution-integrity-reviewer"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -20881,7 +22257,10 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/marketing/content/edit-marketing-copy",
+          "skill/marketing/content/plan-channel-native-social-content"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -21007,6 +22386,7 @@
       },
       "relationships": {
         "composesWith": [
+          "skill/marketing/content/document-brand-voice",
           "skill/writing/technical-writing/write-article-from-source-material"
         ],
         "conflictsWith": [],
@@ -21134,7 +22514,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/marketing/content/document-brand-voice"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -21260,7 +22642,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/marketing/strategy/synthesize-customer-language"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -21386,7 +22770,12 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/marketing/conversion/audit-ethical-persuasion",
+          "skill/marketing/positioning/design-evidence-backed-offer",
+          "skill/marketing/positioning/document-product-positioning",
+          "skill/marketing/strategy/synthesize-customer-language"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -21512,7 +22901,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/marketing/analytics/design-controlled-experiment"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -21637,7 +23028,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/marketing/content/write-conversion-copy"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -21889,7 +23282,10 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "hook/design/authentication-access/authentication-accessibility-guard",
+          "skill/marketing/lifecycle/improve-product-activation"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -22014,7 +23410,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/marketing/analytics/design-controlled-experiment"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -22140,7 +23538,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/marketing/positioning/design-pricing-and-packaging"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -22518,7 +23918,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/marketing/lifecycle/design-lifecycle-email-sequence"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -22896,7 +24298,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/marketing/launch/launch-message-consistency-reviewer"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -23148,7 +24552,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/marketing/growth/design-qualified-lead-magnet"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -23274,7 +24680,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/marketing/conversion/reduce-signup-friction"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -23652,7 +25060,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/marketing/performance/produce-testable-ad-creative"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -23778,7 +25188,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/marketing/performance/plan-paid-acquisition"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -23904,7 +25316,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/marketing/positioning/write-honest-comparison-page"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -24030,7 +25444,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/marketing/content/write-conversion-copy"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -24156,7 +25572,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/marketing/conversion/review-upgrade-moment"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -24282,7 +25700,11 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/marketing/content/write-conversion-copy",
+          "skill/marketing/strategy/synthesize-customer-language",
+          "subagent/marketing/positioning/positioning-evidence-analyst"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -24408,7 +25830,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/marketing/positioning/build-competitor-evidence-profile"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -24660,7 +26084,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/marketing/sales/write-compliant-cold-email"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -25038,7 +26464,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/marketing/sales/build-compliant-prospect-list"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -25668,7 +27096,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/marketing/strategy/generate-marketing-experiments"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -25793,7 +27223,10 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/marketing/analytics/design-controlled-experiment",
+          "skill/marketing/strategy/build-marketing-operating-plan"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -26044,7 +27477,11 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/marketing/content/plan-evidence-led-content",
+          "skill/marketing/content/write-conversion-copy",
+          "skill/marketing/positioning/document-product-positioning"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -26172,7 +27609,10 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/development/agent-tooling/author-deterministic-agent-hook",
+          "skill/development/agent-tooling/author-effective-agent-skill"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -26299,6 +27739,7 @@
       },
       "relationships": {
         "composesWith": [
+          "hook/operations/delegation-budget/subagent-fanout-guard",
           "skill/operations/agent-orchestration/design-delegable-workflow",
           "skill/operations/reviewability/decompose-dependent-work-slices"
         ],
@@ -26426,7 +27867,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/operations/git/isolate-work-with-worktrees"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -26683,7 +28126,8 @@
       },
       "relationships": {
         "composesWith": [
-          "command/development/workflow/draft-evidenced-plan"
+          "command/development/workflow/draft-evidenced-plan",
+          "skill/operations/reviewability/review-plan-execution-divergence"
         ],
         "conflictsWith": [],
         "supersedes": [],
@@ -27336,6 +28780,8 @@
       },
       "relationships": {
         "composesWith": [
+          "context/operations/ci-cd/ci-workflow-baseline",
+          "hook/security/ci-references/ci-reference-pinning-guard",
           "skill/operations/ci-cd/debug-ci-failure",
           "skill/operations/setup/build-repository-quality-gates"
         ],
@@ -27464,7 +28910,10 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "context/operations/git/git-workflow-baseline",
+          "skill/operations/agent-orchestration/delegate-to-codex-cli"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -27591,6 +29040,7 @@
       },
       "relationships": {
         "composesWith": [
+          "context/operations/git/git-workflow-baseline",
           "skill/operations/git/resolve-merge-conflicts-by-intent"
         ],
         "conflictsWith": [],
@@ -28107,7 +29557,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/operations/observability/observability-instrumentation-reviewer"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -28233,7 +29685,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/operations/reliability/slo-error-budget-analyst"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -28359,7 +29813,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/operations/runbooks/runbook-readiness-reviewer"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -29030,7 +30486,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/operations/agent-orchestration/execute-verifiable-plan"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -29505,6 +30963,7 @@
       },
       "relationships": {
         "composesWith": [
+          "context/operations/ci-cd/ci-workflow-baseline",
           "skill/development/testing/verify-completion-evidence",
           "skill/operations/ci-cd/review-ci-workflow-change"
         ],
@@ -30006,7 +31465,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/research/research-planning/research-gap-mapper"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -30517,7 +31978,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/security/authorization/access-control-matrix-auditor"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -30644,7 +32107,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "context/security/dependencies/dependency-change-baseline"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -30777,7 +32242,12 @@
         ]
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "context/security/dependencies/dependency-change-baseline",
+          "hook/security/ci-references/ci-reference-pinning-guard",
+          "hook/security/dependency-origins/dependency-source-guard",
+          "subagent/security/dependencies/dependency-risk-reviewer"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -30905,6 +32375,7 @@
       },
       "relationships": {
         "composesWith": [
+          "context/security/threat-modeling/security-baseline",
           "hook/security/application-security/outbound-data-guard",
           "hook/security/network-control/mcp-capability-drift-guard",
           "hook/security/network-control/mcp-egress-guard",
@@ -31042,7 +32513,10 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/writing/decision-support/resolve-next-decision",
+          "skill/writing/documentation/write-session-handoff"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -31674,7 +33148,8 @@
       },
       "relationships": {
         "composesWith": [
-          "skill/operations/agent-orchestration/map-multi-session-decisions"
+          "skill/operations/agent-orchestration/map-multi-session-decisions",
+          "skill/writing/decision-support/audit-implicit-decisions"
         ],
         "conflictsWith": [],
         "supersedes": [],
@@ -32185,7 +33660,8 @@
       },
       "relationships": {
         "composesWith": [
-          "skill/development/architecture/define-domain-language"
+          "skill/development/architecture/define-domain-language",
+          "subagent/writing/decision-support/decision-record-reviewer"
         ],
         "conflictsWith": [],
         "supersedes": [],
@@ -32312,7 +33788,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/operations/incidents/incident-timeline-analyst"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -32443,7 +33921,9 @@
         ]
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/writing/decision-support/audit-implicit-decisions"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -33370,7 +34850,9 @@
         ]
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "command/development/workflow/audit-release-evidence"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -33750,7 +35232,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/data/quality/data-quality-diagnostician"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -33855,7 +35339,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/development/code-quality/optimize-with-performance-profile"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -33961,7 +35447,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/marketing/analytics/design-controlled-experiment"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -34069,7 +35557,9 @@
       "relationships": {
         "composesWith": [
           "skill/data/governance/design-private-data-lifecycle",
-          "skill/data/quality/design-data-pipeline-change"
+          "skill/data/quality/design-data-pipeline-change",
+          "subagent/development/architecture/repository-architecture-mapper",
+          "subagent/security/telemetry/privacy-data-handling-auditor"
         ],
         "conflictsWith": [],
         "supersedes": [],
@@ -34289,7 +35779,9 @@
       },
       "relationships": {
         "composesWith": [
-          "skill/data/quality/design-data-pipeline-change"
+          "skill/data/analytics/design-data-quality-controls",
+          "skill/data/quality/design-data-pipeline-change",
+          "subagent/data/analytics/metric-contract-reviewer"
         ],
         "conflictsWith": [],
         "supersedes": [],
@@ -34400,7 +35892,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/development/testing/evaluate-retrieval-system"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -34732,7 +36226,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/design/design-systems/audit-design-system-consistency"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -34838,7 +36334,8 @@
       },
       "relationships": {
         "composesWith": [
-          "skill/development/testing/test-interface-in-browser"
+          "skill/development/testing/test-interface-in-browser",
+          "subagent/development/testing/performance-benchmark-analyst"
         ],
         "conflictsWith": [],
         "supersedes": [],
@@ -34948,7 +36445,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/development/state-management/state-machine-invariant-analyst"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -35053,7 +36552,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/design/internationalization/design-for-localization"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -35160,7 +36661,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/design/responsive/design-responsive-behavior"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -35265,7 +36768,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/development/serialization/serialization-contract-reviewer"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -35371,7 +36876,11 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/development/cli/cli-contract-reviewer",
+          "subagent/development/serialization/serialization-contract-reviewer",
+          "subagent/writing/documentation/api-documentation-verifier"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -35479,7 +36988,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/data/governance/data-lineage-mapper"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -35576,7 +37087,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/development/api/api-contract-compatibility-reviewer"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -35686,7 +37199,8 @@
           "hook/operations/reviewability/large-diff-review-guard",
           "skill/development/code-quality/evaluate-code-review-feedback",
           "skill/development/code-quality/request-independent-code-review",
-          "skill/operations/reviewability/prepare-reviewable-pull-request"
+          "skill/operations/reviewability/prepare-reviewable-pull-request",
+          "subagent/development/testing/test-gap-reviewer"
         ],
         "conflictsWith": [],
         "supersedes": [],
@@ -35795,7 +37309,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/development/testing/flaky-test-diagnostician"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -35900,7 +37416,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/operations/configuration/configuration-drift-analyst"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -36005,7 +37523,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/development/resource-management/resource-lifecycle-reviewer"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -36110,7 +37630,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/development/reliability/error-recovery-path-reviewer"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -36215,7 +37737,10 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/development/algorithms/numerical-correctness-analyst",
+          "subagent/development/api/api-contract-compatibility-reviewer"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -36320,7 +37845,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/design/interaction/interaction-state-reviewer"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -36428,7 +37955,10 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/development/concurrency/concurrency-hazard-analyst",
+          "subagent/operations/ci-cd/ci-failure-analyst"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -36636,7 +38166,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/design/frontend/web-performance-reviewer"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -36737,7 +38269,8 @@
         "composesWith": [
           "command/development/workflow/verify-claims-against-output",
           "skill/development/testing/assess-mutation-test-value",
-          "skill/development/testing/design-property-and-fuzz-tests"
+          "skill/development/testing/design-property-and-fuzz-tests",
+          "subagent/development/code-quality/refactor-equivalence-reviewer"
         ],
         "conflictsWith": [],
         "supersedes": [],
@@ -36845,7 +38378,10 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/marketing/analytics/design-marketing-measurement",
+          "skill/marketing/analytics/reconcile-marketing-attribution"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -36951,7 +38487,10 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/marketing/launch/plan-product-launch",
+          "subagent/marketing/positioning/positioning-evidence-analyst"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -37057,7 +38596,10 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/marketing/positioning/document-product-positioning",
+          "subagent/marketing/launch/launch-message-consistency-reviewer"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -37164,7 +38706,9 @@
       },
       "relationships": {
         "composesWith": [
-          "skill/development/testing/plan-load-test"
+          "skill/development/testing/plan-load-test",
+          "subagent/operations/cloud-resources/cloud-cost-finops-analyst",
+          "subagent/security/abuse-prevention/abuse-resistance-analyst"
         ],
         "conflictsWith": [],
         "supersedes": [],
@@ -37273,7 +38817,8 @@
       "relationships": {
         "composesWith": [
           "command/operations/ci-cd/diagnose-ci-failure",
-          "skill/operations/ci-cd/debug-ci-failure"
+          "skill/operations/ci-cd/debug-ci-failure",
+          "subagent/development/testing/flaky-test-diagnostician"
         ],
         "conflictsWith": [],
         "supersedes": [],
@@ -37387,7 +38932,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/operations/capacity/capacity-risk-analyst"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -37485,7 +39032,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/development/configuration/configuration-semantics-reviewer"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -37590,7 +39139,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/writing/documentation/write-learning-postmortem"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -37700,7 +39251,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/operations/infrastructure/infrastructure-change-reviewer"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -37799,7 +39352,8 @@
       },
       "relationships": {
         "composesWith": [
-          "skill/operations/infrastructure/plan-infrastructure-change"
+          "skill/operations/infrastructure/plan-infrastructure-change",
+          "subagent/operations/infrastructure/cloud-iac-policy-reviewer"
         ],
         "conflictsWith": [],
         "supersedes": [],
@@ -37911,7 +39465,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/operations/observability/design-observability-signals"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -38015,7 +39571,8 @@
           "hook/operations/repository-state/release-clean-state-guard",
           "hook/operations/versioning/release-version-consistency-guard",
           "skill/operations/release/verify-production-release",
-          "subagent/operations/release/release-risk-reviewer"
+          "subagent/operations/release/release-risk-reviewer",
+          "subagent/security/supply-chain/build-provenance-reviewer"
         ],
         "conflictsWith": [],
         "supersedes": [],
@@ -38231,7 +39788,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/operations/observability/design-service-level-objectives"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -38338,7 +39897,8 @@
       },
       "relationships": {
         "composesWith": [
-          "skill/operations/infrastructure/plan-infrastructure-change"
+          "skill/operations/infrastructure/plan-infrastructure-change",
+          "subagent/operations/runbooks/runbook-readiness-reviewer"
         ],
         "conflictsWith": [],
         "supersedes": [],
@@ -38447,7 +40007,11 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/operations/observability/write-incident-runbook",
+          "subagent/operations/resilience/disaster-recovery-readiness-auditor",
+          "subagent/writing/documentation/procedural-documentation-tester"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -38553,7 +40117,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/research/source-analysis/source-credibility-auditor"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -38659,7 +40225,10 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/research/source-analysis/write-source-backed-research-brief",
+          "subagent/writing/decision-support/decision-record-reviewer"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -38765,7 +40334,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/research/evidence-synthesis/evidence-synthesis-analyst"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -38871,7 +40442,10 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/operations/capacity/capacity-risk-analyst",
+          "subagent/security/application-security/application-security-reviewer"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -38981,7 +40555,13 @@
           "hook/security/secrets/sensitive-file-access-guard",
           "skill/development/agent-tooling/author-mcp-server-contract",
           "skill/security/threat-modeling/review-agent-tool-boundaries",
-          "subagent/security/threat-modeling/mcp-trust-boundary-reviewer"
+          "subagent/security/abuse-prevention/abuse-resistance-analyst",
+          "subagent/security/authorization/access-control-matrix-auditor",
+          "subagent/security/cryptography/cryptographic-usage-reviewer",
+          "subagent/security/multi-tenancy/tenant-isolation-analyst",
+          "subagent/security/telemetry/sensitive-logging-reviewer",
+          "subagent/security/threat-modeling/mcp-trust-boundary-reviewer",
+          "subagent/security/threat-modeling/threat-model-mapper"
         ],
         "conflictsWith": [],
         "supersedes": [],
@@ -39090,7 +40670,11 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/security/application-security/review-auth-boundary",
+          "subagent/security/application-security/application-security-reviewer",
+          "subagent/security/multi-tenancy/tenant-isolation-analyst"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -39195,7 +40779,10 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/security/application-security/application-security-reviewer",
+          "subagent/security/supply-chain/build-provenance-reviewer"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -39302,7 +40889,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/security/supply-chain/review-supply-chain-change"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -39407,7 +40996,10 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/security/application-security/application-security-reviewer",
+          "subagent/security/authorization/access-control-matrix-auditor"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -39513,7 +41105,10 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/operations/release/release-evidence-verifier",
+          "subagent/security/cryptography/cryptographic-usage-reviewer"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -39623,7 +41218,11 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "skill/data/governance/design-private-data-lifecycle",
+          "subagent/data/governance/data-lineage-mapper",
+          "subagent/security/telemetry/sensitive-logging-reviewer"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -39721,7 +41320,9 @@
       },
       "relationships": {
         "composesWith": [
-          "skill/data/governance/design-private-data-lifecycle"
+          "skill/data/governance/design-private-data-lifecycle",
+          "subagent/security/application-security/application-security-reviewer",
+          "subagent/security/telemetry/privacy-data-handling-auditor"
         ],
         "conflictsWith": [],
         "supersedes": [],
@@ -39939,7 +41540,8 @@
       },
       "relationships": {
         "composesWith": [
-          "skill/security/threat-modeling/review-agent-tool-boundaries"
+          "skill/security/threat-modeling/review-agent-tool-boundaries",
+          "subagent/security/application-security/application-security-reviewer"
         ],
         "conflictsWith": [],
         "supersedes": [],
@@ -40046,7 +41648,9 @@
       },
       "relationships": {
         "composesWith": [
-          "skill/operations/session/resume-session-work"
+          "skill/operations/session/resume-session-work",
+          "skill/writing/documentation/load-architecture-decisions",
+          "subagent/research/research-planning/research-gap-mapper"
         ],
         "conflictsWith": [],
         "supersedes": [],
@@ -40154,7 +41758,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/development/api/api-contract-compatibility-reviewer"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],
@@ -40259,7 +41865,9 @@
         "entrypoints": []
       },
       "relationships": {
-        "composesWith": [],
+        "composesWith": [
+          "subagent/operations/runbooks/runbook-readiness-reviewer"
+        ],
         "conflictsWith": [],
         "supersedes": [],
         "prerequisites": [],

@@ -47,7 +47,10 @@
     "assess"
   ],
   "relationships": {
-    "composesWith": [],
+    "composesWith": [
+      "subagent/development/algorithms/numerical-correctness-analyst",
+      "subagent/development/api/api-contract-compatibility-reviewer"
+    ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],

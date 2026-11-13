@@ -288,6 +288,30 @@ test('relationship integrity rejects contradictory edges and directional cycles'
   assert.ok(errors.some((error) => /prerequisites contains cycle/.test(error)));
 });
 
+test('a payload that names another artifact has a typed relationship with it', () => {
+  const { artifacts } = validateRepository();
+  const idsBySlug = new Map();
+  for (const { manifest } of artifacts) idsBySlug.set(manifest.slug, [...(idsBySlug.get(manifest.slug) ?? []), manifest.id]);
+  const relationships = new Map(artifacts.map(({ manifest }) => [manifest.id, manifest.relationships]));
+  const slugs = new RegExp(`(?<![a-z0-9-])(${[...idsBySlug.keys()].sort((a, b) => b.length - a.length).join('|')})(?![a-z0-9-])`, 'g');
+  const linked = (from, to) => ['composesWith', 'conflictsWith', 'supersedes', 'prerequisites', 'suggests']
+    .some((key) => (relationships.get(from)[key] ?? []).includes(to) || (relationships.get(to)[key] ?? []).includes(from));
+  const missing = [];
+  for (const { manifest, directory, adapters } of artifacts) {
+    const files = new Set(Object.values(adapters ?? {}).flatMap((adapter) => adapter.data?.files ?? [])
+      .filter((entry) => /\.(md|mdc)$/.test(entry.from ?? '')).map((entry) => path.resolve(directory, entry.from)));
+    for (const file of files) {
+      for (const [, slug] of readFileSync(file, 'utf8').matchAll(slugs)) {
+        const ids = idsBySlug.get(slug);
+        // A slug shared by two artifacts does not say which one is meant.
+        if (slug === manifest.slug || ids.length !== 1 || linked(manifest.id, ids[0])) continue;
+        missing.push(`${manifest.id} names ${ids[0]}`);
+      }
+    }
+  }
+  assert.deepEqual([...new Set(missing)], []);
+});
+
 test('relationship arrays must be sorted and orphan analysis is non-punitive', () => {
   const repository = validateRepository();
   const source = repository.artifacts.find(({ manifest }) => manifest.relationships.composesWith.length > 1);

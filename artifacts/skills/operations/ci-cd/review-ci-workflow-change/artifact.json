@@ -59,6 +59,8 @@
   ],
   "relationships": {
     "composesWith": [
+      "context/operations/ci-cd/ci-workflow-baseline",
+      "hook/security/ci-references/ci-reference-pinning-guard",
       "skill/operations/ci-cd/debug-ci-failure",
       "skill/operations/setup/build-repository-quality-gates"
     ],

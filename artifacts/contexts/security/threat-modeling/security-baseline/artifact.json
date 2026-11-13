@@ -99,7 +99,12 @@
     ]
   },
   "relationships": {
-    "composesWith": [],
+    "composesWith": [
+      "hook/security/application-security/outbound-data-guard",
+      "hook/security/secrets/prompt-secret-guard",
+      "hook/security/secrets/sensitive-file-access-guard",
+      "skill/security/threat-modeling/review-agent-tool-boundaries"
+    ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],

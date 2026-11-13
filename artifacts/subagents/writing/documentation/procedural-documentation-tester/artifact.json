@@ -47,7 +47,9 @@
     "verify"
   ],
   "relationships": {
-    "composesWith": [],
+    "composesWith": [
+      "subagent/operations/runbooks/runbook-readiness-reviewer"
+    ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],

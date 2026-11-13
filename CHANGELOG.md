@@ -6,6 +6,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 
 ### Changed
 
+- Related links now cover most of the catalog: 125 new `composesWith` pairs, so 118 artifacts that stood alone point to the artifacts they hand work to or receive it from. An artifact whose text names another by slug is always linked to it.
 - The thirty subagents that review a set of paths now search before they read: each brief lists the calls, keywords, and file patterns to look for, opens the highest-risk candidates first, and reports the ones it did not open with the search that found them.
 - A subagent handed a request that belongs to the neighbour its description names now says so and stops instead of reviewing it.
 - Every subagent description now says what sets it apart: the signals in a request that should select it, and the neighbour to use instead (`Not for X; use <slug>`). Before, 35 of 62 ended with the same sentence, so an agent choosing a specialist had nothing to go on.

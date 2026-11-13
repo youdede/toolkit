@@ -48,7 +48,10 @@
     "diagnose"
   ],
   "relationships": {
-    "composesWith": [],
+    "composesWith": [
+      "subagent/operations/capacity/capacity-risk-analyst",
+      "subagent/security/application-security/application-security-reviewer"
+    ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],

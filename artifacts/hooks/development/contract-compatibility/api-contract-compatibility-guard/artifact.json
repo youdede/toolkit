@@ -52,7 +52,10 @@
     "enforce"
   ],
   "relationships": {
-    "composesWith": [],
+    "composesWith": [
+      "context/development/api/api-contract-baseline",
+      "skill/development/architecture/plan-compatible-deprecation"
+    ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],

@@ -100,7 +100,10 @@
   },
   "relationships": {
     "composesWith": [
-      "command/development/workflow/draft-evidenced-plan"
+      "command/development/workflow/draft-evidenced-plan",
+      "hook/development/code-quality/generated-file-guard",
+      "skill/development/architecture/enforce-typescript-module-boundaries",
+      "skill/development/code-quality/simplify-code-with-invariants"
     ],
     "conflictsWith": [],
     "supersedes": [],

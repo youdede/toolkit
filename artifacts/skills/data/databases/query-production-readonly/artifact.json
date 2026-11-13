@@ -50,7 +50,10 @@
     "collect"
   ],
   "relationships": {
-    "composesWith": [],
+    "composesWith": [
+      "hook/data/live-query-safety/database-query-mode-guard",
+      "skill/data/databases/provision-postgres-readonly-role"
+    ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],

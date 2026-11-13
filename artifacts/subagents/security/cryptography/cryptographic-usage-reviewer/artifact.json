@@ -47,7 +47,10 @@
     "assess"
   ],
   "relationships": {
-    "composesWith": [],
+    "composesWith": [
+      "subagent/security/application-security/application-security-reviewer",
+      "subagent/security/supply-chain/build-provenance-reviewer"
+    ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],

@@ -84,7 +84,11 @@
     ]
   },
   "relationships": {
-    "composesWith": [],
+    "composesWith": [
+      "hook/security/supply-chain/ci-trust-boundary-guard",
+      "skill/operations/ci-cd/review-ci-workflow-change",
+      "skill/operations/setup/build-repository-quality-gates"
+    ],
     "conflictsWith": [],
     "supersedes": [],
     "prerequisites": [],
