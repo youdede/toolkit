@@ -71,10 +71,28 @@ function walk(directory, name, output = []) {
   return output;
 }
 
+const artifactCache = new Map();
+
+function freezeArtifactData(value) {
+  if (value && typeof value === 'object') {
+    for (const child of Object.values(value)) freezeArtifactData(child);
+    Object.freeze(value);
+  }
+  return value;
+}
+
+// Call after writing manifests or adapters before loading the same root again.
+export function invalidateArtifacts(root = ROOT) {
+  artifactCache.delete(path.resolve(root));
+}
+
+// Records are immutable; copy a record with structuredClone before editing it.
 export function loadArtifacts(root = ROOT) {
+  root = path.resolve(root);
+  if (artifactCache.has(root)) return [...artifactCache.get(root)];
   const artifactRoot = path.join(root, 'artifacts');
   if (!existsSync(artifactRoot)) return [];
-  return walk(artifactRoot, 'artifact.json')
+  const records = walk(artifactRoot, 'artifact.json')
     .sort()
     .map((manifestPath) => {
       const directory = path.dirname(manifestPath);
@@ -89,6 +107,8 @@ export function loadArtifacts(root = ROOT) {
       }
       return { root, directory, manifestPath, manifest, adapters };
     });
+  artifactCache.set(root, freezeArtifactData(records));
+  return [...records];
 }
 
 export function loadPacks(root = ROOT) {

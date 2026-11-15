@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import os from 'node:os';
 import path from 'node:path';
@@ -28,7 +28,7 @@ function reportFor(pack) {
 
 test('every pack has a versioned ledger-linked evidence contract and behavioral evaluation', () => {
   const repository = validateRepository();
-  assert.equal(repository.packs.length, 13);
+  assert.equal(repository.packs.length, JSON.parse(readFileSync(new URL('../catalog/packs.json', import.meta.url), 'utf8')).count);
   assert.deepEqual(repository.packResults.flatMap(({ errors }) => errors), []);
   assert.deepEqual(validatePackEvaluations(), []);
   for (const { manifest } of loadPacks()) {

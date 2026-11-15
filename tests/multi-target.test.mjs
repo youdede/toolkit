@@ -7,16 +7,9 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { loadArtifacts } from '../scripts/lib/catalog.mjs';
 import { doctor, installArtifact, removeArtifact } from '../scripts/lib/install.mjs';
-import { resolveConfigRoot, resolveConfigRoots, SUPPORTED_TARGETS } from '../scripts/lib/targets.mjs';
+import { ARTIFACT_KINDS, resolveConfigRoot, resolveConfigRoots, SUPPORTED_TARGETS } from '../scripts/lib/targets.mjs';
 
-const MATRIX = {
-  skill: { 'claude-code': 170, codex: 169, 'gemini-cli': 169, 'github-copilot': 169, cursor: 169, opencode: 169 },
-  hook: { 'claude-code': 64, codex: 22, 'gemini-cli': 22, 'github-copilot': 0, cursor: 24, opencode: 22 },
-  subagent: { 'claude-code': 62, codex: 0, 'gemini-cli': 62, 'github-copilot': 62, cursor: 0, opencode: 50 },
-  command: { 'claude-code': 10, codex: 0, 'gemini-cli': 0, 'github-copilot': 0, cursor: 0, opencode: 0 },
-  context: { 'claude-code': 8, codex: 0, 'gemini-cli': 0, 'github-copilot': 8, cursor: 8, opencode: 0 },
-  'mcp-server': { 'claude-code': 5, codex: 0, 'gemini-cli': 0, 'github-copilot': 0, cursor: 5, opencode: 0 }
-};
+const published = JSON.parse(readFileSync(new URL('../catalog/artifacts.json', import.meta.url), 'utf8')).artifacts;
 
 function temporary(context, prefix) {
   const directory = mkdtempSync(path.join(os.tmpdir(), prefix));
@@ -27,9 +20,10 @@ function temporary(context, prefix) {
 test('runtime target matrix is explicit and never implies unsupported coverage', () => {
   assert.deepEqual(SUPPORTED_TARGETS, ['claude-code', 'codex', 'gemini-cli', 'github-copilot', 'cursor', 'opencode']);
   const artifacts = loadArtifacts();
-  for (const [kind, expected] of Object.entries(MATRIX)) {
+  for (const kind of ARTIFACT_KINDS) {
     const records = artifacts.filter(({ manifest }) => manifest.kind === kind);
-    for (const [target, count] of Object.entries(expected)) {
+    for (const target of SUPPORTED_TARGETS) {
+      const count = published.filter((artifact) => artifact.kind === kind && artifact.targets.includes(target)).length;
       assert.equal(records.filter(({ adapters }) => adapters[target]).length, count, `${kind}/${target}`);
     }
   }

@@ -11,7 +11,7 @@ Plan, enforce, and independently verify accessible interface behavior from sourc
 - **Prepare EAA Conformance Evidence** (skill): Map accessibility results to the requirement set and version an owner declared, keeping verified, asserted, stale and absent apart.
 - **Test Screen Reader Journey** (skill): Test a bounded user journey with a real screen reader and evidence tied to interaction outcomes.
 - **Verify Cognitive Access Barriers** (skill): Verify consistent help, redundant entry, and accessible authentication against an observed process walkthrough.
-- **Accessibility Conformance Reviewer** (subagent): Review a bounded interface change for evidence-led accessibility conformance risks and user barriers.
+- **Accessibility Conformance Reviewer** (subagent): Review interface code, as a change or as it stands, for semantic, labeling, focus, keyboard, and error-message accessibility barriers.
 - **Accessibility Journey Tester** (subagent): Verify a bounded user journey from supplied browser, keyboard, assistive-technology, and static evidence.
 
 ## What it runs

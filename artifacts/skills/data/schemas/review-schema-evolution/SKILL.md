@@ -33,7 +33,7 @@ Do not assume the project working directory contains the helper. It reads at mos
 
 Produce `## Compatibility definition`, `## Structural signals`, `## Producer-consumer matrix`, `## Rollout and rollback`, `## Evidence gaps`, and `## Recommendation`.
 
-For every finding include the schema pointer or field, affected reader/writer pair, verified evidence, inference, unresolved uncertainty, failure effect, and smallest next check. Recommend `ready for owner decision`, `needs revision`, or `blocked by missing evidence`; never label the evolution compatible or safe from a structural diff alone.
+For every finding include severity (`high` when a deployed reader or writer rejects or misreads records, `medium` when data is silently dropped, defaulted, or reinterpreted, `low` otherwise), the schema file path with the pointer or field, affected reader/writer pair, verified evidence, inference, unresolved uncertainty, failure effect, and smallest next check. Recommend `ready for owner decision`, `needs revision`, or `blocked by missing evidence`; never label the evolution compatible or safe from a structural diff alone.
 
 ## Reply paths
 
