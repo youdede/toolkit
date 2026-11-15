@@ -11,8 +11,10 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 
 ### Fixed
 
+- Read-only MCP servers share one packaged runtime and keep it installed until the last server is removed.
 - Pack removal respects prerequisite order, optional members report installation errors, and failed pack installs roll back newly added prerequisites.
 - Catalog validation reports malformed artifact relationships and adapter declarations by artifact and field, and continues checking the catalog.
+- The catalog summaries of nine subagents, `review-frontend-quality`, and `/audit-repository-instructions` describe what each one does today, in English, Italian, and Dutch. Nine still described a review limited to a change after the subagents learned to review paths as they stand.
 
 ## 0.8.0 (2026-11-13)
 

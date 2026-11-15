@@ -1,27 +1,23 @@
 #!/usr/bin/env node
 
 import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadArtifacts } from './lib/catalog.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const RUNTIME = path.join(ROOT, 'scripts/runtime/readonly-mcp-server.mjs');
-const REGISTRY = path.join(ROOT, 'catalog/mcp-pins.json');
 
 function sha256(value) {
   return createHash('sha256').update(value).digest('hex');
 }
 
 export function expectedMcpOutputs(root = ROOT) {
-  const runtime = readFileSync(path.join(root, 'scripts/runtime/readonly-mcp-server.mjs'));
   const servers = {};
   const outputs = new Map();
   for (const record of loadArtifacts(root).filter(({ manifest }) => manifest.kind === 'mcp-server')) {
     const profileFile = path.join(record.directory, 'server.json');
     const profile = JSON.parse(readFileSync(profileFile, 'utf8'));
-    if (profile.mode !== 'external-vendor') outputs.set(path.join(record.directory, 'runtime/readonly-mcp-server.mjs'), runtime);
     servers[profile.serverName] = {
       artifactId: record.manifest.id,
       profileSha256: sha256(readFileSync(profileFile)),
@@ -40,6 +36,12 @@ export function expectedMcpOutputs(root = ROOT) {
 
 export function generateMcp({ root = ROOT, check = false } = {}) {
   const stale = [];
+  for (const record of loadArtifacts(root).filter(({ manifest }) => manifest.kind === 'mcp-server')) {
+    const legacy = path.join(record.directory, 'runtime/readonly-mcp-server.mjs');
+    if (!existsSync(legacy)) continue;
+    stale.push(path.relative(root, legacy));
+    if (!check) rmSync(legacy);
+  }
   for (const [file, expected] of expectedMcpOutputs(root)) {
     const actual = existsSync(file) ? readFileSync(file) : null;
     if (actual?.equals(expected)) continue;

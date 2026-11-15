@@ -6,7 +6,7 @@
   "name": "Dependency risk reviewer",
   "version": "1.4.0",
   "kind": "subagent",
-  "summary": "Review dependency deltas for supply-chain and compatibility risk without mutating the repo.",
+  "summary": "Review dependency manifests and lockfiles, as a change or as they stand, for supply-chain and compatibility risk without mutating the repo.",
   "description": "A narrow read-only specialist subagent for manifest, lockfile, provenance, install-script, runtime, and integration risks after dependency changes.",
   "domain": "security",
   "category": "dependencies",
@@ -25,7 +25,7 @@
     "maintenance"
   ],
   "risk": "low",
-  "risk_reason": "This read-only specialist reviews dependency deltas for supply-chain and compatibility risk without mutating the repo; it cannot edit or approve changes.",
+  "risk_reason": "This read-only specialist reviews dependency manifests and lockfiles, as a change or as they stand, for supply-chain and compatibility risk without mutating the repo; it cannot edit or approve changes.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -61,7 +61,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
-    "latency_reason": "The specialist reviews dependency deltas for supply-chain and compatibility risk without mutating the repo, using sequential evidence and verification steps.",
+    "latency_reason": "The specialist reviews dependency manifests and lockfiles, as a change or as they stand, for supply-chain and compatibility risk without mutating the repo, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

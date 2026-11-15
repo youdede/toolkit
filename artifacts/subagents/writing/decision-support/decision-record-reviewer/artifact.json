@@ -6,7 +6,7 @@
   "name": "Decision Record Reviewer",
   "version": "1.3.0",
   "kind": "subagent",
-  "summary": "Review a bounded decision record for evidence, alternatives, tradeoffs, consequences, and revisit triggers.",
+  "summary": "Audit a historical decision record for status, contemporaneous rationale, alternatives, owned obligations, and supersession links.",
   "description": "A narrow, read-only specialist whose outcome is to identify a missing or contradictory link that prevents a future reader from reconstructing why the recorded choice followed from its context. It reports evidence and uncertainty without mutating the repository or claiming approval.",
   "domain": "writing",
   "category": "decision-support",
@@ -23,7 +23,7 @@
     "review"
   ],
   "risk": "low",
-  "risk_reason": "This read-only specialist reviews a bounded decision record for evidence, alternatives, tradeoffs, consequences, and revisit triggers; it cannot edit or approve changes.",
+  "risk_reason": "This read-only specialist audits a historical decision record for status, contemporaneous rationale, alternatives, owned obligations, and supersession links; it cannot edit or approve changes.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -63,7 +63,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
-    "latency_reason": "The specialist reviews a bounded decision record for evidence, alternatives, tradeoffs, consequences, and revisit triggers, using sequential evidence and verification steps.",
+    "latency_reason": "The specialist audits a historical decision record for status, contemporaneous rationale, alternatives, owned obligations, and supersession links, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

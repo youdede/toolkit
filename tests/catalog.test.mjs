@@ -5,6 +5,8 @@ import os from 'node:os';
 import path from 'node:path';
 import {
   analyzeRelationshipGraph,
+  invalidateArtifacts,
+  loadArtifacts,
   loadPacks,
   publicCatalog,
   publicPackCatalog,
@@ -33,7 +35,19 @@ test('the artifact kinds of the scripts are the kinds the schema accepts', () =>
 
 test('all artifact manifests and adapters validate', () => {
   const { artifacts, results } = validateRepository();
-  assert.ok(artifacts.length >= 113);
+  const published = JSON.parse(readFileSync(new URL('../catalog/artifacts.json', import.meta.url), 'utf8'));
+  assert.equal(artifacts.length, published.counts.total);
+  const cached = loadArtifacts(path.join(ROOT, 'scripts', '..'));
+  assert.equal(cached[0], artifacts[0]);
+  assert.notEqual(cached, artifacts);
+  cached.pop();
+  assert.equal(loadArtifacts().length, artifacts.length);
+  assert.throws(() => { artifacts[0].manifest.summary = 'changed'; }, TypeError);
+  const adapter = Object.values(artifacts[0].adapters)[0];
+  assert.throws(() => { adapter.data.files[0].from = 'changed'; }, TypeError);
+  assert.throws(() => { artifacts[0].manifest.relationships.composesWith.push('changed'); }, TypeError);
+  invalidateArtifacts();
+  assert.notEqual(loadArtifacts()[0], artifacts[0]);
   const errors = results.flatMap(({ record, errors: found }) => found.map((error) => `${record.manifest.id}: ${error}`));
   assert.deepEqual(errors, []);
 });
@@ -53,6 +67,7 @@ test('broken manifest structures produce named errors and do not stop other arti
     writeFileSync(path.join(root, path.relative(ROOT, other.manifestPath)), JSON.stringify({ ...other.manifest, summary: '' }));
     const check = (manifest, expected) => {
       writeFileSync(manifestPath, JSON.stringify(manifest));
+      invalidateArtifacts(root);
       let results;
       assert.doesNotThrow(() => { ({ results } = validateRepository(root)); }, expected);
       const named = results.find(({ record }) => record.manifest.id === source.manifest.id);
@@ -75,6 +90,7 @@ test('broken manifest structures produce named errors and do not stop other arti
       }
     }
   } finally {
+    invalidateArtifacts(root);
     rmSync(root, { recursive: true, force: true });
   }
 });

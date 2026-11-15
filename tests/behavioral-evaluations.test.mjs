@@ -48,7 +48,7 @@ test('every public prompt-bearing artifact has a complete behavioral contract', 
 test('every workflow pack records evidence-bearing behavioral scenarios', () => {
   assert.deepEqual(validatePackEvaluations(), []);
   const packs = loadPacks();
-  assert.equal(packs.length, 13);
+  assert.equal(packs.length, JSON.parse(readFileSync(new URL('../catalog/packs.json', import.meta.url), 'utf8')).count);
   for (const { directory, manifest } of packs) {
     const document = JSON.parse(readFileSync(path.join(directory, 'evaluations', 'behavioral.json'), 'utf8'));
     assert.deepEqual(
