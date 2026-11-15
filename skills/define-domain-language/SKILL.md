@@ -12,7 +12,7 @@ Build a shared language from observed behavior and owner decisions. A glossary d
 ## Workflow
 
 1. Locate existing glossaries, architecture records, schemas, tests, interfaces, and user-facing language. Identify the applicable context before editing anything.
-2. Build a term ledger with proposed canonical term, meaning, examples, non-examples, aliases, owner, and conflicts. Challenge overloaded words through concrete boundary scenarios and compare every claimed rule with current behavior.
+2. Build a term ledger with proposed canonical term, meaning, examples, non-examples, aliases, owner, and conflicts, citing each conflicting use by file path and line (or document and section when it has no lines). Challenge overloaded words through concrete boundary scenarios and compare every claimed rule with current behavior.
 
 When the request asks only for a terminology audit or a ledger to read before anyone decides, or says the glossary and decision records must stay untouched, stop after steps 1 and 2 and edit nothing. Report the ledger under `## Term ledger`, state under `## Decision records` that no record was written, and list each glossary update or record that steps 3 and 4 would have produced as a proposal under `## Open decisions`, naming the document and entry it would change.
 

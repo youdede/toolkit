@@ -16,7 +16,7 @@ Run `node "${CLAUDE_PROJECT_DIR}/.claude/commands/youdede/preflight-change-envir
 ## Step 2 — Complete the bounded workflow
 
 1. Run the deterministic environment collector once and preserve its JSON output verbatim.
-2. Compare only declared repository prerequisites with the snapshot; do not enumerate environment variables.
+2. Compare only declared repository prerequisites with the snapshot; do not enumerate environment variables. Declared prerequisites are the `engines` and `packageManager` fields of `package.json`, `.nvmrc`, `.node-version`, `.tool-versions`, and version fields in the detected markers (for example `requires-python`, `rust-version`, or the `go` line). The snapshot holds only the Node version, platform, and architecture: list every other declared tool version under **Residual uncertainty** as unverified instead of running more commands.
 3. Emit **Snapshot**, **Missing prerequisites**, and **Residual uncertainty**.
 
 ## Output contract
