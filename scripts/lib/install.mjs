@@ -1305,11 +1305,21 @@ export function planPackInstall(query, options = {}) {
   const target = options.target || DEFAULT_TARGET;
   const plans = [];
   for (const member of pack.members) {
+    if (!member.required) {
+      const adapter = resolveArtifact(member.artifactId, root).adapters[target]?.data;
+      const scope = options.scope || DEFAULT_SCOPE;
+      if (!adapter || !adapter.scopes.includes(scope)) {
+        plans.push({ member, skipped: !adapter
+          ? `${member.artifactId} does not support ${target}`
+          : `${member.artifactId} does not support ${scope} scope` });
+        continue;
+      }
+    }
     try {
       plans.push({ member, plan: planArtifactInstall(member.artifactId, options) });
     } catch (error) {
       if (member.required) throw new Error(`${pack.id}: required member ${member.artifactId} cannot install for ${target}: ${error.message}`);
-      plans.push({ member, skipped: error.message });
+      throw error;
     }
   }
   const mutations = new Map();
@@ -1368,7 +1378,11 @@ export function installPack(query, options = {}) {
   const planned = planPackInstall(query, options);
   const owner = `pack:${planned.pack.slug}`;
   const installed = [];
-  const mutations = packMutationPaths(planned);
+  const prerequisiteIds = options.prerequisites === false ? [] : [...new Set(
+    planned.members.flatMap(({ plan }) => plan?.prerequisites || [])
+  )];
+  const prerequisitePlans = prerequisiteIds.map((id) => ({ plan: planArtifactInstall(id, options) }));
+  const mutations = packMutationPaths({ ...planned, members: [...planned.members, ...prerequisitePlans] });
   const snapshots = snapshotFiles(mutations.files);
   try {
     for (const item of planned.members) {
@@ -1416,19 +1430,35 @@ export function removePack(query, options = {}) {
   if (drift.length > 0 && !options.force) {
     throw new Error(`${pack.id}: installed members have drift; use --force after review (${drift.map((item) => `${item.status}:${item.path}`).join(', ')})`);
   }
+  // Recorded insertion order can differ from dependency order when prerequisites were skipped.
+  const ordered = [];
+  const visited = new Set();
+  const byId = new Map(removable.map((entry) => [entry.installed.artifactId, entry]));
+  const manifests = new Map(loadArtifacts(root).map(({ manifest }) => [manifest.id, manifest]));
+  const visit = (entry) => {
+    const id = entry.installed.artifactId;
+    if (visited.has(id)) return;
+    visited.add(id);
+    for (const prerequisite of manifests.get(id)?.relationships?.prerequisites || []) {
+      if (byId.has(prerequisite)) visit(byId.get(prerequisite));
+    }
+    ordered.push(entry);
+  };
+  for (const entry of removable) visit(entry);
+  const removalOrder = ordered.toReversed();
+
   // A plan stops here, with the drift refusal above already applied. Each member plan is taken
   // against the state as it stands now, so the per-member file actions are exact; the state and
   // notice actions are computed once for the whole set, because an intermediate member would
   // otherwise report keeping a file that the last member removes.
   if (options.plan) {
-    // The real removal takes members in reverse recorded order, so a member that is a
-    // prerequisite of another member is removed after it and is never blocked by it. Planning a
+    // The real removal takes dependents before their prerequisites. Planning a
     // member on its own cannot see that, so the per-member dependent check is bypassed here and
     // the dependents that genuinely block are computed once, against what the pack does not own.
     const ownedIds = new Set(removable.map(({ installed }) => installed.artifactId));
     const ownedSlugs = new Set(removable.map(({ installed }) => installed.slug).filter(Boolean));
     const installs = installsOf(target, scope, cwd);
-    const members = removable.map(({ installed }) => {
+    const members = removalOrder.map(({ installed }) => {
       const plan = removeArtifactLocked(installed.artifactId, {
         ...options,
         owner,
@@ -1493,7 +1523,7 @@ export function removePack(query, options = {}) {
   const snapshots = snapshotFiles(mutationFiles);
   const removed = [];
   try {
-    for (const { installed } of removable.toReversed()) {
+    for (const { installed } of removalOrder) {
       removed.push(removeArtifact(installed.artifactId, { ...options, owner }));
     }
   } catch (error) {
