@@ -7,6 +7,13 @@ description: Reconstruct working context from the hash-chained session ledger, c
 
 Rebuild trustable working context from `.youdede/session-ledger.jsonl` — never from memory of a summary.
 
+## Contract
+
+- Inputs: the workspace's `.youdede/session-ledger.jsonl`, the installed ledger helper under `.claude/hooks/youdede/lib/`, and the current git worktree.
+- Scope: read-only reconstruction. Run only the ledger `verify` and `tail` commands below and read-only git inspection.
+- Invariant: every claim carried forward cites the ledger entry it came from, and an unverified chain makes every claim unverified.
+- Authority: the ledger is append-only evidence. This skill never writes, repairs, or reorders it.
+
 ## Step 1 — Verify before trusting
 
 Run the ledger verification:
@@ -33,6 +40,19 @@ If the five entries do not reach back to the goal they serve, or a pending claim
 ## Step 4 — State what could not be verified
 
 Close with a **Could not verify** section: entries missing, claims stale, git anchors that no longer match HEAD. An empty section must be stated explicitly.
+
+## Validation
+
+- The `verify` output is quoted with its result, entry count, and head before any claim is used.
+- Every goal, decision, and pending claim in the reply carries its 12-character entry hash.
+- Each pending claim was compared with the current `git status` and HEAD, and the result is stated as open, done, or stale.
+- The **Could not verify** section is present, even when it says nothing was left unverified.
+
+## Stop conditions
+
+- The ledger file is missing or empty: say so, carry nothing forward, and ask the smallest question that would let work resume.
+- The ledger helper is not installed or the `verify` command fails to run: report the error and treat no ledger claim as verified.
+- The chain fails verification: stop at the first failing line and ask whether to continue from the last intact entry, as Step 1 describes.
 
 ## Output contract
 
