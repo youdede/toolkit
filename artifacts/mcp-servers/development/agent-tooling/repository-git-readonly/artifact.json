@@ -24,7 +24,7 @@
     "It does not accept arbitrary Git flags, revisions, subprocesses, aliases, configuration, or environment overrides.",
     "It does not contact remotes, read credentials, or claim that inspected history is authentic or trusted."
   ],
-  "execution": {"mode": "hybrid", "entrypoints": [{"path": "runtime/readonly-mcp-server.mjs", "runtime": "node", "purpose": "Serve three fixed bounded read-only Git inspection tools over local standard input and output.", "sideEffects": "read-only"}]},
+  "execution": {"mode": "hybrid", "entrypoints": [{"path": "server.json", "runtime": "runtime", "purpose": "Serve three fixed bounded read-only Git inspection tools over local standard input and output.", "sideEffects": "read-only"}]},
   "mcpServer": {
     "transport": "stdio",
     "egress": ["none"],

@@ -61,6 +61,13 @@ export function verifyMcpRecord(record) {
   const drift = compareObservedTools(manifest.mcpServer.pinnedTools, profile.tools);
   for (const kind of ['missing', 'unknown', 'changed']) if (drift[kind].length) errors.push(`${kind} tool pins: ${drift[kind].join(', ')}`);
   for (const [target, adapter] of Object.entries(record.adapters)) {
+    if (!external) {
+      const runtime = (adapter.data.files || []).filter((mapping) => mapping.to === '.youdede/mcp/runtime.mjs');
+      if (runtime.length !== 1 || runtime[0].root !== 'package'
+        || runtime[0].from !== 'scripts/runtime/readonly-mcp-server.mjs' || runtime[0].executable !== true) {
+        errors.push(`${target} must install the shared package runtime`);
+      }
+    }
     const entries = adapter.data.mcpPatch?.servers || {};
     if (JSON.stringify(entries[profile.serverName]) !== JSON.stringify(profile.launch)) errors.push(`${target} MCP config differs from server.json launch`);
   }
