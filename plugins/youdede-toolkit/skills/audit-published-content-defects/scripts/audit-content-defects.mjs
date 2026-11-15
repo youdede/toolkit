@@ -162,7 +162,7 @@ export async function auditUrls(urls, { delay = 1500, onPage } = {}) {
     pages.push(page);
     onPage?.(page, i + 1, urls.length);
     blockedRun = page.status === 'blocked' ? blockedRun + 1 : 0;
-    // ponytail: three bot checks in a row means the site is throttling us; stop instead of hammering it.
+    // Three bot checks in a row means the site is throttling us; stop instead of hammering it.
     if (blockedRun >= 3) {
       for (const rest of urls.slice(i + 1)) pages.push({ url: rest, status: 'blocked', reason: 'not fetched: the site started blocking requests' });
       break;

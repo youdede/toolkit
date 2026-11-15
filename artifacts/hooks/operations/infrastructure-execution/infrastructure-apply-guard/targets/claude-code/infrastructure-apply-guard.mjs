@@ -1954,7 +1954,7 @@ const UNINSPECTABLE = 'infrastructure-command-uninspectable';
 
 // Global options that take the next word as their value: kubectl (`kubectl options`), helm (--kube-*,
 // --registry-config, --repository-*), and pulumi (--color always|never|raw|auto, -C/--cwd, -v/--verbose,
-// --tracing, --profiling), so `pulumi --color always up` reads `up` (PR38-CODEX17-2).
+// --tracing, --profiling), so `pulumi --color always up` reads `up`.
 const GLOBAL_VALUES = ['-chdir', '--chdir', '--context', '--namespace', '-n', '--kubeconfig', '--kube-context', '--as', '--as-group', '--cluster',
   '--user', '-s', '--server', '--as-uid', '--as-user-extra', '--cache-dir', '--certificate-authority', '--client-certificate', '--client-key',
   '--kuberc', '--log-flush-frequency', '--password', '--profile', '--profile-output', '--request-timeout', '--tls-server-name', '--token',

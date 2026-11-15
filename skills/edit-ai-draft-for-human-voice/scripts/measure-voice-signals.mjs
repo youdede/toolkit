@@ -7,7 +7,7 @@ import { parseArgs } from 'node:util';
 const MAX_BYTES = 512 * 1024;
 const SHORT_TEXT_WORDS = 300;
 
-// ponytail: heuristic limits, not fitted to StoryScope data (the paper publishes no per-1k-word rates).
+// Heuristic limits, not fitted to StoryScope data (the paper publishes no per-1k-word rates).
 // Calibrate them against the author's own human-written samples before treating a flag as a defect.
 export const LIMITS = Object.freeze({
   emDashPer1k: 1,
@@ -51,9 +51,9 @@ const LEXICONS = {
     readerAddress: [String.raw`\b(?:lettore|lettrice|lettori)\b`, String.raw`\b(?:tu|voi|tuo|tua|vostro|vostra)\b`],
     timeJumps: [String.raw`(?:anni|mesi|decenni|settimane) (?:prima|dopo|fa|più tardi)`, 'a quei tempi', 'molto tempo prima', 'più tardi avrebbe', String.raw`ricordò|ricordava`],
     conjunctions: ['e', 'o'],
-    // ponytail: 'sei' is left out because it is also 'you are'.
+    // 'sei' is left out because it is also 'you are'.
     stopwords: 'il lo la gli le un una uno del della dei delle degli nel nella nei nelle che chi cui non per con tra fra come anche ancora era erano sono stato stata essere aveva avevano ho hai abbiamo questo questa quello quella suo sua suoi sue loro mio mia tuo tua più poi già quando dove perché ogni tutto tutti molto disse dice'.split(' '),
-    // ponytail: crude Italian stem, final vowel only; unvalidated.
+    // Crude Italian stem, final vowel only; unvalidated.
     stem: (word) => word.replace(/[aeio]$/, ''),
     numberWords: ['due', 'tre', 'quattro', 'cinque', 'sette', 'otto', 'nove', 'dieci', 'undici', 'dodici', 'quindici', 'venti', 'trenta', 'quaranta', 'cinquanta', 'sessanta', 'settanta', 'ottanta', 'novanta', 'cento', 'centinaia', 'mille', 'migliaia', 'milione', 'milioni', 'dozzina', 'dozzine']
   }
@@ -286,7 +286,7 @@ function leanOf(item, value) {
   if (!item.options.includes(value)) return undefined;
   if (value === item.human) return 1;
   if (value === item.ai) return 0;
-  // ponytail: an option the paper names for neither source is half-way only when both ends are named.
+  // An option the paper names for neither source is half-way only when both ends are named.
   return item.human && item.ai ? 0.5 : item.ai ? 1 : 0;
 }
 
@@ -333,7 +333,7 @@ export function compareRubrics(baseline, revised) {
   const after = scoreRubric(revised);
   const both = Object.keys(RUBRIC).filter((id) => before.features[id]?.lean != null && after.features[id]?.lean != null);
   const changed = Object.fromEntries(Object.keys(DIAGNOSTICS).filter((id) => JSON.stringify(before.diagnostics[id]) !== JSON.stringify(after.diagnostics[id])).map((id) => [id, { before: before.diagnostics[id] ?? null, after: after.diagnostics[id] ?? null }]));
-  // ponytail: no pass verdict on purpose; a feature may stay put or move either way for a good editorial reason.
+  // No pass verdict on purpose; a feature may stay put or move either way for a good editorial reason.
   return { schemaVersion: 1, before: before.humanLean, after: after.humanLean, delta: Number((after.humanLean - before.humanLean).toFixed(3)), movedTowardAi: both.filter((id) => after.features[id].lean < before.features[id].lean), movedTowardHuman: both.filter((id) => after.features[id].lean > before.features[id].lean), stillAiSide: after.aiSide, diagnosticsChanged: changed };
 }
 
@@ -349,7 +349,7 @@ const decode = (s) => s.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (m, e) => e[0] 
   ? String.fromCodePoint(Number.parseInt(e[1].toLowerCase() === 'x' ? e.slice(2) : e.slice(1), e[1].toLowerCase() === 'x' ? 16 : 10))
   : ENTITIES[e.toLowerCase()] ?? m);
 
-// ponytail: regex reader, not a DOM parser. It keeps the first <article>, else <main>, else <body>, and drops
+// Regex reader, not a DOM parser. It keeps the first <article>, else <main>, else <body>, and drops
 // page chrome. Pages that render text with JavaScript or split a story across pages need the text saved to a file.
 export function extractText(html) {
   const title = decode(html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] ?? '').trim();
@@ -408,7 +408,7 @@ export function checkReview(text, review, lang = 'en') {
     for (const k of ['quote', 'why', 'suggestion']) if (typeof f?.[k] !== 'string' || !f[k].trim() || f[k].length > 1200) throw new Error(`${at}: ${k} must be a non-empty string up to 1200 characters`);
     if (!(f.kind in REVIEW_KINDS)) throw new Error(`${at}: kind must be one of ${Object.keys(REVIEW_KINDS).join(', ')}`);
     if (!page.includes(squash(f.quote))) throw new Error(`${at}: the quote is not in the text word for word`);
-    // ponytail: names come from specificsOf, so a name opening a sentence of the suggestion slips through;
+    // Names come from specificsOf, so a name opening a sentence of the suggestion slips through;
     // a capitalized word the text has in any case ("Banks", "DTA'") is not new.
     const { numbers, names } = specificsOf(f.suggestion, lang);
     const invented = [...numbers.filter((n) => !lower.includes(n.toLowerCase())), ...names.filter((n) => !lower.includes(n.replace(/'+$/, '').toLowerCase()))];
@@ -532,7 +532,7 @@ function markText(text, spans) {
 }
 
 // Word-level tracked changes: Myers' O((N+M)D) diff, so long texts with scattered edits stay fast.
-// ponytail: past 6,000 edited tokens the view is skipped and the report keeps side by side only.
+// Past 6,000 edited tokens the view is skipped and the report keeps side by side only.
 export function trackChanges(before, after, maxEdits = 6000) {
   const tok = (t) => t.match(/\s+|[\p{L}\p{N}'’-]+|[^\s\p{L}\p{N}]/gu) || [];
   const a = tok(before);

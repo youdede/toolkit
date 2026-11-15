@@ -269,7 +269,7 @@ test('failed pack upgrade restores the exact pre-existing installation', (contex
   assert.equal(doctor({ cwd: directory }).findings.length, 0);
 });
 
-test('failed first pack install removes the notice it generated (PR38-CODEX4-4)', (context) => {
+test('failed first pack install removes the notice it generated', (context) => {
   const repository = mkdtempSync(path.join(os.tmpdir(), 'youdede-pack-notice-repo-'));
   const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-pack-notice-target-'));
   context.after(() => {
@@ -288,7 +288,7 @@ test('failed first pack install removes the notice it generated (PR38-CODEX4-4)'
   assert.equal(existsSync(path.join(directory, '.claude', 'hooks', 'youdede', 'first-hook.mjs')), false);
 });
 
-test('failed pack removal restores the notice with state and payloads (PR38-CODEX14-2)', (context) => {
+test('failed pack removal restores the notice with state and payloads', (context) => {
   const repository = mkdtempSync(path.join(os.tmpdir(), 'youdede-pack-remove-repo-'));
   const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-pack-remove-target-'));
   context.after(() => {

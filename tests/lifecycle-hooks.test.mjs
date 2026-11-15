@@ -142,7 +142,7 @@ test('completion evidence opt-in is scoped to the current task or latest subagen
   assert.equal(optedInTask.ruleId, 'completion-evidence-missing');
 });
 
-test('an ordinary task needs no transcript and an Agent prompt marker opts a subagent in (PR38-HOOK-1)', (context) => {
+test('an ordinary task needs no transcript and an Agent prompt marker opts a subagent in', (context) => {
   const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-completion-optin-'));
   context.after(() => rmSync(directory, { recursive: true, force: true }));
   const plain = { hook_event_name: 'TaskCompleted', task_id: 't', task_description: 'plain task', transcript_path: path.join(directory, 'missing.jsonl') };
@@ -197,7 +197,7 @@ test('configuration guard blocks explicit bypasses and permits safe project sett
   assert.equal(configGuard.evaluate({ ...input, source: 'policy_settings' }, {}).exitCode, 0);
 });
 
-test('configuration guard finds the project root, derives the settings path, and allows deletion (PR38-HOOK-2)', (context) => {
+test('configuration guard finds the project root, derives the settings path, and allows deletion', (context) => {
   const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-config-root-'));
   context.after(() => rmSync(directory, { recursive: true, force: true }));
   mkdirSync(path.join(directory, '.claude'));
