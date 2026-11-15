@@ -38,6 +38,12 @@ in `installable` and `blockingMembers`.
 
 Packs compose procedures, specialists, and lifecycle gates without changing the independent install contract of any member. Required members must share the requested target and scope, and installation plans every member before the first write. Ownership and rollback guarantees are described in [architecture.md](architecture.md).
 
+Packs can declare a skill or command entry, an ordered workflow with activation signals, and
+target-specific members with a fallback. `packs` shows declared entry and workflow metadata;
+`pack-info --target <target>` shows selected members and the resolved workflow. JSON plans and
+installation results include the same resolved entry and workflow when declared. The installer
+does not execute workflow steps. See [pack format](pack-format.md) for selection rules.
+
 Use `--dry-run` before installation to resolve the adapter, validate collisions, and list file and settings mutations without writing anything. Combine it with `--json` to receive stable structured output including payload sizes and SHA-256 digests.
 
 `remove` and `remove-pack` take `--dry-run` as well, and it is the same promise in the other
