@@ -468,7 +468,7 @@ test('concurrent installs into one config root record every artifact', (context)
   assert.equal(doctor({ cwd: directory }).findings.length, 0);
 });
 
-test('a symlinked state directory is refused before the lock touches anything outside the root (PR38-CODEX8-2)', { skip: process.platform === 'win32' }, (context) => {
+test('a symlinked state directory is refused before the lock touches anything outside the root', { skip: process.platform === 'win32' }, (context) => {
   const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-install-lock-link-'));
   const outside = mkdtempSync(path.join(os.tmpdir(), 'youdede-install-lock-outside-'));
   context.after(() => {
@@ -489,7 +489,7 @@ test('a symlinked state directory is refused before the lock touches anything ou
   assert.deepEqual(readdirSync(outside), ['state.lock']);
 });
 
-test('a lock that is a dangling symbolic link is refused at once (PR38-CODEX8-3)', { skip: process.platform === 'win32' }, (context) => {
+test('a lock that is a dangling symbolic link is refused at once', { skip: process.platform === 'win32' }, (context) => {
   const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-install-lock-dangling-'));
   context.after(() => rmSync(directory, { recursive: true, force: true }));
   const stateDirectory = path.join(directory, '.claude', '.youdede-toolkit');

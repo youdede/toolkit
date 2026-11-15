@@ -288,7 +288,7 @@ test('protected branch parser handles wrappers and refuses dynamic or shifted Gi
     ['nice git push origin main', 'protected-branch-direct-push'],
     ['timeout 30 git push origin main', 'protected-branch-direct-push'],
     ["bash -lc 'git branch -D main'", 'protected-branch-delete'],
-    // Substitutions are read, so the push inside is judged itself (W3-REVIEW-2).
+    // Substitutions are read, so the push inside is judged itself.
     ['echo $(git push origin main)', 'protected-branch-direct-push'],
     ['echo `git push origin main`', 'protected-branch-direct-push'],
     ['git status && echo "$(git switch main && git push)"', 'protected-branch-direct-push'],

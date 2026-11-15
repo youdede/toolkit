@@ -248,7 +248,7 @@ test('workspace MCP credential rules match the sensitive file guard', () => {
   }
 });
 
-test('MCP runtime refuses files under credential directories, in reads and diffs (PR38-CODEX4-1)', (context) => {
+test('MCP runtime refuses files under credential directories, in reads and diffs', (context) => {
   const workspace = mkdtempSync(path.join(os.tmpdir(), 'youdede-mcp-credential-dirs-'));
   context.after(() => rmSync(workspace, { recursive: true, force: true }));
   const git = (args) => assert.equal(spawnSync('git', args, { cwd: workspace, env: cleanGitEnvironment() }).status, 0, args.join(' '));

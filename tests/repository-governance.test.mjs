@@ -55,7 +55,7 @@ test('commit policy rejects temporary, malformed, oversized, and ambiguous heade
   assert.ok(breaking.violations.some(({ rule }) => rule === 'COMMIT_BREAKING_FOOTER'));
 });
 
-test('the squash-merge suffix exception needs a commit reachable from origin/main, not only a label (PR38-CODEX8-4)', (context) => {
+test('the squash-merge suffix exception needs a commit reachable from origin/main, not only a label', (context) => {
   const repository = mkdtempSync(path.join(os.tmpdir(), 'youdede-policy-main-'));
   context.after(() => rmSync(repository, { recursive: true, force: true }));
   const git = (...args) => {

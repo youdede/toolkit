@@ -238,7 +238,7 @@ const decode = (s) => s.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (m, e) => e[0] 
   ? String.fromCodePoint(Number.parseInt(e[1].toLowerCase() === 'x' ? e.slice(2) : e.slice(1), e[1].toLowerCase() === 'x' ? 16 : 10))
   : ENTITIES[e.toLowerCase()] ?? m);
 
-// ponytail: regex reader, not a DOM parser. It keeps the first <article>, else <main>, else <body>, and drops
+// Regex reader, not a DOM parser. It keeps the first <article>, else <main>, else <body>, and drops
 // page chrome. Pages that render text with JavaScript or split a story across pages need the text saved to a file.
 export function extractText(html) {
   const title = decode(html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] ?? '').trim();
