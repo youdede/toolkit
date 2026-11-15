@@ -22,7 +22,8 @@ function temporary(context, prefix) {
 
 test('curated MCP profiles match pinned descriptions and reject unsafe drift', (context) => {
   const records = loadArtifacts().filter(({ manifest }) => manifest.kind === 'mcp-server');
-  assert.equal(records.length, 5);
+  const published = JSON.parse(readFileSync(new URL('../catalog/artifacts.json', import.meta.url), 'utf8')).artifacts;
+  assert.equal(records.length, published.filter(({ kind }) => kind === 'mcp-server').length);
   for (const record of records) {
     if (record.manifest.execution.entrypoints.length) assert.deepEqual([record.manifest.execution.entrypoints[0].path, record.manifest.execution.entrypoints[0].runtime], ['server.json', 'runtime']);
     assert.deepEqual(verifyMcpRecord(record), []);
@@ -59,7 +60,8 @@ test('local MCP adapters refuse artifact-owned or mismatched shared runtimes', (
 
 test('external vendor MCP profiles enforce exact versions and confinement flags', (context) => {
   const records = loadArtifacts().filter(({ manifest }) => manifest.kind === 'mcp-server' && manifest.execution.entrypoints.length === 0);
-  assert.equal(records.length, 2);
+  const published = JSON.parse(readFileSync(new URL('../catalog/artifacts.json', import.meta.url), 'utf8')).artifacts;
+  assert.equal(records.length, published.filter(({ kind, execution }) => kind === 'mcp-server' && execution.entrypoints.length === 0).length);
   for (const source of records) {
     const directory = temporary(context, `youdede-external-mcp-${source.manifest.slug}-`);
     const profile = JSON.parse(readFileSync(path.join(source.directory, 'server.json'), 'utf8'));

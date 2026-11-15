@@ -4,7 +4,7 @@ import { existsSync, mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { analyzePackWorkflow, loadPacks, publicPackCatalog, validatePack, validateRepository, ROOT } from '../scripts/lib/catalog.mjs';
+import { analyzePackWorkflow, invalidateArtifacts, loadPacks, publicPackCatalog, validatePack, validateRepository, ROOT } from '../scripts/lib/catalog.mjs';
 import { doctor, installArtifact, installPack, planPackInstall, removeArtifact, removePack } from '../scripts/lib/install.mjs';
 
 function writeJson(file, value) {
@@ -44,6 +44,7 @@ function createCollidingPackRepository(root) {
 }
 
 function writeHookArtifact(root, slug, description) {
+  invalidateArtifacts(root);
   const artifactDirectory = path.join(root, 'artifacts', slug);
   mkdirSync(artifactDirectory, { recursive: true });
   writeFileSync(path.join(artifactDirectory, `${slug}.mjs`), `#!/usr/bin/env node\nprocess.exit(0);\n`);
