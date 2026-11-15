@@ -10,6 +10,8 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 
 ### Fixed
 
+- Read-only MCP servers share one packaged runtime and keep it installed until the last server is removed.
+
 - Pack removal respects prerequisite order, optional members report installation errors, and failed pack installs roll back newly added prerequisites.
 
 ## 0.8.0 (2026-11-13)

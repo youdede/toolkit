@@ -24,7 +24,7 @@
     "It does not write, delete, rename, execute, upload, or otherwise mutate workspace files.",
     "It does not access network services, environment secrets, Git internals, or toolkit state directories."
   ],
-  "execution": {"mode": "hybrid", "entrypoints": [{"path": "runtime/readonly-mcp-server.mjs", "runtime": "node", "purpose": "Serve the pinned bounded workspace inspection tools over local standard input and output.", "sideEffects": "read-only"}]},
+  "execution": {"mode": "hybrid", "entrypoints": [{"path": "server.json", "runtime": "runtime", "purpose": "Serve the pinned bounded workspace inspection tools over local standard input and output.", "sideEffects": "read-only"}]},
   "mcpServer": {
     "transport": "stdio",
     "egress": ["none"],
