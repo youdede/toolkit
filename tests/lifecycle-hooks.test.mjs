@@ -187,13 +187,13 @@ test('configuration guard blocks explicit bypasses and permits safe project sett
   const input = { hook_event_name: 'ConfigChange', source: 'project_settings', cwd: directory, file_path: settings };
 
   writeFileSync(settings, JSON.stringify({ permissions: { defaultMode: 'default' } }));
-  assert.equal(configGuard.evaluate(input, configGuard.collectContext(input)).exitCode, 0);
+  assert.equal(configGuard.evaluate(input, configGuard.collectContext(input, undefined, {})).exitCode, 0);
   writeFileSync(settings, JSON.stringify({ disableAllHooks: true }));
-  assert.equal(configGuard.evaluate(input, configGuard.collectContext(input)).ruleId, 'config-hooks-disabled');
+  assert.equal(configGuard.evaluate(input, configGuard.collectContext(input, undefined, {})).ruleId, 'config-hooks-disabled');
   writeFileSync(settings, JSON.stringify({ permissions: { defaultMode: 'bypassPermissions' } }));
-  assert.equal(configGuard.evaluate(input, configGuard.collectContext(input)).ruleId, 'config-permission-bypass-default');
+  assert.equal(configGuard.evaluate(input, configGuard.collectContext(input, undefined, {})).ruleId, 'config-permission-bypass-default');
   writeFileSync(settings, '{bad');
-  assert.equal(configGuard.evaluate(input, configGuard.collectContext(input)).ruleId, 'config-change-unverified');
+  assert.equal(configGuard.evaluate(input, configGuard.collectContext(input, undefined, {})).ruleId, 'config-change-unverified');
   assert.equal(configGuard.evaluate({ ...input, source: 'policy_settings' }, {}).exitCode, 0);
 });
 
@@ -223,7 +223,7 @@ test('instruction path drift is observed but never presented as blockable', (con
   const instructions = path.join(outside, 'CLAUDE.md');
   writeFileSync(instructions, '# Rules\n');
   const input = { hook_event_name: 'InstructionsLoaded', cwd: root, file_path: instructions, memory_type: 'Project' };
-  const result = configGuard.evaluate(input, configGuard.collectContext(input));
+  const result = configGuard.evaluate(input, configGuard.collectContext(input, undefined, {}));
   assert.equal(result.exitCode, 0);
   assert.equal(result.ruleId, 'instruction-boundary-observed');
   assert.doesNotMatch(result.message, new RegExp(outside.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
