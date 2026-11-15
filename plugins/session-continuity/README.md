@@ -10,7 +10,7 @@ Persist bounded hash-chained checkpoints, restore cited context, and verify cont
 - **Session Checkpoint Guard** (hook): Append a deterministic, hash-chained session-end receipt to the local session ledger.
 - **Session Restore Guard** (hook): Inject a bounded, integrity-flagged summary of the latest session-ledger checkpoints at session start.
 - **Resume Session Work** (skill): Reconstruct working context from the hash-chained session ledger with hash-cited claims and an explicit unverified section.
-- **Decision Record Reviewer** (subagent): Review a bounded decision record for evidence, alternatives, tradeoffs, consequences, and revisit triggers.
+- **Decision Record Reviewer** (subagent): Audit a historical decision record for status, contemporaneous rationale, alternatives, owned obligations, and supersession links.
 
 ## What it runs
 

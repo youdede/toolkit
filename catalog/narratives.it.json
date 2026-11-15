@@ -1,5 +1,5 @@
 {
-  "sourceHash": "0d3f6f03c800022dc0330385fefc98b8649067d058f1f42fdf258e790a6f19cc",
+  "sourceHash": "02074732b133653e01f9438ae000b311474f45ad0344c10890f5b1532acde54d",
   "narratives": {
     "abuse-resistance-analyst": {
       "summary": "Analizza una singola operazione per individuare costi moltiplicati da input controllati da un attaccante, richieste a cascata ed elusione delle quote.",
@@ -35,7 +35,7 @@
       ]
     },
     "accessibility-conformance-reviewer": {
-      "summary": "Esamina una modifica dell'interfaccia con limiti definiti alla ricerca di rischi di conformità all'accessibilità basati su evidenze e di barriere per l'utente.",
+      "summary": "Esamina il codice dell'interfaccia, come modifica o nello stato attuale, alla ricerca di barriere di accessibilità in semantica, etichette, focus, tastiera e messaggi di errore.",
       "description": "Esamina una modifica dell'interfaccia fornita rispetto a criteri di accessibilità specificati, percorsi utente, semantica ed evidenze di test disponibili. Da usare prima dell'integrazione quando l'agente padre necessita di risultati di accessibilità delimitati e di sola lettura, anziché di un'implementazione o di una certificazione.",
       "purposes": [],
       "refuses": [
@@ -256,7 +256,7 @@
     },
     "audit-repository-instructions": {
       "summary": "Verifica i file di istruzioni del repository e della cartella per rilevare deviazioni, conflitti di precedenza e confini operativi mancanti.",
-      "description": "Combina le procedure esistenti di audit e di redazione delle istruzioni per l'agente in un report di sola lettura che traccia la precedenza delle istruzioni e identifica deviazioni concrete senza riscrivere i file di policy.",
+      "description": "Individua i file di istruzioni nell'ambito richiesto del repository, ne registra la precedenza e confronta regole sovrapposte, percorsi obsoleti e confini mancanti con le evidenze del repository, senza riscrivere i file di istruzioni.",
       "purposes": [],
       "refuses": [
         "Non modifica, crea, elimina né normalizza i file di istruzioni.",
@@ -533,7 +533,7 @@
       ]
     },
     "cli-contract-reviewer": {
-      "summary": "Verifica una modifica CLI per modifiche alla grammatica, al flusso, al codice di uscita e all'output che potrebbero interrompere l'automazione.",
+      "summary": "Esamina sintassi, stream, codici di uscita e output di una CLI alla ricerca di modifiche che interrompono l'automazione o di scostamenti dal contratto dichiarato.",
       "description": "Uno specialista ristretto e di sola lettura il cui risultato è quello di indicare se un'invocazione o un parser supportato osserva una modifica non annunciata al contratto della riga di comando. Segnala evidenze e incertezze senza modificare il repository o rivendicare approvazione.",
       "purposes": [],
       "refuses": [
@@ -703,7 +703,7 @@
       ]
     },
     "configuration-semantics-reviewer": {
-      "summary": "Esamina il caricamento della configurazione per modifiche semantiche relative a precedenza, valore predefinito, coercizione e fallback.",
+      "summary": "Esamina come il caricamento della configurazione seleziona, converte e imposta il valore predefinito di ogni chiave, segnalando i valori ignorati, convertiti in un altro tipo o oscurati da un'altra fonte.",
       "description": "È uno specialista ristretto e di sola lettura il cui risultato è ricostruire il valore selezionato ed esporre un significato modificato per uno stato di configurazione esplicito. Segnala evidenze e incertezza senza modificare il repository o rivendicare approvazione.",
       "purposes": [],
       "refuses": [
@@ -835,7 +835,7 @@
       ]
     },
     "decision-record-reviewer": {
-      "summary": "Esamina un record decisionale con limiti definiti per evidenze, alternative, compromessi, conseguenze e trigger di riesame.",
+      "summary": "Verifica un record decisionale storico per stato, motivazioni dell'epoca, alternative, obblighi assegnati e collegamenti di sostituzione.",
       "description": "È uno specialista ristretto e di sola lettura il cui risultato è identificare un collegamento mancante o contraddittorio che impedisce a un lettore futuro di ricostruire perché la scelta registrata è derivata dal suo contesto. Segnala evidenze e incertezze senza modificare il repository o rivendicare approvazione.",
       "purposes": [],
       "refuses": [
@@ -939,7 +939,7 @@
       ]
     },
     "dependency-risk-reviewer": {
-      "summary": "Esamina le differenze delle dipendenze per rischi relativi alla catena di fornitura e alla compatibilità senza modificare il repository.",
+      "summary": "Esamina manifest e lockfile delle dipendenze, come modifica o nello stato attuale, alla ricerca di rischi per la supply chain e di compatibilità senza modificare il repository.",
       "description": "Un subagent specialista, ristretto e di sola lettura, per i rischi relativi a manifest, lockfile, provenienza, script di installazione, runtime e integrazione dopo modifiche alle dipendenze.",
       "purposes": [],
       "refuses": [
@@ -2666,7 +2666,7 @@
       ]
     },
     "review-frontend-quality": {
-      "summary": "Verifica le interfacce web in base al comportamento, all'accessibilità, alla reattività e alle prestazioni.",
+      "summary": "Esamina una singola modifica di un'interfaccia web per stati funzionali, accessibilità, reattività, prestazioni e coerenza con il design system.",
       "description": "Una procedura di revisione basata su evidenze per le interfacce web di produzione, con indicazioni specifiche per framework per React, Next.js, Vue, Nuxt, Svelte, SvelteKit e Angular.",
       "purposes": [],
       "refuses": [
@@ -2723,7 +2723,7 @@
       ]
     },
     "runbook-readiness-reviewer": {
-      "summary": "Esamina un singolo runbook operativo per prerequisiti eseguibili, controlli, rami di errore, proprietà e ripristino.",
+      "summary": "Esamina un singolo runbook per incidenti o controllo della produzione per autorità, contenimento, verifiche sulla telemetria, passaggi distruttivi e ripristino.",
       "description": "È uno specialista ristretto e di sola lettura il cui risultato è trovare un passaggio del runbook che non può essere eseguito o valutato in sicurezza a partire dalle condizioni iniziali dichiarate. Segnala evidenze e incertezze senza modificare il repository o rivendicare approvazioni.",
       "purposes": [],
       "refuses": [
@@ -2799,7 +2799,7 @@
       ]
     },
     "serialization-contract-reviewer": {
-      "summary": "Esamina le modifiche di encoder e decoder per individuare perdita di dati durante il round-trip e incompatibilità tra versioni nel formato di trasferimento.",
+      "summary": "Esamina encoder, decoder e schemi per individuare perdita di dati durante il round-trip e incompatibilità tra versioni nel formato di trasferimento.",
       "description": "È uno specialista ristretto e di sola lettura il cui risultato è trovare un valore o un abbinamento di versioni che comporta perdita di informazioni o modifica del significato attraverso i confini di serializzazione. Segnala evidenze e incertezze senza modificare il repository o rivendicare approvazione.",
       "purposes": [],
       "refuses": [
@@ -3063,7 +3063,7 @@
       ]
     },
     "test-gap-reviewer": {
-      "summary": "Individua comportamenti non provati significativi in una modifica con limiti definiti senza scrivere o eseguire test.",
+      "summary": "Associa i comportamenti di una modifica con limiti definiti o di un insieme di percorsi ai relativi test e individua quelli non dimostrati, senza scrivere né eseguire test.",
       "description": "È un subagent specialista di sola lettura che mappa il comportamento previsto sui test e segnala, con alta confidenza, lacune di regressione, limite, errore, integrazione e durabilità.",
       "purposes": [],
       "refuses": [
@@ -3250,7 +3250,7 @@
       ]
     },
     "web-performance-reviewer": {
-      "summary": "Esamina una modifica web con limiti definiti alla ricerca di rischi comprovati di caricamento, rendering, reattività e regressione.",
+      "summary": "Esamina il codice web, come modifica o nello stato attuale, alla ricerca di costi di caricamento, rendering, idratazione, rete, risorse e interazione.",
       "description": "Esamina una modifica web con limiti definiti per individuare regressioni delle prestazioni in termini di caricamento, rendering, rete, risorse, interazione e confini del framework. Da usare dopo l'implementazione quando l'agente principale necessita di risultati basati su evidenze senza modifiche.",
       "purposes": [],
       "refuses": [

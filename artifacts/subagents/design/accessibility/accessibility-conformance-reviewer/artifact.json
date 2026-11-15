@@ -6,7 +6,7 @@
   "name": "Accessibility Conformance Reviewer",
   "version": "1.6.0",
   "kind": "subagent",
-  "summary": "Review a bounded interface change for evidence-led accessibility conformance risks and user barriers.",
+  "summary": "Review interface code, as a change or as it stands, for semantic, labeling, focus, keyboard, and error-message accessibility barriers.",
   "description": "Review a supplied interface change against named accessibility criteria, user journeys, semantics, and available test evidence. Use before integration when a parent needs bounded read-only accessibility findings rather than implementation or certification.",
   "domain": "design",
   "category": "accessibility",
@@ -26,7 +26,7 @@
     "pre-commit"
   ],
   "risk": "medium",
-  "risk_reason": "This read-only specialist reviews a bounded interface change for evidence-led accessibility conformance risks and user barriers; its findings may affect a decision but it cannot edit or approve changes.",
+  "risk_reason": "This read-only specialist reviews interface code, as a change or as it stands, for semantic, labeling, focus, keyboard, and error-message accessibility barriers; its findings may affect a decision but it cannot edit or approve changes.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -71,7 +71,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
-    "latency_reason": "The specialist reviews a bounded interface change for evidence-led accessibility conformance risks and user barriers, using sequential evidence and verification steps.",
+    "latency_reason": "The specialist reviews interface code, as a change or as it stands, for semantic, labeling, focus, keyboard, and error-message accessibility barriers, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

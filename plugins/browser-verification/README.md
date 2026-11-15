@@ -5,7 +5,7 @@ Exercise an unauthenticated local interface in an isolated browser, preserve jou
 ## What it contains
 
 - **Test Interface In Browser** (skill): Exercise a bounded browser journey with state, network, console, accessibility, and visual evidence.
-- **Web Performance Reviewer** (subagent): Review a bounded web change for evidenced loading, rendering, responsiveness, and regression risks.
+- **Web Performance Reviewer** (subagent): Review web code, as a change or as it stands, for loading, rendering, hydration, network, asset, and interaction costs.
 - **Playwright Local Isolated MCP** (mcp-server): Verify local browser interfaces through an exact Playwright MCP release with isolated state and loopback-only origins.
 
 ## What it runs

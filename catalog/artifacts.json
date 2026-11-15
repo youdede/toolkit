@@ -3996,7 +3996,7 @@
       "version": "1.0.0",
       "kind": "command",
       "summary": "Audit repository and folder instruction files for drift, precedence conflicts, and missing operational boundaries.",
-      "description": "Composes the existing agent-guidance audit and authoring procedures into a read-only report that traces instruction precedence and identifies concrete drift without rewriting policy files.",
+      "description": "Discovers instruction files inside the requested repository scope, records their precedence, and compares overlapping rules, stale paths, and missing boundaries against repository evidence, without rewriting instruction files.",
       "domain": "development",
       "category": "agent-tooling",
       "capabilities": [
@@ -15170,7 +15170,7 @@
       "name": "Review frontend quality",
       "version": "1.3.0",
       "kind": "skill",
-      "summary": "Audit web interfaces across behavior, accessibility, responsiveness, and performance.",
+      "summary": "Review one web interface change for functional states, accessibility, responsiveness, performance, and design-system consistency.",
       "description": "An evidence-first review procedure for production web interfaces, with framework routing for React, Next.js, Vue, Nuxt, Svelte, SvelteKit, and Angular.",
       "domain": "design",
       "category": "frontend",
@@ -15200,7 +15200,7 @@
         "review"
       ],
       "risk": "low",
-      "risk_reason": "This skill audits web interfaces across behavior, accessibility, responsiveness, and performance; it does not turn personal visual preference into a blocking review finding.",
+      "risk_reason": "This skill reviews one web interface change for functional states, accessibility, responsiveness, performance, and design-system consistency; it does not turn personal visual preference into a blocking review finding.",
       "license": "MIT",
       "execution": {
         "mode": "prompt",
@@ -15221,7 +15221,7 @@
         "behavior": "advisory",
         "failurePolicy": "stop-and-report",
         "latencyClass": "bounded",
-        "latency_reason": "The skill audits web interfaces across behavior, accessibility, responsiveness, and performance, using sequential evidence and verification steps.",
+        "latency_reason": "The skill reviews one web interface change for functional states, accessibility, responsiveness, performance, and design-system consistency, using sequential evidence and verification steps.",
         "dataRetention": "runtime-managed"
       },
       "refuses": [
@@ -35964,7 +35964,7 @@
       "name": "Accessibility Conformance Reviewer",
       "version": "1.6.0",
       "kind": "subagent",
-      "summary": "Review a bounded interface change for evidence-led accessibility conformance risks and user barriers.",
+      "summary": "Review interface code, as a change or as it stands, for semantic, labeling, focus, keyboard, and error-message accessibility barriers.",
       "description": "Review a supplied interface change against named accessibility criteria, user journeys, semantics, and available test evidence. Use before integration when a parent needs bounded read-only accessibility findings rather than implementation or certification.",
       "domain": "design",
       "category": "accessibility",
@@ -35987,7 +35987,7 @@
         "pre-commit"
       ],
       "risk": "medium",
-      "risk_reason": "This read-only specialist reviews a bounded interface change for evidence-led accessibility conformance risks and user barriers; its findings may affect a decision but it cannot edit or approve changes.",
+      "risk_reason": "This read-only specialist reviews interface code, as a change or as it stands, for semantic, labeling, focus, keyboard, and error-message accessibility barriers; its findings may affect a decision but it cannot edit or approve changes.",
       "license": "MIT",
       "execution": {
         "mode": "prompt",
@@ -36017,7 +36017,7 @@
         "behavior": "advisory",
         "failurePolicy": "stop-and-report",
         "latencyClass": "bounded",
-        "latency_reason": "The specialist reviews a bounded interface change for evidence-led accessibility conformance risks and user barriers, using sequential evidence and verification steps.",
+        "latency_reason": "The specialist reviews interface code, as a change or as it stands, for semantic, labeling, focus, keyboard, and error-message accessibility barriers, using sequential evidence and verification steps.",
         "dataRetention": "runtime-managed"
       },
       "refuses": [
@@ -36306,7 +36306,7 @@
       "name": "Web Performance Reviewer",
       "version": "1.4.0",
       "kind": "subagent",
-      "summary": "Review a bounded web change for evidenced loading, rendering, responsiveness, and regression risks.",
+      "summary": "Review web code, as a change or as it stands, for loading, rendering, hydration, network, asset, and interaction costs.",
       "description": "Review a bounded web change for performance regressions across loading, rendering, network, assets, interaction, and framework boundaries. Use after implementation when the parent needs evidence-led findings without mutation.",
       "domain": "design",
       "category": "frontend",
@@ -36326,7 +36326,7 @@
         "review"
       ],
       "risk": "medium",
-      "risk_reason": "This read-only specialist reviews a bounded web change for evidenced loading, rendering, responsiveness, and regression risks; its findings may affect a decision but it cannot edit or approve changes.",
+      "risk_reason": "This read-only specialist reviews web code, as a change or as it stands, for loading, rendering, hydration, network, asset, and interaction costs; its findings may affect a decision but it cannot edit or approve changes.",
       "license": "MIT",
       "execution": {
         "mode": "prompt",
@@ -36350,7 +36350,7 @@
         "behavior": "advisory",
         "failurePolicy": "stop-and-report",
         "latencyClass": "bounded",
-        "latency_reason": "The specialist reviews a bounded web change for evidenced loading, rendering, responsiveness, and regression risks, using sequential evidence and verification steps.",
+        "latency_reason": "The specialist reviews web code, as a change or as it stands, for loading, rendering, hydration, network, asset, and interaction costs, using sequential evidence and verification steps.",
         "dataRetention": "runtime-managed"
       },
       "refuses": [
@@ -37060,7 +37060,7 @@
       "name": "CLI Contract Reviewer",
       "version": "1.3.0",
       "kind": "subagent",
-      "summary": "Review a CLI delta for automation-breaking grammar, stream, exit-code, and output changes.",
+      "summary": "Review CLI grammar, streams, exit codes, and output for automation-breaking changes or departures from the declared contract.",
       "description": "A narrow, read-only specialist whose outcome is to show whether a supported invocation or parser observes an unannounced command-line contract change. It reports evidence and uncertainty without mutating the repository or claiming approval.",
       "domain": "development",
       "category": "cli",
@@ -37080,7 +37080,7 @@
         "review"
       ],
       "risk": "medium",
-      "risk_reason": "This read-only specialist reviews a CLI delta for automation-breaking grammar, stream, exit-code, and output changes; its findings may affect a decision but it cannot edit or approve changes.",
+      "risk_reason": "This read-only specialist reviews CLI grammar, streams, exit codes, and output for automation-breaking changes or departures from the declared contract; its findings may affect a decision but it cannot edit or approve changes.",
       "license": "MIT",
       "execution": {
         "mode": "prompt",
@@ -37101,7 +37101,7 @@
         "behavior": "advisory",
         "failurePolicy": "stop-and-report",
         "latencyClass": "bounded",
-        "latency_reason": "The specialist reviews a CLI delta for automation-breaking grammar, stream, exit-code, and output changes, using sequential evidence and verification steps.",
+        "latency_reason": "The specialist reviews CLI grammar, streams, exit codes, and output for automation-breaking changes or departures from the declared contract, using sequential evidence and verification steps.",
         "dataRetention": "runtime-managed"
       },
       "refuses": [
@@ -37389,7 +37389,7 @@
       "name": "Configuration Semantics Reviewer",
       "version": "1.3.0",
       "kind": "subagent",
-      "summary": "Review configuration loading for precedence, default, coercion, and fallback semantic changes.",
+      "summary": "Review how configuration loading selects, coerces, and defaults each key, reporting values ignored, retyped, or shadowed.",
       "description": "A narrow, read-only specialist whose outcome is to reconstruct the selected value and expose a changed meaning for an explicit configuration state. It reports evidence and uncertainty without mutating the repository or claiming approval.",
       "domain": "development",
       "category": "configuration",
@@ -37409,7 +37409,7 @@
         "review"
       ],
       "risk": "medium",
-      "risk_reason": "This read-only specialist reviews configuration loading for precedence, default, coercion, and fallback semantic changes; its findings may affect a decision but it cannot edit or approve changes.",
+      "risk_reason": "This read-only specialist reviews how configuration loading selects, coerces, and defaults each key, reporting values ignored, retyped, or shadowed; its findings may affect a decision but it cannot edit or approve changes.",
       "license": "MIT",
       "execution": {
         "mode": "prompt",
@@ -37430,7 +37430,7 @@
         "behavior": "advisory",
         "failurePolicy": "stop-and-report",
         "latencyClass": "bounded",
-        "latency_reason": "The specialist reviews configuration loading for precedence, default, coercion, and fallback semantic changes, using sequential evidence and verification steps.",
+        "latency_reason": "The specialist reviews how configuration loading selects, coerces, and defaults each key, reporting values ignored, retyped, or shadowed, using sequential evidence and verification steps.",
         "dataRetention": "runtime-managed"
       },
       "refuses": [
@@ -37710,7 +37710,7 @@
       "name": "Serialization Contract Reviewer",
       "version": "1.3.0",
       "kind": "subagent",
-      "summary": "Review encoder and decoder changes for round-trip loss and cross-version wire incompatibility.",
+      "summary": "Review encoders, decoders, and schemas for round-trip loss and cross-version wire incompatibility.",
       "description": "A narrow, read-only specialist whose outcome is to find a value or version pairing that loses information or changes meaning across serialization boundaries. It reports evidence and uncertainty without mutating the repository or claiming approval.",
       "domain": "development",
       "category": "serialization",
@@ -37730,7 +37730,7 @@
         "review"
       ],
       "risk": "medium",
-      "risk_reason": "This read-only specialist reviews encoder and decoder changes for round-trip loss and cross-version wire incompatibility; its findings may affect a decision but it cannot edit or approve changes.",
+      "risk_reason": "This read-only specialist reviews encoders, decoders, and schemas for round-trip loss and cross-version wire incompatibility; its findings may affect a decision but it cannot edit or approve changes.",
       "license": "MIT",
       "execution": {
         "mode": "prompt",
@@ -37752,7 +37752,7 @@
         "behavior": "advisory",
         "failurePolicy": "stop-and-report",
         "latencyClass": "bounded",
-        "latency_reason": "The specialist reviews encoder and decoder changes for round-trip loss and cross-version wire incompatibility, using sequential evidence and verification steps.",
+        "latency_reason": "The specialist reviews encoders, decoders, and schemas for round-trip loss and cross-version wire incompatibility, using sequential evidence and verification steps.",
         "dataRetention": "runtime-managed"
       },
       "refuses": [
@@ -38238,7 +38238,7 @@
       "name": "Test gap reviewer",
       "version": "1.4.0",
       "kind": "subagent",
-      "summary": "Find meaningful unproved behaviors in a bounded change without writing or running tests.",
+      "summary": "Map the behaviors of a bounded change or set of paths to their tests and find unproved ones, without writing or running tests.",
       "description": "A read-only specialist subagent that maps intended behavior to tests and reports high-confidence regression, boundary, error, integration, and durability gaps.",
       "domain": "development",
       "category": "testing",
@@ -38259,7 +38259,7 @@
         "review"
       ],
       "risk": "low",
-      "risk_reason": "This read-only specialist finds meaningful unproved behaviors in a bounded change without writing or running tests; it cannot edit or approve changes.",
+      "risk_reason": "This read-only specialist maps the behaviors of a bounded change or set of paths to their tests and finds unproved ones, without writing or running tests; it cannot edit or approve changes.",
       "license": "MIT",
       "execution": {
         "mode": "prompt",
@@ -38285,7 +38285,7 @@
         "behavior": "advisory",
         "failurePolicy": "stop-and-report",
         "latencyClass": "bounded",
-        "latency_reason": "The specialist finds meaningful unproved behaviors in a bounded change without writing or running tests, using sequential evidence and verification steps.",
+        "latency_reason": "The specialist maps the behaviors of a bounded change or set of paths to their tests and finds unproved ones, without writing or running tests, using sequential evidence and verification steps.",
         "dataRetention": "runtime-managed"
       },
       "refuses": [
@@ -39979,7 +39979,7 @@
       "name": "Runbook Readiness Reviewer",
       "version": "1.3.0",
       "kind": "subagent",
-      "summary": "Review one operational runbook for executable prerequisites, checks, failure branches, ownership, and recovery.",
+      "summary": "Review one incident or production-control runbook for authority, containment, telemetry gates, destructive steps, and recovery.",
       "description": "A narrow, read-only specialist whose outcome is to find a runbook step that cannot be executed or safely evaluated from the stated starting conditions. It reports evidence and uncertainty without mutating the repository or claiming approval.",
       "domain": "operations",
       "category": "runbooks",
@@ -40000,7 +40000,7 @@
         "operations"
       ],
       "risk": "medium",
-      "risk_reason": "This read-only specialist reviews one operational runbook for executable prerequisites, checks, failure branches, ownership, and recovery; its findings may affect a decision but it cannot edit or approve changes.",
+      "risk_reason": "This read-only specialist reviews one incident or production-control runbook for authority, containment, telemetry gates, destructive steps, and recovery; its findings may affect a decision but it cannot edit or approve changes.",
       "license": "MIT",
       "execution": {
         "mode": "prompt",
@@ -40023,7 +40023,7 @@
         "behavior": "advisory",
         "failurePolicy": "stop-and-report",
         "latencyClass": "bounded",
-        "latency_reason": "The specialist reviews one operational runbook for executable prerequisites, checks, failure branches, ownership, and recovery, using sequential evidence and verification steps.",
+        "latency_reason": "The specialist reviews one incident or production-control runbook for authority, containment, telemetry gates, destructive steps, and recovery, using sequential evidence and verification steps.",
         "dataRetention": "runtime-managed"
       },
       "refuses": [
@@ -40860,7 +40860,7 @@
       "name": "Dependency risk reviewer",
       "version": "1.4.0",
       "kind": "subagent",
-      "summary": "Review dependency deltas for supply-chain and compatibility risk without mutating the repo.",
+      "summary": "Review dependency manifests and lockfiles, as a change or as they stand, for supply-chain and compatibility risk without mutating the repo.",
       "description": "A narrow read-only specialist subagent for manifest, lockfile, provenance, install-script, runtime, and integration risks after dependency changes.",
       "domain": "security",
       "category": "dependencies",
@@ -40882,7 +40882,7 @@
         "maintenance"
       ],
       "risk": "low",
-      "risk_reason": "This read-only specialist reviews dependency deltas for supply-chain and compatibility risk without mutating the repo; it cannot edit or approve changes.",
+      "risk_reason": "This read-only specialist reviews dependency manifests and lockfiles, as a change or as they stand, for supply-chain and compatibility risk without mutating the repo; it cannot edit or approve changes.",
       "license": "MIT",
       "execution": {
         "mode": "prompt",
@@ -40903,7 +40903,7 @@
         "behavior": "advisory",
         "failurePolicy": "stop-and-report",
         "latencyClass": "bounded",
-        "latency_reason": "The specialist reviews dependency deltas for supply-chain and compatibility risk without mutating the repo, using sequential evidence and verification steps.",
+        "latency_reason": "The specialist reviews dependency manifests and lockfiles, as a change or as they stand, for supply-chain and compatibility risk without mutating the repo, using sequential evidence and verification steps.",
         "dataRetention": "runtime-managed"
       },
       "refuses": [
@@ -41620,7 +41620,7 @@
       "name": "Decision Record Reviewer",
       "version": "1.3.0",
       "kind": "subagent",
-      "summary": "Review a bounded decision record for evidence, alternatives, tradeoffs, consequences, and revisit triggers.",
+      "summary": "Audit a historical decision record for status, contemporaneous rationale, alternatives, owned obligations, and supersession links.",
       "description": "A narrow, read-only specialist whose outcome is to identify a missing or contradictory link that prevents a future reader from reconstructing why the recorded choice followed from its context. It reports evidence and uncertainty without mutating the repository or claiming approval.",
       "domain": "writing",
       "category": "decision-support",
@@ -41640,7 +41640,7 @@
         "review"
       ],
       "risk": "low",
-      "risk_reason": "This read-only specialist reviews a bounded decision record for evidence, alternatives, tradeoffs, consequences, and revisit triggers; it cannot edit or approve changes.",
+      "risk_reason": "This read-only specialist audits a historical decision record for status, contemporaneous rationale, alternatives, owned obligations, and supersession links; it cannot edit or approve changes.",
       "license": "MIT",
       "execution": {
         "mode": "prompt",
@@ -41665,7 +41665,7 @@
         "behavior": "advisory",
         "failurePolicy": "stop-and-report",
         "latencyClass": "bounded",
-        "latency_reason": "The specialist reviews a bounded decision record for evidence, alternatives, tradeoffs, consequences, and revisit triggers, using sequential evidence and verification steps.",
+        "latency_reason": "The specialist audits a historical decision record for status, contemporaneous rationale, alternatives, owned obligations, and supersession links, using sequential evidence and verification steps.",
         "dataRetention": "runtime-managed"
       },
       "refuses": [

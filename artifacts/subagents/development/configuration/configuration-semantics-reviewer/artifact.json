@@ -6,7 +6,7 @@
   "name": "Configuration Semantics Reviewer",
   "version": "1.3.0",
   "kind": "subagent",
-  "summary": "Review configuration loading for precedence, default, coercion, and fallback semantic changes.",
+  "summary": "Review how configuration loading selects, coerces, and defaults each key, reporting values ignored, retyped, or shadowed.",
   "description": "A narrow, read-only specialist whose outcome is to reconstruct the selected value and expose a changed meaning for an explicit configuration state. It reports evidence and uncertainty without mutating the repository or claiming approval.",
   "domain": "development",
   "category": "configuration",
@@ -23,7 +23,7 @@
     "review"
   ],
   "risk": "medium",
-  "risk_reason": "This read-only specialist reviews configuration loading for precedence, default, coercion, and fallback semantic changes; its findings may affect a decision but it cannot edit or approve changes.",
+  "risk_reason": "This read-only specialist reviews how configuration loading selects, coerces, and defaults each key, reporting values ignored, retyped, or shadowed; its findings may affect a decision but it cannot edit or approve changes.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -59,7 +59,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
-    "latency_reason": "The specialist reviews configuration loading for precedence, default, coercion, and fallback semantic changes, using sequential evidence and verification steps.",
+    "latency_reason": "The specialist reviews how configuration loading selects, coerces, and defaults each key, reporting values ignored, retyped, or shadowed, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }
