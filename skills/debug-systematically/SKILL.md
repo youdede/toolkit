@@ -54,7 +54,7 @@ Enter this phase only when the request covers a fix. When the user asks for a di
 3. Make one root-cause repair without adjacent cleanup.
 4. Run the focused test, the relevant suite, and any repository-required checks.
 5. Remove diagnostic instrumentation unless it is intentionally retained as safe observability.
-6. Report the root cause, evidence, changed invariant, verification commands, and remaining uncertainty.
+6. Report the reproduction, trace, and each verification command with its exit status under `## Evidence`; the root cause and the changed invariant, with the file and line of the repair, under `## Result`; and remaining uncertainty under `## Missing inputs`.
 
 ## Stop conditions
 

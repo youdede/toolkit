@@ -12,8 +12,8 @@ Delegate only work that can run independently. The parent owns decomposition, co
 ## Workflow
 
 1. Map dependencies and shared resources. Keep dependent steps local or sequential; delegate only tasks with disjoint files, read-only analysis, or explicitly partitioned ownership.
-2. Write each brief with objective, inputs, exact scope, constraints, tools, deliverable, acceptance checks, and a concise reporting format. Include enough context for a cold reader.
-3. Launch no more concurrent work than the runtime and task justify. Monitor for blockers without duplicating the delegated task in the parent.
+2. Write each brief with objective, inputs, exact scope, constraints, tools, deliverable, acceptance checks, and a fixed return format every delegate shares: result, files or resources touched, checks run with their outcome, and open doubts. Include enough context for a cold reader.
+3. Run at most three delegates at once unless the user or runtime sets another limit. When no subagent runtime is available, execute the same briefs one at a time in the parent and say so; do not drop the isolation rules. Monitor for blockers without duplicating the delegated task in the parent.
 4. Review every result, reconcile contradictions, inspect shared state, and run integration checks. Do not paste subagent prose as the final answer without synthesis.
 
 ## Output contract

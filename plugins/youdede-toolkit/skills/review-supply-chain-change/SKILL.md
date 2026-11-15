@@ -37,7 +37,7 @@ Treat the JSON output as a literal inventory, not a vulnerability result. It can
 
 ## Decision procedure
 
-1. Confirm that every reviewed file belongs to the named change and installation or build boundary. Stop if the owner, baseline, or intended change is ambiguous.
+1. Confirm that every reviewed file belongs to the named change and installation or build boundary. Stop if the owner, baseline, or intended change is ambiguous. When no baseline is named, use the pre-change side of the supplied diff, or the merge base with the target branch, and state which under `## Scope`; a missing baseline stops the review only when neither exists.
 2. Compare manifest intent with the lockfile diff. Trace added, removed, or redirected inputs; new lifecycle-script surfaces; alternate registries or remote sources; and changes in transitive scope. Do not infer a package's identity from a similar name.
 3. Review workflow action references and reusable-workflow calls against repository pinning policy. A full commit reference is observable pinning, not proof that the commit was reviewed or is trustworthy.
 4. Correlate any supplied SBOM, attestation, signature-verification output, or advisory report with the exact changed artifact, digest, revision, and tool invocation. Record mismatches and freshness gaps. Do not manufacture missing verification.

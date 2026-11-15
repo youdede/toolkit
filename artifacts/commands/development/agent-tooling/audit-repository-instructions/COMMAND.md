@@ -7,8 +7,8 @@ allowed-tools: Read, Grep, Glob
 
 ## Step 1 — Complete the bounded workflow
 
-1. Discover instruction files only inside the requested repository scope and record their precedence.
-2. Compare overlapping rules, stale paths, and missing boundaries against repository evidence.
+1. Discover instruction files only inside the requested repository scope and record their precedence. Look for `AGENTS.md`, `CLAUDE.md`, `CLAUDE.local.md`, `GEMINI.md`, `.github/copilot-instructions.md`, `.github/instructions/*.instructions.md`, `.cursorrules`, and files under `.cursor/rules/`, at the root and in nested folders. Take precedence from the host's documentation; where it is not documented, mark the order unresolved.
+2. Compare overlapping rules, stale paths, and missing boundaries against repository evidence. Every finding cites the instruction file and line, and for a conflict both files and lines; a stale path cites the line and the missing target.
 3. Emit **Instruction map**, **Findings**, **Evidence**, and **Suggested remediation**.
 
 ## Output contract
