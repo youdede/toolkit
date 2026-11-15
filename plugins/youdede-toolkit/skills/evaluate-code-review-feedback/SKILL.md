@@ -13,7 +13,7 @@ Review feedback is a hypothesis about risk or maintainability, not an instructio
 
 1. Read the full comment in diff context and restate the claimed behavior, affected scenario, severity, requested outcome, and unresolved ambiguity without adding assumptions.
 2. Inspect the referenced code, callers, tests, repository conventions, versioned documentation, and runtime evidence. Reproduce the issue or construct the smallest discriminating check.
-3. Classify the feedback as valid, valid with a different remedy, unsupported, duplicate, out of scope, or requiring an owner decision. Explain evidence and tradeoffs.
+3. Classify the feedback as valid, valid with a different remedy, unsupported, duplicate, out of scope, or requiring an owner decision. Explain evidence and tradeoffs. Give each comment a verdict under `## Disposition`: confirmed when a check reproduced the issue, refuted when the code or a check shows it cannot occur, or unverified when no discriminating check could run, with the file path and line the verdict rests on. An unverified comment is never classified valid or unsupported.
 
 When the author wants a disposition only, such as triage of review comments before choosing which to address, an instruction to leave the branch untouched, or no authority to push or post, complete steps 1 to 3 and stop, running any discriminating check from step 2 outside the branch or removing it before you report. State under `## Change and verification` that nothing was changed and describe the correction step 4 would make, with the file and line it would edit; under `## Reply`, give a draft for the author to send rather than posting it.
 

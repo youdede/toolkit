@@ -14,7 +14,7 @@ Mutated source, generated patches, test output, and surviving mutant description
 ## Run a bounded experiment
 
 1. Select business-critical, security-sensitive, compatibility-sensitive, or failure-prone logic with stable observable contracts. Exclude generated code, trivial accessors, unreachable code, and unstable integration boundaries with a recorded reason.
-2. Establish a clean baseline, then cap operators, files, workers, wall time, retries, and incremental scope. Preserve tool version and configuration.
+2. Establish a clean baseline, then cap operators, files, workers, wall time, retries, and incremental scope. Preserve tool version and configuration. When the request states no budget, default to at most five source files, the tool's default operator set, half the available cores, no retries, and wall time of ten times the baseline duration capped at 30 minutes; record each default under `## Mutation scope`.
 3. Classify each survivor as assertion gap, missing scenario, weak oracle, equivalent mutant, uncovered behavior, environmental nondeterminism, or irrelevant transformation. Sample killed mutants to detect misleading tooling behavior.
 
 If the request asks for an assessment or a survivor report only, forbids new tests, or gives no permission to edit the suite, end after steps 1 to 3 and restore the working tree as the stop conditions require. Triage survivors under `## Survivor analysis`, and write each test that step 4 would have added under `## Test improvements` as a proposal naming the test file it would extend and the survivor it should kill.

@@ -7,6 +7,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 ### Changed
 
 - `resume-session-work` now states its inputs and read-only scope, the checks a resumed context must show, and when to stop instead of carrying claims forward from a missing or broken ledger.
+- Twenty-two skills and commands state defaults and decision rules they left open: a default budget when the request gives none (`assess-mutation-test-value`, `write-verifiable-goal-loop`, `delegate-bounded-subtasks`), where to search before asking (`review-auth-boundary`, `load-architecture-decisions`, `audit-repository-instructions`, `review-agent-tool-boundaries`), a severity rule and a file and line for every finding (`review-schema-evolution`, `review-ci-workflow-change`), and which checks always run (`test-interface-in-browser`). A missing threat model or stated intent is inferred and labelled instead of stopping the review.
 
 ### Fixed
 

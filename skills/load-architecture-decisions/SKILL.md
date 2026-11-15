@@ -11,7 +11,7 @@ Completeness is a measurable file set, not a claim from sampling. Read every dis
 
 ## Workflow
 
-1. Read repository guidance and locate ADR conventions using bounded file search across documented and common decision directories. Record the exact discovered file list before reading.
+1. Read repository guidance and locate ADR conventions using bounded file search across documented decision directories; when guidance names none, search `docs/adr/`, `docs/decisions/`, `docs/architecture/decisions/`, `adr/`, `decisions/`, and `architecture/decisions/`, plus Markdown files named like `0001-*.md` or `adr-*.md` elsewhere in the tree. Record the exact discovered file list before reading.
 2. Read each applicable markdown record in full, including status, links, supersession chain, and scope. Follow only directly referenced decision records needed to interpret it.
 3. Build a compact map of active constraints, superseded choices, unresolved proposals, contradictions, and implications for the current task. Cite file paths rather than reproducing full ADR text.
 4. Compare the proposed work against active decisions. Report missing or malformed records separately and ask before changing architecture or decision status.

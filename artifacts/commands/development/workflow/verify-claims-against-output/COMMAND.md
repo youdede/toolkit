@@ -23,7 +23,7 @@ node "${CLAUDE_PROJECT_DIR}/.claude/commands/youdede/verify-claims-against-outpu
 ## Step 1 — Collect the claims
 
 1. Read the change description, task list, or conversation claims being asserted.
-2. For each claim, identify the verification command that would prove it (test suite, build, lint, type check). If a claim has no verifiable command, mark it **unverifiable** — do not improvise one.
+2. For each claim, identify the verification command that would prove it (test suite, build, lint, type check). Take the command, in this order, from the change description or task list, then the repository's documented checks (`CONTRIBUTING.md`, `README.md`, `package.json` scripts, `Makefile`, CI workflow). Record the source of each command. If a claim has no verifiable command, mark it **unverifiable** — do not improvise one.
 3. If the user passed `--scope <checks>`, run only those checks and say so in the report.
 
 ## Step 2 — Run and hash
