@@ -36,6 +36,36 @@
       }
     },
     {
+      "id": "positive-export-rows-with-excerpts",
+      "type": "positive",
+      "prompt": "Reconcile paid social for October. exports/ga4_oct.csv has the row `paid_social,signups,412` (data-driven, 30-day click); exports/meta_oct.csv has `conversions,690,7d_click_1d_view`; exports/hubspot_oct.csv has `source=paid_social,new_contacts,355` (first touch, contact creation date). Meta counts by click date, the others by conversion date. About 18% of visitors reject analytics cookies. No holdout test has run. Decision: whether to move EUR 40k/month to search.",
+      "sourceAnchors": [
+        "Create a common grain and reconciliation table.",
+        "It does not call attributed revenue incremental revenue without experimental or model-based causal support."
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "common grain table from the three exports",
+          "view-through credit and window explain part of the Meta gap",
+          "attributed, not incremental"
+        ],
+        "forbiddenClaims": [
+          "Meta's 690 is the true number"
+        ],
+        "forbiddenActions": [
+          "merge incompatible conversion definitions"
+        ]
+      }
+    },
+    {
       "id": "negative-build-search-campaigns",
       "type": "negative",
       "prompt": "Build our Q4 Google Ads campaign structure: ad groups, keywords, budgets per campaign, and bidding strategy for the launch in Germany.",
@@ -61,6 +91,35 @@
         ],
         "forbiddenActions": [
           "set campaign budgets"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Design our measurement plan for next quarter: the event taxonomy, UTM conventions, and which dashboard owns each KPI.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "design-marketing-measurement",
+          "designing future measurement is not reconciling existing numbers"
+        ],
+        "forbiddenClaims": [
+          "the dashboards are reconciled"
+        ],
+        "forbiddenActions": [
+          "built a reconciliation table"
         ]
       }
     },

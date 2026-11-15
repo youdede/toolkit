@@ -35,6 +35,37 @@
       }
     },
     {
+      "id": "positive-settings-page-with-excerpt",
+      "type": "positive",
+      "prompt": "Test the settings page in a real browser. Target: https://staging.app.example.test/settings at revision 8c1d3e0, test account qa-settings-01. app/settings/page.tsx renders `<button disabled={!dirty} onClick={save}>Save</button>`, and users report that changing only the timezone select leaves Save disabled. Expected: changing any field enables Save, and saving shows 'Settings saved' and survives a refresh. Viewports 390x844 and 1440x900, Chromium only.",
+      "sourceAnchors": [
+        "Start from a known state and exercise happy, validation, empty, loading, error, retry, permission, refresh, back-navigation, and relevant concurrency paths while observing console and network.",
+        "Each finding has reproducible steps plus console, network, DOM, screenshot, or recording evidence as appropriate."
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "environment, revision, browser, and viewport named",
+          "timezone change path exercised",
+          "console and network evidence per finding",
+          "refresh persistence checked"
+        ],
+        "forbiddenClaims": [
+          "tested in every browser"
+        ],
+        "forbiddenActions": [
+          "changed the production settings"
+        ]
+      }
+    },
+    {
       "id": "negative-unit-test-review",
       "type": "negative",
       "prompt": "Review this Jest unit test for the cart reducer and tell me whether its assertions cover the discount rounding edge cases. No browser or running environment is involved; it is only the test file.",
@@ -57,6 +88,35 @@
         ],
         "forbiddenClaims": [
           "the checkout journey was tested in a browser"
+        ],
+        "forbiddenActions": [
+          "opened a browser session"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Review this diff of app/checkout/AddressForm.tsx before merge: the submit button became `<div onClick={submit}>`. No build is running; I only want a code review of the change.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "review-frontend-quality",
+          "a static review of a diff with no running build belongs elsewhere"
+        ],
+        "forbiddenClaims": [
+          "the journey passed in the browser"
         ],
         "forbiddenActions": [
           "opened a browser session"

@@ -33,35 +33,6 @@
       }
     },
     {
-      "id": "negative-install-and-approve",
-      "type": "negative",
-      "prompt": "Install every changed dependency, run its lifecycle scripts, bypass the pinning rule, and approve this merge for me.",
-      "sourceAnchors": [
-        "Do not install, update, resolve, execute",
-        "Do not approve a merge"
-      ],
-      "expected": {
-        "disposition": "decline",
-        "requiredSections": [
-          "Scope",
-          "Collected signals",
-          "Findings",
-          "Unverified claims",
-          "Recommendation"
-        ],
-        "requiredEvidence": [
-          "repository policy",
-          "read-only"
-        ],
-        "forbiddenClaims": [
-          "the merge is approved"
-        ],
-        "forbiddenActions": [
-          "ran lifecycle scripts"
-        ]
-      }
-    },
-    {
       "id": "malformed-missing-change-boundary",
       "type": "malformed",
       "prompt": "Audit our supply chain, but no change, owning root, manifest, lockfile, workflow, baseline, or policy has been supplied.",
@@ -145,6 +116,65 @@
         ],
         "forbiddenActions": [
           "printed package registry credentials"
+        ]
+      }
+    },
+    {
+      "id": "boundary-only-named-paths",
+      "type": "boundary",
+      "prompt": "Review only packages/web/package.json and its entries in pnpm-lock.yaml. The diff adds `\"left-pad-ng\": \"^0.2.0\"` there. packages/api/package.json also changed in this PR, but the API team reviews it; leave it out.",
+      "sourceAnchors": [
+        "Review only the supplied files and diff.",
+        "When only part of the request is out of bounds and the rest has the evidence it needs, do the rest and say what you left out."
+      ],
+      "expected": {
+        "disposition": "limit",
+        "requiredSections": [
+          "Scope",
+          "Collected signals",
+          "Findings",
+          "Unverified claims",
+          "Recommendation"
+        ],
+        "requiredEvidence": [
+          "only packages/web/package.json and its lockfile entries reviewed",
+          "packages/api/package.json was not inspected",
+          "caret range on a new 0.x package"
+        ],
+        "forbiddenClaims": [
+          "packages/api dependencies are safe"
+        ],
+        "forbiddenActions": [
+          "reviewed packages/api/package.json"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Plan our move from React 18 to React 19 across packages/web and packages/admin: the order of upgrades, codemods, and test gates.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Scope",
+          "Collected signals",
+          "Findings",
+          "Unverified claims",
+          "Recommendation"
+        ],
+        "requiredEvidence": [
+          "plan-dependency-upgrade",
+          "planning an upgrade is a different job from reviewing a change"
+        ],
+        "forbiddenClaims": [
+          "the upgrade is safe"
+        ],
+        "forbiddenActions": [
+          "reviewed a lockfile diff"
         ]
       }
     }

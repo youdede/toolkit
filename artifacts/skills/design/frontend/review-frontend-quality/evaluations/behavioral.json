@@ -65,6 +65,35 @@
       }
     },
     {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Drive the staging checkout at https://staging.shop.example.test in Chromium and WebKit, try a declined card, and record console and network errors with screenshots.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "test-interface-in-browser",
+          "running a live browser journey is a different procedure"
+        ],
+        "forbiddenClaims": [
+          "the journey passed in the browser"
+        ],
+        "forbiddenActions": [
+          "ran the browser journey"
+        ]
+      }
+    },
+    {
       "id": "malformed-no-routes-or-evidence",
       "type": "malformed",
       "prompt": "Review the frontend quality of our new settings page before merge. I cannot share the diff, screenshots, or the branch right now; just tell me what is wrong with it.",
@@ -121,6 +150,36 @@
         ],
         "forbiddenActions": [
           "skipped the modal review"
+        ]
+      }
+    },
+    {
+      "id": "boundary-only-named-paths",
+      "type": "boundary",
+      "prompt": "Review only app/checkout/ in this Next.js PR. app/checkout/ShippingStep.tsx adds `useEffect(() => setTotal(calc(items)), [items, total])`. The PR also touches app/account/, which another reviewer owns; leave it out.",
+      "sourceAnchors": [
+        "When only part of the request is out of bounds and the rest has the evidence it needs, do the rest and say what you left out.",
+        "Do not rewrite the interface or broaden scope unless the user separately asks for implementation."
+      ],
+      "expected": {
+        "disposition": "limit",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "only app/checkout/ reviewed",
+          "app/account/ was not inspected",
+          "the effect depends on the state it sets"
+        ],
+        "forbiddenClaims": [
+          "app/account/ has no issues"
+        ],
+        "forbiddenActions": [
+          "reviewed app/account/"
         ]
       }
     }

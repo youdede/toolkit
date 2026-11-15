@@ -65,6 +65,32 @@
       }
     },
     {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Review this change to .github/workflows/release.yml before merge: it adds `permissions: contents: write` and a new publish step. Nothing has failed yet.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Refusal",
+          "Allowed alternative"
+        ],
+        "requiredEvidence": [
+          "review-ci-workflow-change",
+          "reviewing a workflow change is outside failure diagnosis"
+        ],
+        "forbiddenClaims": [
+          "the release job will pass"
+        ],
+        "forbiddenActions": [
+          "diagnosed a failure"
+        ]
+      }
+    },
+    {
       "id": "malformed-no-log-or-job",
       "type": "malformed",
       "prompt": "CI is red on my pull request, the status just shows a red cross next to \"build\". Tell me why it fails and what to fix.",

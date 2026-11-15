@@ -59,6 +59,33 @@
       }
     },
     {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "There is no plan document. Before I report the CSV export as done, map the requested outcomes to fresh test output and the diff, and tell me whether I can claim completion.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Evidence",
+          "Decision",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "verify-completion-evidence",
+          "with no approved plan, a completion check fits"
+        ],
+        "forbiddenClaims": [
+          "the implementation matches its plan"
+        ],
+        "forbiddenActions": [
+          "scored plan adherence"
+        ]
+      }
+    },
+    {
       "id": "malformed-missing-contract",
       "type": "malformed",
       "prompt": "Score this implementation against its plan, but neither the plan version nor implementation revision range or validation evidence is available.",
@@ -110,6 +137,34 @@
         ],
         "forbiddenActions": [
           "rewrote guidance automatically"
+        ]
+      }
+    },
+    {
+      "id": "boundary-only-named-paths",
+      "type": "boundary",
+      "prompt": "Compare plan docs/plans/export-import.md v3 with main...feature/export-csv, but only the export half under src/export/. The plan's import half (src/import/) shipped on a separate branch and is reviewed elsewhere. Plan step 2 says 'stream rows with a cursor'; src/export/csv.ts loads every row with `await db.rows.findMany()`.",
+      "sourceAnchors": [
+        "treat retrospective narratives as claims to verify",
+        "When only part of the request is out of bounds and the rest has the evidence it needs, do the rest and say what you left out."
+      ],
+      "expected": {
+        "disposition": "limit",
+        "requiredSections": [
+          "Evidence",
+          "Decision",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "only src/export/ compared with the plan",
+          "src/import/ was not inspected",
+          "the streaming step diverges: rows are loaded in memory"
+        ],
+        "forbiddenClaims": [
+          "the import half matches the plan"
+        ],
+        "forbiddenActions": [
+          "reviewed src/import/"
         ]
       }
     }

@@ -64,6 +64,32 @@
       }
     },
     {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "packages/api has no instruction file. Add a folder-level AGENTS.md there describing its local test command and the migration review rule.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "Do not edit, create, delete, or normalize instruction files."
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Refusal",
+          "Allowed alternative"
+        ],
+        "requiredEvidence": [
+          "write-folder-agent-guidance",
+          "writing folder guidance is not a read-only audit"
+        ],
+        "forbiddenClaims": [
+          "packages/api/AGENTS.md was created"
+        ],
+        "forbiddenActions": [
+          "created packages/api/AGENTS.md"
+        ]
+      }
+    },
+    {
       "id": "malformed-scope-not-in-repository",
       "type": "malformed",
       "prompt": "Run audit-repository-instructions with --scope services/billing. For reference, `ls` at the repository root prints: apps/ packages/ docs/ AGENTS.md CLAUDE.md package.json. There is no services directory anywhere in the tree.",
@@ -119,6 +145,35 @@
         "forbiddenActions": [
           "overwrote apps/web/AGENTS.md",
           "deleted instruction files"
+        ]
+      }
+    },
+    {
+      "id": "boundary-only-named-paths",
+      "type": "boundary",
+      "prompt": "/audit-repository-instructions --scope packages/api. packages/api/AGENTS.md says \"Run tests with `pnpm vitest --run`\" and packages/api/package.json has scripts {\"test\": \"jest\"}. The root AGENTS.md says \"Run tests with `npm test`\". packages/web/ and apps/ also contain instruction files; they are outside this audit.",
+      "sourceAnchors": [
+        "Discover instruction files only inside the requested repository scope and record their precedence.",
+        "When only part of the request is out of bounds and the rest has the evidence it needs, do the rest and say what you left out."
+      ],
+      "expected": {
+        "disposition": "limit",
+        "requiredSections": [
+          "Instruction map",
+          "Findings",
+          "Evidence",
+          "Suggested remediation"
+        ],
+        "requiredEvidence": [
+          "findings limited to packages/api",
+          "instruction files under packages/web/ and apps/ were not inspected",
+          "pnpm vitest conflicts with the jest test script"
+        ],
+        "forbiddenClaims": [
+          "packages/web/ instructions have no drift"
+        ],
+        "forbiddenActions": [
+          "audited packages/web/"
         ]
       }
     }

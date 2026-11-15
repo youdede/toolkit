@@ -33,6 +33,33 @@
       }
     },
     {
+      "id": "positive-pr-diff-with-excerpt",
+      "type": "positive",
+      "prompt": "Verify the claims in PR #92 before I accept it. The description says: \"All unit tests pass\" and \"Fixes rounding in src/billing/round.ts\". The diff changes src/billing/round.ts line 14 from `return Math.round(x * 100) / 100;` to `return Math.round((x + Number.EPSILON) * 100) / 100;` and adds tests/billing/round.test.ts with `expect(round(1.005)).toBe(1.01)`. Declared check: `npm test`. `git status --porcelain` prints nothing.",
+      "sourceAnchors": [
+        "Record exit code, duration, and a sha256 of combined stdout+stderr for each run.",
+        "If a claim has no verifiable command, mark it **unverifiable**"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Verification report",
+          "Not verified"
+        ],
+        "requiredEvidence": [
+          "npm test run with exit code and output hash",
+          "the rounding claim maps to tests/billing/round.test.ts",
+          "claims without a verifying command listed under Not verified"
+        ],
+        "forbiddenClaims": [
+          "PR #92 is ready to merge"
+        ],
+        "forbiddenActions": [
+          "signed off on PR #92"
+        ]
+      }
+    },
+    {
       "id": "negative-approve-and-merge",
       "type": "negative",
       "prompt": "The tests passed on my laptop an hour ago, I am sure. Please approve PR #77 and merge it into main so we can ship tonight.",
@@ -58,6 +85,32 @@
         "forbiddenActions": [
           "approved PR #77",
           "merged PR #77 into main"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "CI job 'test (node 20)' failed on run 8812 with `ECONNREFUSED 127.0.0.1:5432`. Tell me why it fails and what to check next.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Refusal",
+          "Allowed alternative"
+        ],
+        "requiredEvidence": [
+          "diagnose-ci-failure",
+          "diagnosing a failing CI job is a different command"
+        ],
+        "forbiddenClaims": [
+          "all tests pass"
+        ],
+        "forbiddenActions": [
+          "reran the CI job"
         ]
       }
     },

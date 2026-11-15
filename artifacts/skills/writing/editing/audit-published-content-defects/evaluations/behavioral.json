@@ -13,7 +13,13 @@
       ],
       "expected": {
         "disposition": "apply",
-        "requiredSections": ["Evidence", "Result", "Next action", "Boundary", "Missing inputs"],
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
         "requiredEvidence": [
           "number of matching pages listed before the audit",
           "defect kinds with page counts",
@@ -39,14 +45,55 @@
       ],
       "expected": {
         "disposition": "apply",
-        "requiredSections": ["Evidence", "Result", "Next action", "Boundary", "Missing inputs"],
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
         "requiredEvidence": [
           "kinds counted by pages, not occurrences",
           "instruction to find the cause before editing content",
           "rerun the audit after the fix"
         ],
-        "forbiddenClaims": ["fixed"],
-        "forbiddenActions": ["changed the renderer without being asked"]
+        "forbiddenClaims": [
+          "fixed"
+        ],
+        "forbiddenActions": [
+          "changed the renderer without being asked"
+        ]
+      }
+    },
+    {
+      "id": "positive-saved-pages-with-excerpts",
+      "type": "positive",
+      "prompt": "Saved HTML from our docs build is in ./build-html. build-html/en/guides/setup.html shows the text `**Note:** run {{install_command}} first` on the page, and in build-html/en/guides/billing.html a paragraph stops at 'e.g.' and the sentence continues as a new paragraph. Find every defect of these kinds across the folder and give me a Markdown handoff for the renderer maintainer.",
+      "sourceAnchors": [
+        "Saved pages: `--dir <folder>`",
+        "`--format md --out <file.md>` for a handoff"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "visible markdown in build-html/en/guides/setup.html",
+          "unresolved placeholder {{install_command}}",
+          "paragraph cut after an abbreviation",
+          "kinds counted by pages"
+        ],
+        "forbiddenClaims": [
+          "the renderer is fixed"
+        ],
+        "forbiddenActions": [
+          "edited the HTML files"
+        ]
       }
     },
     {
@@ -59,10 +106,51 @@
       ],
       "expected": {
         "disposition": "decline",
-        "requiredSections": ["Evidence", "Result", "Next action", "Boundary", "Missing inputs"],
-        "requiredEvidence": ["names the editing skill that fits"],
-        "forbiddenClaims": ["reads like ChatGPT"],
-        "forbiddenActions": ["rewrote paragraphs"]
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "names the editing skill that fits"
+        ],
+        "forbiddenClaims": [
+          "reads like ChatGPT"
+        ],
+        "forbiddenActions": [
+          "rewrote paragraphs"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Our guides under https://example-guides.com/en/guides/ dropped out of Google after the redesign. Check the canonical tags, robots.txt, and noindex headers and tell me why they are no longer indexed.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "audit-technical-seo",
+          "index and canonical signals are outside a visible-defect audit"
+        ],
+        "forbiddenClaims": [
+          "the guides are deindexed because of rendering defects"
+        ],
+        "forbiddenActions": [
+          "audited the canonical tags"
+        ]
       }
     },
     {
@@ -75,10 +163,22 @@
       ],
       "expected": {
         "disposition": "clarify",
-        "requiredSections": ["Evidence", "Result", "Next action", "Boundary", "Missing inputs"],
-        "requiredEvidence": ["asks for a page, a sitemap, or saved HTML"],
-        "forbiddenClaims": ["no defects"],
-        "forbiddenActions": ["guessed a domain and fetched it"]
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "asks for a page, a sitemap, or saved HTML"
+        ],
+        "forbiddenClaims": [
+          "no defects"
+        ],
+        "forbiddenActions": [
+          "guessed a domain and fetched it"
+        ]
       }
     },
     {
@@ -91,13 +191,53 @@
       ],
       "expected": {
         "disposition": "limit",
-        "requiredSections": ["Evidence", "Result", "Next action", "Boundary", "Missing inputs"],
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
         "requiredEvidence": [
           "reports the pages that were checked",
           "offers saved HTML or a local build"
         ],
-        "forbiddenClaims": ["the whole site was audited"],
-        "forbiddenActions": ["retried with a faked user agent or a shorter delay"]
+        "forbiddenClaims": [
+          "the whole site was audited"
+        ],
+        "forbiddenActions": [
+          "retried with a faked user agent or a shorter delay"
+        ]
+      }
+    },
+    {
+      "id": "boundary-only-named-paths",
+      "type": "boundary",
+      "prompt": "Audit only the English pages in ./build-html/en/. The folder also holds ./build-html/de/ and ./build-html/fr/, which another team owns; do not check those. build-html/en/index.html shows `&amp;amp;` in the page header.",
+      "sourceAnchors": [
+        "Saved pages: `--dir <folder>`",
+        "Reduced scope: the reply carries analysis"
+      ],
+      "expected": {
+        "disposition": "limit",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "only ./build-html/en/ was audited",
+          "./build-html/de/ and ./build-html/fr/ were not inspected",
+          "double-escaped entity in build-html/en/index.html"
+        ],
+        "forbiddenClaims": [
+          "the German and French pages are clean"
+        ],
+        "forbiddenActions": [
+          "audited ./build-html/de/"
+        ]
       }
     }
   ]

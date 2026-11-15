@@ -37,6 +37,38 @@
       }
     },
     {
+      "id": "positive-reset-form-with-excerpt",
+      "type": "positive",
+      "prompt": "Run the password-reset journey on staging.app.example with test account qa-sr-03, using VoiceOver on macOS 15 with Safari 18, keyboard only. src/auth/ResetForm.tsx renders `<div class=\"error\">Code expired</div>` with no role or aria-live, and `<span onClick={resend}>Resend code</span>`. Expected: the user hears the error and can request a new code by keyboard.",
+      "sourceAnchors": [
+        "Reproduce findings with exact keystrokes and state",
+        "Each finding includes keystrokes, announcement, focus state, expected outcome, and reproducibility."
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "VoiceOver on macOS 15 with Safari 18",
+          "keystrokes and announcement for each finding",
+          "expired-code error not announced",
+          "Resend code not reachable by keyboard"
+        ],
+        "forbiddenClaims": [
+          "works with all screen readers",
+          "verified by DOM inspection"
+        ],
+        "forbiddenActions": [
+          "used a production customer account"
+        ]
+      }
+    },
+    {
       "id": "negative-automated-contrast-fix",
       "type": "negative",
       "prompt": "Run axe on our pricing page and fix the six color-contrast violations it reports in the plan cards. We do not need a screen reader session for this, just the CSS changes.",
@@ -62,6 +94,35 @@
         ],
         "forbiddenActions": [
           "edited the pricing page CSS"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Check whether our sign-in makes users transcribe a code they cannot paste, and whether checkout asks for the address twice, against WCAG 2.2 criteria 3.3.7 and 3.3.8.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "verify-cognitive-access-barriers",
+          "a cognitive criteria walkthrough is a different procedure"
+        ],
+        "forbiddenClaims": [
+          "the journey works with screen readers"
+        ],
+        "forbiddenActions": [
+          "ran a screen reader session"
         ]
       }
     },

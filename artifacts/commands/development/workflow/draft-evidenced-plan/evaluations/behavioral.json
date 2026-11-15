@@ -60,6 +60,32 @@
       }
     },
     {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "The plan in docs/plans/redis-session.md is approved. Execute steps 1 to 4, run the checks after each, and stop if one fails.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Refusal",
+          "Allowed alternative"
+        ],
+        "requiredEvidence": [
+          "execute-verifiable-plan",
+          "executing an approved plan is outside drafting one"
+        ],
+        "forbiddenClaims": [
+          "steps 1 to 4 are done"
+        ],
+        "forbiddenActions": [
+          "edited src/session/"
+        ]
+      }
+    },
+    {
       "id": "malformed-baseline-missing",
       "type": "malformed",
       "prompt": "/draft-evidenced-plan Plan the move of session storage from memory to Redis in src/session/.\n\nThe precondition check just printed:\n```json\n{\"ok\":false,\"failures\":[{\"type\":\"file-exists\",\"path\":\".claude/rules/youdede/0100-coding-style-baseline.md\",\"message\":\"required file is missing\"}]}\n```",
