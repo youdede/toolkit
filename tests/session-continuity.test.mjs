@@ -7,6 +7,15 @@ import { spawnSync } from 'node:child_process';
 import { ROOT } from '../scripts/lib/catalog.mjs';
 import { installArtifact, removeArtifact } from '../scripts/lib/install.mjs';
 import { evaluate as evaluateBudget } from '../artifacts/hooks/development/resource-management/tool-output-budget-guard/targets/claude-code/tool-output-budget-guard.mjs';
+import { evaluate as evaluateCompact } from '../artifacts/hooks/operations/session/compact-readiness-guard/targets/claude-code/compact-readiness-guard.mjs';
+import { evaluate as evaluateCheckpoint, receiptFields } from '../artifacts/hooks/operations/session/session-checkpoint-guard/targets/claude-code/session-checkpoint-guard.mjs';
+import { evaluate as evaluateRestore, renderSummary } from '../artifacts/hooks/operations/session/session-restore-guard/targets/claude-code/session-restore-guard.mjs';
+
+const SESSION_HOOK_SOURCES = {
+  'compact-readiness-guard': 'artifacts/hooks/operations/session/compact-readiness-guard/targets/claude-code/compact-readiness-guard.mjs',
+  'session-checkpoint-guard': 'artifacts/hooks/operations/session/session-checkpoint-guard/targets/claude-code/session-checkpoint-guard.mjs',
+  'session-restore-guard': 'artifacts/hooks/operations/session/session-restore-guard/targets/claude-code/session-restore-guard.mjs'
+};
 
 function withTempRoot(fn) {
   const root = mkdtempSync(path.join(tmpdir(), 'session-continuity-'));
@@ -114,6 +123,29 @@ test('boundary: compact-readiness warns only about real dirty state and pending 
   const dirty = runHook(project, 'compact-readiness-guard', { cwd: project });
   assert.match(dirty.stdout, /uncommitted change/);
 }));
+
+test('boundary: each installed session hook is the source executable, so the process tests above exercise it', () => withTempRoot((root) => {
+  const project = path.join(root, 'project');
+  mkdirSync(project, { recursive: true });
+  initRepo(project);
+  installSessionHooks(project);
+  for (const [slug, source] of Object.entries(SESSION_HOOK_SOURCES)) {
+    const installed = readFileSync(path.join(project, '.claude', 'hooks', 'youdede', `${slug}.mjs`), 'utf8');
+    assert.equal(installed, readFileSync(path.join(ROOT, source), 'utf8'), slug);
+  }
+}));
+
+test('false-positive: session hook decisions from the source executables never block', () => {
+  assert.deepEqual(evaluateCompact({ dirtyChanges: 0, pendingClaims: [] }), { exitCode: 0, warning: null });
+  assert.deepEqual(evaluateCompact(null), { exitCode: 0, warning: null });
+  assert.match(evaluateCompact({ dirtyChanges: 2, pendingClaims: ['tests pass'] }).warning, /2 uncommitted change\(s\).*1 pending claim/);
+  assert.deepEqual(evaluateCheckpoint(), { exitCode: 0 });
+  assert.equal(receiptFields({ reason: 'r'.repeat(200) }).reason.length, 80);
+  assert.equal(receiptFields(null).reason, 'unknown');
+  assert.deepEqual(evaluateRestore(''), { exitCode: 0, additionalContext: null });
+  assert.equal(renderSummary([], 'chain verified'), null);
+  assert.match(renderSummary([{ seq: 1, kind: 'session-end', hash: 'h' }], 'chain verified'), /#1 \[session-end\]/);
+});
 
 test('false-positive: the output budget guard ignores output within budget', () => {
   assert.equal(evaluateBudget({ outputBytes: 1024, budget: 65536 }).guidance, null);

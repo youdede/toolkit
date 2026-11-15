@@ -58,7 +58,7 @@ Put the defect kinds, their page counts, and the examples under `## Result`; the
 ## Validation
 
 - `tests/content-defects.test.mjs` covers every check on positive and clean text, extraction of visible text only (hidden popovers, aria-hidden duplicates, linked footnote markers), a sitemap index with a blocked and a script-only page, the stop after repeated bot checks, and the CLI.
-- On 100 saved guides of a real multilingual site it found broken bold markers and paragraphs cut after "Art." on 8 pages, traced to one paragraph-splitting function, and an unresolved `{discount_percentage}` placeholder.
+- On 100 saved guides of a real multilingual site it found broken bold markers and paragraphs cut after "Art." on 8 pages, traced to one paragraph-splitting function, and an unresolved template variable, `{discount_percentage}`.
 
 ## Stop conditions
 
