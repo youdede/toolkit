@@ -378,3 +378,86 @@ test('pack CLI exposes list, info, and machine-readable dry-run', () => {
   assert.equal(plan.pack.id, 'pack/reviewable-change');
   assert.ok(plan.members.every((item) => item.plan));
 });
+
+test('pack removal succeeds after installing members without prerequisites', (context) => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-pack-order-'));
+  context.after(() => rmSync(directory, { recursive: true, force: true }));
+  const cli = path.join(ROOT, 'bin', 'youdede-toolkit.mjs');
+  const run = (...args) => spawnSync(process.execPath, [cli, ...args, '--cwd', directory], { encoding: 'utf8' });
+  installPack('daily-driver', { cwd: directory, prerequisites: false });
+  const planned = run('remove-pack', 'daily-driver', '--dry-run', '--json');
+  assert.equal(planned.status, 0, planned.stderr);
+  assert.deepEqual(JSON.parse(planned.stdout).dependents, []);
+  const removed = run('remove-pack', 'daily-driver');
+  assert.equal(removed.status, 0, removed.stderr);
+  assert.equal(doctor({ cwd: directory }).installs, 0);
+});
+
+for (const failure of ['unmanaged file', 'modified file']) {
+  test(`optional pack members fail installation on a ${failure}`, (context) => {
+    const repository = mkdtempSync(path.join(os.tmpdir(), 'youdede-pack-optional-repo-'));
+    const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-pack-optional-target-'));
+    context.after(() => {
+      rmSync(repository, { recursive: true, force: true });
+      rmSync(directory, { recursive: true, force: true });
+    });
+    writeHookArtifact(repository, 'optional-hook', '[youdede:optional-hook] optional entry');
+    const artifactId = 'hook/operations/testing/optional-hook';
+    writeJson(path.join(repository, 'packs', 'optional-pack', 'pack.json'), {
+      id: 'pack/optional-pack', slug: 'optional-pack', members: [{ artifactId, required: false }]
+    });
+    if (failure === 'modified file') installArtifact(artifactId, { root: repository, cwd: directory });
+    const script = path.join(directory, '.claude', 'hooks', 'youdede', 'optional-hook.mjs');
+    mkdirSync(path.dirname(script), { recursive: true });
+    writeFileSync(script, 'local content\n');
+    assert.throws(
+      () => installPack('optional-pack', { root: repository, cwd: directory }),
+      /already exists and is unmanaged|changed since installation/
+    );
+    assert.equal(readFileSync(script, 'utf8'), 'local content\n');
+  });
+}
+
+test('optional pack members are skipped for unsupported targets and scopes', (context) => {
+  const repository = mkdtempSync(path.join(os.tmpdir(), 'youdede-pack-optional-repo-'));
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-pack-optional-target-'));
+  context.after(() => {
+    rmSync(repository, { recursive: true, force: true });
+    rmSync(directory, { recursive: true, force: true });
+  });
+  writeHookArtifact(repository, 'optional-hook', '[youdede:optional-hook] optional entry');
+  writeJson(path.join(repository, 'packs', 'optional-pack', 'pack.json'), {
+    id: 'pack/optional-pack', slug: 'optional-pack',
+    members: [{ artifactId: 'hook/operations/testing/optional-hook', required: false }]
+  });
+  for (const options of [{ target: 'codex' }, { scope: 'user' }]) {
+    const result = installPack('optional-pack', { root: repository, cwd: directory, ...options });
+    assert.equal(result.skipped.length, 1);
+    assert.equal(result.installed.length, 0);
+  }
+  assert.deepEqual(doctor({ cwd: directory }).findings, []);
+});
+
+test('failed pack install rolls back prerequisites outside the pack', (context) => {
+  const repository = mkdtempSync(path.join(os.tmpdir(), 'youdede-pack-prerequisite-repo-'));
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'youdede-pack-prerequisite-target-'));
+  context.after(() => {
+    rmSync(repository, { recursive: true, force: true });
+    rmSync(directory, { recursive: true, force: true });
+  });
+  writeHookArtifact(repository, 'prerequisite-hook', '[youdede:prerequisite-hook] prerequisite entry');
+  writeHookArtifact(repository, 'first-hook', '[youdede:shared-marker] colliding entry');
+  writeHookArtifact(repository, 'second-hook', '[youdede:shared-marker] colliding entry');
+  const manifestPath = path.join(repository, 'artifacts', 'first-hook', 'artifact.json');
+  const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
+  manifest.relationships = { prerequisites: ['hook/operations/testing/prerequisite-hook'] };
+  writeJson(manifestPath, manifest);
+  writeRollbackPack(repository, ['hook/operations/testing/first-hook', 'hook/operations/testing/second-hook']);
+  assert.throws(
+    () => installPack('rollback-pack', { root: repository, cwd: directory }),
+    /installation failed: settings contain a modified or unmanaged/
+  );
+  assert.equal(existsSync(path.join(directory, '.claude', 'hooks', 'youdede', 'prerequisite-hook.mjs')), false);
+  assert.equal(existsSync(path.join(directory, '.claude', 'settings.json')), false);
+  assert.equal(doctor({ cwd: directory }).installs, 0);
+});
