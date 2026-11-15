@@ -1222,6 +1222,23 @@
           }
         ]
       },
+      "entry": "command/operations/ci-cd/diagnose-ci-failure",
+      "workflow": [
+        {
+          "member": "command/operations/ci-cd/diagnose-ci-failure",
+          "phase": "diagnose"
+        },
+        {
+          "member": "skill/operations/ci-cd/debug-ci-failure",
+          "phase": "debug",
+          "signal": "the diagnosis needs a reproduced failure or a fix"
+        },
+        {
+          "member": "subagent/operations/ci-cd/ci-failure-analyst",
+          "phase": "review",
+          "signal": "an independent read of the failure evidence is wanted"
+        }
+      ],
       "members": [
         {
           "artifactId": "command/operations/ci-cd/diagnose-ci-failure",

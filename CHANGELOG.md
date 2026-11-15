@@ -4,6 +4,10 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 
 ## Unreleased
 
+### Added
+
+- A pack can declare where to start and the order of its steps. `pack-info` prints both, `add-pack` ends with the entry, and the `remote-review-evidence` pack is the first to declare them.
+
 ### Changed
 
 - `resume-session-work` now states its inputs and read-only scope, the checks a resumed context must show, and when to stop instead of carrying claims forward from a missing or broken ledger.
@@ -59,7 +63,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 ### Changed
 
 - `doctor` accepts `--json` and keeps exiting 1 when it finds drift. It previously refused the flag, and that refusal was asserted by a test; a drift check that CI runs is the one diagnostic that most needs machine-readable output.
-- `npm run validate` refuses a taxonomy value that no artifact carries. A declared value makes a filter a legitimate question whose answer is always none, which reads as an empty catalog rather than an absent dimension. What the installer and the adapters support — kinds, risk levels, targets, scopes — is not checked against the catalog's contents.
+- `npm run validate` refuses a taxonomy value that no artifact carries. A declared value makes a filter a legitimate question whose answer is always none, which reads as an empty catalog rather than an absent dimension. What the installer and the adapters support, kinds, risk levels, targets, scopes, is not checked against the catalog's contents.
 - `catalog/taxonomy.json` no longer declares the `express`, `fastapi`, `flask`, `nestjs`, and `spring` frameworks, which no artifact carried. `list --framework express` answered `0 artifact(s).` with exit 0; it is now refused with the frameworks the catalog does carry.
 
 ### Fixed

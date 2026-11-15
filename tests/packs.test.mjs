@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync, mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { analyzePackWorkflow, invalidateArtifacts, loadPacks, publicPackCatalog, validatePack, validateRepository, ROOT } from '../scripts/lib/catalog.mjs';
+import { analyzePackWorkflow, invalidateArtifacts, loadArtifacts, loadPacks, publicPackCatalog, validatePack, validateRepository, ROOT } from '../scripts/lib/catalog.mjs';
 import { doctor, installArtifact, installPack, planPackInstall, removeArtifact, removePack } from '../scripts/lib/install.mjs';
 
 function writeJson(file, value) {
@@ -461,4 +461,118 @@ test('failed pack install rolls back prerequisites outside the pack', (context) 
   assert.equal(existsSync(path.join(directory, '.claude', 'hooks', 'youdede', 'prerequisite-hook.mjs')), false);
   assert.equal(existsSync(path.join(directory, '.claude', 'settings.json')), false);
   assert.equal(doctor({ cwd: directory }).installs, 0);
+});
+
+function createWorkflowFixture(context) {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'youdede-pack-flow-repo-'));
+  const cwd = mkdtempSync(path.join(os.tmpdir(), 'youdede-pack-flow-target-'));
+  context.after(() => { rmSync(root, { recursive: true, force: true }); rmSync(cwd, { recursive: true, force: true }); });
+  const entry = 'skill/development/testing/collect-review';
+  const outsider = 'skill/development/testing/verify-review';
+  const specialist = 'subagent/development/testing/review-verifier';
+  for (const id of [entry, outsider, specialist]) {
+    const slug = id.split('/').at(-1);
+    const kind = id.split('/')[0];
+    const directory = path.join(root, 'artifacts', slug);
+    writeJson(path.join(directory, 'artifact.json'), {
+      schemaVersion: 1, id, slug, name: slug, version: '1.0.0', kind,
+      relationships: { composesWith: [entry, outsider, specialist].filter((other) => other !== id), prerequisites: [], conflictsWith: [], supersedes: [] },
+      adapters: { 'claude-code': 'claude-code.json' }
+    });
+    writeFileSync(path.join(directory, 'payload.md'), `${slug}\n`);
+    writeJson(path.join(directory, 'claude-code.json'), {
+      schemaVersion: 1, target: 'claude-code', scopes: ['project'],
+      files: [{ from: 'payload.md', to: kind === 'skill' ? `skills/${slug}/SKILL.md` : `agents/${slug}.md` }]
+    });
+  }
+  const directory = path.join(root, 'packs', 'review-flow');
+  const manifest = {
+    $schema: '../../schema/pack.schema.json', schemaVersion: 1, id: 'pack/review-flow', slug: 'review-flow',
+    name: 'Review workflow', version: '1.0.0', summary: 'Collect and independently verify a bounded review.', outcomes: ['reviewed'],
+    entry, workflow: [{ member: entry, phase: 'collect' }, { member: specialist, phase: 'verify', signal: 'Review material is available' }, { member: entry, phase: 'report' }],
+    members: [
+      { artifactId: entry, role: 'procedure', required: true },
+      { artifactId: specialist, role: 'verifier', required: true }
+    ],
+    evidence: { reportSchema: '../../schema/pack-evidence.schema.json', ledgerLinkRequired: true, outcomeEvidence: [{ outcome: 'reviewed', memberArtifactIds: [entry, specialist] }] }
+  };
+  writeJson(path.join(directory, 'pack.json'), manifest);
+  writeJson(path.join(directory, 'evaluations', 'behavioral.json'), {});
+  const artifacts = loadArtifacts(root);
+  const check = (value = manifest) => validatePack({ manifest: value, directory }, new Set(artifacts.map(({ manifest: item }) => item.id)), artifacts, root);
+  return { root, cwd, directory, manifest, artifacts, check, entry, outsider, specialist };
+}
+
+test('a pack entry and workflow reach the catalog, the plan, and the install result', (context) => {
+  const fixture = createWorkflowFixture(context);
+  assert.deepEqual(fixture.check(), []);
+  const published = publicPackCatalog([{ manifest: fixture.manifest }], fixture.artifacts).packs[0];
+  assert.equal(published.entry, fixture.entry);
+  assert.deepEqual(published.workflow, fixture.manifest.workflow);
+  const options = { root: fixture.root, cwd: fixture.cwd, target: 'claude-code' };
+  const plan = planPackInstall('review-flow', options);
+  assert.equal(plan.entry, fixture.entry);
+  assert.deepEqual(plan.workflow, fixture.manifest.workflow);
+  assert.deepEqual(readdirSync(fixture.cwd), [], 'planning writes nothing');
+  const installed = installPack('review-flow', options);
+  assert.equal(installed.entry, fixture.entry);
+  assert.deepEqual(installed.workflow, fixture.manifest.workflow);
+});
+
+test('a pack without entry or workflow stays valid and publishes neither', (context) => {
+  const fixture = createWorkflowFixture(context);
+  delete fixture.manifest.entry; delete fixture.manifest.workflow;
+  assert.deepEqual(fixture.check(), []);
+  const published = publicPackCatalog([{ manifest: fixture.manifest }], fixture.artifacts).packs[0];
+  assert.equal(Object.hasOwn(published, 'entry'), false);
+  assert.equal(Object.hasOwn(published, 'workflow'), false);
+});
+
+test('workflow and entry references reject non-members before planning writes', (context) => {
+  const fixture = createWorkflowFixture(context);
+  fixture.manifest.workflow[0].member = fixture.outsider;
+  assert.ok(fixture.check().some((error) => /workflow step must name a member/.test(error)));
+  writeJson(path.join(fixture.directory, 'pack.json'), fixture.manifest);
+  assert.throws(() => planPackInstall('review-flow', { root: fixture.root, cwd: fixture.cwd }), /workflow step must name a member/);
+  fixture.manifest.entry = fixture.specialist;
+  assert.ok(fixture.check().some((error) => /entry must name/.test(error)));
+  assert.deepEqual(readdirSync(fixture.cwd), []);
+});
+
+// Apply the published field schemas directly, without adding a JSON Schema dependency.
+function acceptsField(schema, value) {
+  if (schema.type === 'object') {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+    if ((schema.required || []).some((key) => !Object.hasOwn(value, key))) return false;
+    return Object.entries(value).every(([key, child]) => schema.properties[key]
+      ? acceptsField(schema.properties[key], child) : schema.additionalProperties !== false);
+  }
+  if (schema.type === 'array') return Array.isArray(value) && value.length >= (schema.minItems || 0) && value.every((item) => acceptsField(schema.items, item));
+  if (schema.type === 'string' && (typeof value !== 'string' || [...value].length < (schema.minLength || 0) || [...value].length > (schema.maxLength || Infinity))) return false;
+  return !schema.pattern || new RegExp(schema.pattern).test(value);
+}
+
+test('schema and hand validator agree on the optional entry and workflow fields', (context) => {
+  const fixture = createWorkflowFixture(context);
+  const schema = JSON.parse(readFileSync(path.join(ROOT, 'schema', 'pack.schema.json'), 'utf8'));
+  const step = { member: fixture.entry, phase: 'verify' };
+  const fields = [
+    ['entry', [fixture.entry], [null, 4, '', 'unknown']],
+    ['workflow', [fixture.manifest.workflow, [{ ...step, signal: 'x'.repeat(240) }]], [null, [], {}, [null], [{ member: fixture.entry }], [{ ...step, phase: 'Not A Slug' }], [{ ...step, signal: '' }], [{ ...step, signal: 'x'.repeat(241) }], [{ ...step, extra: true }]]]
+  ];
+  for (const [field, valid, invalid] of fields) {
+    const rule = schema.properties[field];
+    assert.ok(rule, field);
+    assert.equal(schema.required.includes(field), false, `${field} is optional`);
+    for (const [values, expected] of [[valid, true], [invalid, false]]) for (const value of values) {
+      assert.equal(acceptsField(rule, value), expected, `${field}: schema ${JSON.stringify(value)}`);
+      assert.equal(fixture.check({ ...fixture.manifest, [field]: value }).length === 0, expected, `${field}: validator ${JSON.stringify(value)}`);
+    }
+  }
+});
+
+test('every shipped pack that declares an order starts it from its entry', () => {
+  const declared = loadPacks().filter(({ manifest }) => manifest.workflow);
+  assert.ok(declared.length > 0);
+  for (const { manifest } of declared) assert.equal(manifest.workflow[0].member, manifest.entry, manifest.id);
 });

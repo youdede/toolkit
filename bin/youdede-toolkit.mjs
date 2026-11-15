@@ -3,7 +3,7 @@
 import { statSync } from 'node:fs';
 import path from 'node:path';
 import { createInterface } from 'node:readline/promises';
-import { analyzePackWorkflow, hookBindings, loadArtifacts, loadPacks, loadTaxonomy, prerequisiteMembers, readJson, resolvePack, ROOT, validateRepository } from '../scripts/lib/catalog.mjs';
+import { analyzePackWorkflow, hookBindings, loadArtifacts, loadPacks, loadTaxonomy, packFlow, prerequisiteMembers, readJson, resolvePack, ROOT, validateRepository } from '../scripts/lib/catalog.mjs';
 import { doctor, installArtifact, installedDependentsOf, installPack, listInstalled, planArtifactInstall, planArtifactRemoval, planPackInstall, planPackRemoval, removeArtifact, neededByMessage, removePack, resolveArtifact, suggestionsFor } from '../scripts/lib/install.mjs';
 import { confirmRemoval, decidePrerequisites, parseAnswer, skippedNotice, suggestionHint } from '../scripts/lib/prerequisite-consent.mjs';
 import { readIntegrityManifest, verifyArtifactAttestation, verifyIntegrityManifest } from '../scripts/lib/integrity.mjs';
@@ -540,6 +540,7 @@ async function main() {
         summary: manifest.summary,
         outcomes: manifest.outcomes,
         members: manifest.members.map(({ artifactId, role, required }) => ({ artifactId, role, required })),
+        ...packFlow(manifest),
         // The same targets catalog/packs.json lists for the pack.
         targets: analyzePackWorkflow(manifest, loadArtifacts(ROOT)).compatibility.map((entry) => entry.target)
       };
@@ -549,6 +550,8 @@ async function main() {
     }
     process.stdout.write(`${manifest.name} ${manifest.version}\n${manifest.id}\n\n${manifest.summary}\n\nOutcomes: ${manifest.outcomes.join(', ')}\nEvidence: ledger-linked; schema ${manifest.evidence.reportSchema}\nMembers:\n`);
     for (const member of manifest.members) process.stdout.write(`- ${member.artifactId} (${member.role}${member.required ? ', required' : ', optional'})\n`);
+    if (manifest.entry) process.stdout.write(`\nStart with: ${manifest.entry}\n`);
+    for (const [index, step] of (manifest.workflow ?? []).entries()) process.stdout.write(`${index + 1}. ${step.phase}: ${step.member}${step.signal ? ` (when ${step.signal})` : ''}\n`);
     // Fan-out is catalog data. Deriving it from an install plan made a read-only query depend on
     // the working directory and fail on unrelated workspace state, and made `pack-info` stat and
     // hash files under the user's config root as a side effect.
@@ -696,6 +699,7 @@ async function main() {
         pack: result.pack.id,
         target: result.target,
         scope: result.scope,
+        ...packFlow(result),
         installed: result.installed.map((item) => ({ artifact: item.artifact.id, prerequisites: (item.prerequisites ?? []).map((manifest) => manifest.id), files: item.files })),
         skipped: result.skipped.map((item) => ({ artifact: item.member.artifactId, reason: item.skipped }))
       }, null, 2)}\n`);
@@ -709,6 +713,7 @@ async function main() {
     const skipped = [...new Set(result.installed.flatMap((item) => (item.skippedPrerequisites ?? []).map((manifest) => manifest.id)))].filter((id) => !members.has(id));
     if (skipped.length) write(skippedNotice(subject, skipped.map((id) => ({ slug: slugOf(id), reason: reasons.get(id) ?? null })), { asked: interactive() && !options['no-prerequisites'] }));
     for (const item of result.skipped) process.stdout.write(`- skipped ${item.member.artifactId}: ${item.skipped}\n`);
+    if (result.entry) process.stdout.write(`Start with: ${result.entry}\n`);
     const installedIds = result.installed.flatMap((item) => [item.artifact.id, ...(item.prerequisites ?? []).map((manifest) => manifest.id)]);
     const hint = suggestionHint(suggestionsFor(installedIds, { ...installOptions, exclude: [...members] }));
     if (hint) write(hint);

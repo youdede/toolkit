@@ -19,7 +19,7 @@ import {
 import { spawnSync } from 'node:child_process';
 import { createHash, randomBytes } from 'node:crypto';
 import path from 'node:path';
-import { findContextHookConflicts, loadArtifacts, resolvePack, ROOT } from './catalog.mjs';
+import { findContextHookConflicts, loadArtifacts, resolvePack, packFlow, validatePackFlow, ROOT } from './catalog.mjs';
 import { readIntegrityManifest, verifyArtifactAttestation } from './integrity.mjs';
 import { DEFAULT_SCOPE, DEFAULT_TARGET, defaultSettingsPath, resolveConfigRoot, resolveConfigRoots } from './targets.mjs';
 
@@ -1303,6 +1303,8 @@ export function planPackInstall(query, options = {}) {
   const root = options.root || ROOT;
   const pack = resolvePack(query, root).manifest;
   const target = options.target || DEFAULT_TARGET;
+  const flowErrors = validatePackFlow(pack);
+  if (flowErrors.length) throw new Error(`${pack.id}: ${flowErrors.join('; ')}`);
   const plans = [];
   for (const member of pack.members) {
     if (!member.required) {
@@ -1335,7 +1337,7 @@ export function planPackInstall(query, options = {}) {
       mutations.set(key, { artifactId: member.artifactId, sha256: mutation.sha256 });
     }
   }
-  return { pack, target, scope: options.scope || DEFAULT_SCOPE, members: plans };
+  return { pack, target, scope: options.scope || DEFAULT_SCOPE, members: plans, ...packFlow(pack) };
 }
 
 function snapshotFiles(files) {
@@ -1393,7 +1395,7 @@ export function installPack(query, options = {}) {
     restoreFiles(snapshots, [...mutations.roots]);
     throw new Error(`${planned.pack.id} installation failed: ${error.message}`);
   }
-  return { pack: planned.pack, target: planned.target, scope: planned.scope, installed, skipped: planned.members.filter((item) => item.skipped) };
+  return { pack: planned.pack, target: planned.target, scope: planned.scope, ...packFlow(planned.pack), installed, skipped: planned.members.filter((item) => item.skipped) };
 }
 
 export function planPackRemoval(query, options = {}) {

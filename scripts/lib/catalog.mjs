@@ -207,6 +207,32 @@ function roleMatchesArtifact(role, artifact) {
   return true;
 }
 
+// The optional entry and ordered workflow of a pack, for catalog, plan, and install output.
+export const packFlow = ({ entry, workflow }) => ({ ...(entry !== undefined && { entry }), ...(workflow !== undefined && { workflow }) });
+
+export function validatePackFlow(manifest) {
+  const errors = [];
+  const members = Array.isArray(manifest.members) ? manifest.members : [];
+  const byId = new Map(members.filter(Boolean).map((member) => [member.artifactId, member]));
+  const artifactId = (value) => typeof value === 'string' && /^(skill|hook|subagent|command|context|mcp-server)\/[a-z0-9-]+\/[a-z0-9-]+\/[a-z0-9-]+$/.test(value);
+  if (manifest.entry !== undefined) {
+    if (!artifactId(manifest.entry)) errors.push('entry must be an artifact id');
+    const member = byId.get(manifest.entry);
+    if (!member || !member.required || !['procedure', 'entrypoint'].includes(member.role)) errors.push('entry must name a required procedure or entrypoint member');
+  }
+  if (manifest.workflow !== undefined) {
+    if (!Array.isArray(manifest.workflow) || manifest.workflow.length === 0) errors.push('workflow must be a non-empty array');
+    else for (const step of manifest.workflow) {
+      if (!step || typeof step !== 'object' || Array.isArray(step)) { errors.push('workflow step must be an object'); continue; }
+      if (Object.keys(step).some((key) => !['member', 'phase', 'signal'].includes(key))) errors.push('workflow step has unexpected property');
+      if (!artifactId(step.member) || !byId.has(step.member)) errors.push('workflow step must name a member');
+      if (typeof step.phase !== 'string' || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(step.phase)) errors.push('workflow phase must be a slug');
+      if (step.signal !== undefined && (typeof step.signal !== 'string' || [...step.signal].length < 1 || [...step.signal].length > 240)) errors.push('workflow signal must contain 1-240 characters');
+    }
+  }
+  return errors;
+}
+
 export function analyzePackWorkflow(manifest, artifacts) {
   const members = Array.isArray(manifest.members) ? manifest.members : [];
   const byId = new Map(artifacts.map((record) => [record.manifest.id, record]));
@@ -1131,7 +1157,7 @@ export function orderContextRecords(records) {
 
 // A taxonomy value no artifact carries is a filter that can only ever answer nothing.
 // `list --framework express` is a legitimate question, because the vocabulary declares the value,
-// and its answer is always `0 artifact(s).` — which reads as "the catalog has nothing for
+// and its answer is always `0 artifact(s).`, which reads as "the catalog has nothing for
 // Express" rather than "Express was never a dimension here". The vocabulary is a public promise,
 // so a value in it has to be backed by an artifact that carries it.
 // `kinds`, `risk`, `targets` and `scopes` are deliberately not checked: they describe what the
@@ -1188,8 +1214,10 @@ export function validatePack(record, knownIds, artifacts, root = ROOT) {
   const { manifest, directory } = record;
   const errors = [];
   const allowedPackKeys = ['$schema', 'schemaVersion', 'id', 'slug', 'name', 'version', 'summary', 'outcomes', 'evidence', 'members'];
+  const requiredPackKeys = [...allowedPackKeys];
+  allowedPackKeys.push('entry', 'workflow');
   const packKeys = manifest && typeof manifest === 'object' && !Array.isArray(manifest) ? Object.keys(manifest) : [];
-  for (const key of allowedPackKeys) if (!packKeys.includes(key)) errors.push(`pack is missing required property '${key}'`);
+  for (const key of requiredPackKeys) if (!packKeys.includes(key)) errors.push(`pack is missing required property '${key}'`);
   for (const key of packKeys) if (!allowedPackKeys.includes(key)) errors.push(`pack has unexpected property '${key}'`);
   if (typeof manifest.$schema !== 'string' || path.resolve(directory, manifest.$schema || '') !== path.join(root, 'schema', 'pack.schema.json')) {
     errors.push('$schema must resolve to schema/pack.schema.json');
@@ -1258,6 +1286,7 @@ export function validatePack(record, knownIds, artifacts, root = ROOT) {
       errors.push(`${member.role} member '${member.artifactId}' must be an operationally compatible ${expectedKinds}`);
     }
   }
+  errors.push(...validatePackFlow(manifest));
   const workflow = analyzePackWorkflow(manifest, artifacts);
   if (!workflow.criteria.crossKindRequiredWorkflow) errors.push('pack required members must compose at least two artifact kinds');
   if (!workflow.criteria.requiredProcedure) errors.push('pack requires a required procedure skill');

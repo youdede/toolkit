@@ -38,6 +38,10 @@ in `installable` and `blockingMembers`.
 
 Packs compose procedures, specialists, and lifecycle gates without changing the independent install contract of any member. Required members must share the requested target and scope, and installation plans every member before the first write. Ownership and rollback guarantees are described in [architecture.md](architecture.md).
 
+A pack can declare where to start and the order of its steps. `pack-info` prints both and
+`add-pack` ends with the entry. The installer does not execute the steps. See
+[pack format](pack-format.md).
+
 Use `--dry-run` before installation to resolve the adapter, validate collisions, and list file and settings mutations without writing anything. Combine it with `--json` to receive stable structured output including payload sizes and SHA-256 digests.
 
 `remove` and `remove-pack` take `--dry-run` as well, and it is the same promise in the other

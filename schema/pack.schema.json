@@ -57,6 +57,37 @@
         }
       }
     },
+    "entry": {
+      "type": "string",
+      "pattern": "^(skill|hook|subagent|command|context|mcp-server)/[a-z0-9-]+/[a-z0-9-]+/[a-z0-9-]+$"
+    },
+    "workflow": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "member",
+          "phase"
+        ],
+        "properties": {
+          "member": {
+            "type": "string",
+            "pattern": "^(skill|hook|subagent|command|context|mcp-server)/[a-z0-9-]+/[a-z0-9-]+/[a-z0-9-]+$"
+          },
+          "phase": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "signal": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          }
+        }
+      }
+    },
     "members": {
       "type": "array",
       "minItems": 2,
