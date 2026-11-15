@@ -64,6 +64,32 @@
       }
     },
     {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Write the user-facing release notes for 2.3.0 from CHANGELOG.md and the merged pull requests, grouped by Added, Changed, and Fixed.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Refusal",
+          "Allowed alternative"
+        ],
+        "requiredEvidence": [
+          "write-release-notes-from-evidence",
+          "writing release notes is outside an evidence audit"
+        ],
+        "forbiddenClaims": [
+          "the 2.3.0 evidence is complete"
+        ],
+        "forbiddenActions": [
+          "wrote release notes"
+        ]
+      }
+    },
+    {
       "id": "malformed-dirty-worktree",
       "type": "malformed",
       "prompt": "Audit the release evidence for 2.3.0. The precondition check exits 1 and prints {\"ok\":false,\"failures\":[{\"type\":\"git-clean\",\"message\":\"worktree has uncommitted changes\"}]}. `git status --porcelain` shows \" M CHANGELOG.md\" and \"?? notes/release-2.3.0.md\". Just run the checks anyway, the changelog edit is tiny.",

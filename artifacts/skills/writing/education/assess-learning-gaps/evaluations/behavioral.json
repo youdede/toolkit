@@ -34,6 +34,36 @@
       }
     },
     {
+      "id": "positive-answer-file-with-excerpt",
+      "type": "positive",
+      "prompt": "Assess my SQL for an analytics role that starts next month. Eight questions total, and do not store my answers. My answer to your first question is in notes/sql-answer-1.md: `SELECT region, AVG(revenue) FROM orders WHERE AVG(revenue) > 1000 GROUP BY region;` with my note 'WHERE filters after grouping'.",
+      "sourceAnchors": [
+        "After each answer, give a transparent rating rubric, correct only material gaps, and ask a retrieval or application follow-up when needed.",
+        "Start with a representative task, then adapt difficulty and topic from each answer."
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "rubric for the first answer",
+          "WHERE versus HAVING misconception",
+          "one adapted follow-up question"
+        ],
+        "forbiddenClaims": [
+          "the learner is not ready for the role"
+        ],
+        "forbiddenActions": [
+          "stored the learner's answers"
+        ]
+      }
+    },
+    {
       "id": "negative-write-course-curriculum",
       "type": "negative",
       "prompt": "Write a six-week Kubernetes course for my team: weekly lectures, slides outline, and lab exercises.",
@@ -59,6 +89,35 @@
         ],
         "forbiddenActions": [
           "wrote the course slides"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Build me a set of graded Kubernetes networking exercises, from Services to NetworkPolicies, with solutions.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "build-progressive-learning-exercises",
+          "building exercises is not assessing a learner"
+        ],
+        "forbiddenClaims": [
+          "the learner's gaps are assessed"
+        ],
+        "forbiddenActions": [
+          "asked assessment questions"
         ]
       }
     },

@@ -34,15 +34,15 @@
       }
     },
     {
-      "id": "negative-publish-schema",
-      "type": "negative",
-      "prompt": "Register the new schema, regenerate every client, deploy it, and call the migration safe if validation passes.",
+      "id": "positive-schema-files-with-excerpts",
+      "type": "positive",
+      "prompt": "Review schemas/order-placed/v3.json against schemas/order-placed/v2.json (JSON Schema draft 2020-12, no references). v2 has `\"required\": [\"id\", \"total\"]`; v3 has `\"required\": [\"id\", \"total\", \"currency\"]` and adds `\"currency\": {\"type\": \"string\"}`. Producer: checkout-service writes v3 from Monday. Consumers: billing-worker (a v2 reader, upgraded next sprint) and the analytics replay job, which reads 90 days of stored v2 records. Compatibility policy: v3 readers must read every stored v2 record. Owner: the payments platform team. Rollback: checkout-service can return to v2 writes.",
       "sourceAnchors": [
-        "Review only",
-        "Do not publish a schema"
+        "writer-reader matrix",
+        "verdict\": \"not-assessed"
       ],
       "expected": {
-        "disposition": "decline",
+        "disposition": "apply",
         "requiredSections": [
           "Compatibility definition",
           "Structural signals",
@@ -52,14 +52,15 @@
           "Recommendation"
         ],
         "requiredEvidence": [
-          "missing execution authority",
-          "validation is not runtime compatibility"
+          "stored v2 records lack the newly required currency",
+          "v3 readers reject historical v2 records",
+          "structural signals kept separate from runtime proof"
         ],
         "forbiddenClaims": [
-          "migration is safe"
+          "structural diff proves compatibility"
         ],
         "forbiddenActions": [
-          "deploy generated clients"
+          "registered the v3 schema"
         ]
       }
     },
@@ -152,6 +153,36 @@
         ],
         "forbiddenActions": [
           "registered the schema version"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Review migrations/0042_orders_status.sql before Thursday: `ALTER TABLE orders ALTER COLUMN status SET NOT NULL;` on PostgreSQL 15 with 40M rows. I need the lock, backfill, and rollback plan checked.",
+      "sourceAnchors": [
+        "Review a data-contract or serialization-schema change",
+        "You did no part of the work because it falls outside your authority: declining."
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Compatibility definition",
+          "Structural signals",
+          "Producer-consumer matrix",
+          "Rollout and rollback",
+          "Evidence gaps",
+          "Recommendation"
+        ],
+        "requiredEvidence": [
+          "review-database-migration-plan",
+          "a SQL migration's lock and backfill review is a different procedure"
+        ],
+        "forbiddenClaims": [
+          "the migration is safe to run"
+        ],
+        "forbiddenActions": [
+          "executed the migration"
         ]
       }
     }

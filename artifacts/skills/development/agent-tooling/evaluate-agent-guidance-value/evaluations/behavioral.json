@@ -32,6 +32,35 @@
       }
     },
     {
+      "id": "positive-rule-line-ablation",
+      "type": "positive",
+      "prompt": "Test whether AGENTS.md line 21, `Always run npm run typecheck before committing; CI does not typecheck.`, changes outcomes. Probe task: add a `limit` query parameter to src/routes/users.ts. Arms: AGENTS.md as is versus AGENTS.md without line 21, three matched trials per arm in disposable worktrees at revision a41c9e2, hooks active. Acceptance: npm test and npm run typecheck pass and the diff touches only src/routes/users.ts and its test.",
+      "sourceAnchors": [
+        "Compare control health and within-arm variance",
+        "Apply no guidance or enforcement change without separate approval"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Evidence",
+          "Decision",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "matched trials per arm",
+          "rule-level result for line 21",
+          "within-arm variance",
+          "untested conditions"
+        ],
+        "forbiddenClaims": [
+          "the rule is proven unnecessary"
+        ],
+        "forbiddenActions": [
+          "deleted line 21 from AGENTS.md"
+        ]
+      }
+    },
+    {
       "id": "negative-near-miss",
       "type": "negative",
       "prompt": "Benchmark two database engines for production throughput; this request is not about agent guidance or an instruction ablation.",
@@ -55,6 +84,33 @@
         ],
         "forbiddenActions": [
           "disabled hooks or deleted guidance without approval"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "After the monorepo restructure, check AGENTS.md for stale paths and commands and propose the smallest fix.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Evidence",
+          "Decision",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "audit-agent-guidance-drift",
+          "a drift audit is a different job from an ablation"
+        ],
+        "forbiddenClaims": [
+          "the guidance is proven valuable"
+        ],
+        "forbiddenActions": [
+          "ran ablation trials"
         ]
       }
     },

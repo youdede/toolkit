@@ -36,6 +36,37 @@
       }
     },
     {
+      "id": "positive-robots-and-guide-excerpts",
+      "type": "positive",
+      "prompt": "Audit why AI answer engines do not cite our XRechnung guide. robots.txt contains `User-agent: GPTBot` followed by `Disallow: /`. content/guides/xrechnung.md starts `# E-invoicing made easy` and never lists the steps; it has no author or update date. Baseline on 2026-11-02 from a Berlin IP, fresh sessions: ChatGPT search and Perplexity were each asked 'how do I issue an XRechnung as a freelancer' three times; we were cited 0 of 6.",
+      "sourceAnchors": [
+        "Compare cited competitors at the passage and source level.",
+        "Inspect crawl and rendering access, canonical identity, authorship, update signals"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "GPTBot is disallowed in robots.txt",
+          "content/guides/xrechnung.md has no extractable steps",
+          "dated baseline with logged conditions",
+          "repeat measurement for volatility"
+        ],
+        "forbiddenClaims": [
+          "we will be cited"
+        ],
+        "forbiddenActions": [
+          "generate synthetic mentions"
+        ]
+      }
+    },
+    {
       "id": "negative-keyword-research",
       "type": "negative",
       "prompt": "Do classic keyword research for our blog: give me 50 long-tail keywords for German freelancers with search volume and keyword difficulty.",
@@ -61,6 +92,35 @@
         ],
         "forbiddenActions": [
           "invent search volumes"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "After moving the blog from /blog/ to /resources/, Search Console shows 4,000 pages dropped from the index. Check redirects, canonicals, and the sitemap.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "audit-technical-seo",
+          "an index drop after a migration is a technical SEO audit"
+        ],
+        "forbiddenClaims": [
+          "AI answers will cite us"
+        ],
+        "forbiddenActions": [
+          "ran AI answer queries"
         ]
       }
     },

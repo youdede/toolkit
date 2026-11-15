@@ -66,6 +66,32 @@
       }
     },
     {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "I finished moving the repo to pnpm workspaces. Map my requested outcomes to fresh test output and the diff and tell me whether I can report it as done.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Refusal",
+          "Allowed alternative"
+        ],
+        "requiredEvidence": [
+          "verify-completion-evidence",
+          "verifying completed work is outside an environment preflight"
+        ],
+        "forbiddenClaims": [
+          "the migration is complete"
+        ],
+        "forbiddenActions": [
+          "verified completion"
+        ]
+      }
+    },
+    {
       "id": "malformed-absolute-scope-path",
       "type": "malformed",
       "prompt": "Run preflight-change-environment with --scope /home/dana/work/billing-api/services/invoices so follow-up inspection stays inside the invoices service. The repository does not declare any prerequisites and I have not listed any.",

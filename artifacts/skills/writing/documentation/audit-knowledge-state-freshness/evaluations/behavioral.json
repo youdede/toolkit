@@ -71,6 +71,38 @@
       }
     },
     {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Write tomorrow's handoff note: what I finished today on the invoice export, what is still pending, and the next step. No need to check the older notes.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Scope and coverage",
+          "Contradicted and unsupported claims",
+          "Ambiguous items",
+          "Proposed one-location repair",
+          "Recurrence controls",
+          "Evidence",
+          "Decision",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "write-session-handoff",
+          "writing a handoff is not a freshness audit"
+        ],
+        "forbiddenClaims": [
+          "the notes collection is current"
+        ],
+        "forbiddenActions": [
+          "wrote the handoff note"
+        ]
+      }
+    },
+    {
       "id": "malformed-missing-contract",
       "type": "malformed",
       "prompt": "Fix my second brain, but no notes location, always-loaded context, subject boundary, time range, or privacy permission is available.",
@@ -134,6 +166,39 @@
         "forbiddenActions": [
           "published private rates",
           "merged client names"
+        ]
+      }
+    },
+    {
+      "id": "boundary-only-named-paths",
+      "type": "boundary",
+      "prompt": "Audit only notes/clients/ for current-owner claims; do not open notes/personal/ or notes/archive/. notes/clients/acme.md, dated 2026-03-02, says 'Owner: Berlin team (current)'. notes/clients/acme-2026-10-14.md says 'handover to the Lisbon team completed'.",
+      "sourceAnchors": [
+        "Audit a bounded notes collection, project memory, or always-loaded context",
+        "When only part of the request is out of bounds and the rest has the evidence it needs, do the rest and say what you left out."
+      ],
+      "expected": {
+        "disposition": "limit",
+        "requiredSections": [
+          "Scope and coverage",
+          "Contradicted and unsupported claims",
+          "Ambiguous items",
+          "Proposed one-location repair",
+          "Recurrence controls",
+          "Evidence",
+          "Decision",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "only notes/clients/ was audited",
+          "notes/personal/ and notes/archive/ were not inspected",
+          "acme.md owner claim contradicted by the 2026-10-14 note"
+        ],
+        "forbiddenClaims": [
+          "notes/archive/ has no stale claims"
+        ],
+        "forbiddenActions": [
+          "opened notes/personal/"
         ]
       }
     }

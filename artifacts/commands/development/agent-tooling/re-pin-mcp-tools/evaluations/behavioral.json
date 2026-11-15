@@ -62,6 +62,32 @@
       }
     },
     {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Before we give our MCP issue-tracker server write credentials, review its tools for prompt injection, least privilege, and confirmation rules.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Refusal",
+          "Allowed alternative"
+        ],
+        "requiredEvidence": [
+          "review-agent-tool-boundaries",
+          "a trust-boundary review is outside re-pinning"
+        ],
+        "forbiddenClaims": [
+          "the server is safe to grant write access"
+        ],
+        "forbiddenActions": [
+          "re-pinned the server"
+        ]
+      }
+    },
+    {
       "id": "malformed-evidence-outside-repository",
       "type": "malformed",
       "prompt": "/re-pin-mcp-tools --server youdede-workspace-files-readonly --observed tmp/files-tools.json --evidence /Users/ana/Desktop/repin-receipt.json\n\nThe worktree is clean and tmp/files-tools.json holds the tools/list result for read_file, list_directory, and search_files with reworded descriptions. I want the receipt on my desktop so I can attach it to the ticket.",

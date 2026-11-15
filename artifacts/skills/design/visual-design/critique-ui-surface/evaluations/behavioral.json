@@ -60,6 +60,34 @@
       }
     },
     {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Review this diff of components/PlanCard.tsx before merge: the 'Choose plan' button became a `<div onClick>` and its hover state was removed. Check focus, keyboard, and state handling in the code.",
+      "sourceAnchors": [
+        "Reviewing source code, certifying accessibility conformance, and rewriting copy stay with their owning skills.",
+        "Do not extend the critique into code review, accessibility certification, or copy rewriting owned by other skills."
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Scope and evidence",
+          "Findings by criterion",
+          "Prioritized fixes",
+          "Limits of this critique"
+        ],
+        "requiredEvidence": [
+          "review-frontend-quality",
+          "code review stays with its owning skill"
+        ],
+        "forbiddenClaims": [
+          "the surface is sound"
+        ],
+        "forbiddenActions": [
+          "reviewed the component code"
+        ]
+      }
+    },
+    {
       "id": "malformed-no-surface-no-purpose",
       "type": "malformed",
       "prompt": "Please critique our app's look and feel. There is no screenshot yet and I cannot say what the main screen is for.",

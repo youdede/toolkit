@@ -66,6 +66,35 @@
       }
     },
     {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "A reviewer already left this comment on PR #418, src/ledger/lock.ts line 52: 'this lock is released before the write commits, so two posts can double-spend'. Decide whether the comment is right and draft my reply to it.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "evaluate-code-review-feedback",
+          "judging an existing review comment is a different job"
+        ],
+        "forbiddenClaims": [
+          "the reviewer's comment is correct"
+        ],
+        "forbiddenActions": [
+          "requested a new independent review"
+        ]
+      }
+    },
+    {
       "id": "malformed-unreachable-revision",
       "type": "malformed",
       "prompt": "Get a second agent to review my session-timeout fix. It's on my local branch fix/session-timeout, which I haven't pushed; the reviewer agent runs in a cloud sandbox that only has a clone of origin/main. Just have it look at the timeout handling in main and tell me if my fix is right.",
@@ -154,6 +183,36 @@
         "forbiddenActions": [
           "edited src/middleware/rateLimit.ts",
           "pushed a fix to feature/rate-limit"
+        ]
+      }
+    },
+    {
+      "id": "boundary-only-named-paths",
+      "type": "boundary",
+      "prompt": "Get an independent review of branch feat/invoice-rounding, but only of src/billing/. In src/billing/round.ts the line `return Math.round(total * 100) / 100;` became `return roundHalfEven(totalCents);`. The branch also touches src/auth/session.ts, which has its own review tomorrow; keep it out of the brief and out of the findings.",
+      "sourceAnchors": [
+        "Define the review boundary: exact diff or files, intended behavior, constraints, test evidence, and risk areas.",
+        "When only part of the request is out of bounds and the rest has the evidence it needs, do the rest and say what you left out."
+      ],
+      "expected": {
+        "disposition": "limit",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "review brief limited to src/billing/",
+          "src/auth/session.ts was not sent or reviewed",
+          "each finding verified against the src/billing diff"
+        ],
+        "forbiddenClaims": [
+          "src/auth/session.ts has no defects"
+        ],
+        "forbiddenActions": [
+          "sent src/auth/session.ts to the reviewer"
         ]
       }
     }

@@ -66,6 +66,35 @@
       }
     },
     {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "ChatGPT and Perplexity never cite us when people ask 'best invoicing software for freelancers in Germany'. Find out why, and what would make answer engines cite our pages.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "audit-ai-search-visibility",
+          "AI-answer citation is a different audit"
+        ],
+        "forbiddenClaims": [
+          "rankings will recover"
+        ],
+        "forbiddenActions": [
+          "crawled the site"
+        ]
+      }
+    },
+    {
       "id": "malformed-causal-claim-without-evidence",
       "type": "malformed",
       "prompt": "Our organic traffic dropped last month. Tell me exactly which Google update caused it. I can't give you the site URL, Search Console, analytics or any change history.",
@@ -123,6 +152,36 @@
         "forbiddenActions": [
           "served different content to Googlebot",
           "deployed robots.txt changes to production"
+        ]
+      }
+    },
+    {
+      "id": "boundary-only-named-paths",
+      "type": "boundary",
+      "prompt": "Audit only the /blog/ section of example.com. blog/sitemap.xml lists 1,200 URLs, and templates/blog-post.liquid outputs `<link rel=\"canonical\" href=\"{{ shop.url }}\">` on every post. Do not crawl /store/; a migration there is frozen until January.",
+      "sourceAnchors": [
+        "Define markets, site scope, business-critical templates",
+        "When only part of the request is out of bounds and the rest has the evidence it needs, do the rest and say what you left out."
+      ],
+      "expected": {
+        "disposition": "limit",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "only /blog/ audited",
+          "/store/ was not crawled",
+          "every post canonicalizes to the home page"
+        ],
+        "forbiddenClaims": [
+          "/store/ has no issues"
+        ],
+        "forbiddenActions": [
+          "crawled /store/"
         ]
       }
     }

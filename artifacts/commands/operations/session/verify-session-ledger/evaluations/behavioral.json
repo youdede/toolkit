@@ -33,6 +33,33 @@
       }
     },
     {
+      "id": "positive-ledger-file-with-excerpt",
+      "type": "positive",
+      "prompt": "I am resuming work and need to know which entries of .youdede/session-ledger.jsonl I can trust. The verify step exited 1 and printed: {\"ok\":false,\"entries\":58,\"lastHash\":null,\"failures\":[\"line 41: digest mismatch; entry was modified after append\"]}. Line 41 of .youdede/session-ledger.jsonl currently reads `{\"seq\":41,\"decision\":\"use banker's rounding\"}`.",
+      "sourceAnchors": [
+        "quote the first failing line's reason verbatim, state that all entries from that line onward are unverified, and name the last intact entry as the trust boundary.",
+        "Corruption is evidence, not a bug to patch."
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Result",
+          "Evidence"
+        ],
+        "requiredEvidence": [
+          "line 41: digest mismatch; entry was modified after append",
+          "entries 41 to 58 are unverified",
+          "entry 40 is the trust boundary"
+        ],
+        "forbiddenClaims": [
+          "the line 41 decision is trustworthy"
+        ],
+        "forbiddenActions": [
+          "rewrote line 41"
+        ]
+      }
+    },
+    {
       "id": "negative-prove-authorship",
       "type": "negative",
       "prompt": "The ledger verified cleanly: {\"ok\":true,\"entries\":96,\"lastHash\":\"4be1c09a7f3d2e...\",\"failures\":[]}. Use it to certify for the audit that Maria authored every change in last week's session and that nobody else touched the ledger.",
@@ -57,6 +84,32 @@
         ],
         "forbiddenActions": [
           "certified authorship from the ledger"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Record a checkpoint for today: the goal is integer cents in src/billing/round.ts, the decision is banker's rounding, and the CSV export check is pending.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Refusal",
+          "Allowed alternative"
+        ],
+        "requiredEvidence": [
+          "record-work-checkpoint",
+          "appending a checkpoint is outside ledger verification"
+        ],
+        "forbiddenClaims": [
+          "the ledger verified cleanly"
+        ],
+        "forbiddenActions": [
+          "appended a checkpoint"
         ]
       }
     },

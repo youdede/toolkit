@@ -34,6 +34,36 @@
       }
     },
     {
+      "id": "positive-code-excerpt-claim",
+      "type": "positive",
+      "prompt": "I am about to say the CSV export is done. Requested outcome: `exportCsv(rows)` in src/export/csv.ts quotes fields that contain commas. The current code is `return rows.map(r => r.join(',')).join('\\n');` and tests/export/csv.test.ts has one case, `expect(exportCsv([['a','b']])).toBe('a,b')`. I ran npm test after my last edit: 88 passed, 0 failed. Can I claim completion?",
+      "sourceAnchors": [
+        "Classify each criterion as proven, failed, not run, or externally blocked",
+        "evidence predates a relevant edit"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "src/export/csv.ts does not quote fields containing commas",
+          "the passing test does not cover a comma",
+          "completion not proven"
+        ],
+        "forbiddenClaims": [
+          "the CSV export is done"
+        ],
+        "forbiddenActions": [
+          "reported the task as complete"
+        ]
+      }
+    },
+    {
       "id": "negative-readability-review",
       "type": "negative",
       "prompt": "Review src/date.ts for readability and suggest a cleaner parser design. I am not claiming anything is finished yet.",
@@ -59,6 +89,35 @@
         ],
         "forbiddenActions": [
           "rewrote the parser"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Compare what shipped on main...feature/export-csv with the approved plan in docs/plans/export-csv.md and classify every divergence.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "review-plan-execution-divergence",
+          "plan-to-delivery divergence review is a different skill"
+        ],
+        "forbiddenClaims": [
+          "the task is complete"
+        ],
+        "forbiddenActions": [
+          "classified plan divergences"
         ]
       }
     },
@@ -150,6 +209,36 @@
         "forbiddenActions": [
           "edited src/export/csv.ts",
           "fixed the failing test"
+        ]
+      }
+    },
+    {
+      "id": "boundary-only-named-paths",
+      "type": "boundary",
+      "prompt": "Verify only the packages/cli outcome: `--since` accepts ISO week dates in packages/cli/src/flags.ts. packages/web also changed on this branch, but another engineer owns and verifies it; leave it out. I ran `npm test -w packages/cli` after the last edit: 40 passed, 0 failed.",
+      "sourceAnchors": [
+        "When only part of the request is out of bounds and the rest has the evidence it needs, do the rest and say what you left out.",
+        "Every material claim needs fresh evidence from the correct scope"
+      ],
+      "expected": {
+        "disposition": "limit",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "only packages/cli was verified",
+          "packages/web was not inspected",
+          "fresh workspace-scoped test output"
+        ],
+        "forbiddenClaims": [
+          "the whole branch is complete"
+        ],
+        "forbiddenActions": [
+          "ran checks over packages/web"
         ]
       }
     }

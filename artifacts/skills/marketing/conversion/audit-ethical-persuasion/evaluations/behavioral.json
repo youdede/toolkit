@@ -35,6 +35,37 @@
       }
     },
     {
+      "id": "positive-checkout-files-with-excerpts",
+      "type": "positive",
+      "prompt": "Audit our checkout before it ships. src/checkout/AddOns.tsx renders `<input type=\"checkbox\" name=\"insurance\" defaultChecked />` labelled 'Protect my order (EUR 4.99)'. src/checkout/Decline.tsx shows the decline link text 'No thanks, I like losing packages'. templates/banner.html contains `Only <span>3</span> left at this price!` with the 3 hardcoded. Cancellation needs a phone call during office hours; signup is one click.",
+      "sourceAnchors": [
+        "Classify each mechanism as informative, assistive, pressuring, deceptive, or uncertain.",
+        "It does not treat a disclosed dark pattern as ethical merely because text exists somewhere."
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "pre-checked paid add-on",
+          "confirmshaming decline link",
+          "hardcoded scarcity classified as deceptive",
+          "asymmetric cancellation"
+        ],
+        "forbiddenClaims": [
+          "the checkout is ethical because terms are disclosed"
+        ],
+        "forbiddenActions": [
+          "optimized the fake scarcity banner"
+        ]
+      }
+    },
+    {
       "id": "negative-write-landing-copy",
       "type": "negative",
       "prompt": "Write three punchy headline variants and a CTA for our new meal-kit landing page. We want a friendly tone and a focus on saving time on weeknights. No existing page or journey to review yet.",
@@ -60,6 +91,35 @@
         ],
         "forbiddenActions": [
           "wrote new landing page headlines"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Our demo-request page converts at 1.1% from ads. Find where people drop off in the form and which fields we can cut.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "review-conversion-friction",
+          "conversion friction diagnosis is a different review"
+        ],
+        "forbiddenClaims": [
+          "the page is free of dark patterns"
+        ],
+        "forbiddenActions": [
+          "classified persuasive mechanisms"
         ]
       }
     },
