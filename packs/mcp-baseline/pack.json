@@ -15,6 +15,12 @@
       {"outcome": "mcp-trust-evidence", "memberArtifactIds": ["skill/development/agent-tooling/author-mcp-server-contract", "skill/security/threat-modeling/review-agent-tool-boundaries", "subagent/security/threat-modeling/mcp-trust-boundary-reviewer"]}
     ]
   },
+  "entry": "skill/development/agent-tooling/author-mcp-server-contract",
+  "workflow": [
+    {"member": "skill/development/agent-tooling/author-mcp-server-contract", "phase": "contract"},
+    {"member": "skill/security/threat-modeling/review-agent-tool-boundaries", "phase": "boundaries"},
+    {"member": "subagent/security/threat-modeling/mcp-trust-boundary-reviewer", "phase": "review", "signal": "an independent read of the server surface is wanted"}
+  ],
   "members": [
     {"artifactId": "hook/security/network-control/mcp-capability-drift-guard", "role": "enforcement", "required": true},
     {"artifactId": "mcp-server/development/agent-tooling/allowlisted-fetch-readonly", "role": "integration", "required": true},

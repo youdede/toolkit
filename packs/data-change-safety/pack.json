@@ -18,6 +18,12 @@
       {"outcome": "migration-safety", "memberArtifactIds": ["hook/security/application-security/shell-command-guard", "hook/data/migrations/migration-safety-guard", "skill/data/migrations/review-database-migration-plan"]}
     ]
   },
+  "entry": "skill/data/migrations/review-database-migration-plan",
+  "workflow": [
+    {"member": "skill/data/migrations/review-database-migration-plan", "phase": "plan-review"},
+    {"member": "skill/data/schemas/review-schema-evolution", "phase": "schema-review", "signal": "the change alters a schema that existing readers or writers depend on"},
+    {"member": "subagent/data/migrations/migration-risk-reviewer", "phase": "risk-review", "signal": "an independent read of the migration risk is wanted"}
+  ],
   "members": [
     {
       "artifactId": "skill/data/migrations/review-database-migration-plan",

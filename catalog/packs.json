@@ -39,6 +39,38 @@
           }
         ]
       },
+      "entry": "skill/design/accessibility/plan-accessibility-conformance-evidence",
+      "workflow": [
+        {
+          "member": "skill/design/accessibility/plan-accessibility-conformance-evidence",
+          "phase": "plan"
+        },
+        {
+          "member": "skill/design/accessibility/test-screen-reader-journey",
+          "phase": "test",
+          "signal": "a journey needs a pass with a real screen reader"
+        },
+        {
+          "member": "skill/design/accessibility/verify-cognitive-access-barriers",
+          "phase": "verify",
+          "signal": "a process asks the user to remember, re-enter, or authenticate"
+        },
+        {
+          "member": "subagent/design/accessibility/accessibility-conformance-reviewer",
+          "phase": "code-review",
+          "signal": "interface code needs an independent accessibility read"
+        },
+        {
+          "member": "subagent/design/accessibility/accessibility-journey-tester",
+          "phase": "journey-review",
+          "signal": "collected journey evidence needs an independent verdict"
+        },
+        {
+          "member": "skill/design/accessibility/prepare-eaa-conformance-evidence",
+          "phase": "conformance",
+          "signal": "an owner needs the results mapped to a declared requirement set"
+        }
+      ],
       "members": [
         {
           "artifactId": "hook/design/authentication-access/authentication-accessibility-guard",
@@ -169,6 +201,18 @@
           }
         ]
       },
+      "entry": "skill/development/testing/test-interface-in-browser",
+      "workflow": [
+        {
+          "member": "skill/development/testing/test-interface-in-browser",
+          "phase": "test"
+        },
+        {
+          "member": "subagent/design/frontend/web-performance-reviewer",
+          "phase": "review",
+          "signal": "the change may affect loading, rendering, or interaction cost"
+        }
+      ],
       "members": [
         {
           "artifactId": "skill/development/testing/test-interface-in-browser",
@@ -281,6 +325,26 @@
           }
         ]
       },
+      "entry": "skill/development/code-quality/deliver-incremental-change",
+      "workflow": [
+        {
+          "member": "skill/development/code-quality/deliver-incremental-change",
+          "phase": "deliver"
+        },
+        {
+          "member": "subagent/development/code-quality/refactor-equivalence-reviewer",
+          "phase": "equivalence",
+          "signal": "a slice is meant to leave observable behavior unchanged"
+        },
+        {
+          "member": "command/development/workflow/assemble-review-brief",
+          "phase": "brief"
+        },
+        {
+          "member": "skill/operations/reviewability/prepare-reviewable-pull-request",
+          "phase": "pull-request"
+        }
+      ],
       "members": [
         {
           "artifactId": "command/development/workflow/assemble-review-brief",
@@ -405,6 +469,23 @@
           }
         ]
       },
+      "entry": "skill/data/migrations/review-database-migration-plan",
+      "workflow": [
+        {
+          "member": "skill/data/migrations/review-database-migration-plan",
+          "phase": "plan-review"
+        },
+        {
+          "member": "skill/data/schemas/review-schema-evolution",
+          "phase": "schema-review",
+          "signal": "the change alters a schema that existing readers or writers depend on"
+        },
+        {
+          "member": "subagent/data/migrations/migration-risk-reviewer",
+          "phase": "risk-review",
+          "signal": "an independent read of the migration risk is wanted"
+        }
+      ],
       "members": [
         {
           "artifactId": "skill/data/migrations/review-database-migration-plan",
@@ -521,6 +602,23 @@
           }
         ]
       },
+      "entry": "skill/operations/infrastructure/plan-infrastructure-change",
+      "workflow": [
+        {
+          "member": "skill/operations/infrastructure/plan-infrastructure-change",
+          "phase": "plan"
+        },
+        {
+          "member": "subagent/operations/infrastructure/infrastructure-change-reviewer",
+          "phase": "review",
+          "signal": "the planned change exists as an infrastructure-as-code delta"
+        },
+        {
+          "member": "subagent/operations/resilience/disaster-recovery-readiness-auditor",
+          "phase": "recovery",
+          "signal": "the change touches backup, restore, or failover paths"
+        }
+      ],
       "members": [
         {
           "artifactId": "skill/operations/infrastructure/plan-infrastructure-change",
@@ -678,6 +776,22 @@
           }
         ]
       },
+      "entry": "skill/development/agent-tooling/author-mcp-server-contract",
+      "workflow": [
+        {
+          "member": "skill/development/agent-tooling/author-mcp-server-contract",
+          "phase": "contract"
+        },
+        {
+          "member": "skill/security/threat-modeling/review-agent-tool-boundaries",
+          "phase": "boundaries"
+        },
+        {
+          "member": "subagent/security/threat-modeling/mcp-trust-boundary-reviewer",
+          "phase": "review",
+          "signal": "an independent read of the server surface is wanted"
+        }
+      ],
       "members": [
         {
           "artifactId": "hook/security/network-control/mcp-capability-drift-guard",
@@ -817,6 +931,18 @@
           }
         ]
       },
+      "entry": "skill/operations/release/verify-mobile-release-readiness",
+      "workflow": [
+        {
+          "member": "skill/operations/release/verify-mobile-release-readiness",
+          "phase": "verify"
+        },
+        {
+          "member": "subagent/development/testing/mobile-reliability-accessibility-reviewer",
+          "phase": "review",
+          "signal": "a journey needs an independent read of its reliability and accessibility evidence"
+        }
+      ],
       "members": [
         {
           "artifactId": "skill/operations/release/verify-mobile-release-readiness",
@@ -956,6 +1082,26 @@
           }
         ]
       },
+      "entry": "command/development/workflow/draft-evidenced-plan",
+      "workflow": [
+        {
+          "member": "command/development/workflow/draft-evidenced-plan",
+          "phase": "plan"
+        },
+        {
+          "member": "skill/operations/agent-orchestration/execute-verifiable-plan",
+          "phase": "execute"
+        },
+        {
+          "member": "subagent/development/testing/test-gap-reviewer",
+          "phase": "test-gaps",
+          "signal": "the tests may not prove every behavior the change adds"
+        },
+        {
+          "member": "command/development/workflow/verify-claims-against-output",
+          "phase": "verify"
+        }
+      ],
       "members": [
         {
           "artifactId": "command/development/workflow/draft-evidenced-plan",
@@ -1089,6 +1235,27 @@
           }
         ]
       },
+      "entry": "command/development/workflow/audit-release-evidence",
+      "workflow": [
+        {
+          "member": "command/development/workflow/audit-release-evidence",
+          "phase": "audit"
+        },
+        {
+          "member": "subagent/operations/release/release-evidence-verifier",
+          "phase": "evidence-review",
+          "signal": "a release claim needs an independent check against its evidence"
+        },
+        {
+          "member": "subagent/operations/release/release-risk-reviewer",
+          "phase": "risk-review",
+          "signal": "rollout or rollback risk needs an independent read"
+        },
+        {
+          "member": "skill/operations/release/verify-production-release",
+          "phase": "release"
+        }
+      ],
       "members": [
         {
           "artifactId": "command/development/workflow/audit-release-evidence",
@@ -1358,6 +1525,31 @@
           }
         ]
       },
+      "entry": "command/development/workflow/assemble-review-brief",
+      "workflow": [
+        {
+          "member": "command/development/workflow/assemble-review-brief",
+          "phase": "brief"
+        },
+        {
+          "member": "skill/operations/reviewability/prepare-reviewable-pull-request",
+          "phase": "pull-request"
+        },
+        {
+          "member": "subagent/development/code-quality/refactor-equivalence-reviewer",
+          "phase": "equivalence",
+          "signal": "the change is meant to leave observable behavior unchanged"
+        },
+        {
+          "member": "skill/development/code-quality/request-independent-code-review",
+          "phase": "review"
+        },
+        {
+          "member": "skill/development/code-quality/evaluate-code-review-feedback",
+          "phase": "feedback",
+          "signal": "review feedback has arrived"
+        }
+      ],
       "members": [
         {
           "artifactId": "command/development/workflow/assemble-review-brief",
@@ -1491,6 +1683,27 @@
           }
         ]
       },
+      "entry": "skill/development/agent-tooling/author-mcp-server-contract",
+      "workflow": [
+        {
+          "member": "skill/development/agent-tooling/author-mcp-server-contract",
+          "phase": "design"
+        },
+        {
+          "member": "skill/security/threat-modeling/review-agent-tool-boundaries",
+          "phase": "boundaries"
+        },
+        {
+          "member": "subagent/security/threat-modeling/mcp-trust-boundary-reviewer",
+          "phase": "mcp-review",
+          "signal": "the integration exposes an MCP server surface"
+        },
+        {
+          "member": "subagent/security/application-security/application-security-reviewer",
+          "phase": "security-review",
+          "signal": "a risk crosses boundaries that no narrower reviewer covers"
+        }
+      ],
       "members": [
         {
           "artifactId": "skill/security/threat-modeling/review-agent-tool-boundaries",
@@ -1639,6 +1852,28 @@
           }
         ]
       },
+      "entry": "command/operations/session/record-work-checkpoint",
+      "workflow": [
+        {
+          "member": "command/operations/session/record-work-checkpoint",
+          "phase": "checkpoint"
+        },
+        {
+          "member": "command/operations/session/verify-session-ledger",
+          "phase": "verify",
+          "signal": "the ledger is about to be trusted in a new session"
+        },
+        {
+          "member": "skill/operations/session/resume-session-work",
+          "phase": "resume",
+          "signal": "work continues in a new session"
+        },
+        {
+          "member": "subagent/writing/decision-support/decision-record-reviewer",
+          "phase": "decisions",
+          "signal": "a past decision record is about to be relied on"
+        }
+      ],
       "members": [
         {
           "artifactId": "command/operations/session/record-work-checkpoint",

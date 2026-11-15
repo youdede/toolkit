@@ -14,6 +14,11 @@
       {"outcome": "local-browser-verification", "memberArtifactIds": ["skill/development/testing/test-interface-in-browser", "subagent/design/frontend/web-performance-reviewer", "mcp-server/development/testing/playwright-local-isolated"]}
     ]
   },
+  "entry": "skill/development/testing/test-interface-in-browser",
+  "workflow": [
+    {"member": "skill/development/testing/test-interface-in-browser", "phase": "test"},
+    {"member": "subagent/design/frontend/web-performance-reviewer", "phase": "review", "signal": "the change may affect loading, rendering, or interaction cost"}
+  ],
   "members": [
     {"artifactId": "skill/development/testing/test-interface-in-browser", "role": "procedure", "required": true},
     {"artifactId": "subagent/design/frontend/web-performance-reviewer", "role": "specialist", "required": true},

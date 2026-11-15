@@ -15,6 +15,13 @@
       {"outcome": "verified-implementation", "memberArtifactIds": ["command/development/workflow/verify-claims-against-output", "subagent/development/testing/test-gap-reviewer"]}
     ]
   },
+  "entry": "command/development/workflow/draft-evidenced-plan",
+  "workflow": [
+    {"member": "command/development/workflow/draft-evidenced-plan", "phase": "plan"},
+    {"member": "skill/operations/agent-orchestration/execute-verifiable-plan", "phase": "execute"},
+    {"member": "subagent/development/testing/test-gap-reviewer", "phase": "test-gaps", "signal": "the tests may not prove every behavior the change adds"},
+    {"member": "command/development/workflow/verify-claims-against-output", "phase": "verify"}
+  ],
   "members": [
     {"artifactId": "command/development/workflow/draft-evidenced-plan", "role": "entrypoint", "required": true},
     {"artifactId": "command/development/workflow/verify-claims-against-output", "role": "entrypoint", "required": true},
