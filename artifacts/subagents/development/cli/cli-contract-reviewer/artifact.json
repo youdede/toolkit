@@ -6,7 +6,7 @@
   "name": "CLI Contract Reviewer",
   "version": "1.3.0",
   "kind": "subagent",
-  "summary": "Review a CLI delta for automation-breaking grammar, stream, exit-code, and output changes.",
+  "summary": "Review CLI grammar, streams, exit codes, and output for automation-breaking changes or departures from the declared contract.",
   "description": "A narrow, read-only specialist whose outcome is to show whether a supported invocation or parser observes an unannounced command-line contract change. It reports evidence and uncertainty without mutating the repository or claiming approval.",
   "domain": "development",
   "category": "cli",
@@ -23,7 +23,7 @@
     "review"
   ],
   "risk": "medium",
-  "risk_reason": "This read-only specialist reviews a CLI delta for automation-breaking grammar, stream, exit-code, and output changes; its findings may affect a decision but it cannot edit or approve changes.",
+  "risk_reason": "This read-only specialist reviews CLI grammar, streams, exit codes, and output for automation-breaking changes or departures from the declared contract; its findings may affect a decision but it cannot edit or approve changes.",
   "license": "MIT",
   "authors": [
     "Youdede"
@@ -59,7 +59,7 @@
     "behavior": "advisory",
     "failurePolicy": "stop-and-report",
     "latencyClass": "bounded",
-    "latency_reason": "The specialist reviews a CLI delta for automation-breaking grammar, stream, exit-code, and output changes, using sequential evidence and verification steps.",
+    "latency_reason": "The specialist reviews CLI grammar, streams, exit codes, and output for automation-breaking changes or departures from the declared contract, using sequential evidence and verification steps.",
     "dataRetention": "runtime-managed"
   }
 }

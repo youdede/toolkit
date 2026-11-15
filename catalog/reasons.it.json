@@ -409,8 +409,8 @@
       "latency": "La skill specifica i componenti con stati esaustivi, varianti e regole di utilizzo che l'ingegneria può creare senza interpretazione, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "review-frontend-quality": {
-      "risk": "Questa skill controlla le interfacce web in termini di comportamento, accessibilità, reattività e prestazioni; non trasforma la preferenza visiva personale in un risultato bloccante della revisione.",
-      "latency": "La skill controlla le interfacce web in termini di comportamento, accessibilità, reattività e prestazioni, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questa skill esamina una singola modifica di un'interfaccia web per stati funzionali, accessibilità, reattività, prestazioni e coerenza con il design system; non trasforma la preferenza visiva personale in un risultato bloccante della revisione.",
+      "latency": "La skill esamina una singola modifica di un'interfaccia web per stati funzionali, accessibilità, reattività, prestazioni e coerenza con il design system, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "specify-engineering-handoff": {
       "risk": "Questa skill impacchetta un progetto in una specifica basata su token e completa di tutti gli stati, e verifica la build rispetto a essa; non certifica la conformità all'accessibilità e indirizza tali controlli alle skill di accessibilità.",
@@ -1045,8 +1045,8 @@
       "latency": "Lo specialista esamina le prove di valutazione della generazione aumentata dal recupero per perdite, copertura, calibrazione e idoneità decisionale, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "accessibility-conformance-reviewer": {
-      "risk": "Questo specialista di sola lettura esamina una modifica limitata dell'interfaccia alla ricerca di rischi di conformità all'accessibilità basati su evidenze e di barriere per l'utente; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
-      "latency": "Lo specialista esamina una modifica limitata dell'interfaccia alla ricerca di rischi di conformità all'accessibilità basati su evidenze e di barriere per l'utente, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questo specialista di sola lettura esamina il codice dell'interfaccia, come modifica o nello stato attuale, alla ricerca di barriere di accessibilità in semantica, etichette, focus, tastiera e messaggi di errore; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
+      "latency": "Lo specialista esamina il codice dell'interfaccia, come modifica o nello stato attuale, alla ricerca di barriere di accessibilità in semantica, etichette, focus, tastiera e messaggi di errore, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "accessibility-journey-tester": {
       "risk": "Questo specialista di sola lettura verifica un percorso utente delimitato a partire dalle evidenze fornite (browser, tastiera, tecnologia assistiva ed evidenze statiche); i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
@@ -1057,8 +1057,8 @@
       "latency": "Lo specialista esamina un delta dell'interfaccia delimitato per verificarne la coerenza di componente, token, variante ed eccezione, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "web-performance-reviewer": {
-      "risk": "Questo specialista di sola lettura esamina una modifica Web limitata per i rischi di caricamento, rendering, reattività e regressione comprovati; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
-      "latency": "Lo specialista esamina una modifica Web delimitata per i rischi di caricamento, rendering, reattività e regressione comprovati, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questo specialista di sola lettura esamina il codice web, come modifica o nello stato attuale, alla ricerca di costi di caricamento, rendering, idratazione, rete, risorse e interazione; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
+      "latency": "Lo specialista esamina il codice web, come modifica o nello stato attuale, alla ricerca di costi di caricamento, rendering, idratazione, rete, risorse e interazione, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "interaction-state-reviewer": {
       "risk": "Questo specialista di sola lettura esamina un singolo percorso utente per transizioni di stato di interazione complete, coerenti e recuperabili; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
@@ -1085,8 +1085,8 @@
       "latency": "Lo specialista produce una mappa di componenti e dipendenze collegata alle evidenze per una superficie di repository delimitata, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "cli-contract-reviewer": {
-      "risk": "Questo specialista di sola lettura esamina le modifiche di una CLI che potrebbero interrompere l'automazione: sintassi, stream, codici di uscita e output. I risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
-      "latency": "Lo specialista esamina un delta CLI per rilevare modifiche di grammatica, flusso, codice di uscita e output che compromettono l'automazione, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questo specialista di sola lettura esamina sintassi, stream, codici di uscita e output di una CLI alla ricerca di modifiche che interrompono l'automazione o di scostamenti dal contratto dichiarato; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
+      "latency": "Lo specialista esamina sintassi, stream, codici di uscita e output di una CLI alla ricerca di modifiche che interrompono l'automazione o di scostamenti dal contratto dichiarato, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "refactor-equivalence-reviewer": {
       "risk": "Questo specialista di sola lettura confronta il prima e il dopo di un refactoring delimitato per individuare cambiamenti di comportamento osservabili non intenzionali; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
@@ -1097,8 +1097,8 @@
       "latency": "Lo specialista analizza un percorso concorrente con limiti definiti alla ricerca di una race condition concreta, un deadlock, un aggiornamento perso o un errore di ordinamento, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "configuration-semantics-reviewer": {
-      "risk": "Questo specialista di sola lettura esamina il caricamento della configurazione per modifiche semantiche di precedenza, impostazione predefinita, coercizione e fallback; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
-      "latency": "Lo specialista esamina il caricamento della configurazione per rilevare modifiche semantiche di precedenza, impostazione predefinita, coercizione e fallback, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questo specialista di sola lettura esamina come il caricamento della configurazione seleziona, converte e imposta il valore predefinito di ogni chiave, segnalando i valori ignorati, convertiti in un altro tipo o oscurati da un'altra fonte; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
+      "latency": "Lo specialista esamina come il caricamento della configurazione seleziona, converte e imposta il valore predefinito di ogni chiave, segnalando i valori ignorati, convertiti in un altro tipo o oscurati da un'altra fonte, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "error-recovery-path-reviewer": {
       "risk": "Questo specialista di sola lettura esamina un percorso di errore per difetti di stato parziale, nuovi tentativi, idempotenza, compensazione e pulizia; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
@@ -1109,8 +1109,8 @@
       "latency": "Lo specialista esamina i percorsi di acquisizione e rilascio per individuare eventuali perdite, doppio rilascio e comportamento di utilizzo dopo la chiusura, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "serialization-contract-reviewer": {
-      "risk": "Questo specialista di sola lettura esamina le modifiche al codificatore e al decodificatore per verificare la perdita di informazioni nel round-trip e l'incompatibilità del formato di trasferimento tra versioni; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
-      "latency": "Lo specialista esamina le modifiche del codificatore e del decodificatore per verificare la perdita di informazioni nel round-trip e l'incompatibilità del formato di trasferimento tra versioni, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questo specialista di sola lettura esamina encoder, decoder e schemi per individuare perdita di dati durante il round-trip e incompatibilità tra versioni nel formato di trasferimento; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
+      "latency": "Lo specialista esamina encoder, decoder e schemi per individuare perdita di dati durante il round-trip e incompatibilità tra versioni nel formato di trasferimento, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "state-machine-invariant-analyst": {
       "risk": "Questo specialista di sola lettura analizza una macchina a stati delimitata per transizioni illegali, stati orfani e guardie aggirate; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
@@ -1129,8 +1129,8 @@
       "latency": "Lo specialista valuta se i risultati dei benchmark forniti dimostrano una regressione significativa in condizioni comparabili, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "test-gap-reviewer": {
-      "risk": "Questo specialista di sola lettura trova comportamenti significativi non dimostrati in una modifica limitata senza scrivere o eseguire test; non può modificare o approvare modifiche.",
-      "latency": "Lo specialista trova comportamenti significativi non dimostrati in un cambiamento limitato senza scrivere o eseguire test, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questo specialista di sola lettura associa i comportamenti di una modifica con limiti definiti o di un insieme di percorsi ai relativi test e individua quelli non dimostrati, senza scrivere né eseguire test; non può modificare né approvare cambiamenti.",
+      "latency": "Lo specialista associa i comportamenti di una modifica con limiti definiti o di un insieme di percorsi ai relativi test e individua quelli non dimostrati, senza scrivere né eseguire test, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "campaign-attribution-integrity-reviewer": {
       "risk": "Questo specialista di sola lettura esamina l'identificatore della campagna e la propagazione degli eventi per perdita di attribuzione, duplicazione e distorsione della finestra; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
@@ -1193,8 +1193,8 @@
       "latency": "Lo specialista controlla gli obiettivi di ripristino rispetto alle evidenze di backup, ripristino, failover, dipendenze ed esercitazioni, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "runbook-readiness-reviewer": {
-      "risk": "Questo specialista di sola lettura esamina un runbook operativo per prerequisiti eseguibili, controlli, rami di errore, proprietà e ripristino; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
-      "latency": "Lo specialista esamina un runbook operativo per prerequisiti eseguibili, controlli, rami di errore, proprietà e ripristino, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questo specialista di sola lettura esamina un singolo runbook per incidenti o controllo della produzione per autorità, contenimento, verifiche sulla telemetria, passaggi distruttivi e ripristino; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
+      "latency": "Lo specialista esamina un singolo runbook per incidenti o controllo della produzione per autorità, contenimento, verifiche sulla telemetria, passaggi distruttivi e ripristino, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "evidence-synthesis-analyst": {
       "risk": "Questo specialista di sola lettura sintetizza un pacchetto di fonti limitato preservando le differenze di popolazione, metodo, contesto e contraddizione; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
@@ -1225,8 +1225,8 @@
       "latency": "Lo specialista esamina l'uso delimitato di API crittografiche rispetto alla proprietà di sicurezza e al contratto di protocollo forniti, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "dependency-risk-reviewer": {
-      "risk": "Questo specialista di sola lettura esamina i delta delle dipendenze per individuare rischi di supply chain e di compatibilità senza modificare il repository; non può modificare né approvare modifiche.",
-      "latency": "Lo specialista esamina i delta delle dipendenze per individuare rischi di supply chain e di compatibilità senza modificare il repository, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questo specialista di sola lettura esamina manifest e lockfile delle dipendenze, come modifica o nello stato attuale, alla ricerca di rischi per la supply chain e di compatibilità senza modificare il repository; non può modificare né approvare cambiamenti.",
+      "latency": "Lo specialista esamina manifest e lockfile delle dipendenze, come modifica o nello stato attuale, alla ricerca di rischi per la supply chain e di compatibilità senza modificare il repository, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "tenant-isolation-analyst": {
       "risk": "Questo specialista di sola lettura traccia l'identità di un tenant attraverso i limiti di archiviazione, cache, processo e query per errori di isolamento; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
@@ -1253,8 +1253,8 @@
       "latency": "Lo specialista mappa risorse, attori, confini di fiducia, controlli e ipotesi di abuso raggiungibili per un singolo percorso, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "decision-record-reviewer": {
-      "risk": "Questo specialista di sola lettura esamina un record decisionale con limiti definiti per evidenze, alternative, compromessi, conseguenze e trigger di riesame; non può modificare o approvare modifiche.",
-      "latency": "Lo specialista esamina un record decisionale con limiti definiti per evidenze, alternative, compromessi, conseguenze e trigger di riesame, seguendo passaggi successivi di raccolta delle evidenze e verifica."
+      "risk": "Questo specialista di sola lettura verifica un record decisionale storico per stato, motivazioni dell'epoca, alternative, obblighi assegnati e collegamenti di sostituzione; non può modificare né approvare cambiamenti.",
+      "latency": "Lo specialista verifica un record decisionale storico per stato, motivazioni dell'epoca, alternative, obblighi assegnati e collegamenti di sostituzione, seguendo passaggi successivi di raccolta delle evidenze e verifica."
     },
     "api-documentation-verifier": {
       "risk": "Questo specialista di sola lettura verifica la documentazione e gli esempi API limitati rispetto alla versione esatta dell'implementazione o della specifica; i risultati possono influenzare una decisione, ma lo specialista non può modificare né approvare cambiamenti.",
@@ -1407,5 +1407,5 @@
       "mcp-egress-guard": "per confrontare gli argomenti degli strumenti MCP di questo server con la sua uscita dichiarata"
     }
   },
-  "sourceHash": "5ef78a4802c4ad354f11ef7b9551c14fbc240c84d61bc7b60c19a7ac4eb17e8d"
+  "sourceHash": "0675a375f2c59172f1be632e284eef9606eb2151e72081719cbc9ff35d5fbe63"
 }

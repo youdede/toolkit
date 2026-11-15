@@ -25,7 +25,7 @@ test('curated MCP profiles match pinned descriptions and reject unsafe drift', (
   const published = JSON.parse(readFileSync(new URL('../catalog/artifacts.json', import.meta.url), 'utf8')).artifacts;
   assert.equal(records.length, published.filter(({ kind }) => kind === 'mcp-server').length);
   for (const record of records) {
-    if (record.manifest.execution.entrypoints.length) assert.equal(record.manifest.execution.entrypoints[0].path, 'runtime/readonly-mcp-server.mjs');
+    if (record.manifest.execution.entrypoints.length) assert.deepEqual([record.manifest.execution.entrypoints[0].path, record.manifest.execution.entrypoints[0].runtime], ['server.json', 'runtime']);
     assert.deepEqual(verifyMcpRecord(record), []);
   }
 
@@ -47,6 +47,15 @@ test('curated MCP profiles match pinned descriptions and reject unsafe drift', (
   const authorityFailures = verifyMcpRecord(drifted);
   assert.ok(authorityFailures.some((failure) => /egress differs/.test(failure)));
   assert.ok(authorityFailures.some((failure) => /secretAccess differs/.test(failure)));
+});
+
+test('local MCP adapters refuse artifact-owned or mismatched shared runtimes', () => {
+  const source = loadArtifacts().find(({ manifest }) => manifest.slug === 'workspace-files-readonly');
+  for (const change of [{ root: 'artifact' }, { from: 'scripts/runtime/other.mjs' }, { executable: false }]) {
+    const record = { ...source, adapters: structuredClone(source.adapters) };
+    Object.assign(record.adapters['claude-code'].data.files.find(({ to }) => to === '.youdede/mcp/runtime.mjs'), change);
+    assert.ok(verifyMcpRecord(record).some((failure) => /must install the shared package runtime/.test(failure)));
+  }
 });
 
 test('external vendor MCP profiles enforce exact versions and confinement flags', (context) => {
@@ -90,7 +99,19 @@ test('MCP install merges exact servers, diagnoses drift, and removes reversibly'
     config.mcpServers['youdede-workspace-files-readonly'].command = 'node';
     writeFileSync(configFile, JSON.stringify(config));
 
-    for (const slug of ['allowlisted-fetch-readonly', 'repository-git-readonly', 'workspace-files-readonly']) removeArtifact(slug, { cwd: directory, target });
+    const runtime = path.join(directory, '.youdede/mcp/runtime.mjs');
+    const expectedRuntime = readFileSync('scripts/runtime/readonly-mcp-server.mjs');
+    for (const slug of ['allowlisted-fetch-readonly', 'repository-git-readonly']) {
+      removeArtifact(slug, { cwd: directory, target });
+      assert.deepEqual(readFileSync(runtime), expectedRuntime);
+      const result = spawnSync(process.execPath, [runtime, '--profile', '.youdede/mcp/workspace-files-readonly/server.json'], {
+        cwd: directory, input: `${JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list' })}\n`, encoding: 'utf8'
+      });
+      assert.equal(result.status, 0, result.stderr);
+      assert.deepEqual(JSON.parse(result.stdout).result.tools.map(({ name }) => name), ['read_file', 'list_directory', 'search_files']);
+      assert.deepEqual(doctor({ cwd: directory, target }).findings, []);
+    }
+    removeArtifact('workspace-files-readonly', { cwd: directory, target });
     assert.deepEqual(JSON.parse(readFileSync(configFile, 'utf8')), original);
     assert.equal(existsSync(path.join(directory, '.youdede', 'mcp', 'runtime.mjs')), false);
   }

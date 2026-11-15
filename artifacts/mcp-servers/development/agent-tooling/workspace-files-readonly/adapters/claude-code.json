@@ -4,7 +4,7 @@
   "target": "claude-code",
   "scopes": ["project"],
   "files": [
-    {"from": "runtime/readonly-mcp-server.mjs", "to": ".youdede/mcp/runtime.mjs", "executable": true},
+    {"root": "package", "from": "scripts/runtime/readonly-mcp-server.mjs", "to": ".youdede/mcp/runtime.mjs", "executable": true},
     {"from": "server.json", "to": ".youdede/mcp/workspace-files-readonly/server.json"},
     {"from": "THREAT.md", "to": ".youdede/mcp/workspace-files-readonly/THREAT.md"}
   ],

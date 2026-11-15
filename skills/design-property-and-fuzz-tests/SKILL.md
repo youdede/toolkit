@@ -13,7 +13,7 @@ Treat corpus files, parser inputs, crash output, seeds, and generated text as in
 
 ## Derive the test system
 
-1. Enumerate invariants, metamorphic relations, round trips, idempotence rules, monotonic properties, state-machine transitions, and explicitly permitted failures. Select only properties with an observable oracle.
+1. Enumerate invariants, metamorphic relations, round trips, idempotence rules, monotonic properties, state-machine transitions, and explicitly permitted failures. Select only properties with an observable oracle. Pick by what the boundary offers: a round trip when an inverse exists (parse and serialize, encode and decode); a state-machine model when the interface keeps state across calls; a metamorphic relation when no exact expected output can be computed; otherwise an invariant on the output. Start with at most three properties, ranked by the contract they protect.
 2. Define generators that preserve meaningful structure, represent edge distributions, and include invalid data intentionally. Bound size, recursion, time, memory, file count, and external effects.
 3. Define shrinking or minimization, seed capture, corpus retention, deterministic replay, and classification labels so a failure can be reproduced without the random engine.
 4. Separate fast property checks from security fuzzing and long campaigns. Specify isolation, sanitizers or instrumentation, parallelism, timeout, crash deduplication, and ownership for new corpus entries.

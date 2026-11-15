@@ -14,7 +14,8 @@ Optimize for the real objective while preventing metric gaming. A loop must alwa
 1. State the objective as an observable outcome, then list non-negotiable constraints, out-of-scope actions, available evidence, and who can authorize scope changes.
 2. Define the cycle: inspect current state, choose the smallest useful action, execute within authority, validate the result, and persist a checkpoint. Make repeated cycles idempotent.
 3. Choose progress measures that cannot be improved by violating quality, safety, or coverage. Pair every target metric with guardrails and independent validation.
-4. Set maximum cycles, time or cost budget, success criteria, stagnation detection, retry limits, and explicit pause conditions. Require a final evidence summary.
+4. Set maximum cycles, time or cost budget, success criteria, stagnation detection, retry limits, and explicit pause conditions. When the user sets none, default to at most 10 cycles, a stop after 3 consecutive cycles without measured progress, and 2 retries per failing action, and state these defaults in the loop. Require a final evidence summary.
+5. Write the complete loop under `## Result`: objective, constraints, cycle, measures with guardrails, and every limit.
 
 ## Output contract
 
