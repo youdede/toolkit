@@ -409,8 +409,8 @@
       "latency": "De skill specificeert componenten met alle toestanden, varianten en gebruiksregels, zodat ontwikkelaars ze zonder eigen interpretatie kunnen bouwen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "review-frontend-quality": {
-      "risk": "Deze skill controleert webinterfaces op gedrag, toegankelijkheid, responsiviteit en prestaties; hij verandert persoonlijke visuele voorkeur niet in een blokkerende reviewbevinding.",
-      "latency": "De skill controleert webinterfaces op gedrag, toegankelijkheid, responsiviteit en prestaties, via opeenvolgende stappen voor bewijsgaring en verificatie."
+      "risk": "Deze skill beoordeelt één wijziging aan een webinterface op functionele toestanden, toegankelijkheid, responsiviteit, prestaties en consistentie met het designsystem; hij verandert persoonlijke visuele voorkeur niet in een blokkerende reviewbevinding.",
+      "latency": "De skill beoordeelt één wijziging aan een webinterface op functionele toestanden, toegankelijkheid, responsiviteit, prestaties en consistentie met het designsystem, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "specify-engineering-handoff": {
       "risk": "Deze skill werkt een ontwerp uit tot een specificatie met tokenverwijzingen en volledige dekking van toestanden en verifieert de build daaraan; hij certificeert geen toegankelijkheidsconformiteit; hij verwijst die audits door naar de toegankelijkheidsskills.",
@@ -1045,8 +1045,8 @@
       "latency": "De specialist beoordeelt evaluatiebewijs voor retrieval-augmented generation op lekkage, dekking, kalibratie en geschiktheid voor besluitvorming, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "accessibility-conformance-reviewer": {
-      "risk": "Deze alleen-lezen-specialist beoordeelt een afgebakende interfacewijziging op onderbouwde risico's voor toegankelijkheidsconformiteit en belemmeringen voor gebruikers; de bevindingen kunnen een beslissing beïnvloeden, maar de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
-      "latency": "De specialist beoordeelt een afgebakende interfacewijziging op onderbouwde risico's voor toegankelijkheidsconformiteit en belemmeringen voor gebruikers, via opeenvolgende stappen voor bewijsgaring en verificatie."
+      "risk": "Deze alleen-lezen specialist beoordeelt interfacecode, als wijziging of in de huidige staat, op toegankelijkheidsbelemmeringen in semantiek, labels, focus, toetsenbediening en foutmeldingen; de bevindingen kunnen een beslissing beïnvloeden, maar de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
+      "latency": "De specialist beoordeelt interfacecode, als wijziging of in de huidige staat, op toegankelijkheidsbelemmeringen in semantiek, labels, focus, toetsenbediening en foutmeldingen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "accessibility-journey-tester": {
       "risk": "Deze alleen-lezen specialist verifieert een afgebakend gebruikerstraject op basis van aangeleverd bewijs uit browser, toetsenbord, ondersteunende technologie en statische controles; de bevindingen kunnen een beslissing beïnvloeden, maar de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
@@ -1057,8 +1057,8 @@
       "latency": "De specialist beoordeelt een begrensde interface-delta op consistentie van componenten, tokens, varianten en uitzonderingen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "web-performance-reviewer": {
-      "risk": "Deze alleen-lezen specialist beoordeelt een begrensde webwijziging op bewezen risico's op het gebied van laden, weergeven, reactievermogen en regressie; de bevindingen kunnen een beslissing beïnvloeden, maar de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
-      "latency": "De specialist beoordeelt een begrensde webwijziging op aangetoonde risico's op het gebied van laden, weergeven, reactievermogen en regressie, via opeenvolgende stappen voor bewijsgaring en verificatie."
+      "risk": "Deze alleen-lezen specialist beoordeelt webcode, als wijziging of in de huidige staat, op kosten van laden, weergave, hydratatie, netwerk, assets en interactie; de bevindingen kunnen een beslissing beïnvloeden, maar de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
+      "latency": "De specialist beoordeelt webcode, als wijziging of in de huidige staat, op kosten van laden, weergave, hydratatie, netwerk, assets en interactie, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "interaction-state-reviewer": {
       "risk": "Deze alleen-lezen specialist beoordeelt één gebruikerstraject op volledige, samenhangende en herstelbare interactie-statusovergangen; de bevindingen kunnen een beslissing beïnvloeden, maar de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
@@ -1085,8 +1085,8 @@
       "latency": "De specialist maakt voor een afgebakend deel van een repository een overzicht van componenten en afhankelijkheden met verwijzingen naar bewijs, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "cli-contract-reviewer": {
-      "risk": "Deze specialist met alleen leestoegang beoordeelt CLI-wijzigingen die automatisering kunnen breken: syntaxis, streams, exitcodes en output. De bevindingen kunnen een beslissing beïnvloeden, maar de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
-      "latency": "De specialist beoordeelt een CLI-delta op wijzigingen in syntaxis, streams, exitcodes en uitvoer die automatisering kunnen breken, via opeenvolgende stappen voor bewijsgaring en verificatie."
+      "risk": "Deze alleen-lezen specialist beoordeelt de syntaxis, streams, exitcodes en uitvoer van een CLI op wijzigingen die automatisering breken of op afwijkingen van het vastgelegde contract; de bevindingen kunnen een beslissing beïnvloeden, maar de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
+      "latency": "De specialist beoordeelt de syntaxis, streams, exitcodes en uitvoer van een CLI op wijzigingen die automatisering breken of op afwijkingen van het vastgelegde contract, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "refactor-equivalence-reviewer": {
       "risk": "Deze alleen-lezen specialist vergelijkt een begrensde voor-en-na-refactor op onbedoelde veranderingen in waarneembaar gedrag; de bevindingen kunnen een beslissing beïnvloeden, maar de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
@@ -1097,8 +1097,8 @@
       "latency": "De specialist analyseert een afgebakend gelijktijdig pad op een concrete raceconditie, deadlock, verloren update of volgordefout, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "configuration-semantics-reviewer": {
-      "risk": "Deze alleen-lezen specialist beoordeelt het laden van configuraties op semantische wijzigingen in voorrang, standaardwaarden, typeomzetting en terugvalgedrag; de bevindingen kunnen een beslissing beïnvloeden, maar de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
-      "latency": "De specialist beoordeelt het laden van de configuratie op semantische wijzigingen in voorrang, standaardwaarden, typeomzetting en terugvalgedrag, via opeenvolgende stappen voor bewijsgaring en verificatie."
+      "risk": "Deze alleen-lezen specialist beoordeelt hoe het laden van configuratie elke sleutel selecteert, omzet en van een standaardwaarde voorziet, en meldt waarden die worden genegeerd, van type veranderen of worden overschaduwd; de bevindingen kunnen een beslissing beïnvloeden, maar de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
+      "latency": "De specialist beoordeelt hoe het laden van configuratie elke sleutel selecteert, omzet en van een standaardwaarde voorziet, en meldt waarden die worden genegeerd, van type veranderen of worden overschaduwd, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "error-recovery-path-reviewer": {
       "risk": "Deze alleen-lezen specialist beoordeelt één foutpad op defecten in gedeeltelijke toestand, herhaalpogingen, idempotentie, compensatie en opruiming; de bevindingen kunnen een beslissing beïnvloeden, maar de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
@@ -1109,8 +1109,8 @@
       "latency": "De specialist beoordeelt de acquisitie- en vrijgavepaden op lekken, dubbele vrijgave en gebruik na sluiting, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "serialization-contract-reviewer": {
-      "risk": "Deze alleen-lezen specialist beoordeelt wijzigingen in encoders en decoders op informatieverlies bij coderen en decoderen en op incompatibiliteit van het overdrachtsformaat tussen versies; de bevindingen kunnen een beslissing beïnvloeden, maar de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
-      "latency": "De specialist beoordeelt wijzigingen in encoders en decoders op informatieverlies bij coderen en decoderen en op incompatibiliteit van het overdrachtsformaat tussen versies, via opeenvolgende stappen voor bewijsgaring en verificatie."
+      "risk": "Deze alleen-lezen specialist beoordeelt encoders, decoders en schema's op informatieverlies bij coderen en decoderen en op incompatibiliteit van het overdrachtsformaat tussen versies; de bevindingen kunnen een beslissing beïnvloeden, maar de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
+      "latency": "De specialist beoordeelt encoders, decoders en schema's op informatieverlies bij coderen en decoderen en op incompatibiliteit van het overdrachtsformaat tussen versies, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "state-machine-invariant-analyst": {
       "risk": "Deze alleen-lezen specialist analyseert een afgebakende toestandsmachine op verboden overgangen, verweesde toestanden en omzeilde controles; de bevindingen kunnen een beslissing beïnvloeden, maar de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
@@ -1129,8 +1129,8 @@
       "latency": "De specialist beoordeelt of aangeleverde benchmarkresultaten onder vergelijkbare omstandigheden een betekenisvolle regressie bewijzen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "test-gap-reviewer": {
-      "risk": "Deze alleen-lezen specialist vindt betekenisvol onbewezen gedrag in een afgebakende wijziging zonder tests te schrijven of uit te voeren; de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
-      "latency": "De specialist vindt betekenisvol onbewezen gedrag in een afgebakende wijziging zonder tests te schrijven of uit te voeren, via opeenvolgende stappen voor bewijsgaring en verificatie."
+      "risk": "Deze alleen-lezen specialist koppelt het gedrag van een afgebakende wijziging of een set paden aan de bijbehorende tests en vindt wat onbewezen blijft, zonder tests te schrijven of uit te voeren; de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
+      "latency": "De specialist koppelt het gedrag van een afgebakende wijziging of een set paden aan de bijbehorende tests en vindt wat onbewezen blijft, zonder tests te schrijven of uit te voeren, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "campaign-attribution-integrity-reviewer": {
       "risk": "Deze alleen-lezen specialist beoordeelt campagne-ID en gebeurtenispropagatie op attributieverlies, duplicatie en vensterbias; de bevindingen kunnen een beslissing beïnvloeden, maar de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
@@ -1193,8 +1193,8 @@
       "latency": "De specialist controleert de hersteldoelstellingen op basis van back-up-, herstel-, failover-, afhankelijkheids- en oefenbewijs, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "runbook-readiness-reviewer": {
-      "risk": "Deze alleen-lezen specialist beoordeelt één operationeel runbook op uitvoerbare vereisten, controles, foutvertakkingen, eigendom en herstel; de bevindingen kunnen een beslissing beïnvloeden, maar de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
-      "latency": "De specialist beoordeelt één operationeel runbook op uitvoerbare vereisten, controles, foutvertakkingen, eigendom en herstel, via opeenvolgende stappen voor bewijsgaring en verificatie."
+      "risk": "Deze alleen-lezen specialist beoordeelt één runbook voor incidenten of productiebeheer op bevoegdheid, inperking, telemetriecontroles, destructieve stappen en herstel; de bevindingen kunnen een beslissing beïnvloeden, maar de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
+      "latency": "De specialist beoordeelt één runbook voor incidenten of productiebeheer op bevoegdheid, inperking, telemetriecontroles, destructieve stappen en herstel, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "evidence-synthesis-analyst": {
       "risk": "Deze alleen-lezen specialist synthetiseert een begrensd bronpakket met behoud van populatie-, methode-, context- en tegenstrijdigheidsverschillen; de bevindingen kunnen een beslissing beïnvloeden, maar de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
@@ -1225,8 +1225,8 @@
       "latency": "De specialist beoordeelt afgebakend gebruik van cryptografische API's aan de hand van een aangeleverde beveiligingseigenschap en protocolcontract, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "dependency-risk-reviewer": {
-      "risk": "Deze alleen-lezen specialist beoordeelt verschillen in afhankelijkheden op risico's voor de toeleveringsketen en compatibiliteit zonder de repository te wijzigen; hij kan geen wijzigingen aanbrengen of goedkeuren.",
-      "latency": "De specialist beoordeelt verschillen in afhankelijkheden op risico's voor de toeleveringsketen en compatibiliteit zonder de repository te wijzigen, via opeenvolgende stappen voor bewijsgaring en verificatie."
+      "risk": "Deze alleen-lezen specialist beoordeelt manifesten en lockfiles van afhankelijkheden, als wijziging of in de huidige staat, op risico's voor de toeleveringsketen en compatibiliteit zonder de repository te wijzigen; de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
+      "latency": "De specialist beoordeelt manifesten en lockfiles van afhankelijkheden, als wijziging of in de huidige staat, op risico's voor de toeleveringsketen en compatibiliteit zonder de repository te wijzigen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "tenant-isolation-analyst": {
       "risk": "Deze alleen-lezen specialist traceert de identiteit van een tenant via opslag-, cache-, taak- en querygrenzen op isolatiefouten; de bevindingen kunnen een beslissing beïnvloeden, maar de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
@@ -1253,8 +1253,8 @@
       "latency": "De specialist brengt voor één gebruikersreis assets, actoren, vertrouwensgrenzen, beveiligingsmaatregelen en hypothesen over bereikbaar misbruik in kaart, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "decision-record-reviewer": {
-      "risk": "Deze alleen-lezen specialist beoordeelt een afgebakend beslissingsdocument op bewijs, alternatieven, afwegingen, gevolgen en aanleidingen om de beslissing te heroverwegen; de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
-      "latency": "De specialist beoordeelt een afgebakend beslissingsdocument op bewijs, alternatieven, afwegingen, gevolgen en aanleidingen om de beslissing te heroverwegen, via opeenvolgende stappen voor bewijsgaring en verificatie."
+      "risk": "Deze alleen-lezen specialist controleert een historisch beslissingsdocument op status, de toenmalige motivering, alternatieven, toegewezen verplichtingen en vervangingsverwijzingen; de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
+      "latency": "De specialist controleert een historisch beslissingsdocument op status, de toenmalige motivering, alternatieven, toegewezen verplichtingen en vervangingsverwijzingen, via opeenvolgende stappen voor bewijsgaring en verificatie."
     },
     "api-documentation-verifier": {
       "risk": "Deze alleen-lezen specialist verifieert de begrensde API-documentatie en voorbeelden aan de hand van de exacte implementatie- of specificatieversie; de bevindingen kunnen een beslissing beïnvloeden, maar de specialist kan geen wijzigingen aanbrengen of goedkeuren.",
@@ -1407,5 +1407,5 @@
       "mcp-egress-guard": "om de argumenten van de MCP-tools van deze server te toetsen aan het opgegeven uitgaande verkeer"
     }
   },
-  "sourceHash": "5ef78a4802c4ad354f11ef7b9551c14fbc240c84d61bc7b60c19a7ac4eb17e8d"
+  "sourceHash": "0675a375f2c59172f1be632e284eef9606eb2151e72081719cbc9ff35d5fbe63"
 }
