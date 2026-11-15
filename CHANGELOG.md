@@ -11,6 +11,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 ### Fixed
 
 - Pack removal respects prerequisite order, optional members report installation errors, and failed pack installs roll back newly added prerequisites.
+- Catalog validation reports malformed artifact relationships and adapter declarations by artifact and field, and continues checking the catalog.
 
 ## 0.8.0 (2026-11-13)
 
