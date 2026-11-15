@@ -2,6 +2,12 @@
 
 All notable changes are recorded here. Versions follow Semantic Versioning; release entries are derived from reviewed pull requests and verified against the corresponding Git tag.
 
+## Unreleased
+
+### Changed
+
+- `resume-session-work` now states its inputs and read-only scope, the checks a resumed context must show, and when to stop instead of carrying claims forward from a missing or broken ledger.
+
 ## 0.8.0 (2026-11-13)
 
 ### Changed
