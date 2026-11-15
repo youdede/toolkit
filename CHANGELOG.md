@@ -2,6 +2,12 @@
 
 All notable changes are recorded here. Versions follow Semantic Versioning; release entries are derived from reviewed pull requests and verified against the corresponding Git tag.
 
+## Unreleased
+
+### Fixed
+
+- Pack removal respects prerequisite order, optional members report installation errors, and failed pack installs roll back newly added prerequisites.
+
 ## 0.8.0 (2026-11-13)
 
 ### Changed
