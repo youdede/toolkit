@@ -2,6 +2,12 @@
 
 All notable changes are recorded here. Versions follow Semantic Versioning; release entries are derived from reviewed pull requests and verified against the corresponding Git tag.
 
+## Unreleased
+
+### Fixed
+
+- Catalog validation reports malformed artifact relationships and adapter declarations by artifact and field, and continues checking the catalog.
+
 ## 0.8.0 (2026-11-13)
 
 ### Changed
