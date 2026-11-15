@@ -4,6 +4,10 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 
 ## Unreleased
 
+### Changed
+
+- `resume-session-work` now states its inputs and read-only scope, the checks a resumed context must show, and when to stop instead of carrying claims forward from a missing or broken ledger.
+
 ### Fixed
 
 - Pack removal respects prerequisite order, optional members report installation errors, and failed pack installs roll back newly added prerequisites.
