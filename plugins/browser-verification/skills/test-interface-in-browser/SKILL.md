@@ -13,7 +13,7 @@ Test only authorized environments and data. Define the journey and expected outc
 
 1. Confirm target URL, environment, authentication method, safe test data, journey, expected states, viewports, supported browsers, and mutation or cleanup boundaries.
 2. Start from a known state and exercise happy, validation, empty, loading, error, retry, permission, refresh, back-navigation, and relevant concurrency paths while observing console and network.
-3. Check keyboard sequence, focus, names, headings, live errors, zoom, responsive layout, motion preferences, and screen-reader semantics appropriate to the risk.
+3. Always check keyboard sequence, visible focus, accessible names, headings, and live errors, and check layout at 320 CSS pixels wide, at 200% zoom, and at the widest supported viewport. Add a screen-reader pass when the journey has forms, dialogs, or dynamic updates, and a reduced-motion pass when it animates. Name every check you skipped and why.
 4. Capture minimal reproducible evidence, clean up test data, run repository browser tests when available, and report defects with exact state, action, observation, expectation, and artifacts.
 
 ## Output contract

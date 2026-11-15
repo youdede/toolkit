@@ -12681,8 +12681,8 @@
         "mode": "hybrid",
         "entrypoints": [
           {
-            "path": "runtime/readonly-mcp-server.mjs",
-            "runtime": "node",
+            "path": "server.json",
+            "runtime": "runtime",
             "purpose": "Serve one bounded credential-free HTTPS retrieval tool over local standard input and output.",
             "sideEffects": "external"
           }
@@ -12880,8 +12880,8 @@
         "mode": "hybrid",
         "entrypoints": [
           {
-            "path": "runtime/readonly-mcp-server.mjs",
-            "runtime": "node",
+            "path": "server.json",
+            "runtime": "runtime",
             "purpose": "Serve three fixed bounded read-only Git inspection tools over local standard input and output.",
             "sideEffects": "read-only"
           }
@@ -12986,8 +12986,8 @@
         "mode": "hybrid",
         "entrypoints": [
           {
-            "path": "runtime/readonly-mcp-server.mjs",
-            "runtime": "node",
+            "path": "server.json",
+            "runtime": "runtime",
             "purpose": "Serve the pinned bounded workspace inspection tools over local standard input and output.",
             "sideEffects": "read-only"
           }

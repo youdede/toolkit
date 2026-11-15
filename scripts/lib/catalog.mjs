@@ -80,7 +80,10 @@ export function loadArtifacts(root = ROOT) {
       const directory = path.dirname(manifestPath);
       const manifest = readJson(manifestPath);
       const adapters = {};
-      for (const [target, relative] of Object.entries(manifest.adapters || {})) {
+      const declarations = manifest.adapters;
+      const adapterMap = declarations && typeof declarations === 'object' && !Array.isArray(declarations) ? declarations : {};
+      for (const [target, relative] of Object.entries(adapterMap)) {
+        if (typeof relative !== 'string' || !relative.trim()) continue;
         const adapterPath = path.resolve(directory, relative);
         adapters[target] = { path: adapterPath, data: readJson(adapterPath) };
       }
@@ -641,9 +644,28 @@ function validateKindContract(manifest, errors) {
   }
 }
 
+// Cross-artifact checks require typed relationships, and adapter paths are loaded before validation.
+function artifactStructureErrors(manifest) {
+  const errors = [];
+  const isObject = (value) => value !== null && typeof value === 'object' && !Array.isArray(value);
+  if (!isObject(manifest.relationships)) errors.push('relationships must be an object');
+  else for (const key of [...ARTIFACT_RELATIONSHIP_KEYS, 'packIds']) {
+    const values = manifest.relationships[key];
+    if (key === 'suggests' && values === undefined) continue;
+    if (!Array.isArray(values)) errors.push(`relationships.${key} must be an array`);
+    else if (values.some((value) => typeof value !== 'string')) errors.push(`relationships.${key} entries must be strings`);
+  }
+  if (!isObject(manifest.adapters) || Object.keys(manifest.adapters).length === 0) errors.push('adapters must be non-empty');
+  else for (const [target, relative] of Object.entries(manifest.adapters)) {
+    if (typeof relative !== 'string' || !relative.trim()) errors.push(`adapters.${target} must be a non-empty string`);
+  }
+  return errors;
+}
+
 export function validateArtifact(record, taxonomy, artifactsRoot = ARTIFACTS_ROOT) {
   const { directory, manifest, adapters } = record;
-  const errors = [];
+  const errors = artifactStructureErrors(manifest);
+  if (errors.length) return errors;
   const requiredStrings = ['id', 'slug', 'name', 'version', 'kind', 'summary', 'description', 'domain', 'category', 'risk', 'license'];
   for (const key of requiredStrings) if (typeof manifest[key] !== 'string' || !manifest[key].trim()) errors.push(`${key} must be a non-empty string`);
   if (manifest.schemaVersion !== 1) errors.push('schemaVersion must be 1');
@@ -1127,10 +1149,12 @@ export function validateRepository(root = ROOT) {
     if (slugs.has(slug)) result.errors.push(`duplicate slug also used by ${slugs.get(slug)}`);
     else slugs.set(slug, result.record.manifestPath);
   }
+  const structuredResults = results.filter(({ record }) => artifactStructureErrors(record.manifest).length === 0);
+  const structuredArtifacts = structuredResults.map(({ record }) => record);
   const knownIds = new Set(artifacts.map(({ manifest }) => manifest.id));
   const packs = loadPacks(root);
-  validateRelationshipIntegrity(results, packs);
-  const packResults = packs.map((record) => ({ record, errors: validatePack(record, knownIds, artifacts, root) }));
+  validateRelationshipIntegrity(structuredResults, packs);
+  const packResults = packs.map((record) => ({ record, errors: validatePack(record, knownIds, structuredArtifacts, root) }));
   const seenPacks = new Set();
   for (const result of packResults) {
     const id = result.record.manifest.id;
