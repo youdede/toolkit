@@ -2,10 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, mkdtempSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
-import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { analyzePackWorkflow, loadArtifacts, loadPacks, publicPackCatalog, validatePack, validateRepository, ROOT } from '../scripts/lib/catalog.mjs';
+import { analyzePackWorkflow, invalidateArtifacts, loadArtifacts, loadPacks, publicPackCatalog, validatePack, validateRepository, ROOT } from '../scripts/lib/catalog.mjs';
 import { doctor, installArtifact, installPack, planPackInstall, removeArtifact, removePack } from '../scripts/lib/install.mjs';
 
 function writeJson(file, value) {
@@ -45,6 +44,7 @@ function createCollidingPackRepository(root) {
 }
 
 function writeHookArtifact(root, slug, description) {
+  invalidateArtifacts(root);
   const artifactDirectory = path.join(root, 'artifacts', slug);
   mkdirSync(artifactDirectory, { recursive: true });
   writeFileSync(path.join(artifactDirectory, `${slug}.mjs`), `#!/usr/bin/env node\nprocess.exit(0);\n`);
@@ -468,21 +468,20 @@ function createWorkflowFixture(context) {
   const cwd = mkdtempSync(path.join(os.tmpdir(), 'youdede-pack-flow-target-'));
   context.after(() => { rmSync(root, { recursive: true, force: true }); rmSync(cwd, { recursive: true, force: true }); });
   const entry = 'skill/development/testing/collect-review';
-  const verifier = 'skill/development/testing/verify-review';
+  const outsider = 'skill/development/testing/verify-review';
   const specialist = 'subagent/development/testing/review-verifier';
-  for (const id of [entry, verifier, specialist]) {
+  for (const id of [entry, outsider, specialist]) {
     const slug = id.split('/').at(-1);
     const kind = id.split('/')[0];
     const directory = path.join(root, 'artifacts', slug);
-    const targets = kind === 'subagent' ? ['claude-code'] : ['claude-code', 'codex', 'cursor'];
     writeJson(path.join(directory, 'artifact.json'), {
       schemaVersion: 1, id, slug, name: slug, version: '1.0.0', kind,
-      relationships: { composesWith: [entry, verifier, specialist].filter((other) => other !== id), prerequisites: [], conflictsWith: [], supersedes: [] },
-      adapters: Object.fromEntries(targets.map((target) => [target, `${target}.json`]))
+      relationships: { composesWith: [entry, outsider, specialist].filter((other) => other !== id), prerequisites: [], conflictsWith: [], supersedes: [] },
+      adapters: { 'claude-code': 'claude-code.json' }
     });
     writeFileSync(path.join(directory, 'payload.md'), `${slug}\n`);
-    for (const target of targets) writeJson(path.join(directory, `${target}.json`), {
-      schemaVersion: 1, target, scopes: ['project'],
+    writeJson(path.join(directory, 'claude-code.json'), {
+      schemaVersion: 1, target: 'claude-code', scopes: ['project'],
       files: [{ from: 'payload.md', to: kind === 'skill' ? `skills/${slug}/SKILL.md` : `agents/${slug}.md` }]
     });
   }
@@ -492,8 +491,8 @@ function createWorkflowFixture(context) {
     name: 'Review workflow', version: '1.0.0', summary: 'Collect and independently verify a bounded review.', outcomes: ['reviewed'],
     entry, workflow: [{ member: entry, phase: 'collect' }, { member: specialist, phase: 'verify', signal: 'Review material is available' }, { member: entry, phase: 'report' }],
     members: [
-      { artifactId: entry, role: 'entrypoint', required: true },
-      { artifactId: specialist, role: 'verifier', required: true, targets: { 'claude-code': specialist }, fallback: verifier }
+      { artifactId: entry, role: 'procedure', required: true },
+      { artifactId: specialist, role: 'verifier', required: true }
     ],
     evidence: { reportSchema: '../../schema/pack-evidence.schema.json', ledgerLinkRequired: true, outcomeEvidence: [{ outcome: 'reviewed', memberArtifactIds: [entry, specialist] }] }
   };
@@ -501,57 +500,41 @@ function createWorkflowFixture(context) {
   writeJson(path.join(directory, 'evaluations', 'behavioral.json'), {});
   const artifacts = loadArtifacts(root);
   const check = (value = manifest) => validatePack({ manifest: value, directory }, new Set(artifacts.map(({ manifest: item }) => item.id)), artifacts, root);
-  return { root, cwd, directory, manifest, artifacts, check, entry, verifier, specialist };
+  return { root, cwd, directory, manifest, artifacts, check, entry, outsider, specialist };
 }
 
-test('skill entry and verifier support targets without subagents and publish optional workflow metadata', (context) => {
+test('a pack entry and workflow reach the catalog, the plan, and the install result', (context) => {
   const fixture = createWorkflowFixture(context);
   assert.deepEqual(fixture.check(), []);
-  const analysis = analyzePackWorkflow(fixture.manifest, fixture.artifacts);
-  assert.equal(analysis.eligible, true);
-  assert.deepEqual(analysis.compatibility.map(({ target }) => target), ['claude-code', 'codex', 'cursor']);
   const published = publicPackCatalog([{ manifest: fixture.manifest }], fixture.artifacts).packs[0];
   assert.equal(published.entry, fixture.entry);
   assert.deepEqual(published.workflow, fixture.manifest.workflow);
-  assert.deepEqual(published.members[1].targets, { 'claude-code': fixture.specialist });
-  assert.equal(published.members[1].fallback, fixture.verifier);
-  for (const { manifest } of loadPacks()) {
-    assert.equal(Object.hasOwn(manifest, 'entry'), false);
-    assert.equal(Object.hasOwn(manifest, 'workflow'), false);
-  }
+  const options = { root: fixture.root, cwd: fixture.cwd, target: 'claude-code' };
+  const plan = planPackInstall('review-flow', options);
+  assert.equal(plan.entry, fixture.entry);
+  assert.deepEqual(plan.workflow, fixture.manifest.workflow);
+  assert.deepEqual(readdirSync(fixture.cwd), [], 'planning writes nothing');
+  const installed = installPack('review-flow', options);
+  assert.equal(installed.entry, fixture.entry);
+  assert.deepEqual(installed.workflow, fixture.manifest.workflow);
 });
 
-test('target overrides and fallback select the same members and flow in dry run and installation', (context) => {
+test('a pack without entry or workflow stays valid and publishes neither', (context) => {
   const fixture = createWorkflowFixture(context);
-  for (const [target, expected] of [['claude-code', fixture.specialist], ['codex', fixture.verifier], ['cursor', fixture.verifier]]) {
-    const options = { root: fixture.root, cwd: fixture.cwd, target };
-    const plan = planPackInstall('review-flow', options);
-    assert.equal(plan.members[1].member.artifactId, expected);
-    assert.equal(plan.entry, fixture.entry);
-    assert.deepEqual(plan.workflow.map(({ member }) => member), [fixture.entry, expected, fixture.entry]);
-    const configRoot = plan.members[0].plan.configRoot;
-    assert.equal(existsSync(configRoot), false, 'planning writes nothing');
-    const installed = installPack('review-flow', options);
-    assert.deepEqual(installed.installed.map(({ artifact }) => artifact.id), plan.members.map(({ member }) => member.artifactId));
-    assert.deepEqual(installed.workflow, plan.workflow);
-    assert.equal(installed.entry, plan.entry);
-    for (const { plan: memberPlan } of plan.members) for (const write of memberPlan.writes) {
-      const file = path.join(memberPlan.configRoot, write.path);
-      assert.ok(existsSync(file), write.path);
-      assert.equal(createHash('sha256').update(readFileSync(file)).digest('hex'), write.sha256);
-    }
-    assert.deepEqual(doctor(options).findings, []);
-    removePack('review-flow', options);
-  }
+  delete fixture.manifest.entry; delete fixture.manifest.workflow;
+  assert.deepEqual(fixture.check(), []);
+  const published = publicPackCatalog([{ manifest: fixture.manifest }], fixture.artifacts).packs[0];
+  assert.equal(Object.hasOwn(published, 'entry'), false);
+  assert.equal(Object.hasOwn(published, 'workflow'), false);
 });
 
 test('workflow and entry references reject non-members before planning writes', (context) => {
   const fixture = createWorkflowFixture(context);
-  fixture.manifest.workflow[0].member = fixture.verifier;
+  fixture.manifest.workflow[0].member = fixture.outsider;
   assert.ok(fixture.check().some((error) => /workflow step must name a member/.test(error)));
   writeJson(path.join(fixture.directory, 'pack.json'), fixture.manifest);
   assert.throws(() => planPackInstall('review-flow', { root: fixture.root, cwd: fixture.cwd }), /workflow step must name a member/);
-  fixture.manifest.entry = fixture.verifier;
+  fixture.manifest.entry = fixture.specialist;
   assert.ok(fixture.check().some((error) => /entry must name/.test(error)));
   assert.deepEqual(readdirSync(fixture.cwd), []);
 });
@@ -560,71 +543,36 @@ test('workflow and entry references reject non-members before planning writes', 
 function acceptsField(schema, value) {
   if (schema.type === 'object') {
     if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
-    if (Object.keys(value).length < (schema.minProperties || 0)) return false;
     if ((schema.required || []).some((key) => !Object.hasOwn(value, key))) return false;
     return Object.entries(value).every(([key, child]) => schema.properties[key]
       ? acceptsField(schema.properties[key], child) : schema.additionalProperties !== false);
   }
   if (schema.type === 'array') return Array.isArray(value) && value.length >= (schema.minItems || 0) && value.every((item) => acceptsField(schema.items, item));
   if (schema.type === 'string' && (typeof value !== 'string' || [...value].length < (schema.minLength || 0) || [...value].length > (schema.maxLength || Infinity))) return false;
-  if (schema.pattern && !new RegExp(schema.pattern).test(value)) return false;
-  return !schema.enum || schema.enum.includes(value);
+  return !schema.pattern || new RegExp(schema.pattern).test(value);
 }
 
-test('schema and hand validator agree on each optional pack field and nested workflow field', (context) => {
+test('schema and hand validator agree on the optional entry and workflow fields', (context) => {
   const fixture = createWorkflowFixture(context);
   const schema = JSON.parse(readFileSync(path.join(ROOT, 'schema', 'pack.schema.json'), 'utf8'));
+  const step = { member: fixture.entry, phase: 'verify' };
   const fields = [
-    ['entry', schema.properties.entry, [fixture.entry], [null, 4, '', 'unknown']],
-    ['workflow', schema.properties.workflow, [fixture.manifest.workflow, [{ member: fixture.entry, phase: 'verify', signal: '🦊'.repeat(240) }]], [null, [], {}, [null], [{ member: fixture.entry }], [{ member: fixture.entry, phase: 'Bad phase' }], [{ member: fixture.entry, phase: 'verify', signal: '' }], [{ member: fixture.entry, phase: 'verify', signal: 4 }], [{ member: fixture.entry, phase: 'verify', signal: 'x'.repeat(241) }], [{ member: fixture.entry, phase: 'verify', extra: true }]]],
-    ['targets', schema.properties.members.items.properties.targets, [{ codex: fixture.verifier }], [null, {}, [], { unknown: fixture.verifier }, { codex: 4 }, { codex: 'unknown' }]],
-    ['fallback', schema.properties.members.items.properties.fallback, [fixture.verifier], [null, 4, '', 'unknown']]
+    ['entry', [fixture.entry], [null, 4, '', 'unknown']],
+    ['workflow', [fixture.manifest.workflow, [{ ...step, signal: 'x'.repeat(240) }]], [null, [], {}, [null], [{ member: fixture.entry }], [{ ...step, phase: 'Not A Slug' }], [{ ...step, signal: '' }], [{ ...step, signal: 'x'.repeat(241) }], [{ ...step, extra: true }]]]
   ];
-  for (const [field, rule, valid, invalid] of fields) {
+  for (const [field, valid, invalid] of fields) {
+    const rule = schema.properties[field];
     assert.ok(rule, field);
-    const required = ['targets', 'fallback'].includes(field) ? schema.properties.members.items.required : schema.required;
-    assert.equal(required.includes(field), false, `${field} is optional`);
+    assert.equal(schema.required.includes(field), false, `${field} is optional`);
     for (const [values, expected] of [[valid, true], [invalid, false]]) for (const value of values) {
-      const manifest = structuredClone(fixture.manifest);
-      if (['targets', 'fallback'].includes(field)) manifest.members[1][field] = value;
-      else manifest[field] = value;
       assert.equal(acceptsField(rule, value), expected, `${field}: schema ${JSON.stringify(value)}`);
-      assert.equal(fixture.check(manifest).length === 0, expected, `${field}: validator ${JSON.stringify(value)}`);
+      assert.equal(fixture.check({ ...fixture.manifest, [field]: value }).length === 0, expected, `${field}: validator ${JSON.stringify(value)}`);
     }
   }
-  const absent = structuredClone(fixture.manifest);
-  delete absent.entry; delete absent.workflow; delete absent.members[1].targets; delete absent.members[1].fallback;
-  assert.deepEqual(fixture.check(absent), []);
 });
 
-
-test('distinct procedure and verifier skills validate without any subagent member', (context) => {
-  const fixture = createWorkflowFixture(context);
-  const manifest = structuredClone(fixture.manifest);
-  manifest.members[1] = { artifactId: fixture.verifier, role: 'verifier', required: true };
-  manifest.evidence.outcomeEvidence[0].memberArtifactIds[1] = fixture.verifier;
-  manifest.workflow[1].member = fixture.verifier;
-  assert.deepEqual(fixture.check(manifest), []);
-  assert.equal(analyzePackWorkflow(manifest, fixture.artifacts).criteria.independentRequiredAssurance, true);
-});
-
-test('target selection rejects unknown, wrong-role, and duplicate alternatives', (context) => {
-  const fixture = createWorkflowFixture(context);
-  const unknown = structuredClone(fixture.manifest);
-  unknown.members[1].fallback = 'skill/development/testing/missing-review';
-  assert.ok(fixture.check(unknown).some((error) => /unknown artifact/.test(error)));
-  const wrongRole = structuredClone(fixture.manifest);
-  wrongRole.members[0].fallback = fixture.specialist;
-  assert.ok(fixture.check(wrongRole).some((error) => /incompatible with role/.test(error)));
-  const duplicate = structuredClone(fixture.manifest);
-  duplicate.members[1].fallback = fixture.entry;
-  assert.ok(fixture.check(duplicate).some((error) => /duplicate artifacts/.test(error)));
-});
-
-test('explicit target members never fall back after an unsupported adapter', (context) => {
-  const fixture = createWorkflowFixture(context);
-  fixture.manifest.members[1].targets.codex = fixture.specialist;
-  writeJson(path.join(fixture.directory, 'pack.json'), fixture.manifest);
-  assert.throws(() => planPackInstall('review-flow', { root: fixture.root, cwd: fixture.cwd, target: 'codex' }), /required member.*cannot install for codex/);
-  assert.deepEqual(readdirSync(fixture.cwd), []);
+test('every shipped pack that declares an order starts it from its entry', () => {
+  const declared = loadPacks().filter(({ manifest }) => manifest.workflow);
+  assert.ok(declared.length > 0);
+  for (const { manifest } of declared) assert.equal(manifest.workflow[0].member, manifest.entry, manifest.id);
 });

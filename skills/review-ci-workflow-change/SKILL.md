@@ -39,11 +39,11 @@ Run `node "<skill-root>/scripts/collect-workflow-signals.mjs" --file <workflow-f
 
 Check trigger and branch scope, least privilege, pinning and provenance of actions, command inputs, secret exposure paths, concurrency/cancellation behavior, test and artifact retention, failure diagnostics, environment protection, and rollback/disable path. Compare claims with repository evidence where supplied.
 
-Write `## Collected signals`, `## Review findings`, `## Evidence gaps`, `## Release impact`, and `## Recommendation`. Label conclusions as verified, inference, or unresolved.
+Write `## Collected signals`, `## Review findings`, `## Evidence gaps`, `## Release impact`, and `## Recommendation`. Label conclusions as verified, inference, or unresolved. For each finding give the workflow path and collector line number, and a severity: `high` when it can expose a secret, give untrusted code write access, or publish a release; `medium` when it can skip or weaken a required check; `low` otherwise.
 
 ## Stop conditions
 
-Stop for missing workflow or intended behavior. Refuse to parse ambiguous YAML semantically, run the workflow, reveal secrets, or claim the workflow is secure or approved.
+Stop for a missing workflow. When intended behavior is not stated, take it from the pull request description or the diff, label it inferred, and review against it; stop only when that evidence leaves the intent contradictory. Refuse to parse ambiguous YAML semantically, run the workflow, reveal secrets, or claim the workflow is secure or approved.
 
 ## Refusals
 

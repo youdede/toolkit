@@ -1,6 +1,5 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
-import { SUPPORTED_TARGETS } from './targets.mjs';
 import { fileURLToPath } from 'node:url';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -36,7 +35,7 @@ const PACK_ROLE_KINDS = {
   verifier: new Set(['skill', 'subagent']),
   enforcement: new Set(['hook']),
   observer: new Set(['hook']),
-  entrypoint: new Set(['command', 'skill']),
+  entrypoint: new Set(['command']),
   baseline: new Set(['context']),
   integration: new Set(['mcp-server'])
 };
@@ -72,21 +71,44 @@ function walk(directory, name, output = []) {
   return output;
 }
 
+const artifactCache = new Map();
+
+function freezeArtifactData(value) {
+  if (value && typeof value === 'object') {
+    for (const child of Object.values(value)) freezeArtifactData(child);
+    Object.freeze(value);
+  }
+  return value;
+}
+
+// Call after writing manifests or adapters before loading the same root again.
+export function invalidateArtifacts(root = ROOT) {
+  artifactCache.delete(path.resolve(root));
+}
+
+// Records are immutable; copy a record with structuredClone before editing it.
 export function loadArtifacts(root = ROOT) {
+  root = path.resolve(root);
+  if (artifactCache.has(root)) return [...artifactCache.get(root)];
   const artifactRoot = path.join(root, 'artifacts');
   if (!existsSync(artifactRoot)) return [];
-  return walk(artifactRoot, 'artifact.json')
+  const records = walk(artifactRoot, 'artifact.json')
     .sort()
     .map((manifestPath) => {
       const directory = path.dirname(manifestPath);
       const manifest = readJson(manifestPath);
       const adapters = {};
-      for (const [target, relative] of Object.entries(manifest.adapters || {})) {
+      const declarations = manifest.adapters;
+      const adapterMap = declarations && typeof declarations === 'object' && !Array.isArray(declarations) ? declarations : {};
+      for (const [target, relative] of Object.entries(adapterMap)) {
+        if (typeof relative !== 'string' || !relative.trim()) continue;
         const adapterPath = path.resolve(directory, relative);
         adapters[target] = { path: adapterPath, data: readJson(adapterPath) };
       }
       return { root, directory, manifestPath, manifest, adapters };
     });
+  artifactCache.set(root, freezeArtifactData(records));
+  return [...records];
 }
 
 export function loadPacks(root = ROOT) {
@@ -185,22 +207,8 @@ function roleMatchesArtifact(role, artifact) {
   return true;
 }
 
-// Member IDs are stable references; target selection changes only the installed artifact.
-export function resolvePackMembers(manifest, target) {
-  return manifest.members.map((member) => ({
-    ...member,
-    artifactId: member.targets?.[target] ?? member.fallback ?? member.artifactId
-  }));
-}
-
-export function resolvePackFlow(manifest, target) {
-  const members = resolvePackMembers(manifest, target);
-  const selected = new Map(manifest.members.map((member, index) => [member.artifactId, members[index].artifactId]));
-  return {
-    ...(manifest.entry !== undefined ? { entry: selected.get(manifest.entry) } : {}),
-    ...(manifest.workflow !== undefined ? { workflow: manifest.workflow.map((step) => ({ ...step, member: selected.get(step.member) })) } : {})
-  };
-}
+// The optional entry and ordered workflow of a pack, for catalog, plan, and install output.
+export const packFlow = ({ entry, workflow }) => ({ ...(entry !== undefined && { entry }), ...(workflow !== undefined && { workflow }) });
 
 export function validatePackFlow(manifest) {
   const errors = [];
@@ -222,39 +230,10 @@ export function validatePackFlow(manifest) {
       if (step.signal !== undefined && (typeof step.signal !== 'string' || [...step.signal].length < 1 || [...step.signal].length > 240)) errors.push('workflow signal must contain 1-240 characters');
     }
   }
-  for (const member of members.filter(Boolean)) {
-    if (member.targets !== undefined) {
-      if (!member.targets || typeof member.targets !== 'object' || Array.isArray(member.targets) || Object.keys(member.targets).length === 0) errors.push('member targets must be a non-empty target map');
-      else for (const [target, id] of Object.entries(member.targets)) {
-        if (!SUPPORTED_TARGETS.includes(target) || !artifactId(id)) errors.push('member targets must map known targets to artifact ids');
-      }
-    }
-    if (member.fallback !== undefined && !artifactId(member.fallback)) errors.push('member fallback must be an artifact id');
-  }
   return errors;
 }
 
 export function analyzePackWorkflow(manifest, artifacts) {
-  if (!manifest.members?.some((member) => member?.targets || member?.fallback)) return analyzeResolvedPackWorkflow(manifest, artifacts);
-  const views = SUPPORTED_TARGETS.map((target) => {
-    const members = resolvePackMembers(manifest, target);
-    const analysis = analyzeResolvedPackWorkflow({ ...manifest, members }, artifacts);
-    return { target, analysis };
-  });
-  const supported = views.filter(({ target, analysis }) => analysis.compatibility.some((coordinate) => coordinate.target === target));
-  const base = analyzeResolvedPackWorkflow(manifest, artifacts);
-  const applicable = supported.length ? supported : [{ analysis: base }];
-  const criteria = Object.fromEntries(Object.keys(base.criteria).map((key) => [key, applicable.every(({ analysis }) => analysis.criteria[key])]));
-  criteria.compatibleInstallCoordinate = supported.length > 0;
-  return {
-    ...base, criteria, eligible: Object.values(criteria).every(Boolean),
-    compatibility: supported.flatMap(({ target, analysis }) => analysis.compatibility.filter((coordinate) => coordinate.target === target)).sort((a, b) => a.target.localeCompare(b.target)),
-    incompatiblePairs: applicable.flatMap(({ analysis }) => analysis.incompatiblePairs),
-    missingPrerequisites: applicable.flatMap(({ analysis }) => analysis.missingPrerequisites)
-  };
-}
-
-function analyzeResolvedPackWorkflow(manifest, artifacts) {
   const members = Array.isArray(manifest.members) ? manifest.members : [];
   const byId = new Map(artifacts.map((record) => [record.manifest.id, record]));
   const entries = members.map((value) => {
@@ -334,9 +313,9 @@ function analyzeResolvedPackWorkflow(manifest, artifacts) {
   const roleCompatible = knownEntries.length === members.length
     && knownEntries.every(({ member, record }) => roleMatchesArtifact(member.role, record.manifest));
   const criteria = {
-    crossKindRequiredWorkflow: requiredKinds.size >= 2 || (required.length >= 2 && required.some(({ member, record }) => member.role === 'verifier' && record?.manifest.kind === 'skill')),
-    requiredProcedure: required.some(({ member, record }) => ['procedure', 'entrypoint'].includes(member.role) && record?.manifest.kind === 'skill'),
-    independentRequiredAssurance: required.some(({ member, record }) => (['specialist', 'verifier'].includes(member.role) && record?.manifest.kind === 'subagent') || (member.role === 'verifier' && record?.manifest.kind === 'skill')),
+    crossKindRequiredWorkflow: requiredKinds.size >= 2,
+    requiredProcedure: required.some(({ member, record }) => member.role === 'procedure' && record?.manifest.kind === 'skill'),
+    independentRequiredAssurance: required.some(({ member, record }) => ['specialist', 'verifier'].includes(member.role) && record?.manifest.kind === 'subagent'),
     roleCompatible,
     compositionConnected,
     conflictFree: incompatiblePairs.length === 0,
@@ -711,9 +690,28 @@ function validateKindContract(manifest, errors) {
   }
 }
 
+// Cross-artifact checks require typed relationships, and adapter paths are loaded before validation.
+function artifactStructureErrors(manifest) {
+  const errors = [];
+  const isObject = (value) => value !== null && typeof value === 'object' && !Array.isArray(value);
+  if (!isObject(manifest.relationships)) errors.push('relationships must be an object');
+  else for (const key of [...ARTIFACT_RELATIONSHIP_KEYS, 'packIds']) {
+    const values = manifest.relationships[key];
+    if (key === 'suggests' && values === undefined) continue;
+    if (!Array.isArray(values)) errors.push(`relationships.${key} must be an array`);
+    else if (values.some((value) => typeof value !== 'string')) errors.push(`relationships.${key} entries must be strings`);
+  }
+  if (!isObject(manifest.adapters) || Object.keys(manifest.adapters).length === 0) errors.push('adapters must be non-empty');
+  else for (const [target, relative] of Object.entries(manifest.adapters)) {
+    if (typeof relative !== 'string' || !relative.trim()) errors.push(`adapters.${target} must be a non-empty string`);
+  }
+  return errors;
+}
+
 export function validateArtifact(record, taxonomy, artifactsRoot = ARTIFACTS_ROOT) {
   const { directory, manifest, adapters } = record;
-  const errors = [];
+  const errors = artifactStructureErrors(manifest);
+  if (errors.length) return errors;
   const requiredStrings = ['id', 'slug', 'name', 'version', 'kind', 'summary', 'description', 'domain', 'category', 'risk', 'license'];
   for (const key of requiredStrings) if (typeof manifest[key] !== 'string' || !manifest[key].trim()) errors.push(`${key} must be a non-empty string`);
   if (manifest.schemaVersion !== 1) errors.push('schemaVersion must be 1');
@@ -1197,10 +1195,12 @@ export function validateRepository(root = ROOT) {
     if (slugs.has(slug)) result.errors.push(`duplicate slug also used by ${slugs.get(slug)}`);
     else slugs.set(slug, result.record.manifestPath);
   }
+  const structuredResults = results.filter(({ record }) => artifactStructureErrors(record.manifest).length === 0);
+  const structuredArtifacts = structuredResults.map(({ record }) => record);
   const knownIds = new Set(artifacts.map(({ manifest }) => manifest.id));
   const packs = loadPacks(root);
-  validateRelationshipIntegrity(results, packs);
-  const packResults = packs.map((record) => ({ record, errors: validatePack(record, knownIds, artifacts, root) }));
+  validateRelationshipIntegrity(structuredResults, packs);
+  const packResults = packs.map((record) => ({ record, errors: validatePack(record, knownIds, structuredArtifacts, root) }));
   const seenPacks = new Set();
   for (const result of packResults) {
     const id = result.record.manifest.id;
@@ -1273,7 +1273,7 @@ export function validatePack(record, knownIds, artifacts, root = ROOT) {
     }
     const memberKeys = Object.keys(member);
     for (const key of ['artifactId', 'role', 'required']) if (!memberKeys.includes(key)) errors.push(`members[${index}] is missing required property '${key}'`);
-    for (const key of memberKeys) if (!['artifactId', 'role', 'required', 'targets', 'fallback'].includes(key)) errors.push(`members[${index}] has unexpected property '${key}'`);
+    for (const key of memberKeys) if (!['artifactId', 'role', 'required'].includes(key)) errors.push(`members[${index}] has unexpected property '${key}'`);
     if (typeof member.artifactId !== 'string' || !/^(skill|hook|subagent|command|context|mcp-server)\/[a-z0-9-]+\/[a-z0-9-]+\/[a-z0-9-]+$/.test(member.artifactId)) errors.push(`members[${index}].artifactId is invalid`);
     if (!knownIds.has(member.artifactId)) errors.push(`members[${index}] references unknown artifact '${member.artifactId}'`);
     if (ids.has(member.artifactId)) errors.push(`members repeats '${member.artifactId}'`);
@@ -1287,22 +1287,10 @@ export function validatePack(record, knownIds, artifacts, root = ROOT) {
     }
   }
   errors.push(...validatePackFlow(manifest));
-  for (const member of manifest.members.filter(Boolean)) {
-    const variants = [...Object.values(member.targets && typeof member.targets === 'object' ? member.targets : {}), ...(member.fallback !== undefined ? [member.fallback] : [])];
-    for (const id of variants) {
-      const artifact = byId.get(id)?.manifest;
-      if (!knownIds.has(id)) errors.push(`member variant references unknown artifact '${id}'`);
-      else if (!roleMatchesArtifact(member.role, artifact)) errors.push(`member variant '${id}' is incompatible with role '${member.role}'`);
-    }
-  }
-  for (const target of SUPPORTED_TARGETS) {
-    const ids = resolvePackMembers(manifest, target).map((member) => member.artifactId);
-    if (new Set(ids).size !== ids.length) errors.push(`members resolve to duplicate artifacts on ${target}`);
-  }
   const workflow = analyzePackWorkflow(manifest, artifacts);
-  if (!workflow.criteria.crossKindRequiredWorkflow) errors.push('pack required members must compose at least two artifact kinds or include a skill verifier');
+  if (!workflow.criteria.crossKindRequiredWorkflow) errors.push('pack required members must compose at least two artifact kinds');
   if (!workflow.criteria.requiredProcedure) errors.push('pack requires a required procedure skill');
-  if (!workflow.criteria.independentRequiredAssurance) errors.push('pack requires a required subagent specialist or a skill or subagent verifier');
+  if (!workflow.criteria.independentRequiredAssurance) errors.push('pack requires a required subagent specialist or verifier');
   if (!workflow.criteria.compositionConnected) errors.push('pack members must form one composesWith-connected workflow');
   for (const pair of workflow.incompatiblePairs) {
     errors.push(`pack members '${pair.left}' and '${pair.right}' are incompatible via ${pair.relationship}`);
@@ -1311,9 +1299,9 @@ export function validatePack(record, knownIds, artifacts, root = ROOT) {
     errors.push(`required member '${gap.artifactId}' needs required prerequisite '${gap.prerequisiteId}'`);
   }
   if (!workflow.criteria.compatibleInstallCoordinate) errors.push('pack required members have no common installation target and scope');
+  const prerequisites = prerequisiteMembers(manifest, (id) => byId.get(id));
   for (const { target } of workflow.compatibility) {
-    const prerequisites = prerequisiteMembers({ ...manifest, members: resolvePackMembers(manifest, target) }, (id) => byId.get(id));
-    for (const member of resolvePackMembers(manifest, target)) {
+    for (const member of manifest.members) {
       const record = byId.get(member.artifactId);
       if (record?.manifest.kind !== 'hook' || prerequisites.has(member.artifactId)) continue;
       for (const binding of hookBindings(record.adapters[target]?.data)) {
@@ -1457,9 +1445,9 @@ export function publicPackCatalog(packs, artifacts) {
     const workflow = analyzePackWorkflow(manifest, artifacts);
     const targets = workflow.compatibility.map(({ target }) => target);
     const hookFanout = new Map();
+    const prerequisites = prerequisiteMembers(manifest, (id) => byId.get(id));
     for (const target of targets) {
-      const prerequisites = prerequisiteMembers({ ...manifest, members: resolvePackMembers(manifest, target) }, (id) => byId.get(id));
-      for (const { artifactId } of resolvePackMembers(manifest, target)) {
+      for (const { artifactId } of manifest.members) {
         const record = byId.get(artifactId);
         if (record?.manifest.kind !== 'hook' || prerequisites.has(artifactId)) continue;
         for (const binding of hookBindings(record.adapters[target]?.data)) {

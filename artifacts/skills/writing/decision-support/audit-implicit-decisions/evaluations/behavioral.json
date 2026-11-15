@@ -66,6 +66,35 @@
       }
     },
     {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "We already listed the open decisions in docs/open-decisions.md: cache TTL, retry limit, and export format. Help me pick which one to settle next and walk me through deciding it.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "resolve-next-decision",
+          "choosing and settling an already listed decision is a different job"
+        ],
+        "forbiddenClaims": [
+          "the cache TTL is decided"
+        ],
+        "forbiddenActions": [
+          "decided the cache TTL"
+        ]
+      }
+    },
+    {
       "id": "malformed-no-work-to-audit",
       "type": "malformed",
       "prompt": "What assumptions are we making? Audit our implicit decisions. (This is the first message of the session; no plan, diff, document, or tool output has been shared.)",

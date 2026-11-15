@@ -3,7 +3,7 @@
 import { statSync } from 'node:fs';
 import path from 'node:path';
 import { createInterface } from 'node:readline/promises';
-import { analyzePackWorkflow, hookBindings, loadArtifacts, loadPacks, loadTaxonomy, prerequisiteMembers, readJson, resolvePack, resolvePackMembers, resolvePackFlow, ROOT, validateRepository } from '../scripts/lib/catalog.mjs';
+import { analyzePackWorkflow, hookBindings, loadArtifacts, loadPacks, loadTaxonomy, packFlow, prerequisiteMembers, readJson, resolvePack, ROOT, validateRepository } from '../scripts/lib/catalog.mjs';
 import { doctor, installArtifact, installedDependentsOf, installPack, listInstalled, planArtifactInstall, planArtifactRemoval, planPackInstall, planPackRemoval, removeArtifact, neededByMessage, removePack, resolveArtifact, suggestionsFor } from '../scripts/lib/install.mjs';
 import { confirmRemoval, decidePrerequisites, parseAnswer, skippedNotice, suggestionHint } from '../scripts/lib/prerequisite-consent.mjs';
 import { readIntegrityManifest, verifyArtifactAttestation, verifyIntegrityManifest } from '../scripts/lib/integrity.mjs';
@@ -508,22 +508,13 @@ async function main() {
           name: manifest.name,
           version: manifest.version,
           summary: manifest.summary,
-          memberCount: manifest.members.length,
-          ...(manifest.members.some((member) => member.targets || member.fallback) ? { members: manifest.members } : {}),
-          ...(manifest.entry !== undefined ? { entry: manifest.entry } : {}),
-          ...(manifest.workflow !== undefined ? { workflow: manifest.workflow } : {})
+          memberCount: manifest.members.length
         }))
       }, null, 2));
       return;
     }
     for (const { manifest } of packs) {
       process.stdout.write(`${manifest.slug.padEnd(32)} ${manifest.members.length} members\n  ${manifest.summary}\n`);
-      if (manifest.entry) process.stdout.write(`${manifest.slug} entry: ${manifest.entry}\n`);
-      if (manifest.workflow) process.stdout.write(`${manifest.slug} workflow: ${manifest.workflow.map((step) => `${step.phase}: ${step.member}${step.signal ? ` (when ${step.signal})` : ''}`).join(' -> ')}\n`);
-      for (const member of manifest.members) {
-        if (member.targets) process.stdout.write(`  ${member.artifactId} targets: ${JSON.stringify(member.targets)}\n`);
-        if (member.fallback) process.stdout.write(`  ${member.artifactId} fallback: ${member.fallback}\n`);
-      }
     }
     process.stdout.write(`\n${packs.length} pack(s).\n`);
     return;
@@ -536,9 +527,7 @@ async function main() {
     const target = options.target || DEFAULT_TARGET;
     // A required member without an adapter for the target makes `add-pack` refuse there, so the
     // answer says so instead of reading as installable. Catalog data only, like the fan-out.
-    const selectedMembers = resolvePackMembers(manifest, target);
-    const selectedFlow = resolvePackFlow(manifest, target);
-    const blockers = selectedMembers.filter((member) => {
+    const blockers = manifest.members.filter((member) => {
       if (!member.required) return false;
       try { return !resolveArtifact(member.artifactId).adapters[target]; } catch { return true; }
     }).map((member) => member.artifactId);
@@ -550,30 +539,25 @@ async function main() {
         version: manifest.version,
         summary: manifest.summary,
         outcomes: manifest.outcomes,
-        members: manifest.members,
-        ...(manifest.entry !== undefined ? { entry: manifest.entry } : {}),
-        ...(manifest.workflow !== undefined ? { workflow: manifest.workflow } : {}),
+        members: manifest.members.map(({ artifactId, role, required }) => ({ artifactId, role, required })),
+        ...packFlow(manifest),
         // The same targets catalog/packs.json lists for the pack.
         targets: analyzePackWorkflow(manifest, loadArtifacts(ROOT)).compatibility.map((entry) => entry.target)
       };
-      if (options.target) Object.assign(result, { target, installable: blockers.length === 0, blockingMembers: blockers, selectedMembers, ...selectedFlow });
+      if (options.target) Object.assign(result, { target, installable: blockers.length === 0, blockingMembers: blockers });
       write(JSON.stringify(result, null, 2));
       return;
     }
     process.stdout.write(`${manifest.name} ${manifest.version}\n${manifest.id}\n\n${manifest.summary}\n\nOutcomes: ${manifest.outcomes.join(', ')}\nEvidence: ledger-linked; schema ${manifest.evidence.reportSchema}\nMembers:\n`);
-    if (selectedFlow.entry) process.stdout.write(`Entry: ${selectedFlow.entry}\n`);
-    if (selectedFlow.workflow) for (const [index, step] of selectedFlow.workflow.entries()) process.stdout.write(`Workflow ${index + 1}: ${step.phase}: ${step.member}${step.signal ? ` (when ${step.signal})` : ''}\n`);
-    for (const member of selectedMembers) {
-      process.stdout.write(`- ${member.artifactId} (${member.role}${member.required ? ', required' : ', optional'})\n`);
-      if (member.targets) process.stdout.write(`  Targets: ${JSON.stringify(member.targets)}\n`);
-      if (member.fallback) process.stdout.write(`  Fallback: ${member.fallback}\n`);
-    }
+    for (const member of manifest.members) process.stdout.write(`- ${member.artifactId} (${member.role}${member.required ? ', required' : ', optional'})\n`);
+    if (manifest.entry) process.stdout.write(`\nStart with: ${manifest.entry}\n`);
+    for (const [index, step] of (manifest.workflow ?? []).entries()) process.stdout.write(`${index + 1}. ${step.phase}: ${step.member}${step.signal ? ` (when ${step.signal})` : ''}\n`);
     // Fan-out is catalog data. Deriving it from an install plan made a read-only query depend on
     // the working directory and fail on unrelated workspace state, and made `pack-info` stat and
     // hash files under the user's config root as a side effect.
     const fanout = new Map();
-    const prerequisites = prerequisiteMembers({ ...manifest, members: selectedMembers }, (id) => { try { return resolveArtifact(id); } catch { return null; } });
-    for (const member of selectedMembers) {
+    const prerequisites = prerequisiteMembers(manifest, (id) => { try { return resolveArtifact(id); } catch { return null; } });
+    for (const member of manifest.members) {
       let record = null;
       try { record = resolveArtifact(member.artifactId); } catch { continue; }
       if (record.manifest.kind !== 'hook' || prerequisites.has(member.artifactId)) continue;
@@ -715,8 +699,7 @@ async function main() {
         pack: result.pack.id,
         target: result.target,
         scope: result.scope,
-        ...(result.entry !== undefined ? { entry: result.entry } : {}),
-        ...(result.workflow !== undefined ? { workflow: result.workflow } : {}),
+        ...packFlow(result),
         installed: result.installed.map((item) => ({ artifact: item.artifact.id, prerequisites: (item.prerequisites ?? []).map((manifest) => manifest.id), files: item.files })),
         skipped: result.skipped.map((item) => ({ artifact: item.member.artifactId, reason: item.skipped }))
       }, null, 2)}\n`);
@@ -730,6 +713,7 @@ async function main() {
     const skipped = [...new Set(result.installed.flatMap((item) => (item.skippedPrerequisites ?? []).map((manifest) => manifest.id)))].filter((id) => !members.has(id));
     if (skipped.length) write(skippedNotice(subject, skipped.map((id) => ({ slug: slugOf(id), reason: reasons.get(id) ?? null })), { asked: interactive() && !options['no-prerequisites'] }));
     for (const item of result.skipped) process.stdout.write(`- skipped ${item.member.artifactId}: ${item.skipped}\n`);
+    if (result.entry) process.stdout.write(`Start with: ${result.entry}\n`);
     const installedIds = result.installed.flatMap((item) => [item.artifact.id, ...(item.prerequisites ?? []).map((manifest) => manifest.id)]);
     const hint = suggestionHint(suggestionsFor(installedIds, { ...installOptions, exclude: [...members] }));
     if (hint) write(hint);

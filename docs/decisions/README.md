@@ -8,4 +8,4 @@ Each record states its status, date, context, decision, consequences, and replac
 
 - [`0001-protect-main-with-evidence-gates.md`](0001-protect-main-with-evidence-gates.md): accepted
 - [`0002-extend-artifact-kinds-for-agent-workflows.md`](0002-extend-artifact-kinds-for-agent-workflows.md): accepted
-- [`0003-declare-portable-pack-workflows.md`](0003-declare-portable-pack-workflows.md): proposed
+- [`0003-declare-pack-entry-and-workflow.md`](0003-declare-pack-entry-and-workflow.md): accepted

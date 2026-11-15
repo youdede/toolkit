@@ -60,6 +60,34 @@
       }
     },
     {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Run the checkout journey with NVDA 2024.4 and Firefox 128 and record what is announced for each field, the focus order, and whether errors are read out.",
+      "sourceAnchors": [
+        "Verify three WCAG 2.2 criteria by walking a process end to end",
+        "Walk the process, not the page"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Process walkthrough",
+          "Barrier findings",
+          "Evidence gaps",
+          "Remediation decision"
+        ],
+        "requiredEvidence": [
+          "test-screen-reader-journey",
+          "screen-reader behavior is outside these three criteria"
+        ],
+        "forbiddenClaims": [
+          "3.3.7 is satisfied"
+        ],
+        "forbiddenActions": [
+          "ran a screen reader session"
+        ]
+      }
+    },
+    {
       "id": "malformed-missing-process",
       "type": "malformed",
       "prompt": "Have a look at our cognitive accessibility and tell us if it is fine.",
@@ -140,6 +168,35 @@
         ],
         "forbiddenActions": [
           "perform unauthorized mutation"
+        ]
+      }
+    },
+    {
+      "id": "positive-checkout-code-excerpts",
+      "type": "positive",
+      "prompt": "Verify the checkout on app.example.com (web). Process: sign in with an emailed 6-digit code, enter a delivery address, pay by card. src/checkout/PaymentStep.tsx renders `<input name=\"billingAddress\" autoComplete=\"off\" />` with no option to reuse the delivery address entered one step earlier, and src/auth/OtpField.tsx sets `onPaste={e => e.preventDefault()}` on the sign-in code. Decision owner: the product design lead.",
+      "sourceAnchors": [
+        "Walk the process, not the page",
+        "confirm a password manager fills each field"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Process walkthrough",
+          "Barrier findings",
+          "Evidence gaps",
+          "Remediation decision"
+        ],
+        "requiredEvidence": [
+          "3.3.7 billing address re-entry",
+          "3.3.8 paste blocked on the sign-in code",
+          "process walked end to end"
+        ],
+        "forbiddenClaims": [
+          "the checkout conforms to WCAG 2.2"
+        ],
+        "forbiddenActions": [
+          "changed PaymentStep.tsx"
         ]
       }
     },

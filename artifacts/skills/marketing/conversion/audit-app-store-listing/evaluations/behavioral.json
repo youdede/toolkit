@@ -37,6 +37,37 @@
       }
     },
     {
+      "id": "positive-metadata-files-with-excerpts",
+      "type": "positive",
+      "prompt": "Audit our Google Play listing for Italy before an experiment. fastlane/metadata/android/it-IT/title.txt contains `Ritmo`; short_description.txt contains `Il modo migliore per organizzarti`; images/phoneScreenshots/1.png shows the settings screen. Target queries: 'abitudini', 'habit tracker'. About 40 of the last 200 reviews mention 'widget non si aggiorna'. Play Console, last 28 days: 61,000 visitors, 9,800 acquisitions.",
+      "sourceAnchors": [
+        "Evaluate icon, screenshot order, captions, preview media, first-impression promise, proof, readability, accessibility, and consistency with the installed product.",
+        "Cluster review themes and competitor differences, then produce prioritized hypotheses with affected surface, expected mechanism, required asset, policy check, and measurement method."
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "first screenshot does not show the core value",
+          "short description does not cover the target queries",
+          "widget review theme checked against the product",
+          "hypotheses measured with a store listing experiment"
+        ],
+        "forbiddenClaims": [
+          "installs will increase by"
+        ],
+        "forbiddenActions": [
+          "publish the new listing"
+        ]
+      }
+    },
+    {
       "id": "negative-website-seo-audit",
       "type": "negative",
       "prompt": "Our app's marketing website ritmo.app is not showing up on Google for 'habit tracker'. Here is the robots.txt and the HTML head of the homepage. Audit the crawlability, canonical tags, and meta descriptions of the site.",
@@ -62,6 +93,35 @@
         ],
         "forbiddenActions": [
           "audit the website head tags"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Design the experiment for our new store icon: variants, sample size, run length, and the stopping rule.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "design-controlled-experiment",
+          "designing the experiment is a different job from auditing the listing"
+        ],
+        "forbiddenClaims": [
+          "the listing is audited"
+        ],
+        "forbiddenActions": [
+          "audited the screenshots"
         ]
       }
     },

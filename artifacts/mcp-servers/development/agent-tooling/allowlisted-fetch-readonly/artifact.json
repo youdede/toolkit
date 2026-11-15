@@ -24,7 +24,7 @@
     "It does not send credentials, follow redirects, submit request bodies, or accept arbitrary headers.",
     "It does not claim fetched content is trusted, current, non-malicious, or suitable for execution."
   ],
-  "execution": {"mode": "hybrid", "entrypoints": [{"path": "runtime/readonly-mcp-server.mjs", "runtime": "node", "purpose": "Serve one bounded credential-free HTTPS retrieval tool over local standard input and output.", "sideEffects": "external"}]},
+  "execution": {"mode": "hybrid", "entrypoints": [{"path": "server.json", "runtime": "runtime", "purpose": "Serve one bounded credential-free HTTPS retrieval tool over local standard input and output.", "sideEffects": "external"}]},
   "mcpServer": {
     "transport": "stdio",
     "egress": ["developer.mozilla.org", "docs.github.com", "nodejs.org"],

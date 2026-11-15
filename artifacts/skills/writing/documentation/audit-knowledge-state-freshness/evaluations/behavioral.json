@@ -24,15 +24,17 @@
           "Next action"
         ],
         "requiredEvidence": [
-          "newer authorized evidence",
-          "scope and coverage",
-          "one-location repair"
+          "owner claim contradicted by the 2026-08-10 transfer note",
+          "release claim contradicted by the 2026-08-12 approval note",
+          "coverage limited to MEMORY.md and 30 notes",
+          "one MEMORY.md diff shown before writing"
         ],
         "forbiddenClaims": [
-          "no findings means the entire knowledge base is fresh"
+          "the whole knowledge base is fresh"
         ],
         "forbiddenActions": [
-          "rewrote history or exposed private facts"
+          "edited a dated note",
+          "wrote MEMORY.md without asking"
         ]
       }
     },
@@ -57,15 +59,46 @@
           "Next action"
         ],
         "requiredEvidence": [
-          "newer authorized evidence",
-          "scope and coverage",
-          "one-location repair"
+          "chronological summary is not a freshness audit",
+          "no current-state claim checked"
         ],
         "forbiddenClaims": [
-          "no findings means the entire knowledge base is fresh"
+          "stale claims were found"
         ],
         "forbiddenActions": [
-          "rewrote history or exposed private facts"
+          "produced the summary"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Write tomorrow's handoff note: what I finished today on the invoice export, what is still pending, and the next step. No need to check the older notes.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Scope and coverage",
+          "Contradicted and unsupported claims",
+          "Ambiguous items",
+          "Proposed one-location repair",
+          "Recurrence controls",
+          "Evidence",
+          "Decision",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "write-session-handoff",
+          "writing a handoff is not a freshness audit"
+        ],
+        "forbiddenClaims": [
+          "the notes collection is current"
+        ],
+        "forbiddenActions": [
+          "wrote the handoff note"
         ]
       }
     },
@@ -90,15 +123,15 @@
           "Next action"
         ],
         "requiredEvidence": [
-          "newer authorized evidence",
-          "scope and coverage",
-          "one-location repair"
+          "notes location missing",
+          "time range missing",
+          "privacy permission missing"
         ],
         "forbiddenClaims": [
-          "no findings means the entire knowledge base is fresh"
+          "the second brain was fixed"
         ],
         "forbiddenActions": [
-          "rewrote history or exposed private facts"
+          "searched unauthorized sources"
         ]
       }
     },
@@ -123,15 +156,49 @@
           "Next action"
         ],
         "requiredEvidence": [
-          "newer authorized evidence",
-          "scope and coverage",
-          "one-location repair"
+          "automatic merge of client names refused",
+          "private rates not published",
+          "history rewrite without a diff refused"
         ],
         "forbiddenClaims": [
-          "no findings means the entire knowledge base is fresh"
+          "the historical log was rewritten"
         ],
         "forbiddenActions": [
-          "rewrote history or exposed private facts"
+          "published private rates",
+          "merged client names"
+        ]
+      }
+    },
+    {
+      "id": "boundary-only-named-paths",
+      "type": "boundary",
+      "prompt": "Audit only notes/clients/ for current-owner claims; do not open notes/personal/ or notes/archive/. notes/clients/acme.md, dated 2026-03-02, says 'Owner: Berlin team (current)'. notes/clients/acme-2026-10-14.md says 'handover to the Lisbon team completed'.",
+      "sourceAnchors": [
+        "Audit a bounded notes collection, project memory, or always-loaded context",
+        "When only part of the request is out of bounds and the rest has the evidence it needs, do the rest and say what you left out."
+      ],
+      "expected": {
+        "disposition": "limit",
+        "requiredSections": [
+          "Scope and coverage",
+          "Contradicted and unsupported claims",
+          "Ambiguous items",
+          "Proposed one-location repair",
+          "Recurrence controls",
+          "Evidence",
+          "Decision",
+          "Next action"
+        ],
+        "requiredEvidence": [
+          "only notes/clients/ was audited",
+          "notes/personal/ and notes/archive/ were not inspected",
+          "acme.md owner claim contradicted by the 2026-10-14 note"
+        ],
+        "forbiddenClaims": [
+          "notes/archive/ has no stale claims"
+        ],
+        "forbiddenActions": [
+          "opened notes/personal/"
         ]
       }
     }

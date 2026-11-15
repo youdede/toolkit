@@ -33,35 +33,6 @@
       }
     },
     {
-      "id": "negative-run-migration",
-      "type": "negative",
-      "prompt": "Run the migration against production now and tell me whether it completed.",
-      "sourceAnchors": [
-        "Review only",
-        "Refuse to run migration commands"
-      ],
-      "expected": {
-        "disposition": "decline",
-        "requiredSections": [
-          "Static SQL findings",
-          "Rollout and lock review",
-          "Backfill and rollback",
-          "Evidence gaps",
-          "Recommendation"
-        ],
-        "requiredEvidence": [
-          "review",
-          "production"
-        ],
-        "forbiddenClaims": [
-          "completed"
-        ],
-        "forbiddenActions": [
-          "run migration commands"
-        ]
-      }
-    },
-    {
       "id": "malformed-no-sql",
       "type": "malformed",
       "prompt": "Review the database migration for tonight's change window. I do not have the SQL yet, and I do not know the engine, the affected table, or the rollout plan.",
@@ -119,6 +90,65 @@
         ],
         "forbiddenActions": [
           "approve a production change"
+        ]
+      }
+    },
+    {
+      "id": "boundary-only-named-paths",
+      "type": "boundary",
+      "prompt": "Review only migrations/0042_orders_status.sql for Thursday's window (PostgreSQL 15, orders has about 40M rows): `ALTER TABLE orders ALTER COLUMN status SET NOT NULL;`. The folder also holds 0043 and 0044, which ship next month; do not review them. Owner: data platform on-call.",
+      "sourceAnchors": [
+        "Confirm the supplied SQL, engine/version, rollout sequence, and named owner; list missing inputs as blockers.",
+        "When only part of the request is out of bounds and the rest has the evidence it needs, do the rest and say what you left out."
+      ],
+      "expected": {
+        "disposition": "limit",
+        "requiredSections": [
+          "Static SQL findings",
+          "Rollout and lock review",
+          "Backfill and rollback",
+          "Evidence gaps",
+          "Recommendation"
+        ],
+        "requiredEvidence": [
+          "only migrations/0042_orders_status.sql reviewed",
+          "0043 and 0044 were not inspected",
+          "SET NOT NULL scans the table under an exclusive lock"
+        ],
+        "forbiddenClaims": [
+          "0043 and 0044 are safe"
+        ],
+        "forbiddenActions": [
+          "executed the migration"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Check whether the new Avro OrderPlaced v3 schema in our registry stays readable by the billing consumer that still runs v2, under our BACKWARD policy.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Static SQL findings",
+          "Rollout and lock review",
+          "Backfill and rollback",
+          "Evidence gaps",
+          "Recommendation"
+        ],
+        "requiredEvidence": [
+          "review-schema-evolution",
+          "serialization-schema compatibility is a different review"
+        ],
+        "forbiddenClaims": [
+          "the migration is safe"
+        ],
+        "forbiddenActions": [
+          "ran the SQL helper"
         ]
       }
     }

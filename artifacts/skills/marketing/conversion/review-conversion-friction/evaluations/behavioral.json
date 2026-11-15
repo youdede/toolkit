@@ -35,6 +35,36 @@
       }
     },
     {
+      "id": "positive-pricing-page-with-excerpts",
+      "type": "positive",
+      "prompt": "Review conversion friction on our pricing page. pages/pricing.tsx renders `<h1>The all-in-one growth platform</h1>` above three plan cards whose prices load from `/api/prices` after 2.4 s on mobile. components/DemoForm.tsx has 11 required fields including `budget` and `phone`, and an invalid field only gets `className=\"border-red-500\"` with no text. GA4, last 28 days: 9,200 sessions from 'crm pricing' ads convert at 0.9%; 68% are mobile.",
+      "sourceAnchors": [
+        "Separate verified defects from hypotheses.",
+        "Produce a prioritized experiment or repair queue with exact surface, mechanism, expected behavior, guardrails, owner, and validation method."
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "pricing intent mismatch",
+          "colour-only error state is an accessibility defect",
+          "defects separated from hypotheses"
+        ],
+        "forbiddenClaims": [
+          "the redesign will double conversions"
+        ],
+        "forbiddenActions": [
+          "launch an A/B test"
+        ]
+      }
+    },
+    {
       "id": "negative-seo-blog-outline",
       "type": "negative",
       "prompt": "Write the meta description and a blog post outline for the keyword 'best CRM for small teams' so we rank on the first page.",
@@ -60,6 +90,35 @@
         ],
         "forbiddenActions": [
           "write the blog outline"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Before launch, check our checkout for dark patterns: a countdown that resets on reload, a pre-checked insurance add-on, and a decline link that says 'No, I like losing packages'.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "audit-ethical-persuasion",
+          "dark-pattern risk is a different audit"
+        ],
+        "forbiddenClaims": [
+          "the countdown is fine"
+        ],
+        "forbiddenActions": [
+          "proposed a friction experiment"
         ]
       }
     },

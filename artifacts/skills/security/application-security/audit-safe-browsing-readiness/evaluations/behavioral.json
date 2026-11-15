@@ -64,6 +64,35 @@
       }
     },
     {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Since we moved the shop from /shop/ to /store/, Search Console shows indexed pages down from 18,400 to 11,900. Check our redirects, canonicals, and sitemap and tell me why.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "audit-technical-seo",
+          "an indexing drop after a migration is a technical SEO audit, not a reputation-readiness review"
+        ],
+        "forbiddenClaims": [
+          "the site is flagged as deceptive"
+        ],
+        "forbiddenActions": [
+          "submitted a review request"
+        ]
+      }
+    },
+    {
       "id": "malformed-flagged-no-url-or-access",
       "type": "malformed",
       "prompt": "Our site got flagged by Chrome. Why?",

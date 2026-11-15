@@ -1,9 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import {
   analyzeRelationshipGraph,
+  invalidateArtifacts,
+  loadArtifacts,
   loadPacks,
   publicCatalog,
   publicPackCatalog,
@@ -32,9 +35,74 @@ test('the artifact kinds of the scripts are the kinds the schema accepts', () =>
 
 test('all artifact manifests and adapters validate', () => {
   const { artifacts, results } = validateRepository();
-  assert.ok(artifacts.length >= 113);
+  const published = JSON.parse(readFileSync(new URL('../catalog/artifacts.json', import.meta.url), 'utf8'));
+  assert.equal(artifacts.length, published.counts.total);
+  const cached = loadArtifacts(path.join(ROOT, 'scripts', '..'));
+  assert.equal(cached[0], artifacts[0]);
+  assert.notEqual(cached, artifacts);
+  cached.pop();
+  assert.equal(loadArtifacts().length, artifacts.length);
+  assert.throws(() => { artifacts[0].manifest.summary = 'changed'; }, TypeError);
+  const adapter = Object.values(artifacts[0].adapters)[0];
+  assert.throws(() => { adapter.data.files[0].from = 'changed'; }, TypeError);
+  assert.throws(() => { artifacts[0].manifest.relationships.composesWith.push('changed'); }, TypeError);
+  invalidateArtifacts();
+  assert.notEqual(loadArtifacts()[0], artifacts[0]);
   const errors = results.flatMap(({ record, errors: found }) => found.map((error) => `${record.manifest.id}: ${error}`));
   assert.deepEqual(errors, []);
+});
+
+test('broken manifest structures produce named errors and do not stop other artifacts', () => {
+  const repository = validateRepository();
+  const pack = repository.packs[0];
+  const sources = pack.manifest.members.map(({ artifactId }) => repository.artifacts.find(({ manifest }) => manifest.id === artifactId));
+  const source = sources[0];
+  const other = sources[1];
+  const root = mkdtempSync(path.join(os.tmpdir(), 'catalog-structure-'));
+  try {
+    mkdirSync(path.join(root, 'catalog'));
+    cpSync(path.join(ROOT, 'catalog', 'taxonomy.json'), path.join(root, 'catalog', 'taxonomy.json'));
+    for (const record of [...sources, pack]) cpSync(record.directory, path.join(root, path.relative(ROOT, record.directory)), { recursive: true });
+    const manifestPath = path.join(root, path.relative(ROOT, source.manifestPath));
+    writeFileSync(path.join(root, path.relative(ROOT, other.manifestPath)), JSON.stringify({ ...other.manifest, summary: '' }));
+    const check = (manifest, expected) => {
+      writeFileSync(manifestPath, JSON.stringify(manifest));
+      invalidateArtifacts(root);
+      let results;
+      assert.doesNotThrow(() => { ({ results } = validateRepository(root)); }, expected);
+      const named = results.find(({ record }) => record.manifest.id === source.manifest.id);
+      assert.ok(named.errors.includes(expected), `${source.manifest.id}: ${expected}`);
+      assert.ok(results.find(({ record }) => record.manifest.id === other.manifest.id).errors.includes('summary must be a non-empty string'));
+    };
+    for (const value of [undefined, null, {}, [], 42, 'invalid']) {
+      check({ ...source.manifest, relationships: value }, value && !Array.isArray(value) && typeof value === 'object'
+        ? 'relationships.composesWith must be an array' : 'relationships must be an object');
+      check({ ...source.manifest, adapters: value }, 'adapters must be non-empty');
+    }
+    const target = Object.keys(source.manifest.adapters)[0];
+    for (const value of [null, {}, [], 42, '']) {
+      check({ ...source.manifest, adapters: { [target]: value } }, `adapters.${target} must be a non-empty string`);
+    }
+    for (const key of ['composesWith', 'conflictsWith', 'supersedes', 'prerequisites', 'suggests', 'packIds']) {
+      for (const value of [null, {}, 42, 'invalid', [null, 42]]) {
+        check({ ...source.manifest, relationships: { ...source.manifest.relationships, [key]: value } },
+          `relationships.${key} ${Array.isArray(value) ? 'entries must be strings' : 'must be an array'}`);
+      }
+    }
+  } finally {
+    invalidateArtifacts(root);
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('every published pack satisfies the reportSchema constraint in the published schema', () => {
+  const schema = JSON.parse(readFileSync(new URL('../schema/pack.schema.json', import.meta.url), 'utf8'));
+  const constraint = schema.properties.evidence.properties.reportSchema;
+  // Keep this focused assertion in step with the constraint rather than interpreting JSON Schema.
+  assert.deepEqual(constraint, { const: '../../schema/pack-evidence.schema.json' });
+  const packs = loadPacks();
+  assert.ok(packs.length > 0);
+  for (const { manifest } of packs) assert.equal(manifest.evidence.reportSchema, constraint.const, manifest.id);
 });
 
 test('risk and latency reasons are required by both validator and schema', () => {

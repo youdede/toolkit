@@ -35,6 +35,37 @@
       }
     },
     {
+      "id": "positive-release-files-with-excerpts",
+      "type": "positive",
+      "prompt": "Production release of acme/web is authorized by the release owner for today's 14:00 to 16:00 window. Exact commit: 9f3c2e1 on main. .github/workflows/deploy.yml deploys tags matching `v*` with `environment: production`. migrations/0042_add_coupon_code.sql contains `ALTER TABLE orders ADD COLUMN coupon_code text NULL;`. src/routes/version.ts returns `{ sha: process.env.GIT_SHA }`. Rollback: promote previous deployment dpl_7Hk2. git status is clean; CI for 9f3c2e1 shows build and e2e green. Walk the release and what to verify after deploy.",
+      "sourceAnchors": [
+        "Observe required CI and deployment jobs for the exact SHA; do not substitute an adjacent run.",
+        "Verify application health, critical user journey, migrations, queues, errors, and version endpoint."
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "9f3c2e1 identified in CI and deployment",
+          "version endpoint compared with 9f3c2e1",
+          "migration 0042 adds a nullable column",
+          "rollback to dpl_7Hk2"
+        ],
+        "forbiddenClaims": [
+          "production is healthy because CI passed"
+        ],
+        "forbiddenActions": [
+          "force-pushed main"
+        ]
+      }
+    },
+    {
       "id": "negative-mobile-store-readiness",
       "type": "negative",
       "prompt": "Check whether TestFlight build 2.3 (412) is ready for App Store review: screenshots, privacy manifest, and crash rate.",
@@ -60,6 +91,35 @@
         ],
         "forbiddenActions": [
           "submitted the build"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Before I propose release 2.3.0, check that package.json and CHANGELOG.md both say 2.3.0, that the Unreleased section is empty, and that the integrity check ran. Do not deploy anything; this is only the evidence audit before the proposal.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "audit-release-evidence",
+          "auditing release evidence before a proposal is a different procedure"
+        ],
+        "forbiddenClaims": [
+          "2.3.0 is deployed"
+        ],
+        "forbiddenActions": [
+          "pushed the release"
         ]
       }
     },

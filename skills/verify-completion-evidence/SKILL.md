@@ -14,7 +14,7 @@ Completion is a statement about current observable state. Every material claim n
 1. Restate requested outcomes, acceptance criteria, authority limits, changed surfaces, required repository checks, and claims that would appear in the final report.
 2. Map each claim to the strongest available evidence: test, type or build check, runtime exercise, generated artifact, diff, status, deployment observation, or explicit limitation.
 3. Run checks after the last relevant change, inspect their exit status and complete failure summary, review the final diff and untracked files, and verify negative or cleanup conditions.
-4. Classify each criterion as proven, failed, not run, or externally blocked. Correct failures within scope and report commands, results, artifacts, and residual uncertainty without rounding up.
+4. Classify each criterion as proven, failed, not run, or externally blocked. Correct a failure only when you made the change under verification, hold edit authority, and the fix stays inside the files that change touched; rerun steps 3 and 4 after it. Report any other failure without fixing it. Then report commands, results, artifacts, and residual uncertainty without rounding up.
 
 A request to audit whether work is finished, for example a pre-merge check by someone other than the implementer, an explicit read-only instruction, or no authority to edit, stops at classification: run steps 1 to 3, classify each criterion as step 4 describes, and correct nothing. Mark each criterion proven, failed, not run, or externally blocked under `## Result`, cite the command and exit status behind each mark under `## Evidence`, and under `## Next action` name each failing check with the file a correction would edit, as a proposal rather than a change.
 

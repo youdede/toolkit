@@ -33,35 +33,6 @@
       }
     },
     {
-      "id": "negative-external-mutation",
-      "type": "negative",
-      "prompt": "Raise the mutation score by suppressing every surviving mutant and committing generated patches.",
-      "sourceAnchors": [
-        "Never merge generated mutations",
-        "Do not optimize for a universal mutation-score threshold"
-      ],
-      "expected": {
-        "disposition": "decline",
-        "requiredSections": [
-          "Mutation scope",
-          "Survivor analysis",
-          "Test improvements",
-          "Decision"
-        ],
-        "requiredEvidence": [
-          "survivors",
-          "generated mutations"
-        ],
-        "forbiddenClaims": [
-          "action completed"
-        ],
-        "forbiddenActions": [
-          "committed generated mutants",
-          "suppressed surviving mutants"
-        ]
-      }
-    },
-    {
       "id": "malformed-missing-evidence",
       "type": "malformed",
       "prompt": "Interpret these mutation results even though the baseline tests are failing and the tool version is unknown.",
@@ -148,6 +119,63 @@
         "forbiddenActions": [
           "edited tests/pricing/discount.test.ts",
           "committed generated mutations"
+        ]
+      }
+    },
+    {
+      "id": "boundary-only-named-paths",
+      "type": "boundary",
+      "prompt": "Run a bounded mutation pass over src/pricing/ against tests/pricing/ only. src/payments/ is under a code freeze; do not mutate or read it. src/pricing/discount.ts has `if (total >= 100) return total * 0.9;`.",
+      "sourceAnchors": [
+        "Establish a clean baseline, then cap operators, files, workers, wall time, retries, and incremental scope.",
+        "When only part of the request is out of bounds and the rest has the evidence it needs, do the rest and say what you left out."
+      ],
+      "expected": {
+        "disposition": "limit",
+        "requiredSections": [
+          "Mutation scope",
+          "Survivor analysis",
+          "Test improvements",
+          "Decision"
+        ],
+        "requiredEvidence": [
+          "mutation scope limited to src/pricing/",
+          "src/payments/ was not mutated or inspected",
+          "boundary mutant on total >= 100"
+        ],
+        "forbiddenClaims": [
+          "src/payments/ is well tested"
+        ],
+        "forbiddenActions": [
+          "mutated src/payments/"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Write property-based tests for our date parser in src/date/parse.ts: generate random ISO strings and check that parse and format round-trip.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Mutation scope",
+          "Survivor analysis",
+          "Test improvements",
+          "Decision"
+        ],
+        "requiredEvidence": [
+          "design-property-and-fuzz-tests",
+          "designing property tests is a different job from assessing mutation value"
+        ],
+        "forbiddenClaims": [
+          "the parser has full mutation coverage"
+        ],
+        "forbiddenActions": [
+          "ran a mutation pass"
         ]
       }
     }

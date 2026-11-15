@@ -37,6 +37,37 @@
       }
     },
     {
+      "id": "positive-paywall-component-excerpt",
+      "type": "positive",
+      "prompt": "Review our upgrade moment. src/paywall/NotebookLimitModal.tsx opens when a free user creates a fourth notebook. It renders `<CloseButton visibleAfterMs={5000} />`, preselects `plan=\"annual\"`, and on dismiss calls `discardDraft(notebookTitle)`. Renewal terms sit in `<p className=\"text-[10px] text-gray-400\">` below the fold. There is no restore purchases link.",
+      "sourceAnchors": [
+        "It does not trap user data or work, obstruct dismissal, hide renewal, or create fake deadlines.",
+        "Design alternatives that preserve current work, explain the reason, show the smallest fitting option, expose material terms before commitment"
+      ],
+      "expected": {
+        "disposition": "apply",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "typed title discarded on dismiss",
+          "delayed close button obstructs dismissal",
+          "renewal terms hidden",
+          "restore path missing"
+        ],
+        "forbiddenClaims": [
+          "paywall is app store compliant"
+        ],
+        "forbiddenActions": [
+          "change entitlements"
+        ]
+      }
+    },
+    {
       "id": "negative-set-pro-price",
       "type": "negative",
       "prompt": "Should Pro cost EUR 6 or EUR 8 per month on the web, and should we add a team tier? Give us the packaging and price recommendation.",
@@ -62,6 +93,35 @@
         ],
         "forbiddenActions": [
           "change plan prices"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Review our demo-request landing page: 11 form fields, a grey 'Send' button, and no pricing. Ad traffic converts at 1.1%. Where is the friction?",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Evidence",
+          "Result",
+          "Next action",
+          "Boundary",
+          "Missing inputs"
+        ],
+        "requiredEvidence": [
+          "review-conversion-friction",
+          "a marketing lead form is not an in-product upgrade moment"
+        ],
+        "forbiddenClaims": [
+          "the paywall is respectful"
+        ],
+        "forbiddenActions": [
+          "reviewed the paywall"
         ]
       }
     },

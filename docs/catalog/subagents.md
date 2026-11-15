@@ -23,10 +23,10 @@ A specialist with a deliberately narrow brief. None may edit, execute, or approv
 
 | Slug | What it does | Risk | Runtimes |
 | --- | --- | --- | --- |
-| `accessibility-conformance-reviewer` | Review a bounded interface change for evidence-led accessibility conformance risks and user barriers. | medium | claude-code, gemini-cli, github-copilot, opencode |
+| `accessibility-conformance-reviewer` | Review interface code, as a change or as it stands, for semantic, labeling, focus, keyboard, and error-message accessibility barriers. | medium | claude-code, gemini-cli, github-copilot, opencode |
 | `accessibility-journey-tester` | Verify a bounded user journey from supplied browser, keyboard, assistive-technology, and static evidence. | medium | claude-code, gemini-cli, github-copilot |
 | `design-system-consistency-reviewer` | Review a bounded interface delta for component, token, variant, and exception consistency. | medium | claude-code, gemini-cli, github-copilot, opencode |
-| `web-performance-reviewer` | Review a bounded web change for evidenced loading, rendering, responsiveness, and regression risks. | medium | claude-code, gemini-cli, github-copilot, opencode |
+| `web-performance-reviewer` | Review web code, as a change or as it stands, for loading, rendering, hydration, network, asset, and interaction costs. | medium | claude-code, gemini-cli, github-copilot, opencode |
 | `interaction-state-reviewer` | Review one user journey for complete, coherent, and recoverable interaction-state transitions. | medium | claude-code, gemini-cli, github-copilot, opencode |
 | `localization-readiness-reviewer` | Review locale-sensitive code for message, plural, format, timezone, fallback, and bidirectional defects. | medium | claude-code, gemini-cli, github-copilot, opencode |
 | `responsive-layout-reviewer` | Review a bounded layout for viewport, content-length, zoom, and reflow resilience using supplied evidence. | medium | claude-code, gemini-cli, github-copilot, opencode |
@@ -38,18 +38,18 @@ A specialist with a deliberately narrow brief. None may edit, execute, or approv
 | `numerical-correctness-analyst` | Analyze bounded numeric code for overflow, precision, rounding, and unit errors with witness inputs. | medium | claude-code, gemini-cli, github-copilot, opencode |
 | `api-contract-compatibility-reviewer` | Review a bounded API delta for evidenced source, wire, and rollout compatibility breaks. | medium | claude-code, gemini-cli, github-copilot, opencode |
 | `repository-architecture-mapper` | Produce an evidence-linked component and dependency map for a bounded repository surface. | low | claude-code, gemini-cli, github-copilot |
-| `cli-contract-reviewer` | Review a CLI delta for automation-breaking grammar, stream, exit-code, and output changes. | medium | claude-code, gemini-cli, github-copilot, opencode |
+| `cli-contract-reviewer` | Review CLI grammar, streams, exit codes, and output for automation-breaking changes or departures from the declared contract. | medium | claude-code, gemini-cli, github-copilot, opencode |
 | `refactor-equivalence-reviewer` | Compare a bounded before-and-after refactor for unintended observable behavior changes. | medium | claude-code, gemini-cli, github-copilot, opencode |
 | `concurrency-hazard-analyst` | Analyze a bounded concurrent path for a concrete race, deadlock, lost update, or ordering failure. | medium | claude-code, gemini-cli, github-copilot, opencode |
-| `configuration-semantics-reviewer` | Review configuration loading for precedence, default, coercion, and fallback semantic changes. | medium | claude-code, gemini-cli, github-copilot, opencode |
+| `configuration-semantics-reviewer` | Review how configuration loading selects, coerces, and defaults each key, reporting values ignored, retyped, or shadowed. | medium | claude-code, gemini-cli, github-copilot, opencode |
 | `error-recovery-path-reviewer` | Review one failure path for partial state, retry, idempotency, compensation, and cleanup defects. | medium | claude-code, gemini-cli, github-copilot, opencode |
 | `resource-lifecycle-reviewer` | Review acquisition and release paths for leaks, double release, and use-after-close behavior. | medium | claude-code, gemini-cli, github-copilot, opencode |
-| `serialization-contract-reviewer` | Review encoder and decoder changes for round-trip loss and cross-version wire incompatibility. | medium | claude-code, gemini-cli, github-copilot, opencode |
+| `serialization-contract-reviewer` | Review encoders, decoders, and schemas for round-trip loss and cross-version wire incompatibility. | medium | claude-code, gemini-cli, github-copilot, opencode |
 | `state-machine-invariant-analyst` | Analyze a bounded state machine for illegal transitions, orphan states, and bypassed guards. | medium | claude-code, gemini-cli, github-copilot, opencode |
 | `flaky-test-diagnostician` | Diagnose repeated-test instability from supplied run evidence without rerunning, quarantining, or editing tests. | medium | claude-code, gemini-cli, github-copilot |
 | `mobile-reliability-accessibility-reviewer` | Review a bounded mobile journey for lifecycle, offline, recovery, permission, and accessibility evidence gaps. | medium | claude-code, gemini-cli, github-copilot |
 | `performance-benchmark-analyst` | Judge whether supplied benchmark results prove a meaningful regression under comparable conditions. | medium | claude-code, gemini-cli, github-copilot |
-| `test-gap-reviewer` | Find meaningful unproved behaviors in a bounded change without writing or running tests. | low | claude-code, gemini-cli, github-copilot, opencode |
+| `test-gap-reviewer` | Map the behaviors of a bounded change or set of paths to their tests and find unproved ones, without writing or running tests. | low | claude-code, gemini-cli, github-copilot, opencode |
 
 ## marketing
 
@@ -75,7 +75,7 @@ A specialist with a deliberately narrow brief. None may edit, execute, or approv
 | `release-risk-reviewer` | Review a bounded release candidate for evidence-backed rollout, rollback, and verification risk. | medium | claude-code, gemini-cli, github-copilot, opencode |
 | `slo-error-budget-analyst` | Analyze supplied SLI and error-budget evidence for eligibility, window, exclusion, and burn-rate errors. | medium | claude-code, gemini-cli, github-copilot, opencode |
 | `disaster-recovery-readiness-auditor` | Audit recovery objectives against backup, restore, failover, dependency, and exercise evidence. | medium | claude-code, gemini-cli, github-copilot, opencode |
-| `runbook-readiness-reviewer` | Review one operational runbook for executable prerequisites, checks, failure branches, ownership, and recovery. | medium | claude-code, gemini-cli, github-copilot, opencode |
+| `runbook-readiness-reviewer` | Review one incident or production-control runbook for authority, containment, telemetry gates, destructive steps, and recovery. | medium | claude-code, gemini-cli, github-copilot, opencode |
 
 ## research
 
@@ -93,7 +93,7 @@ A specialist with a deliberately narrow brief. None may edit, execute, or approv
 | `application-security-reviewer` | Fallback cross-boundary application-security review when no narrower security specialist fits. | medium | claude-code, gemini-cli, github-copilot, opencode |
 | `access-control-matrix-auditor` | Audit a bounded role-action-resource matrix against concrete authorization enforcement points. | medium | claude-code, gemini-cli, github-copilot, opencode |
 | `cryptographic-usage-reviewer` | Review bounded cryptographic API use against a supplied security property and protocol contract. | medium | claude-code, gemini-cli, github-copilot, opencode |
-| `dependency-risk-reviewer` | Review dependency deltas for supply-chain and compatibility risk without mutating the repo. | low | claude-code, gemini-cli, github-copilot, opencode |
+| `dependency-risk-reviewer` | Review dependency manifests and lockfiles, as a change or as they stand, for supply-chain and compatibility risk without mutating the repo. | low | claude-code, gemini-cli, github-copilot, opencode |
 | `tenant-isolation-analyst` | Trace a tenant identity through storage, cache, job, and query boundaries for isolation failures. | medium | claude-code, gemini-cli, github-copilot, opencode |
 | `build-provenance-reviewer` | Review a named build subject for evidence-backed provenance identity-chain gaps. | medium | claude-code, gemini-cli, github-copilot, opencode |
 | `privacy-data-handling-auditor` | Trace a bounded personal-data flow and report concrete collection, exposure, retention, or deletion risks. | medium | claude-code, gemini-cli, github-copilot |
@@ -105,7 +105,7 @@ A specialist with a deliberately narrow brief. None may edit, execute, or approv
 
 | Slug | What it does | Risk | Runtimes |
 | --- | --- | --- | --- |
-| `decision-record-reviewer` | Review a bounded decision record for evidence, alternatives, tradeoffs, consequences, and revisit triggers. | low | claude-code, gemini-cli, github-copilot, opencode |
+| `decision-record-reviewer` | Audit a historical decision record for status, contemporaneous rationale, alternatives, owned obligations, and supersession links. | low | claude-code, gemini-cli, github-copilot, opencode |
 | `api-documentation-verifier` | Verify bounded API documentation and examples against the exact implementation or specification version. | medium | claude-code, gemini-cli, github-copilot, opencode |
 | `procedural-documentation-tester` | Statically walk a procedure for prerequisites, state, observable results, retries, and recovery branches. | medium | claude-code, gemini-cli, github-copilot, opencode |
 

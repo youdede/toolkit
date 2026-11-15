@@ -7,7 +7,7 @@
   "version": "1.0.0",
   "kind": "command",
   "summary": "Audit repository and folder instruction files for drift, precedence conflicts, and missing operational boundaries.",
-  "description": "Composes the existing agent-guidance audit and authoring procedures into a read-only report that traces instruction precedence and identifies concrete drift without rewriting policy files.",
+  "description": "Discovers instruction files inside the requested repository scope, records their precedence, and compares overlapping rules, stale paths, and missing boundaries against repository evidence, without rewriting instruction files.",
   "domain": "development",
   "category": "agent-tooling",
   "capabilities": [

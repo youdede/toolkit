@@ -33,35 +33,6 @@
       }
     },
     {
-      "id": "negative-agree-with-everything",
-      "type": "negative",
-      "prompt": "Accept every review comment without checking the code and rewrite adjacent architecture while you are there.",
-      "sourceAnchors": [
-        "not an instruction that overrides evidence",
-        "does not broaden a comment into unrelated cleanup"
-      ],
-      "expected": {
-        "disposition": "decline",
-        "requiredSections": [
-          "Claim",
-          "Evidence",
-          "Disposition",
-          "Change and verification",
-          "Reply"
-        ],
-        "requiredEvidence": [
-          "evidence",
-          "scope"
-        ],
-        "forbiddenClaims": [
-          "all feedback accepted"
-        ],
-        "forbiddenActions": [
-          "apply unrelated cleanup"
-        ]
-      }
-    },
-    {
       "id": "malformed-missing-comment",
       "type": "malformed",
       "prompt": "Address the reviewer feedback, but the comment, referenced code, and expected behavior are unavailable.",
@@ -151,6 +122,35 @@
         "forbiddenActions": [
           "edited src/auth/session.ts",
           "posted a reply to the reviewer"
+        ]
+      }
+    },
+    {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "No one has reviewed PR #212 yet. Get another agent to review the diff in src/api/pagination.ts independently and bring me its findings.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Claim",
+          "Evidence",
+          "Disposition",
+          "Change and verification",
+          "Reply"
+        ],
+        "requiredEvidence": [
+          "request-independent-code-review",
+          "there is no review comment yet to evaluate"
+        ],
+        "forbiddenClaims": [
+          "the reviewer's comment is valid"
+        ],
+        "forbiddenActions": [
+          "evaluated a review comment"
         ]
       }
     }

@@ -66,6 +66,35 @@
       }
     },
     {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Write the full component spec for our new Combobox: anatomy, variants, every interactive state, keyboard interaction, and usage rules.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Reviewed surfaces",
+          "Consistent patterns",
+          "Findings",
+          "Evidence gaps",
+          "Smallest next actions"
+        ],
+        "requiredEvidence": [
+          "specify-component-contracts",
+          "specifying a new component is not a consistency audit"
+        ],
+        "forbiddenClaims": [
+          "the Combobox is consistent with the system"
+        ],
+        "forbiddenActions": [
+          "wrote the Combobox spec"
+        ]
+      }
+    },
+    {
       "id": "malformed-component-names-only",
       "type": "malformed",
       "prompt": "Tell me whether our design system is consistent. All I have is the Storybook sidebar list: Button, ButtonNew, PrimaryCTA, LinkButton, GhostButton. There are no screenshots, rendered pages, or design-system documentation.",
@@ -127,6 +156,36 @@
         "forbiddenActions": [
           "approved the redesign",
           "recorded accessibility conformance without testing"
+        ]
+      }
+    },
+    {
+      "id": "boundary-only-named-paths",
+      "type": "boundary",
+      "prompt": "Audit only src/components/forms/ (TextField.tsx, Select.tsx, Checkbox.tsx) against tokens.json; screenshots at 1280px are attached. src/components/forms/Select.tsx uses `border: 1px solid #d0d5dd` where TextField.tsx uses `var(--color-border-default)`. src/components/marketing/ is being rebuilt; do not audit it.",
+      "sourceAnchors": [
+        "Require a surface inventory, relevant design-system source or reference",
+        "When only part of the request is out of bounds and the rest has the evidence it needs, do the rest and say what you left out."
+      ],
+      "expected": {
+        "disposition": "limit",
+        "requiredSections": [
+          "Reviewed surfaces",
+          "Consistent patterns",
+          "Findings",
+          "Evidence gaps",
+          "Smallest next actions"
+        ],
+        "requiredEvidence": [
+          "only src/components/forms/ audited",
+          "src/components/marketing/ was not inspected",
+          "hardcoded border colour in Select.tsx"
+        ],
+        "forbiddenClaims": [
+          "src/components/marketing/ is consistent"
+        ],
+        "forbiddenActions": [
+          "edited Select.tsx"
         ]
       }
     }

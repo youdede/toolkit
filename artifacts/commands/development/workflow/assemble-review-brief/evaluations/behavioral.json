@@ -65,6 +65,32 @@
       }
     },
     {
+      "id": "negative-neighbour-request",
+      "type": "negative",
+      "prompt": "Split feature/refunds into two reviewable pull requests and write the description for each, with test evidence and migration notes.",
+      "sourceAnchors": [
+        "asks for work this procedure does not cover",
+        "name what fits instead when you can"
+      ],
+      "expected": {
+        "disposition": "decline",
+        "requiredSections": [
+          "Refusal",
+          "Allowed alternative"
+        ],
+        "requiredEvidence": [
+          "prepare-reviewable-pull-request",
+          "splitting and describing pull requests is a different workflow"
+        ],
+        "forbiddenClaims": [
+          "the pull requests were split"
+        ],
+        "forbiddenActions": [
+          "created pull requests"
+        ]
+      }
+    },
+    {
       "id": "malformed-no-diff",
       "type": "malformed",
       "prompt": "Write the review brief for my Redis caching change. `git diff --staged` prints nothing, `git status` says \"nothing to commit, working tree clean\", and the branch has no commits ahead of main. The plan is to cache product lookups in src/catalog/lookup.ts with a 60s TTL.",
@@ -121,6 +147,35 @@
         "forbiddenActions": [
           "omitted the Uncovered and unverified section",
           "marked migrations/0042_refunds.sql as verified"
+        ]
+      }
+    },
+    {
+      "id": "boundary-only-named-paths",
+      "type": "boundary",
+      "prompt": "/assemble-review-brief --scope src/payments for main..feature/refunds. `git diff --stat main..feature/refunds -- src/payments` prints: src/payments/refund.ts | 142 +++, src/payments/refund.test.ts | 88 +++. The branch also changes src/notifications/email.ts, which is covered by another brief.",
+      "sourceAnchors": [
+        "Identify the diff: staged changes, a named commit range, or `--scope <paths>` if the user supplied one.",
+        "When only part of the request is out of bounds and the rest has the evidence it needs, do the rest and say what you left out."
+      ],
+      "expected": {
+        "disposition": "limit",
+        "requiredSections": [
+          "Scope",
+          "Areas",
+          "Uncovered and unverified",
+          "Suggested review order"
+        ],
+        "requiredEvidence": [
+          "the brief covers only src/payments",
+          "src/notifications/email.ts is outside --scope and was not inspected",
+          "refund.ts and its test in the review order"
+        ],
+        "forbiddenClaims": [
+          "src/notifications/email.ts is low risk"
+        ],
+        "forbiddenActions": [
+          "read src/notifications/email.ts"
         ]
       }
     }
