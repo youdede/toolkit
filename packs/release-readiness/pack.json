@@ -18,6 +18,13 @@
       {"outcome": "safe-publication", "memberArtifactIds": ["hook/security/application-security/shell-command-guard", "hook/operations/package-publication/package-publish-guard", "hook/operations/repository-state/release-clean-state-guard", "hook/operations/versioning/release-version-consistency-guard"]}
     ]
   },
+  "entry": "command/development/workflow/audit-release-evidence",
+  "workflow": [
+    {"member": "command/development/workflow/audit-release-evidence", "phase": "audit"},
+    {"member": "subagent/operations/release/release-evidence-verifier", "phase": "evidence-review", "signal": "a release claim needs an independent check against its evidence"},
+    {"member": "subagent/operations/release/release-risk-reviewer", "phase": "risk-review", "signal": "rollout or rollback risk needs an independent read"},
+    {"member": "skill/operations/release/verify-production-release", "phase": "release"}
+  ],
   "members": [
     {
       "artifactId": "command/development/workflow/audit-release-evidence",

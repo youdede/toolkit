@@ -6,7 +6,7 @@ All notable changes are recorded here. Versions follow Semantic Versioning; rele
 
 ### Added
 
-- A pack can declare where to start and the order of its steps. `pack-info` prints both, `add-pack` ends with the entry, and the `remote-review-evidence` pack is the first to declare them.
+- A pack can declare where to start and the order of its steps. `pack-info` prints both, `add-pack` ends with the entry, and every shipped pack declares them.
 
 ### Changed
 

@@ -18,6 +18,13 @@
       {"outcome": "data-exposure-control", "memberArtifactIds": ["hook/security/application-security/shell-command-guard", "hook/security/application-security/outbound-data-guard", "hook/security/secrets/sensitive-file-access-guard"]}
     ]
   },
+  "entry": "skill/development/agent-tooling/author-mcp-server-contract",
+  "workflow": [
+    {"member": "skill/development/agent-tooling/author-mcp-server-contract", "phase": "design"},
+    {"member": "skill/security/threat-modeling/review-agent-tool-boundaries", "phase": "boundaries"},
+    {"member": "subagent/security/threat-modeling/mcp-trust-boundary-reviewer", "phase": "mcp-review", "signal": "the integration exposes an MCP server surface"},
+    {"member": "subagent/security/application-security/application-security-reviewer", "phase": "security-review", "signal": "a risk crosses boundaries that no narrower reviewer covers"}
+  ],
   "members": [
     {
       "artifactId": "skill/security/threat-modeling/review-agent-tool-boundaries",

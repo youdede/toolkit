@@ -18,6 +18,11 @@
       {"outcome": "safe-publication", "memberArtifactIds": ["hook/security/application-security/shell-command-guard", "hook/operations/repository-state/release-clean-state-guard", "hook/operations/versioning/release-version-consistency-guard"]}
     ]
   },
+  "entry": "skill/operations/release/verify-mobile-release-readiness",
+  "workflow": [
+    {"member": "skill/operations/release/verify-mobile-release-readiness", "phase": "verify"},
+    {"member": "subagent/development/testing/mobile-reliability-accessibility-reviewer", "phase": "review", "signal": "a journey needs an independent read of its reliability and accessibility evidence"}
+  ],
   "members": [
     {
       "artifactId": "skill/operations/release/verify-mobile-release-readiness",

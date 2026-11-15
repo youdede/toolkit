@@ -15,6 +15,13 @@
       {"outcome": "verified-session-history", "memberArtifactIds": ["command/operations/session/verify-session-ledger"]}
     ]
   },
+  "entry": "command/operations/session/record-work-checkpoint",
+  "workflow": [
+    {"member": "command/operations/session/record-work-checkpoint", "phase": "checkpoint"},
+    {"member": "command/operations/session/verify-session-ledger", "phase": "verify", "signal": "the ledger is about to be trusted in a new session"},
+    {"member": "skill/operations/session/resume-session-work", "phase": "resume", "signal": "work continues in a new session"},
+    {"member": "subagent/writing/decision-support/decision-record-reviewer", "phase": "decisions", "signal": "a past decision record is about to be relied on"}
+  ],
   "members": [
     {"artifactId": "command/operations/session/record-work-checkpoint", "role": "entrypoint", "required": true},
     {"artifactId": "command/operations/session/verify-session-ledger", "role": "entrypoint", "required": true},

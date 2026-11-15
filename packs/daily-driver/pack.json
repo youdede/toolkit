@@ -15,6 +15,13 @@
       {"outcome": "review-ready-change", "memberArtifactIds": ["command/development/workflow/assemble-review-brief", "skill/operations/reviewability/prepare-reviewable-pull-request", "subagent/development/code-quality/refactor-equivalence-reviewer"]}
     ]
   },
+  "entry": "skill/development/code-quality/deliver-incremental-change",
+  "workflow": [
+    {"member": "skill/development/code-quality/deliver-incremental-change", "phase": "deliver"},
+    {"member": "subagent/development/code-quality/refactor-equivalence-reviewer", "phase": "equivalence", "signal": "a slice is meant to leave observable behavior unchanged"},
+    {"member": "command/development/workflow/assemble-review-brief", "phase": "brief"},
+    {"member": "skill/operations/reviewability/prepare-reviewable-pull-request", "phase": "pull-request"}
+  ],
   "members": [
     {"artifactId": "command/development/workflow/assemble-review-brief", "role": "entrypoint", "required": true},
     {"artifactId": "hook/operations/reviewability/large-diff-review-guard", "role": "enforcement", "required": true},

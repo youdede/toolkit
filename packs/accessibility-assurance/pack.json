@@ -18,6 +18,15 @@
       {"outcome": "regression-prevention", "memberArtifactIds": ["hook/design/authentication-access/authentication-accessibility-guard", "hook/design/keyboard-focus/focus-style-regression-guard", "hook/design/semantic-markup/accessibility-attribute-regression-guard"]}
     ]
   },
+  "entry": "skill/design/accessibility/plan-accessibility-conformance-evidence",
+  "workflow": [
+    {"member": "skill/design/accessibility/plan-accessibility-conformance-evidence", "phase": "plan"},
+    {"member": "skill/design/accessibility/test-screen-reader-journey", "phase": "test", "signal": "a journey needs a pass with a real screen reader"},
+    {"member": "skill/design/accessibility/verify-cognitive-access-barriers", "phase": "verify", "signal": "a process asks the user to remember, re-enter, or authenticate"},
+    {"member": "subagent/design/accessibility/accessibility-conformance-reviewer", "phase": "code-review", "signal": "interface code needs an independent accessibility read"},
+    {"member": "subagent/design/accessibility/accessibility-journey-tester", "phase": "journey-review", "signal": "collected journey evidence needs an independent verdict"},
+    {"member": "skill/design/accessibility/prepare-eaa-conformance-evidence", "phase": "conformance", "signal": "an owner needs the results mapped to a declared requirement set"}
+  ],
   "members": [
     {
       "artifactId": "hook/design/authentication-access/authentication-accessibility-guard",

@@ -18,6 +18,12 @@
       {"outcome": "staged-infrastructure-change", "memberArtifactIds": ["skill/operations/infrastructure/plan-infrastructure-change", "subagent/operations/infrastructure/infrastructure-change-reviewer"]}
     ]
   },
+  "entry": "skill/operations/infrastructure/plan-infrastructure-change",
+  "workflow": [
+    {"member": "skill/operations/infrastructure/plan-infrastructure-change", "phase": "plan"},
+    {"member": "subagent/operations/infrastructure/infrastructure-change-reviewer", "phase": "review", "signal": "the planned change exists as an infrastructure-as-code delta"},
+    {"member": "subagent/operations/resilience/disaster-recovery-readiness-auditor", "phase": "recovery", "signal": "the change touches backup, restore, or failover paths"}
+  ],
   "members": [
     {
       "artifactId": "skill/operations/infrastructure/plan-infrastructure-change",
